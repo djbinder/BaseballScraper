@@ -1,0 +1,14 @@
+/Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/bin/Debug/netcoreapp2.1/BaseballScraper.deps.json
+/Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/bin/Debug/netcoreapp2.1/BaseballScraper.runtimeconfig.json
+/Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/bin/Debug/netcoreapp2.1/BaseballScraper.runtimeconfig.dev.json
+/Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/bin/Debug/netcoreapp2.1/BaseballScraper.dll
+/Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/bin/Debug/netcoreapp2.1/BaseballScraper.pdb
+/Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/obj/Debug/netcoreapp2.1/BaseballScraper.csprojAssemblyReference.cache
+/Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/obj/Debug/netcoreapp2.1/BaseballScraper.csproj.CoreCompileInputs.cache
+/Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/obj/Debug/netcoreapp2.1/BaseballScraper.RazorAssemblyInfo.cache
+/Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/obj/Debug/netcoreapp2.1/BaseballScraper.RazorAssemblyInfo.cs
+/Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/obj/Debug/netcoreapp2.1/BaseballScraper.AssemblyInfoInputs.cache
+/Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/obj/Debug/netcoreapp2.1/BaseballScraper.AssemblyInfo.cs
+/Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/obj/Debug/netcoreapp2.1/BaseballScraper.RazorTargetAssemblyInfo.cache
+/Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/obj/Debug/netcoreapp2.1/BaseballScraper.dll
+/Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/obj/Debug/netcoreapp2.1/BaseballScraper.pdb
