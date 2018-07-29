@@ -1,74 +1,108 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Drawing;
 using System.Linq;
-using System.Net.Http;
+using System.Net;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
+using System.Web;
+using System.Windows.Forms;
 
-using AngleSharp;
-using AngleSharp.Parser.Html;
-
+using BaseballScraper.Client;
+using BaseballScraper.Configuration;
+using BaseballScraper.Controllers;
+using BaseballScraper.Infrastructure;
+using BaseballScraper.Mappers;
 using BaseballScraper.Models;
 using BaseballScraper.Scrapers;
+
+using DevDefined.OAuth.Consumer;
+using DevDefined.OAuth.Framework;
+
+using OAuth;
+
+// using BaseballScraper.Web
 
 using HtmlAgilityPack;
 
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 
-using NScrape;
-using NScrape.Forms;
+using Npoi.Mapper;
+
+using RDotNet;
+
 
 namespace BaseballScraper
 {
     public class Program
     {
 
-        private String _start    = "STARTED";
-        private String _complete = "COMPLETED";
+        private System.Data.DataTable table = new System.Data.DataTable ("ParentTable");
 
-        public string _Start
-        {
-            get => _start;
-            set => _start = value;
-        }
+        private static String _start = "STARTED";
+        private static String _complete = "COMPLETED";
+        public static string Start { get => _start; set => _start = value; }
+        public static string Complete { get => _complete; set => _complete = value; }
+        private const string RequestUrl = "https://api.login.yahoo.com/oauth/v2/get_request_token";
+        private const string UserAuthorizeUrl = "https://api.login.yahoo.com/oauth/v2/request_auth";
+        private const string AccessUrl = "https://api.login.yahoo.com/oauth/v2/get_token";
+        private const string ConsumerKey = "[dj0yJmk9ckl2Z0V6YTdpaDZtJmQ9WVdrOVJGbEpaMUZ1TmpRbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD1hMw--";
+        private const string ClientId = "dj0yJmk9ckl2Z0V6YTdpaDZtJmQ9WVdrOVJGbEpaMUZ1TmpRbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD1hMw--";
 
-        public string Complete
-        {
-            get => _complete;
-            set => _complete = value;
-        }
+        private const string HmacSecert = "[66b4934e332c8100df465c4531b53b9f353d9955";
+        private const string ClientSecrent = "66b4934e332c8100df465c4531b53b9f353d9955";
+        private static string _authenticateUrl = "https://api.login.yahoo.com/oauth/v2/request_auth?oauth_token=";
+        private const string ApiUrl = "http://fantasysports.yahooapis.com/fantasy/v2/";
+
+
 
         public static void Main (string[] args)
         {
-            Console.WriteLine ("main method started");
+            Console.WriteLine ($"Version: {Environment.Version}");
 
-            bool HTMLScrapeOn = true;
-            if (HTMLScrapeOn == true)
-            {
-                var HTMLScrape = new _HTML_AgilityPack ();
 
-                List<string> ListOfUrls = _HTML_AgilityPack.Get_Urls_OfPages_ToScrape ().ToList ();
+            // DataTabler dt = new DataTabler();
+            // dt.PublishTable();
 
-                var Count_OfUrls = ListOfUrls.Count ();
-                Count_OfUrls.Intro ("url count");
-                ListOfUrls.Dig ();
 
-                // _HTML_AgilityPack.HitterCrawler (_fg_H_50);
-            }
+
+            // table.Dig();
+
+            // var NPOIMapper = new NPOIMapper ();
+
+            // int HTMLScrapeOn = 0;
+            // if (HTMLScrapeOn == 1)
+            // {
+            //     var HTMLScrape = new HtmlAgilityPackScraper ();
+            //     List<string> ListOfUrls = HtmlAgilityPackScraper.Get_Urls_OfPages_ToScrape ().ToList ();
+            //     // var Count_OfUrls = ListOfUrls.Count ();
+            //     // Count_OfUrls.Intro ("url count");
+            //     // ListOfUrls.Dig ();
+            //     HtmlAgilityPackScraper.HitterCrawler ();
+            // }
 
             CreateWebHostBuilder (args).Build ().Run ();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder (string[] args) => 
+        public static IWebHostBuilder CreateWebHostBuilder (string[] args) =>
             WebHost.CreateDefaultBuilder (args)
             .UseStartup<Startup> ();
     }
 }
+//
+//
+//
+//
+//
 
-// this was all moved to _HTML_AgilityPack --> it worked in main before the move
+//
+
+//
+
+//
+// this was all moved to HtmlAgilityPackScraper --> it worked in main before the move
 // public static void HitterCrawler (string url)
 // {
 //     string TableBodyXPath = "//*[@id='LeaderBoard1_dg1_ctl00']/tbody";
