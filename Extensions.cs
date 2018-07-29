@@ -12,6 +12,19 @@ public static class Extensions
     public const String Start = "START";
     public const String Complete = "COMPLETE";
 
+    // https://msdn.microsoft.com/en-us/library/system.consolekeyinfo(v=vs.110).aspx
+    public static void ConsoleKey ()
+    {
+        Start.ThisMethod();
+
+        ConsoleKeyInfo key = Console.ReadKey();
+        Console.WriteLine(key);
+        Console.WriteLine();
+        Console.WriteLine("Character Entered: " + key.KeyChar);
+        Console.WriteLine("Special Keys: " + key.Modifiers);
+    }
+
+
 
     // retrieve high-level info about 'this'
     public static void Dig<T>(this T x)
