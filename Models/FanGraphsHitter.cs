@@ -3,13 +3,12 @@ using System.Collections.Generic;
 
 namespace BaseballScraper.Models
 {
-    public class FGHitter
+    public class FGHitter: Player
     {
-        public string Name { get; set; }
-        public string Team { get; set; }
+        public string FanGraphsId { get; set; }
+        public string FanGraphsName { get; set; }
         public string GP { get; set; }
         public string PA { get; set; }
-
         public string HR { get; set; }
         public string R { get; set; }
         public string RBI { get; set; }
