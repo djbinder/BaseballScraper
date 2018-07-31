@@ -9,7 +9,7 @@ using System.Linq;
 public static class Extensions
 {
 
-    public const String Start = "START";
+    public const String Start    = "START";
     public const String Complete = "COMPLETE";
 
     // https://msdn.microsoft.com/en-us/library/system.consolekeyinfo(v=vs.110).aspx
@@ -29,7 +29,7 @@ public static class Extensions
     // retrieve high-level info about 'this'
     public static void Dig<T>(this T x)
     {
-        Console.ForegroundColor = ConsoleColor.DarkRed;
+        Console.ForegroundColor = ConsoleColor.DarkCyan;
         Console.WriteLine("'DIG' STARTED");
 
         string json = JsonConvert.SerializeObject(x, Formatting.Indented);
@@ -67,8 +67,8 @@ public static class Extensions
         string FullMessage = JsonConvert.SerializeObject(Message, Formatting.Indented).ToUpper();
         // string UpperMessage = jsonMessage.ToUpper();
 
-        StackFrame frame = new StackFrame(1, true);
-        var lineNumber = frame.GetFileLineNumber();
+        StackFrame frame      = new StackFrame(1, true);
+        var        lineNumber = frame.GetFileLineNumber();
 
         using (var writer = new System.IO.StringWriter())
         {
@@ -93,10 +93,12 @@ public static class Extensions
 
         string UpperString = String.ToUpper();
 
-        StackFrame frame = new StackFrame(1, true);
-        var lineNumber = frame.GetFileLineNumber();
+        StackFrame frame      = new StackFrame(1, true);
+        var        lineNumber = frame.GetFileLineNumber();
 
-        Console.WriteLine("{0} [@ Line#: {1}] ---> {2} ", UpperString, lineNumber - 1, Object);
+        // Console.WriteLine("{0} [@ Line#: {1}] ---> {2} ", UpperString, lineNumber - 1, Object);
+
+        Console.WriteLine($"//  {UpperString} ---> {Object} ---> [@ Line#: {lineNumber - 1}]");
 
         Console.ResetColor();
         Console.WriteLine();
@@ -115,9 +117,9 @@ public static class Extensions
 
         var MethodName = stackTrace.GetFrame(1).GetMethod().Name;
 
-        StackFrame frame = new StackFrame(1, true);
-        var method = frame.GetMethod();
-        var fileName = frame.GetFileName();
+        StackFrame frame    = new StackFrame(1, true);
+        var        method   = frame.GetMethod();
+        var        fileName = frame.GetFileName();
         // var path = @"/Users/DanBinder/Google_Drive/Coding/Projects/movieGame/movieGame/Controllers/";
         var lineNumber = frame.GetFileLineNumber();
 

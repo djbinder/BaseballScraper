@@ -17,34 +17,36 @@ namespace BaseballScraper.Scrapers
         private static String _start    = "STARTED";
         private static String _complete = "COMPLETED";
 
-        public static string start { get => _start; set => _start = value; }
-        public static string complete { get => _complete; set => _complete = value; }
+        public static string Start { get => _start; set => _start = value; }
+        public static string Complete { get => _complete; set => _complete = value; }
 
         public HtmlAgilityPackScraper () { }
 
 
-        // test comment string
-        public static string GetXpathForNumOfPagesToScrape ()
+        // THIS WORKS
+        private static string GetXpathForNumOfPagesToScrape ()
         {
-            // start.ThisMethod ();
+            Start.ThisMethod ();
             string tableBodyXpath = "//*[@id='LeaderBoard1_dg1_ctl00']/thead/tr[1]/td/div/div[5]/strong[2]";
 
-            // complete.ThisMethod ();
+            // Complete.ThisMethod ();
             return tableBodyXpath;
         }
 
-        public static string SetInitialUrlToScrape ()
+        // THIS WORKS
+        private static string SetInitialUrlToScrape ()
         {
-            // start.ThisMethod ();
+            Start.ThisMethod ();
             string initialUrl = "https://www.fangraphs.com/leaders.aspx?pos=all&stats=bat&lg=all&qual=y&type=8&season=2018&month=0&season1=2018&ind=0&page=1_50";
 
-            // complete.ThisMethod ();
+            // Complete.ThisMethod ();
             return initialUrl;
         }
 
-        public static int GetNumOfPagesToScrape ()
+        // THIS WORKS
+        private static int GetNumOfPagesToScrape ()
         {
-            // start.ThisMethod ();
+            Start.ThisMethod ();
             string urlToBeginScraping = SetInitialUrlToScrape ();
 
             HtmlWeb htmlWeb = new HtmlWeb ();
@@ -61,16 +63,18 @@ namespace BaseballScraper.Scrapers
             string numOfPagesToScrapeString = numOfHtmlElement[0].InnerText;
             int    numOfPagesToScrapeInt    = Convert.ToInt32 (numOfPagesToScrapeString);
 
-            // complete.ThisMethod ();
+            // Complete.ThisMethod ();
             return numOfPagesToScrapeInt;
         }
 
-        public static List<string> GetUrlsOfPagesToScrape ()
+        // THIS WORKS
+        private static List<string> GetUrlsOfPagesToScrape ()
         {
-            // start.ThisMethod ();
-            int numOfPagesToScrape = GetNumOfPagesToScrape ();
+            Start.ThisMethod ();
 
             List<string> urlsOfPagesToScrape = new List<string> ();
+
+            int numOfPagesToScrape = GetNumOfPagesToScrape ();
 
             for (var i = 1; i <= numOfPagesToScrape; i++)
             {
@@ -85,56 +89,60 @@ namespace BaseballScraper.Scrapers
                 urlsOfPagesToScrape.Add (urlToScrape);
             }
 
-            // complete.ThisMethod ();
+            // Complete.ThisMethod ();
             return urlsOfPagesToScrape;
         }
 
-        public static string Get_XPathOf_TableBody_ToScrape ()
+        // THIS WORKS
+        private static string GetXPathOfTableBodyToScrape ()
         {
-            // start.ThisMethod ();
+            Start.ThisMethod ();
             string tableBodyXpath = "//*[@id='LeaderBoard1_dg1_ctl00']/tbody";
 
-            // complete.ThisMethod ();
+            // Complete.ThisMethod ();
             return tableBodyXpath;
         }
 
-        public static string Get_XPathOf_TableRow_ToScrape ()
+        private static string GetXPathOfTableRowToScrape ()
         {
-            // start.ThisMethod ();
+            Start.ThisMethod ();
             string preForRows    = "//*[@id='LeaderBoard1_dg1_ctl00__";
             string postForRows   = "']";
             int    i             = 0;
             string tableRowXpath = $"{preForRows}{i}{postForRows}";
 
-            // complete.ThisMethod ();
+            // Complete.ThisMethod ();
             return tableRowXpath;
         }
 
         // public static int Get_Num_OfRows_ToScrape_OnPage ()
         // {
-        //     start.ThisMethod ();
+        //     Start.ThisMethod ();
 
         //     HtmlNode TableBodyXPath = "//*[@id='LeaderBoard1_dg1_ctl00']/tbody";
 
         //     foreach (HtmlNode tr in TableBodyXPath.SelectNodes ("//tr"));
         // }
 
-        public static void HitterCrawler ()
-        // public static void HitterCrawler (string url)
-        {
-            start.ThisMethod ();
-            List<string> listOfUrls = HtmlAgilityPackScraper.GetUrlsOfPagesToScrape ().ToList ();
-            // var  numOfUrls       = listOfUrls.Count ();
-            // numOfUrls.Intro ("url count");
 
-            string tableBodyXpath = Get_XPathOf_TableBody_ToScrape ();
+
+        // THIS WORKS
+        public static void HitterCrawler ()
+        {
+            Start.ThisMethod ();
+
+            List<string> listOfUrls = HtmlAgilityPackScraper.GetUrlsOfPagesToScrape ().ToList ();
+            var  numOfUrls          = listOfUrls.Count ();
+            numOfUrls.Intro ("url count");
+
+            string tableBodyXpath = GetXPathOfTableBodyToScrape ();
 
             HtmlWeb htmlWeb = new HtmlWeb ();
 
             int loopCount = 1;
             foreach (var urlForThisPageInLoop in listOfUrls)
             {
-                // urlForThisPageInLoop.Intro ("single page url");
+                urlForThisPageInLoop.Intro ("single page url");
                 loopCount.Intro ("this is loop number");
                 loopCount++;
 
@@ -168,7 +176,8 @@ namespace BaseballScraper.Scrapers
                         foreach (var playerItem in nodeRowEachPlayer)
                         {
                             // COUNT --> 24
-                            // var Player_Item_Children_Count = playerItem.ChildNodes.Count ();
+                            var playerItemChildrenCount = playerItem.ChildNodes.Count ();
+                            // playerItemChildrenCount.Intro("player item children count");
 
                             //  e.g. --->   12Manny Machado- - -101440245066710.9 %12.5 %.252.310.311.384.563.393152-0.526.3-3.23.9
                             string preForData  = $"{trForEachPlayer}/td[";
@@ -193,38 +202,45 @@ namespace BaseballScraper.Scrapers
                                 {
                                     try
                                     {
+                                        // Extensions.Spotlight("MARK A");
                                         string postPost = "/a";
 
                                         // NAME AND TEAM X-PATHS ---> //*[@id='LeaderBoard1_dg1_ctl00__11']/td[2]/a
                                         string nameAndTeamTableBodyXpaths = $"{tdForEachPlayer}{postPost}";
+                                        // nameAndTeamTableBodyXpaths.Intro("name and team table body x paths");
 
                                         // COUNT --> 1
                                         // NAME AND TEAM ---> HtmlAgilityPack.HtmlNodeCollection
                                         var nameAndTeam = playerItem.SelectNodes (nameAndTeamTableBodyXpaths);
+                                        // nameAndTeam.Intro("name and team");
 
                                         foreach (var actualNumber in nameAndTeam)
                                         {
+                                            // Extensions.Spotlight("MARK B");
                                             // e.g. '3.9', '26.3' etc. The players actual numbers for each stats
                                             var numToAddToList = actualNumber.InnerText;
                                             playerItems.Add (numToAddToList);
+                                            // numToAddToList.Intro("num to add to list");
                                         }
                                     }
 
                                     catch
                                     {
+                                        Extensions.Spotlight ("NAME or TEAM is broken");
                                         string cellIsBlank = "";
                                         playerItems.Add (cellIsBlank);
-                                        Extensions.Spotlight ("NAME or TEAM is broken");
                                     }
                                 }
 
                                 else
                                 {
+                                    // Extensions.Spotlight("MARK D");
                                     foreach (var actualNumber in playersNodeCollection)
                                     {
                                         // e.g. '3.9', '26.3' etc. The players actual numbers for each stats
                                         var numToAddToList = actualNumber.InnerText;
                                         playerItems.Add (numToAddToList);
+                                        // numToAddToList.Intro("num to add to list");
                                     }
                                 }
 
@@ -236,33 +252,33 @@ namespace BaseballScraper.Scrapers
                             FGHitter newFGHitter = new FGHitter
                             {
                                 FanGraphsName = playerItems[1],
-                                Team          = playerItems[2],
-                                GP            = playerItems[3],
-                                PA            = playerItems[4],
-                                HR            = playerItems[5],
-                                R             = playerItems[6],
-                                RBI           = playerItems[7],
-                                SB            = playerItems[8],
-                                BB_percent    = playerItems[9],
-                                K_percent     = playerItems[10],
-                                ISO           = playerItems[11],
-                                BABIP         = playerItems[12],
-                                AVG           = playerItems[13],
-                                OBP           = playerItems[14],
-                                SLG           = playerItems[15],
-                                wOBA          = playerItems[16],
-                                wRC_plus      = playerItems[17],
-                                BsR           = playerItems[18],
-                                Off           = playerItems[19],
-                                Def           = playerItems[20],
-                                WAR           = playerItems[21],
+                                // FanGraphsTeam = playerItems[2],
+                                GP         = playerItems[3],
+                                PA         = playerItems[4],
+                                HR         = playerItems[5],
+                                R          = playerItems[6],
+                                RBI        = playerItems[7],
+                                SB         = playerItems[8],
+                                BB_percent = playerItems[9],
+                                K_percent  = playerItems[10],
+                                ISO        = playerItems[11],
+                                BABIP      = playerItems[12],
+                                AVG        = playerItems[13],
+                                OBP        = playerItems[14],
+                                SLG        = playerItems[15],
+                                wOBA       = playerItems[16],
+                                wRC_plus   = playerItems[17],
+                                BsR        = playerItems[18],
+                                Off        = playerItems[19],
+                                Def        = playerItems[20],
+                                WAR        = playerItems[21],
                             };
 
                             hitters.Add (newFGHitter);
 
                             // foreach (var hitter in hitters)
                             // {
-                            //     Console.WriteLine (hitter.Name);
+                            //     Console.WriteLine (hitter.FanGraphsName);
                             //     Console.WriteLine (hitter.WAR);
                             // }
 
@@ -274,27 +290,11 @@ namespace BaseballScraper.Scrapers
 
         }
 
-        // public void MainHTML_scrape (string url, string node)
-        // {
-        //     start.ThisMethod ();
 
-        //     HtmlAgilityPack.HtmlWeb      web = new HtmlAgilityPack.HtmlWeb ();
-        //     HtmlAgilityPack.HtmlDocument doc = web.Load (url);
 
-        //     // HEADER NAMES [@ Line#: 35] ---> System.Collections.Generic.List`1[HtmlAgilityPack.HtmlNode]
-        //     // COUNT --> 1
-        //     var HeaderNames = doc.DocumentNode
-        //         .SelectNodes (node).ToList ();
-
-        //     foreach (var item in HeaderNames)
-        //     {
-        //         Console.WriteLine (item.InnerText);
-        //     }
-        // }
-
-        public void HTML_from_String (string html)
+        public void HtmlFromString (string html)
         {
-            start.ThisMethod ();
+            Start.ThisMethod ();
 
             var htmlDoc = new HtmlDocument ();
             htmlDoc.LoadHtml (html);
@@ -304,9 +304,9 @@ namespace BaseballScraper.Scrapers
             Console.WriteLine (htmlBody.OuterHtml);
         }
 
-        public void LoadHTML_FromFile (string FilePath)
+        public void LoadHtmlFromFile (string FilePath)
         {
-            start.ThisMethod ();
+            Start.ThisMethod ();
 
             // example of 'FilePath'
             // var path = @"test.html";
@@ -322,20 +322,4 @@ namespace BaseballScraper.Scrapers
     }
 }
 
-// this made it work in Main[]
 
-// string Sterbenz = "https://www.yellowpages.com/search?search_terms=Sterbenz&geo_location_terms=Chicago%2C+IL";
-
-// string DoctorsPage2 = "https://www.yellowpages.com/search?search_terms=doctor&geo_location_terms=Chicago%2C%20IL&page=2";
-
-// string businessNode = "//a[@class='business-name']";
-
-// // HTML SCRAPE  ---> BaseballScraper.Scrapers.HtmlAgilityPack
-// var HTMLScrape = new HtmlAgilityPack();
-// bool HTMLScrapeOn = true;
-// if(HTMLScrapeOn == true)
-// {
-//     // HTMLScrape.MainHTML_scrape(YellowPages, businessNode);
-//     // HTMLScrape.MainHTML_scrape(Sterbenz, businessNode);
-//     // HTMLScrape.MainHTML_scrape(DoctorsPage2, businessNode);
-// }
