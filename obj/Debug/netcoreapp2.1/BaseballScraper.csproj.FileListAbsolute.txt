@@ -12,13 +12,5 @@
 /Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/obj/Debug/netcoreapp2.1/BaseballScraper.RazorTargetAssemblyInfo.cache
 /Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/obj/Debug/netcoreapp2.1/BaseballScraper.dll
 /Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/obj/Debug/netcoreapp2.1/BaseballScraper.pdb
-/Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/bin/Debug/netcoreapp2.1/log4net.dll
-/Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/bin/Debug/netcoreapp2.1/log4net.xml
-/Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/bin/Debug/netcoreapp2.1/Microsoft.SCPNet.dll
-/Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/bin/Debug/netcoreapp2.1/Microsoft.SCPNet.dll.config
-/Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/bin/Debug/netcoreapp2.1/Microsoft.SCPNet.XML
-/Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/bin/Debug/netcoreapp2.1/SCPHost.exe
-/Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/bin/Debug/netcoreapp2.1/SCPHost.exe.config
-/Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/bin/Debug/netcoreapp2.1/Thrift.dll
-/Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/bin/Debug/netcoreapp2.1/Thrift.XML
-/Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/bin/Debug/netcoreapp2.1/ZooKeeperNet.dll
+/Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/bin/Debug/netcoreapp2.1/BaseballScraper.dll.config
+/Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/obj/Debug/netcoreapp2.1/BaseballScraper.dll.config
