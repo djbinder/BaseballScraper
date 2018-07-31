@@ -43,19 +43,6 @@
           "lib/portable-windows8+net45+windowsphone8+wpa+monoandroid+monotouch/AngleSharp.Scripting.JavaScript.dll": {}
         }
       },
-      "ApplicationInsightsTelemetryExtensions/0.2.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.ApplicationInsights": "2.5.1",
-          "Microsoft.AspNetCore.Http": "2.0.2"
-        },
-        "compile": {
-          "lib/netstandard2.0/ApplicationInsightsTelemetryExtensions.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/ApplicationInsightsTelemetryExtensions.dll": {}
-        }
-      },
       "Autofac/4.6.2": {
         "type": "package",
         "dependencies": {
@@ -80,298 +67,6 @@
         },
         "runtime": {
           "lib/netstandard1.3/ConsoleTables.dll": {}
-        }
-      },
-      "DevDefined.OAuth/0.2.0": {
-        "type": "package",
-        "compile": {
-          "lib/DevDefined.OAuth.dll": {}
-        },
-        "runtime": {
-          "lib/DevDefined.OAuth.dll": {}
-        }
-      },
-      "DotNetOpenAuth/4.3.4.13329": {
-        "type": "package",
-        "dependencies": {
-          "DotNetOpenAuth.OAuth.Consumer": "[4.3.4.13329]",
-          "DotNetOpenAuth.OAuth.ServiceProvider": "[4.3.4.13329]",
-          "DotNetOpenAuth.OAuth2.AuthorizationServer": "[4.3.4.13329]",
-          "DotNetOpenAuth.OAuth2.Client.UI": "[4.3.4.13329]",
-          "DotNetOpenAuth.OAuth2.ResourceServer": "[4.3.4.13329]",
-          "DotNetOpenAuth.OpenId.Provider.UI": "[4.3.4.13329]",
-          "DotNetOpenAuth.OpenId.RelyingParty.UI": "[4.3.4.13329]",
-          "DotNetOpenAuth.OpenIdInfoCard.UI": "[4.3.4.13329]",
-          "DotNetOpenAuth.OpenIdOAuth": "[4.3.4.13329]"
-        }
-      },
-      "DotNetOpenAuth.Core/4.3.4.13329": {
-        "type": "package",
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.Core.dll": {}
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.Core.dll": {}
-        }
-      },
-      "DotNetOpenAuth.Core.UI/4.3.4.13329": {
-        "type": "package",
-        "dependencies": {
-          "DotNetOpenAuth.Core": "[4.3.4.13329]"
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.Core.UI.dll": {}
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.Core.UI.dll": {}
-        }
-      },
-      "DotNetOpenAuth.InfoCard/4.3.4.13329": {
-        "type": "package",
-        "dependencies": {
-          "DotNetOpenAuth.Core": "[4.3.4.13329]"
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.InfoCard.dll": {}
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.InfoCard.dll": {}
-        }
-      },
-      "DotNetOpenAuth.InfoCard.UI/4.3.4.13329": {
-        "type": "package",
-        "dependencies": {
-          "DotNetOpenAuth.Core.UI": "[4.3.4.13329]",
-          "DotNetOpenAuth.InfoCard": "[4.3.4.13329]"
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.InfoCard.UI.dll": {}
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.InfoCard.UI.dll": {}
-        }
-      },
-      "DotNetOpenAuth.OAuth.Common/4.3.4.13329": {
-        "type": "package",
-        "dependencies": {
-          "DotNetOpenAuth.Core": "[4.3.4.13329]"
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.OAuth.Common.dll": {}
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.OAuth.Common.dll": {}
-        }
-      },
-      "DotNetOpenAuth.OAuth.Consumer/4.3.4.13329": {
-        "type": "package",
-        "dependencies": {
-          "DotNetOpenAuth.OAuth.Core": "[4.3.4.13329]"
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.OAuth.Consumer.dll": {}
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.OAuth.Consumer.dll": {}
-        }
-      },
-      "DotNetOpenAuth.OAuth.Core/4.3.4.13329": {
-        "type": "package",
-        "dependencies": {
-          "DotNetOpenAuth.Core": "[4.3.4.13329]"
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.OAuth.dll": {}
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.OAuth.dll": {}
-        }
-      },
-      "DotNetOpenAuth.OAuth.ServiceProvider/4.3.4.13329": {
-        "type": "package",
-        "dependencies": {
-          "DotNetOpenAuth.OAuth.Common": "[4.3.4.13329]",
-          "DotNetOpenAuth.OAuth.Core": "[4.3.4.13329]"
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.OAuth.ServiceProvider.dll": {}
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.OAuth.ServiceProvider.dll": {}
-        }
-      },
-      "DotNetOpenAuth.OAuth2.AuthorizationServer/4.3.4.13329": {
-        "type": "package",
-        "dependencies": {
-          "DotNetOpenAuth.OAuth2.ClientAuthorization": "[4.3.4.13329]"
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.OAuth2.AuthorizationServer.dll": {}
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.OAuth2.AuthorizationServer.dll": {}
-        }
-      },
-      "DotNetOpenAuth.OAuth2.Client/4.3.4.13329": {
-        "type": "package",
-        "dependencies": {
-          "DotNetOpenAuth.OAuth2.ClientAuthorization": "[4.3.4.13329]"
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.OAuth2.Client.dll": {}
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.OAuth2.Client.dll": {}
-        }
-      },
-      "DotNetOpenAuth.OAuth2.Client.UI/4.3.4.13329": {
-        "type": "package",
-        "dependencies": {
-          "DotNetOpenAuth.OAuth2.Client": "[4.3.4.13329]"
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.OAuth2.Client.UI.dll": {}
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.OAuth2.Client.UI.dll": {}
-        }
-      },
-      "DotNetOpenAuth.OAuth2.ClientAuthorization/4.3.4.13329": {
-        "type": "package",
-        "dependencies": {
-          "DotNetOpenAuth.OAuth2.Core": "[4.3.4.13329]"
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.OAuth2.ClientAuthorization.dll": {}
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.OAuth2.ClientAuthorization.dll": {}
-        }
-      },
-      "DotNetOpenAuth.OAuth2.Core/4.3.4.13329": {
-        "type": "package",
-        "dependencies": {
-          "DotNetOpenAuth.Core": "[4.3.4.13329]"
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.OAuth2.dll": {}
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.OAuth2.dll": {}
-        }
-      },
-      "DotNetOpenAuth.OAuth2.ResourceServer/4.3.4.13329": {
-        "type": "package",
-        "dependencies": {
-          "DotNetOpenAuth.OAuth.Common": "[4.3.4.13329]",
-          "DotNetOpenAuth.OAuth2.Core": "[4.3.4.13329]"
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.OAuth2.ResourceServer.dll": {}
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.OAuth2.ResourceServer.dll": {}
-        }
-      },
-      "DotNetOpenAuth.OpenId.Core/4.3.4.13329": {
-        "type": "package",
-        "dependencies": {
-          "DotNetOpenAuth.Core": "[4.3.4.13329]"
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.OpenId.dll": {}
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.OpenId.dll": {}
-        }
-      },
-      "DotNetOpenAuth.OpenId.Core.UI/4.3.4.13329": {
-        "type": "package",
-        "dependencies": {
-          "DotNetOpenAuth.Core.UI": "[4.3.4.13329]"
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.OpenId.UI.dll": {}
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.OpenId.UI.dll": {}
-        }
-      },
-      "DotNetOpenAuth.OpenId.Provider/4.3.4.13329": {
-        "type": "package",
-        "dependencies": {
-          "DotNetOpenAuth.OpenId.Core": "[4.3.4.13329]"
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.OpenId.Provider.dll": {}
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.OpenId.Provider.dll": {}
-        }
-      },
-      "DotNetOpenAuth.OpenId.Provider.UI/4.3.4.13329": {
-        "type": "package",
-        "dependencies": {
-          "DotNetOpenAuth.OpenId.Core.UI": "[4.3.4.13329]",
-          "DotNetOpenAuth.OpenId.Provider": "[4.3.4.13329]"
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.OpenId.Provider.UI.dll": {}
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.OpenId.Provider.UI.dll": {}
-        }
-      },
-      "DotNetOpenAuth.OpenId.RelyingParty/4.3.4.13329": {
-        "type": "package",
-        "dependencies": {
-          "DotNetOpenAuth.OpenId.Core": "[4.3.4.13329]"
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.OpenId.RelyingParty.dll": {}
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.OpenId.RelyingParty.dll": {}
-        }
-      },
-      "DotNetOpenAuth.OpenId.RelyingParty.UI/4.3.4.13329": {
-        "type": "package",
-        "dependencies": {
-          "DotNetOpenAuth.OpenId.Core.UI": "[4.3.4.13329]",
-          "DotNetOpenAuth.OpenId.RelyingParty": "[4.3.4.13329]"
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.OpenId.RelyingParty.UI.dll": {}
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.OpenId.RelyingParty.UI.dll": {}
-        }
-      },
-      "DotNetOpenAuth.OpenIdInfoCard.UI/4.3.4.13329": {
-        "type": "package",
-        "dependencies": {
-          "DotNetOpenAuth.InfoCard.UI": "[4.3.4.13329]",
-          "DotNetOpenAuth.OpenId.RelyingParty.UI": "[4.3.4.13329]"
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.OpenIdInfoCard.UI.dll": {}
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.OpenIdInfoCard.UI.dll": {}
-        }
-      },
-      "DotNetOpenAuth.OpenIdOAuth/4.3.4.13329": {
-        "type": "package",
-        "dependencies": {
-          "DotNetOpenAuth.OAuth.Consumer": "[4.3.4.13329]",
-          "DotNetOpenAuth.OAuth.ServiceProvider": "[4.3.4.13329]",
-          "DotNetOpenAuth.OpenId.Core": "[4.3.4.13329]"
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.OpenIdOAuth.dll": {}
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.OpenIdOAuth.dll": {}
         }
       },
       "DynamicInterop/0.8.1": {
@@ -422,125 +117,27 @@
           "lib/netstandard1.3/jint.dll": {}
         }
       },
-      "Microsoft.ApplicationInsights/2.6.4": {
+      "linqtotwitter/4.2.1": {
         "type": "package",
         "dependencies": {
-          "NETStandard.Library": "1.6.1",
-          "System.Diagnostics.DiagnosticSource": "4.4.0",
-          "System.Diagnostics.StackTrace": "4.3.0",
-          "System.Net.Requests": "4.3.0"
+          "Microsoft.Bcl": "1.1.10",
+          "Microsoft.Bcl.Build": "1.0.21",
+          "Microsoft.Bcl.Compression": "3.9.85",
+          "Microsoft.Net.Http": "2.2.29",
+          "Newtonsoft.Json": "10.0.3",
+          "Rx-Core": "2.2.5",
+          "Rx-Interfaces": "2.2.5",
+          "Rx-Linq": "2.2.5",
+          "Rx-Main": "2.2.5",
+          "Rx-PlatformServices": "2.2.5"
         },
         "compile": {
-          "lib/netstandard1.3/Microsoft.ApplicationInsights.dll": {}
+          "lib/netcoreapp2.0/LinqToTwitter.AspNetCore.dll": {},
+          "lib/netcoreapp2.0/LinqToTwitter.Core.dll": {}
         },
         "runtime": {
-          "lib/netstandard1.3/Microsoft.ApplicationInsights.dll": {}
-        }
-      },
-      "Microsoft.ApplicationInsights.AspNetCore/2.3.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.ApplicationInsights": "2.6.4",
-          "Microsoft.ApplicationInsights.DependencyCollector": "2.6.4",
-          "Microsoft.ApplicationInsights.PerfCounterCollector": "2.6.4",
-          "Microsoft.ApplicationInsights.WindowsServer": "2.6.4",
-          "Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel": "2.6.4",
-          "Microsoft.AspNetCore.Hosting": "1.0.2",
-          "Microsoft.Extensions.Configuration": "1.0.2",
-          "Microsoft.Extensions.Configuration.Json": "1.0.2",
-          "Microsoft.Extensions.DiagnosticAdapter": "1.0.2",
-          "Microsoft.Extensions.Logging.Abstractions": "1.0.2",
-          "NETStandard.Library": "1.6.1",
-          "System.Net.NameResolution": "4.3.0",
-          "System.Text.Encodings.Web": "4.3.1"
-        },
-        "compile": {
-          "lib/netstandard1.6/Microsoft.ApplicationInsights.AspNetCore.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard1.6/Microsoft.ApplicationInsights.AspNetCore.dll": {}
-        }
-      },
-      "Microsoft.ApplicationInsights.DependencyCollector/2.6.4": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.ApplicationInsights": "[2.6.4]",
-          "Microsoft.Extensions.PlatformAbstractions": "1.1.0",
-          "NETStandard.Library": "1.6.1",
-          "System.Data.SqlClient": "4.3.1",
-          "System.Diagnostics.DiagnosticSource": "4.4.0",
-          "System.Diagnostics.StackTrace": "4.3.0"
-        },
-        "compile": {
-          "lib/netstandard1.6/Microsoft.AI.DependencyCollector.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard1.6/Microsoft.AI.DependencyCollector.dll": {}
-        }
-      },
-      "Microsoft.ApplicationInsights.PerfCounterCollector/2.6.4": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.ApplicationInsights": "[2.6.4]",
-          "Microsoft.Extensions.PlatformAbstractions": "1.1.0",
-          "NETStandard.Library": "1.6.1",
-          "System.Runtime.Serialization.Json": "4.3.0",
-          "System.Runtime.Serialization.Primitives": "4.3.0"
-        },
-        "compile": {
-          "lib/netstandard1.6/Microsoft.AI.PerfCounterCollector.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard1.6/Microsoft.AI.PerfCounterCollector.dll": {}
-        }
-      },
-      "Microsoft.ApplicationInsights.SnapshotCollector/1.3.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.ApplicationInsights": "2.4.0",
-          "System.Diagnostics.DiagnosticSource": "4.4.0"
-        },
-        "compile": {
-          "lib/netstandard2.0/Microsoft.ApplicationInsights.SnapshotCollector.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/Microsoft.ApplicationInsights.SnapshotCollector.dll": {}
-        }
-      },
-      "Microsoft.ApplicationInsights.WindowsServer/2.6.4": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.ApplicationInsights": "[2.6.4]",
-          "NETStandard.Library": "1.6.1",
-          "System.Runtime.Serialization.Json": "4.3.0",
-          "System.Runtime.Serialization.Primitives": "4.3.0"
-        },
-        "compile": {
-          "lib/netstandard1.6/Microsoft.AI.WindowsServer.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard1.6/Microsoft.AI.WindowsServer.dll": {}
-        }
-      },
-      "Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel/2.6.4": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.ApplicationInsights": "2.6.4",
-          "System.Diagnostics.Process": "4.3.0",
-          "System.IO.FileSystem.AccessControl": "4.3.0",
-          "System.Net.NetworkInformation": "4.3.0",
-          "System.Net.Requests": "4.3.0",
-          "System.Net.WebHeaderCollection": "4.3.0",
-          "System.Runtime": "4.3.0",
-          "System.Runtime.Serialization.Primitives": "4.3.0",
-          "System.Security.Cryptography.Algorithms": "4.3.0",
-          "System.Threading.Thread": "4.3.0"
-        },
-        "compile": {
-          "lib/netstandard2.0/Microsoft.AI.ServerTelemetryChannel.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/Microsoft.AI.ServerTelemetryChannel.dll": {}
+          "lib/netcoreapp2.0/LinqToTwitter.AspNetCore.dll": {},
+          "lib/netcoreapp2.0/LinqToTwitter.Core.dll": {}
         }
       },
       "Microsoft.AspNet.WebApi.Client/5.2.6": {
@@ -2044,6 +1641,36 @@
           "lib/netstandard2.0/Microsoft.AspNetCore.WebUtilities.dll": {}
         }
       },
+      "Microsoft.Bcl/1.1.10": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Bcl.Build": "1.0.14"
+        },
+        "compile": {
+          "lib/net45/_._": {}
+        },
+        "runtime": {
+          "lib/net45/_._": {}
+        }
+      },
+      "Microsoft.Bcl.Build/1.0.21": {
+        "type": "package",
+        "build": {
+          "build/Microsoft.Bcl.Build.targets": {}
+        }
+      },
+      "Microsoft.Bcl.Compression/3.9.85": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Bcl.Build": "1.0.14"
+        },
+        "compile": {
+          "lib/net45/_._": {}
+        },
+        "runtime": {
+          "lib/net45/_._": {}
+        }
+      },
       "Microsoft.CodeAnalysis.Analyzers/1.1.0": {
         "type": "package"
       },
@@ -2770,19 +2397,6 @@
           "lib/netstandard2.0/Microsoft.Extensions.Options.ConfigurationExtensions.dll": {}
         }
       },
-      "Microsoft.Extensions.PlatformAbstractions/1.1.0": {
-        "type": "package",
-        "dependencies": {
-          "NETStandard.Library": "1.6.1",
-          "System.Reflection.TypeExtensions": "4.3.0"
-        },
-        "compile": {
-          "lib/netstandard1.3/Microsoft.Extensions.PlatformAbstractions.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard1.3/Microsoft.Extensions.PlatformAbstractions.dll": {}
-        }
-      },
       "Microsoft.Extensions.Primitives/2.1.1": {
         "type": "package",
         "dependencies": {
@@ -2926,6 +2540,21 @@
         },
         "runtime": {
           "lib/netstandard1.4/Microsoft.IdentityModel.Xml.dll": {}
+        }
+      },
+      "Microsoft.Net.Http/2.2.29": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Bcl": "1.1.10",
+          "Microsoft.Bcl.Build": "1.0.14"
+        },
+        "compile": {
+          "lib/net45/System.Net.Http.Extensions.dll": {},
+          "lib/net45/System.Net.Http.Primitives.dll": {}
+        },
+        "runtime": {
+          "lib/net45/System.Net.Http.Extensions.dll": {},
+          "lib/net45/System.Net.Http.Primitives.dll": {}
         }
       },
       "Microsoft.Net.Http.Headers/2.1.1": {
@@ -3130,27 +2759,6 @@
         },
         "runtime": {
           "lib/netstandard1.0/_._": {}
-        }
-      },
-      "Microsoft.SCP.Net.SDK/1.0.0.3": {
-        "type": "package",
-        "dependencies": {
-          "Newtonsoft.Json": "6.0.8"
-        },
-        "build": {
-          "build/Microsoft.SCP.Net.SDK.props": {},
-          "build/Microsoft.SCP.Net.SDK.targets": {}
-        }
-      },
-      "Microsoft.Win32.Primitives/4.3.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.NETCore.Platforms": "1.1.0",
-          "Microsoft.NETCore.Targets": "1.1.0",
-          "System.Runtime": "4.3.0"
-        },
-        "compile": {
-          "ref/netstandard1.3/_._": {}
         }
       },
       "Microsoft.Win32.Registry/4.5.0": {
@@ -3564,6 +3172,62 @@
           }
         }
       },
+      "Rx-Core/2.2.5": {
+        "type": "package",
+        "dependencies": {
+          "Rx-Interfaces": "2.2.5"
+        },
+        "compile": {
+          "lib/net45/System.Reactive.Core.dll": {}
+        },
+        "runtime": {
+          "lib/net45/System.Reactive.Core.dll": {}
+        }
+      },
+      "Rx-Interfaces/2.2.5": {
+        "type": "package",
+        "compile": {
+          "lib/net45/System.Reactive.Interfaces.dll": {}
+        },
+        "runtime": {
+          "lib/net45/System.Reactive.Interfaces.dll": {}
+        }
+      },
+      "Rx-Linq/2.2.5": {
+        "type": "package",
+        "dependencies": {
+          "Rx-Core": "2.2.5",
+          "Rx-Interfaces": "2.2.5"
+        },
+        "compile": {
+          "lib/net45/System.Reactive.Linq.dll": {}
+        },
+        "runtime": {
+          "lib/net45/System.Reactive.Linq.dll": {}
+        }
+      },
+      "Rx-Main/2.2.5": {
+        "type": "package",
+        "dependencies": {
+          "Rx-Core": "2.2.5",
+          "Rx-Interfaces": "2.2.5",
+          "Rx-Linq": "2.2.5",
+          "Rx-PlatformServices": "2.2.5"
+        }
+      },
+      "Rx-PlatformServices/2.2.5": {
+        "type": "package",
+        "dependencies": {
+          "Rx-Core": "2.2.5",
+          "Rx-Interfaces": "2.2.5"
+        },
+        "compile": {
+          "lib/net45/System.Reactive.PlatformServices.dll": {}
+        },
+        "runtime": {
+          "lib/net45/System.Reactive.PlatformServices.dll": {}
+        }
+      },
       "SharpZipLib/0.86.0": {
         "type": "package",
         "compile": {
@@ -3706,19 +3370,6 @@
           "lib/netcoreapp2.0/_._": {}
         }
       },
-      "System.Configuration.ConfigurationManager/4.5.0": {
-        "type": "package",
-        "dependencies": {
-          "System.Security.Cryptography.ProtectedData": "4.5.0",
-          "System.Security.Permissions": "4.5.0"
-        },
-        "compile": {
-          "ref/netstandard2.0/System.Configuration.ConfigurationManager.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/System.Configuration.ConfigurationManager.dll": {}
-        }
-      },
       "System.Console/4.3.0": {
         "type": "package",
         "dependencies": {
@@ -3816,49 +3467,6 @@
           }
         }
       },
-      "System.Diagnostics.Process/4.3.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.NETCore.Platforms": "1.1.0",
-          "Microsoft.Win32.Primitives": "4.3.0",
-          "Microsoft.Win32.Registry": "4.3.0",
-          "System.Collections": "4.3.0",
-          "System.Diagnostics.Debug": "4.3.0",
-          "System.Globalization": "4.3.0",
-          "System.IO": "4.3.0",
-          "System.IO.FileSystem": "4.3.0",
-          "System.IO.FileSystem.Primitives": "4.3.0",
-          "System.Resources.ResourceManager": "4.3.0",
-          "System.Runtime": "4.3.0",
-          "System.Runtime.Extensions": "4.3.0",
-          "System.Runtime.Handles": "4.3.0",
-          "System.Runtime.InteropServices": "4.3.0",
-          "System.Text.Encoding": "4.3.0",
-          "System.Text.Encoding.Extensions": "4.3.0",
-          "System.Threading": "4.3.0",
-          "System.Threading.Tasks": "4.3.0",
-          "System.Threading.Thread": "4.3.0",
-          "System.Threading.ThreadPool": "4.3.0",
-          "runtime.native.System": "4.3.0"
-        },
-        "compile": {
-          "ref/netstandard1.4/System.Diagnostics.Process.dll": {}
-        },
-        "runtimeTargets": {
-          "runtimes/linux/lib/netstandard1.4/System.Diagnostics.Process.dll": {
-            "assetType": "runtime",
-            "rid": "linux"
-          },
-          "runtimes/osx/lib/netstandard1.4/System.Diagnostics.Process.dll": {
-            "assetType": "runtime",
-            "rid": "osx"
-          },
-          "runtimes/win/lib/netstandard1.4/System.Diagnostics.Process.dll": {
-            "assetType": "runtime",
-            "rid": "win"
-          }
-        }
-      },
       "System.Diagnostics.StackTrace/4.3.0": {
         "type": "package",
         "dependencies": {
@@ -3868,7 +3476,7 @@
           "System.Runtime": "4.3.0"
         },
         "compile": {
-          "ref/netstandard1.3/System.Diagnostics.StackTrace.dll": {}
+          "ref/netstandard1.3/_._": {}
         },
         "runtime": {
           "lib/netstandard1.3/System.Diagnostics.StackTrace.dll": {}
@@ -4078,32 +3686,6 @@
           "ref/netstandard1.3/System.IO.FileSystem.dll": {}
         }
       },
-      "System.IO.FileSystem.AccessControl/4.3.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.NETCore.Platforms": "1.1.0",
-          "System.IO.FileSystem": "4.3.0",
-          "System.Resources.ResourceManager": "4.3.0",
-          "System.Runtime": "4.3.0",
-          "System.Runtime.Extensions": "4.3.0",
-          "System.Runtime.Handles": "4.3.0",
-          "System.Security.AccessControl": "4.3.0",
-          "System.Security.Principal.Windows": "4.3.0"
-        },
-        "compile": {
-          "ref/netstandard1.3/System.IO.FileSystem.AccessControl.dll": {}
-        },
-        "runtimeTargets": {
-          "runtimes/unix/lib/netstandard1.3/System.IO.FileSystem.AccessControl.dll": {
-            "assetType": "runtime",
-            "rid": "unix"
-          },
-          "runtimes/win/lib/netstandard1.3/System.IO.FileSystem.AccessControl.dll": {
-            "assetType": "runtime",
-            "rid": "win"
-          }
-        }
-      },
       "System.IO.FileSystem.Primitives/4.3.0": {
         "type": "package",
         "dependencies": {
@@ -4241,83 +3823,6 @@
           }
         }
       },
-      "System.Net.NameResolution/4.3.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.NETCore.Platforms": "1.1.0",
-          "System.Collections": "4.3.0",
-          "System.Diagnostics.Tracing": "4.3.0",
-          "System.Globalization": "4.3.0",
-          "System.Net.Primitives": "4.3.0",
-          "System.Resources.ResourceManager": "4.3.0",
-          "System.Runtime": "4.3.0",
-          "System.Runtime.Extensions": "4.3.0",
-          "System.Runtime.Handles": "4.3.0",
-          "System.Runtime.InteropServices": "4.3.0",
-          "System.Security.Principal.Windows": "4.3.0",
-          "System.Threading": "4.3.0",
-          "System.Threading.Tasks": "4.3.0",
-          "runtime.native.System": "4.3.0"
-        },
-        "compile": {
-          "ref/netstandard1.3/System.Net.NameResolution.dll": {}
-        },
-        "runtimeTargets": {
-          "runtimes/unix/lib/netstandard1.3/System.Net.NameResolution.dll": {
-            "assetType": "runtime",
-            "rid": "unix"
-          },
-          "runtimes/win/lib/netstandard1.3/System.Net.NameResolution.dll": {
-            "assetType": "runtime",
-            "rid": "win"
-          }
-        }
-      },
-      "System.Net.NetworkInformation/4.3.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.NETCore.Platforms": "1.1.0",
-          "Microsoft.Win32.Primitives": "4.3.0",
-          "System.Collections": "4.3.0",
-          "System.Diagnostics.Tracing": "4.3.0",
-          "System.Globalization": "4.3.0",
-          "System.IO": "4.3.0",
-          "System.IO.FileSystem": "4.3.0",
-          "System.IO.FileSystem.Primitives": "4.3.0",
-          "System.Linq": "4.3.0",
-          "System.Net.Primitives": "4.3.0",
-          "System.Net.Sockets": "4.3.0",
-          "System.Resources.ResourceManager": "4.3.0",
-          "System.Runtime": "4.3.0",
-          "System.Runtime.Extensions": "4.3.0",
-          "System.Runtime.Handles": "4.3.0",
-          "System.Runtime.InteropServices": "4.3.0",
-          "System.Security.Principal.Windows": "4.3.0",
-          "System.Threading": "4.3.0",
-          "System.Threading.Overlapped": "4.3.0",
-          "System.Threading.Tasks": "4.3.0",
-          "System.Threading.Thread": "4.3.0",
-          "System.Threading.ThreadPool": "4.3.0",
-          "runtime.native.System": "4.3.0"
-        },
-        "compile": {
-          "ref/netstandard1.3/System.Net.NetworkInformation.dll": {}
-        },
-        "runtimeTargets": {
-          "runtimes/linux/lib/netstandard1.3/System.Net.NetworkInformation.dll": {
-            "assetType": "runtime",
-            "rid": "linux"
-          },
-          "runtimes/osx/lib/netstandard1.3/System.Net.NetworkInformation.dll": {
-            "assetType": "runtime",
-            "rid": "osx"
-          },
-          "runtimes/win/lib/netstandard1.3/System.Net.NetworkInformation.dll": {
-            "assetType": "runtime",
-            "rid": "win"
-          }
-        }
-      },
       "System.Net.Primitives/4.3.0": {
         "type": "package",
         "dependencies": {
@@ -4330,22 +3835,22 @@
           "ref/netstandard1.3/System.Net.Primitives.dll": {}
         }
       },
-      "System.Net.Requests/4.3.0": {
+      "System.Net.Requests/4.0.11": {
         "type": "package",
         "dependencies": {
-          "Microsoft.NETCore.Platforms": "1.1.0",
-          "System.Collections": "4.3.0",
-          "System.Diagnostics.Debug": "4.3.0",
-          "System.Diagnostics.Tracing": "4.3.0",
-          "System.Globalization": "4.3.0",
-          "System.IO": "4.3.0",
-          "System.Net.Http": "4.3.0",
-          "System.Net.Primitives": "4.3.0",
-          "System.Net.WebHeaderCollection": "4.3.0",
-          "System.Resources.ResourceManager": "4.3.0",
-          "System.Runtime": "4.3.0",
-          "System.Threading": "4.3.0",
-          "System.Threading.Tasks": "4.3.0"
+          "Microsoft.NETCore.Platforms": "1.0.1",
+          "System.Collections": "4.0.11",
+          "System.Diagnostics.Debug": "4.0.11",
+          "System.Diagnostics.Tracing": "4.1.0",
+          "System.Globalization": "4.0.11",
+          "System.IO": "4.1.0",
+          "System.Net.Http": "4.1.0",
+          "System.Net.Primitives": "4.0.11",
+          "System.Net.WebHeaderCollection": "4.0.1",
+          "System.Resources.ResourceManager": "4.0.1",
+          "System.Runtime": "4.1.0",
+          "System.Threading": "4.0.11",
+          "System.Threading.Tasks": "4.0.11"
         },
         "compile": {
           "ref/netstandard1.3/System.Net.Requests.dll": {}
@@ -4361,27 +3866,13 @@
           }
         }
       },
-      "System.Net.Sockets/4.3.0": {
+      "System.Net.WebHeaderCollection/4.0.1": {
         "type": "package",
         "dependencies": {
-          "Microsoft.NETCore.Platforms": "1.1.0",
-          "Microsoft.NETCore.Targets": "1.1.0",
-          "System.IO": "4.3.0",
-          "System.Net.Primitives": "4.3.0",
-          "System.Runtime": "4.3.0",
-          "System.Threading.Tasks": "4.3.0"
-        },
-        "compile": {
-          "ref/netstandard1.3/_._": {}
-        }
-      },
-      "System.Net.WebHeaderCollection/4.3.0": {
-        "type": "package",
-        "dependencies": {
-          "System.Collections": "4.3.0",
-          "System.Resources.ResourceManager": "4.3.0",
-          "System.Runtime": "4.3.0",
-          "System.Runtime.Extensions": "4.3.0"
+          "System.Collections": "4.0.11",
+          "System.Resources.ResourceManager": "4.0.1",
+          "System.Runtime": "4.1.0",
+          "System.Runtime.Extensions": "4.1.0"
         },
         "compile": {
           "ref/netstandard1.3/System.Net.WebHeaderCollection.dll": {}
@@ -4674,20 +4165,6 @@
           "lib/netstandard1.3/System.Runtime.Numerics.dll": {}
         }
       },
-      "System.Runtime.Serialization.Json/4.3.0": {
-        "type": "package",
-        "dependencies": {
-          "System.IO": "4.3.0",
-          "System.Private.DataContractSerialization": "4.3.0",
-          "System.Runtime": "4.3.0"
-        },
-        "compile": {
-          "ref/netstandard1.0/System.Runtime.Serialization.Json.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard1.3/System.Runtime.Serialization.Json.dll": {}
-        }
-      },
       "System.Runtime.Serialization.Primitives/4.3.0": {
         "type": "package",
         "dependencies": {
@@ -4933,21 +4410,6 @@
           "lib/netstandard1.3/System.Security.Cryptography.Primitives.dll": {}
         }
       },
-      "System.Security.Cryptography.ProtectedData/4.5.0": {
-        "type": "package",
-        "compile": {
-          "ref/netstandard2.0/_._": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/System.Security.Cryptography.ProtectedData.dll": {}
-        },
-        "runtimeTargets": {
-          "runtimes/win/lib/netstandard2.0/System.Security.Cryptography.ProtectedData.dll": {
-            "assetType": "runtime",
-            "rid": "win"
-          }
-        }
-      },
       "System.Security.Cryptography.X509Certificates/4.3.0": {
         "type": "package",
         "dependencies": {
@@ -5135,28 +4597,6 @@
           "lib/netcoreapp2.1/System.Threading.Channels.dll": {}
         }
       },
-      "System.Threading.Overlapped/4.3.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.NETCore.Platforms": "1.1.0",
-          "System.Resources.ResourceManager": "4.3.0",
-          "System.Runtime": "4.3.0",
-          "System.Runtime.Handles": "4.3.0"
-        },
-        "compile": {
-          "ref/netstandard1.3/_._": {}
-        },
-        "runtimeTargets": {
-          "runtimes/unix/lib/netstandard1.3/System.Threading.Overlapped.dll": {
-            "assetType": "runtime",
-            "rid": "unix"
-          },
-          "runtimes/win/lib/netstandard1.3/System.Threading.Overlapped.dll": {
-            "assetType": "runtime",
-            "rid": "win"
-          }
-        }
-      },
       "System.Threading.Tasks/4.3.0": {
         "type": "package",
         "dependencies": {
@@ -5202,23 +4642,10 @@
           "System.Runtime": "4.3.0"
         },
         "compile": {
-          "ref/netstandard1.3/System.Threading.Thread.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard1.3/System.Threading.Thread.dll": {}
-        }
-      },
-      "System.Threading.ThreadPool/4.3.0": {
-        "type": "package",
-        "dependencies": {
-          "System.Runtime": "4.3.0",
-          "System.Runtime.Handles": "4.3.0"
-        },
-        "compile": {
           "ref/netstandard1.3/_._": {}
         },
         "runtime": {
-          "lib/netstandard1.3/System.Threading.ThreadPool.dll": {}
+          "lib/netstandard1.3/System.Threading.Thread.dll": {}
         }
       },
       "System.ValueTuple/4.3.0": {
@@ -5233,15 +4660,6 @@
         },
         "runtime": {
           "lib/netstandard1.0/System.ValueTuple.dll": {}
-        }
-      },
-      "System.Windows.Forms.Ribbon35/3.5.8": {
-        "type": "package",
-        "compile": {
-          "lib/net35/System.Windows.Forms.Ribbon35.dll": {}
-        },
-        "runtime": {
-          "lib/net35/System.Windows.Forms.Ribbon35.dll": {}
         }
       },
       "System.Xml.ReaderWriter/4.3.0": {
@@ -5434,6 +4852,20 @@
           "lib/netstandard1.4/Tweetinvi.WebLogic.dll": {},
           "lib/netstandard1.4/Tweetinvi.dll": {}
         }
+      },
+      "YahooFantasyWrapper/1.2.2": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.Options": "2.0.0",
+          "Newtonsoft.Json": "10.0.3",
+          "System.Text.Encodings.Web": "4.4.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/YahooFantasyWrapper.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/YahooFantasyWrapper.dll": {}
+        }
       }
     }
   },
@@ -5468,16 +4900,6 @@
         "lib/portable-windows8+net45+windowsphone8+wpa+monoandroid+monotouch/AngleSharp.Scripting.JavaScript.xml"
       ]
     },
-    "ApplicationInsightsTelemetryExtensions/0.2.0": {
-      "sha512": "0kpxPvaO/I3EpiWLRhYXlcWuccnCouQhMCYjo2O/tDmcU9CxgAfeYVjSVIcdAKA6j5KEbK7px2ibchOg1n0d+A==",
-      "type": "package",
-      "path": "applicationinsightstelemetryextensions/0.2.0",
-      "files": [
-        "applicationinsightstelemetryextensions.0.2.0.nupkg.sha512",
-        "applicationinsightstelemetryextensions.nuspec",
-        "lib/netstandard2.0/ApplicationInsightsTelemetryExtensions.dll"
-      ]
-    },
     "Autofac/4.6.2": {
       "sha512": "wKI7F6+n45gqfq0T8FuB3hFzaCkuegiFo5in6uB1y2Ai9ZYcjue8yqk3yzyNEwBDS7AyvlTUGSoNovwpUuKqTw==",
       "type": "package",
@@ -5500,374 +4922,6 @@
         "consoletables.nuspec",
         "lib/net40/ConsoleTables.dll",
         "lib/netstandard1.3/ConsoleTables.dll"
-      ]
-    },
-    "DevDefined.OAuth/0.2.0": {
-      "sha512": "HrN5nLFGfME1wquJU1IzUwnabuzQuTBIT06LtsqBWu7KhB3djKywQ8IBYzf+H1yHvhj5rHao/zVMQMMvlHe1qQ==",
-      "type": "package",
-      "path": "devdefined.oauth/0.2.0",
-      "files": [
-        "devdefined.oauth.0.2.0.nupkg.sha512",
-        "devdefined.oauth.nuspec",
-        "lib/DevDefined.OAuth.dll"
-      ]
-    },
-    "DotNetOpenAuth/4.3.4.13329": {
-      "sha512": "+XrbtWeBBUujZBRGirbUUBzp7JESRwSIsQMdh/2kJzlwTr+ZVvggHQ1Tpr4uF7F8n1LTYWNy571wDdNs94BYZw==",
-      "type": "package",
-      "path": "dotnetopenauth/4.3.4.13329",
-      "files": [
-        "dotnetopenauth.4.3.4.13329.nupkg.sha512",
-        "dotnetopenauth.nuspec"
-      ]
-    },
-    "DotNetOpenAuth.Core/4.3.4.13329": {
-      "sha512": "sgTuUWHv5tn1weh8jLqXytGQKWpebhk+D4e/RTNNH21eqCEs/ch+x7YxQxzp2u70DO1Hvcjb6dTDj2rO3grgxA==",
-      "type": "package",
-      "path": "dotnetopenauth.core/4.3.4.13329",
-      "files": [
-        "content/web.config.transform",
-        "dotnetopenauth.core.4.3.4.13329.nupkg.sha512",
-        "dotnetopenauth.core.nuspec",
-        "lib/net35-full/DotNetOpenAuth.Core.dll",
-        "lib/net35-full/DotNetOpenAuth.Core.xml",
-        "lib/net40-full/DotNetOpenAuth.Core.dll",
-        "lib/net40-full/DotNetOpenAuth.Core.xml",
-        "lib/net45-full/DotNetOpenAuth.Core.dll",
-        "lib/net45-full/DotNetOpenAuth.Core.xml"
-      ]
-    },
-    "DotNetOpenAuth.Core.UI/4.3.4.13329": {
-      "sha512": "xd7tQ1TDolBUedrNaCZkvaQ7zeBmo7pzuWvrANGsAAzv+KOyUYAA4ATgp6H0MW+K682hjCrAEo0G/7wFRPBIWA==",
-      "type": "package",
-      "path": "dotnetopenauth.core.ui/4.3.4.13329",
-      "files": [
-        "dotnetopenauth.core.ui.4.3.4.13329.nupkg.sha512",
-        "dotnetopenauth.core.ui.nuspec",
-        "lib/net35-full/DotNetOpenAuth.Core.UI.dll",
-        "lib/net35-full/DotNetOpenAuth.Core.UI.xml",
-        "lib/net40-full/DotNetOpenAuth.Core.UI.dll",
-        "lib/net40-full/DotNetOpenAuth.Core.UI.xml",
-        "lib/net45-full/DotNetOpenAuth.Core.UI.dll",
-        "lib/net45-full/DotNetOpenAuth.Core.UI.xml"
-      ]
-    },
-    "DotNetOpenAuth.InfoCard/4.3.4.13329": {
-      "sha512": "aKPCMoX9rZWU+kYbdpWyaQZnXp9EU8Y4W81NfM+kV/Nlb+01b9QTJvT3K6XeAou7habnrNEXQg0iAjYS7AeDwg==",
-      "type": "package",
-      "path": "dotnetopenauth.infocard/4.3.4.13329",
-      "files": [
-        "dotnetopenauth.infocard.4.3.4.13329.nupkg.sha512",
-        "dotnetopenauth.infocard.nuspec",
-        "lib/net35-full/DotNetOpenAuth.InfoCard.dll",
-        "lib/net35-full/DotNetOpenAuth.InfoCard.xml",
-        "lib/net40-full/DotNetOpenAuth.InfoCard.dll",
-        "lib/net40-full/DotNetOpenAuth.InfoCard.xml",
-        "lib/net45-full/DotNetOpenAuth.InfoCard.dll",
-        "lib/net45-full/DotNetOpenAuth.InfoCard.xml"
-      ]
-    },
-    "DotNetOpenAuth.InfoCard.UI/4.3.4.13329": {
-      "sha512": "YS6cxh3Y3jIwc6srlcjFwgMY2mnErFLVaPaScq5/eCBt+7UcCyYlZxD4qOH+Am69TogSVZa1AV/jwn+qMq8lOw==",
-      "type": "package",
-      "path": "dotnetopenauth.infocard.ui/4.3.4.13329",
-      "files": [
-        "dotnetopenauth.infocard.ui.4.3.4.13329.nupkg.sha512",
-        "dotnetopenauth.infocard.ui.nuspec",
-        "lib/net35-full/DotNetOpenAuth.InfoCard.UI.dll",
-        "lib/net35-full/DotNetOpenAuth.InfoCard.UI.xml",
-        "lib/net40-full/DotNetOpenAuth.InfoCard.UI.dll",
-        "lib/net40-full/DotNetOpenAuth.InfoCard.UI.xml",
-        "lib/net45-full/DotNetOpenAuth.InfoCard.UI.dll",
-        "lib/net45-full/DotNetOpenAuth.InfoCard.UI.xml"
-      ]
-    },
-    "DotNetOpenAuth.OAuth.Common/4.3.4.13329": {
-      "sha512": "42q/rT1H0n/mo1hIqoyhtSX+efBpf23c9gZvv5pc37PXST1zYmtTM3RDW+UM0cuAKlzCBhkqfjo63Nito57UpA==",
-      "type": "package",
-      "path": "dotnetopenauth.oauth.common/4.3.4.13329",
-      "files": [
-        "dotnetopenauth.oauth.common.4.3.4.13329.nupkg.sha512",
-        "dotnetopenauth.oauth.common.nuspec",
-        "lib/net35-full/DotNetOpenAuth.OAuth.Common.dll",
-        "lib/net35-full/DotNetOpenAuth.OAuth.Common.xml",
-        "lib/net40-full/DotNetOpenAuth.OAuth.Common.dll",
-        "lib/net40-full/DotNetOpenAuth.OAuth.Common.xml",
-        "lib/net45-full/DotNetOpenAuth.OAuth.Common.dll",
-        "lib/net45-full/DotNetOpenAuth.OAuth.Common.xml"
-      ]
-    },
-    "DotNetOpenAuth.OAuth.Consumer/4.3.4.13329": {
-      "sha512": "J+2v9yoOn4yIFBstU95/5f0iKs/WrSyYzlnv6dlOkSTqMX/Bm0pIg462U0whr0dnRd3U8JKP6yUNKTfvCrscQA==",
-      "type": "package",
-      "path": "dotnetopenauth.oauth.consumer/4.3.4.13329",
-      "files": [
-        "dotnetopenauth.oauth.consumer.4.3.4.13329.nupkg.sha512",
-        "dotnetopenauth.oauth.consumer.nuspec",
-        "lib/net35-full/DotNetOpenAuth.OAuth.Consumer.dll",
-        "lib/net35-full/DotNetOpenAuth.OAuth.Consumer.xml",
-        "lib/net40-full/DotNetOpenAuth.OAuth.Consumer.dll",
-        "lib/net40-full/DotNetOpenAuth.OAuth.Consumer.xml",
-        "lib/net45-full/DotNetOpenAuth.OAuth.Consumer.dll",
-        "lib/net45-full/DotNetOpenAuth.OAuth.Consumer.xml"
-      ]
-    },
-    "DotNetOpenAuth.OAuth.Core/4.3.4.13329": {
-      "sha512": "lvdJweyGX+orYVDX8LfQ/p2Lr5D8brkCPmTP4t5QlgeztV629oJCtKvqZxaB7ir6nO3jKPfiyrSJVgAW0e1d4g==",
-      "type": "package",
-      "path": "dotnetopenauth.oauth.core/4.3.4.13329",
-      "files": [
-        "content/web.config.transform",
-        "dotnetopenauth.oauth.core.4.3.4.13329.nupkg.sha512",
-        "dotnetopenauth.oauth.core.nuspec",
-        "lib/net35-full/DotNetOpenAuth.OAuth.dll",
-        "lib/net35-full/DotNetOpenAuth.OAuth.xml",
-        "lib/net40-full/DotNetOpenAuth.OAuth.dll",
-        "lib/net40-full/DotNetOpenAuth.OAuth.xml",
-        "lib/net45-full/DotNetOpenAuth.OAuth.dll",
-        "lib/net45-full/DotNetOpenAuth.OAuth.xml"
-      ]
-    },
-    "DotNetOpenAuth.OAuth.ServiceProvider/4.3.4.13329": {
-      "sha512": "P/I9gINYouLktBFQlM5bluPh+/HPORlpLtIsc3HoIulHQr/UJuJNBbS0YxKnJWh8CWpniTamU9DPc7/NZLLTIA==",
-      "type": "package",
-      "path": "dotnetopenauth.oauth.serviceprovider/4.3.4.13329",
-      "files": [
-        "dotnetopenauth.oauth.serviceprovider.4.3.4.13329.nupkg.sha512",
-        "dotnetopenauth.oauth.serviceprovider.nuspec",
-        "lib/net35-full/DotNetOpenAuth.OAuth.ServiceProvider.dll",
-        "lib/net35-full/DotNetOpenAuth.OAuth.ServiceProvider.xml",
-        "lib/net40-full/DotNetOpenAuth.OAuth.ServiceProvider.dll",
-        "lib/net40-full/DotNetOpenAuth.OAuth.ServiceProvider.xml",
-        "lib/net45-full/DotNetOpenAuth.OAuth.ServiceProvider.dll",
-        "lib/net45-full/DotNetOpenAuth.OAuth.ServiceProvider.xml"
-      ]
-    },
-    "DotNetOpenAuth.OAuth2.AuthorizationServer/4.3.4.13329": {
-      "sha512": "yq8IpYhlmm4gVrbx6qeoE8F6OaiBipFyTsuXdLUEXWS1hv/Fq5BNG6eACyKW7BiG+jb1jFO7gedWjmjO+wPdiA==",
-      "type": "package",
-      "path": "dotnetopenauth.oauth2.authorizationserver/4.3.4.13329",
-      "files": [
-        "dotnetopenauth.oauth2.authorizationserver.4.3.4.13329.nupkg.sha512",
-        "dotnetopenauth.oauth2.authorizationserver.nuspec",
-        "lib/net35-full/DotNetOpenAuth.OAuth2.AuthorizationServer.dll",
-        "lib/net35-full/DotNetOpenAuth.OAuth2.AuthorizationServer.xml",
-        "lib/net40-full/DotNetOpenAuth.OAuth2.AuthorizationServer.dll",
-        "lib/net40-full/DotNetOpenAuth.OAuth2.AuthorizationServer.xml",
-        "lib/net45-full/DotNetOpenAuth.OAuth2.AuthorizationServer.dll",
-        "lib/net45-full/DotNetOpenAuth.OAuth2.AuthorizationServer.xml"
-      ]
-    },
-    "DotNetOpenAuth.OAuth2.Client/4.3.4.13329": {
-      "sha512": "7a0AnHNMx15rgG2GPFdhRpcrFJX7MZdRY+bxnooJ9rUXCKJgFn8e061Wnc7tff3mY2YAjPOo2bg+ThIOqYaClw==",
-      "type": "package",
-      "path": "dotnetopenauth.oauth2.client/4.3.4.13329",
-      "files": [
-        "dotnetopenauth.oauth2.client.4.3.4.13329.nupkg.sha512",
-        "dotnetopenauth.oauth2.client.nuspec",
-        "lib/net35-full/DotNetOpenAuth.OAuth2.Client.dll",
-        "lib/net35-full/DotNetOpenAuth.OAuth2.Client.xml",
-        "lib/net40-full/DotNetOpenAuth.OAuth2.Client.dll",
-        "lib/net40-full/DotNetOpenAuth.OAuth2.Client.xml",
-        "lib/net45-full/DotNetOpenAuth.OAuth2.Client.dll",
-        "lib/net45-full/DotNetOpenAuth.OAuth2.Client.xml"
-      ]
-    },
-    "DotNetOpenAuth.OAuth2.Client.UI/4.3.4.13329": {
-      "sha512": "hAih1ctQvR6Hl57/WHoMEdrB2kKCU6j+i3B++iRpeyjESO3KIZOphnBYHCuHvQ6bgjnX5hJ0XI/HrZTEDzwwjA==",
-      "type": "package",
-      "path": "dotnetopenauth.oauth2.client.ui/4.3.4.13329",
-      "files": [
-        "dotnetopenauth.oauth2.client.ui.4.3.4.13329.nupkg.sha512",
-        "dotnetopenauth.oauth2.client.ui.nuspec",
-        "lib/net35-full/DotNetOpenAuth.OAuth2.Client.UI.dll",
-        "lib/net35-full/DotNetOpenAuth.OAuth2.Client.UI.xml",
-        "lib/net40-full/DotNetOpenAuth.OAuth2.Client.UI.dll",
-        "lib/net40-full/DotNetOpenAuth.OAuth2.Client.UI.xml",
-        "lib/net45-full/DotNetOpenAuth.OAuth2.Client.UI.dll",
-        "lib/net45-full/DotNetOpenAuth.OAuth2.Client.UI.xml"
-      ]
-    },
-    "DotNetOpenAuth.OAuth2.ClientAuthorization/4.3.4.13329": {
-      "sha512": "J102aHCpTNLzZ6pmkNEkZiNvRPXkSMxPUlvDseGGWEd/g+dSfFT4fH4VQMHV2gb0g6JOhwgImEdy6UB8NJBhOQ==",
-      "type": "package",
-      "path": "dotnetopenauth.oauth2.clientauthorization/4.3.4.13329",
-      "files": [
-        "dotnetopenauth.oauth2.clientauthorization.4.3.4.13329.nupkg.sha512",
-        "dotnetopenauth.oauth2.clientauthorization.nuspec",
-        "lib/net35-full/DotNetOpenAuth.OAuth2.ClientAuthorization.dll",
-        "lib/net35-full/DotNetOpenAuth.OAuth2.ClientAuthorization.xml",
-        "lib/net40-full/DotNetOpenAuth.OAuth2.ClientAuthorization.dll",
-        "lib/net40-full/DotNetOpenAuth.OAuth2.ClientAuthorization.xml",
-        "lib/net45-full/DotNetOpenAuth.OAuth2.ClientAuthorization.dll",
-        "lib/net45-full/DotNetOpenAuth.OAuth2.ClientAuthorization.xml"
-      ]
-    },
-    "DotNetOpenAuth.OAuth2.Core/4.3.4.13329": {
-      "sha512": "2KPnfW/lEObcn5dtme1zrwkU3wxIMaAp/fZvrRom9TA/6P8WZLb/wiyHMtkm77+rC18SRYbAmGCHxuc3p+Uezw==",
-      "type": "package",
-      "path": "dotnetopenauth.oauth2.core/4.3.4.13329",
-      "files": [
-        "dotnetopenauth.oauth2.core.4.3.4.13329.nupkg.sha512",
-        "dotnetopenauth.oauth2.core.nuspec",
-        "lib/net35-full/DotNetOpenAuth.OAuth2.dll",
-        "lib/net35-full/DotNetOpenAuth.OAuth2.xml",
-        "lib/net40-full/DotNetOpenAuth.OAuth2.dll",
-        "lib/net40-full/DotNetOpenAuth.OAuth2.xml",
-        "lib/net45-full/DotNetOpenAuth.OAuth2.dll",
-        "lib/net45-full/DotNetOpenAuth.OAuth2.xml"
-      ]
-    },
-    "DotNetOpenAuth.OAuth2.ResourceServer/4.3.4.13329": {
-      "sha512": "Y2MgpdJ3fophQaa74FSHYx9eihIcknQyOh53ktCJ3QxNKX8qjuA9pqITMoJdpnv5c39NOY6s4jRU6AvuhfQB1Q==",
-      "type": "package",
-      "path": "dotnetopenauth.oauth2.resourceserver/4.3.4.13329",
-      "files": [
-        "dotnetopenauth.oauth2.resourceserver.4.3.4.13329.nupkg.sha512",
-        "dotnetopenauth.oauth2.resourceserver.nuspec",
-        "lib/net35-full/DotNetOpenAuth.OAuth2.ResourceServer.dll",
-        "lib/net35-full/DotNetOpenAuth.OAuth2.ResourceServer.xml",
-        "lib/net40-full/DotNetOpenAuth.OAuth2.ResourceServer.dll",
-        "lib/net40-full/DotNetOpenAuth.OAuth2.ResourceServer.xml",
-        "lib/net45-full/DotNetOpenAuth.OAuth2.ResourceServer.dll",
-        "lib/net45-full/DotNetOpenAuth.OAuth2.ResourceServer.xml"
-      ]
-    },
-    "DotNetOpenAuth.OpenId.Core/4.3.4.13329": {
-      "sha512": "r8XKTJ6c+YvOOQcTLMgjWsfAkNxgxp8QVsP6pRXrg1Onp5TpzNZ9ULVzKkyRRipmC0fEGitydRnjKRDD2QxLtg==",
-      "type": "package",
-      "path": "dotnetopenauth.openid.core/4.3.4.13329",
-      "files": [
-        "content/net35-full/web.config.transform",
-        "content/net40-full/web.config.transform",
-        "content/net45-full/web.config.transform",
-        "dotnetopenauth.openid.core.4.3.4.13329.nupkg.sha512",
-        "dotnetopenauth.openid.core.nuspec",
-        "lib/net35-full/DotNetOpenAuth.OpenId.dll",
-        "lib/net35-full/DotNetOpenAuth.OpenId.xml",
-        "lib/net35-full/Mono.Math.dll",
-        "lib/net35-full/Mono.Math.xml",
-        "lib/net35-full/Org.Mentalis.Security.Cryptography.dll",
-        "lib/net35-full/Org.Mentalis.Security.Cryptography.xml",
-        "lib/net40-full/DotNetOpenAuth.OpenId.dll",
-        "lib/net40-full/DotNetOpenAuth.OpenId.xml",
-        "lib/net40-full/Mono.Math.dll",
-        "lib/net40-full/Mono.Math.xml",
-        "lib/net40-full/Org.Mentalis.Security.Cryptography.dll",
-        "lib/net40-full/Org.Mentalis.Security.Cryptography.xml",
-        "lib/net45-full/DotNetOpenAuth.OpenId.dll",
-        "lib/net45-full/DotNetOpenAuth.OpenId.xml",
-        "lib/net45-full/Mono.Math.dll",
-        "lib/net45-full/Mono.Math.xml",
-        "lib/net45-full/Org.Mentalis.Security.Cryptography.dll",
-        "lib/net45-full/Org.Mentalis.Security.Cryptography.xml"
-      ]
-    },
-    "DotNetOpenAuth.OpenId.Core.UI/4.3.4.13329": {
-      "sha512": "Jooj8My+LgRGN6WbiakcU40wl9oXxK8IbIrH2BW87mpQTqAQFIsepAHxlzKStkoEFgByxSEI05YnnscRu9uLMg==",
-      "type": "package",
-      "path": "dotnetopenauth.openid.core.ui/4.3.4.13329",
-      "files": [
-        "dotnetopenauth.openid.core.ui.4.3.4.13329.nupkg.sha512",
-        "dotnetopenauth.openid.core.ui.nuspec",
-        "lib/net35-full/DotNetOpenAuth.OpenId.UI.dll",
-        "lib/net35-full/DotNetOpenAuth.OpenId.UI.xml",
-        "lib/net40-full/DotNetOpenAuth.OpenId.UI.dll",
-        "lib/net40-full/DotNetOpenAuth.OpenId.UI.xml",
-        "lib/net45-full/DotNetOpenAuth.OpenId.UI.dll",
-        "lib/net45-full/DotNetOpenAuth.OpenId.UI.xml"
-      ]
-    },
-    "DotNetOpenAuth.OpenId.Provider/4.3.4.13329": {
-      "sha512": "AU332jmP8/BUZ6Tmu7bpykJWNd4gO9xsMVz0G/pZg1pAaEP7ftdprbMu93ZhLgk7v3YIUT2pQje8DbWElFJu4Q==",
-      "type": "package",
-      "path": "dotnetopenauth.openid.provider/4.3.4.13329",
-      "files": [
-        "content/web.config.transform",
-        "dotnetopenauth.openid.provider.4.3.4.13329.nupkg.sha512",
-        "dotnetopenauth.openid.provider.nuspec",
-        "lib/net35-full/DotNetOpenAuth.OpenId.Provider.dll",
-        "lib/net35-full/DotNetOpenAuth.OpenId.Provider.xml",
-        "lib/net40-full/DotNetOpenAuth.OpenId.Provider.dll",
-        "lib/net40-full/DotNetOpenAuth.OpenId.Provider.xml",
-        "lib/net45-full/DotNetOpenAuth.OpenId.Provider.dll",
-        "lib/net45-full/DotNetOpenAuth.OpenId.Provider.xml"
-      ]
-    },
-    "DotNetOpenAuth.OpenId.Provider.UI/4.3.4.13329": {
-      "sha512": "/WeLnfEPwuWyWFENzqNGYRioqfKKdGSiVnT2wW5hx1T/1DjbK7HxwiE+bpUxctNU0iodlFnIYUdkwkFlNmg3SA==",
-      "type": "package",
-      "path": "dotnetopenauth.openid.provider.ui/4.3.4.13329",
-      "files": [
-        "dotnetopenauth.openid.provider.ui.4.3.4.13329.nupkg.sha512",
-        "dotnetopenauth.openid.provider.ui.nuspec",
-        "lib/net35-full/DotNetOpenAuth.OpenId.Provider.UI.dll",
-        "lib/net35-full/DotNetOpenAuth.OpenId.Provider.UI.xml",
-        "lib/net40-full/DotNetOpenAuth.OpenId.Provider.UI.dll",
-        "lib/net40-full/DotNetOpenAuth.OpenId.Provider.UI.xml",
-        "lib/net45-full/DotNetOpenAuth.OpenId.Provider.UI.dll",
-        "lib/net45-full/DotNetOpenAuth.OpenId.Provider.UI.xml"
-      ]
-    },
-    "DotNetOpenAuth.OpenId.RelyingParty/4.3.4.13329": {
-      "sha512": "2uME8eTovsaE+/EiDDkr82O7y7yl0LMyoQHuHCdOVizUHrUZewkF/vi7pn1F9pGqs8zeBQqI9y1AZ6XQ3s2REA==",
-      "type": "package",
-      "path": "dotnetopenauth.openid.relyingparty/4.3.4.13329",
-      "files": [
-        "content/web.config.transform",
-        "dotnetopenauth.openid.relyingparty.4.3.4.13329.nupkg.sha512",
-        "dotnetopenauth.openid.relyingparty.nuspec",
-        "lib/net35-full/DotNetOpenAuth.OpenId.RelyingParty.dll",
-        "lib/net35-full/DotNetOpenAuth.OpenId.RelyingParty.xml",
-        "lib/net40-full/DotNetOpenAuth.OpenId.RelyingParty.dll",
-        "lib/net40-full/DotNetOpenAuth.OpenId.RelyingParty.xml",
-        "lib/net45-full/DotNetOpenAuth.OpenId.RelyingParty.dll",
-        "lib/net45-full/DotNetOpenAuth.OpenId.RelyingParty.xml"
-      ]
-    },
-    "DotNetOpenAuth.OpenId.RelyingParty.UI/4.3.4.13329": {
-      "sha512": "06kxJcANMgQ4eLWh2HawHRDJ6rRAL+EOWMGLhW5aE8G0F31iQHB2vlRVPEo//rnf0dhAaVSDo0mPgwodYmjKGA==",
-      "type": "package",
-      "path": "dotnetopenauth.openid.relyingparty.ui/4.3.4.13329",
-      "files": [
-        "dotnetopenauth.openid.relyingparty.ui.4.3.4.13329.nupkg.sha512",
-        "dotnetopenauth.openid.relyingparty.ui.nuspec",
-        "lib/net35-full/DotNetOpenAuth.OpenId.RelyingParty.UI.dll",
-        "lib/net35-full/DotNetOpenAuth.OpenId.RelyingParty.UI.xml",
-        "lib/net40-full/DotNetOpenAuth.OpenId.RelyingParty.UI.dll",
-        "lib/net40-full/DotNetOpenAuth.OpenId.RelyingParty.UI.xml",
-        "lib/net45-full/DotNetOpenAuth.OpenId.RelyingParty.UI.dll",
-        "lib/net45-full/DotNetOpenAuth.OpenId.RelyingParty.UI.xml"
-      ]
-    },
-    "DotNetOpenAuth.OpenIdInfoCard.UI/4.3.4.13329": {
-      "sha512": "HkV7igZG5cudLfdT9p9gQshtSr8C4da65UmaubYqnLMJpgdBnKIlsVz/2PhRfQ8zfxWPOcpkjQxu1Ps/K33v2Q==",
-      "type": "package",
-      "path": "dotnetopenauth.openidinfocard.ui/4.3.4.13329",
-      "files": [
-        "dotnetopenauth.openidinfocard.ui.4.3.4.13329.nupkg.sha512",
-        "dotnetopenauth.openidinfocard.ui.nuspec",
-        "lib/net35-full/DotNetOpenAuth.OpenIdInfoCard.UI.dll",
-        "lib/net35-full/DotNetOpenAuth.OpenIdInfoCard.UI.xml",
-        "lib/net40-full/DotNetOpenAuth.OpenIdInfoCard.UI.dll",
-        "lib/net40-full/DotNetOpenAuth.OpenIdInfoCard.UI.xml",
-        "lib/net45-full/DotNetOpenAuth.OpenIdInfoCard.UI.dll",
-        "lib/net45-full/DotNetOpenAuth.OpenIdInfoCard.UI.xml"
-      ]
-    },
-    "DotNetOpenAuth.OpenIdOAuth/4.3.4.13329": {
-      "sha512": "37yvW2z/l1e6WGiLMdqjpWijgOpqHGa6GClIyynF94PjEs2bEJH9iPpHTrskxNdimOG1nzqR9sJYS4Gh26mt4w==",
-      "type": "package",
-      "path": "dotnetopenauth.openidoauth/4.3.4.13329",
-      "files": [
-        "dotnetopenauth.openidoauth.4.3.4.13329.nupkg.sha512",
-        "dotnetopenauth.openidoauth.nuspec",
-        "lib/net35-full/DotNetOpenAuth.OpenIdOAuth.dll",
-        "lib/net35-full/DotNetOpenAuth.OpenIdOAuth.xml",
-        "lib/net40-full/DotNetOpenAuth.OpenIdOAuth.dll",
-        "lib/net40-full/DotNetOpenAuth.OpenIdOAuth.xml",
-        "lib/net45-full/DotNetOpenAuth.OpenIdOAuth.dll",
-        "lib/net45-full/DotNetOpenAuth.OpenIdOAuth.xml"
       ]
     },
     "DynamicInterop/0.8.1": {
@@ -5951,118 +5005,21 @@
         "lib/portable40-net40+sl5+win8+wp8+wpa81/jint.dll"
       ]
     },
-    "Microsoft.ApplicationInsights/2.6.4": {
-      "sha512": "cOYn7GQOWVu3O11J3Ckcq2ZrL8p83dAOEW67w8G6+Szq1usGSRYNkPOBDWJMg5iskHN/VA65n6EWuhMP/yNqvw==",
+    "linqtotwitter/4.2.1": {
+      "sha512": "2cpsJVLRm0IokyoaGLKX9Y3/V7mbPHh3GOOy209/D/ClwFGjuKZQ92zdiG8lVILejk7pDTyZVzqHWpZeQpbX8g==",
       "type": "package",
-      "path": "microsoft.applicationinsights/2.6.4",
+      "path": "linqtotwitter/4.2.1",
       "files": [
-        ".signature.p7s",
-        "lib/net45/Microsoft.ApplicationInsights.dll",
-        "lib/net46/Microsoft.ApplicationInsights.dll",
-        "lib/netstandard1.3/Microsoft.ApplicationInsights.dll",
-        "microsoft.applicationinsights.2.6.4.nupkg.sha512",
-        "microsoft.applicationinsights.nuspec"
-      ]
-    },
-    "Microsoft.ApplicationInsights.AspNetCore/2.3.0": {
-      "sha512": "Dudt/xCpVNKDi2Nha2Ddn3yWUVHKOo6jF8uQ4/xpSn7Lc3zVrFNrriZRnyvw6ueWPelxDC5SrQWpVDP/SK0b/A==",
-      "type": "package",
-      "path": "microsoft.applicationinsights.aspnetcore/2.3.0",
-      "files": [
-        ".signature.p7s",
-        "lib/net451/Microsoft.ApplicationInsights.AspNetCore.dll",
-        "lib/net451/Microsoft.ApplicationInsights.AspNetCore.xml",
-        "lib/net46/Microsoft.ApplicationInsights.AspNetCore.dll",
-        "lib/net46/Microsoft.ApplicationInsights.AspNetCore.xml",
-        "lib/netstandard1.6/Microsoft.ApplicationInsights.AspNetCore.dll",
-        "lib/netstandard1.6/Microsoft.ApplicationInsights.AspNetCore.xml",
-        "microsoft.applicationinsights.aspnetcore.2.3.0.nupkg.sha512",
-        "microsoft.applicationinsights.aspnetcore.nuspec"
-      ]
-    },
-    "Microsoft.ApplicationInsights.DependencyCollector/2.6.4": {
-      "sha512": "ATcRdhD5BqtyHE3iQa9lb+FGWqOV+6Qmv6bvN2bXZA3K8+1J7czVBT2wFbSnu5S4xrl4Z4BFWhvp4elvgLZ/9Q==",
-      "type": "package",
-      "path": "microsoft.applicationinsights.dependencycollector/2.6.4",
-      "files": [
-        ".signature.p7s",
-        "content/ApplicationInsights.config.install.xdt",
-        "content/ApplicationInsights.config.transform",
-        "content/ApplicationInsights.config.uninstall.xdt",
-        "lib/net45/Microsoft.AI.DependencyCollector.XML",
-        "lib/net45/Microsoft.AI.DependencyCollector.dll",
-        "lib/netstandard1.6/Microsoft.AI.DependencyCollector.dll",
-        "lib/netstandard1.6/Microsoft.AI.DependencyCollector.xml",
-        "microsoft.applicationinsights.dependencycollector.2.6.4.nupkg.sha512",
-        "microsoft.applicationinsights.dependencycollector.nuspec"
-      ]
-    },
-    "Microsoft.ApplicationInsights.PerfCounterCollector/2.6.4": {
-      "sha512": "TdAoUPfiF4GYJUyFl0VWYnwzHpYcZU7jrAqFi6qv1h8sGRIT7d6IqLakmiFYI/kv6n26DPTrd3cGQP6cy4GaXg==",
-      "type": "package",
-      "path": "microsoft.applicationinsights.perfcountercollector/2.6.4",
-      "files": [
-        ".signature.p7s",
-        "content/ApplicationInsights.config.install.xdt",
-        "content/ApplicationInsights.config.transform",
-        "content/ApplicationInsights.config.uninstall.xdt",
-        "lib/net45/Microsoft.AI.PerfCounterCollector.dll",
-        "lib/netstandard1.6/Microsoft.AI.PerfCounterCollector.dll",
-        "lib/netstandard1.6/Microsoft.AI.PerfCounterCollector.xml",
-        "microsoft.applicationinsights.perfcountercollector.2.6.4.nupkg.sha512",
-        "microsoft.applicationinsights.perfcountercollector.nuspec"
-      ]
-    },
-    "Microsoft.ApplicationInsights.SnapshotCollector/1.3.0": {
-      "sha512": "q3EC/dmb1b+PLsoiW/ZqhKXw8G4k5vjeOszwn07u0wklfSTJocRY6M4nhVt1X9STXanfzjHeww4T3MAsGH+6/w==",
-      "type": "package",
-      "path": "microsoft.applicationinsights.snapshotcollector/1.3.0",
-      "files": [
-        ".signature.p7s",
-        "ThirdPartyNotices.txt",
-        "content/ApplicationInsights.config.install.xdt",
-        "content/ApplicationInsights.config.transform",
-        "content/ApplicationInsights.config.uninstall.xdt",
-        "lib/net45/Microsoft.ApplicationInsights.SnapshotCollector.dll",
-        "lib/net45/Microsoft.ApplicationInsights.SnapshotCollector.xml",
-        "lib/netstandard2.0/Microsoft.ApplicationInsights.SnapshotCollector.dll",
-        "lib/netstandard2.0/Microsoft.ApplicationInsights.SnapshotCollector.xml",
-        "microsoft.applicationinsights.snapshotcollector.1.3.0.nupkg.sha512",
-        "microsoft.applicationinsights.snapshotcollector.nuspec"
-      ]
-    },
-    "Microsoft.ApplicationInsights.WindowsServer/2.6.4": {
-      "sha512": "DblLQvovmCPetuaT/9L81pmJ0qWaQp8ADZ9UJM3riIdAZdyrqFzKSH4mB/Wf5nNfwFrbCmJx7AQ6omWZK+1p3w==",
-      "type": "package",
-      "path": "microsoft.applicationinsights.windowsserver/2.6.4",
-      "files": [
-        ".signature.p7s",
-        "Tools/install.ps1",
-        "content/ApplicationInsights.config.install.xdt",
-        "content/ApplicationInsights.config.transform",
-        "content/ApplicationInsights.config.uninstall.xdt",
-        "lib/net45/Microsoft.AI.WindowsServer.XML",
-        "lib/net45/Microsoft.AI.WindowsServer.dll",
-        "lib/netstandard1.6/Microsoft.AI.WindowsServer.dll",
-        "lib/netstandard1.6/Microsoft.AI.WindowsServer.xml",
-        "microsoft.applicationinsights.windowsserver.2.6.4.nupkg.sha512",
-        "microsoft.applicationinsights.windowsserver.nuspec"
-      ]
-    },
-    "Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel/2.6.4": {
-      "sha512": "oDAd2EymLQevzXbbb51rQK2TV8Y2y27uvNgsSrYyFQtmbKkHQjVPIPsJAX7imBDT9Qfgyuyr6264yU4kxWqTdA==",
-      "type": "package",
-      "path": "microsoft.applicationinsights.windowsserver.telemetrychannel/2.6.4",
-      "files": [
-        ".signature.p7s",
-        "content/ApplicationInsights.config.install.xdt",
-        "content/ApplicationInsights.config.transform",
-        "content/ApplicationInsights.config.uninstall.xdt",
-        "lib/net45/Microsoft.AI.ServerTelemetryChannel.dll",
-        "lib/netstandard1.3/Microsoft.AI.ServerTelemetryChannel.dll",
-        "lib/netstandard2.0/Microsoft.AI.ServerTelemetryChannel.dll",
-        "microsoft.applicationinsights.windowsserver.telemetrychannel.2.6.4.nupkg.sha512",
-        "microsoft.applicationinsights.windowsserver.telemetrychannel.nuspec"
+        "lib/monoandroid/LinqToTwitter.xamarin.dll",
+        "lib/monotouch/LinqToTwitter.xamarin.dll",
+        "lib/net45/LinqToTwitter.AspNet.dll",
+        "lib/net45/LinqToTwitter.net.dll",
+        "lib/netcoreapp2.0/LinqToTwitter.AspNetCore.dll",
+        "lib/netcoreapp2.0/LinqToTwitter.Core.dll",
+        "lib/portable-net45+win8+wpa81/LinqToTwitter.xamarin.dll",
+        "lib/uap10.0/LinqToTwitter.uap10.dll",
+        "linqtotwitter.4.2.1.nupkg.sha512",
+        "linqtotwitter.nuspec"
       ]
     },
     "Microsoft.AspNet.WebApi.Client/5.2.6": {
@@ -7234,6 +6191,133 @@
         "microsoft.aspnetcore.webutilities.nuspec"
       ]
     },
+    "Microsoft.Bcl/1.1.10": {
+      "sha512": "+tTqoh/M1pyL8El3qLy30EcwnAtyvFoDZJtdG9Cbg/WdFbh4N8kyrq198XHuEL7lnJbeD0DRO8jcX5IIOh05cQ==",
+      "type": "package",
+      "path": "microsoft.bcl/1.1.10",
+      "files": [
+        "License-Stable.rtf",
+        "lib/Xamarin.iOS10/_._",
+        "lib/monoandroid/_._",
+        "lib/monotouch/_._",
+        "lib/net40/System.IO.dll",
+        "lib/net40/System.IO.xml",
+        "lib/net40/System.Runtime.dll",
+        "lib/net40/System.Runtime.xml",
+        "lib/net40/System.Threading.Tasks.dll",
+        "lib/net40/System.Threading.Tasks.xml",
+        "lib/net40/ensureRedirect.xml",
+        "lib/net45/_._",
+        "lib/portable-net40+sl4+win8+wp71+wpa81/System.IO.dll",
+        "lib/portable-net40+sl4+win8+wp71+wpa81/System.IO.xml",
+        "lib/portable-net40+sl4+win8+wp71+wpa81/System.Runtime.dll",
+        "lib/portable-net40+sl4+win8+wp71+wpa81/System.Runtime.xml",
+        "lib/portable-net40+sl4+win8+wp71+wpa81/System.Threading.Tasks.dll",
+        "lib/portable-net40+sl4+win8+wp71+wpa81/System.Threading.Tasks.xml",
+        "lib/portable-net40+sl4+win8+wp71+wpa81/ensureRedirect.xml",
+        "lib/portable-net40+sl4+win8+wp8+wpa81/System.IO.dll",
+        "lib/portable-net40+sl4+win8+wp8+wpa81/System.IO.xml",
+        "lib/portable-net40+sl4+win8+wp8+wpa81/System.Runtime.dll",
+        "lib/portable-net40+sl4+win8+wp8+wpa81/System.Runtime.xml",
+        "lib/portable-net40+sl4+win8+wp8+wpa81/System.Threading.Tasks.dll",
+        "lib/portable-net40+sl4+win8+wp8+wpa81/System.Threading.Tasks.xml",
+        "lib/portable-net40+sl4+win8+wp8+wpa81/ensureRedirect.xml",
+        "lib/portable-net40+sl4+win8/System.IO.dll",
+        "lib/portable-net40+sl4+win8/System.IO.xml",
+        "lib/portable-net40+sl4+win8/System.Runtime.dll",
+        "lib/portable-net40+sl4+win8/System.Runtime.xml",
+        "lib/portable-net40+sl4+win8/System.Threading.Tasks.dll",
+        "lib/portable-net40+sl4+win8/System.Threading.Tasks.xml",
+        "lib/portable-net40+sl4+win8/ensureRedirect.xml",
+        "lib/portable-net40+sl5+win8+wp8+wpa81/System.IO.dll",
+        "lib/portable-net40+sl5+win8+wp8+wpa81/System.IO.xml",
+        "lib/portable-net40+sl5+win8+wp8+wpa81/System.Runtime.dll",
+        "lib/portable-net40+sl5+win8+wp8+wpa81/System.Runtime.xml",
+        "lib/portable-net40+sl5+win8+wp8+wpa81/System.Threading.Tasks.dll",
+        "lib/portable-net40+sl5+win8+wp8+wpa81/System.Threading.Tasks.xml",
+        "lib/portable-net40+sl5+win8+wp8+wpa81/ensureRedirect.xml",
+        "lib/portable-net40+win8+wp8+wpa81/System.IO.dll",
+        "lib/portable-net40+win8+wp8+wpa81/System.IO.xml",
+        "lib/portable-net40+win8+wp8+wpa81/System.Runtime.dll",
+        "lib/portable-net40+win8+wp8+wpa81/System.Runtime.xml",
+        "lib/portable-net40+win8+wp8+wpa81/System.Threading.Tasks.dll",
+        "lib/portable-net40+win8+wp8+wpa81/System.Threading.Tasks.xml",
+        "lib/portable-net40+win8+wp8+wpa81/ensureRedirect.xml",
+        "lib/portable-net40+win8/System.IO.dll",
+        "lib/portable-net40+win8/System.IO.xml",
+        "lib/portable-net40+win8/System.Runtime.dll",
+        "lib/portable-net40+win8/System.Runtime.xml",
+        "lib/portable-net40+win8/System.Threading.Tasks.dll",
+        "lib/portable-net40+win8/System.Threading.Tasks.xml",
+        "lib/portable-net40+win8/ensureRedirect.xml",
+        "lib/portable-net45+win8+wp8+wpa81/_._",
+        "lib/portable-net45+win8+wpa81/_._",
+        "lib/portable-net451+win81+wpa81/_._",
+        "lib/portable-net451+win81/_._",
+        "lib/portable-win81+wp81+wpa81/_._",
+        "lib/sl4-windowsphone71/System.IO.dll",
+        "lib/sl4-windowsphone71/System.IO.xml",
+        "lib/sl4-windowsphone71/System.Runtime.dll",
+        "lib/sl4-windowsphone71/System.Runtime.xml",
+        "lib/sl4-windowsphone71/System.Threading.Tasks.dll",
+        "lib/sl4-windowsphone71/System.Threading.Tasks.xml",
+        "lib/sl4-windowsphone71/ensureRedirect.xml",
+        "lib/sl4/System.IO.dll",
+        "lib/sl4/System.IO.xml",
+        "lib/sl4/System.Runtime.dll",
+        "lib/sl4/System.Runtime.xml",
+        "lib/sl4/System.Threading.Tasks.dll",
+        "lib/sl4/System.Threading.Tasks.xml",
+        "lib/sl5/System.IO.dll",
+        "lib/sl5/System.IO.xml",
+        "lib/sl5/System.Runtime.dll",
+        "lib/sl5/System.Runtime.xml",
+        "lib/sl5/System.Threading.Tasks.dll",
+        "lib/sl5/System.Threading.Tasks.xml",
+        "lib/win8/_._",
+        "lib/wp8/_._",
+        "lib/wpa81/_._",
+        "microsoft.bcl.1.1.10.nupkg.sha512",
+        "microsoft.bcl.nuspec"
+      ]
+    },
+    "Microsoft.Bcl.Build/1.0.21": {
+      "sha512": "sgHu4mIt0+NVGyI12Bj4hLPypNK55UOH+ologj2LqDCjxq3EbIxe/uAtHjY+fEwbE1dtsAHG8SXHf+V/EYbKTg==",
+      "type": "package",
+      "path": "microsoft.bcl.build/1.0.21",
+      "files": [
+        "License-Stable.rtf",
+        "build/Microsoft.Bcl.Build.Tasks.dll",
+        "build/Microsoft.Bcl.Build.targets",
+        "microsoft.bcl.build.1.0.21.nupkg.sha512",
+        "microsoft.bcl.build.nuspec"
+      ]
+    },
+    "Microsoft.Bcl.Compression/3.9.85": {
+      "sha512": "3DO/7SNSF3GV25zR8CllyFeRYTUWGhW4pQvQMTlrrHHNXgADaTnVZn67KAc8fOV4sn1yp3X1ZsfMb28O0sdb5Q==",
+      "type": "package",
+      "path": "microsoft.bcl.compression/3.9.85",
+      "files": [
+        "License-Stable.rtf",
+        "build/wp8/Microsoft.Bcl.Compression.targets",
+        "lib/native/ARM/ClrCompression.dll",
+        "lib/native/ARM/ClrCompression.winmd",
+        "lib/native/x86/ClrCompression.dll",
+        "lib/native/x86/ClrCompression.winmd",
+        "lib/net45/_._",
+        "lib/portable-net45+win8+wp8+wpa81/System.IO.Compression.dll",
+        "lib/portable-net45+win8+wp8+wpa81/System.IO.Compression.xml",
+        "lib/portable-net45+win8+wpa81/_._",
+        "lib/portable-net45+wp8+wpa81/System.IO.Compression.dll",
+        "lib/portable-net45+wp8+wpa81/System.IO.Compression.xml",
+        "lib/win8/_._",
+        "lib/wp8/System.IO.Compression.dll",
+        "lib/wp8/System.IO.Compression.xml",
+        "lib/wpa81/_._",
+        "microsoft.bcl.compression.3.9.85.nupkg.sha512",
+        "microsoft.bcl.compression.nuspec"
+      ]
+    },
     "Microsoft.CodeAnalysis.Analyzers/1.1.0": {
       "sha512": "4cQbvcqZcdFG2JxmsZZkA4xDeEW2z1607tr2Sbk1KTsuNU1MI3hCK2TQEgcVAYEdPhOp81F26BcQZ9qOTolVbQ==",
       "type": "package",
@@ -7979,19 +7063,6 @@
         "microsoft.extensions.options.configurationextensions.nuspec"
       ]
     },
-    "Microsoft.Extensions.PlatformAbstractions/1.1.0": {
-      "sha512": "z7eI1rwd/gCnIdvdy0TLpltVVQ7a8wjkh10B9f1hZfZMunj3GrYIonv4+tiyrDDCoQlvKTRl3+XGCL/mncDPOA==",
-      "type": "package",
-      "path": "microsoft.extensions.platformabstractions/1.1.0",
-      "files": [
-        "lib/net451/Microsoft.Extensions.PlatformAbstractions.dll",
-        "lib/net451/Microsoft.Extensions.PlatformAbstractions.xml",
-        "lib/netstandard1.3/Microsoft.Extensions.PlatformAbstractions.dll",
-        "lib/netstandard1.3/Microsoft.Extensions.PlatformAbstractions.xml",
-        "microsoft.extensions.platformabstractions.1.1.0.nupkg.sha512",
-        "microsoft.extensions.platformabstractions.nuspec"
-      ]
-    },
     "Microsoft.Extensions.Primitives/2.1.1": {
       "sha512": "Svz25/egj1TsNL4118jyMqkhDiu0l8QYWq2p52P4BBN0GbqwR18ZRIctSP5TTDJy0m0EFC8aB2FOVjGtvEGWSA==",
       "type": "package",
@@ -8119,6 +7190,73 @@
         "lib/netstandard1.4/Microsoft.IdentityModel.Xml.xml",
         "microsoft.identitymodel.xml.5.2.0.nupkg.sha512",
         "microsoft.identitymodel.xml.nuspec"
+      ]
+    },
+    "Microsoft.Net.Http/2.2.29": {
+      "sha512": "fc4CPEewJ30Xgal+fSq1lYIBt582A7eKlAL7O4HXiYAiTp2VTnA4osSvk7T2n8aS4xTCPVJusQk3yKLT0XSpkg==",
+      "type": "package",
+      "path": "microsoft.net.http/2.2.29",
+      "files": [
+        "License-Stable.rtf",
+        "lib/Xamarin.iOS10/System.Net.Http.Extensions.XML",
+        "lib/Xamarin.iOS10/System.Net.Http.Extensions.dll",
+        "lib/Xamarin.iOS10/System.Net.Http.Primitives.dll",
+        "lib/Xamarin.iOS10/System.Net.Http.Primitives.xml",
+        "lib/monoandroid/System.Net.Http.Extensions.XML",
+        "lib/monoandroid/System.Net.Http.Extensions.dll",
+        "lib/monoandroid/System.Net.Http.Primitives.dll",
+        "lib/monoandroid/System.Net.Http.Primitives.xml",
+        "lib/monotouch/System.Net.Http.Extensions.XML",
+        "lib/monotouch/System.Net.Http.Extensions.dll",
+        "lib/monotouch/System.Net.Http.Primitives.dll",
+        "lib/monotouch/System.Net.Http.Primitives.xml",
+        "lib/net40/System.Net.Http.Extensions.XML",
+        "lib/net40/System.Net.Http.Extensions.dll",
+        "lib/net40/System.Net.Http.Primitives.dll",
+        "lib/net40/System.Net.Http.Primitives.xml",
+        "lib/net40/System.Net.Http.WebRequest.dll",
+        "lib/net40/System.Net.Http.WebRequest.xml",
+        "lib/net40/System.Net.Http.dll",
+        "lib/net40/System.Net.Http.xml",
+        "lib/net40/ensureRedirect.xml",
+        "lib/net45/System.Net.Http.Extensions.XML",
+        "lib/net45/System.Net.Http.Extensions.dll",
+        "lib/net45/System.Net.Http.Primitives.dll",
+        "lib/net45/System.Net.Http.Primitives.xml",
+        "lib/net45/ensureRedirect.xml",
+        "lib/portable-net40+sl4+win8+wp71+wpa81/System.Net.Http.Extensions.XML",
+        "lib/portable-net40+sl4+win8+wp71+wpa81/System.Net.Http.Extensions.dll",
+        "lib/portable-net40+sl4+win8+wp71+wpa81/System.Net.Http.Primitives.XML",
+        "lib/portable-net40+sl4+win8+wp71+wpa81/System.Net.Http.Primitives.dll",
+        "lib/portable-net40+sl4+win8+wp71+wpa81/System.Net.Http.dll",
+        "lib/portable-net40+sl4+win8+wp71+wpa81/System.Net.Http.xml",
+        "lib/portable-net40+sl4+win8+wp71+wpa81/ensureRedirect.xml",
+        "lib/portable-net45+win8+wpa81/System.Net.Http.Extensions.XML",
+        "lib/portable-net45+win8+wpa81/System.Net.Http.Extensions.dll",
+        "lib/portable-net45+win8+wpa81/System.Net.Http.Primitives.dll",
+        "lib/portable-net45+win8+wpa81/System.Net.Http.Primitives.xml",
+        "lib/portable-net45+win8+wpa81/ensureRedirect.xml",
+        "lib/portable-net45+win8/System.Net.Http.Extensions.XML",
+        "lib/portable-net45+win8/System.Net.Http.Extensions.dll",
+        "lib/portable-net45+win8/System.Net.Http.Primitives.dll",
+        "lib/portable-net45+win8/System.Net.Http.Primitives.xml",
+        "lib/portable-net45+win8/ensureRedirect.xml",
+        "lib/sl4-windowsphone71/System.Net.Http.Extensions.XML",
+        "lib/sl4-windowsphone71/System.Net.Http.Extensions.dll",
+        "lib/sl4-windowsphone71/System.Net.Http.Primitives.XML",
+        "lib/sl4-windowsphone71/System.Net.Http.Primitives.dll",
+        "lib/sl4-windowsphone71/System.Net.Http.dll",
+        "lib/sl4-windowsphone71/System.Net.Http.xml",
+        "lib/win8/System.Net.Http.Extensions.XML",
+        "lib/win8/System.Net.Http.Extensions.dll",
+        "lib/win8/System.Net.Http.Primitives.dll",
+        "lib/win8/System.Net.Http.Primitives.xml",
+        "lib/wpa81/System.Net.Http.Extensions.XML",
+        "lib/wpa81/System.Net.Http.Extensions.dll",
+        "lib/wpa81/System.Net.Http.Primitives.dll",
+        "lib/wpa81/System.Net.Http.Primitives.xml",
+        "microsoft.net.http.2.2.29.nupkg.sha512",
+        "microsoft.net.http.nuspec"
       ]
     },
     "Microsoft.Net.Http.Headers/2.1.1": {
@@ -8467,68 +7605,6 @@
         "runtime.json",
         "useSharedDesignerContext.txt",
         "version.txt"
-      ]
-    },
-    "Microsoft.SCP.Net.SDK/1.0.0.3": {
-      "sha512": "hWbzhxDaQG5CI1WVb6wqbv8G8AIKE+jJXLFDd6KS5TNHdUxp/ksMSbwbd2W7W4l8PYzJ3YPgvO/HGHZ4PMH0QA==",
-      "type": "package",
-      "path": "microsoft.scp.net.sdk/1.0.0.3",
-      "files": [
-        "build/Microsoft.SCP.Net.SDK.props",
-        "build/Microsoft.SCP.Net.SDK.targets",
-        "lib/net45/Microsoft.SCPNet.XML",
-        "lib/net45/Microsoft.SCPNet.dll",
-        "lib/net45/Microsoft.SCPNet.dll.config",
-        "lib/net45/SCPHost.exe",
-        "lib/net45/SCPHost.exe.config",
-        "lib/net45/Thrift.XML",
-        "lib/net45/Thrift.dll",
-        "lib/net45/ZooKeeperNet.dll",
-        "lib/net45/log4net.dll",
-        "lib/net45/log4net.xml",
-        "microsoft.scp.net.sdk.1.0.0.3.nupkg.sha512",
-        "microsoft.scp.net.sdk.nuspec",
-        "readme.txt",
-        "tools/ScpC.exe",
-        "tools/ScpC.exe.config",
-        "tools/ScpWebApiClient.exe",
-        "tools/ScpWebApiClient.exe.config"
-      ]
-    },
-    "Microsoft.Win32.Primitives/4.3.0": {
-      "sha512": "/bZY8QAwKJxZKGzLXRp1L967bCB0i21VcZllz4HENkfxu/Wi17u8T7D63gLbjvV0G9CF/UEC4aXTCwIvm9kjoA==",
-      "type": "package",
-      "path": "microsoft.win32.primitives/4.3.0",
-      "files": [
-        "ThirdPartyNotices.txt",
-        "dotnet_library_license.txt",
-        "lib/MonoAndroid10/_._",
-        "lib/MonoTouch10/_._",
-        "lib/net46/Microsoft.Win32.Primitives.dll",
-        "lib/xamarinios10/_._",
-        "lib/xamarinmac20/_._",
-        "lib/xamarintvos10/_._",
-        "lib/xamarinwatchos10/_._",
-        "microsoft.win32.primitives.4.3.0.nupkg.sha512",
-        "microsoft.win32.primitives.nuspec",
-        "ref/MonoAndroid10/_._",
-        "ref/MonoTouch10/_._",
-        "ref/net46/Microsoft.Win32.Primitives.dll",
-        "ref/netstandard1.3/Microsoft.Win32.Primitives.dll",
-        "ref/netstandard1.3/Microsoft.Win32.Primitives.xml",
-        "ref/netstandard1.3/de/Microsoft.Win32.Primitives.xml",
-        "ref/netstandard1.3/es/Microsoft.Win32.Primitives.xml",
-        "ref/netstandard1.3/fr/Microsoft.Win32.Primitives.xml",
-        "ref/netstandard1.3/it/Microsoft.Win32.Primitives.xml",
-        "ref/netstandard1.3/ja/Microsoft.Win32.Primitives.xml",
-        "ref/netstandard1.3/ko/Microsoft.Win32.Primitives.xml",
-        "ref/netstandard1.3/ru/Microsoft.Win32.Primitives.xml",
-        "ref/netstandard1.3/zh-hans/Microsoft.Win32.Primitives.xml",
-        "ref/netstandard1.3/zh-hant/Microsoft.Win32.Primitives.xml",
-        "ref/xamarinios10/_._",
-        "ref/xamarinmac20/_._",
-        "ref/xamarintvos10/_._",
-        "ref/xamarinwatchos10/_._"
       ]
     },
     "Microsoft.Win32.Registry/4.5.0": {
@@ -9165,6 +8241,131 @@
         "version.txt"
       ]
     },
+    "Rx-Core/2.2.5": {
+      "sha512": "DfWVTfW6tvRkkqpnRHKxPIvaRZyDJGADuqrE6J2nwejOQbLRWi0rNUwXkViDWz++25BGDy3iRE5OE6Dv8mJxYQ==",
+      "type": "package",
+      "path": "rx-core/2.2.5",
+      "files": [
+        "lib/net40/System.Reactive.Core.XML",
+        "lib/net40/System.Reactive.Core.dll",
+        "lib/net45/System.Reactive.Core.XML",
+        "lib/net45/System.Reactive.Core.dll",
+        "lib/portable-net40+sl5+win8+wp8/System.Reactive.Core.XML",
+        "lib/portable-net40+sl5+win8+wp8/System.Reactive.Core.dll",
+        "lib/portable-net45+winrt45+wp8+wpa81/System.Reactive.Core.XML",
+        "lib/portable-net45+winrt45+wp8+wpa81/System.Reactive.Core.dll",
+        "lib/portable-win81+wpa81/System.Reactive.Core.XML",
+        "lib/portable-win81+wpa81/System.Reactive.Core.dll",
+        "lib/portable-windows8+net45+wp8/System.Reactive.Core.XML",
+        "lib/portable-windows8+net45+wp8/System.Reactive.Core.dll",
+        "lib/sl5/System.Reactive.Core.XML",
+        "lib/sl5/System.Reactive.Core.dll",
+        "lib/windows8/System.Reactive.Core.XML",
+        "lib/windows8/System.Reactive.Core.dll",
+        "lib/windowsphone71/System.Reactive.Core.XML",
+        "lib/windowsphone71/System.Reactive.Core.dll",
+        "lib/windowsphone8/System.Reactive.Core.XML",
+        "lib/windowsphone8/System.Reactive.Core.dll",
+        "rx-core.2.2.5.nupkg.sha512",
+        "rx-core.nuspec"
+      ]
+    },
+    "Rx-Interfaces/2.2.5": {
+      "sha512": "FKtG2QfMIeUcfB7r3a89VoAiszX3DTvYETkpC6U0FzWpxRK/mcHyzYOsniDfag+NsDG0P1k1c8yNSefXKp3t2A==",
+      "type": "package",
+      "path": "rx-interfaces/2.2.5",
+      "files": [
+        "lib/net40/System.Reactive.Interfaces.XML",
+        "lib/net40/System.Reactive.Interfaces.dll",
+        "lib/net45/System.Reactive.Interfaces.XML",
+        "lib/net45/System.Reactive.Interfaces.dll",
+        "lib/portable-net40+sl5+win8+wp8/System.Reactive.Interfaces.XML",
+        "lib/portable-net40+sl5+win8+wp8/System.Reactive.Interfaces.dll",
+        "lib/portable-net45+winrt45+wp8+wpa81/System.Reactive.Interfaces.XML",
+        "lib/portable-net45+winrt45+wp8+wpa81/System.Reactive.Interfaces.dll",
+        "lib/portable-win81+wpa81/System.Reactive.Interfaces.XML",
+        "lib/portable-win81+wpa81/System.Reactive.Interfaces.dll",
+        "lib/portable-windows8+net45+wp8/System.Reactive.Interfaces.XML",
+        "lib/portable-windows8+net45+wp8/System.Reactive.Interfaces.dll",
+        "lib/sl5/System.Reactive.Interfaces.XML",
+        "lib/sl5/System.Reactive.Interfaces.dll",
+        "lib/windows8/System.Reactive.Interfaces.XML",
+        "lib/windows8/System.Reactive.Interfaces.dll",
+        "lib/windowsphone71/System.Reactive.Interfaces.XML",
+        "lib/windowsphone71/System.Reactive.Interfaces.dll",
+        "lib/windowsphone8/System.Reactive.Interfaces.XML",
+        "lib/windowsphone8/System.Reactive.Interfaces.dll",
+        "rx-interfaces.2.2.5.nupkg.sha512",
+        "rx-interfaces.nuspec"
+      ]
+    },
+    "Rx-Linq/2.2.5": {
+      "sha512": "UTeCIu3cWPExxmTzdiVq7SalqTBhUaomBTaAC9LpYPoAopjlFwA3hjVWXoLkGlDc/44wqJemJuEwFP00KphiFg==",
+      "type": "package",
+      "path": "rx-linq/2.2.5",
+      "files": [
+        "lib/net40/System.Reactive.Linq.XML",
+        "lib/net40/System.Reactive.Linq.dll",
+        "lib/net45/System.Reactive.Linq.XML",
+        "lib/net45/System.Reactive.Linq.dll",
+        "lib/portable-net40+sl5+win8+wp8/System.Reactive.Linq.XML",
+        "lib/portable-net40+sl5+win8+wp8/System.Reactive.Linq.dll",
+        "lib/portable-net45+winrt45+wp8+wpa81/System.Reactive.Linq.XML",
+        "lib/portable-net45+winrt45+wp8+wpa81/System.Reactive.Linq.dll",
+        "lib/portable-win81+wpa81/System.Reactive.Linq.XML",
+        "lib/portable-win81+wpa81/System.Reactive.Linq.dll",
+        "lib/portable-windows8+net45+wp8/System.Reactive.Linq.XML",
+        "lib/portable-windows8+net45+wp8/System.Reactive.Linq.dll",
+        "lib/sl5/System.Reactive.Linq.XML",
+        "lib/sl5/System.Reactive.Linq.dll",
+        "lib/windows8/System.Reactive.Linq.XML",
+        "lib/windows8/System.Reactive.Linq.dll",
+        "lib/windowsphone71/System.Reactive.Linq.XML",
+        "lib/windowsphone71/System.Reactive.Linq.dll",
+        "lib/windowsphone8/System.Reactive.Linq.XML",
+        "lib/windowsphone8/System.Reactive.Linq.dll",
+        "rx-linq.2.2.5.nupkg.sha512",
+        "rx-linq.nuspec"
+      ]
+    },
+    "Rx-Main/2.2.5": {
+      "sha512": "qdQ6qENEiLsp/LRdzZlLlodihWN8VDjwNfWa8c2ELjEHZgTdKzt1V4i61gkHVtFKZXe8Px6KupbMP3pZ+1tusQ==",
+      "type": "package",
+      "path": "rx-main/2.2.5",
+      "files": [
+        "rx-main.2.2.5.nupkg.sha512",
+        "rx-main.nuspec"
+      ]
+    },
+    "Rx-PlatformServices/2.2.5": {
+      "sha512": "pMnNEvJVjT+wuDib+W/bi5hhIYcre7dW5yxvKrJxnR4iKJ1VLA/dY2FTtjDriHGx7OeGn12lQewXlH2oHiWFPA==",
+      "type": "package",
+      "path": "rx-platformservices/2.2.5",
+      "files": [
+        "lib/net40/System.Reactive.PlatformServices.XML",
+        "lib/net40/System.Reactive.PlatformServices.dll",
+        "lib/net45/System.Reactive.PlatformServices.XML",
+        "lib/net45/System.Reactive.PlatformServices.dll",
+        "lib/portable-net40+sl5+win8+wp8/System.Reactive.PlatformServices.XML",
+        "lib/portable-net40+sl5+win8+wp8/System.Reactive.PlatformServices.dll",
+        "lib/portable-net45+winrt45+wp8+wpa81/System.Reactive.PlatformServices.XML",
+        "lib/portable-net45+winrt45+wp8+wpa81/System.Reactive.PlatformServices.dll",
+        "lib/portable-win81+wpa81/System.Reactive.PlatformServices.XML",
+        "lib/portable-win81+wpa81/System.Reactive.PlatformServices.dll",
+        "lib/portable-windows8+net45+wp8/System.Reactive.PlatformServices.XML",
+        "lib/portable-windows8+net45+wp8/System.Reactive.PlatformServices.dll",
+        "lib/sl5/System.Reactive.PlatformServices.XML",
+        "lib/sl5/System.Reactive.PlatformServices.dll",
+        "lib/windows8/System.Reactive.PlatformServices.XML",
+        "lib/windows8/System.Reactive.PlatformServices.dll",
+        "lib/windowsphone71/System.Reactive.PlatformServices.XML",
+        "lib/windowsphone71/System.Reactive.PlatformServices.dll",
+        "lib/windowsphone8/System.Reactive.PlatformServices.XML",
+        "lib/windowsphone8/System.Reactive.PlatformServices.dll",
+        "rx-platformservices.2.2.5.nupkg.sha512",
+        "rx-platformservices.nuspec"
+      ]
+    },
     "SharpZipLib/0.86.0": {
       "sha512": "5DbS1SlKLMi+WG00Cm0ueYf2oyXJrowETQk8nx96rmdjTuHsA3laPykGV7Sxi0R5Xxfx0Kh/EfacAZ1f6M7y/g==",
       "type": "package",
@@ -9653,26 +8854,6 @@
         "version.txt"
       ]
     },
-    "System.Configuration.ConfigurationManager/4.5.0": {
-      "sha512": "NIY8VUJuSNeXPrV5wjQBKKMcd/vctzEGzQuY15zt3/j7Vd4PXfk/QVIOBlqU1/ONRRUu0dsdk5uUTLSSNY+now==",
-      "type": "package",
-      "path": "system.configuration.configurationmanager/4.5.0",
-      "files": [
-        ".signature.p7s",
-        "LICENSE.TXT",
-        "THIRD-PARTY-NOTICES.TXT",
-        "lib/net461/System.Configuration.ConfigurationManager.dll",
-        "lib/netstandard2.0/System.Configuration.ConfigurationManager.dll",
-        "ref/net461/System.Configuration.ConfigurationManager.dll",
-        "ref/net461/System.Configuration.ConfigurationManager.xml",
-        "ref/netstandard2.0/System.Configuration.ConfigurationManager.dll",
-        "ref/netstandard2.0/System.Configuration.ConfigurationManager.xml",
-        "system.configuration.configurationmanager.4.5.0.nupkg.sha512",
-        "system.configuration.configurationmanager.nuspec",
-        "useSharedDesignerContext.txt",
-        "version.txt"
-      ]
-    },
     "System.Console/4.3.0": {
       "sha512": "R5tqUsCX7LOVPRWD25JutdYmQ1OFPw3pVpoV8APXV0FZFzVRqvV/2Xy46n2eRy27iWXoisbIO9H1c+BoZurikA==",
       "type": "package",
@@ -9968,61 +9149,6 @@
         "runtimes/win/lib/netstandard1.3/System.Diagnostics.FileVersionInfo.dll",
         "system.diagnostics.fileversioninfo.4.3.0.nupkg.sha512",
         "system.diagnostics.fileversioninfo.nuspec"
-      ]
-    },
-    "System.Diagnostics.Process/4.3.0": {
-      "sha512": "J0wOX07+QASQblsfxmIMFc9Iq7KTXYL3zs2G/Xc704Ylv3NpuVdo6gij6V3PGiptTxqsK0K7CdXenRvKUnkA2g==",
-      "type": "package",
-      "path": "system.diagnostics.process/4.3.0",
-      "files": [
-        "ThirdPartyNotices.txt",
-        "dotnet_library_license.txt",
-        "lib/MonoAndroid10/_._",
-        "lib/MonoTouch10/_._",
-        "lib/net46/System.Diagnostics.Process.dll",
-        "lib/net461/System.Diagnostics.Process.dll",
-        "lib/xamarinios10/_._",
-        "lib/xamarinmac20/_._",
-        "lib/xamarintvos10/_._",
-        "lib/xamarinwatchos10/_._",
-        "ref/MonoAndroid10/_._",
-        "ref/MonoTouch10/_._",
-        "ref/net46/System.Diagnostics.Process.dll",
-        "ref/net461/System.Diagnostics.Process.dll",
-        "ref/netstandard1.3/System.Diagnostics.Process.dll",
-        "ref/netstandard1.3/System.Diagnostics.Process.xml",
-        "ref/netstandard1.3/de/System.Diagnostics.Process.xml",
-        "ref/netstandard1.3/es/System.Diagnostics.Process.xml",
-        "ref/netstandard1.3/fr/System.Diagnostics.Process.xml",
-        "ref/netstandard1.3/it/System.Diagnostics.Process.xml",
-        "ref/netstandard1.3/ja/System.Diagnostics.Process.xml",
-        "ref/netstandard1.3/ko/System.Diagnostics.Process.xml",
-        "ref/netstandard1.3/ru/System.Diagnostics.Process.xml",
-        "ref/netstandard1.3/zh-hans/System.Diagnostics.Process.xml",
-        "ref/netstandard1.3/zh-hant/System.Diagnostics.Process.xml",
-        "ref/netstandard1.4/System.Diagnostics.Process.dll",
-        "ref/netstandard1.4/System.Diagnostics.Process.xml",
-        "ref/netstandard1.4/de/System.Diagnostics.Process.xml",
-        "ref/netstandard1.4/es/System.Diagnostics.Process.xml",
-        "ref/netstandard1.4/fr/System.Diagnostics.Process.xml",
-        "ref/netstandard1.4/it/System.Diagnostics.Process.xml",
-        "ref/netstandard1.4/ja/System.Diagnostics.Process.xml",
-        "ref/netstandard1.4/ko/System.Diagnostics.Process.xml",
-        "ref/netstandard1.4/ru/System.Diagnostics.Process.xml",
-        "ref/netstandard1.4/zh-hans/System.Diagnostics.Process.xml",
-        "ref/netstandard1.4/zh-hant/System.Diagnostics.Process.xml",
-        "ref/xamarinios10/_._",
-        "ref/xamarinmac20/_._",
-        "ref/xamarintvos10/_._",
-        "ref/xamarinwatchos10/_._",
-        "runtimes/linux/lib/netstandard1.4/System.Diagnostics.Process.dll",
-        "runtimes/osx/lib/netstandard1.4/System.Diagnostics.Process.dll",
-        "runtimes/win/lib/net46/System.Diagnostics.Process.dll",
-        "runtimes/win/lib/net461/System.Diagnostics.Process.dll",
-        "runtimes/win/lib/netstandard1.4/System.Diagnostics.Process.dll",
-        "runtimes/win7/lib/netcore50/_._",
-        "system.diagnostics.process.4.3.0.nupkg.sha512",
-        "system.diagnostics.process.nuspec"
       ]
     },
     "System.Diagnostics.StackTrace/4.3.0": {
@@ -10663,34 +9789,6 @@
         "system.io.filesystem.nuspec"
       ]
     },
-    "System.IO.FileSystem.AccessControl/4.3.0": {
-      "sha512": "crjUsNiUm4n6uwPC4K6ya43tu6+pDo8CPQRj/mkVzsAYKLeP26PhhkJuUFSP0TYW1wEe8ZajPi7Mw+WPm3AmfQ==",
-      "type": "package",
-      "path": "system.io.filesystem.accesscontrol/4.3.0",
-      "files": [
-        "ThirdPartyNotices.txt",
-        "dotnet_library_license.txt",
-        "lib/net46/System.IO.FileSystem.AccessControl.dll",
-        "ref/net46/System.IO.FileSystem.AccessControl.dll",
-        "ref/netstandard1.3/System.IO.FileSystem.AccessControl.dll",
-        "ref/netstandard1.3/System.IO.FileSystem.AccessControl.xml",
-        "ref/netstandard1.3/de/System.IO.FileSystem.AccessControl.xml",
-        "ref/netstandard1.3/es/System.IO.FileSystem.AccessControl.xml",
-        "ref/netstandard1.3/fr/System.IO.FileSystem.AccessControl.xml",
-        "ref/netstandard1.3/it/System.IO.FileSystem.AccessControl.xml",
-        "ref/netstandard1.3/ja/System.IO.FileSystem.AccessControl.xml",
-        "ref/netstandard1.3/ko/System.IO.FileSystem.AccessControl.xml",
-        "ref/netstandard1.3/ru/System.IO.FileSystem.AccessControl.xml",
-        "ref/netstandard1.3/zh-hans/System.IO.FileSystem.AccessControl.xml",
-        "ref/netstandard1.3/zh-hant/System.IO.FileSystem.AccessControl.xml",
-        "runtimes/unix/lib/netstandard1.3/System.IO.FileSystem.AccessControl.dll",
-        "runtimes/win/lib/net46/System.IO.FileSystem.AccessControl.dll",
-        "runtimes/win/lib/netcore50/_._",
-        "runtimes/win/lib/netstandard1.3/System.IO.FileSystem.AccessControl.dll",
-        "system.io.filesystem.accesscontrol.4.3.0.nupkg.sha512",
-        "system.io.filesystem.accesscontrol.nuspec"
-      ]
-    },
     "System.IO.FileSystem.Primitives/4.3.0": {
       "sha512": "XloH21XTsFqxbrxine1C614CLADJ+kpmA4Jae5Hg6HTdD5WUdW32o1MqL1oEWgwuVqb7B0OckHO77+03WMsM2Q==",
       "type": "package",
@@ -11022,119 +10120,6 @@
         "system.net.http.nuspec"
       ]
     },
-    "System.Net.NameResolution/4.3.0": {
-      "sha512": "tsZzgBE4L0GD+5ZWmZ8lLWAuTxx8NxynJnVJ9F70+DC+fSJNavIMS+yYcEvD3M7NV4XdNAWyLCNcMsJOv3VChw==",
-      "type": "package",
-      "path": "system.net.nameresolution/4.3.0",
-      "files": [
-        "ThirdPartyNotices.txt",
-        "dotnet_library_license.txt",
-        "lib/MonoAndroid10/_._",
-        "lib/MonoTouch10/_._",
-        "lib/net46/System.Net.NameResolution.dll",
-        "lib/xamarinios10/_._",
-        "lib/xamarinmac20/_._",
-        "lib/xamarintvos10/_._",
-        "lib/xamarinwatchos10/_._",
-        "ref/MonoAndroid10/_._",
-        "ref/MonoTouch10/_._",
-        "ref/net46/System.Net.NameResolution.dll",
-        "ref/netstandard1.3/System.Net.NameResolution.dll",
-        "ref/netstandard1.3/System.Net.NameResolution.xml",
-        "ref/netstandard1.3/de/System.Net.NameResolution.xml",
-        "ref/netstandard1.3/es/System.Net.NameResolution.xml",
-        "ref/netstandard1.3/fr/System.Net.NameResolution.xml",
-        "ref/netstandard1.3/it/System.Net.NameResolution.xml",
-        "ref/netstandard1.3/ja/System.Net.NameResolution.xml",
-        "ref/netstandard1.3/ko/System.Net.NameResolution.xml",
-        "ref/netstandard1.3/ru/System.Net.NameResolution.xml",
-        "ref/netstandard1.3/zh-hans/System.Net.NameResolution.xml",
-        "ref/netstandard1.3/zh-hant/System.Net.NameResolution.xml",
-        "ref/xamarinios10/_._",
-        "ref/xamarinmac20/_._",
-        "ref/xamarintvos10/_._",
-        "ref/xamarinwatchos10/_._",
-        "runtimes/unix/lib/netstandard1.3/System.Net.NameResolution.dll",
-        "runtimes/win/lib/net46/System.Net.NameResolution.dll",
-        "runtimes/win/lib/netcore50/System.Net.NameResolution.dll",
-        "runtimes/win/lib/netstandard1.3/System.Net.NameResolution.dll",
-        "system.net.nameresolution.4.3.0.nupkg.sha512",
-        "system.net.nameresolution.nuspec"
-      ]
-    },
-    "System.Net.NetworkInformation/4.3.0": {
-      "sha512": "zNVmWVry0pAu7lcrRBhwwU96WUdbsrGL3azyzsbXmVNptae1+Za+UgOe9Z6s8iaWhPn7/l4wQqhC56HZWq7tkg==",
-      "type": "package",
-      "path": "system.net.networkinformation/4.3.0",
-      "files": [
-        "ThirdPartyNotices.txt",
-        "dotnet_library_license.txt",
-        "lib/MonoAndroid10/_._",
-        "lib/MonoTouch10/_._",
-        "lib/net45/_._",
-        "lib/net46/System.Net.NetworkInformation.dll",
-        "lib/portable-net45+win8+wp8+wpa81/_._",
-        "lib/win8/_._",
-        "lib/wp80/_._",
-        "lib/wpa81/_._",
-        "lib/xamarinios10/_._",
-        "lib/xamarinmac20/_._",
-        "lib/xamarintvos10/_._",
-        "lib/xamarinwatchos10/_._",
-        "ref/MonoAndroid10/_._",
-        "ref/MonoTouch10/_._",
-        "ref/net45/_._",
-        "ref/net46/System.Net.NetworkInformation.dll",
-        "ref/netcore50/System.Net.NetworkInformation.dll",
-        "ref/netcore50/System.Net.NetworkInformation.xml",
-        "ref/netcore50/de/System.Net.NetworkInformation.xml",
-        "ref/netcore50/es/System.Net.NetworkInformation.xml",
-        "ref/netcore50/fr/System.Net.NetworkInformation.xml",
-        "ref/netcore50/it/System.Net.NetworkInformation.xml",
-        "ref/netcore50/ja/System.Net.NetworkInformation.xml",
-        "ref/netcore50/ko/System.Net.NetworkInformation.xml",
-        "ref/netcore50/ru/System.Net.NetworkInformation.xml",
-        "ref/netcore50/zh-hans/System.Net.NetworkInformation.xml",
-        "ref/netcore50/zh-hant/System.Net.NetworkInformation.xml",
-        "ref/netstandard1.0/System.Net.NetworkInformation.dll",
-        "ref/netstandard1.0/System.Net.NetworkInformation.xml",
-        "ref/netstandard1.0/de/System.Net.NetworkInformation.xml",
-        "ref/netstandard1.0/es/System.Net.NetworkInformation.xml",
-        "ref/netstandard1.0/fr/System.Net.NetworkInformation.xml",
-        "ref/netstandard1.0/it/System.Net.NetworkInformation.xml",
-        "ref/netstandard1.0/ja/System.Net.NetworkInformation.xml",
-        "ref/netstandard1.0/ko/System.Net.NetworkInformation.xml",
-        "ref/netstandard1.0/ru/System.Net.NetworkInformation.xml",
-        "ref/netstandard1.0/zh-hans/System.Net.NetworkInformation.xml",
-        "ref/netstandard1.0/zh-hant/System.Net.NetworkInformation.xml",
-        "ref/netstandard1.3/System.Net.NetworkInformation.dll",
-        "ref/netstandard1.3/System.Net.NetworkInformation.xml",
-        "ref/netstandard1.3/de/System.Net.NetworkInformation.xml",
-        "ref/netstandard1.3/es/System.Net.NetworkInformation.xml",
-        "ref/netstandard1.3/fr/System.Net.NetworkInformation.xml",
-        "ref/netstandard1.3/it/System.Net.NetworkInformation.xml",
-        "ref/netstandard1.3/ja/System.Net.NetworkInformation.xml",
-        "ref/netstandard1.3/ko/System.Net.NetworkInformation.xml",
-        "ref/netstandard1.3/ru/System.Net.NetworkInformation.xml",
-        "ref/netstandard1.3/zh-hans/System.Net.NetworkInformation.xml",
-        "ref/netstandard1.3/zh-hant/System.Net.NetworkInformation.xml",
-        "ref/portable-net45+win8+wp8+wpa81/_._",
-        "ref/win8/_._",
-        "ref/wp80/_._",
-        "ref/wpa81/_._",
-        "ref/xamarinios10/_._",
-        "ref/xamarinmac20/_._",
-        "ref/xamarintvos10/_._",
-        "ref/xamarinwatchos10/_._",
-        "runtimes/linux/lib/netstandard1.3/System.Net.NetworkInformation.dll",
-        "runtimes/osx/lib/netstandard1.3/System.Net.NetworkInformation.dll",
-        "runtimes/win/lib/net46/System.Net.NetworkInformation.dll",
-        "runtimes/win/lib/netcore50/System.Net.NetworkInformation.dll",
-        "runtimes/win/lib/netstandard1.3/System.Net.NetworkInformation.dll",
-        "system.net.networkinformation.4.3.0.nupkg.sha512",
-        "system.net.networkinformation.nuspec"
-      ]
-    },
     "System.Net.Primitives/4.3.0": {
       "sha512": "xrvIPfmrwPpVfUt2ffkWJg7IkGbJfWOcR0Qtlfa2ui4WGxjsStiomYohFF8zAfKplLRMg4UDv+TlDVL8lJ24tA==",
       "type": "package",
@@ -11212,10 +10197,10 @@
         "system.net.primitives.nuspec"
       ]
     },
-    "System.Net.Requests/4.3.0": {
-      "sha512": "OZNUuAs0kDXUzm7U5NZ1ojVta5YFZmgT2yxBqsQ7Eseq5Ahz88LInGRuNLJ/NP2F8W1q7tse1pKDthj3reF5QA==",
+    "System.Net.Requests/4.0.11": {
+      "sha512": "vxGt7C0cZixN+VqoSW4Yakc1Y9WknmxauDqzxgpw/FnBdz4kQNN51l4wxdXX5VY1xjqy//+G+4CvJWp1+f+y6Q==",
       "type": "package",
-      "path": "system.net.requests/4.3.0",
+      "path": "system.net.requests/4.0.11",
       "files": [
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
@@ -11289,50 +10274,14 @@
         "runtimes/unix/lib/netstandard1.3/System.Net.Requests.dll",
         "runtimes/win/lib/net46/_._",
         "runtimes/win/lib/netstandard1.3/System.Net.Requests.dll",
-        "system.net.requests.4.3.0.nupkg.sha512",
+        "system.net.requests.4.0.11.nupkg.sha512",
         "system.net.requests.nuspec"
       ]
     },
-    "System.Net.Sockets/4.3.0": {
-      "sha512": "khiB2w/4ij8/4F1gnvtyt0CYbRzh20iHRHCRO5NxDC765tyWjXNiTsHqh8EsLBZG6iqVEbACVAM+x+Itg/flYA==",
+    "System.Net.WebHeaderCollection/4.0.1": {
+      "sha512": "XX2TIAN+wBSAIV51BU2FvvXMdstUa8b0FBSZmDWjZdwUMmggQSifpTOZ5fNH20z9ZCg2fkV1L5SsZnpO2RQDRQ==",
       "type": "package",
-      "path": "system.net.sockets/4.3.0",
-      "files": [
-        "ThirdPartyNotices.txt",
-        "dotnet_library_license.txt",
-        "lib/MonoAndroid10/_._",
-        "lib/MonoTouch10/_._",
-        "lib/net46/System.Net.Sockets.dll",
-        "lib/xamarinios10/_._",
-        "lib/xamarinmac20/_._",
-        "lib/xamarintvos10/_._",
-        "lib/xamarinwatchos10/_._",
-        "ref/MonoAndroid10/_._",
-        "ref/MonoTouch10/_._",
-        "ref/net46/System.Net.Sockets.dll",
-        "ref/netstandard1.3/System.Net.Sockets.dll",
-        "ref/netstandard1.3/System.Net.Sockets.xml",
-        "ref/netstandard1.3/de/System.Net.Sockets.xml",
-        "ref/netstandard1.3/es/System.Net.Sockets.xml",
-        "ref/netstandard1.3/fr/System.Net.Sockets.xml",
-        "ref/netstandard1.3/it/System.Net.Sockets.xml",
-        "ref/netstandard1.3/ja/System.Net.Sockets.xml",
-        "ref/netstandard1.3/ko/System.Net.Sockets.xml",
-        "ref/netstandard1.3/ru/System.Net.Sockets.xml",
-        "ref/netstandard1.3/zh-hans/System.Net.Sockets.xml",
-        "ref/netstandard1.3/zh-hant/System.Net.Sockets.xml",
-        "ref/xamarinios10/_._",
-        "ref/xamarinmac20/_._",
-        "ref/xamarintvos10/_._",
-        "ref/xamarinwatchos10/_._",
-        "system.net.sockets.4.3.0.nupkg.sha512",
-        "system.net.sockets.nuspec"
-      ]
-    },
-    "System.Net.WebHeaderCollection/4.3.0": {
-      "sha512": "XZrXYG3c7QV/GpWeoaRC02rM6LH2JJetfVYskf35wdC/w2fFDFMphec4gmVH2dkll6abtW14u9Rt96pxd9YH2A==",
-      "type": "package",
-      "path": "system.net.webheadercollection/4.3.0",
+      "path": "system.net.webheadercollection/4.0.1",
       "files": [
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
@@ -11362,7 +10311,7 @@
         "ref/xamarinmac20/_._",
         "ref/xamarintvos10/_._",
         "ref/xamarinwatchos10/_._",
-        "system.net.webheadercollection.4.3.0.nupkg.sha512",
+        "system.net.webheadercollection.4.0.1.nupkg.sha512",
         "system.net.webheadercollection.nuspec"
       ]
     },
@@ -12355,63 +11304,6 @@
         "system.runtime.numerics.nuspec"
       ]
     },
-    "System.Runtime.Serialization.Json/4.3.0": {
-      "sha512": "CpVfOH0M/uZ5PH+M9+Gu56K0j9lJw3M+PKRegTkcrY/stOIvRUeonggxNrfBYLA5WOHL2j15KNJuTuld3x4o9w==",
-      "type": "package",
-      "path": "system.runtime.serialization.json/4.3.0",
-      "files": [
-        "ThirdPartyNotices.txt",
-        "dotnet_library_license.txt",
-        "lib/MonoAndroid10/_._",
-        "lib/MonoTouch10/_._",
-        "lib/net45/_._",
-        "lib/netcore50/System.Runtime.Serialization.Json.dll",
-        "lib/netstandard1.3/System.Runtime.Serialization.Json.dll",
-        "lib/portable-net45+win8+wp8+wpa81/_._",
-        "lib/win8/_._",
-        "lib/wp80/_._",
-        "lib/wpa81/_._",
-        "lib/xamarinios10/_._",
-        "lib/xamarinmac20/_._",
-        "lib/xamarintvos10/_._",
-        "lib/xamarinwatchos10/_._",
-        "ref/MonoAndroid10/_._",
-        "ref/MonoTouch10/_._",
-        "ref/net45/_._",
-        "ref/netcore50/System.Runtime.Serialization.Json.dll",
-        "ref/netcore50/System.Runtime.Serialization.Json.xml",
-        "ref/netcore50/de/System.Runtime.Serialization.Json.xml",
-        "ref/netcore50/es/System.Runtime.Serialization.Json.xml",
-        "ref/netcore50/fr/System.Runtime.Serialization.Json.xml",
-        "ref/netcore50/it/System.Runtime.Serialization.Json.xml",
-        "ref/netcore50/ja/System.Runtime.Serialization.Json.xml",
-        "ref/netcore50/ko/System.Runtime.Serialization.Json.xml",
-        "ref/netcore50/ru/System.Runtime.Serialization.Json.xml",
-        "ref/netcore50/zh-hans/System.Runtime.Serialization.Json.xml",
-        "ref/netcore50/zh-hant/System.Runtime.Serialization.Json.xml",
-        "ref/netstandard1.0/System.Runtime.Serialization.Json.dll",
-        "ref/netstandard1.0/System.Runtime.Serialization.Json.xml",
-        "ref/netstandard1.0/de/System.Runtime.Serialization.Json.xml",
-        "ref/netstandard1.0/es/System.Runtime.Serialization.Json.xml",
-        "ref/netstandard1.0/fr/System.Runtime.Serialization.Json.xml",
-        "ref/netstandard1.0/it/System.Runtime.Serialization.Json.xml",
-        "ref/netstandard1.0/ja/System.Runtime.Serialization.Json.xml",
-        "ref/netstandard1.0/ko/System.Runtime.Serialization.Json.xml",
-        "ref/netstandard1.0/ru/System.Runtime.Serialization.Json.xml",
-        "ref/netstandard1.0/zh-hans/System.Runtime.Serialization.Json.xml",
-        "ref/netstandard1.0/zh-hant/System.Runtime.Serialization.Json.xml",
-        "ref/portable-net45+win8+wp8+wpa81/_._",
-        "ref/win8/_._",
-        "ref/wp80/_._",
-        "ref/wpa81/_._",
-        "ref/xamarinios10/_._",
-        "ref/xamarinmac20/_._",
-        "ref/xamarintvos10/_._",
-        "ref/xamarinwatchos10/_._",
-        "system.runtime.serialization.json.4.3.0.nupkg.sha512",
-        "system.runtime.serialization.json.nuspec"
-      ]
-    },
     "System.Runtime.Serialization.Primitives/4.3.0": {
       "sha512": "MdMS2k1KGxBb1Lz9aoN+VCEesssyvu3R21TmL5DxX3yWEGJxdEtbFwY4SDLR1O42DEGN7vYbk04Ve1YlCxywtg==",
       "type": "package",
@@ -12872,46 +11764,6 @@
         "ref/xamarinwatchos10/_._",
         "system.security.cryptography.primitives.4.3.0.nupkg.sha512",
         "system.security.cryptography.primitives.nuspec"
-      ]
-    },
-    "System.Security.Cryptography.ProtectedData/4.5.0": {
-      "sha512": "wZGwRoLGTuEQBOYXlZmEK41OfmO+vYWbLk7q5ePoFqs6vOKP2kUsOeviEjQoR6MbW9udlDjx9iWhcWOTzSj05w==",
-      "type": "package",
-      "path": "system.security.cryptography.protecteddata/4.5.0",
-      "files": [
-        ".signature.p7s",
-        "LICENSE.TXT",
-        "THIRD-PARTY-NOTICES.TXT",
-        "lib/MonoAndroid10/_._",
-        "lib/MonoTouch10/_._",
-        "lib/net46/System.Security.Cryptography.ProtectedData.dll",
-        "lib/net461/System.Security.Cryptography.ProtectedData.dll",
-        "lib/netstandard1.3/System.Security.Cryptography.ProtectedData.dll",
-        "lib/netstandard2.0/System.Security.Cryptography.ProtectedData.dll",
-        "lib/xamarinios10/_._",
-        "lib/xamarinmac20/_._",
-        "lib/xamarintvos10/_._",
-        "lib/xamarinwatchos10/_._",
-        "ref/MonoAndroid10/_._",
-        "ref/MonoTouch10/_._",
-        "ref/net46/System.Security.Cryptography.ProtectedData.dll",
-        "ref/net461/System.Security.Cryptography.ProtectedData.dll",
-        "ref/net461/System.Security.Cryptography.ProtectedData.xml",
-        "ref/netstandard1.3/System.Security.Cryptography.ProtectedData.dll",
-        "ref/netstandard2.0/System.Security.Cryptography.ProtectedData.dll",
-        "ref/netstandard2.0/System.Security.Cryptography.ProtectedData.xml",
-        "ref/xamarinios10/_._",
-        "ref/xamarinmac20/_._",
-        "ref/xamarintvos10/_._",
-        "ref/xamarinwatchos10/_._",
-        "runtimes/win/lib/net46/System.Security.Cryptography.ProtectedData.dll",
-        "runtimes/win/lib/net461/System.Security.Cryptography.ProtectedData.dll",
-        "runtimes/win/lib/netstandard1.3/System.Security.Cryptography.ProtectedData.dll",
-        "runtimes/win/lib/netstandard2.0/System.Security.Cryptography.ProtectedData.dll",
-        "system.security.cryptography.protecteddata.4.5.0.nupkg.sha512",
-        "system.security.cryptography.protecteddata.nuspec",
-        "useSharedDesignerContext.txt",
-        "version.txt"
       ]
     },
     "System.Security.Cryptography.X509Certificates/4.3.0": {
@@ -13475,34 +12327,6 @@
         "version.txt"
       ]
     },
-    "System.Threading.Overlapped/4.3.0": {
-      "sha512": "m3HQ2dPiX/DSTpf+yJt8B0c+SRvzfqAJKx+QDWi+VLhz8svLT23MVjEOHPF/KiSLeArKU/iHescrbLd3yVgyNg==",
-      "type": "package",
-      "path": "system.threading.overlapped/4.3.0",
-      "files": [
-        "ThirdPartyNotices.txt",
-        "dotnet_library_license.txt",
-        "lib/net46/System.Threading.Overlapped.dll",
-        "ref/net46/System.Threading.Overlapped.dll",
-        "ref/netstandard1.3/System.Threading.Overlapped.dll",
-        "ref/netstandard1.3/System.Threading.Overlapped.xml",
-        "ref/netstandard1.3/de/System.Threading.Overlapped.xml",
-        "ref/netstandard1.3/es/System.Threading.Overlapped.xml",
-        "ref/netstandard1.3/fr/System.Threading.Overlapped.xml",
-        "ref/netstandard1.3/it/System.Threading.Overlapped.xml",
-        "ref/netstandard1.3/ja/System.Threading.Overlapped.xml",
-        "ref/netstandard1.3/ko/System.Threading.Overlapped.xml",
-        "ref/netstandard1.3/ru/System.Threading.Overlapped.xml",
-        "ref/netstandard1.3/zh-hans/System.Threading.Overlapped.xml",
-        "ref/netstandard1.3/zh-hant/System.Threading.Overlapped.xml",
-        "runtimes/unix/lib/netstandard1.3/System.Threading.Overlapped.dll",
-        "runtimes/win/lib/net46/System.Threading.Overlapped.dll",
-        "runtimes/win/lib/netcore50/System.Threading.Overlapped.dll",
-        "runtimes/win/lib/netstandard1.3/System.Threading.Overlapped.dll",
-        "system.threading.overlapped.4.3.0.nupkg.sha512",
-        "system.threading.overlapped.nuspec"
-      ]
-    },
     "System.Threading.Tasks/4.3.0": {
       "sha512": "7UmBjAThus275weGEq2AWpWu/I6vGcldqvCOHCGqcfTZBU+onxXbjRjETKhJeOvgKPxmGCErcFbtenoyZ9Btew==",
       "type": "package",
@@ -13700,44 +12524,6 @@
         "system.threading.thread.nuspec"
       ]
     },
-    "System.Threading.ThreadPool/4.3.0": {
-      "sha512": "CBal8Gik50aT7tJ/Hlc6BmWSUFPVmvVpVswVDnwZjpGqNN+9iUVJXVL12EBuhKCYsOQ6TWRwDOhelLu+aZbFHQ==",
-      "type": "package",
-      "path": "system.threading.threadpool/4.3.0",
-      "files": [
-        "ThirdPartyNotices.txt",
-        "dotnet_library_license.txt",
-        "lib/MonoAndroid10/_._",
-        "lib/MonoTouch10/_._",
-        "lib/net46/System.Threading.ThreadPool.dll",
-        "lib/netcore50/_._",
-        "lib/netstandard1.3/System.Threading.ThreadPool.dll",
-        "lib/xamarinios10/_._",
-        "lib/xamarinmac20/_._",
-        "lib/xamarintvos10/_._",
-        "lib/xamarinwatchos10/_._",
-        "ref/MonoAndroid10/_._",
-        "ref/MonoTouch10/_._",
-        "ref/net46/System.Threading.ThreadPool.dll",
-        "ref/netstandard1.3/System.Threading.ThreadPool.dll",
-        "ref/netstandard1.3/System.Threading.ThreadPool.xml",
-        "ref/netstandard1.3/de/System.Threading.ThreadPool.xml",
-        "ref/netstandard1.3/es/System.Threading.ThreadPool.xml",
-        "ref/netstandard1.3/fr/System.Threading.ThreadPool.xml",
-        "ref/netstandard1.3/it/System.Threading.ThreadPool.xml",
-        "ref/netstandard1.3/ja/System.Threading.ThreadPool.xml",
-        "ref/netstandard1.3/ko/System.Threading.ThreadPool.xml",
-        "ref/netstandard1.3/ru/System.Threading.ThreadPool.xml",
-        "ref/netstandard1.3/zh-hans/System.Threading.ThreadPool.xml",
-        "ref/netstandard1.3/zh-hant/System.Threading.ThreadPool.xml",
-        "ref/xamarinios10/_._",
-        "ref/xamarinmac20/_._",
-        "ref/xamarintvos10/_._",
-        "ref/xamarinwatchos10/_._",
-        "system.threading.threadpool.4.3.0.nupkg.sha512",
-        "system.threading.threadpool.nuspec"
-      ]
-    },
     "System.ValueTuple/4.3.0": {
       "sha512": "cNLEvBX3d6MMQRZe3SMFNukVbitDAEpVZO17qa0/2FHxZ7Y7PpFRpr6m2615XYM/tYYYf0B+WyHNujqIw8Luwg==",
       "type": "package",
@@ -13751,17 +12537,6 @@
         "lib/portable-net40+sl4+win8+wp8/System.ValueTuple.dll",
         "system.valuetuple.4.3.0.nupkg.sha512",
         "system.valuetuple.nuspec"
-      ]
-    },
-    "System.Windows.Forms.Ribbon35/3.5.8": {
-      "sha512": "eCT9IcJyU/NDrDA7Obp40Ata7hvPTVrtKjcofJe4LC/qjx7MNpOR0vNDfc5IDEzZi5bP5wGfJpVOWnnFeL2AUQ==",
-      "type": "package",
-      "path": "system.windows.forms.ribbon35/3.5.8",
-      "files": [
-        "content/Updates.txt",
-        "lib/net35/System.Windows.Forms.Ribbon35.dll",
-        "system.windows.forms.ribbon35.3.5.8.nupkg.sha512",
-        "system.windows.forms.ribbon35.nuspec"
       ]
     },
     "System.Xml.ReaderWriter/4.3.0": {
@@ -14146,27 +12921,32 @@
         "tweetinviapi.3.0.0.nupkg.sha512",
         "tweetinviapi.nuspec"
       ]
+    },
+    "YahooFantasyWrapper/1.2.2": {
+      "sha512": "IE/cJZrm2U7s+p7mTiVOC9tQQaOLNcLOHuDD6+lxNZp+aGZNu8uD7LpXKUZmA8TqNW3FQOyeuZHSKnhNlTpFrQ==",
+      "type": "package",
+      "path": "yahoofantasywrapper/1.2.2",
+      "files": [
+        "lib/netstandard2.0/YahooFantasyWrapper.dll",
+        "yahoofantasywrapper.1.2.2.nupkg.sha512",
+        "yahoofantasywrapper.nuspec"
+      ]
     }
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v2.1": [
       "AngleSharp >= 0.9.10",
       "AngleSharp.Scripting.JavaScript >= 0.5.1",
-      "ApplicationInsightsTelemetryExtensions >= 0.2.0",
       "ConsoleTables >= 2.2.0",
-      "DevDefined.OAuth >= 0.2.0",
-      "DotNetOpenAuth >= 4.3.4.13329",
-      "DynamicInterop >= 0.8.1",
       "HtmlAgilityPack >= 1.8.5",
       "IronWebScraper >= 4.0.4.3",
-      "Microsoft.ApplicationInsights.AspNetCore >= 2.3.0",
-      "Microsoft.ApplicationInsights.SnapshotCollector >= 1.3.0",
       "Microsoft.AspNetCore.App >= 2.1.1",
+      "Microsoft.Extensions.Options >= 2.1.1",
       "Microsoft.NETCore.App >= 2.1.0",
       "Microsoft.NETCore.Platforms >= 2.1.0",
-      "Microsoft.SCP.Net.SDK >= 1.0.0.3",
       "NPOI >= 2.3.0",
       "NScrape >= 0.4.0",
+      "Newtonsoft.Json >= 11.0.2",
       "Npoi.Mapper >= 3.2.0",
       "OAuth >= 1.0.3",
       "ObjectDumper >= 1.*",
@@ -14175,11 +12955,10 @@
       "R.NET >= 1.7.0",
       "R.NET.Community >= 1.7.0",
       "RestSharp >= 106.2.2",
-      "System.Configuration.ConfigurationManager >= 4.5.0",
-      "System.Runtime.CompilerServices.Unsafe >= 4.5.1",
       "System.Text.Encoding.CodePages >= 4.5.0",
-      "System.Windows.Forms.Ribbon35 >= 3.5.8",
-      "TweetinviAPI >= 3.0.0"
+      "TweetinviAPI >= 3.0.0",
+      "YahooFantasyWrapper >= 1.2.2",
+      "linqtotwitter >= 4.2.1"
     ]
   },
   "packageFolders": {
@@ -14232,25 +13011,9 @@
             "target": "Package",
             "version": "[0.5.1, )"
           },
-          "ApplicationInsightsTelemetryExtensions": {
-            "target": "Package",
-            "version": "[0.2.0, )"
-          },
           "ConsoleTables": {
             "target": "Package",
             "version": "[2.2.0, )"
-          },
-          "DevDefined.OAuth": {
-            "target": "Package",
-            "version": "[0.2.0, )"
-          },
-          "DotNetOpenAuth": {
-            "target": "Package",
-            "version": "[4.3.4.13329, )"
-          },
-          "DynamicInterop": {
-            "target": "Package",
-            "version": "[0.8.1, )"
           },
           "HtmlAgilityPack": {
             "target": "Package",
@@ -14260,19 +13023,15 @@
             "target": "Package",
             "version": "[4.0.4.3, )"
           },
-          "Microsoft.ApplicationInsights.AspNetCore": {
-            "target": "Package",
-            "version": "[2.3.0, )"
-          },
-          "Microsoft.ApplicationInsights.SnapshotCollector": {
-            "target": "Package",
-            "version": "[1.3.0, )"
-          },
           "Microsoft.AspNetCore.App": {
             "suppressParent": "All",
             "target": "Package",
             "version": "[2.1.1, )",
             "autoReferenced": true
+          },
+          "Microsoft.Extensions.Options": {
+            "target": "Package",
+            "version": "[2.1.1, )"
           },
           "Microsoft.NETCore.App": {
             "target": "Package",
@@ -14283,10 +13042,6 @@
             "target": "Package",
             "version": "[2.1.0, )"
           },
-          "Microsoft.SCP.Net.SDK": {
-            "target": "Package",
-            "version": "[1.0.0.3, )"
-          },
           "NPOI": {
             "target": "Package",
             "version": "[2.3.0, )"
@@ -14294,6 +13049,10 @@
           "NScrape": {
             "target": "Package",
             "version": "[0.4.0, )"
+          },
+          "Newtonsoft.Json": {
+            "target": "Package",
+            "version": "[11.0.2, )"
           },
           "Npoi.Mapper": {
             "target": "Package",
@@ -14327,25 +13086,21 @@
             "target": "Package",
             "version": "[106.2.2, )"
           },
-          "System.Configuration.ConfigurationManager": {
-            "target": "Package",
-            "version": "[4.5.0, )"
-          },
-          "System.Runtime.CompilerServices.Unsafe": {
-            "target": "Package",
-            "version": "[4.5.1, )"
-          },
           "System.Text.Encoding.CodePages": {
             "target": "Package",
             "version": "[4.5.0, )"
           },
-          "System.Windows.Forms.Ribbon35": {
-            "target": "Package",
-            "version": "[3.5.8, )"
-          },
           "TweetinviAPI": {
             "target": "Package",
             "version": "[3.0.0, )"
+          },
+          "YahooFantasyWrapper": {
+            "target": "Package",
+            "version": "[1.2.2, )"
+          },
+          "linqtotwitter": {
+            "target": "Package",
+            "version": "[4.2.1, )"
           }
         },
         "imports": [

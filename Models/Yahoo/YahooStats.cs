@@ -34,11 +34,11 @@ namespace BaseballScraper.Models
         public string PositionType { get; set; }
 
         [XmlElement (ElementName = "value", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
-        public string ValueText
-        {
-            get { return Value.HasValue ? Value.Value.ToString () : "-"; }
-            set { Value = YahooStatParser.Parse (value); }
-        }
+        // public string ValueText
+        // {
+        //     get { return Value.HasValue ? Value.Value.ToString () : "-"; }
+        //     set { Value = YahooStatParser.Parse (value); }
+        // }
 
         [XmlIgnore]
         public double? Value { get; private set; }

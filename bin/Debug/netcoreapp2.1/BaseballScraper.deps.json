@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.1",
-    "signature": "b20e09fbcd7c1c339d6f94c3c376e9e3211757d6"
+    "signature": "9538abede536ef20d32bb55da0df766bd08dd445"
   },
   "compilationOptions": {
     "defines": [
@@ -26,21 +26,16 @@
         "dependencies": {
           "AngleSharp": "0.9.10",
           "AngleSharp.Scripting.JavaScript": "0.5.1",
-          "ApplicationInsightsTelemetryExtensions": "0.2.0",
           "ConsoleTables": "2.2.0",
-          "DevDefined.OAuth": "0.2.0",
-          "DotNetOpenAuth": "4.3.4.13329",
-          "DynamicInterop": "0.8.1",
           "HtmlAgilityPack": "1.8.5",
           "IronWebScraper": "4.0.4.3",
-          "Microsoft.ApplicationInsights.AspNetCore": "2.3.0",
-          "Microsoft.ApplicationInsights.SnapshotCollector": "1.3.0",
           "Microsoft.AspNetCore.App": "2.1.1",
+          "Microsoft.Extensions.Options": "2.1.1",
           "Microsoft.NETCore.App": "2.1.0",
           "Microsoft.NETCore.Platforms": "2.1.0",
-          "Microsoft.SCP.Net.SDK": "1.0.0.3",
           "NPOI": "2.3.0",
           "NScrape": "0.4.0",
+          "Newtonsoft.Json": "11.0.2",
           "Npoi.Mapper": "3.2.0",
           "OAuth": "1.0.3",
           "ObjectDumper": "1.0.0.12",
@@ -49,11 +44,10 @@
           "R.NET": "1.7.0",
           "R.NET.Community": "1.7.0",
           "RestSharp": "106.2.2",
-          "System.Configuration.ConfigurationManager": "4.5.0",
-          "System.Runtime.CompilerServices.Unsafe": "4.5.1",
           "System.Text.Encoding.CodePages": "4.5.0",
-          "System.Windows.Forms.Ribbon35": "3.5.8",
-          "TweetinviAPI": "3.0.0"
+          "TweetinviAPI": "3.0.0",
+          "YahooFantasyWrapper": "1.2.2",
+          "linqtotwitter": "4.2.1"
         },
         "runtime": {
           "BaseballScraper.dll": {}
@@ -70,7 +64,7 @@
           "System.IO": "4.3.0",
           "System.Linq": "4.3.0",
           "System.Net.Primitives": "4.3.0",
-          "System.Net.Requests": "4.3.0",
+          "System.Net.Requests": "4.0.11",
           "System.Reflection": "4.3.0",
           "System.Reflection.Extensions": "4.3.0",
           "System.Resources.ResourceManager": "4.3.0",
@@ -107,21 +101,6 @@
           "lib/portable-windows8+net45+windowsphone8+wpa+monoandroid+monotouch/AngleSharp.Scripting.JavaScript.dll": {}
         }
       },
-      "ApplicationInsightsTelemetryExtensions/0.2.0": {
-        "dependencies": {
-          "Microsoft.ApplicationInsights": "2.6.4",
-          "Microsoft.AspNetCore.Http": "2.1.1"
-        },
-        "runtime": {
-          "lib/netstandard2.0/ApplicationInsightsTelemetryExtensions.dll": {
-            "assemblyVersion": "0.2.0.0",
-            "fileVersion": "0.2.0.0"
-          }
-        },
-        "compile": {
-          "lib/netstandard2.0/ApplicationInsightsTelemetryExtensions.dll": {}
-        }
-      },
       "Autofac/4.6.2": {
         "dependencies": {
           "NETStandard.Library": "2.0.3",
@@ -150,343 +129,6 @@
         },
         "compile": {
           "lib/netstandard1.3/ConsoleTables.dll": {}
-        }
-      },
-      "DevDefined.OAuth/0.2.0": {
-        "runtime": {
-          "lib/DevDefined.OAuth.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "1.0.0.0"
-          }
-        },
-        "compile": {
-          "lib/DevDefined.OAuth.dll": {}
-        }
-      },
-      "DotNetOpenAuth/4.3.4.13329": {
-        "dependencies": {
-          "DotNetOpenAuth.OAuth.Consumer": "4.3.4.13329",
-          "DotNetOpenAuth.OAuth.ServiceProvider": "4.3.4.13329",
-          "DotNetOpenAuth.OAuth2.AuthorizationServer": "4.3.4.13329",
-          "DotNetOpenAuth.OAuth2.Client.UI": "4.3.4.13329",
-          "DotNetOpenAuth.OAuth2.ResourceServer": "4.3.4.13329",
-          "DotNetOpenAuth.OpenId.Provider.UI": "4.3.4.13329",
-          "DotNetOpenAuth.OpenId.RelyingParty.UI": "4.3.4.13329",
-          "DotNetOpenAuth.OpenIdInfoCard.UI": "4.3.4.13329",
-          "DotNetOpenAuth.OpenIdOAuth": "4.3.4.13329"
-        }
-      },
-      "DotNetOpenAuth.Core/4.3.4.13329": {
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.Core.dll": {
-            "assemblyVersion": "4.3.0.0",
-            "fileVersion": "4.3.4.13329"
-          }
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.Core.dll": {}
-        }
-      },
-      "DotNetOpenAuth.Core.UI/4.3.4.13329": {
-        "dependencies": {
-          "DotNetOpenAuth.Core": "4.3.4.13329"
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.Core.UI.dll": {
-            "assemblyVersion": "4.3.0.0",
-            "fileVersion": "4.3.4.13329"
-          }
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.Core.UI.dll": {}
-        }
-      },
-      "DotNetOpenAuth.InfoCard/4.3.4.13329": {
-        "dependencies": {
-          "DotNetOpenAuth.Core": "4.3.4.13329"
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.InfoCard.dll": {
-            "assemblyVersion": "4.3.0.0",
-            "fileVersion": "4.3.4.13329"
-          }
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.InfoCard.dll": {}
-        }
-      },
-      "DotNetOpenAuth.InfoCard.UI/4.3.4.13329": {
-        "dependencies": {
-          "DotNetOpenAuth.Core.UI": "4.3.4.13329",
-          "DotNetOpenAuth.InfoCard": "4.3.4.13329"
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.InfoCard.UI.dll": {
-            "assemblyVersion": "4.3.0.0",
-            "fileVersion": "4.3.4.13329"
-          }
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.InfoCard.UI.dll": {}
-        }
-      },
-      "DotNetOpenAuth.OAuth.Common/4.3.4.13329": {
-        "dependencies": {
-          "DotNetOpenAuth.Core": "4.3.4.13329"
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.OAuth.Common.dll": {
-            "assemblyVersion": "4.3.0.0",
-            "fileVersion": "4.3.4.13329"
-          }
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.OAuth.Common.dll": {}
-        }
-      },
-      "DotNetOpenAuth.OAuth.Consumer/4.3.4.13329": {
-        "dependencies": {
-          "DotNetOpenAuth.OAuth.Core": "4.3.4.13329"
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.OAuth.Consumer.dll": {
-            "assemblyVersion": "4.3.0.0",
-            "fileVersion": "4.3.4.13329"
-          }
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.OAuth.Consumer.dll": {}
-        }
-      },
-      "DotNetOpenAuth.OAuth.Core/4.3.4.13329": {
-        "dependencies": {
-          "DotNetOpenAuth.Core": "4.3.4.13329"
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.OAuth.dll": {
-            "assemblyVersion": "4.3.0.0",
-            "fileVersion": "4.3.4.13329"
-          }
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.OAuth.dll": {}
-        }
-      },
-      "DotNetOpenAuth.OAuth.ServiceProvider/4.3.4.13329": {
-        "dependencies": {
-          "DotNetOpenAuth.OAuth.Common": "4.3.4.13329",
-          "DotNetOpenAuth.OAuth.Core": "4.3.4.13329"
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.OAuth.ServiceProvider.dll": {
-            "assemblyVersion": "4.3.0.0",
-            "fileVersion": "4.3.4.13329"
-          }
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.OAuth.ServiceProvider.dll": {}
-        }
-      },
-      "DotNetOpenAuth.OAuth2.AuthorizationServer/4.3.4.13329": {
-        "dependencies": {
-          "DotNetOpenAuth.OAuth2.ClientAuthorization": "4.3.4.13329"
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.OAuth2.AuthorizationServer.dll": {
-            "assemblyVersion": "4.3.0.0",
-            "fileVersion": "4.3.4.13329"
-          }
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.OAuth2.AuthorizationServer.dll": {}
-        }
-      },
-      "DotNetOpenAuth.OAuth2.Client/4.3.4.13329": {
-        "dependencies": {
-          "DotNetOpenAuth.OAuth2.ClientAuthorization": "4.3.4.13329"
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.OAuth2.Client.dll": {
-            "assemblyVersion": "4.3.0.0",
-            "fileVersion": "4.3.4.13329"
-          }
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.OAuth2.Client.dll": {}
-        }
-      },
-      "DotNetOpenAuth.OAuth2.Client.UI/4.3.4.13329": {
-        "dependencies": {
-          "DotNetOpenAuth.OAuth2.Client": "4.3.4.13329"
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.OAuth2.Client.UI.dll": {
-            "assemblyVersion": "4.3.0.0",
-            "fileVersion": "4.3.4.13329"
-          }
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.OAuth2.Client.UI.dll": {}
-        }
-      },
-      "DotNetOpenAuth.OAuth2.ClientAuthorization/4.3.4.13329": {
-        "dependencies": {
-          "DotNetOpenAuth.OAuth2.Core": "4.3.4.13329"
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.OAuth2.ClientAuthorization.dll": {
-            "assemblyVersion": "4.3.0.0",
-            "fileVersion": "4.3.4.13329"
-          }
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.OAuth2.ClientAuthorization.dll": {}
-        }
-      },
-      "DotNetOpenAuth.OAuth2.Core/4.3.4.13329": {
-        "dependencies": {
-          "DotNetOpenAuth.Core": "4.3.4.13329"
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.OAuth2.dll": {
-            "assemblyVersion": "4.3.0.0",
-            "fileVersion": "4.3.4.13329"
-          }
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.OAuth2.dll": {}
-        }
-      },
-      "DotNetOpenAuth.OAuth2.ResourceServer/4.3.4.13329": {
-        "dependencies": {
-          "DotNetOpenAuth.OAuth.Common": "4.3.4.13329",
-          "DotNetOpenAuth.OAuth2.Core": "4.3.4.13329"
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.OAuth2.ResourceServer.dll": {
-            "assemblyVersion": "4.3.0.0",
-            "fileVersion": "4.3.4.13329"
-          }
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.OAuth2.ResourceServer.dll": {}
-        }
-      },
-      "DotNetOpenAuth.OpenId.Core/4.3.4.13329": {
-        "dependencies": {
-          "DotNetOpenAuth.Core": "4.3.4.13329"
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.OpenId.dll": {
-            "assemblyVersion": "4.3.0.0",
-            "fileVersion": "4.3.4.13329"
-          }
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.OpenId.dll": {}
-        }
-      },
-      "DotNetOpenAuth.OpenId.Core.UI/4.3.4.13329": {
-        "dependencies": {
-          "DotNetOpenAuth.Core.UI": "4.3.4.13329"
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.OpenId.UI.dll": {
-            "assemblyVersion": "4.3.0.0",
-            "fileVersion": "4.3.4.13329"
-          }
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.OpenId.UI.dll": {}
-        }
-      },
-      "DotNetOpenAuth.OpenId.Provider/4.3.4.13329": {
-        "dependencies": {
-          "DotNetOpenAuth.OpenId.Core": "4.3.4.13329"
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.OpenId.Provider.dll": {
-            "assemblyVersion": "4.3.0.0",
-            "fileVersion": "4.3.4.13329"
-          }
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.OpenId.Provider.dll": {}
-        }
-      },
-      "DotNetOpenAuth.OpenId.Provider.UI/4.3.4.13329": {
-        "dependencies": {
-          "DotNetOpenAuth.OpenId.Core.UI": "4.3.4.13329",
-          "DotNetOpenAuth.OpenId.Provider": "4.3.4.13329"
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.OpenId.Provider.UI.dll": {
-            "assemblyVersion": "4.3.0.0",
-            "fileVersion": "4.3.4.13329"
-          }
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.OpenId.Provider.UI.dll": {}
-        }
-      },
-      "DotNetOpenAuth.OpenId.RelyingParty/4.3.4.13329": {
-        "dependencies": {
-          "DotNetOpenAuth.OpenId.Core": "4.3.4.13329"
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.OpenId.RelyingParty.dll": {
-            "assemblyVersion": "4.3.0.0",
-            "fileVersion": "4.3.4.13329"
-          }
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.OpenId.RelyingParty.dll": {}
-        }
-      },
-      "DotNetOpenAuth.OpenId.RelyingParty.UI/4.3.4.13329": {
-        "dependencies": {
-          "DotNetOpenAuth.OpenId.Core.UI": "4.3.4.13329",
-          "DotNetOpenAuth.OpenId.RelyingParty": "4.3.4.13329"
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.OpenId.RelyingParty.UI.dll": {
-            "assemblyVersion": "4.3.0.0",
-            "fileVersion": "4.3.4.13329"
-          }
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.OpenId.RelyingParty.UI.dll": {}
-        }
-      },
-      "DotNetOpenAuth.OpenIdInfoCard.UI/4.3.4.13329": {
-        "dependencies": {
-          "DotNetOpenAuth.InfoCard.UI": "4.3.4.13329",
-          "DotNetOpenAuth.OpenId.RelyingParty.UI": "4.3.4.13329"
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.OpenIdInfoCard.UI.dll": {
-            "assemblyVersion": "4.3.0.0",
-            "fileVersion": "4.3.4.13329"
-          }
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.OpenIdInfoCard.UI.dll": {}
-        }
-      },
-      "DotNetOpenAuth.OpenIdOAuth/4.3.4.13329": {
-        "dependencies": {
-          "DotNetOpenAuth.OAuth.Consumer": "4.3.4.13329",
-          "DotNetOpenAuth.OAuth.ServiceProvider": "4.3.4.13329",
-          "DotNetOpenAuth.OpenId.Core": "4.3.4.13329"
-        },
-        "runtime": {
-          "lib/net45-full/DotNetOpenAuth.OpenIdOAuth.dll": {
-            "assemblyVersion": "4.3.0.0",
-            "fileVersion": "4.3.4.13329"
-          }
-        },
-        "compile": {
-          "lib/net45-full/DotNetOpenAuth.OpenIdOAuth.dll": {}
         }
       },
       "DynamicInterop/0.8.1": {
@@ -545,154 +187,63 @@
           "lib/netstandard1.3/jint.dll": {}
         }
       },
-      "Microsoft.ApplicationInsights/2.6.4": {
+      "linqtotwitter/4.2.1": {
         "dependencies": {
-          "NETStandard.Library": "2.0.3",
-          "System.Diagnostics.DiagnosticSource": "4.5.0",
-          "System.Diagnostics.StackTrace": "4.3.0",
-          "System.Net.Requests": "4.3.0"
+          "Microsoft.Bcl": "1.1.10",
+          "Microsoft.Bcl.Build": "1.0.21",
+          "Microsoft.Bcl.Compression": "3.9.85",
+          "Microsoft.Net.Http": "2.2.29",
+          "Newtonsoft.Json": "11.0.2",
+          "Rx-Core": "2.2.5",
+          "Rx-Interfaces": "2.2.5",
+          "Rx-Linq": "2.2.5",
+          "Rx-Main": "2.2.5",
+          "Rx-PlatformServices": "2.2.5"
         },
         "runtime": {
-          "lib/netstandard1.3/Microsoft.ApplicationInsights.dll": {
-            "assemblyVersion": "2.6.4.0",
-            "fileVersion": "2.6.4.28384"
+          "lib/netcoreapp2.0/LinqToTwitter.AspNetCore.dll": {
+            "assemblyVersion": "4.2.1.0",
+            "fileVersion": "4.2.1.0"
+          },
+          "lib/netcoreapp2.0/LinqToTwitter.Core.dll": {
+            "assemblyVersion": "4.2.1.0",
+            "fileVersion": "4.2.1.0"
           }
         },
         "compile": {
-          "lib/netstandard1.3/Microsoft.ApplicationInsights.dll": {}
+          "lib/netcoreapp2.0/LinqToTwitter.AspNetCore.dll": {},
+          "lib/netcoreapp2.0/LinqToTwitter.Core.dll": {}
         }
       },
-      "Microsoft.ApplicationInsights.AspNetCore/2.3.0": {
+      "Microsoft.Bcl/1.1.10": {
         "dependencies": {
-          "Microsoft.ApplicationInsights": "2.6.4",
-          "Microsoft.ApplicationInsights.DependencyCollector": "2.6.4",
-          "Microsoft.ApplicationInsights.PerfCounterCollector": "2.6.4",
-          "Microsoft.ApplicationInsights.WindowsServer": "2.6.4",
-          "Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel": "2.6.4",
-          "Microsoft.AspNetCore.Hosting": "2.1.1",
-          "Microsoft.Extensions.Configuration": "2.1.1",
-          "Microsoft.Extensions.Configuration.Json": "2.1.1",
-          "Microsoft.Extensions.DiagnosticAdapter": "2.1.0",
-          "Microsoft.Extensions.Logging.Abstractions": "2.1.1",
-          "NETStandard.Library": "2.0.3",
-          "System.Net.NameResolution": "4.3.0",
-          "System.Text.Encodings.Web": "4.5.0"
-        },
-        "runtime": {
-          "lib/netstandard1.6/Microsoft.ApplicationInsights.AspNetCore.dll": {
-            "assemblyVersion": "2.3.0.0",
-            "fileVersion": "2.3.0.0"
-          }
-        },
-        "compile": {
-          "lib/netstandard1.6/Microsoft.ApplicationInsights.AspNetCore.dll": {}
+          "Microsoft.Bcl.Build": "1.0.21"
         }
       },
-      "Microsoft.ApplicationInsights.DependencyCollector/2.6.4": {
+      "Microsoft.Bcl.Build/1.0.21": {},
+      "Microsoft.Bcl.Compression/3.9.85": {
         "dependencies": {
-          "Microsoft.ApplicationInsights": "2.6.4",
-          "Microsoft.Extensions.PlatformAbstractions": "1.1.0",
-          "NETStandard.Library": "2.0.3",
-          "System.Data.SqlClient": "4.5.1",
-          "System.Diagnostics.DiagnosticSource": "4.5.0",
-          "System.Diagnostics.StackTrace": "4.3.0"
-        },
-        "runtime": {
-          "lib/netstandard1.6/Microsoft.AI.DependencyCollector.dll": {
-            "assemblyVersion": "2.6.4.0",
-            "fileVersion": "2.6.4.28401"
-          }
-        },
-        "compile": {
-          "lib/netstandard1.6/Microsoft.AI.DependencyCollector.dll": {}
+          "Microsoft.Bcl.Build": "1.0.21"
         }
       },
-      "Microsoft.ApplicationInsights.PerfCounterCollector/2.6.4": {
+      "Microsoft.Net.Http/2.2.29": {
         "dependencies": {
-          "Microsoft.ApplicationInsights": "2.6.4",
-          "Microsoft.Extensions.PlatformAbstractions": "1.1.0",
-          "NETStandard.Library": "2.0.3",
-          "System.Runtime.Serialization.Json": "4.3.0",
-          "System.Runtime.Serialization.Primitives": "4.3.0"
+          "Microsoft.Bcl": "1.1.10",
+          "Microsoft.Bcl.Build": "1.0.21"
         },
         "runtime": {
-          "lib/netstandard1.6/Microsoft.AI.PerfCounterCollector.dll": {
-            "assemblyVersion": "2.6.4.0",
-            "fileVersion": "2.6.4.28401"
+          "lib/net45/System.Net.Http.Extensions.dll": {
+            "assemblyVersion": "2.2.29.0",
+            "fileVersion": "2.2.29.0"
+          },
+          "lib/net45/System.Net.Http.Primitives.dll": {
+            "assemblyVersion": "4.2.29.0",
+            "fileVersion": "4.2.29.0"
           }
         },
         "compile": {
-          "lib/netstandard1.6/Microsoft.AI.PerfCounterCollector.dll": {}
-        }
-      },
-      "Microsoft.ApplicationInsights.SnapshotCollector/1.3.0": {
-        "dependencies": {
-          "Microsoft.ApplicationInsights": "2.6.4",
-          "System.Diagnostics.DiagnosticSource": "4.5.0"
-        },
-        "runtime": {
-          "lib/netstandard2.0/Microsoft.ApplicationInsights.SnapshotCollector.dll": {
-            "assemblyVersion": "1.3.0.0",
-            "fileVersion": "1.3.0.0"
-          }
-        },
-        "compile": {
-          "lib/netstandard2.0/Microsoft.ApplicationInsights.SnapshotCollector.dll": {}
-        }
-      },
-      "Microsoft.ApplicationInsights.WindowsServer/2.6.4": {
-        "dependencies": {
-          "Microsoft.ApplicationInsights": "2.6.4",
-          "NETStandard.Library": "2.0.3",
-          "System.Runtime.Serialization.Json": "4.3.0",
-          "System.Runtime.Serialization.Primitives": "4.3.0"
-        },
-        "runtime": {
-          "lib/netstandard1.6/Microsoft.AI.WindowsServer.dll": {
-            "assemblyVersion": "2.6.4.0",
-            "fileVersion": "2.6.4.28401"
-          }
-        },
-        "compile": {
-          "lib/netstandard1.6/Microsoft.AI.WindowsServer.dll": {}
-        }
-      },
-      "Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel/2.6.4": {
-        "dependencies": {
-          "Microsoft.ApplicationInsights": "2.6.4",
-          "System.Diagnostics.Process": "4.3.0",
-          "System.IO.FileSystem.AccessControl": "4.3.0",
-          "System.Net.NetworkInformation": "4.3.0",
-          "System.Net.Requests": "4.3.0",
-          "System.Net.WebHeaderCollection": "4.3.0",
-          "System.Runtime": "4.3.0",
-          "System.Runtime.Serialization.Primitives": "4.3.0",
-          "System.Security.Cryptography.Algorithms": "4.3.0",
-          "System.Threading.Thread": "4.3.0"
-        },
-        "runtime": {
-          "lib/netstandard2.0/Microsoft.AI.ServerTelemetryChannel.dll": {
-            "assemblyVersion": "2.6.4.0",
-            "fileVersion": "2.6.4.28384"
-          }
-        },
-        "compile": {
-          "lib/netstandard2.0/Microsoft.AI.ServerTelemetryChannel.dll": {}
-        }
-      },
-      "Microsoft.Extensions.PlatformAbstractions/1.1.0": {
-        "dependencies": {
-          "NETStandard.Library": "2.0.3",
-          "System.Reflection.TypeExtensions": "4.3.0"
-        },
-        "runtime": {
-          "lib/netstandard1.3/Microsoft.Extensions.PlatformAbstractions.dll": {
-            "assemblyVersion": "1.1.0.0",
-            "fileVersion": "1.1.0.21115"
-          }
-        },
-        "compile": {
-          "lib/netstandard1.3/Microsoft.Extensions.PlatformAbstractions.dll": {}
+          "lib/net45/System.Net.Http.Extensions.dll": {},
+          "lib/net45/System.Net.Http.Primitives.dll": {}
         }
       },
       "Microsoft.NETCore.App/2.1.0": {
@@ -861,18 +412,6 @@
       },
       "Microsoft.NETCore.Platforms/2.1.0": {},
       "Microsoft.NETCore.Targets/2.1.0": {},
-      "Microsoft.SCP.Net.SDK/1.0.0.3": {
-        "dependencies": {
-          "Newtonsoft.Json": "11.0.2"
-        }
-      },
-      "Microsoft.Win32.Primitives/4.3.0": {
-        "dependencies": {
-          "Microsoft.NETCore.Platforms": "2.1.0",
-          "Microsoft.NETCore.Targets": "2.1.0",
-          "System.Runtime": "4.3.0"
-        }
-      },
       "NETStandard.Library/2.0.3": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "2.1.0"
@@ -1028,6 +567,69 @@
           "lib/netstandard2.0/RestSharp.dll": {}
         }
       },
+      "Rx-Core/2.2.5": {
+        "dependencies": {
+          "Rx-Interfaces": "2.2.5"
+        },
+        "runtime": {
+          "lib/net45/System.Reactive.Core.dll": {
+            "assemblyVersion": "2.2.5.0",
+            "fileVersion": "2.2.5.40722"
+          }
+        },
+        "compile": {
+          "lib/net45/System.Reactive.Core.dll": {}
+        }
+      },
+      "Rx-Interfaces/2.2.5": {
+        "runtime": {
+          "lib/net45/System.Reactive.Interfaces.dll": {
+            "assemblyVersion": "2.2.5.0",
+            "fileVersion": "2.2.5.40722"
+          }
+        },
+        "compile": {
+          "lib/net45/System.Reactive.Interfaces.dll": {}
+        }
+      },
+      "Rx-Linq/2.2.5": {
+        "dependencies": {
+          "Rx-Core": "2.2.5",
+          "Rx-Interfaces": "2.2.5"
+        },
+        "runtime": {
+          "lib/net45/System.Reactive.Linq.dll": {
+            "assemblyVersion": "2.2.5.0",
+            "fileVersion": "2.2.5.40722"
+          }
+        },
+        "compile": {
+          "lib/net45/System.Reactive.Linq.dll": {}
+        }
+      },
+      "Rx-Main/2.2.5": {
+        "dependencies": {
+          "Rx-Core": "2.2.5",
+          "Rx-Interfaces": "2.2.5",
+          "Rx-Linq": "2.2.5",
+          "Rx-PlatformServices": "2.2.5"
+        }
+      },
+      "Rx-PlatformServices/2.2.5": {
+        "dependencies": {
+          "Rx-Core": "2.2.5",
+          "Rx-Interfaces": "2.2.5"
+        },
+        "runtime": {
+          "lib/net45/System.Reactive.PlatformServices.dll": {
+            "assemblyVersion": "2.2.5.0",
+            "fileVersion": "2.2.5.40722"
+          }
+        },
+        "compile": {
+          "lib/net45/System.Reactive.PlatformServices.dll": {}
+        }
+      },
       "SharpZipLib/0.86.0": {
         "runtime": {
           "lib/20/ICSharpCode.SharpZipLib.dll": {
@@ -1061,60 +663,6 @@
           "System.Runtime": "4.3.0"
         }
       },
-      "System.Configuration.ConfigurationManager/4.5.0": {
-        "dependencies": {
-          "System.Security.Cryptography.ProtectedData": "4.5.0",
-          "System.Security.Permissions": "4.5.0"
-        },
-        "runtime": {
-          "lib/netstandard2.0/System.Configuration.ConfigurationManager.dll": {
-            "assemblyVersion": "4.0.1.0",
-            "fileVersion": "4.6.26515.6"
-          }
-        },
-        "compile": {
-          "ref/netstandard2.0/System.Configuration.ConfigurationManager.dll": {}
-        }
-      },
-      "System.Diagnostics.Process/4.3.0": {
-        "dependencies": {
-          "Microsoft.NETCore.Platforms": "2.1.0",
-          "Microsoft.Win32.Primitives": "4.3.0",
-          "Microsoft.Win32.Registry": "4.5.0",
-          "System.Collections": "4.3.0",
-          "System.Diagnostics.Debug": "4.3.0",
-          "System.Globalization": "4.3.0",
-          "System.IO": "4.3.0",
-          "System.IO.FileSystem": "4.3.0",
-          "System.IO.FileSystem.Primitives": "4.3.0",
-          "System.Resources.ResourceManager": "4.3.0",
-          "System.Runtime": "4.3.0",
-          "System.Runtime.Extensions": "4.3.0",
-          "System.Runtime.Handles": "4.3.0",
-          "System.Runtime.InteropServices": "4.3.0",
-          "System.Text.Encoding": "4.3.0",
-          "System.Text.Encoding.Extensions": "4.3.0",
-          "System.Threading": "4.3.0",
-          "System.Threading.Tasks": "4.3.0",
-          "System.Threading.Thread": "4.3.0",
-          "System.Threading.ThreadPool": "4.3.0",
-          "runtime.native.System": "4.3.0"
-        },
-        "runtimeTargets": {
-          "runtime/linux/lib/_._": {
-            "rid": "linux",
-            "assetType": "runtime"
-          },
-          "runtime/osx/lib/_._": {
-            "rid": "osx",
-            "assetType": "runtime"
-          },
-          "runtime/win/lib/_._": {
-            "rid": "win",
-            "assetType": "runtime"
-          }
-        }
-      },
       "System.Drawing.Common/4.5.0-preview1-26216-02": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "2.1.0"
@@ -1141,31 +689,6 @@
         },
         "compile": {
           "ref/netstandard2.0/System.Drawing.Common.dll": {}
-        }
-      },
-      "System.IO.FileSystem.AccessControl/4.3.0": {
-        "dependencies": {
-          "Microsoft.NETCore.Platforms": "2.1.0",
-          "System.IO.FileSystem": "4.3.0",
-          "System.Resources.ResourceManager": "4.3.0",
-          "System.Runtime": "4.3.0",
-          "System.Runtime.Extensions": "4.3.0",
-          "System.Runtime.Handles": "4.3.0",
-          "System.Security.AccessControl": "4.5.0",
-          "System.Security.Principal.Windows": "4.5.0"
-        },
-        "runtimeTargets": {
-          "runtime/unix/lib/_._": {
-            "rid": "unix",
-            "assetType": "runtime"
-          },
-          "runtime/win/lib/_._": {
-            "rid": "win",
-            "assetType": "runtime"
-          }
-        },
-        "compile": {
-          "ref/netstandard1.3/System.IO.FileSystem.AccessControl.dll": {}
         }
       },
       "System.Net.Http/4.3.2": {
@@ -1208,75 +731,6 @@
           }
         }
       },
-      "System.Net.NameResolution/4.3.0": {
-        "dependencies": {
-          "Microsoft.NETCore.Platforms": "2.1.0",
-          "System.Collections": "4.3.0",
-          "System.Diagnostics.Tracing": "4.3.0",
-          "System.Globalization": "4.3.0",
-          "System.Net.Primitives": "4.3.0",
-          "System.Resources.ResourceManager": "4.3.0",
-          "System.Runtime": "4.3.0",
-          "System.Runtime.Extensions": "4.3.0",
-          "System.Runtime.Handles": "4.3.0",
-          "System.Runtime.InteropServices": "4.3.0",
-          "System.Security.Principal.Windows": "4.5.0",
-          "System.Threading": "4.3.0",
-          "System.Threading.Tasks": "4.3.0",
-          "runtime.native.System": "4.3.0"
-        },
-        "runtimeTargets": {
-          "runtime/unix/lib/_._": {
-            "rid": "unix",
-            "assetType": "runtime"
-          },
-          "runtime/win/lib/_._": {
-            "rid": "win",
-            "assetType": "runtime"
-          }
-        }
-      },
-      "System.Net.NetworkInformation/4.3.0": {
-        "dependencies": {
-          "Microsoft.NETCore.Platforms": "2.1.0",
-          "Microsoft.Win32.Primitives": "4.3.0",
-          "System.Collections": "4.3.0",
-          "System.Diagnostics.Tracing": "4.3.0",
-          "System.Globalization": "4.3.0",
-          "System.IO": "4.3.0",
-          "System.IO.FileSystem": "4.3.0",
-          "System.IO.FileSystem.Primitives": "4.3.0",
-          "System.Linq": "4.3.0",
-          "System.Net.Primitives": "4.3.0",
-          "System.Net.Sockets": "4.3.0",
-          "System.Resources.ResourceManager": "4.3.0",
-          "System.Runtime": "4.3.0",
-          "System.Runtime.Extensions": "4.3.0",
-          "System.Runtime.Handles": "4.3.0",
-          "System.Runtime.InteropServices": "4.3.0",
-          "System.Security.Principal.Windows": "4.5.0",
-          "System.Threading": "4.3.0",
-          "System.Threading.Overlapped": "4.3.0",
-          "System.Threading.Tasks": "4.3.0",
-          "System.Threading.Thread": "4.3.0",
-          "System.Threading.ThreadPool": "4.3.0",
-          "runtime.native.System": "4.3.0"
-        },
-        "runtimeTargets": {
-          "runtime/linux/lib/_._": {
-            "rid": "linux",
-            "assetType": "runtime"
-          },
-          "runtime/osx/lib/_._": {
-            "rid": "osx",
-            "assetType": "runtime"
-          },
-          "runtime/win/lib/_._": {
-            "rid": "win",
-            "assetType": "runtime"
-          }
-        }
-      },
       "System.Net.Primitives/4.3.0": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "2.1.0",
@@ -1285,7 +739,7 @@
           "System.Runtime.Handles": "4.3.0"
         }
       },
-      "System.Net.Requests/4.3.0": {
+      "System.Net.Requests/4.0.11": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "2.1.0",
           "System.Collections": "4.3.0",
@@ -1295,7 +749,7 @@
           "System.IO": "4.3.0",
           "System.Net.Http": "4.3.2",
           "System.Net.Primitives": "4.3.0",
-          "System.Net.WebHeaderCollection": "4.3.0",
+          "System.Net.WebHeaderCollection": "4.0.1",
           "System.Resources.ResourceManager": "4.3.0",
           "System.Runtime": "4.3.0",
           "System.Threading": "4.3.0",
@@ -1312,80 +766,12 @@
           }
         }
       },
-      "System.Net.Sockets/4.3.0": {
-        "dependencies": {
-          "Microsoft.NETCore.Platforms": "2.1.0",
-          "Microsoft.NETCore.Targets": "2.1.0",
-          "System.IO": "4.3.0",
-          "System.Net.Primitives": "4.3.0",
-          "System.Runtime": "4.3.0",
-          "System.Threading.Tasks": "4.3.0"
-        }
-      },
-      "System.Net.WebHeaderCollection/4.3.0": {
+      "System.Net.WebHeaderCollection/4.0.1": {
         "dependencies": {
           "System.Collections": "4.3.0",
           "System.Resources.ResourceManager": "4.3.0",
           "System.Runtime": "4.3.0",
           "System.Runtime.Extensions": "4.3.0"
-        }
-      },
-      "System.Runtime.Serialization.Json/4.3.0": {
-        "dependencies": {
-          "System.IO": "4.3.0",
-          "System.Private.DataContractSerialization": "4.3.0",
-          "System.Runtime": "4.3.0"
-        }
-      },
-      "System.Security.Cryptography.ProtectedData/4.5.0": {
-        "runtime": {
-          "lib/netstandard2.0/System.Security.Cryptography.ProtectedData.dll": {
-            "assemblyVersion": "4.0.3.0",
-            "fileVersion": "4.6.26515.6"
-          }
-        },
-        "runtimeTargets": {
-          "runtimes/win/lib/netstandard2.0/System.Security.Cryptography.ProtectedData.dll": {
-            "rid": "win",
-            "assetType": "runtime",
-            "assemblyVersion": "4.0.3.0",
-            "fileVersion": "4.6.26515.6"
-          }
-        }
-      },
-      "System.Threading.Overlapped/4.3.0": {
-        "dependencies": {
-          "Microsoft.NETCore.Platforms": "2.1.0",
-          "System.Resources.ResourceManager": "4.3.0",
-          "System.Runtime": "4.3.0",
-          "System.Runtime.Handles": "4.3.0"
-        },
-        "runtimeTargets": {
-          "runtime/unix/lib/_._": {
-            "rid": "unix",
-            "assetType": "runtime"
-          },
-          "runtime/win/lib/_._": {
-            "rid": "win",
-            "assetType": "runtime"
-          }
-        }
-      },
-      "System.Threading.ThreadPool/4.3.0": {
-        "dependencies": {
-          "System.Runtime": "4.3.0",
-          "System.Runtime.Handles": "4.3.0"
-        }
-      },
-      "System.Windows.Forms.Ribbon35/3.5.8": {
-        "runtime": {
-          "lib/net35/System.Windows.Forms.Ribbon35.dll": {
-            "assemblyVersion": "3.5.8.0",
-            "fileVersion": "3.5.8.0"
-          }
-        },
-        "compile": {
-          "lib/net35/System.Windows.Forms.Ribbon35.dll": {}
         }
       },
       "System.Xml.XPath.XmlDocument/4.3.0": {
@@ -1467,6 +853,22 @@
           "lib/netstandard1.4/Tweetinvi.Streams.dll": {},
           "lib/netstandard1.4/Tweetinvi.WebLogic.dll": {},
           "lib/netstandard1.4/Tweetinvi.dll": {}
+        }
+      },
+      "YahooFantasyWrapper/1.2.2": {
+        "dependencies": {
+          "Microsoft.Extensions.Options": "2.1.1",
+          "Newtonsoft.Json": "11.0.2",
+          "System.Text.Encodings.Web": "4.5.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/YahooFantasyWrapper.dll": {
+            "assemblyVersion": "1.2.0.0",
+            "fileVersion": "1.2.0.0"
+          }
+        },
+        "compile": {
+          "lib/netstandard2.0/YahooFantasyWrapper.dll": {}
         }
       },
       "Microsoft.AspNet.WebApi.Client/5.2.6": {
@@ -4397,13 +3799,6 @@
       "path": "anglesharp.scripting.javascript/0.5.1",
       "hashPath": "anglesharp.scripting.javascript.0.5.1.nupkg.sha512"
     },
-    "ApplicationInsightsTelemetryExtensions/0.2.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-0kpxPvaO/I3EpiWLRhYXlcWuccnCouQhMCYjo2O/tDmcU9CxgAfeYVjSVIcdAKA6j5KEbK7px2ibchOg1n0d+A==",
-      "path": "applicationinsightstelemetryextensions/0.2.0",
-      "hashPath": "applicationinsightstelemetryextensions.0.2.0.nupkg.sha512"
-    },
     "Autofac/4.6.2": {
       "type": "package",
       "serviceable": true,
@@ -4417,174 +3812,6 @@
       "sha512": "sha512-RIt2J8ULyWGJCo5nfoVB1wB7m3tkRVO5Y2+OJqk45B4YQN70c65I16K6E7BePXoHzKD5n37FDQZii4qWOwvTZQ==",
       "path": "consoletables/2.2.0",
       "hashPath": "consoletables.2.2.0.nupkg.sha512"
-    },
-    "DevDefined.OAuth/0.2.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-HrN5nLFGfME1wquJU1IzUwnabuzQuTBIT06LtsqBWu7KhB3djKywQ8IBYzf+H1yHvhj5rHao/zVMQMMvlHe1qQ==",
-      "path": "devdefined.oauth/0.2.0",
-      "hashPath": "devdefined.oauth.0.2.0.nupkg.sha512"
-    },
-    "DotNetOpenAuth/4.3.4.13329": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-+XrbtWeBBUujZBRGirbUUBzp7JESRwSIsQMdh/2kJzlwTr+ZVvggHQ1Tpr4uF7F8n1LTYWNy571wDdNs94BYZw==",
-      "path": "dotnetopenauth/4.3.4.13329",
-      "hashPath": "dotnetopenauth.4.3.4.13329.nupkg.sha512"
-    },
-    "DotNetOpenAuth.Core/4.3.4.13329": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-sgTuUWHv5tn1weh8jLqXytGQKWpebhk+D4e/RTNNH21eqCEs/ch+x7YxQxzp2u70DO1Hvcjb6dTDj2rO3grgxA==",
-      "path": "dotnetopenauth.core/4.3.4.13329",
-      "hashPath": "dotnetopenauth.core.4.3.4.13329.nupkg.sha512"
-    },
-    "DotNetOpenAuth.Core.UI/4.3.4.13329": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-xd7tQ1TDolBUedrNaCZkvaQ7zeBmo7pzuWvrANGsAAzv+KOyUYAA4ATgp6H0MW+K682hjCrAEo0G/7wFRPBIWA==",
-      "path": "dotnetopenauth.core.ui/4.3.4.13329",
-      "hashPath": "dotnetopenauth.core.ui.4.3.4.13329.nupkg.sha512"
-    },
-    "DotNetOpenAuth.InfoCard/4.3.4.13329": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-aKPCMoX9rZWU+kYbdpWyaQZnXp9EU8Y4W81NfM+kV/Nlb+01b9QTJvT3K6XeAou7habnrNEXQg0iAjYS7AeDwg==",
-      "path": "dotnetopenauth.infocard/4.3.4.13329",
-      "hashPath": "dotnetopenauth.infocard.4.3.4.13329.nupkg.sha512"
-    },
-    "DotNetOpenAuth.InfoCard.UI/4.3.4.13329": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-YS6cxh3Y3jIwc6srlcjFwgMY2mnErFLVaPaScq5/eCBt+7UcCyYlZxD4qOH+Am69TogSVZa1AV/jwn+qMq8lOw==",
-      "path": "dotnetopenauth.infocard.ui/4.3.4.13329",
-      "hashPath": "dotnetopenauth.infocard.ui.4.3.4.13329.nupkg.sha512"
-    },
-    "DotNetOpenAuth.OAuth.Common/4.3.4.13329": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-42q/rT1H0n/mo1hIqoyhtSX+efBpf23c9gZvv5pc37PXST1zYmtTM3RDW+UM0cuAKlzCBhkqfjo63Nito57UpA==",
-      "path": "dotnetopenauth.oauth.common/4.3.4.13329",
-      "hashPath": "dotnetopenauth.oauth.common.4.3.4.13329.nupkg.sha512"
-    },
-    "DotNetOpenAuth.OAuth.Consumer/4.3.4.13329": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-J+2v9yoOn4yIFBstU95/5f0iKs/WrSyYzlnv6dlOkSTqMX/Bm0pIg462U0whr0dnRd3U8JKP6yUNKTfvCrscQA==",
-      "path": "dotnetopenauth.oauth.consumer/4.3.4.13329",
-      "hashPath": "dotnetopenauth.oauth.consumer.4.3.4.13329.nupkg.sha512"
-    },
-    "DotNetOpenAuth.OAuth.Core/4.3.4.13329": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-lvdJweyGX+orYVDX8LfQ/p2Lr5D8brkCPmTP4t5QlgeztV629oJCtKvqZxaB7ir6nO3jKPfiyrSJVgAW0e1d4g==",
-      "path": "dotnetopenauth.oauth.core/4.3.4.13329",
-      "hashPath": "dotnetopenauth.oauth.core.4.3.4.13329.nupkg.sha512"
-    },
-    "DotNetOpenAuth.OAuth.ServiceProvider/4.3.4.13329": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-P/I9gINYouLktBFQlM5bluPh+/HPORlpLtIsc3HoIulHQr/UJuJNBbS0YxKnJWh8CWpniTamU9DPc7/NZLLTIA==",
-      "path": "dotnetopenauth.oauth.serviceprovider/4.3.4.13329",
-      "hashPath": "dotnetopenauth.oauth.serviceprovider.4.3.4.13329.nupkg.sha512"
-    },
-    "DotNetOpenAuth.OAuth2.AuthorizationServer/4.3.4.13329": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-yq8IpYhlmm4gVrbx6qeoE8F6OaiBipFyTsuXdLUEXWS1hv/Fq5BNG6eACyKW7BiG+jb1jFO7gedWjmjO+wPdiA==",
-      "path": "dotnetopenauth.oauth2.authorizationserver/4.3.4.13329",
-      "hashPath": "dotnetopenauth.oauth2.authorizationserver.4.3.4.13329.nupkg.sha512"
-    },
-    "DotNetOpenAuth.OAuth2.Client/4.3.4.13329": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-7a0AnHNMx15rgG2GPFdhRpcrFJX7MZdRY+bxnooJ9rUXCKJgFn8e061Wnc7tff3mY2YAjPOo2bg+ThIOqYaClw==",
-      "path": "dotnetopenauth.oauth2.client/4.3.4.13329",
-      "hashPath": "dotnetopenauth.oauth2.client.4.3.4.13329.nupkg.sha512"
-    },
-    "DotNetOpenAuth.OAuth2.Client.UI/4.3.4.13329": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-hAih1ctQvR6Hl57/WHoMEdrB2kKCU6j+i3B++iRpeyjESO3KIZOphnBYHCuHvQ6bgjnX5hJ0XI/HrZTEDzwwjA==",
-      "path": "dotnetopenauth.oauth2.client.ui/4.3.4.13329",
-      "hashPath": "dotnetopenauth.oauth2.client.ui.4.3.4.13329.nupkg.sha512"
-    },
-    "DotNetOpenAuth.OAuth2.ClientAuthorization/4.3.4.13329": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-J102aHCpTNLzZ6pmkNEkZiNvRPXkSMxPUlvDseGGWEd/g+dSfFT4fH4VQMHV2gb0g6JOhwgImEdy6UB8NJBhOQ==",
-      "path": "dotnetopenauth.oauth2.clientauthorization/4.3.4.13329",
-      "hashPath": "dotnetopenauth.oauth2.clientauthorization.4.3.4.13329.nupkg.sha512"
-    },
-    "DotNetOpenAuth.OAuth2.Core/4.3.4.13329": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-2KPnfW/lEObcn5dtme1zrwkU3wxIMaAp/fZvrRom9TA/6P8WZLb/wiyHMtkm77+rC18SRYbAmGCHxuc3p+Uezw==",
-      "path": "dotnetopenauth.oauth2.core/4.3.4.13329",
-      "hashPath": "dotnetopenauth.oauth2.core.4.3.4.13329.nupkg.sha512"
-    },
-    "DotNetOpenAuth.OAuth2.ResourceServer/4.3.4.13329": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-Y2MgpdJ3fophQaa74FSHYx9eihIcknQyOh53ktCJ3QxNKX8qjuA9pqITMoJdpnv5c39NOY6s4jRU6AvuhfQB1Q==",
-      "path": "dotnetopenauth.oauth2.resourceserver/4.3.4.13329",
-      "hashPath": "dotnetopenauth.oauth2.resourceserver.4.3.4.13329.nupkg.sha512"
-    },
-    "DotNetOpenAuth.OpenId.Core/4.3.4.13329": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-r8XKTJ6c+YvOOQcTLMgjWsfAkNxgxp8QVsP6pRXrg1Onp5TpzNZ9ULVzKkyRRipmC0fEGitydRnjKRDD2QxLtg==",
-      "path": "dotnetopenauth.openid.core/4.3.4.13329",
-      "hashPath": "dotnetopenauth.openid.core.4.3.4.13329.nupkg.sha512"
-    },
-    "DotNetOpenAuth.OpenId.Core.UI/4.3.4.13329": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-Jooj8My+LgRGN6WbiakcU40wl9oXxK8IbIrH2BW87mpQTqAQFIsepAHxlzKStkoEFgByxSEI05YnnscRu9uLMg==",
-      "path": "dotnetopenauth.openid.core.ui/4.3.4.13329",
-      "hashPath": "dotnetopenauth.openid.core.ui.4.3.4.13329.nupkg.sha512"
-    },
-    "DotNetOpenAuth.OpenId.Provider/4.3.4.13329": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-AU332jmP8/BUZ6Tmu7bpykJWNd4gO9xsMVz0G/pZg1pAaEP7ftdprbMu93ZhLgk7v3YIUT2pQje8DbWElFJu4Q==",
-      "path": "dotnetopenauth.openid.provider/4.3.4.13329",
-      "hashPath": "dotnetopenauth.openid.provider.4.3.4.13329.nupkg.sha512"
-    },
-    "DotNetOpenAuth.OpenId.Provider.UI/4.3.4.13329": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-/WeLnfEPwuWyWFENzqNGYRioqfKKdGSiVnT2wW5hx1T/1DjbK7HxwiE+bpUxctNU0iodlFnIYUdkwkFlNmg3SA==",
-      "path": "dotnetopenauth.openid.provider.ui/4.3.4.13329",
-      "hashPath": "dotnetopenauth.openid.provider.ui.4.3.4.13329.nupkg.sha512"
-    },
-    "DotNetOpenAuth.OpenId.RelyingParty/4.3.4.13329": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-2uME8eTovsaE+/EiDDkr82O7y7yl0LMyoQHuHCdOVizUHrUZewkF/vi7pn1F9pGqs8zeBQqI9y1AZ6XQ3s2REA==",
-      "path": "dotnetopenauth.openid.relyingparty/4.3.4.13329",
-      "hashPath": "dotnetopenauth.openid.relyingparty.4.3.4.13329.nupkg.sha512"
-    },
-    "DotNetOpenAuth.OpenId.RelyingParty.UI/4.3.4.13329": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-06kxJcANMgQ4eLWh2HawHRDJ6rRAL+EOWMGLhW5aE8G0F31iQHB2vlRVPEo//rnf0dhAaVSDo0mPgwodYmjKGA==",
-      "path": "dotnetopenauth.openid.relyingparty.ui/4.3.4.13329",
-      "hashPath": "dotnetopenauth.openid.relyingparty.ui.4.3.4.13329.nupkg.sha512"
-    },
-    "DotNetOpenAuth.OpenIdInfoCard.UI/4.3.4.13329": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-HkV7igZG5cudLfdT9p9gQshtSr8C4da65UmaubYqnLMJpgdBnKIlsVz/2PhRfQ8zfxWPOcpkjQxu1Ps/K33v2Q==",
-      "path": "dotnetopenauth.openidinfocard.ui/4.3.4.13329",
-      "hashPath": "dotnetopenauth.openidinfocard.ui.4.3.4.13329.nupkg.sha512"
-    },
-    "DotNetOpenAuth.OpenIdOAuth/4.3.4.13329": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-37yvW2z/l1e6WGiLMdqjpWijgOpqHGa6GClIyynF94PjEs2bEJH9iPpHTrskxNdimOG1nzqR9sJYS4Gh26mt4w==",
-      "path": "dotnetopenauth.openidoauth/4.3.4.13329",
-      "hashPath": "dotnetopenauth.openidoauth.4.3.4.13329.nupkg.sha512"
     },
     "DynamicInterop/0.8.1": {
       "type": "package",
@@ -4614,61 +3841,40 @@
       "path": "jint/2.10.4",
       "hashPath": "jint.2.10.4.nupkg.sha512"
     },
-    "Microsoft.ApplicationInsights/2.6.4": {
+    "linqtotwitter/4.2.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-cOYn7GQOWVu3O11J3Ckcq2ZrL8p83dAOEW67w8G6+Szq1usGSRYNkPOBDWJMg5iskHN/VA65n6EWuhMP/yNqvw==",
-      "path": "microsoft.applicationinsights/2.6.4",
-      "hashPath": "microsoft.applicationinsights.2.6.4.nupkg.sha512"
+      "sha512": "sha512-2cpsJVLRm0IokyoaGLKX9Y3/V7mbPHh3GOOy209/D/ClwFGjuKZQ92zdiG8lVILejk7pDTyZVzqHWpZeQpbX8g==",
+      "path": "linqtotwitter/4.2.1",
+      "hashPath": "linqtotwitter.4.2.1.nupkg.sha512"
     },
-    "Microsoft.ApplicationInsights.AspNetCore/2.3.0": {
+    "Microsoft.Bcl/1.1.10": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-Dudt/xCpVNKDi2Nha2Ddn3yWUVHKOo6jF8uQ4/xpSn7Lc3zVrFNrriZRnyvw6ueWPelxDC5SrQWpVDP/SK0b/A==",
-      "path": "microsoft.applicationinsights.aspnetcore/2.3.0",
-      "hashPath": "microsoft.applicationinsights.aspnetcore.2.3.0.nupkg.sha512"
+      "sha512": "sha512-+tTqoh/M1pyL8El3qLy30EcwnAtyvFoDZJtdG9Cbg/WdFbh4N8kyrq198XHuEL7lnJbeD0DRO8jcX5IIOh05cQ==",
+      "path": "microsoft.bcl/1.1.10",
+      "hashPath": "microsoft.bcl.1.1.10.nupkg.sha512"
     },
-    "Microsoft.ApplicationInsights.DependencyCollector/2.6.4": {
+    "Microsoft.Bcl.Build/1.0.21": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-ATcRdhD5BqtyHE3iQa9lb+FGWqOV+6Qmv6bvN2bXZA3K8+1J7czVBT2wFbSnu5S4xrl4Z4BFWhvp4elvgLZ/9Q==",
-      "path": "microsoft.applicationinsights.dependencycollector/2.6.4",
-      "hashPath": "microsoft.applicationinsights.dependencycollector.2.6.4.nupkg.sha512"
+      "sha512": "sha512-sgHu4mIt0+NVGyI12Bj4hLPypNK55UOH+ologj2LqDCjxq3EbIxe/uAtHjY+fEwbE1dtsAHG8SXHf+V/EYbKTg==",
+      "path": "microsoft.bcl.build/1.0.21",
+      "hashPath": "microsoft.bcl.build.1.0.21.nupkg.sha512"
     },
-    "Microsoft.ApplicationInsights.PerfCounterCollector/2.6.4": {
+    "Microsoft.Bcl.Compression/3.9.85": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-TdAoUPfiF4GYJUyFl0VWYnwzHpYcZU7jrAqFi6qv1h8sGRIT7d6IqLakmiFYI/kv6n26DPTrd3cGQP6cy4GaXg==",
-      "path": "microsoft.applicationinsights.perfcountercollector/2.6.4",
-      "hashPath": "microsoft.applicationinsights.perfcountercollector.2.6.4.nupkg.sha512"
+      "sha512": "sha512-3DO/7SNSF3GV25zR8CllyFeRYTUWGhW4pQvQMTlrrHHNXgADaTnVZn67KAc8fOV4sn1yp3X1ZsfMb28O0sdb5Q==",
+      "path": "microsoft.bcl.compression/3.9.85",
+      "hashPath": "microsoft.bcl.compression.3.9.85.nupkg.sha512"
     },
-    "Microsoft.ApplicationInsights.SnapshotCollector/1.3.0": {
+    "Microsoft.Net.Http/2.2.29": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-q3EC/dmb1b+PLsoiW/ZqhKXw8G4k5vjeOszwn07u0wklfSTJocRY6M4nhVt1X9STXanfzjHeww4T3MAsGH+6/w==",
-      "path": "microsoft.applicationinsights.snapshotcollector/1.3.0",
-      "hashPath": "microsoft.applicationinsights.snapshotcollector.1.3.0.nupkg.sha512"
-    },
-    "Microsoft.ApplicationInsights.WindowsServer/2.6.4": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-DblLQvovmCPetuaT/9L81pmJ0qWaQp8ADZ9UJM3riIdAZdyrqFzKSH4mB/Wf5nNfwFrbCmJx7AQ6omWZK+1p3w==",
-      "path": "microsoft.applicationinsights.windowsserver/2.6.4",
-      "hashPath": "microsoft.applicationinsights.windowsserver.2.6.4.nupkg.sha512"
-    },
-    "Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel/2.6.4": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-oDAd2EymLQevzXbbb51rQK2TV8Y2y27uvNgsSrYyFQtmbKkHQjVPIPsJAX7imBDT9Qfgyuyr6264yU4kxWqTdA==",
-      "path": "microsoft.applicationinsights.windowsserver.telemetrychannel/2.6.4",
-      "hashPath": "microsoft.applicationinsights.windowsserver.telemetrychannel.2.6.4.nupkg.sha512"
-    },
-    "Microsoft.Extensions.PlatformAbstractions/1.1.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-z7eI1rwd/gCnIdvdy0TLpltVVQ7a8wjkh10B9f1hZfZMunj3GrYIonv4+tiyrDDCoQlvKTRl3+XGCL/mncDPOA==",
-      "path": "microsoft.extensions.platformabstractions/1.1.0",
-      "hashPath": "microsoft.extensions.platformabstractions.1.1.0.nupkg.sha512"
+      "sha512": "sha512-fc4CPEewJ30Xgal+fSq1lYIBt582A7eKlAL7O4HXiYAiTp2VTnA4osSvk7T2n8aS4xTCPVJusQk3yKLT0XSpkg==",
+      "path": "microsoft.net.http/2.2.29",
+      "hashPath": "microsoft.net.http.2.2.29.nupkg.sha512"
     },
     "Microsoft.NETCore.App/2.1.0": {
       "type": "package",
@@ -4711,20 +3917,6 @@
       "sha512": "sha512-etaYwrLZQUS+b3UWTpCnUggd6SQ/ZIkZ5pHnoR7+dIWt/wp2Rv3CvMKOZISsrt7FYCHKwCxfcepuuyEWkQxADg==",
       "path": "microsoft.netcore.targets/2.1.0",
       "hashPath": "microsoft.netcore.targets.2.1.0.nupkg.sha512"
-    },
-    "Microsoft.SCP.Net.SDK/1.0.0.3": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-hWbzhxDaQG5CI1WVb6wqbv8G8AIKE+jJXLFDd6KS5TNHdUxp/ksMSbwbd2W7W4l8PYzJ3YPgvO/HGHZ4PMH0QA==",
-      "path": "microsoft.scp.net.sdk/1.0.0.3",
-      "hashPath": "microsoft.scp.net.sdk.1.0.0.3.nupkg.sha512"
-    },
-    "Microsoft.Win32.Primitives/4.3.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-/bZY8QAwKJxZKGzLXRp1L967bCB0i21VcZllz4HENkfxu/Wi17u8T7D63gLbjvV0G9CF/UEC4aXTCwIvm9kjoA==",
-      "path": "microsoft.win32.primitives/4.3.0",
-      "hashPath": "microsoft.win32.primitives.4.3.0.nupkg.sha512"
     },
     "NETStandard.Library/2.0.3": {
       "type": "package",
@@ -4810,6 +4002,41 @@
       "path": "restsharp/106.2.2",
       "hashPath": "restsharp.106.2.2.nupkg.sha512"
     },
+    "Rx-Core/2.2.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-DfWVTfW6tvRkkqpnRHKxPIvaRZyDJGADuqrE6J2nwejOQbLRWi0rNUwXkViDWz++25BGDy3iRE5OE6Dv8mJxYQ==",
+      "path": "rx-core/2.2.5",
+      "hashPath": "rx-core.2.2.5.nupkg.sha512"
+    },
+    "Rx-Interfaces/2.2.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-FKtG2QfMIeUcfB7r3a89VoAiszX3DTvYETkpC6U0FzWpxRK/mcHyzYOsniDfag+NsDG0P1k1c8yNSefXKp3t2A==",
+      "path": "rx-interfaces/2.2.5",
+      "hashPath": "rx-interfaces.2.2.5.nupkg.sha512"
+    },
+    "Rx-Linq/2.2.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-UTeCIu3cWPExxmTzdiVq7SalqTBhUaomBTaAC9LpYPoAopjlFwA3hjVWXoLkGlDc/44wqJemJuEwFP00KphiFg==",
+      "path": "rx-linq/2.2.5",
+      "hashPath": "rx-linq.2.2.5.nupkg.sha512"
+    },
+    "Rx-Main/2.2.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-qdQ6qENEiLsp/LRdzZlLlodihWN8VDjwNfWa8c2ELjEHZgTdKzt1V4i61gkHVtFKZXe8Px6KupbMP3pZ+1tusQ==",
+      "path": "rx-main/2.2.5",
+      "hashPath": "rx-main.2.2.5.nupkg.sha512"
+    },
+    "Rx-PlatformServices/2.2.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-pMnNEvJVjT+wuDib+W/bi5hhIYcre7dW5yxvKrJxnR4iKJ1VLA/dY2FTtjDriHGx7OeGn12lQewXlH2oHiWFPA==",
+      "path": "rx-platformservices/2.2.5",
+      "hashPath": "rx-platformservices.2.2.5.nupkg.sha512"
+    },
     "SharpZipLib/0.86.0": {
       "type": "package",
       "serviceable": true,
@@ -4831,33 +4058,12 @@
       "path": "system.componentmodel/4.0.1",
       "hashPath": "system.componentmodel.4.0.1.nupkg.sha512"
     },
-    "System.Configuration.ConfigurationManager/4.5.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-NIY8VUJuSNeXPrV5wjQBKKMcd/vctzEGzQuY15zt3/j7Vd4PXfk/QVIOBlqU1/ONRRUu0dsdk5uUTLSSNY+now==",
-      "path": "system.configuration.configurationmanager/4.5.0",
-      "hashPath": "system.configuration.configurationmanager.4.5.0.nupkg.sha512"
-    },
-    "System.Diagnostics.Process/4.3.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-J0wOX07+QASQblsfxmIMFc9Iq7KTXYL3zs2G/Xc704Ylv3NpuVdo6gij6V3PGiptTxqsK0K7CdXenRvKUnkA2g==",
-      "path": "system.diagnostics.process/4.3.0",
-      "hashPath": "system.diagnostics.process.4.3.0.nupkg.sha512"
-    },
     "System.Drawing.Common/4.5.0-preview1-26216-02": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-+hNFjaDH/ATpPC37RTffgDUwgCWgWur7pxn9D5S5kDLL+7gfHS/cITZvIeOj3W6r8DzMNRzMOYxRSHu6DYjKcg==",
       "path": "system.drawing.common/4.5.0-preview1-26216-02",
       "hashPath": "system.drawing.common.4.5.0-preview1-26216-02.nupkg.sha512"
-    },
-    "System.IO.FileSystem.AccessControl/4.3.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-crjUsNiUm4n6uwPC4K6ya43tu6+pDo8CPQRj/mkVzsAYKLeP26PhhkJuUFSP0TYW1wEe8ZajPi7Mw+WPm3AmfQ==",
-      "path": "system.io.filesystem.accesscontrol/4.3.0",
-      "hashPath": "system.io.filesystem.accesscontrol.4.3.0.nupkg.sha512"
     },
     "System.Net.Http/4.3.2": {
       "type": "package",
@@ -4866,20 +4072,6 @@
       "path": "system.net.http/4.3.2",
       "hashPath": "system.net.http.4.3.2.nupkg.sha512"
     },
-    "System.Net.NameResolution/4.3.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-tsZzgBE4L0GD+5ZWmZ8lLWAuTxx8NxynJnVJ9F70+DC+fSJNavIMS+yYcEvD3M7NV4XdNAWyLCNcMsJOv3VChw==",
-      "path": "system.net.nameresolution/4.3.0",
-      "hashPath": "system.net.nameresolution.4.3.0.nupkg.sha512"
-    },
-    "System.Net.NetworkInformation/4.3.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-zNVmWVry0pAu7lcrRBhwwU96WUdbsrGL3azyzsbXmVNptae1+Za+UgOe9Z6s8iaWhPn7/l4wQqhC56HZWq7tkg==",
-      "path": "system.net.networkinformation/4.3.0",
-      "hashPath": "system.net.networkinformation.4.3.0.nupkg.sha512"
-    },
     "System.Net.Primitives/4.3.0": {
       "type": "package",
       "serviceable": true,
@@ -4887,61 +4079,19 @@
       "path": "system.net.primitives/4.3.0",
       "hashPath": "system.net.primitives.4.3.0.nupkg.sha512"
     },
-    "System.Net.Requests/4.3.0": {
+    "System.Net.Requests/4.0.11": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-OZNUuAs0kDXUzm7U5NZ1ojVta5YFZmgT2yxBqsQ7Eseq5Ahz88LInGRuNLJ/NP2F8W1q7tse1pKDthj3reF5QA==",
-      "path": "system.net.requests/4.3.0",
-      "hashPath": "system.net.requests.4.3.0.nupkg.sha512"
+      "sha512": "sha512-vxGt7C0cZixN+VqoSW4Yakc1Y9WknmxauDqzxgpw/FnBdz4kQNN51l4wxdXX5VY1xjqy//+G+4CvJWp1+f+y6Q==",
+      "path": "system.net.requests/4.0.11",
+      "hashPath": "system.net.requests.4.0.11.nupkg.sha512"
     },
-    "System.Net.Sockets/4.3.0": {
+    "System.Net.WebHeaderCollection/4.0.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-khiB2w/4ij8/4F1gnvtyt0CYbRzh20iHRHCRO5NxDC765tyWjXNiTsHqh8EsLBZG6iqVEbACVAM+x+Itg/flYA==",
-      "path": "system.net.sockets/4.3.0",
-      "hashPath": "system.net.sockets.4.3.0.nupkg.sha512"
-    },
-    "System.Net.WebHeaderCollection/4.3.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-XZrXYG3c7QV/GpWeoaRC02rM6LH2JJetfVYskf35wdC/w2fFDFMphec4gmVH2dkll6abtW14u9Rt96pxd9YH2A==",
-      "path": "system.net.webheadercollection/4.3.0",
-      "hashPath": "system.net.webheadercollection.4.3.0.nupkg.sha512"
-    },
-    "System.Runtime.Serialization.Json/4.3.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-CpVfOH0M/uZ5PH+M9+Gu56K0j9lJw3M+PKRegTkcrY/stOIvRUeonggxNrfBYLA5WOHL2j15KNJuTuld3x4o9w==",
-      "path": "system.runtime.serialization.json/4.3.0",
-      "hashPath": "system.runtime.serialization.json.4.3.0.nupkg.sha512"
-    },
-    "System.Security.Cryptography.ProtectedData/4.5.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-wZGwRoLGTuEQBOYXlZmEK41OfmO+vYWbLk7q5ePoFqs6vOKP2kUsOeviEjQoR6MbW9udlDjx9iWhcWOTzSj05w==",
-      "path": "system.security.cryptography.protecteddata/4.5.0",
-      "hashPath": "system.security.cryptography.protecteddata.4.5.0.nupkg.sha512"
-    },
-    "System.Threading.Overlapped/4.3.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-m3HQ2dPiX/DSTpf+yJt8B0c+SRvzfqAJKx+QDWi+VLhz8svLT23MVjEOHPF/KiSLeArKU/iHescrbLd3yVgyNg==",
-      "path": "system.threading.overlapped/4.3.0",
-      "hashPath": "system.threading.overlapped.4.3.0.nupkg.sha512"
-    },
-    "System.Threading.ThreadPool/4.3.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-CBal8Gik50aT7tJ/Hlc6BmWSUFPVmvVpVswVDnwZjpGqNN+9iUVJXVL12EBuhKCYsOQ6TWRwDOhelLu+aZbFHQ==",
-      "path": "system.threading.threadpool/4.3.0",
-      "hashPath": "system.threading.threadpool.4.3.0.nupkg.sha512"
-    },
-    "System.Windows.Forms.Ribbon35/3.5.8": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-eCT9IcJyU/NDrDA7Obp40Ata7hvPTVrtKjcofJe4LC/qjx7MNpOR0vNDfc5IDEzZi5bP5wGfJpVOWnnFeL2AUQ==",
-      "path": "system.windows.forms.ribbon35/3.5.8",
-      "hashPath": "system.windows.forms.ribbon35.3.5.8.nupkg.sha512"
+      "sha512": "sha512-XX2TIAN+wBSAIV51BU2FvvXMdstUa8b0FBSZmDWjZdwUMmggQSifpTOZ5fNH20z9ZCg2fkV1L5SsZnpO2RQDRQ==",
+      "path": "system.net.webheadercollection/4.0.1",
+      "hashPath": "system.net.webheadercollection.4.0.1.nupkg.sha512"
     },
     "System.Xml.XPath.XmlDocument/4.3.0": {
       "type": "package",
@@ -4956,6 +4106,13 @@
       "sha512": "sha512-OAauSLDaLRruhPD8nfSWpxqkb/n3IchnaOXkOivV6w8hKFCem+tObh29zNNKLIDh59sYerMLf5P3rem+8F9QNA==",
       "path": "tweetinviapi/3.0.0",
       "hashPath": "tweetinviapi.3.0.0.nupkg.sha512"
+    },
+    "YahooFantasyWrapper/1.2.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-IE/cJZrm2U7s+p7mTiVOC9tQQaOLNcLOHuDD6+lxNZp+aGZNu8uD7LpXKUZmA8TqNW3FQOyeuZHSKnhNlTpFrQ==",
+      "path": "yahoofantasywrapper/1.2.2",
+      "hashPath": "yahoofantasywrapper.1.2.2.nupkg.sha512"
     },
     "Microsoft.AspNet.WebApi.Client/5.2.6": {
       "type": "package",

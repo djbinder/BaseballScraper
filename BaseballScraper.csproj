@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <NoWarn>NU1701</NoWarn>
+
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,17 +13,27 @@
   <ItemGroup>
     <!-- <PackageReference Include="DataElement" Version="1.0.0" /> -->
 
-    <PackageReference Include="DevDefined.OAuth" Version="0.2.0" />
+    <!-- <PackageReference Include="DevDefined.OAuth" Version="0.2.0" /> -->
 
-    <PackageReference Include="DynamicInterop" Version="0.8.1" />
+    <!-- <PackageReference Include="DynamicInterop" Version="0.8.1" /> -->
+
+    <!-- <PackageReference Include="FantasyData.Api.Client" Version="0.2.1" /> -->
+
+    <!-- this package is causing the conflict error MSB3276 that shows up console log -->
+    <PackageReference Include="linqtotwitter" Version="4.2.1" />
 
     <PackageReference Include="Microsoft.AspNetCore.App" />
+
+    <!-- <PackageReference Include="Microsoft.Bcl" Version="1.1.10" /> -->
+
+    <PackageReference Include="Microsoft.Extensions.Options" Version="2.1.1" />
     <PackageReference Include="Microsoft.NETCore.Platforms" Version="2.1.0" />
-    <PackageReference Include="Microsoft.SCP.Net.SDK" Version="1.0.0.3" />
+    <!-- <PackageReference Include="Microsoft.SCP.Net.SDK" Version="1.0.0.3" /> -->
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="OAuth" Version="1.0.3" />
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.5.1" />
+    <!-- <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.5.1" /> -->
     <PackageReference Include="System.Text.Encoding.CodePages" Version="4.5.0" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" />
+    <!-- <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" /> -->
 
     <!-- R stats -->
     <PackageReference Include="R.NET" Version="1.7.0" />
@@ -41,11 +52,12 @@
     <PackageReference Include="RestSharp" Version="106.2.2" />
 
     <!-- Yahoo API -->
+    <PackageReference Include="YahooFantasyWrapper" Version="1.2.2" />
     <!-- <PackageReference Include="DotNetOpenAuth-Auth0" Version="1.0.4" /> -->
-    <PackageReference Include="DotNetOpenAuth" Version="4.3.4.13329" />
+    <!-- <PackageReference Include="DotNetOpenAuth" Version="4.3.4.13329" />
     <PackageReference Include="ApplicationInsightsTelemetryExtensions" Version="0.2.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.3.0" />
-    <PackageReference Include="Microsoft.ApplicationInsights.SnapshotCollector" Version="1.3.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.SnapshotCollector" Version="1.3.0" /> -->
 
     <!-- scrapers -->
     <PackageReference Include="HtmlAgilityPack" Version="1.8.5" />
@@ -54,10 +66,11 @@
     <PackageReference Include="AngleSharp.Scripting.JavaScript" Version="0.5.1" />
     <PackageReference Include="OpenScraping" Version="1.0.1" />
     <PackageReference Include="IronWebScraper" Version="4.0.4.3" />
-    <PackageReference Include="System.Windows.Forms.Ribbon35" Version="3.5.8" />
+    <!-- <PackageReference Include="System.Windows.Forms.Ribbon35" Version="3.5.8" /> -->
 
     <!-- twitter -->
     <PackageReference Include="TweetinviAPI" Version="3.0.0" />
+
 
 
 

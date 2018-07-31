@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+
 using HtmlAgilityPack;
+
 using NScrape;
 using NScrape.Forms;
 
@@ -10,109 +12,93 @@ using NScrape.Forms;
 
 namespace BaseballScraper.Scrapers
 {
-    public class NScrape : Scraper
+    public class NScraper: Scraper
     {
-        private static String _start = "STARTED";
+        private static String _start    = "STARTED";
         private static String _complete = "COMPLETED";
-        public static string Start {get => _start; set => _start = value;}
-        public static  string Complete { get => _complete; set => _complete = value; }
+        public static string Start { get => _start; set => _start = value; }
+        public static string Complete { get => _complete; set => _complete = value; }
 
 
-        public NScrape( string html ) : base( html ) {}
+        public NScraper (string html): base (html) { }
 
-        public string GetConditions()
-        {
-            Start.ThisMethod();
+        // public string GetConditions ()
+        // {
+        //     Start.ThisMethod ();
 
-            // NODE ---> HtmlAgilityPack.HtmlNode
-            var node = HtmlDocument.DocumentNode.Descendants().SingleOrDefault( n => n.Attributes.Contains( "class" ) && n.Attributes["class"].Value == "myforecast-current" );
-            node.Intro("node");
+        //     // NODE ---> HtmlAgilityPack.HtmlNode
+        //     var node = HtmlDocument.DocumentNode.Descendants ().SingleOrDefault (n => n.Attributes.Contains ("class") && n.Attributes["class"].Value == "myforecast-current");
+        //     node.Intro ("node");
 
-            if ( node != null )
-            {
-                Extensions.Spotlight("get conditions --> mark 1 | NODE IS NOT NULL");
-                return node.InnerText;
-            }
+        //     if (node != null)
+        //     {
+        //         Extensions.Spotlight ("get conditions --> mark 1 | NODE IS NOT NULL");
+        //         return node.InnerText;
+        //     }
 
-            throw new ScrapeException( "Could not scrape conditions.", Html );
-        }
+        //     throw new ScrapeException ("Could not scrape conditions.", Html);
+        // }
 
-        public string GetTemperatureF()
-        {
-            Start.ThisMethod();
+        // public string GetTemperatureF ()
+        // {
+        //     Start.ThisMethod ();
 
-            var node = HtmlDocument.DocumentNode.Descendants().SingleOrDefault( n => n.Attributes.Contains( "class" ) && n.Attributes["class"].Value == "myforecast-current-lrg" );
+        //     var node = HtmlDocument.DocumentNode.Descendants ().SingleOrDefault (n => n.Attributes.Contains ("class") && n.Attributes["class"].Value == "myforecast-current-lrg");
 
-            if ( node != null )
-            {
-                Extensions.Spotlight("get temperature --> mark 1 | NODE IS NOT NULL");
-                return node.InnerText.Replace( "&deg;", "°" );
-            }
+        //     if (node != null)
+        //     {
+        //         Extensions.Spotlight ("get temperature --> mark 1 | NODE IS NOT NULL");
+        //         return node.InnerText.Replace ("&deg;", "°");
+        //     }
 
-            throw new ScrapeException( "Could not scrape temperature.", Html );
-        }
+        //     throw new ScrapeException ("Could not scrape temperature.", Html);
+        // }
 
-        public string GetTemperatureC()
-        {
-            Start.ThisMethod();
+        // public string GetTemperatureC ()
+        // {
+        //     Start.ThisMethod ();
 
-            var node = HtmlDocument.DocumentNode.Descendants().SingleOrDefault( n => n.Attributes.Contains( "class" ) && n.Attributes["class"].Value == "myforecast-current-sm" );
+        //     var node = HtmlDocument.DocumentNode.Descendants ().SingleOrDefault (n => n.Attributes.Contains ("class") && n.Attributes["class"].Value == "myforecast-current-sm");
 
-            if ( node != null )
-            {
-                return node.InnerText.Replace( "&deg;", "°" );
-            }
+        //     if (node != null)
+        //     {
+        //         return node.InnerText.Replace ("&deg;", "°");
+        //     }
 
-            throw new ScrapeException( "Could not scrape temperature.", Html );
-        }
-
-
-        public string FanGraphsHitters()
-        {
-            Start.ThisMethod();
-
-            var node = HtmlDocument.DocumentNode.Descendants().SingleOrDefault( n => n.Attributes.Contains( "class" ) && n.Attributes["class"].Value == "myforecast-current-sm" );
-
-            if ( node != null )
-            {
-                return node.InnerText.Replace( "&deg;", "°" );
-            }
-
-            throw new ScrapeException( "Could not scrape temperature.", Html );
-        }
+        //     throw new ScrapeException ("Could not scrape temperature.", Html);
+        // }
 
 
-        public WebClient CreateNewWebClient ()
-        {
-            var webClient = new WebClient();
-            return webClient;
-        }
+
+        // public WebClient CreateNewWebClient ()
+        // {
+        //     var webClient = new WebClient ();
+        //     return webClient;
+        // }
 
 
-        public NScrape CreateScraper ()
-        {
-            var NewWebClient = CreateNewWebClient();
-            // FORM --> NScrape.Forms.BasicHtmlForm
-            var form = new BasicHtmlForm( NewWebClient );
-            // form.Intro("form");
+        // public NScraper CreateScraper ()
+        // {
+        //     var NewWebClient = CreateNewWebClient ();
+        //     // FORM --> NScrape.Forms.BasicHtmlForm
+        //     var form = new BasicHtmlForm (NewWebClient);
+        //     // form.Intro("form");
 
-            form.Load( new Uri( "http://www.weather.gov/" ), new KeyValuePair<string, string>( "name", "getForecast" ) );
+        //     form.Load (new Uri ("http://www.weather.gov/"), new KeyValuePair<string, string> ("name", "getForecast"));
 
-            form.InputControls.Single( c => c.Name == "inputstring" ).Value = "chicago, il";
+        //     form.InputControls.Single (c => c.Name == "inputstring").Value = "chicago, il";
 
-            var response = form.Submit();
-            var scraper = new NScrape( ( ( HtmlWebResponse )response ).Html );
-            scraper.Intro("scraper");
+        //     var response = form.Submit ();
+        //     var scraper  = new NScraper (((HtmlWebResponse) response).Html);
+        //     scraper.Intro ("scraper");
 
-            return scraper;
-        }
-
+        //     return scraper;
+        // }
 
 
 
     }
 }
-
 
 
 
