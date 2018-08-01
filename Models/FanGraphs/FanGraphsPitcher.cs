@@ -1,4 +1,4 @@
-namespace BaseballScraper.Models
+namespace BaseballScraper.Models.FanGraphs
 {
     public class FanGraphsPitcher: Player
     {

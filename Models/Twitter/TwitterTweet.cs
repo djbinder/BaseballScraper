@@ -1,6 +1,6 @@
 using System;
 
-namespace BaseballScraper.Models
+namespace BaseballScraper.Models.Twitter
 {
     public class TwitterTweet
     {

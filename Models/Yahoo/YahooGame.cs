@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace BaseballScraper.Models
+namespace BaseballScraper.Models.Yahoo
 {
 
     [XmlRoot (ElementName = "game_week", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
@@ -174,14 +174,14 @@ namespace BaseballScraper.Models
 
     public enum GameCode
     {
-        nfl = 0,
-        pnfl = 1,
-        mlb = 2,
-        pmlb = 3,
-        nba = 4,
-        nhl = 5,
+        nfl     = 0,
+        pnfl    = 1,
+        mlb     = 2,
+        pmlb    = 3,
+        nba     = 4,
+        nhl     = 5,
         yahoops = 6,
-        nflp = 7
+        nflp    = 7
     }
 
 }

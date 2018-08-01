@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 
 using BaseballScraper.Models;
+using BaseballScraper.Models.FanGraphs;
 
 using Npoi.Mapper;
 
@@ -21,10 +22,8 @@ namespace BaseballScraper.Mappers
 {
     public class NpoiMapper
     {
-        private static String _start    = "STARTED";
-        private static String _complete = "COMPLETED";
-        public static string Start { get => _start; set => _start = value; }
-        public static string Complete { get => _complete; set => _complete = value; }
+        private static String Start    = "STARTED";
+        private static String Complete = "COMPLETED";
 
 
         // THIS WORKS

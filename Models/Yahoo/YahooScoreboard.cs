@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace BaseballScraper.Models
+namespace BaseballScraper.Models.Yahoo
 {
     [XmlRoot (ElementName = "stat_winner")]
     public class StatWinner

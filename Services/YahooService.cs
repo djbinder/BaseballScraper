@@ -17,6 +17,7 @@ using Newtonsoft.Json;
 using System.Linq;
 using System.Collections.Generic;
 using BaseballScraper.Models;
+using BaseballScraper.Models.Yahoo;
 using Newtonsoft.Json.Converters;
 
 namespace BaseballScraper.Services
@@ -147,14 +148,14 @@ namespace BaseballScraper.Services
                     var playerName = JsonConvert.DeserializeObject<PlayerName>(value.ToString());
                     prop.SetValue(player, (PlayerName)playerName, null);
                 }
-                else if (type == typeof(BaseballScraper.Models.Headshot))
+                else if (type == typeof(BaseballScraper.Models.Yahoo.Headshot))
                 {
-                    var headshot = JsonConvert.DeserializeObject<BaseballScraper.Models.Headshot>(value.ToString());
+                    var headshot = JsonConvert.DeserializeObject<BaseballScraper.Models.Yahoo.Headshot>(value.ToString());
                     prop.SetValue(player, headshot, null);
                 }
-                else if (type == typeof(BaseballScraper.Models.ByeWeeks))
+                else if (type == typeof(BaseballScraper.Models.Yahoo.ByeWeeks))
                 {
-                    var byeWeeks = JsonConvert.DeserializeObject<BaseballScraper.Models.ByeWeeks>(value.ToString());
+                    var byeWeeks = JsonConvert.DeserializeObject<BaseballScraper.Models.Yahoo.ByeWeeks>(value.ToString());
                     prop.SetValue(player, byeWeeks, null);
                 }
                 else if (type == typeof(List<EligiblePosition>))

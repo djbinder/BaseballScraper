@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 
 
 
-namespace BaseballScraper.Models
+namespace BaseballScraper.Models.Yahoo
 {
     public enum SortOrder
     {

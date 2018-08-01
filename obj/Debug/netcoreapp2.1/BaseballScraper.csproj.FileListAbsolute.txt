@@ -14,3 +14,15 @@
 /Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/obj/Debug/netcoreapp2.1/BaseballScraper.pdb
 /Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/bin/Debug/netcoreapp2.1/BaseballScraper.dll.config
 /Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/obj/Debug/netcoreapp2.1/BaseballScraper.dll.config
+/Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/obj/Debug/netcoreapp2.1/UserSecretsAssemblyInfo.cs
+/Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/bin/Debug/netcoreapp2.1/BaseballScraper.Views.dll
+/Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/bin/Debug/netcoreapp2.1/BaseballScraper.Views.pdb
+/Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/obj/Debug/netcoreapp2.1/BaseballScraper.TagHelpers.input.cache
+/Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/obj/Debug/netcoreapp2.1/BaseballScraper.TagHelpers.output.cache
+/Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/obj/Debug/netcoreapp2.1/BaseballScraper.RazorCoreGenerate.cache
+/Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/obj/Debug/netcoreapp2.1/Razor/Views/Home/Index.g.cshtml.cs
+/Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/obj/Debug/netcoreapp2.1/Razor/Views/Home/_Layout.g.cshtml.cs
+/Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/obj/Debug/netcoreapp2.1/Razor/Views/_ViewStart.g.cshtml.cs
+/Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/obj/Debug/netcoreapp2.1/BaseballScraper.RazorTargetAssemblyInfo.cs
+/Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/obj/Debug/netcoreapp2.1/BaseballScraper.Views.pdb
+/Users/DanBinder/Google_Drive/Coding/Projects/BaseballScraper/obj/Debug/netcoreapp2.1/BaseballScraper.csproj.CopyComplete
