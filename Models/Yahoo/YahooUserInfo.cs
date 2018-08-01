@@ -4,7 +4,7 @@ using System.Text;
 
 using Newtonsoft.Json;
 
-namespace BaseballScraper.Models
+namespace BaseballScraper.Models.Yahoo
 {
     [Serializable]
     public class UserInfo

@@ -3,10 +3,10 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using BaseballScraper.Models;
+using BaseballScraper.Models.Configuration;
 using LinqToTwitter;
 using Microsoft.AspNetCore.Mvc;
-using BaseballScraper.Services.Security;
+// using BaseballScraper.Services.Security;
 using Microsoft.Extensions.Options;
 
 namespace BaseballScraper.Controllers
@@ -15,13 +15,20 @@ namespace BaseballScraper.Controllers
     {
         private static String Start    = "STARTED";
         private static String Complete = "COMPLETED";
-        private readonly AppIdentitySettings _identity;
+        private readonly TwitterConfiguration _twConfig;
 
 
-        // public OAuthControllerX(IOptions<AppIdentitySettings> appSettingsAccessor)
-        // {
-        //     _identity = appSettingsAccessor.Value;
-        // }
+        public OAuthControllerX(IOptionsSnapshot<TwitterConfiguration> appSettingsAccessor)
+        {
+            _twConfig = appSettingsAccessor.Value;
+        }
+
+        public string person ()
+        {
+            string xyz = _twConfig.ConsumerKey;
+            return xyz;
+        }
+
 
         public async Task BeginAsync()
         {
@@ -32,8 +39,8 @@ namespace BaseballScraper.Controllers
             {
                 CredentialStore = new InMemoryCredentialStore()
                 {
-                    ConsumerKey    = _identity.TwConfig.ConsumerKey,
-                    ConsumerSecret = _identity.TwConfig.ConsumerSecret
+                    ConsumerKey    = _twConfig.ConsumerKey,
+                    ConsumerSecret = _twConfig.ConsumerSecret
                 }
             };
 

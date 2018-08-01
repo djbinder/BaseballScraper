@@ -5,6 +5,7 @@ using System.Linq;
 using AngleSharp.Extensions;
 
 using BaseballScraper.Models;
+using BaseballScraper.Models.FanGraphs;
 
 using HtmlAgilityPack;
 
@@ -14,11 +15,9 @@ namespace BaseballScraper.Scrapers
 {
     public class HtmlAgilityPackScraper
     {
-        private static String _start    = "STARTED";
-        private static String _complete = "COMPLETED";
+        private static String Start = "STARTED";
+        // private static String Complete = "COMPLETED";
 
-        public static string Start { get => _start; set => _start = value; }
-        public static string Complete { get => _complete; set => _complete = value; }
 
         public HtmlAgilityPackScraper () { }
 

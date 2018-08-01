@@ -1,6 +1,6 @@
 using System;
 
-namespace BaseballScraper.Models
+namespace BaseballScraper.Models.Yahoo
 {
     public class YahooUserModel
     {

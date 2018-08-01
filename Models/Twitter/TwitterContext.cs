@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics;
 using LinqToTwitter;
 
-namespace BaseballScraper.Models
+namespace BaseballScraper.Models.Twitter
 {
     public class TwContext
     {

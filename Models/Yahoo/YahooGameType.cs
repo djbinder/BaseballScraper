@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BaseballScraper.Models
+namespace BaseballScraper.Models.Yahoo
 {
     public enum GameType
     {
