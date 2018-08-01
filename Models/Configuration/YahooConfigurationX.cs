@@ -1,12 +1,12 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Text;
 
-namespace BaseballScraper.Configuration
+namespace BaseballScraper.Models.Configuration
 {
 
-    public class YahooConfiguration
+    public class YahooConfigurationX
     {
 
         public string ClientId { get; set; }

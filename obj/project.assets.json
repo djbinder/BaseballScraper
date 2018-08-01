@@ -12941,6 +12941,7 @@
       "HtmlAgilityPack >= 1.8.5",
       "IronWebScraper >= 4.0.4.3",
       "Microsoft.AspNetCore.App >= 2.1.1",
+      "Microsoft.Extensions.Configuration.Binder >= 2.1.1",
       "Microsoft.Extensions.Options >= 2.1.1",
       "Microsoft.NETCore.App >= 2.1.0",
       "Microsoft.NETCore.Platforms >= 2.1.0",
@@ -13028,6 +13029,10 @@
             "target": "Package",
             "version": "[2.1.1, )",
             "autoReferenced": true
+          },
+          "Microsoft.Extensions.Configuration.Binder": {
+            "target": "Package",
+            "version": "[2.1.1, )"
           },
           "Microsoft.Extensions.Options": {
             "target": "Package",

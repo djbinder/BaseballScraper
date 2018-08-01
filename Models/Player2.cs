@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using RestSharp.Deserializers;
+using BaseballScraper.Models.Yahoo;
 
 namespace BaseballScraper.Models
 {

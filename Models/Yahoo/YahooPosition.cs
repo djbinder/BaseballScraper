@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace BaseballScraper.Models
+namespace BaseballScraper.Models.Yahoo
 {
 
     [XmlRoot (ElementName = "position_types", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BaseballScraper.Models
+namespace BaseballScraper.Models.FanGraphs
 {
     public class FGHitter: Player
     {

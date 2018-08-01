@@ -14,10 +14,8 @@ namespace BaseballScraper.Scrapers
 {
     public class NScraper: Scraper
     {
-        private static String _start    = "STARTED";
-        private static String _complete = "COMPLETED";
-        public static string Start { get => _start; set => _start = value; }
-        public static string Complete { get => _complete; set => _complete = value; }
+        // private static String Start = "STARTED";
+        // private static String Complete = "COMPLETED";
 
 
         public NScraper (string html): base (html) { }

@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 
 using BaseballScraper.Models;
 
-namespace BaseballScraper.Models
+namespace BaseballScraper.Models.Yahoo
 {
     [XmlRoot (ElementName = "team_logo")]
     public class TeamLogo

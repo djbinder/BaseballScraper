@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace BaseballScraper.Models
+namespace BaseballScraper.Models.Yahoo
 {
     [XmlRoot (ElementName = "transaction_data")]
     public class TransactionData

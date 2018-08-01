@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <UserSecretsId>79a3edd0-2092-40a2-a04d-dcb46d5ca9ed</UserSecretsId>
     <NoWarn>NU1701</NoWarn>
 
   </PropertyGroup>
@@ -11,29 +12,21 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!-- <PackageReference Include="DataElement" Version="1.0.0" /> -->
-
-    <!-- <PackageReference Include="DevDefined.OAuth" Version="0.2.0" /> -->
-
-    <!-- <PackageReference Include="DynamicInterop" Version="0.8.1" /> -->
-
-    <!-- <PackageReference Include="FantasyData.Api.Client" Version="0.2.1" /> -->
-
     <!-- this package is causing the conflict error MSB3276 that shows up console log -->
     <PackageReference Include="linqtotwitter" Version="4.2.1" />
 
     <PackageReference Include="Microsoft.AspNetCore.App" />
 
-    <!-- <PackageReference Include="Microsoft.Bcl" Version="1.1.10" /> -->
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="2.1.1" />
 
     <PackageReference Include="Microsoft.Extensions.Options" Version="2.1.1" />
     <PackageReference Include="Microsoft.NETCore.Platforms" Version="2.1.0" />
     <!-- <PackageReference Include="Microsoft.SCP.Net.SDK" Version="1.0.0.3" /> -->
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="OAuth" Version="1.0.3" />
-    <!-- <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.5.1" /> -->
+
     <PackageReference Include="System.Text.Encoding.CodePages" Version="4.5.0" />
-    <!-- <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" /> -->
+
 
     <!-- R stats -->
     <PackageReference Include="R.NET" Version="1.7.0" />

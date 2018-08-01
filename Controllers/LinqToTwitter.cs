@@ -1,61 +1,97 @@
 using System;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using LinqToTwitter;
-using Microsoft.Net.Http;
-using Microsoft.AspNetCore.Identity;
-using BaseballScraper.Models;
-using BaseballScraper.Services.Security.Extensions;
-using BaseballScraper.Services.Security;
-using Newtonsoft.Json;
+using BaseballScraper.Models.Configuration;
 using BaseballScraper.Models.Twitter;
+using BaseballScraper.Controllers;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Configuration.UserSecrets;
 
 namespace BaseballScraper
 {
-    public class LinqToTwitterController: Controller
+    [Route("linq/[controller]")]
+    [ApiController]
+    public class LinqToTwitterController: ControllerBase
     {
-        private TwitterContext _twitterContext;
-        private TwContext _twContext;
-
-        // aka 'oauth_consumer_key' and 'ConsumerKey'
-        private static String _apiKey = "ptSiuGtIpFnCz7nAbzH7EidKQ";
-
-        // aka 'ConsumerSecret'
-        private static String _apiSecretKey = "EQLjfoQNg2luDSEIC0j8ehpopi2ACbfdl0tIpumkLCsaGgBAev";
-
-        // aka 'oauth_token', 'AccessToken', and 'OAuthToken'
-        private static String _accessToken = "100554390-KFStxew66kJrgIkH8HY6zTaOBOEh9W6Otfe7bDTO";
-
-        // aka 'AccessTokenSecret', 'OAuthTokenSecret'
-        private static String _accessTokenSecret = "0yqldliDxx0vadWQ1I2akX3X6tiBqSAiA58lhLpoBcnmM";
+        private static String Start        = "STARTED";
+        private static String Complete     = "COMPLETED";
+        private string _twitterConsumerKey = null;
+        public IConfiguration _configuration;
+        public string _ConsumerKey { get; set; }
 
 
-        public static string ApiKey { get => _apiKey; set => _apiKey = value; }
-        public static string ApiSecretKey { get => _apiSecretKey; set => _apiSecretKey = value; }
-        public static string AccessToken { get => _accessToken; set => _accessToken = value; }
-        public static string AccessTokenSecret { get => _accessTokenSecret; set => _accessTokenSecret = value; }
+        private readonly TwitterConfiguration _secrets;
 
-        private readonly AppIdentitySettings _identity;
+        public static TwitterConfiguration _twitConfig;
 
-        public LinqToTwitterController(IOptions<AppIdentitySettings> appSettingsAccessor)
+        public LinqToTwitterController(IOptions<TwitterConfiguration> secrets)
         {
-            _identity = appSettingsAccessor.Value;
+            _secrets = secrets.Value ?? throw new ArgumentException(nameof(secrets));
         }
 
-        public static SingleUserAuthorizer AuthorizeTwitterUser()
+        // THIS DOES NOT WORK
+        [HttpGet]
+        public IActionResult ConsumerKey ()
+        {
+            Start.ThisMethod();
+
+            var twitterConsumerKey = _secrets.ConsumerKey;
+            twitterConsumerKey.Intro("consumer key");
+
+            Complete.ThisMethod();
+            return Content($"Consumer Key Is: {twitterConsumerKey}");
+        }
+        public string ConsumerSecret ()
+        {
+            Start.ThisMethod();
+
+            var twitterConsumerSecret = _secrets.ConsumerSecret;
+            twitterConsumerSecret.Intro("consumer key");
+
+            Complete.ThisMethod();
+            return twitterConsumerSecret;
+        }
+
+
+        [HttpGet("{id}")]
+        public ActionResult Get(int id)
+        {
+            if(id == 1)
+            {
+                var twitterConsumerKey = _secrets.ConsumerKey;
+                twitterConsumerKey.Intro("consumer key");
+                return Content($"Consumer Key Is: {twitterConsumerKey}");
+            }
+
+            if(id == 2)
+            {
+                var twitterConsumerSecret = _secrets.ConsumerSecret;
+                twitterConsumerSecret.Intro("consumer key");
+                return Content($"Consumer Secret Is: {twitterConsumerSecret}");
+            }
+
+            return Content("djb xyz");
+        }
+
+
+        public SingleUserAuthorizer AuthorizeTwitterUser()
         {
             var auth = new SingleUserAuthorizer
             {
                 CredentialStore = new SingleUserInMemoryCredentialStore
                 {
-                    ConsumerKey       = ApiKey,
-                    ConsumerSecret    = ApiSecretKey,
-                    AccessToken       = AccessToken,
-                    AccessTokenSecret = AccessTokenSecret
+                    ConsumerKey       = "jC9xha0LjStVYQY6kXXhljBvd",
+                    ConsumerSecret    = "XrpXmzl9oN6ziwZR1pbRosb1Ljh44TVNe7gTsgwwM7nT5XCjtX",
+                    AccessToken       = "100554390-tqir0ZO3vmYMAxGdZDI9WAfg7tGkE3sd7WUTVzoR",
+                    AccessTokenSecret = "81B5NC0rUqo3GUiMmEhEWTxG3DydEzfTVTOWVLa1m2lQk"
+                    // ConsumerKey       = _twitterConfiguration.ConsumerKey,
+                    // ConsumerSecret    = _twitterConfiguration.ConsumerSecret,
+                    // AccessToken       = _twitterConfiguration.AccessToken,
+                    // AccessTokenSecret = _twitterConfiguration.AccessTokenSecret
 
                 }
             };
@@ -64,8 +100,12 @@ namespace BaseballScraper
 
         public async Task TwitterStringSearch (String searchString)
         {
+            Start.ThisMethod();
             //  AUTHORIZED USER ---> LinqToTwitter.SingleUserAuthorizer
             var authorizedUser = AuthorizeTwitterUser();
+
+            var twitterConsumerKey = _secrets.ConsumerKey;
+            twitterConsumerKey.Intro("consumer key");
 
             //  TWITTER CTX ---> LinqToTwitter.TwitterContext
             var twitterCtx = new TwitterContext(authorizedUser);
