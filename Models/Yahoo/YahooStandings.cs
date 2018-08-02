@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Xml.Serialization;
 
 namespace BaseballScraper.Models.Yahoo
@@ -69,6 +70,6 @@ namespace BaseballScraper.Models.Yahoo
     public class Standings
     {
         [XmlElement (ElementName = "teams")]
-        public TeamList TeamList { get; set; }
+        public List<YahooTeam> TeamList { get; set; }
     }
 }
