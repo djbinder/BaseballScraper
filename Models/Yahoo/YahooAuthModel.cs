@@ -6,7 +6,7 @@ namespace BaseballScraper.Models.Yahoo
     {
         public string AccessToken { get; set; }
 
-        public UserInfo UserInfo { get; set; }
+        // public UserInfo UserInfo { get; set; }
     }
 
     public class YahooPostModel

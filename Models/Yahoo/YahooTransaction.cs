@@ -25,6 +25,6 @@ namespace BaseballScraper.Models.Yahoo
         public string FaabBid { get; set; }
 
         [XmlElement (ElementName = "players")]
-        public PlayerList PlayerList { get; set; }
+        public List<YahooPlayer> PlayerList { get; set; }
     }
 }
