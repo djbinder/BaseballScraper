@@ -15,6 +15,9 @@ using YahooFantasyWrapper;
 using YahooFantasyWrapper.Client;
 using YahooFantasyWrapper.Configuration;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 
 // using BaseballScraper.Services.Security;
@@ -60,31 +63,41 @@ namespace BaseballScraper
         public void ConfigureServices (IServiceCollection services)
         {
             Start.ThisMethod();
+            Configuration.Intro("configuration");
+
 
 
             services.AddMvc ().SetCompatibilityVersion (CompatibilityVersion.Version_2_1);
-
             services.Configure<YahooFantasyWrapper.Configuration.YahooConfiguration>(Configuration.GetSection("YahooConfiguration"));
-
             services.Configure<TwitterConfiguration>(Configuration.GetSection("TwitterConfiguration"));
-
             services.AddScoped(cfg => cfg.GetService<IOptionsSnapshot<TwitterConfiguration>>().Value);
 
-
             _twitterConsumerKey = Configuration["TwitterConfiguration:ConsumerKey"];
-            // _twitterConsumerSecret = Configuration["TwitterConfiguration:ConsumerSecret"];
-            // _twitterAccessToken       = Configuration["TwitterConfiguration:AccessToken"];
-            // _twitterAccessTokenSecret = Configuration["TwitterConfiguration:AccessTokenSecret"];
-
             _twitterConsumerKey.Intro("twitter consumer key");
-            // _twitterConsumerSecret.Intro("twitter consumer key");
-            // _twitterAccessToken.Intro("token");
-            // _twitterAccessTokenSecret.Intro("token secret");
 
 
-            services.AddSession ();
+            var airtableKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(Configuration["Airtable:ApiKey"])
+            );
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddJwtBearer(options =>
+                    {
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            IssuerSigningKey    = airtableKey,
+                            RequireSignedTokens = true,
+                        };
+
+                        options.IncludeErrorDetails = true;
+                    });
 
             // services.AddDbContext<MovieContext> (options => options.UseNpgsql (Configuration["DBInfo:ConnectionString"]));
+
+            services.AddSession ();
+            Configuration.Dig();
+
+            services.DigDeep();
 
             Complete.ThisMethod();
         }
@@ -127,6 +140,7 @@ namespace BaseballScraper
             app.UseStaticFiles ();
             app.UseSession ();
             app.UseHttpsRedirection ();
+            app.UseAuthentication();
             app.UseMvc ();
         }
     }

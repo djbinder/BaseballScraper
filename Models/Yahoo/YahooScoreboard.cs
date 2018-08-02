@@ -31,7 +31,7 @@ namespace BaseballScraper.Models.Yahoo
         public int Week { get; set; }
 
         [XmlElement (ElementName = "stats")]
-        public Stats Stats { get; set; }
+        public YahooStats Stats { get; set; }
     }
 
     [XmlRoot (ElementName = "team_points")]
