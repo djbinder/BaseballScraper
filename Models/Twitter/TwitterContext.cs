@@ -11,17 +11,7 @@ namespace BaseballScraper.Models.Twitter
         public static string Start { get => _start; set => _start = value; }
         public static string Complete { get => _complete; set => _complete = value; }
 
-        // aka 'oauth_consumer_key' and 'ConsumerKey'
-        private static String _apiKey = "ptSiuGtIpFnCz7nAbzH7EidKQ";
 
-        // aka 'ConsumerSecret'
-        private static String _apiSecretKey = "EQLjfoQNg2luDSEIC0j8ehpopi2ACbfdl0tIpumkLCsaGgBAev";
-
-        // aka 'oauth_token', 'AccessToken', and 'OAuthToken'
-        private static String _accessToken = "100554390-KFStxew66kJrgIkH8HY6zTaOBOEh9W6Otfe7bDTO";
-
-        // aka 'AccessTokenSecret', 'OAuthTokenSecret'
-        private static String _accessTokenSecret = "0yqldliDxx0vadWQ1I2akX3X6tiBqSAiA58lhLpoBcnmM";
 
 
         public static string ApiKey { get => _apiKey; set => _apiKey = value; }
