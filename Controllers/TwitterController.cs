@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
 using LinqToTwitter;
@@ -13,68 +13,59 @@ using Microsoft.Extensions.Configuration.UserSecrets;
 
 namespace BaseballScraper
 {
-    [Route("linq/[controller]")]
-    [ApiController]
-    public class LinqToTwitterController: ControllerBase
+    #pragma warning disable CS0414
+    public class TwitterController: Controller
     {
-        private static String Start        = "STARTED";
-        private static String Complete     = "COMPLETED";
-        private string _twitterConsumerKey = null;
-        public IConfiguration _configuration;
-        public string _ConsumerKey { get; set; }
+        private static String Start    = "STARTED";
+        private static String Complete = "COMPLETED";
+        private readonly TwitterConfiguration _twitterConfig;
+        private readonly AirtableConfiguration _airtableConfig;
 
 
-        private readonly TwitterConfiguration _secrets;
-
-        public static TwitterConfiguration _twitConfig;
-
-        public LinqToTwitterController(IOptions<TwitterConfiguration> secrets)
+        public TwitterController(IOptions<AirtableConfiguration> airtableConfig, IOptions<TwitterConfiguration> twitterConfig)
         {
-            _secrets = secrets.Value ?? throw new ArgumentException(nameof(secrets));
+            _airtableConfig = airtableConfig.Value;
+            _twitterConfig  = twitterConfig.Value;
         }
+
 
         // THIS DOES NOT WORK
         [HttpGet]
-        public IActionResult ConsumerKey ()
+        [Route("/consumerkey")]
+        public string GetConsumerKey ()
         {
             Start.ThisMethod();
-
-            var twitterConsumerKey = _secrets.ConsumerKey;
-            twitterConsumerKey.Intro("consumer key");
-
-            Complete.ThisMethod();
-            return Content($"Consumer Key Is: {twitterConsumerKey}");
+            var twitterConsumerKey = _twitterConfig.ConsumerKey;
+            return twitterConsumerKey;
+            // return Content($"Consumer Key Is: {twitterConsumerKey}");
         }
-        public string ConsumerSecret ()
+
+        [HttpGet]
+        [Route("/consumersecret")]
+        public string GetConsumerSecret ()
         {
             Start.ThisMethod();
-
-            var twitterConsumerSecret = _secrets.ConsumerSecret;
-            twitterConsumerSecret.Intro("consumer key");
-
-            Complete.ThisMethod();
+            var twitterConsumerSecret = _twitterConfig.ConsumerSecret;
             return twitterConsumerSecret;
         }
 
 
-        [HttpGet("{id}")]
-        public ActionResult Get(int id)
+        [HttpGet]
+        [Route("/accesstoken")]
+        public string GetAccessToken ()
         {
-            if(id == 1)
-            {
-                var twitterConsumerKey = _secrets.ConsumerKey;
-                twitterConsumerKey.Intro("consumer key");
-                return Content($"Consumer Key Is: {twitterConsumerKey}");
-            }
+            Start.ThisMethod();
+            var twitterAccessToken = _twitterConfig.AccessToken;
+            return twitterAccessToken;
+        }
 
-            if(id == 2)
-            {
-                var twitterConsumerSecret = _secrets.ConsumerSecret;
-                twitterConsumerSecret.Intro("consumer key");
-                return Content($"Consumer Secret Is: {twitterConsumerSecret}");
-            }
-
-            return Content("djb xyz");
+        [HttpGet]
+        [Route("/accesstokensecret")]
+        public string GetAccessTokenSecret ()
+        {
+            Start.ThisMethod();
+            var twitterAcccessTokenSecret = _twitterConfig.AccessTokenSecret;
+            return twitterAcccessTokenSecret;
         }
 
 
@@ -84,34 +75,40 @@ namespace BaseballScraper
             {
                 CredentialStore = new SingleUserInMemoryCredentialStore
                 {
-                    ConsumerKey       = _twitterConfiguration.ConsumerKey,
-                    ConsumerSecret    = _twitterConfiguration.ConsumerSecret,
-                    AccessToken       = _twitterConfiguration.AccessToken,
-                    AccessTokenSecret = _twitterConfiguration.AccessTokenSecret
+                    ConsumerKey       = _twitterConfig.ConsumerKey,
+                    ConsumerSecret    = _twitterConfig.ConsumerSecret,
+                    AccessToken       = _twitterConfig.AccessToken,
+                    AccessTokenSecret = _twitterConfig.AccessTokenSecret
 
                 }
             };
             return auth;
         }
 
+
+        [HttpGet]
+        [Route("/playersearch")]
         public async Task TwitterStringSearch (String searchString)
         {
             Start.ThisMethod();
             //  AUTHORIZED USER ---> LinqToTwitter.SingleUserAuthorizer
             var authorizedUser = AuthorizeTwitterUser();
 
-            var twitterConsumerKey = _secrets.ConsumerKey;
+            var twitterConsumerKey = _twitterConfig.ConsumerKey;
             twitterConsumerKey.Intro("consumer key");
 
             //  TWITTER CTX ---> LinqToTwitter.TwitterContext
             var twitterCtx = new TwitterContext(authorizedUser);
+
+            // test string
+            string searchThis = "Anthony Rizzo";
 
             //  SEARCH RESPONSE ---> LinqToTwitter.Search
             var searchResponse = 
                 await
                     (from search in twitterCtx.Search
                     where search.Type == SearchType.Search &&
-                    search.Query == searchString
+                    search.Query == searchThis
                     select search)
                     .SingleOrDefaultAsync();
 
@@ -180,3 +177,5 @@ namespace BaseballScraper
 //     Console.WriteLine(ex);
 //     Console.WriteLine("error");
 // }
+
+
