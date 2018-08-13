@@ -80,6 +80,33 @@ namespace BaseballScraper.Models.Yahoo
 
     }
 
+    public class YahooTeamBase
+    {
+        [XmlElement (ElementName = "team_key")]
+        public string Key { get; set; }
+        public string Name { get; set; }
+        public int? TeamId { get; set; }
+        public int? IsOwnedByCurrentLogin { get; set; }
+        public string Url { get; set; }
+        public string TeamLogo { get; set; }
+        public int? WaiverPriority { get; set; }
+        public int? NumberOfMoves { get; set; }
+        public int? NumberOfTrades { get; set; }
+        public int? RosterAdds { get; set; }
+        public string CoverageType { get; set; }
+        public string CoverageValue { get; set; }
+        public string Value { get; set; }
+        public string LeagueScoringType { get; set; }
+        public string HasDraftGuide { get; set; }
+        public string ManagerId { get; set; }
+        public string NickName { get; set; }
+        public string Guid { get; set; }
+        public int? IsCommissioner { get; set; }
+        public int? IsCurrentLogin { get; set; }
+        public string Email { get; set; }
+        public string ImageUrl { get; set; }
+    }
+
 
 
 }

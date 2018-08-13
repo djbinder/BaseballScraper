@@ -1,3 +1,190 @@
-<h1>Baseball Scraper</h1>
-<br>
-<button>Scrape</button>
+@{ ViewData["Title"] = "Home Page"; }
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Home Page</title>
+</head>
+
+<body>
+    <h4>Yahoo Tests</h4>
+    <table>
+        <tr>
+            <th>Button</th>
+            <th>Purpose</th>
+            <th>Route</th>
+        </tr>
+        <tr>
+            <td>
+                <a href="yahoo/teambase">
+                    <button>Click</button>
+                </a>
+            </td>
+            <td>Query League</td>
+            <td> /yahoo/apirequest</td>
+        </tr>
+        <tr>
+            <tr>
+                <td>
+                    <a href="yahoo/authorizationcode">
+                        <button>Click</button>
+                    </a>
+                </td>
+                <td>Request Authorization Code</td>
+                <td> /yahoo/authorizationcode</td>
+            </tr>
+            <tr>
+                <td>
+                    <a href="yahoo/requestauth">
+                        <button>Click</button>
+                    </a>
+                </td>
+                <td>Request Authorization List </td>
+                <td> /yahoo/requestauth</td>
+            </tr>
+
+            <tr>
+                <td>
+                    <a href="/yahoo/refreshtoken">
+                        <button>Click</button>
+                    </a>
+                </td>
+                <td>Refresh Token</td>
+                <td> /yahoo/refreshtoken</td>
+            </tr>
+            <tr>
+                <td>
+                    <a href="/yahoo/accesstoken">
+                        <button>Click</button>
+                    </a>
+                </td>
+                <td>Get Access Token</td>
+                <td> /yahoo/accesstoken</td>
+            </tr>
+            <tr>
+                <td>
+                    <a href="/yahoo/signature">
+                        <button>Click</button>
+                    </a>
+                </td>
+                <td>Get Signature</td>
+                <td> /yahoo/signature</td>
+            </tr>
+            <tr>
+                <td>
+                    <a href="yahoo/simulate">
+                        <button>Click</button>
+                    </a>
+                </td>
+                <td>Simulate</td>
+                <td> /yahoo/simulate</td>
+            </tr>
+    </table>
+
+
+
+
+    <hr>
+
+    <h4>Twitter Tests</h4>
+    <table>
+        <tr>
+            <th>Button</th>
+            <th>Purpose</th>
+        </tr>
+        <tr>
+            <td>
+                <a href="/consumerkey">
+                    <button>Click</button>
+                </a>
+            </td>
+            <td>Twitter Consumer Key</td>
+        </tr>
+        <tr>
+            <td>
+                <a href="/consumersecret">
+                    <button>Click</button>
+                </a>
+            </td>
+            <td>Twitter Consumer Secret</td>
+        </tr>
+        <tr>
+            <td>
+                <a href="/accesstoken">
+                    <button>Click</button>
+                </a>
+            </td>
+            <td>Twitter Access Token</td>
+        </tr>
+        <tr>
+            <td>
+                <a href="/accesstokensecret">
+                    <button>Click</button>
+                </a>
+            </td>
+            <td>Twitter Access Token Secret</td>
+        </tr>
+        <tr>
+            <td>
+                <a href="/playersearch">
+                    <button>Click</button>
+                </a>
+            </td>
+            <td>Twitter Player Search</td>
+        </tr>
+    </table>
+
+    <br>
+    <hr>
+    <h4>Airtable Tests</h4>
+    <table>
+        <tr>
+            <th>Button</th>
+            <th>Purpose</th>
+        </tr>
+        <tr>
+            <td>
+                <a href="/airtablekey">
+                    <button>Click</button>
+                </a>
+            </td>
+            <td>Airtable Api Key</td>
+        </tr>
+        <tr>
+            <td>
+                <a href="/managers">
+                    <button>Click</button>
+                </a>
+            </td>
+            <td>Airtable Managers</td>
+        </tr>
+    </table>
+
+    <br>
+    <hr>
+
+
+    <h2>Airtable Config</h2>
+    <p>Api Key: @ViewData["ApiKey2"]</p>
+    <hr>
+
+    <h2>Twitter Config</h2>
+    <p>C Key: @ViewData["ConsumerKey"]</p>
+    <p>C Secret: @ViewData["ConsumerSecret"]</p>
+    <p>A Token: @ViewData["AccessToken"]</p>
+    <p>A Secret: @ViewData["AccessTokenSecret"]</p>
+
+    <hr>
+
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+    <script src="site.js"></script>
+</body>
+
+</html>

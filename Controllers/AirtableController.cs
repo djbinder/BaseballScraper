@@ -1,8 +1,9 @@
 // https://gist.githubusercontent.com/deanebarker/2b4520f290ece96be40436bc5c8915c5/raw/0cf6005f41ac27c46c9ce1f9bdbf8b5faeb62f8d/AirtableGetObjects.cs
 
 using System;
-using Microsoft.AspNetCore.Authorization;
+using BaseballScraper.Models.Configuration;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 
@@ -14,51 +15,57 @@ namespace BaseballScraper.Controllers
         private static String Start    = "STARTED";
         private static String Complete = "COMPLETED";
 
+        private readonly TwitterConfiguration _twitterConfig;
+        private readonly AirtableConfiguration _airtableConfig;
 
-        [Authorize]
-        [HttpGet]
-        [Route("DoTheQuery")]
-        public IActionResult DoTheQuery()
+
+        public AirtableController(IOptions<AirtableConfiguration> airtableConfig, IOptions<TwitterConfiguration> twitterConfig)
         {
-            Start.ThisMethod();
-            QueryManagers();
-            Complete.ThisMethod();
-
-            return Content($"this is a test");
+            _airtableConfig = airtableConfig.Value;
+            _twitterConfig  = twitterConfig.Value;
         }
 
-        public static void QueryManagers ()
+
+
+        // [Authorize]
+        [HttpGet]
+        [Route("/airtablekey")]
+        public string GetAirtableKey()
         {
             Start.ThisMethod();
+            var airtableApiKey = _airtableConfig.ApiKey;
+
+            return airtableApiKey;
+        }
 
 
+
+        // THIS WORKS
+        [HttpGet]
+        [Route("/managers")]
+        public JObject GetAirtableManagers ()
+        {
+            Start.ThisMethod();
+            string airTableKey = GetAirtableKey();
+            airTableKey.Intro("air table key");
+
+            var client = new RestClient($"https://api.airtable.com/v0/appeokc0jzuDMQ31H/YahooManager?api_key={airTableKey}");
+
+            var request = new RestRequest(Method.GET);
+            request.AddHeader("Postman-Token", "af978745-112b-40d2-b760-a86945ce4095");
+            request.AddHeader("Cache-Control", "no-cache");
+            request.AddHeader("Authorization", "Bearer aXJUKynsTUXLVY");
+
+            IRestResponse response = client.Execute(request);
+            response.Intro("response");
+
+            var     initialJson    = response.Content;
+            JObject structuredJson = JObject.Parse(initialJson);
+            structuredJson.Intro("structured json");
 
             Complete.ThisMethod();
+            return structuredJson;
 
         }
     }
 }
-
-
-
-//     public static void CreateAirtable()
-//     {
-//         var airtable = new Airtable("myAccountId", "myApiKey");
-
-//         airtable.AddConvertor("Last Name", "LastName", (value) => {
-//             return $"{value} the Great!";
-//         });
-
-//         var people = airtable.GetObjects<Person>("myTableName");
-
-//         airtable.OnHttpResponse += (sender, e) => { Console.WriteLine(e.HttpResponse); };
-
-//         airtable.OnTypeConversionFailure += (sender, e) => {
-//             if(e.FieldName == "Date") { e.FieldValue = DateTime.MinValue;}
-//         };
-
-
-//         airtable.OnBeforeAssignValues += (sender, e) => {
-//             if(e.Values["FirstName"].ToString() == "Deane") { e.Cancel = true; }
-//         };
-//     }
