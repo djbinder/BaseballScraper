@@ -17,12 +17,14 @@ namespace BaseballScraper.Controllers
 
         private readonly TwitterConfiguration _twitterConfig;
         private readonly AirtableConfiguration _airtableConfig;
+        private readonly YahooConfiguration _yahooConfig;
 
 
-        public AirtableController(IOptions<AirtableConfiguration> airtableConfig, IOptions<TwitterConfiguration> twitterConfig)
+        public AirtableController(IOptions<AirtableConfiguration> airtableConfig, IOptions<TwitterConfiguration> twitterConfig, IOptions<YahooConfiguration> yahooConfig)
         {
             _airtableConfig = airtableConfig.Value;
             _twitterConfig  = twitterConfig.Value;
+            _yahooConfig    = yahooConfig.Value;
         }
 
 
