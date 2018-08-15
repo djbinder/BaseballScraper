@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Root>
+    <Customer>
+        <Name>A. Datum Corporation</Name>
+        <Item>
+            <Key>0001</Key>
+        </Item>
+        <Item>
+            <Key>0002</Key>
+        </Item>
+        <Item>
+            <Key>0003</Key>
+        </Item>
+        <Item>
+            <Key>0004</Key>
+        </Item>
+    </Customer>
+    <Customer>
+        <Name>Fabrikam, Inc.</Name>
+        <Item>
+            <Key>0005</Key>
+        </Item>
+        <Item>
+            <Key>0006</Key>
+        </Item>
+        <Item>
+            <Key>0007</Key>
+        </Item>
+        <Item>
+            <Key>0008</Key>
+        </Item>
+    </Customer>
+    <Customer>
+        <Name>Southridge Video</Name>
+        <Item>
+            <Key>0009</Key>
+        </Item>
+        <Item>
+            <Key>0010</Key>
+        </Item>
+    </Customer>
+</Root>

@@ -18,21 +18,7 @@ namespace BaseballScraper.Models.Yahoo
         public string Total { get; set; }
     }
 
-    [XmlRoot (ElementName = "outcome_totals")]
-    public class OutcomeTotals
-    {
-        [XmlElement (ElementName = "wins")]
-        public string Wins { get; set; }
 
-        [XmlElement (ElementName = "losses")]
-        public string Losses { get; set; }
-
-        [XmlElement (ElementName = "ties")]
-        public string Ties { get; set; }
-
-        [XmlElement (ElementName = "percentage")]
-        public string Percentage { get; set; }
-    }
 
     [XmlRoot (ElementName = "streak")]
     public class Streak
@@ -53,8 +39,7 @@ namespace BaseballScraper.Models.Yahoo
         [XmlElement (ElementName = "playoff_seed")]
         public string PlayoffSeed { get; set; }
 
-        [XmlElement (ElementName = "outcome_totals")]
-        public OutcomeTotals OutcomeTotals { get; set; }
+
 
         [XmlElement (ElementName = "streak")]
         public Streak Streak { get; set; }
@@ -66,10 +51,10 @@ namespace BaseballScraper.Models.Yahoo
         public string PointsAgainst { get; set; }
     }
 
-    [XmlRoot (ElementName = "standings")]
-    public class Standings
-    {
-        [XmlElement (ElementName = "teams")]
-        public List<YahooTeam> TeamList { get; set; }
-    }
+    // [XmlRoot (ElementName = "standings")]
+    // public class Standings
+    // {
+    //     [XmlElement (ElementName = "teams")]
+    //     public List<YahooTeam> TeamList { get; set; }
+    // }
 }
