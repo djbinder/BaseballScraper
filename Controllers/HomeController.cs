@@ -28,35 +28,35 @@ namespace BaseballScraper.Controllers
         [Route("")]
         public IActionResult Index()
         {
-            Start.ThisMethod();
+            // Start.ThisMethod();
 
-            ViewData["ApiKey2"] = _airtableConfig.ApiKey;
+            // ViewData["ApiKey2"] = _airtableConfig.ApiKey;
 
-            ViewData["ConsumerKey"]       = _twitterConfiguration.ConsumerKey;
-            ViewData["ConsumerSecret"]    = _twitterConfiguration.ConsumerSecret;
-            ViewData["AccessToken"]       = _twitterConfiguration.AccessToken;
-            ViewData["AccessTokenSecret"] = _twitterConfiguration.AccessTokenSecret;
+            // ViewData["ConsumerKey"]       = _twitterConfiguration.ConsumerKey;
+            // ViewData["ConsumerSecret"]    = _twitterConfiguration.ConsumerSecret;
+            // ViewData["AccessToken"]       = _twitterConfiguration.AccessToken;
+            // ViewData["AccessTokenSecret"] = _twitterConfiguration.AccessTokenSecret;
 
-            Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Debug()
-            .WriteTo.Console()
-            .WriteTo.File("Logs//BaseballScraperLog.txt", rollingInterval: RollingInterval.Day)
-            .CreateLogger();
+            // Log.Logger = new LoggerConfiguration()
+            // .MinimumLevel.Debug()
+            // .WriteTo.Console()
+            // .WriteTo.File("Logs//BaseballScraperLog.txt", rollingInterval: RollingInterval.Day)
+            // .CreateLogger();
 
-            Log.Information("Hello, world!");
-            Log.Information("The time is {Now}", DateTime.Now);
+            // // Log.Information("Hello, world!");
+            // Log.Information("The time is {Now}", DateTime.Now);
 
-            Log.CloseAndFlush();
+            // Log.CloseAndFlush();
 
-            var config = new NLog.Config.LoggingConfiguration();
+            // var config = new NLog.Config.LoggingConfiguration();
 
-            var logfile    = new NLog.Targets.FileTarget("logfile") { FileName = "file.txt" };
-            var logconsole = new NLog.Targets.ConsoleTarget("logconsole");
+            // var logfile    = new NLog.Targets.FileTarget("logfile") { FileName = "file.txt" };
+            // var logconsole = new NLog.Targets.ConsoleTarget("logconsole");
 
-            config.AddRule(LogLevel.Info, LogLevel.Fatal, logconsole);
-            config.AddRule(LogLevel.Debug, LogLevel.Fatal, logfile);
+            // config.AddRule(LogLevel.Info, LogLevel.Fatal, logconsole);
+            // config.AddRule(LogLevel.Debug, LogLevel.Fatal, logfile);
 
-            NLog.LogManager.Configuration = config;
+            // NLog.LogManager.Configuration = config;
 
             return View();
         }
