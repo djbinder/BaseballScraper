@@ -1,18 +1,16 @@
 using System;
+using System.IO;
 using System.Net;
+using System.Xml;
 using BaseballScraper.Models.Configuration;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
-using System.Text;
-using System.IO;
-using System.Diagnostics;
-using ObjectPrinter;
 using Newtonsoft.Json.Linq;
-using System.Xml;
 using Newtonsoft.Json;
 using BaseballScraper.Models.Yahoo;
 using System.Collections;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 
 namespace BaseballScraper.Controllers
 {
@@ -24,302 +22,202 @@ namespace BaseballScraper.Controllers
         private readonly AirtableConfiguration _airtableConfig;
         private readonly TwitterConfiguration _twitterConfig;
         private readonly YahooConfiguration _yahooConfig;
+        private readonly BaseballScraper.Controllers.YahooAuthController _yahooAuthController;
+
+        private readonly IHttpContextAccessor _contextAccessor;
 
 
-        public YahooController(IOptions<AirtableConfiguration> airtableConfig, IOptions<TwitterConfiguration> twitterConfig, IOptions<YahooConfiguration> yahooConfig)
+
+        public YahooController(IOptions<AirtableConfiguration> airtableConfig, IOptions<TwitterConfiguration> twitterConfig, IOptions<YahooConfiguration> yahooConfig, YahooAuthController yahooAuthController, IHttpContextAccessor contextAccessor)
         {
-            _airtableConfig = airtableConfig.Value;
-            _twitterConfig  = twitterConfig.Value;
-            _yahooConfig    = yahooConfig.Value;
+            _airtableConfig      = airtableConfig.Value;
+            _twitterConfig       = twitterConfig.Value;
+            _yahooConfig         = yahooConfig.Value;
+            _yahooAuthController = yahooAuthController;
+            _contextAccessor     = contextAccessor;
         }
 
-
-        [HttpGet]
-        [Route("/yahoo/simulate")]
-        public IActionResult SimulateWebRequest()
-        {
-            Start.ThisMethod();
-
-            Complete.ThisMethod();
-            return Content($"Request is: xyz");
-        }
-
-
-
-        public string SetAccessCode ()
-        {
-            Start.ThisMethod();
-
-            string requestUrl = $"https://api.login.yahoo.com/oauth2/request_auth?client_id={_yahooConfig.ClientId}&redirect_uri={_yahooConfig.RedirectUri}&response_type=code&language=en-us";
-
-            Process.Start("open", requestUrl);
-
-            Extensions.Spotlight("Enter Code:");
-            // get approval code from console input _____ AUTHORIZATION CODE FROM CONSOLE ---> System.String
-            // the code comes from https://api.login.yahoo.com/oauth2/authorize
-            var authorizationCodeFromConsole = Console.ReadLine();
-
-            authorizationCodeFromConsole.Intro("code entered in console");
-
-            Complete.ThisMethod();
-
-            return authorizationCodeFromConsole;
-        }
-
-
-        [Route("/yahoo/authorize/accesstokenrequest")]
-        public HttpWebRequest CreateYahooAccessTokenRequest()
-        {
-            Start.ThisMethod();
-
-            var consumerKey    = _yahooConfig.ClientId;
-            var consumerSecret = _yahooConfig.ClientSecret;
-            var redirectUri    = _yahooConfig.RedirectUri;
-
-            var authorizationCodeFromConsole = SetAccessCode();
-            authorizationCodeFromConsole.Intro("auth code");
-
-            // Exchange authorization code for Access Token by sending Post Request
-            Uri address = new Uri("https://api.login.yahoo.com/oauth2/get_token");
-
-            // Create the web request ___ REQUEST ---> System.Net.HttpWebRequest
-            HttpWebRequest request = WebRequest.Create(address) as HttpWebRequest;
-
-            // Set type to POST ---> changes 'Method' of HttpWebRequest to 'POST'
-            request.Method = "POST";
-
-            // changes 'Content Type' of HttpWebRequest to 'application/x-www-form-urlencoded'
-            request.ContentType = "application/x-www-form-urlencoded";
-
-            // produces very Base64Encoded version of consumerKey and yahooClientSecrent(it's long string of letters and numbers) ___ HEADER BYTE ---> System.Byte[] ___ e.g., '"ZGoweUpt...etc."'
-            byte[] headerByte = System.Text.Encoding.UTF8.GetBytes(consumerKey+":"+consumerSecret);
-
-            // converts 'headerByte'; same letters and numbers but new format ___ HEADER STRING ---> System.String ___ e.g., 'ZGoweUpt...etc.'
-            string headerString = System.Convert.ToBase64String(headerByte);
-
-            // returns two lines
-                // Content-Type: application/x-www-form-urlencoded
-                // 'Authorization: Basic <headerString> ___ e.g., <headerString> = ZGoweUpt...etc.
-            request.Headers["Authorization"] = "Basic " + headerString;
-
-            // Create the data we want to send ___ DATA ---> System.Text.StringBuilder ___ 'data' is a concatanated string of all of the data.Append items
-            StringBuilder data = new StringBuilder();
-                data.Append("?client_id=" + consumerKey);
-                data.Append("&client_secret=" + consumerSecret);
-                data.Append("&redirect_uri=" + redirectUri);
-                data.Append("&code=" + authorizationCodeFromConsole);
-                data.Append("&grant_type=authorization_code");
-
-            // Create a byte array of the data we want to send ___ BYTE DATA ---> System.Byte[]
-            byte[] byteData = UTF8Encoding.UTF8.GetBytes(data.ToString());
-
-            // Set the content length in the request headers ___ // changes 'Content Length' of HttpWebRequest to 218
-            request.ContentLength = byteData.Length;
-
-            // request.Dig();
-
-            Complete.ThisMethod();
-
-            return request;
-        }
-
-
-        // THIS WORKS
-        [HttpGet]
-        [Route("/yahoo/authorize/accesstokenjobject")]
-        public JObject CreateYahooAccessTokenResponseJObject()
-        {
-            Start.ThisMethod();
-
-            var consumerKey    = _yahooConfig.ClientId;
-            var consumerSecret = _yahooConfig.ClientSecret;
-            var redirectUri    = _yahooConfig.RedirectUri;
-
-            var authorizationCodeFromConsole = SetAccessCode();
-            authorizationCodeFromConsole.Intro("auth code");
-
-            // Exchange authorization code for Access Token by sending Post Request
-            Uri address = new Uri("https://api.login.yahoo.com/oauth2/get_token");
-
-            // Create the web request ___ REQUEST ---> System.Net.HttpWebRequest
-            HttpWebRequest request = WebRequest.Create(address) as HttpWebRequest;
-
-            // Set type to POST ---> changes 'Method' of HttpWebRequest to 'POST'
-            request.Method = "POST";
-
-            // changes 'Content Type' of HttpWebRequest to 'application/x-www-form-urlencoded'
-            request.ContentType = "application/x-www-form-urlencoded";
-
-            // produces very Base64Encoded version of consumerKey and yahooClientSecrent(it's long string of letters and numbers) ___ HEADER BYTE ---> System.Byte[] ___ e.g., '"ZGoweUpt...etc."'
-            byte[] headerByte = System.Text.Encoding.UTF8.GetBytes(consumerKey+":"+consumerSecret);
-
-            // converts 'headerByte'; same letters and numbers but new format ___ HEADER STRING ---> System.String ___ e.g., 'ZGoweUpt...etc.'
-            string headerString = System.Convert.ToBase64String(headerByte);
-
-            // returns two lines
-                // Content-Type: application/x-www-form-urlencoded
-                // 'Authorization: Basic <headerString> ___ e.g., <headerString> = ZGoweUpt...etc.
-            request.Headers["Authorization"] = "Basic " + headerString;
-
-            // Create the data we want to send ___ DATA ---> System.Text.StringBuilder ___ 'data' is a concatanated string of all of the data.Append items
-            StringBuilder data = new StringBuilder();
-                data.Append("?client_id=" + consumerKey);
-                data.Append("&client_secret=" + consumerSecret);
-                data.Append("&redirect_uri=" + redirectUri);
-                data.Append("&code=" + authorizationCodeFromConsole);
-                data.Append("&grant_type=authorization_code");
-
-            // Create a byte array of the data we want to send ___ BYTE DATA ---> System.Byte[]
-            byte[] byteData = UTF8Encoding.UTF8.GetBytes(data.ToString());
-
-            // Set the content length in the request headers ___ // changes 'Content Length' of HttpWebRequest to 218
-            request.ContentLength = byteData.Length;
-
-            // Write data ___ POST STREAM ---> System.Net.RequestStream
-            using (Stream postStream = request.GetRequestStream())
-            {
-                postStream.Write(byteData, 0, byteData.Length);
-            }
-
-            // Get response
-            string responseFromServer = "";
-
-            try
-            {
-                // changes 'HaveResponse' of HttpWebRequest to 228
-                using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
-                {
-                    // Get the response stream ___ READER ---> System.IO.StreamReader
-                    StreamReader reader = new StreamReader(response.GetResponseStream());
-
-                    responseFromServer = reader.ReadToEnd();
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message); // if error ---> 'The remote server returned an error: (400) Bad Request.'
-                ex.SetContext("response from server", responseFromServer);
-            }
-
-            // RESPONSE TO JSON ---> Newtonsoft.Json.Linq.JObject
-            JObject responseToJson = JObject.Parse(responseFromServer);
-
-            // PrintJObjectItems(responseToJson);
-
-            // responseToJson.Dig();
-
-            // REQUEST ---> following are added through beginning to end: ContentLength, HaveResponse, Method, ContentType
-            Complete.ThisMethod();
-            return responseToJson;
-        }
-
-
-        [Route("/yahoo/authorize/accesstokenresponse")]
-        public AccessTokenResponse GetYahooAccessTokenResponse (JObject AccessTokenResponseJson)
-        {
-            Start.ThisMethod();
-
-            JObject responseToJson = AccessTokenResponseJson;
-
-            // NEW ACCESS TOKEN RESPONSE ---> BaseballScraper.Models.Configuration.AccessTokenResponse
-            AccessTokenResponse newAccessTokenResponse = new AccessTokenResponse()
-            {
-                // generated / variable: a VERY long string of letters and numbers
-                AccessToken = responseToJson["access_token"].ToString(),
-                // constant: bearer
-                TokenType = responseToJson["token_type"].ToString(),
-                // constant: 3600
-                ExpiresIn = responseToJson["expires_in"].ToString(),
-                // mine: refresh_token
-                RefreshToken = responseToJson["refresh_token"].ToString(),
-                // mine: yahoo guid
-                XOAuthYahooGuid = responseToJson["xoauth_yahoo_guid"].ToString(),
-            };
-
-            // mine
-            string refreshToken = newAccessTokenResponse.RefreshToken;
-                HttpContext.Session.SetString("refresh token", refreshToken);
-                var      refreshTokenCheck = HttpContext.Session.GetString("refresh token");
-                TempData["SessionToken"]   = refreshToken;
-                ViewData["SessionToken"]   = refreshToken;
-
-            // generated / variable
-            string accessToken = newAccessTokenResponse.AccessToken;
-                HttpContext.Session.SetString("access token", accessToken);
-
-            Complete.ThisMethod();
-
-            return newAccessTokenResponse;
-        }
-
-
-
-
-        // returns 'access_token', 'refresh_token', 'expires_in', 'token_type', 'xoauth_yahoo_guid'
-        public void PrintJObjectItems(JObject JObjectToPrint)
-        {
-            Start.ThisMethod();
-
-            var responseToJson = JObjectToPrint;
-
-            Extensions.Spotlight("access token response");
-
-            foreach(var jsonItem in responseToJson)
-            {
-                Console.ForegroundColor = ConsoleColor.DarkMagenta;
-                Console.WriteLine($"{jsonItem.Key.ToUpper()}");
-                Console.ResetColor();
-                Console.WriteLine(jsonItem.Value);
-                Console.WriteLine();
-            }
-
-            Complete.ThisMethod();
-        }
-
-
-
-        // [HttpGet]
-        // [Route("/yahoo/team/teamstats")]
-        // public IActionResult GetTeamStats()
+        // public string GetDataFromSession()
         // {
-        //     Start.ThisMethod();
-        //     JObject             teamStatsJObject    = CreateYahooAccessTokenResponseJObject();
-        //     AccessTokenResponse accessTokenResponse = GetYahooAccessTokenResponse(teamStatsJObject);
+        //     var authCode = _contextAccessor.HttpContext.Session.GetString("authorizationcode");
+        //     authCode.Intro("auth code in main Y controller");
 
-        //     Complete.ThisMethod();
-
-
+        //     return authCode;
         // }
 
 
+        [HttpGet]
+        [Route("/yahoohome")]
+        public IActionResult ViewYahooHomePage()
+        {
+            Start.ThisMethod();
+
+            try
+            {
+                // _yahooAuthController.CheckYahooSession();
+                var authCodeCheck     = _contextAccessor.HttpContext.Session.GetString("authorizationcode");
+                var accessTokenCheck  = HttpContext.Session.GetString("accesstoken");
+                var refreshTokenCheck = HttpContext.Session.GetString("refreshtoken");
+                var yahooGuidCheck    = HttpContext.Session.GetString("yahooguid");
+
+                Dictionary<string, string> sessionInfoDictionary = new Dictionary<string, string>();
+                    sessionInfoDictionary.Add("authcode", authCodeCheck);
+                    sessionInfoDictionary.Add("accesstoken", accessTokenCheck);
+                    sessionInfoDictionary.Add("refreshtoken", refreshTokenCheck);
+                    sessionInfoDictionary.Add("yahooguid", yahooGuidCheck);
+
+                int itemCount = 1;
+                foreach(var item in sessionInfoDictionary)
+                {
+                    Console.WriteLine($"----- SESSION ITEM {itemCount} -------------------------------------------");
+                    Console.WriteLine(item.Key);
+                    Console.WriteLine(item.Value);
+                    Console.WriteLine();
+
+                    itemCount++;
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine("--------------------");
+                Console.WriteLine("BASE MESSAGE");
+                Console.WriteLine(ex.Message);
+                Console.WriteLine("INNER EXCEPTION");
+                Console.WriteLine(ex.InnerException);
+                Console.WriteLine("--------------------");
+                Console.WriteLine();
+            }
+
+
+
+            return View("yahoohome");
+        }
+
+
+        [HttpGet]
+        [Route("/yahoo/team/teambase/queryuri")]
+        public Uri SetUriToQuery()
+        {
+            Start.ThisMethod();
+
+            int teamNumberToGet = 1;
+            int weekNumber      = 18;
+
+            // for just teambase
+            var uriTeamBase = new Uri($"https://fantasysports.yahooapis.com/fantasy/v2/team/378.l.26189.t.{teamNumberToGet}?");
+
+            // for stats
+            Uri uriStatsA = new Uri($"https://fantasysports.yahooapis.com/fantasy/v2/team/378.l.26189.t.{teamNumberToGet}/stats;type=week;week=2");
+            var uriStatsB = new Uri($"https://fantasysports.yahooapis.com/fantasy/v2/team/378.l.26189.t.{teamNumberToGet}/stats");
+            var uriStatsC = new Uri($"https://fantasysports.yahooapis.com/fantasy/v2/team/378.l.26189.t.{teamNumberToGet}/stats;type=week;week={weekNumber}");
+
+            // for standings
+            var uriStandings = new Uri($"https://fantasysports.yahooapis.com/fantasy/v2/team/378.l.26189.t.{teamNumberToGet}/standings");
+
+            // roster
+            var uriRoster = new Uri($"https://fantasysports.yahooapis.com/fantasy/v2/team/378.l.26189.t.{teamNumberToGet}/roster;week={weekNumber}");
+
+
+            // draft results
+            var uriDraftResults = new Uri($"https://fantasysports.yahooapis.com/fantasy/v2/team/378.l.26189.t.{teamNumberToGet}/draftresults");
+
+            // matchups
+            var uriMatchups = new Uri($"https://fantasysports.yahooapis.com/fantasy/v2/team/378.l.26189.t.{teamNumberToGet}/matchups;weeks=1,3,6");
+
+            // Complete.ThisMethod();
+
+            return uriTeamBase;
+        }
+
+
+        [Route("/yahoo/team/teambase/listof10")]
+        public List<Uri> CreateListOfUrisForAllTeams()
+        {
+            Start.ThisMethod();
+
+            HttpContext.Session.SetInt32("djb2", 2);
+            var djb = HttpContext.Session.GetInt32("djb2");
+            djb.Intro("djb2");
+
+            TempData["Id"] = 12;
+            Console.WriteLine(TempData["Id"]);
+
+            _yahooAuthController.CheckYahooSession();
+
+            bool NeedToLoop = true;
+
+            List<Uri> teamUris = new List<Uri>();
+
+            int numTeamsInLeague = 10;
+
+            for(var teamNumberToGet = 1; teamNumberToGet <= numTeamsInLeague; teamNumberToGet++)
+            {
+                teamNumberToGet.Intro("team number");
+                // for just teambase
+                var uri = new Uri($"https://fantasysports.yahooapis.com/fantasy/v2/team/378.l.26189.t.{teamNumberToGet}?");
+                Console.WriteLine(uri);
+
+                teamUris.Add(uri);
+            }
+
+            Console.WriteLine(teamUris.Count);
+
+            Complete.ThisMethod();
+
+            return teamUris;
+        }
+
+
 
 
 
         [HttpGet]
-        [Route("/yahoo/team/teambase")]
-        public JObject CreateTeamBaseJObject(Uri uri)
+        [Route("/yahoo/team/teambase/json")]
+        public JObject CreateTeamBaseJObject()
         {
             Start.ThisMethod();
 
-            JObject jObject = CreateYahooAccessTokenResponseJObject();
+            string initialAccessTokenCheck = _contextAccessor.HttpContext.Session.GetString("accesstoken");
+            initialAccessTokenCheck.Intro("initial check");
 
-            // call the GetYahooAccessToken method
+            // returns Access Token, Token Type(i.e., bearer), Expires In (i.e., 3600), Refresh Token (unique), and XOAuth Yahoo Guid(unique)
+            // JObject accessTokenResponseJObject = _yahooAuthController.CreateYahooAccessTokenResponseJObject();
+
+            // call the GetYahooAccessTokenResponse method
                 // 1. web browser will launch and take user to ---> https://api.login.yahoo.com/oauth2/request_auth?...
                 // 2. click "Agree" in browser and a 7 digit code will appear; this code is the "&code=xyz" part of request_auth
                 // 3. terminal will be asking for this code; copy and paste from browser and hit enter
                 // 4. rest of the method runs
-            AccessTokenResponse accessTokenResponse = GetYahooAccessTokenResponse(jObject);
+            // AccessTokenResponse accessTokenResponse = GetYahooAccessTokenResponse(accessTokenResponseJObject);
+            // returns Access Token, Token Type(i.e., bearer), Expires In (i.e., 3600), Refresh Token (unique), and XOAuth Yahoo Guid(unique)
+            // AccessTokenResponse accessTokenResponse = _yahooAuthController.GetYahooAccessTokenResponse();
+            // AccessTokenResponse accessTokenResponse = _yahooAuthController.GetYahooAccessTokenResponse(accessTokenResponseJObject);
 
-            string accessToken = accessTokenResponse.AccessToken;
+            // access token is a long mix of letters and numbers;
+            // string accessToken      = accessTokenResponse.AccessToken;
+            string accessToken = _contextAccessor.HttpContext.Session.GetString("accesstoken");
 
-            // int teamNumberToGet = 1;
+            // if(accessToken == accessTokenCheck)
+            // {
+            //     Console.WriteLine("this is GOOOD!!!!!!!");
+            // }
 
-            // var uri = new Uri($"https://fantasysports.yahooapis.com/fantasy/v2/team/378.l.26189.t.{teamNumberToGet}/stats;type=week;week=2");
-            // var uri = new Uri($"https://fantasysports.yahooapis.com/fantasy/v2/team/378.l.26189.t.{teamNumberToGet}?");
+            // else {
+            //     Console.WriteLine("this is BAD");
+            //     accessToken.Intro("access token");
+            //     accessTokenCheck.Intro("access token check");
+            // }
 
-            HttpWebRequest  request          = WebRequest.Create(uri) as HttpWebRequest;
+            // pull in uri from 'SetUriToQuery' method
+            var uri = SetUriToQuery();
+
+            HttpWebRequest request = WebRequest.Create(uri) as HttpWebRequest;
+
             request.Headers["Authorization"] = "Bearer " + accessToken;
-                            request.Method   = "GET";
+
+            request.Method = "GET";
 
             string responseFromServer = "";
 
@@ -331,21 +229,45 @@ namespace BaseballScraper.Controllers
                 responseFromServer = reader.ReadToEnd();
             }
 
+            // DOC type ---> System.Xml.XmlDocument
             XmlDocument doc       = new XmlDocument();
             XmlReader   xmlReader = XmlReader.Create(new System.IO.StringReader(responseFromServer));
 
-            // responseFromServer comes back as xml
+            // responseFromServer comes back as xml in string format
             doc.LoadXml(responseFromServer);
+            doc.Dig();
 
             // convert the xml to json
             string json = JsonConvert.SerializeXmlNode(doc);
 
             // clean the json up
+            // type ---> Newtonsoft.Json.Linq.JObject
             JObject responseToJson = JObject.Parse(json);
-            PrintJObjectItems(responseToJson);
+            // Extensions.PrintJObjectItems(responseToJson);
 
+            Complete.ThisMethod();
             return responseToJson;
         }
+
+
+
+
+
+
+
+        [Route("yahoo/team/testing")]
+        public void YahooTeamTesting()
+        {
+            Start.ThisMethod();
+
+            JObject teamStatsJson = CreateTeamBaseJObject();
+
+            Extensions.PrintJObjectItems(teamStatsJson);
+
+            Complete.ThisMethod();
+        }
+
+
 
 
         [Route("yahoo/team/stats/model")]
@@ -353,14 +275,7 @@ namespace BaseballScraper.Controllers
         {
             Start.ThisMethod();
 
-            int teamNumberToGet = 1;
-            int weekNumber      = 18;
-
-            var uri = new Uri($"https://fantasysports.yahooapis.com/fantasy/v2/team/378.l.26189.t.{teamNumberToGet}/standings");
-            // var uri = new Uri($"https://fantasysports.yahooapis.com/fantasy/v2/team/378.l.26189.t.{teamNumberToGet}/stats");
-            // var uri = new Uri($"https://fantasysports.yahooapis.com/fantasy/v2/team/378.l.26189.t.{teamNumberToGet}/stats;type=week;week={weekNumber}");
-
-            JObject teamStatsJson = CreateTeamBaseJObject(uri);
+            JObject teamStatsJson = CreateTeamBaseJObject();
 
             YahooTeamStats teamStats = new YahooTeamStats();
 
@@ -372,11 +287,11 @@ namespace BaseballScraper.Controllers
                 teamStats.WeekNumber = teamStatsJson["fantasy_content"]["team"]["team_stats"]["week"].ToString();
                 teamStats.Season     = "No season / year; these numbers are for one week";
             }
-            // finally {
-            //     Console.WriteLine("there is no season OR week; something is broken");
-            // }
+            finally {
+                Console.WriteLine("there is no season OR week; something is broken");
+            }
 
-            teamStats.CoverageType = teamStatsJson["fantasy_content"]["team"]["team_stats"]["coverage_type"].ToString();
+            // teamStats.CoverageType = teamStatsJson["fantasy_content"]["team"]["team_stats"]["coverage_type"].ToString();
 
             int currentStatId = 0;
 
@@ -421,8 +336,8 @@ namespace BaseballScraper.Controllers
             currentStatId++;
             teamStats.WhipTotal = teamStatsJson["fantasy_content"]["team"]["team_stats"]["stats"]["stat"][currentStatId]["value"].ToString();
 
-            currentStatId++;
-            teamStats.TeamPoints = teamStatsJson["fantasy_content"]["team"]["team_points"]["total"].ToString();
+            // currentStatId++;
+            // teamStats.TeamPoints = teamStatsJson["fantasy_content"]["team"]["team_points"]["total"].ToString();
 
             teamStats.Dig();
 
@@ -434,44 +349,45 @@ namespace BaseballScraper.Controllers
 
 
 
-
-
-
         [Route("/yahoo/team/teambase/model")]
         public YahooTeamBase CreateYahooTeamBaseModel ()
         {
             Start.ThisMethod();
 
-            int teamNumberToGet = 1;
-
-            var uri = new Uri($"https://fantasysports.yahooapis.com/fantasy/v2/team/378.l.26189.t.{teamNumberToGet}?");
-
-            JObject responseToJson = CreateTeamBaseJObject(uri);
+            JObject responseToJson = CreateTeamBaseJObject();
 
             YahooTeamBase teamBase = new YahooTeamBase();
 
             Extensions.Spotlight("trying to build teambase");
             teamBase.Key                   = responseToJson["fantasy_content"]["team"]["team_key"].ToString();
-            teamBase.Name                  = responseToJson["fantasy_content"]["team"]["name"].ToString();
+            teamBase.TeamName              = responseToJson["fantasy_content"]["team"]["name"].ToString();
             teamBase.TeamId                = (int?)responseToJson["fantasy_content"]["team"]["team_id"];
             teamBase.IsOwnedByCurrentLogin = (int?)responseToJson["fantasy_content"]["team"]["is_owned_by_current_login"];
             teamBase.Url                   = responseToJson["fantasy_content"]["team"]["url"].ToString();
-            teamBase.TeamLogo              = responseToJson["fantasy_content"]["team"]["team_logos"]["team_logo"]["url"].ToString();
             teamBase.WaiverPriority        = (int?)responseToJson["fantasy_content"]["team"]["waiver_priority"];
             teamBase.NumberOfMoves         = (int?)responseToJson["fantasy_content"]["team"]["number_of_moves"];
             teamBase.NumberOfTrades        = (int?)responseToJson["fantasy_content"]["team"]["number_of_trades"];
-            teamBase.CoverageType          = responseToJson["fantasy_content"]["team"]["roster_adds"]["coverage_type"].ToString();
-            teamBase.CoverageValue         = responseToJson["fantasy_content"]["team"]["roster_adds"]["coverage_value"].ToString();
-            teamBase.Value                 = responseToJson["fantasy_content"]["team"]["roster_adds"]["value"].ToString();
             teamBase.LeagueScoringType     = responseToJson["fantasy_content"]["team"]["league_scoring_type"].ToString();
-            teamBase.HasDraftGuide         = responseToJson["fantasy_content"]["team"]["has_draft_grade"].ToString();
-            teamBase.ManagerId             = responseToJson["fantasy_content"]["team"]["managers"]["manager"]["manager_id"].ToString();
-            teamBase.NickName              = responseToJson["fantasy_content"]["team"]["managers"]["manager"]["nickname"].ToString();
-            teamBase.Guid                  = responseToJson["fantasy_content"]["team"]["managers"]["manager"]["guid"].ToString();
-            teamBase.IsCommissioner        = (int?)responseToJson["fantasy_content"]["team"]["managers"]["manager"]["is_commissioner"];
-            teamBase.IsCurrentLogin        = (int?)responseToJson["fantasy_content"]["team"]["managers"]["manager"]["is_current_login"];
-            teamBase.Email                 = responseToJson["fantasy_content"]["team"]["managers"]["manager"]["email"].ToString();
-            teamBase.ImageUrl              = responseToJson["fantasy_content"]["team"]["managers"]["manager"]["image_url"].ToString();
+            teamBase.HasDraftGrade         = responseToJson["fantasy_content"]["team"]["has_draft_grade"].ToString();
+
+            // team logo
+            teamBase.TeamLogo.Size = responseToJson["fantasy_content"]["team"]["team_logos"]["team_logo"]["size"].ToString();
+            teamBase.TeamLogo.Url  = responseToJson["fantasy_content"]["team"]["team_logos"]["team_logo"]["url"].ToString();
+
+            // roster adds
+            teamBase.RosterAdds.CoverageType  = responseToJson["fantasy_content"]["team"]["roster_adds"]["coverage_type"].ToString();
+            teamBase.RosterAdds.CoverageValue = responseToJson["fantasy_content"]["team"]["roster_adds"]["coverage_value"].ToString();
+            teamBase.RosterAdds.Value         = responseToJson["fantasy_content"]["team"]["roster_adds"]["value"].ToString();
+
+            // managers
+            teamBase.TeamManager.ManagerId      = responseToJson["fantasy_content"]["team"]["managers"]["manager"]["manager_id"].ToString();
+            teamBase.TeamManager.NickName       = responseToJson["fantasy_content"]["team"]["managers"]["manager"]["nickname"].ToString();
+            teamBase.TeamManager.Guid           = responseToJson["fantasy_content"]["team"]["managers"]["manager"]["guid"].ToString();
+            teamBase.TeamManager.IsCommissioner = (int?)responseToJson["fantasy_content"]["team"]["managers"]["manager"]["is_commissioner"];
+            teamBase.TeamManager.IsCurrentLogin = (int?)responseToJson["fantasy_content"]["team"]["managers"]["manager"]["is_current_login"];
+            teamBase.TeamManager.Email          = responseToJson["fantasy_content"]["team"]["managers"]["manager"]["email"].ToString();
+            teamBase.TeamManager.ImageUrl       = responseToJson["fantasy_content"]["team"]["managers"]["manager"]["image_url"].ToString();
+
             teamBase.Dig();
 
             Complete.ThisMethod();
@@ -483,11 +399,11 @@ namespace BaseballScraper.Controllers
 
 
         [Route("/yahoo/team/teambase/hashtable")]
-        public Hashtable CreateYahooTeamBaseHashTable (JObject TeamBaseJson)
+        public Hashtable CreateYahooTeamBaseHashTable ()
         {
             Start.ThisMethod();
 
-            JObject responseToJson = TeamBaseJson;
+            JObject responseToJson = CreateTeamBaseJObject();
 
             Hashtable teamHashTable = new Hashtable();
                 teamHashTable.Add("Key", responseToJson["fantasy_content"]["team"]["team_key"].ToString());
@@ -541,92 +457,211 @@ namespace BaseballScraper.Controllers
         }
 
 
+        // internal static async Task<T> GetResource<T>(EndPoint endPoint, string AccessToken, string lookup)
+        // {
+        //     return await await ResilientCall(async () =>
+        //     {
+        //         var           xml        = await Utils.GetResponseData(endPoint, AccessToken);
+        //         XmlSerializer serializer = new XmlSerializer(typeof(T));
+        //         XElement      xElement   = xml.Descendants(YahooXml.XMLNS + lookup).FirstOrDefault();
+        //         if (xElement == null && IsError(xml))
+        //             throw new InvalidOperationException(GetErrorMessage(xml));
+        //         if (xElement == null)
+        //             throw new InvalidOperationException($"Invalid XML returned. {xml}");
 
-        [HttpGet]
-        [Route("/yahoo/refreshtoken")]
-        public IActionResult GetYahooRefreshToken()
-        {
-            Start.ThisMethod();
+        //         var resource = (T)serializer.Deserialize(xElement.CreateReader());
+        //         return resource;
+        //     });
+        // }
 
-            var consumerKey    = _yahooConfig.ClientId;
-            var consumerSecret = _yahooConfig.ClientSecret;
-            var redirectUri    = _yahooConfig.RedirectUri;
-            var refreshToken   = HttpContext.Session.GetString("session token");
+        // async static Task<T> ResilientCall<T>(Func<T> block)
+        // {
+        //     int      currentRetry = 0;
+        //     TimeSpan delay        = TimeSpan.FromSeconds(2);
 
-            refreshToken.Intro("refresh token");
+        //     for (; ; )
+        //     {
+        //         try
+        //         {
+        //             return block();
+        //         }
+        //         catch (Exception ex)
+        //         {
+        //             Trace.TraceError("Operation Exception");
 
-            Uri address = new Uri("https://api.login.yahoo.com/oauth2/get_token");
+        //             currentRetry++;
 
-            HttpWebRequest request = WebRequest.Create(address) as HttpWebRequest;
+        //             // Check if the exception thrown was a transient exception
+        //             // based on the logic in the error detection strategy.
+        //             // Determine whether to retry the operation, as well as how
+        //             // long to wait, based on the retry strategy.
+        //             if (currentRetry > 3 || !IsTransient(ex))
+        //             {
+        //                 // If this isn't a transient error or we shouldn't retry,
+        //                 // rethrow the exception.
+        //                 throw;
+        //             }
+        //         }
 
-            request.Method      = "POST";
-            request.ContentType = "application/x-www-form-urlencoded";
+        //         // Wait to retry the operation.
+        //         // Consider calculating an exponential delay here and
+        //         // using a strategy best suited for the operation and fault.
+        //         await Task.Delay(delay);
+        //     }
+        // }
 
-            byte[] headerByte = System.Text.Encoding.UTF8.GetBytes(consumerKey+":"+consumerSecret);
 
-            string headerString = System.Convert.ToBase64String(headerByte);
+        // private static bool IsTransient(Exception ex)
+        // {
+        //     var webException = ex as WebException;
+        //     if (webException != null)
+        //     {
+        //         // If the web exception contains one of the following status values
+        //         // it might be transient.
+        //         return new[] {WebExceptionStatus.ConnectionClosed,
+        //           WebExceptionStatus.Timeout,
+        //           WebExceptionStatus.RequestCanceled }.
+        //                 Contains(webException.Status);
+        //     }
 
-            request.Headers["Authorization"] = "Basic " + headerString;
+        //     // Additional exception checking logic goes here.
+        //     return false;
+        // }
 
-            StringBuilder data = new StringBuilder();
-            data.Append("?client_id=" + consumerKey);
-            data.Append("&client_secret=" + consumerSecret);
-            data.Append("&grant_type=refresh_token");
-            data.Append("&redirect_uri=" + redirectUri);
-            data.Append("&refresh_token=" + refreshToken);
+        // private static bool IsError(XDocument xml)
+        // {
+        //     return string.Equals(xml.Root.Name.LocalName, "error", StringComparison.OrdinalIgnoreCase);
+        // }
 
-            byte[] byteData = UTF8Encoding.UTF8.GetBytes(data.ToString());
 
-            request.ContentLength = byteData.Length;
+        // private static string GetErrorMessage(XDocument xml)
+        // {
+        //     var result =
+        //         from e in xml.Root.Elements()
+        //         where e.Name.LocalName == "description"
+        //         select e.Value;
 
-            using (Stream postStream = request.GetRequestStream())
-            {
-                postStream.Write(byteData, 0, byteData.Length);
-            }
+        //     return result.FirstOrDefault() ?? "Unknown XML";
+        // }
 
-            string responseFromServer = "";
 
-            try
-            {
-                using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
-                {
-                    StreamReader reader = new StreamReader(response.GetResponseStream());
 
-                    responseFromServer = reader.ReadToEnd();
-                }
-            }
-
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                ex.SetContext("response from server", responseFromServer);
-            }
-
-            try {
-                JObject responseToJson = JObject.Parse(responseFromServer);
-
-                Extensions.Spotlight("refresh token response");
-                foreach(var jsonItem in responseToJson)
-                {
-                    Console.ForegroundColor = ConsoleColor.DarkMagenta;
-                    Console.WriteLine($"{jsonItem.Key.ToUpper()}");
-                    Console.ResetColor();
-                    Console.WriteLine(jsonItem.Value);
-                    Console.WriteLine();
-                }
-            }
-
-            catch (Exception ex)
-            {
-                ex.Message.Intro("error message");
-                ex.SetContext("response from server", responseFromServer);
-            }
-
-            Complete.ThisMethod();
-            return RedirectToAction("viewnflgames");
-        }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // //THIS WORKS
+        // [HttpGet]
+        // [Route("/yahoo/authorize/accesstokenjobject")]
+        // public JObject CreateYahooAccessTokenResponseJObject()
+        // {
+        //     Start.ThisMethod();
+
+        //     var consumerKey    = _yahooConfig.ClientId;
+        //     var consumerSecret = _yahooConfig.ClientSecret;
+        //     var redirectUri    = _yahooConfig.RedirectUri;
+
+        //     var authorizationCodeFromConsole = GetUserAuthorizationCode();
+        //     authorizationCodeFromConsole.Intro("auth code");
+
+        //     // Exchange authorization code for Access Token by sending Post Request
+        //     Uri address = new Uri("https://api.login.yahoo.com/oauth2/get_token");
+
+        //     // Create the web request ___ REQUEST ---> System.Net.HttpWebRequest
+        //     HttpWebRequest request = WebRequest.Create(address) as HttpWebRequest;
+
+        //     // Set type to POST ---> changes 'Method' of HttpWebRequest to 'POST'
+        //     request.Method = "POST";
+
+        //     // changes 'Content Type' of HttpWebRequest to 'application/x-www-form-urlencoded'
+        //     request.ContentType = "application/x-www-form-urlencoded";
+
+        //     // produces very Base64Encoded version of consumerKey and yahooClientSecrent(it's long string of letters and numbers) ___ HEADER BYTE ---> System.Byte[] ___ e.g., '"ZGoweUpt...etc."'
+        //     byte[] headerByte = System.Text.Encoding.UTF8.GetBytes(consumerKey+":"+consumerSecret);
+
+        //     // converts 'headerByte'; same letters and numbers but new format ___ HEADER STRING ---> System.String ___ e.g., 'ZGoweUpt...etc.'
+        //     string headerString = System.Convert.ToBase64String(headerByte);
+
+        //     // returns two lines
+        //         // Content-Type: application/x-www-form-urlencoded
+        //         // 'Authorization: Basic <headerString> ___ e.g., <headerString> = ZGoweUpt...etc.
+        //     request.Headers["Authorization"] = "Basic " + headerString;
+
+        //     // Create the data we want to send ___ DATA ---> System.Text.StringBuilder ___ 'data' is a concatanated string of all of the data.Append items
+        //     StringBuilder data = new StringBuilder();
+        //         data.Append("?client_id=" + consumerKey);
+        //         data.Append("&client_secret=" + consumerSecret);
+        //         data.Append("&redirect_uri=" + redirectUri);
+        //         data.Append("&code=" + authorizationCodeFromConsole);
+        //         data.Append("&grant_type=authorization_code");
+
+        //     // Create a byte array of the data we want to send ___ BYTE DATA ---> System.Byte[]
+        //     byte[] byteData = UTF8Encoding.UTF8.GetBytes(data.ToString());
+
+        //     // Set the content length in the request headers ___ // changes 'Content Length' of HttpWebRequest to 218
+        //     request.ContentLength = byteData.Length;
+
+        //     // Write data ___ POST STREAM ---> System.Net.RequestStream
+        //     using (Stream postStream = request.GetRequestStream())
+        //     {
+        //         postStream.Write(byteData, 0, byteData.Length);
+        //     }
+
+        //     // Get response
+        //     string responseFromServer = "";
+
+        //     try
+        //     {
+        //         // changes 'HaveResponse' of HttpWebRequest to 228
+        //         using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
+        //         {
+        //             // Get the response stream ___ READER ---> System.IO.StreamReader
+        //             StreamReader reader = new StreamReader(response.GetResponseStream());
+
+        //             responseFromServer = reader.ReadToEnd();
+        //         }
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         Console.WriteLine(ex.Message); // if error ---> 'The remote server returned an error: (400) Bad Request.'
+        //         ex.SetContext("response from server", responseFromServer);
+        //     }
+
+        //     // RESPONSE TO JSON ---> Newtonsoft.Json.Linq.JObject
+        //     JObject responseToJson = JObject.Parse(responseFromServer);
+
+        //     // PrintJObjectItems(responseToJson);
+
+        //     // responseToJson.Dig();
+
+        //     // REQUEST ---> following are added through beginning to end: ContentLength, HaveResponse, Method, ContentType
+        //     Complete.ThisMethod();
+        //     return responseToJson;
+        // }
+
+
+
+
+
+
+
 
 // this works - do I need it?
 // [HttpGet]
@@ -721,3 +756,105 @@ namespace BaseballScraper.Controllers
 
 //     return requestAuthItemsList;
 // }
+
+
+
+
+        // [HttpGet]
+        // [Route("/yahoo/team/printxml")]
+        // public IActionResult PrintXml()
+        // {
+        //     Start.ThisMethod();
+
+        //     XStreamingElement root = new XStreamingElement("Root",
+        //         from el in CreateTeamBaseXml("Source.xml")
+        //         select new XElement("Item",
+        //             new XElement("Customer", (string)el.Parent.Element("Name")),
+        //             new XElement(el.Element("Key"))
+        //         )
+        //     );
+
+        //     root.Save("Test.xml");
+        //     // Console.WriteLine(System.IO.File.ReadAllText("Test.xml"));
+
+        //     Complete.ThisMethod();
+
+        //     return Content($"String is");
+        // }
+
+
+
+
+
+        // [HttpGet]
+        // [Route("/yahoo/team/createxml")]
+        // public static IEnumerable<XElement> CreateTeamBaseXml(string response)
+        // {
+        //     Start.ThisMethod();
+
+        //     // response ---> this is a string of the xml
+        //     response.Intro("response");
+
+        //     // intro DOC ---> System.Xml.XmlDocument
+        //     XmlDocument doc = new XmlDocument();
+
+        //     // intro XMLREADER ---> System.Xml.XmlTextReaderImpl
+        //     XmlReader xmlReader = XmlReader.Create(new System.IO.StringReader(response));
+
+        //     using(XmlReader reader = XmlReader.Create(response))
+        //     {
+        //         XElement name = null;
+        //         XElement item = null;
+
+        //         reader.MoveToContent();
+
+        //         // MARK A
+        //         while (reader.Read())
+        //         {
+        //             if (reader.NodeType == XmlNodeType.Element && reader.Name == "Customer")
+        //             {
+        //                 // move to Name element
+        //                 while (reader.Read())
+        //                 {
+        //                     if (reader.NodeType == XmlNodeType.Element && reader.Name == "Name")
+        //                     {
+        //                         name = XElement.ReadFrom(reader) as XElement;
+        //                         break;
+        //                     }
+        //                 }
+
+        //                 // loop through Item elements
+        //                 while (reader.Read())
+        //                 {
+        //                     // nodetypes both equal 'EndElement'
+        //                     if (reader.NodeType == XmlNodeType.EndElement)
+        //                     {
+        //                         break;
+        //                     }
+
+        //                     if (reader.NodeType == XmlNodeType.Element && reader.Name == "Item")
+        //                     {
+        //                         item = XElement.ReadFrom(reader) as XElement;
+
+        //                         if (item != null)
+        //                         {
+        //                             XElement tempRoot = new XElement("Root",
+        //                                 new XElement(name)
+        //                             );
+
+        //                             tempRoot.Add(item);
+        //                             yield return item;
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+
+        //     // doc.Dig();
+        //     // xmlReader.Dig();
+        //     // response.Dig();
+
+        //     Complete.ThisMethod();
+        // }
+

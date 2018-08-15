@@ -10,7 +10,8 @@ using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 
 namespace BaseballScraper
 {
@@ -28,7 +29,7 @@ namespace BaseballScraper
 
         public Startup (IHostingEnvironment env)
         {
-            Start.ThisMethod();
+            // Start.ThisMethod();
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile($"Configuration/appsettings.json", optional: false, reloadOnChange: true)
@@ -52,7 +53,7 @@ namespace BaseballScraper
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices (IServiceCollection services)
         {
-            Start.ThisMethod();
+            // Start.ThisMethod();
 
             // Required to use the Options<T> pattern
             services.AddOptions();
@@ -114,17 +115,40 @@ namespace BaseballScraper
                         options.IncludeErrorDetails = true;
                     });
 
+            // services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            //         .AddCookie();
+
             // services.AddDbContext<MovieContext> (options => options.UseNpgsql (Configuration["DBInfo:ConnectionString"]));
 
-            services.AddMvc ().SetCompatibilityVersion (CompatibilityVersion.Version_2_1);
+            // this is related to session
+            // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/app-state?view=aspnetcore-2.1
+            // services.AddDistributedMemoryCache();
+
+            // services.AddSession(options =>
+            // {
+            //     // Set a short timeout for easy testing.
+            //     options.IdleTimeout     = TimeSpan.FromSeconds(10);
+            //     options.Cookie.HttpOnly = true;
+            // });
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            services.AddMvc ()
+                .SetCompatibilityVersion (CompatibilityVersion.Version_2_1)
+                .AddSessionStateTempDataProvider();
+
+            services.AddMvc().AddControllersAsServices();
+            services.AddTransient<BaseballScraper.Controllers.YahooAuthController>();
             services.AddSession ();
-            Complete.ThisMethod();
+            // Complete.ThisMethod();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure (IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IOptionsMonitor<TwitterConfiguration> twitterConfigMonitor)
         {
-            Start.ThisMethod();
+            // Start.ThisMethod();
+
+            HttpHelper.Configure(app.ApplicationServices.GetRequiredService<IHttpContextAccessor>());
 
             if (env.IsDevelopment ())
             {
