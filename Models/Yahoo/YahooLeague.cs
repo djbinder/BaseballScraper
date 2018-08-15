@@ -66,8 +66,8 @@ namespace BaseballScraper.Models.Yahoo
         public LeagueSettings LeagueSettings { get; set; } //
 
 
-        [XmlElement (ElementName = "standings", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
-        public Standings Standings { get; set; } //
+        // [XmlElement (ElementName = "standings", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
+        // public Standings Standings { get; set; } //
 
 
         [XmlElement (ElementName = "scoreboard", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
@@ -78,8 +78,8 @@ namespace BaseballScraper.Models.Yahoo
         public List<YahooPlayer> PlayerList { get; set; } //
 
 
-        [XmlElement (ElementName = "teams", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
-        public List<YahooTeam> TeamsList { get; set; } //
+        // [XmlElement (ElementName = "teams", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
+        // public List<YahooTeam> TeamsList { get; set; } //
 
 
         [XmlElement (ElementName = "draft_results")]

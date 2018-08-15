@@ -5,6 +5,7 @@ using System.IO;                    // <--- 'Path'
 using Newtonsoft.Json;              // <--- 'JsonConvert' and 'Formatting.Indented'
 using ConsoleTables;
 using System.Linq;
+using Newtonsoft.Json.Linq;
 
 public static class Extensions
 {
@@ -136,6 +137,28 @@ public static class Extensions
         Console.WriteLine();
 
         return;
+    }
+
+
+
+    public static void PrintJObjectItems(JObject JObjectToPrint)
+    {
+        Start.ThisMethod();
+
+        var responseToJson = JObjectToPrint;
+
+        Extensions.Spotlight("access token response");
+
+        foreach(var jsonItem in responseToJson)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkMagenta;
+            Console.WriteLine($"{jsonItem.Key.ToUpper()}");
+            Console.ResetColor();
+            Console.WriteLine(jsonItem.Value);
+            Console.WriteLine();
+        }
+
+        Complete.ThisMethod();
     }
 
 
