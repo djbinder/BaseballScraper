@@ -20,6 +20,10 @@
     <PackageReference Include="Microsoft.NETCore.Platforms" Version="2.1.0" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="4.5.0" />
 
+
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.1.0" />
+
+
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
 
     <!-- OAuth -->
