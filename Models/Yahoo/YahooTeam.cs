@@ -12,59 +12,49 @@ namespace BaseballScraper.Models.Yahoo
     // meta: /fantasy/v2/team/{team_key}/metadata
     public class YahooTeamBase
     {
+        public int YahooTeamBaseId { get; set; }
+
         [JsonProperty("team_key")]
         [XmlElement (ElementName = "team_key")]
-        public string Key { get; set; } //1
-
+        public string Key { get; set; }
 
         [JsonProperty("team_name")]
         [XmlElement (ElementName = "team_name")]
         public string TeamName { get; set; }
 
-
         [JsonProperty("team_id")]
         [XmlElement (ElementName = "team_id")]
         public int? TeamId { get; set; }
 
-
         [XmlElement (ElementName = "is_owned_by_current_login")]
         public int? IsOwnedByCurrentLogin { get; set; }
 
-
         [XmlElement (ElementName = "url")]
-        public string Url { get; set; }  //5
-
+        public string Url { get; set; }
 
         [XmlElement (ElementName = "team_logo")]
         public TeamLogo TeamLogo { get; set; }
 
-
         [XmlElement (ElementName = "waiver_priority")]
         public int? WaiverPriority { get; set; }
-
 
         [XmlElement (ElementName = "number_of_moves")]
         public int? NumberOfMoves { get; set; }
 
-
         [XmlElement (ElementName = "number_of_trades")]
         public int? NumberOfTrades { get; set; }
-
 
         [XmlElement (ElementName = "roster_adds")]
         public RosterAdds RosterAdds { get; set; }
 
-
         [XmlElement (ElementName = "league_scoring_type")]
         public string LeagueScoringType { get; set; }
-
 
         [XmlElement (ElementName = "has_draft_grade")]
         public string HasDraftGrade { get; set; }
 
         [XmlElement (ElementName = "managers")]
         public IList<TeamManagers> ManagersList { get; set; }
-
 
         public TeamManagers TeamManager { get; set; }
 
@@ -80,7 +70,10 @@ namespace BaseballScraper.Models.Yahoo
 
 
     [XmlRoot (ElementName = "team_logo")]
-    public class TeamLogo {
+    public class TeamLogo
+    {
+        public int TeamLogoId { get; set; }
+
         [XmlElement (ElementName = "size")]
         public string Size { get; set; }
 
@@ -90,7 +83,10 @@ namespace BaseballScraper.Models.Yahoo
 
 
     [XmlRoot (ElementName = "roster_adds")]
-    public class RosterAdds {
+    public class RosterAdds
+    {
+        public int RosterAddsId { get; set; }
+
         [XmlElement (ElementName = "coverage_type")]
         public string CoverageType { get; set; }
 
@@ -99,34 +95,33 @@ namespace BaseballScraper.Models.Yahoo
 
         [XmlElement (ElementName = "value")]
         public string Value { get; set; }
+
+        // public int YahooTeamBaseId { get; set; }
+        // public YahooTeamBase YahooTeamBase { get; set; }
     }
 
 
     public class TeamManagers
     {
+        public int TeamManagersId { get; set; }
+
         [XmlElement (ElementName = "manager_id")]
         public string ManagerId { get; set; }
-
 
         [XmlElement (ElementName = "nickname")]
         public string NickName { get; set; }
 
-
         [XmlElement (ElementName = "guid")]
         public string Guid { get; set; }
-
 
         [XmlElement (ElementName = "is_commissioner")]
         public int? IsCommissioner { get; set; }
 
-
         [XmlElement (ElementName = "is_current_login")]
         public int? IsCurrentLogin { get; set; }
 
-
         [XmlElement (ElementName = "email")]
         public string Email { get; set; }
-
 
         [XmlElement (ElementName = "image_url")]
         public string ImageUrl { get; set; }
@@ -138,14 +133,11 @@ namespace BaseballScraper.Models.Yahoo
     {
         public string Season { get; set; }
 
-
         [XmlElement (ElementName = "coverage_type")]
         public string StatCoverageType { get; set; }
 
-
         [XmlElement (ElementName = "week")]
         public string WeekNumber { get; set; }
-
 
         public string HitsAtBatsId { get; set; } = "60";
         public string HitsAtBatsTotal { get; set; }
@@ -195,7 +187,8 @@ namespace BaseballScraper.Models.Yahoo
 
         public YahooTeamStats()
         {
-            TeamStats = new List<TeamStats>();
+            TeamStats  = new List<TeamStats>();
+            TeamPoints = new TeamWeekPoints();
         }
     }
 
@@ -211,6 +204,11 @@ namespace BaseballScraper.Models.Yahoo
 
         [XmlElement (ElementName = "stats")]
         public YahooStats Stats { get; set; }
+
+        public TeamStats()
+        {
+            Stats = new YahooStats();
+        }
     }
 
 
@@ -234,17 +232,19 @@ namespace BaseballScraper.Models.Yahoo
         [XmlElement (ElementName = "rank")]
         public string Rank { get; set; }
 
-
         [XmlElement (ElementName = "playoff_seed")]
         public string PlayoffSeed { get; set; }
-
 
         [XmlElement (ElementName = "outcome_totals")]
         public OutcomeTotals OutcomeTotals { get; set; }
 
-
         [XmlElement (ElementName = "games_back")]
         public string GamesBack { get; set; }
+
+        public YahooTeamStandings()
+        {
+            OutcomeTotals = new OutcomeTotals();
+        }
     }
 
 
@@ -397,18 +397,14 @@ namespace BaseballScraper.Models.Yahoo
         [XmlElement (ElementName = "full")]
         public string FullName { get; set; }
 
-
         [XmlElement (ElementName = "first")]
         public string FirstName { get; set; }
-
 
         [XmlElement (ElementName = "last")]
         public string LastName { get; set; }
 
-
         [XmlElement (ElementName = "ascii_first")]
         public string AsciiFirstName { get; set; }
-
 
         [XmlElement (ElementName = "ascii_last")]
         public string AsciiLastName { get; set; }
@@ -421,7 +417,6 @@ namespace BaseballScraper.Models.Yahoo
         [XmlElement(ElementName = "url", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
         public string Url { get; set; }
 
-
         [XmlElement(ElementName = "size", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
         public string Size { get; set; }
     }
@@ -433,10 +428,8 @@ namespace BaseballScraper.Models.Yahoo
         [XmlElement(ElementName = "coverage_type")]
         public string CoverageType { get; set; }
 
-
         [XmlElement(ElementName = "date")]
         public string Date { get; set; }
-
 
         [XmlElement(ElementName = "position")]
         public string Position { get; set; }
@@ -464,14 +457,11 @@ namespace BaseballScraper.Models.Yahoo
         [XmlElement (ElementName = "pick")]
         public string PickNumber { get; set; }
 
-
         [XmlElement (ElementName = "round")]
         public string RoundNumber { get; set; }
 
-
         [XmlElement (ElementName = "team_key")]
         public string DraftingTeamsKey { get; set; }
-
 
         [XmlElement (ElementName = "player_key")]
         public string PlayerKey { get; set; }
@@ -485,10 +475,8 @@ namespace BaseballScraper.Models.Yahoo
         [XmlAttribute (AttributeName = "count")]
         public int Count { get; set; }
 
-
         [XmlElement (ElementName = "matchup")]
         public List<Matchup> MatchupsList { get; set; }
-
 
         public Matchups()
         {
