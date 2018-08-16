@@ -1,17 +1,21 @@
 ﻿using System;
+using System.Net;
+using System.Text;
+using System.Text.Encodings.Web;
 using BaseballScraper.Models.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Http;
+using BaseballScraper.Models;
 
 namespace BaseballScraper
 {
@@ -118,7 +122,7 @@ namespace BaseballScraper
             // services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             //         .AddCookie();
 
-            // services.AddDbContext<MovieContext> (options => options.UseNpgsql (Configuration["DBInfo:ConnectionString"]));
+
 
             // this is related to session
             // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/app-state?view=aspnetcore-2.1
@@ -140,6 +144,17 @@ namespace BaseballScraper
             services.AddMvc().AddControllersAsServices();
             services.AddTransient<BaseballScraper.Controllers.YahooAuthController>();
             services.AddSession ();
+
+            Console.WriteLine("CHECK CON STRING");
+            Console.WriteLine(Configuration["DBInfo:ConnectionString"]);
+
+            services.Configure<BaseballScraperContext>(Configuration);
+            services.Configure<BaseballScraperContext>(config =>
+            {
+                config.ConnectionString = Configuration["DBInfo:ConnectionString"];
+                config.Name             = Configuration["DBInfo:Name"];
+            });
+            services.AddDbContext<BaseballScraperContext> (options => options.UseNpgsql (Configuration["DBInfo:ConnectionString"]));
             // Complete.ThisMethod();
         }
 

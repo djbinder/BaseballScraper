@@ -5,10 +5,12 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using BaseballScraper.Models.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ObjectPrinter;
 
@@ -41,7 +43,7 @@ namespace BaseballScraper.Controllers
             Start.ThisMethod();
 
             // Extensions.Spotlight("begin getting auth code on main Y! auth page");
-            // GetUserAuthorizationCode();
+            // GenerateUserAuthorizationCode();
             // Extensions.Spotlight("end getting autho code on main Y! auth page");
 
             Extensions.Spotlight("begin checking session on main Y! auth page");
@@ -54,7 +56,7 @@ namespace BaseballScraper.Controllers
 
         [HttpGet]
         [Route("/yahoo/authorize/authorizationcode")]
-        public string GetUserAuthorizationCode ()
+        public string GenerateUserAuthorizationCode ()
         {
             Start.ThisMethod();
 
@@ -69,26 +71,77 @@ namespace BaseballScraper.Controllers
 
             authorizationCodeFromConsole.Intro("code entered in console");
 
+            SetSessionAuthorizationCode(authorizationCodeFromConsole);
 
-            try {
-                HttpContext.Session.SetString("authorizationcode", authorizationCodeFromConsole);
+            // try {
+            //     HttpContext.Session.SetString("authorizationcode", authorizationCodeFromConsole);
 
-                var authCodeCheck = HttpContext.Session.GetString("authorizationcode");
-                authCodeCheck.Intro("setting auth code as");
-            }
+            //     var authCodeCheck = HttpContext.Session.GetString("authorizationcode");
+            //     authCodeCheck.Intro("setting auth code as");
 
-            catch (Exception ex)
-            {
-                Console.WriteLine("error setting session in GetUserAuthorizationCode");
-                Console.WriteLine(ex.Message);
-                Console.WriteLine(ex.InnerException);
-            }
+            //     HttpContext.Session.SetInt32("sessionid", 1);
+
+            // }
+
+            // catch (Exception ex)
+            // {
+            //     Console.WriteLine("error setting session in GenerateUserAuthorizationCode");
+            //     Console.WriteLine(ex.Message);
+            //     Console.WriteLine(ex.InnerException);
+            // }
 
             // Complete.ThisMethod();
             return authorizationCodeFromConsole;
         }
 
 
+        // [HttpPost]
+        // [Route("/yahoo/authorize/setsessionauthorizationcode")]
+        public IActionResult SetSessionAuthorizationCode(string authorizationCodeFromConsole)
+        {
+            var authCodeCheck = "";
+            try {
+                HttpContext.Session.SetString("authorizationcode", authorizationCodeFromConsole);
+                    authCodeCheck = HttpContext.Session.GetString("authorizationcode");
+                    authCodeCheck.Intro("setting auth code as");
+
+                HttpContext.Session.SetInt32("sessionid", 1);
+                    int? sessionid = HttpContext.Session.GetInt32("sessionid");
+                    sessionid.Intro("setting session code as");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error setting session in SetSessionAuthorizationCode");
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.InnerException);
+            }
+            return Content(authCodeCheck);
+        }
+
+
+
+        // public static void SetObjectAsJson(this ISession session, string key, object value)
+        // {
+        //     Start.ThisMethod();
+        //     session.SetString(key, JsonConvert.SerializeObject(value));
+        //     Complete.ThisMethod();
+        // }
+
+        // public static async Task Set<T>(this ISession session, string key, T value)
+        // {
+        //     if (!session.IsAvailable)
+        //     await session.LoadAsync();
+        //     session.SetString(key, JsonConvert.SerializeObject(value));
+        // }
+
+        // public static async Task<T> Get<T>(this ISession session,string key)
+        // {
+        //     if (!session.IsAvailable)
+        //     await session.LoadAsync();
+        //     var value = session.GetString(key);
+        //     return value == null ? default(T):
+        //                         JsonConvert.DeserializeObject<T>(value);
+        // }
 
 
         [Route("/yahoo/authorize/accesstokenrequest")]
@@ -100,7 +153,7 @@ namespace BaseballScraper.Controllers
             var consumerSecret = _yahooConfig.ClientSecret;
             var redirectUri    = _yahooConfig.RedirectUri;
 
-            var authorizationCodeFromConsole = GetUserAuthorizationCode();
+            var authorizationCodeFromConsole = GenerateUserAuthorizationCode();
 
             // Exchange authorization code for Access Token by sending Post Request
             Uri address = new Uri("https://api.login.yahoo.com/oauth2/get_token");
@@ -157,8 +210,7 @@ namespace BaseballScraper.Controllers
             var redirectUri    = _yahooConfig.RedirectUri;
 
             // generated from users input into console; it's a seven character string
-            var authorizationCodeFromConsole = GetUserAuthorizationCode();
-            authorizationCodeFromConsole.Intro("auth code");
+            var authorizationCodeFromConsole = GenerateUserAuthorizationCode();
 
             // Exchange authorization code for Access Token by sending Post Request
             Uri address = new Uri("https://api.login.yahoo.com/oauth2/get_token");
@@ -235,11 +287,8 @@ namespace BaseballScraper.Controllers
         [HttpGet]
         [Route("/yahoo/authorize/accesstokenresponse")]
         public AccessTokenResponse GetYahooAccessTokenResponse ()
-        // public AccessTokenResponse GetYahooAccessTokenResponse (JObject AccessTokenResponseJson)
         {
             Start.ThisMethod();
-
-            // JObject responseToJson = AccessTokenResponseJson;
 
             JObject responseToJson = CreateYahooAccessTokenResponseJObject();
 
@@ -258,6 +307,16 @@ namespace BaseballScraper.Controllers
                 XOAuthYahooGuid = responseToJson["xoauth_yahoo_guid"].ToString(),
             };
 
+            SetSessionAccessTokenItems(newAccessTokenResponse);
+
+            // Complete.ThisMethod();
+            return newAccessTokenResponse;
+        }
+
+
+        [Route("/yahoo/authorize/setsessionaccesstoken")]
+        public void SetSessionAccessTokenItems(AccessTokenResponse newAccessTokenResponse)
+        {
             try {
                 HttpContext.Session.SetString("accesstoken", newAccessTokenResponse.AccessToken);
                 HttpContext.Session.SetString("tokentype", newAccessTokenResponse.TokenType);
@@ -271,10 +330,12 @@ namespace BaseballScraper.Controllers
                 Console.WriteLine(ex.Message);
                 Console.WriteLine(ex.InnerException);
             }
-
-            // Complete.ThisMethod();
-            return newAccessTokenResponse;
         }
+
+
+
+
+
 
         [HttpGet]
         [Route("/yahoo/authorize/checkyahoosession")]
@@ -298,12 +359,14 @@ namespace BaseballScraper.Controllers
                     var accessTokenCheck  = HttpContext.Session.GetString("accesstoken");
                     var refreshTokenCheck = HttpContext.Session.GetString("refreshtoken");
                     var yahooGuidCheck    = HttpContext.Session.GetString("yahooguid");
+                    var sessionIdCheck    = HttpContext.Session.GetInt32("sessionid").ToString();
 
                     Dictionary<string, string> sessionInfoDictionary = new Dictionary<string, string>();
                         sessionInfoDictionary.Add("authcode", authCodeCheck);
                         sessionInfoDictionary.Add("accesstoken", accessTokenCheck);
                         sessionInfoDictionary.Add("refreshtoken", refreshTokenCheck);
                         sessionInfoDictionary.Add("yahooguid", yahooGuidCheck);
+                        sessionInfoDictionary.Add("sessionid", sessionIdCheck);
 
                     int itemCount = 1;
                     foreach(var item in sessionInfoDictionary)
@@ -312,7 +375,6 @@ namespace BaseballScraper.Controllers
                         Console.WriteLine(item.Key);
                         Console.WriteLine(item.Value);
                         Console.WriteLine();
-
                         itemCount++;
                     }
                 }

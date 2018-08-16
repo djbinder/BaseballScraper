@@ -11,6 +11,8 @@ using BaseballScraper.Models.Yahoo;
 using System.Collections;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
+using System.Linq;
+using BaseballScraper.Models;
 
 namespace BaseballScraper.Controllers
 {
@@ -19,78 +21,123 @@ namespace BaseballScraper.Controllers
     {
         private static String Start    = "STARTED";
         private static String Complete = "COMPLETED";
+        private BaseballScraperContext _context;
         private readonly AirtableConfiguration _airtableConfig;
         private readonly TwitterConfiguration _twitterConfig;
         private readonly YahooConfiguration _yahooConfig;
         private readonly BaseballScraper.Controllers.YahooAuthController _yahooAuthController;
-
         private readonly IHttpContextAccessor _contextAccessor;
 
+        public List<string> messagesList = new List<string>();
 
-
-        public YahooController(IOptions<AirtableConfiguration> airtableConfig, IOptions<TwitterConfiguration> twitterConfig, IOptions<YahooConfiguration> yahooConfig, YahooAuthController yahooAuthController, IHttpContextAccessor contextAccessor)
+        public YahooController(IOptions<AirtableConfiguration> airtableConfig, IOptions<TwitterConfiguration> twitterConfig, IOptions<YahooConfiguration> yahooConfig, YahooAuthController yahooAuthController, IHttpContextAccessor contextAccessor, BaseballScraperContext context)
         {
             _airtableConfig      = airtableConfig.Value;
             _twitterConfig       = twitterConfig.Value;
             _yahooConfig         = yahooConfig.Value;
             _yahooAuthController = yahooAuthController;
             _contextAccessor     = contextAccessor;
+            _context             = context;
         }
 
-        // public string GetDataFromSession()
-        // {
-        //     var authCode = _contextAccessor.HttpContext.Session.GetString("authorizationcode");
-        //     authCode.Intro("auth code in main Y controller");
 
-        //     return authCode;
-        // }
+
+
+        public int CheckSession()
+        {
+            int? sessionId = HttpContext.Session.GetInt32("sessionid");
+
+            if(sessionId == null)
+            {
+                return 0;
+            }
+            return (int)sessionId;
+        }
+
+        public Dictionary<string, string> CreateSessionInfoDictionary()
+        {
+            Dictionary<string, string> sessionInfoDictionary = new Dictionary<string, string>();
+
+            try
+            {
+                if(CheckSession() == 0)
+                {
+                    // Console.WriteLine("dictionary created; but nothing to add to it");
+                    string consoleMessage = "dictionary created; but nothing to add to it";
+                    messagesList.Add(consoleMessage);
+                }
+
+                var authCodeCheck     = _contextAccessor.HttpContext.Session.GetString("authorizationcode");
+                var accessTokenCheck  = HttpContext.Session.GetString("accesstoken");
+                var refreshTokenCheck = HttpContext.Session.GetString("refreshtoken");
+                var yahooGuidCheck    = HttpContext.Session.GetString("yahooguid");
+                var sessionIdCheck    = HttpContext.Session.GetInt32("sessionid").ToString();
+
+                sessionInfoDictionary.Add("authcode", authCodeCheck);
+                sessionInfoDictionary.Add("accesstoken", accessTokenCheck);
+                sessionInfoDictionary.Add("refreshtoken", refreshTokenCheck);
+                sessionInfoDictionary.Add("yahooguid", yahooGuidCheck);
+                sessionInfoDictionary.Add("sessionid", sessionIdCheck);
+
+                bool printDictionaryItems = false;
+
+                if(printDictionaryItems == true)
+                {
+                    int itemCount = 1;
+                    foreach(var item in sessionInfoDictionary)
+                    {
+                        var setKey = item.Key;
+                        Console.WriteLine($"----- #{itemCount} {setKey} ------");
+                        Console.WriteLine(item.Value);
+                        Console.WriteLine();
+                        itemCount++;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("--------------------");
+                Console.WriteLine("BASE MESSAGE");
+                Console.WriteLine(ex.Message);
+                // Console.WriteLine("INNER EXCEPTION");
+                // Console.WriteLine(ex.InnerException);
+                // Console.WriteLine("--------------------");
+                Console.WriteLine();
+            }
+            return sessionInfoDictionary;
+        }
 
 
         [HttpGet]
         [Route("/yahoohome")]
         public IActionResult ViewYahooHomePage()
         {
-            Start.ThisMethod();
+            var sessionInfoDictionary = CreateSessionInfoDictionary();
 
-            try
+            if(CheckSession() == 0)
             {
-                // _yahooAuthController.CheckYahooSession();
-                var authCodeCheck     = _contextAccessor.HttpContext.Session.GetString("authorizationcode");
-                var accessTokenCheck  = HttpContext.Session.GetString("accesstoken");
-                var refreshTokenCheck = HttpContext.Session.GetString("refreshtoken");
-                var yahooGuidCheck    = HttpContext.Session.GetString("yahooguid");
-
-                Dictionary<string, string> sessionInfoDictionary = new Dictionary<string, string>();
-                    sessionInfoDictionary.Add("authcode", authCodeCheck);
-                    sessionInfoDictionary.Add("accesstoken", accessTokenCheck);
-                    sessionInfoDictionary.Add("refreshtoken", refreshTokenCheck);
-                    sessionInfoDictionary.Add("yahooguid", yahooGuidCheck);
-
-                int itemCount = 1;
-                foreach(var item in sessionInfoDictionary)
-                {
-                    Console.WriteLine($"----- SESSION ITEM {itemCount} -------------------------------------------");
-                    Console.WriteLine(item.Key);
-                    Console.WriteLine(item.Value);
-                    Console.WriteLine();
-
-                    itemCount++;
-                }
-
-            }
-
-            catch (Exception ex)
-            {
-                Console.WriteLine("--------------------");
-                Console.WriteLine("BASE MESSAGE");
-                Console.WriteLine(ex.Message);
-                Console.WriteLine("INNER EXCEPTION");
-                Console.WriteLine(ex.InnerException);
-                Console.WriteLine("--------------------");
                 Console.WriteLine();
+                Console.WriteLine("NEW SESSION IS NEEDED");
+                ViewBag.SessionIdExists = " NO session exists";
+
+                // return RedirectToAction("setsessioninfo");
             }
+            else
+            {
+                Console.WriteLine("SESSION ALREADY IN PROGRESS");
+                ViewBag.AuthCodeBag     = sessionInfoDictionary["authcode"];
+                ViewBag.SessionIdExists = " YES session exists";
+                ViewBag.Now             = DateTime.Now;
+            }
+            return View("yahoohome");
+        }
 
 
+        [Route("setsessioninfo")]
+        public IActionResult SetSessionInfo()
+        {
+            Start.ThisMethod();
+            _yahooAuthController.GetYahooAccessTokenResponse();
 
             return View("yahoohome");
         }
@@ -102,8 +149,12 @@ namespace BaseballScraper.Controllers
         {
             Start.ThisMethod();
 
-            int teamNumberToGet = 1;
-            int weekNumber      = 18;
+            Extensions.Spotlight("Enter Team Number:");
+
+            string teamNumberToGetString = Console.ReadLine();
+            int    teamNumberToGet       = Int32.Parse(teamNumberToGetString);
+            // int teamNumberToGet = 3;
+            int weekNumber = 18;
 
             // for just teambase
             var uriTeamBase = new Uri($"https://fantasysports.yahooapis.com/fantasy/v2/team/378.l.26189.t.{teamNumberToGet}?");
@@ -136,15 +187,6 @@ namespace BaseballScraper.Controllers
         public List<Uri> CreateListOfUrisForAllTeams()
         {
             Start.ThisMethod();
-
-            HttpContext.Session.SetInt32("djb2", 2);
-            var djb = HttpContext.Session.GetInt32("djb2");
-            djb.Intro("djb2");
-
-            TempData["Id"] = 12;
-            Console.WriteLine(TempData["Id"]);
-
-            _yahooAuthController.CheckYahooSession();
 
             bool NeedToLoop = true;
 
@@ -179,36 +221,9 @@ namespace BaseballScraper.Controllers
         {
             Start.ThisMethod();
 
-            string initialAccessTokenCheck = _contextAccessor.HttpContext.Session.GetString("accesstoken");
-            initialAccessTokenCheck.Intro("initial check");
-
-            // returns Access Token, Token Type(i.e., bearer), Expires In (i.e., 3600), Refresh Token (unique), and XOAuth Yahoo Guid(unique)
-            // JObject accessTokenResponseJObject = _yahooAuthController.CreateYahooAccessTokenResponseJObject();
-
-            // call the GetYahooAccessTokenResponse method
-                // 1. web browser will launch and take user to ---> https://api.login.yahoo.com/oauth2/request_auth?...
-                // 2. click "Agree" in browser and a 7 digit code will appear; this code is the "&code=xyz" part of request_auth
-                // 3. terminal will be asking for this code; copy and paste from browser and hit enter
-                // 4. rest of the method runs
-            // AccessTokenResponse accessTokenResponse = GetYahooAccessTokenResponse(accessTokenResponseJObject);
-            // returns Access Token, Token Type(i.e., bearer), Expires In (i.e., 3600), Refresh Token (unique), and XOAuth Yahoo Guid(unique)
-            // AccessTokenResponse accessTokenResponse = _yahooAuthController.GetYahooAccessTokenResponse();
-            // AccessTokenResponse accessTokenResponse = _yahooAuthController.GetYahooAccessTokenResponse(accessTokenResponseJObject);
-
+            // pull access token from session
             // access token is a long mix of letters and numbers;
-            // string accessToken      = accessTokenResponse.AccessToken;
             string accessToken = _contextAccessor.HttpContext.Session.GetString("accesstoken");
-
-            // if(accessToken == accessTokenCheck)
-            // {
-            //     Console.WriteLine("this is GOOOD!!!!!!!");
-            // }
-
-            // else {
-            //     Console.WriteLine("this is BAD");
-            //     accessToken.Intro("access token");
-            //     accessTokenCheck.Intro("access token check");
-            // }
 
             // pull in uri from 'SetUriToQuery' method
             var uri = SetUriToQuery();
@@ -356,43 +371,67 @@ namespace BaseballScraper.Controllers
 
             JObject responseToJson = CreateTeamBaseJObject();
 
-            YahooTeamBase teamBase = new YahooTeamBase();
+            YahooTeamBase tB = new YahooTeamBase();
 
             Extensions.Spotlight("trying to build teambase");
-            teamBase.Key                   = responseToJson["fantasy_content"]["team"]["team_key"].ToString();
-            teamBase.TeamName              = responseToJson["fantasy_content"]["team"]["name"].ToString();
-            teamBase.TeamId                = (int?)responseToJson["fantasy_content"]["team"]["team_id"];
-            teamBase.IsOwnedByCurrentLogin = (int?)responseToJson["fantasy_content"]["team"]["is_owned_by_current_login"];
-            teamBase.Url                   = responseToJson["fantasy_content"]["team"]["url"].ToString();
-            teamBase.WaiverPriority        = (int?)responseToJson["fantasy_content"]["team"]["waiver_priority"];
-            teamBase.NumberOfMoves         = (int?)responseToJson["fantasy_content"]["team"]["number_of_moves"];
-            teamBase.NumberOfTrades        = (int?)responseToJson["fantasy_content"]["team"]["number_of_trades"];
-            teamBase.LeagueScoringType     = responseToJson["fantasy_content"]["team"]["league_scoring_type"].ToString();
-            teamBase.HasDraftGrade         = responseToJson["fantasy_content"]["team"]["has_draft_grade"].ToString();
+            tB.Key                   = responseToJson["fantasy_content"]["team"]["team_key"].ToString();
+            tB.TeamName              = responseToJson["fantasy_content"]["team"]["name"].ToString();
+            tB.TeamId                = (int?)responseToJson["fantasy_content"]["team"]["team_id"];
+            tB.IsOwnedByCurrentLogin = (int?)responseToJson["fantasy_content"]["team"]["is_owned_by_current_login"];
+            tB.Url                   = responseToJson["fantasy_content"]["team"]["url"].ToString();
+            tB.WaiverPriority        = (int?)responseToJson["fantasy_content"]["team"]["waiver_priority"];
+            tB.NumberOfMoves         = (int?)responseToJson["fantasy_content"]["team"]["number_of_moves"];
+            tB.NumberOfTrades        = (int?)responseToJson["fantasy_content"]["team"]["number_of_trades"];
+            tB.LeagueScoringType     = responseToJson["fantasy_content"]["team"]["league_scoring_type"].ToString();
+            tB.HasDraftGrade         = responseToJson["fantasy_content"]["team"]["has_draft_grade"].ToString();
 
             // team logo
-            teamBase.TeamLogo.Size = responseToJson["fantasy_content"]["team"]["team_logos"]["team_logo"]["size"].ToString();
-            teamBase.TeamLogo.Url  = responseToJson["fantasy_content"]["team"]["team_logos"]["team_logo"]["url"].ToString();
+            tB.TeamLogo.Size = responseToJson["fantasy_content"]["team"]["team_logos"]["team_logo"]["size"].ToString();
+            tB.TeamLogo.Url  = responseToJson["fantasy_content"]["team"]["team_logos"]["team_logo"]["url"].ToString();
 
             // roster adds
-            teamBase.RosterAdds.CoverageType  = responseToJson["fantasy_content"]["team"]["roster_adds"]["coverage_type"].ToString();
-            teamBase.RosterAdds.CoverageValue = responseToJson["fantasy_content"]["team"]["roster_adds"]["coverage_value"].ToString();
-            teamBase.RosterAdds.Value         = responseToJson["fantasy_content"]["team"]["roster_adds"]["value"].ToString();
+            tB.RosterAdds.CoverageType  = responseToJson["fantasy_content"]["team"]["roster_adds"]["coverage_type"].ToString();
+            tB.RosterAdds.CoverageValue = responseToJson["fantasy_content"]["team"]["roster_adds"]["coverage_value"].ToString();
+            tB.RosterAdds.Value         = responseToJson["fantasy_content"]["team"]["roster_adds"]["value"].ToString();
 
             // managers
-            teamBase.TeamManager.ManagerId      = responseToJson["fantasy_content"]["team"]["managers"]["manager"]["manager_id"].ToString();
-            teamBase.TeamManager.NickName       = responseToJson["fantasy_content"]["team"]["managers"]["manager"]["nickname"].ToString();
-            teamBase.TeamManager.Guid           = responseToJson["fantasy_content"]["team"]["managers"]["manager"]["guid"].ToString();
-            teamBase.TeamManager.IsCommissioner = (int?)responseToJson["fantasy_content"]["team"]["managers"]["manager"]["is_commissioner"];
-            teamBase.TeamManager.IsCurrentLogin = (int?)responseToJson["fantasy_content"]["team"]["managers"]["manager"]["is_current_login"];
-            teamBase.TeamManager.Email          = responseToJson["fantasy_content"]["team"]["managers"]["manager"]["email"].ToString();
-            teamBase.TeamManager.ImageUrl       = responseToJson["fantasy_content"]["team"]["managers"]["manager"]["image_url"].ToString();
+            tB.TeamManager.ManagerId      = responseToJson["fantasy_content"]["team"]["managers"]["manager"]["manager_id"].ToString();
+            tB.TeamManager.NickName       = responseToJson["fantasy_content"]["team"]["managers"]["manager"]["nickname"].ToString();
+            tB.TeamManager.Guid           = responseToJson["fantasy_content"]["team"]["managers"]["manager"]["guid"].ToString();
+            tB.TeamManager.IsCommissioner = (int?)responseToJson["fantasy_content"]["team"]["managers"]["manager"]["is_commissioner"];
+            tB.TeamManager.IsCurrentLogin = (int?)responseToJson["fantasy_content"]["team"]["managers"]["manager"]["is_current_login"];
 
-            teamBase.Dig();
+            try
+            {
+                tB.TeamManager.Email = responseToJson["fantasy_content"]["team"]["managers"]["manager"]["email"].ToString();
+            }
+            catch (System.Exception ex)
+            {
+                tB.TeamManager.Email = "hidden";
+                Console.WriteLine($"Email is hidden ---> {ex.Message}");
+            }
+
+
+            tB.TeamManager.ImageUrl = responseToJson["fantasy_content"]["team"]["managers"]["manager"]["image_url"].ToString();
+
+            tB.Dig();
+
+            SaveTeamBaseToDatabase(tB);
 
             Complete.ThisMethod();
 
-            return teamBase;
+            return tB;
+        }
+
+
+        public void SaveTeamBaseToDatabase(YahooTeamBase teambase)
+        {
+            Start.ThisMethod();
+
+            _context.Add(teambase);
+            _context.SaveChanges();
+
+            Complete.ThisMethod();
         }
 
 
