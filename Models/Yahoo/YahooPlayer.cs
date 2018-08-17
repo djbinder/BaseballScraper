@@ -6,67 +6,96 @@ using System.Xml.Serialization;
 namespace BaseballScraper.Models.Yahoo
 {
     [XmlRoot (ElementName = "player", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
-    public class YahooPlayer
+    public class YahooPlayerBase
     {
-        [XmlElement (ElementName = "yahoo_full_name", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
-        public string YahooFullName { get; set; }
-
-
-        [XmlElement (ElementName = "player_key", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
+        [XmlElement (ElementName = "player_key")]
         public string PlayerKey { get; set; }
 
 
-        [XmlElement (ElementName = "player_id", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
+        [XmlElement (ElementName = "player_id")]
         public string PlayerId { get; set; }
 
 
-        [XmlElement (ElementName = "image_url", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
+        [XmlElement (ElementName = "name")]
+        public PlayerName PlayerName { get; set; }
+
+
+        [XmlElement (ElementName = "editorial_player_key")]
+        public string EditorialPlayerKey { get; set; }
+
+
+        [XmlElement (ElementName = "editorial_team_key")]
+        public string EditorialTeamKey { get; set; }
+
+
+        [XmlElement (ElementName = "editorial_team_full_name")]
+        public string EditorialTeamFullName { get; set; }
+
+
+        [XmlElement (ElementName = "editorial_team_abbr")]
+        public string EditorialTeamAbbreviation { get; set; }
+
+
+        [XmlElement (ElementName = "uniform_number")]
+        public string UniformNumber { get; set; }
+
+
+        [XmlElement (ElementName = "display_position")]
+        public string DisplayPosition { get; set; }
+
+
+        [XmlElement(ElementName = "headshot", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
+        public Headshot Headshot { get; set; }
+
+
+        [XmlElement (ElementName = "image_url")]
         public string ImageUrl { get; set; }
 
 
-        [XmlElement (ElementName = "image_size", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
-        public string ImageSize { get; set; }
-
-
-        [XmlElement (ElementName = "is_undroppable", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
+        [XmlElement (ElementName = "is_undroppable")]
         public string IsUndroppable { get; set; }
 
 
-        [XmlElement (ElementName = "position_type", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
+        [XmlElement (ElementName = "position_type")]
         public string PositionType { get; set; }
 
 
-        [XmlElement (ElementName = "eligible_positions", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
-        public List<string> EligiblePositions { get; set; }
+        [XmlElement (ElementName = "eligible_positions")]
+        public string EligiblePositions { get; set; }
 
 
-        [XmlElement (ElementName = "status", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
-        public string Status { get; set; }
-
-
-        [XmlElement (ElementName = "status_full", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
-        public string StatusFull { get; set; }
-
-
-        [XmlElement (ElementName = "injury_note", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
-        public string InjuryNote { get; set; }
-
-        [XmlElement (ElementName = "has_player_notes", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
+        [XmlElement (ElementName = "has_player_notes")]
         public string HasPlayerNotes { get; set; }
 
+    }
 
-        [XmlElement (ElementName = "transaction_data")]
-        public TransactionData TransactionData { get; set; }
+    [XmlRoot (ElementName = "name")]
+    public class PlayerName
+    {
+        [XmlElement (ElementName = "full")]
+        public string FullName { get; set; }
+
+        [XmlElement (ElementName = "first")]
+        public string FirstName { get; set; }
+
+        [XmlElement (ElementName = "last")]
+        public string LastName { get; set; }
+
+        [XmlElement (ElementName = "ascii_first")]
+        public string AsciiFirstName { get; set; }
+
+        [XmlElement (ElementName = "ascii_last")]
+        public string AsciiLastName { get; set; }
+    }
 
 
-        [XmlElement (ElementName = "selected_position")]
-        public SelectedPosition SelectedPosition { get; set; }
+    [XmlRoot(ElementName = "headshot", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
+    public class Headshot
+    {
+        [XmlElement(ElementName = "url", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
+        public string Url { get; set; }
 
-
-        [XmlElement (ElementName = "player_stats", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
-        public YahooStats PlayerStats { get; set; }
-
-
-
+        [XmlElement(ElementName = "size", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
+        public string Size { get; set; }
     }
 }

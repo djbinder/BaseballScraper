@@ -1,9 +1,10 @@
+// DJB WORKING ON
+
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
 namespace BaseballScraper.Models.Yahoo
 {
-
     [XmlRoot (ElementName = "game_week", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
     public class YahooMatchup
     {
@@ -12,22 +13,117 @@ namespace BaseballScraper.Models.Yahoo
 
 
         [XmlElement (ElementName = "start", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
-        public string Start { get; set; }
+        public string WeekStart { get; set; }
 
 
         [XmlElement (ElementName = "end", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
-        public string End { get; set; }
+        public string WeekEnd { get; set; }
 
 
         [XmlElement (ElementName = "manager", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
-        public List<YahooManager> Managers { get; set; }
+        public List<YahooManager> MatchupManagers { get; set; }
 
 
         [XmlElement (ElementName = "matchup_winner", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
-        public YahooManager WinningManager { get; set; }
+        public YahooManager MatchupWinningManager { get; set; }
 
 
         [XmlElement (ElementName = "matchup_loser", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
-        public YahooManager LosingManager { get; set; }
+
+        public YahooManager MatchupLosingManager { get; set; }
     }
+
+    [XmlRoot (ElementName = "matchups")]
+    public class YahooMatchups
+    {
+        [XmlAttribute (AttributeName = "count")]
+        public int Count { get; set; }
+
+        [XmlElement (ElementName = "matchup")]
+        public List<YahooMatchup> MatchupsList { get; set; }
+
+        public YahooMatchups()
+        {
+            MatchupsList = new List<YahooMatchup>();
+        }
+    }
+
+
+    // All matchups: /fantasy/v2/team/{team_key}/matchups
+    public class YahooTeamMatchup: YahooTeamBase
+    {
+        [XmlElement (ElementName = "week")]
+        public string WeekNumber { get; set; }
+
+
+        [XmlElement (ElementName = "week_start")]
+        public string WeekStart { get; set; }
+
+
+        [XmlElement (ElementName = "week_end")]
+        public string WeekEnd { get; set; }
+
+
+        [XmlElement (ElementName = "status")]
+        public string Status { get; set; }
+
+
+        [XmlElement (ElementName = "is_playoffs")]
+        public string IsPlayoffs { get; set; }
+
+
+        [XmlElement (ElementName = "is_consolation")]
+        public string IsConsolation { get; set; }
+
+
+        [XmlElement (ElementName = "is_tied")]
+        public string IsTied { get; set; }
+
+
+        [XmlElement (ElementName = "winner_team_key")]
+        public string WinnerTeamKey { get; set; }
+
+
+        [XmlElement (ElementName = "stat_winner")]
+        public List<YahooMatchupStatWinner> YahooMatchupStatWinner { get; set; }
+
+
+        [XmlElement (ElementName = "stat")]
+        public List<YahooTeamStats> YahooTeamStats { get; set; }
+        public YahooTeamMatchup()
+        {
+            YahooMatchupStatWinner = new List<YahooMatchupStatWinner>();
+            YahooTeamStats         = new List<YahooTeamStats>();
+        }
+    }
+
+
+    [XmlRoot (ElementName = "stat_winner")]
+    public class YahooMatchupStatWinner
+    {
+        [XmlElement (ElementName = "stat_id")]
+        public string StatId { get; set; }
+
+
+        [XmlElement (ElementName = "winner_team_key")]
+        public string WinnerTeamKey { get; set; }
+    }
+
+
+    [XmlRoot (ElementName = "outcome_totals")]
+    public class YahooMatchupOutcomeTotals
+    {
+        [XmlElement (ElementName = "wins")]
+        public string Wins { get; set; }
+
+        [XmlElement (ElementName = "losses")]
+        public string Losses { get; set; }
+
+        [XmlElement (ElementName = "ties")]
+        public string Ties { get; set; }
+
+        [XmlElement (ElementName = "percentage")]
+        public string Percentage { get; set; }
+    }
+
 }
