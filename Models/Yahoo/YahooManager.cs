@@ -1,28 +1,33 @@
+// DJB WORKING ON
+
 using System.Xml.Serialization;
 
 namespace BaseballScraper.Models.Yahoo
 {
-    [XmlRoot (ElementName = "managers", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
     public class YahooManager
     {
+        public int TeamManagersId { get; set; }
 
+        [XmlElement (ElementName = "manager_id")]
         public string ManagerId { get; set; }
 
-        public string ManagerFullName { get; set; }
+        [XmlElement (ElementName = "nickname")]
+        public string NickName { get; set; }
 
-        public string ManagerFirstName { get; set; }
+        [XmlElement (ElementName = "guid")]
+        public string Guid { get; set; }
 
-        public string ManagerLastName { get; set; }
+        [XmlElement (ElementName = "is_commissioner")]
+        public int? IsCommissioner { get; set; }
 
-        public string ManagerEmail { get; set; }
+        [XmlElement (ElementName = "is_current_login")]
+        public int? IsCurrentLogin { get; set; }
 
-        public string Fullname
-        {
-            get { return string.Concat(ManagerFirstName, " ", ManagerLastName); }
-        }
+        [XmlElement (ElementName = "email")]
+        public string Email { get; set; }
+
+        [XmlElement (ElementName = "image_url")]
+        public string ImageUrl { get; set; }
+
     }
 }
-
-
-
-

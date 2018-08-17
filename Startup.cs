@@ -47,6 +47,7 @@ namespace BaseballScraper
                 builder.AddUserSecrets<TwitterConfiguration>();
                 builder.AddUserSecrets<AirtableConfiguration>();
                 builder.AddUserSecrets<YahooConfiguration>();
+                builder.AddUserSecrets<TheGameIsTheGameConfiguration>();
             }
 
             Configuration = builder.Build();
@@ -107,6 +108,16 @@ namespace BaseballScraper
                 Encoding.UTF8.GetBytes(Configuration["AirtableConfiguration:ApiKey"])
             );
 
+
+            services.Configure<TheGameIsTheGameConfiguration>(Configuration);
+            services.Configure<TheGameIsTheGameConfiguration>(config =>
+            {
+                config.LeagueKey = Configuration["TheGameIsTheGame:2018Season:LeagueKey"];
+            });
+
+            Console.WriteLine("THE GAME KEY");
+            Console.WriteLine(Configuration["TheGameIsTheGame:2018Season:LeagueKey"]);
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(options =>
                     {
@@ -135,6 +146,8 @@ namespace BaseballScraper
             //     options.Cookie.HttpOnly = true;
             // });
 
+            services.AddSingleton<ApiEndPoints>();
+
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddMvc ()
@@ -144,9 +157,6 @@ namespace BaseballScraper
             services.AddMvc().AddControllersAsServices();
             services.AddTransient<BaseballScraper.Controllers.YahooAuthController>();
             services.AddSession ();
-
-            Console.WriteLine("CHECK CON STRING");
-            Console.WriteLine(Configuration["DBInfo:ConnectionString"]);
 
             services.Configure<BaseballScraperContext>(Configuration);
             services.Configure<BaseballScraperContext>(config =>
