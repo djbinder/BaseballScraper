@@ -115,8 +115,6 @@ namespace BaseballScraper
                 config.LeagueKey = Configuration["TheGameIsTheGame:2018Season:LeagueKey"];
             });
 
-            Console.WriteLine("THE GAME KEY");
-            Console.WriteLine(Configuration["TheGameIsTheGame:2018Season:LeagueKey"]);
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(options =>
@@ -155,7 +153,7 @@ namespace BaseballScraper
                 .AddSessionStateTempDataProvider();
 
             services.AddMvc().AddControllersAsServices();
-            services.AddTransient<BaseballScraper.Controllers.YahooAuthController>();
+            services.AddTransient<BaseballScraper.Controllers.YahooControllers.YahooAuthController>();
             services.AddSession ();
 
             services.Configure<BaseballScraperContext>(Configuration);
@@ -165,6 +163,11 @@ namespace BaseballScraper
                 config.Name             = Configuration["DBInfo:Name"];
             });
             services.AddDbContext<BaseballScraperContext> (options => options.UseNpgsql (Configuration["DBInfo:ConnectionString"]));
+
+            // example of how to console config items
+                // Console.WriteLine("THE GAME KEY");
+                // Console.WriteLine(Configuration["TheGameIsTheGame:2018Season:LeagueKey"]);
+
             // Complete.ThisMethod();
         }
 
