@@ -22,8 +22,8 @@ namespace BaseballScraper
         {
             // Start.ThisMethod();
             Console.WriteLine();
-            Console.WriteLine("READY TO ROLL");
-            Console.WriteLine ($"Version: {Environment.Version}");
+            Console.WriteLine("***** ---> READY TO ROLL <--- *****");
+            // Console.WriteLine ($"Version: {Environment.Version}");
             Console.WriteLine();
 
             CreateWebHostBuilder(args).Build().Run();
@@ -31,7 +31,7 @@ namespace BaseballScraper
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) => 
             WebHost.CreateDefaultBuilder(args)
-                // .UseSetting(WebHostDefaults.SuppressStatusMessagesKey, "True")
+                .UseSetting(WebHostDefaults.SuppressStatusMessagesKey, "True")
                 .UseStartup<Startup>()
                 .ConfigureLogging(logging =>
                     logging.SetMinimumLevel(LogLevel.Warning)

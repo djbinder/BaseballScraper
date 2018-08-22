@@ -8,7 +8,7 @@ namespace BaseballScraper.Models.Yahoo
     [XmlRoot (ElementName = "roster", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
 
     // Roster for a particular week: /fantasy/v2/team/{team_key}/roster;week={week}
-    public class YahooTeamRoster: YahooTeamBase
+    public class YahooTeamRoster
     {
         [XmlElement (ElementName = "coverage_type", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
         public string RosterCoverageType { get ; set; }
@@ -35,11 +35,13 @@ namespace BaseballScraper.Models.Yahoo
     }
 
 
-    public class YahooTeamRosterPlayer: YahooPlayerBase
+    public class YahooTeamRosterPlayer
     {
 
         [XmlElement (ElementName = "selected_position")]
         public YahooPlayerSelectedPosition PlayersSelectedPosition { get; set; }
+        public PlayerName PlayerName { get; set; }
+        public Headshot Headshot { get; set; }
 
 
         [XmlElement (ElementName = "coverage_type")]

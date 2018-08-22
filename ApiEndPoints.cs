@@ -1,6 +1,8 @@
 using System;
 using BaseballScraper.Models.Configuration;
+using BaseballScraper.Models.Yahoo;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json.Linq;
 
 namespace BaseballScraper
 {
@@ -194,78 +196,237 @@ namespace BaseballScraper
                 };
             }
 
+            // team_key, team_id, name, is_owned_by_current_login, url, team_logos, waiver_priority, number_of_moves, number_of_trades, roster_adds, league_scoring_type, has_draft_grade, managers, team_stats, team_points, team_standings
+            internal string TeamItem(JObject obj, int teamNumber, string itemName)
+            {
+                var LeagueTeam    = obj["fantasy_content"]["league"]["standings"]["teams"]["team"][teamNumber];
+                var TeamLogos     = LeagueTeam["team_logos"];
+                var TeamLogo      = TeamLogos["team_logo"];
+                var RosterAdds    = LeagueTeam["roster_adds"];
+                var TeamStandings = obj["fantasy_content"]["league"]["standings"]["teams"]["team"][teamNumber]["team_standings"];
+                var TeamOutcomes  = TeamStandings["outcome_totals"];
+                var TeamPoints    = obj["fantasy_content"]["league"]["standings"]["teams"]["team"][teamNumber]["team_points"];
+                var Managers      = obj["fantasy_content"]["league"]["standings"]["teams"]["team"][teamNumber]["managers"];
+                var Manager       = obj["fantasy_content"]["league"]["standings"]["teams"]["team"][teamNumber]["managers"]["manager"];
+
+                // before being converted to strings, all return types is Newtonsoft.Json.Linq.JValue
+                switch (itemName)
+                {
+                    #region LeagueTeam
+                        // string teamKey = endPoints.LeagueTeamItem(leagueStandings, 0, "TeamKey");
+                        case "TeamKey": 
+                            return LeagueTeam["team_key"].ToString();
+
+                        case "TeamId": 
+                            return LeagueTeam["team_id"].ToString();
+
+                        case "TeamName": 
+                            return LeagueTeam["team_name"].ToString();
+
+                        case "IsOwnedByCurrentLogin": 
+                            return LeagueTeam["is_owned_by_current_login"].ToString();
+
+                        case "Url": 
+                            return LeagueTeam["url"].ToString();
+
+                        case "WaiverPriority": 
+                            return LeagueTeam["waiver_priority"].ToString();
+
+                        case "NumberOfMoves": 
+                            return LeagueTeam["number_of_moves"].ToString();
+
+                        case "NumberOfTrades": 
+                            return LeagueTeam["number_of_trades"].ToString();
+
+                        case "LeagueScoringType": 
+                            return LeagueTeam["league_scoring_type"].ToString();
+
+                        case "HasDraftGrade": 
+                            return LeagueTeam["has_draft_grade"].ToString();
+                    #endregion LeagueTeam
+
+                    #region RosterAdds
+                        case "RosterCoverageType": 
+                            return RosterAdds["coverage_type"].ToString();
+
+                        case "CoverageValue": 
+                            return RosterAdds["coverage_value"].ToString();
+
+                        case "Value": 
+                            return RosterAdds["value"].ToString();
+                    #endregion RosterAdds
+
+                    #region TeamStandings
+                        // string teamRank = endPoints.LeagueTeamItem(leagueStandings, 0, "Rank");
+                        case "Rank": 
+                            return TeamStandings["rank"].ToString();
+
+                        case "PlayoffSeed": 
+                            return TeamStandings["playoff_seed"].ToString();
+
+                        case "GamesBack": 
+                            return TeamStandings["games_back"].ToString();
+                    #endregion TeamStandings
+
+                    #region TeamLogos
+                        case "TeamLogos": 
+                            return TeamLogos["team_logo"].ToString();
+                    #endregion TeamLogos
+
+                    // 'team_logo' is nested under 'team_logos'
+                    #region TeamLogo
+                        case "TeamLogoSize": 
+                            return TeamLogo["size"].ToString();
+
+                        case "TeamLogoUrl": 
+                            return TeamLogo["url"].ToString();
+                    #endregion TeamLogo
+
+                    // 'outcome_totals' is nested under TeamStandings
+                    #region TeamOutcomes
+                        case "Wins": 
+                            return TeamOutcomes["wins"].ToString();
+
+                        case "Losses": 
+                            return TeamOutcomes["losses"].ToString();
+
+                        case "Ties": 
+                            return TeamOutcomes["ties"].ToString();
+
+                        case "WinningPercentage": 
+                            return TeamOutcomes["percentage"].ToString();
+                    #endregion TeamOutcomes
+
+                    #region TeamPoints
+                        case "PointsCoverageType": 
+                            return TeamPoints["coverage_type"].ToString();
+
+                        case "Season": 
+                            return TeamPoints["season"].ToString();
+
+                        case "Total": 
+                            return TeamPoints["total"].ToString();
+                    #endregion TeamPoints
+
+                    #region Manager
+                        case "Manager": 
+                            return Managers["manager"].ToString();
+                    #endregion Manager
+
+                    #region Manager
+                        case "ManagerId": 
+                            return Manager["manager_id"].ToString();
+
+                        case "Nickname": 
+                            return Manager["nickname"].ToString();
+
+                        case "Guid": 
+                            return Manager["guid"].ToString();
+
+                        case "IsCommissioner": 
+                            return Manager["is_commissioner"].ToString();
+
+                        case "IsCurrentLogin": 
+                            return Manager["is_current_login"].ToString();
+
+                        case "Email": 
+                            return Manager["email"].ToString();
+
+                        case "ImageUrl": 
+                            return Manager["image_url"].ToString();
+                    #endregion Manager
+                }
+
+                string test = "test";
+
+                return test;
+            }
+
         #endregion LEAGUE end points
 
         //https://developer.yahoo.com/fantasysports/guide/team-resource.html
         #region TEAM end points
-
             // var uriTeamBase = endPoints.TeamBaseEndPoint(leagueKey, teamId).EndPointUri;
             public EndPoint TeamBaseEndPoint (string leaguekey, int teamnumber)
             {
+                EndPointType = "team";
+
                 return new EndPoint
                 {
                     BaseUri      = baseUri,
-                    ResourceType = $"/team/{leaguekey}.t.{teamnumber}"
+                    ResourceType = $"/{EndPointType}/{leaguekey}.t.{teamnumber}"
                 };
             }
 
             // var uriTeamStatsSeason = endPoints.TeamSeasonStatsEndPoint(leagueKey, teamId).EndPointUri;
             public EndPoint TeamSeasonStatsEndPoint (string leaguekey, int teamnumber)
             {
+                EndPointType = "team";
+
                 return new EndPoint
                 {
                     BaseUri      = baseUri,
-                    ResourceType = $"/team/{leaguekey}.t.{teamnumber}/stats"
+                    ResourceType = $"/{EndPointType}/{leaguekey}.t.{teamnumber}/stats"
                 };
             }
 
             // var uriTeamStatsWeek = endPoints.TeamWeeksStatsEndPoint(leagueKey, teamId, weekNumber).EndPointUri;
             public EndPoint TeamWeeksStatsEndPoint (string leaguekey, int teamnumber, int weeknumber)
             {
+                EndPointType = "team";
+
                 return new EndPoint
                 {
                     BaseUri      = baseUri,
-                    ResourceType = $"/team/{leaguekey}.t.{teamnumber}/stats;type=week;week={weeknumber}"
+                    ResourceType = $"/{EndPointType}/{leaguekey}.t.{teamnumber}/stats;type=week;week={weeknumber}"
                 };
             }
 
             // var uriTeamStandings = endPoints.TeamStandingsEndPoint(leagueKey, teamId).EndPointUri;
             public EndPoint TeamStandingsEndPoint (string leaguekey, int teamnumber)
             {
+                EndPointType = "team";
+
                 return new EndPoint
                 {
                     BaseUri      = baseUri,
-                    ResourceType = $"/team/{leaguekey}.t.{teamnumber}/standings"
+                    ResourceType = $"/{EndPointType}/{leaguekey}.t.{teamnumber}/standings"
                 };
             }
 
             // var uriTeamRoster = endPoints.TeamRosterEndPoint(leagueKey, teamId, weekNumber).EndPointUri;
             public EndPoint TeamRosterEndPoint (string leaguekey, int teamnumber, int weeknumber)
             {
+                EndPointType = "team";
+
                 return new EndPoint
                 {
                     BaseUri      = baseUri,
-                    ResourceType = $"/team/{leaguekey}.t.{teamnumber}/roster;week={weeknumber}"
+                    ResourceType = $"/{EndPointType}/{leaguekey}.t.{teamnumber}/roster;week={weeknumber}"
                 };
             }
 
             // var uriTeamDraftResults = endPoints.TeamDraftResultsEndPoint(leagueKey, teamId).EndPointUri;
             public EndPoint TeamDraftResultsEndPoint (string leaguekey, int teamnumber)
             {
+                EndPointType = "team";
+
                 return new EndPoint
                 {
                     BaseUri      = baseUri,
-                    ResourceType = $"/team/{leaguekey}.t.{teamnumber}/draftresults"
+                    ResourceType = $"/{EndPointType}/{leaguekey}.t.{teamnumber}/draftresults"
                 };
             }
 
             // var uriTeamAllMatchups = endPoints.TeamAllMatchupsEndPoint(leagueKey, teamId).EndPointUri;
             public EndPoint TeamAllMatchupsEndPoint (string leaguekey, int teamnumber)
             {
+                EndPointType = "team";
+
                 return new EndPoint
                 {
                     BaseUri      = baseUri,
-                    ResourceType = $"/team/{leaguekey}.t.{teamnumber}/matchups"
+                    ResourceType = $"/{EndPointType}/{leaguekey}.t.{teamnumber}/matchups"
                 };
             }
 
