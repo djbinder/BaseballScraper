@@ -27,7 +27,7 @@ namespace BaseballScraper.Mappers
 
 
         // THIS WORKS
-        public static void CreateEmptyXLSX (string FileName, string SheetName, int StartStop)
+        public static void CreateEmptyXlsx (string FileName, string SheetName, int StartStop)
         {
             if (StartStop == 1)
             {
@@ -78,7 +78,7 @@ namespace BaseballScraper.Mappers
         // }
 
 
-        public static void ModifyFormatXLSX (Mapper mapper, string sheetName)
+        public static void ModifyFormatXlsx (Mapper mapper, string sheetName)
         {
             var dateFormat   = "yyyy.MM.dd hh.mm.ss";
             var doubleFormat = "0%";
@@ -92,7 +92,7 @@ namespace BaseballScraper.Mappers
 
         // THIS WORKS
         // add a new row to an existing sheet
-        public static void AddRowToExistingXLSX (FGHitter hitter, int StartStop)
+        public static void AddRowToExistingXlsx (FGHitter hitter, int StartStop)
         {
             if (StartStop == 1)
             {
@@ -112,7 +112,7 @@ namespace BaseballScraper.Mappers
 
         // THIS WORKS
         // https://github.com/dotnetcore/NPOI/blob/master/samples/Npoi.Samples.CreateNewSpreadsheet/Program.cs
-        public static void CreateEmptyXLS (string FileName, string SheetName, int StartStop)
+        public static void CreateEmptyXls (string FileName, string SheetName, int StartStop)
         {
             if (StartStop == 1)
             {
@@ -131,7 +131,7 @@ namespace BaseballScraper.Mappers
                     ISheet sheet1 = workbook.CreateSheet (SheetName);
                     sheet1.Intro ("sheet 1");
 
-                    MergeRowsInXLS (workbook, sheet1);
+                    MergeRowsInXls (workbook, sheet1);
 
 
 
@@ -155,7 +155,7 @@ namespace BaseballScraper.Mappers
 
 
         // THIS WORKS
-        public static Object MergeRowsInXLS (IWorkbook TargetWB, ISheet TargetS)
+        public static Object MergeRowsInXls (IWorkbook TargetWB, ISheet TargetS)
         {
             Start.ThisMethod ();
 
@@ -300,7 +300,7 @@ namespace BaseballScraper.Mappers
 
 
 
-//                 // FGHitter NewFGHitter = new FGHitter
+// FGHitter NewFGHitter = new FGHitter
 // {
 
 //     Name = "Javier Baez",

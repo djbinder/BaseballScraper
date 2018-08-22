@@ -1,12 +1,18 @@
 // DJB WORKING ON
+// DJB: this is correct
 
 using System.Xml.Serialization;
 
 namespace BaseballScraper.Models.Yahoo
 {
+    public class YahooManagers
+    {
+        public YahooManager Manager { get; set; }
+    }
+
     public class YahooManager
     {
-        public int TeamManagersId { get; set; }
+        public int YahooManagerRecordId { get; set; }
 
         [XmlElement (ElementName = "manager_id")]
         public string ManagerId { get; set; }
@@ -18,10 +24,10 @@ namespace BaseballScraper.Models.Yahoo
         public string Guid { get; set; }
 
         [XmlElement (ElementName = "is_commissioner")]
-        public int? IsCommissioner { get; set; }
+        public string IsCommissioner { get; set; }
 
         [XmlElement (ElementName = "is_current_login")]
-        public int? IsCurrentLogin { get; set; }
+        public string IsCurrentLogin { get; set; }
 
         [XmlElement (ElementName = "email")]
         public string Email { get; set; }

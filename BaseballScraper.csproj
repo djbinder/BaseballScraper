@@ -3,11 +3,13 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <UserSecretsId>79a3edd0-2092-40a2-a04d-dcb46d5ca9ed</UserSecretsId>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 
     <NoWarn>NU1701</NoWarn>
     <!-- <NoWarn>CS0414</NoWarn> -->
 
   </PropertyGroup>
+
 
   <ItemGroup>
     <Folder Include="wwwroot\" />
@@ -44,7 +46,7 @@
     <PackageReference Include="ObjectDumper" Version="1.*" />
     <PackageReference Include="ObjectDumper.NET" Version="1.0.3" />
     <PackageReference Include="ConsoleTables" Version="2.2.0" />
-    <PackageReference Include="log4net" Version="2.0.8" />
+    <!-- <PackageReference Include="log4net" Version="2.0.8" /> -->
 
 
     <!-- R stats -->

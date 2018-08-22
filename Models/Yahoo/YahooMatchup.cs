@@ -5,33 +5,33 @@ using System.Xml.Serialization;
 
 namespace BaseballScraper.Models.Yahoo
 {
-    [XmlRoot (ElementName = "game_week", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
-    public class YahooMatchup
-    {
-        [XmlElement (ElementName = "week", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
-        public string Week { get; set; }
+    // [XmlRoot (ElementName = "game_week", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
+    // public class YahooMatchup
+    // {
+    //     [XmlElement (ElementName = "week", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
+    //     public string Week { get; set; }
 
 
-        [XmlElement (ElementName = "start", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
-        public string WeekStart { get; set; }
+    //     [XmlElement (ElementName = "start", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
+    //     public string WeekStart { get; set; }
 
 
-        [XmlElement (ElementName = "end", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
-        public string WeekEnd { get; set; }
+    //     [XmlElement (ElementName = "end", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
+    //     public string WeekEnd { get; set; }
 
 
-        [XmlElement (ElementName = "manager", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
-        public List<YahooManager> MatchupManagers { get; set; }
+    //     [XmlElement (ElementName = "manager", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
+    //     public List<YahooManager> MatchupManagers { get; set; }
 
 
-        [XmlElement (ElementName = "matchup_winner", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
-        public YahooManager MatchupWinningManager { get; set; }
+    //     [XmlElement (ElementName = "matchup_winner", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
+    //     public YahooManager MatchupWinningManager { get; set; }
 
 
-        [XmlElement (ElementName = "matchup_loser", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
+    //     [XmlElement (ElementName = "matchup_loser", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
 
-        public YahooManager MatchupLosingManager { get; set; }
-    }
+    //     public YahooManager MatchupLosingManager { get; set; }
+    // }
 
     [XmlRoot (ElementName = "matchups")]
     public class YahooMatchups
@@ -50,7 +50,7 @@ namespace BaseballScraper.Models.Yahoo
 
 
     // All matchups: /fantasy/v2/team/{team_key}/matchups
-    public class YahooTeamMatchup: YahooTeamBase
+    public class YahooMatchup
     {
         [XmlElement (ElementName = "week")]
         public string WeekNumber { get; set; }
@@ -88,16 +88,27 @@ namespace BaseballScraper.Models.Yahoo
         public List<YahooMatchupStatWinner> YahooMatchupStatWinner { get; set; }
 
 
-        [XmlElement (ElementName = "stat")]
-        public List<YahooTeamStats> YahooTeamStats { get; set; }
-        public YahooTeamMatchup()
+        // [XmlElement (ElementName = "stat")]
+        // public List<YahooTeamStats> YahooTeamStats { get; set; }
+        public YahooMatchup()
         {
             YahooMatchupStatWinner = new List<YahooMatchupStatWinner>();
-            YahooTeamStats         = new List<YahooTeamStats>();
+            // YahooTeamStats         = new List<YahooTeamStats>();
+        }
+    }
+
+    public class YahooMatchupStatWinners
+    {
+        List<YahooMatchupStatWinner> StatWinner { get; set; }
+
+        public YahooMatchupStatWinners ()
+        {
+            StatWinner = new List<YahooMatchupStatWinner>();
         }
     }
 
 
+    // this is correct
     [XmlRoot (ElementName = "stat_winner")]
     public class YahooMatchupStatWinner
     {
@@ -107,23 +118,13 @@ namespace BaseballScraper.Models.Yahoo
 
         [XmlElement (ElementName = "winner_team_key")]
         public string WinnerTeamKey { get; set; }
+
+
+        [XmlElement (ElementName = "is_tied")]
+        public string IsTied { get; set; }
     }
 
 
-    [XmlRoot (ElementName = "outcome_totals")]
-    public class YahooMatchupOutcomeTotals
-    {
-        [XmlElement (ElementName = "wins")]
-        public string Wins { get; set; }
 
-        [XmlElement (ElementName = "losses")]
-        public string Losses { get; set; }
-
-        [XmlElement (ElementName = "ties")]
-        public string Ties { get; set; }
-
-        [XmlElement (ElementName = "percentage")]
-        public string Percentage { get; set; }
-    }
 
 }
