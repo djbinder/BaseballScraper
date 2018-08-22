@@ -14,7 +14,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ObjectPrinter;
 
-namespace BaseballScraper.Controllers
+namespace BaseballScraper.Controllers.YahooControllers
 {
     #pragma warning disable CS0414, CS0219
     public class YahooAuthController: Controller
@@ -25,6 +25,7 @@ namespace BaseballScraper.Controllers
         private readonly TwitterConfiguration _twitterConfig;
         private readonly YahooConfiguration _yahooConfig;
         private readonly IHttpContextAccessor _contextAccessor;
+        private readonly YahooHomeController _yahooHomeController;
 
 
         public YahooAuthController(IOptions<AirtableConfiguration> airtableConfig, IOptions<TwitterConfiguration> twitterConfig, IOptions<YahooConfiguration> yahooConfig, IHttpContextAccessor contextAccessor)
@@ -33,6 +34,7 @@ namespace BaseballScraper.Controllers
             _twitterConfig   = twitterConfig.Value;
             _yahooConfig     = yahooConfig.Value;
             _contextAccessor = contextAccessor;
+            // _yahooHomeController = yahooHomeController;
         }
 
 
@@ -414,6 +416,71 @@ namespace BaseballScraper.Controllers
             public RequestFailedException(string message, HttpResponseMessage response): base(message) { Response = response; }
 
             public RequestFailedException(string message, Exception innerException): base(message, innerException) { }
+        }
+
+        public int CheckSession()
+        {
+            int? sessionId = HttpContext.Session.GetInt32("sessionid");
+
+            if(sessionId == null)
+            {
+                return 0;
+            }
+            return (int)sessionId;
+        }
+
+        public Dictionary<string, string> CreateSessionInfoDictionary()
+        {
+            List       <string> messagesList                 = new List<string>();
+            Dictionary<string, string> sessionInfoDictionary = new Dictionary<string, string>();
+
+            try
+            {
+                if(CheckSession() == 0)
+                {
+                    // Console.WriteLine("dictionary created; but nothing to add to it");
+                    string consoleMessage = "dictionary created; but nothing to add to it";
+                    messagesList.Add(consoleMessage);
+                }
+
+                var authCodeCheck     = _contextAccessor.HttpContext.Session.GetString("authorizationcode");
+                var accessTokenCheck  = HttpContext.Session.GetString("accesstoken");
+                var refreshTokenCheck = HttpContext.Session.GetString("refreshtoken");
+                var yahooGuidCheck    = HttpContext.Session.GetString("yahooguid");
+                var sessionIdCheck    = HttpContext.Session.GetInt32("sessionid").ToString();
+
+                sessionInfoDictionary.Add("authcode", authCodeCheck);
+                sessionInfoDictionary.Add("accesstoken", accessTokenCheck);
+                sessionInfoDictionary.Add("refreshtoken", refreshTokenCheck);
+                sessionInfoDictionary.Add("yahooguid", yahooGuidCheck);
+                sessionInfoDictionary.Add("sessionid", sessionIdCheck);
+
+                bool printDictionaryItems = false;
+
+                if(printDictionaryItems == true)
+                {
+                    int itemCount = 1;
+                    foreach(var item in sessionInfoDictionary)
+                    {
+                        var setKey = item.Key;
+                        Console.WriteLine($"----- #{itemCount} {setKey} ------");
+                        Console.WriteLine(item.Value);
+                        Console.WriteLine();
+                        itemCount++;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("--------------------");
+                Console.WriteLine("BASE MESSAGE");
+                Console.WriteLine(ex.Message);
+                // Console.WriteLine("INNER EXCEPTION");
+                // Console.WriteLine(ex.InnerException);
+                // Console.WriteLine("--------------------");
+                Console.WriteLine();
+            }
+            return sessionInfoDictionary;
         }
 
 

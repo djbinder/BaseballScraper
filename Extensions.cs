@@ -107,6 +107,12 @@ public static class Extensions
         return;
     }
 
+    public static void TypeAndIntro(Object o, string x)
+    {
+        o.Intro(x);
+        o.GetType().Intro($"TYPE for {x}");
+    }
+
 
     // https://msdn.microsoft.com/en-us/library/system.io.path.getfilename(v=vs.110).aspx
     public static void ThisMethod(this string String)
@@ -143,11 +149,9 @@ public static class Extensions
 
     public static void PrintJObjectItems(JObject JObjectToPrint)
     {
-        Start.ThisMethod();
+        // Start.ThisMethod();
 
         var responseToJson = JObjectToPrint;
-
-        Extensions.Spotlight("access token response");
 
         foreach(var jsonItem in responseToJson)
         {
@@ -158,7 +162,7 @@ public static class Extensions
             Console.WriteLine();
         }
 
-        Complete.ThisMethod();
+        // Complete.ThisMethod();
     }
 
 
