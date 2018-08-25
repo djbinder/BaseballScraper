@@ -31,7 +31,7 @@ namespace BaseballScraper
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) => 
             WebHost.CreateDefaultBuilder(args)
-                .UseSetting(WebHostDefaults.SuppressStatusMessagesKey, "True")
+                // .UseSetting(WebHostDefaults.SuppressStatusMessagesKey, "True")
                 .UseStartup<Startup>()
                 .ConfigureLogging(logging =>
                     logging.SetMinimumLevel(LogLevel.Warning)
