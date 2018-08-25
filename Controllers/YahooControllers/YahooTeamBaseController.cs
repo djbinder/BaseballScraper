@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using BaseballScraper.Models.Configuration;
+using BaseballScraper.EndPoints;
 using BaseballScraper.Models.Yahoo;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -13,10 +14,9 @@ namespace BaseballScraper.Controllers.YahooControllers
     #pragma warning disable CS0414, CS0219
     public class YahooTeamBaseController
     {
-        private static String Start    = "STARTED";
-        private static String Complete = "COMPLETED";
+        private Constants _c = new Constants();
         private readonly TheGameIsTheGameConfiguration _theGameConfig;
-        private static ApiEndPoints endPoints = new ApiEndPoints();
+        private static YahooApiEndPoints endPoints = new YahooApiEndPoints();
         private static YahooHomeController _yahooHomeController;
 
         public YahooTeamBaseController(IOptions<TheGameIsTheGameConfiguration> theGameConfig, YahooHomeController yahooHomeController)
@@ -27,17 +27,18 @@ namespace BaseballScraper.Controllers.YahooControllers
 
 
         /// <summary> Create instance of yahoo team model; save it to the database</summary>
-        /// <returns>YahooTeamBase</returns>
+        /// <returns> new YahooTeamBase </returns>
         [HttpGet]
         [Route("/yahoo/teambase/create")]
         public YahooTeamBase CreateYahooTeamBaseModel ()
         {
-            Start.ThisMethod();
+            _c.Start.ThisMethod();
 
             YahooTeamBase tB = new YahooTeamBase();
 
             int countOfTeamsInLeague = 10;
 
+            // for each team in the league, dig through their team json, find the required items to create the new YahooTeamBase and set those items
             for(var teamId = 1; teamId <= countOfTeamsInLeague; teamId++)
             {
                 Console.WriteLine($"creating team base for team {teamId}");
@@ -155,16 +156,17 @@ namespace BaseballScraper.Controllers.YahooControllers
             }
             // SaveObjectToDatabase(tB);
 
-            Complete.ThisMethod();
+            _c.Complete.ThisMethod();
 
             return tB;
         }
 
 
+        // optional; a different way to set a YahooTeamBase
         [Route("/yahoo/teambase/hashtable")]
         public Hashtable CreateYahooTeamBaseHashTable ()
         {
-            Start.ThisMethod();
+            _c.Start.ThisMethod();
 
             int teamId      = 1;
             var uriTeamBase = endPoints.TeamBaseEndPoint(_theGameConfig.LeagueKey, teamId).EndPointUri;
@@ -218,7 +220,7 @@ namespace BaseballScraper.Controllers.YahooControllers
                 _enumeratorCount++;
             }
 
-            Complete.ThisMethod();
+            _c.Complete.ThisMethod();
            return teamHashTable;
         }
     }

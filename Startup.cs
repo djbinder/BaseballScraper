@@ -3,6 +3,7 @@ using System.Net;
 using System.Text;
 using System.Text.Encodings.Web;
 using BaseballScraper.Models.Configuration;
+using BaseballScraper.EndPoints;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -144,7 +145,7 @@ namespace BaseballScraper
             //     options.Cookie.HttpOnly = true;
             // });
 
-            services.AddSingleton<ApiEndPoints>();
+            services.AddSingleton<YahooApiEndPoints>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 

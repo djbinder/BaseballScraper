@@ -1,11 +1,11 @@
-// // SFFB SOURCE --> https://www.smartfantasybaseball.com/tools/
+﻿// // SFFB SOURCE --> https://www.smartfantasybaseball.com/tools/
 // other source http://crunchtimebaseball.com/baseball_map.html
 
 using System;
 
 namespace BaseballScraper.Models
 {
-    public abstract class Player
+    public abstract class PlayerBase
     {
         public int? DJBid { get; set; }
 
