@@ -16,20 +16,6 @@ namespace BaseballScraper.Controllers
     [ApiController]
     public class ValuesController: ControllerBase
     {
-        private static String Start    = "STARTED";
-        private static String Complete = "COMPLETED";
-
-
-        // THIS WORKS
-        // go to this link:
-            // https://127.0.0.1:5001/api/Values
-        // [HttpGet]
-        // public string[] Get ()
-        // {
-
-        // }
-
-
         // GET api/values/5
         [HttpGet("{id}")]
         public ActionResult<string> Get(int id)

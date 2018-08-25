@@ -1,5 +1,6 @@
 using System;
 using BaseballScraper.Models.Configuration;
+using BaseballScraper.EndPoints;
 using BaseballScraper.Models.Yahoo;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -10,10 +11,9 @@ namespace BaseballScraper.Controllers.YahooControllers
     #pragma warning disable CS0414, CS0219
     public class YahooTeamPointsController: Controller
     {
-        private static String Start    = "STARTED";
-        private static String Complete = "COMPLETED";
+        private Constants _c = new Constants();
         private readonly TheGameIsTheGameConfiguration _theGameConfig;
-        private static ApiEndPoints endPoints = new ApiEndPoints();
+        private static YahooApiEndPoints endPoints = new YahooApiEndPoints();
         private static YahooHomeController _yahooHomeController;
 
         public YahooTeamPointsController(IOptions<TheGameIsTheGameConfiguration> theGameConfig, YahooHomeController yahooController)
@@ -23,11 +23,11 @@ namespace BaseballScraper.Controllers.YahooControllers
         }
 
 
+        // TODO: need to confirm this works
         [Route("yahoo/teampoints/create")]
-        // need to confirm this works
         public YahooTeamPoints CreateYahooTeamPointsModel (JObject o, int teamId)
         {
-            Start.ThisMethod();
+            _c.Start.ThisMethod();
             YahooTeamPoints yTP = new YahooTeamPoints();
 
             var uriTeamBase = endPoints.TeamSeasonStatsEndPoint(_theGameConfig.LeagueKey, teamId).EndPointUri;

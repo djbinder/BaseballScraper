@@ -6,6 +6,7 @@ using Newtonsoft.Json;              // <--- 'JsonConvert' and 'Formatting.Indent
 using ConsoleTables;
 using System.Linq;
 using Newtonsoft.Json.Linq;
+using MarkdownLog;
 
 public static class Extensions
 {
@@ -76,8 +77,7 @@ public static class Extensions
             // change text color
             Console.ForegroundColor = ConsoleColor.Magenta;
 
-            // Console.WriteLine("***** {0} @ Line#: {1} *****", UpperMessage, lineNumber);
-            Console.WriteLine($"***** {FullMessage} @ Line#: {lineNumber} *****");
+            Console.WriteLine($"{FullMessage} @ Line#: {lineNumber}");
 
             Console.Write(writer.ToString());
 
@@ -97,9 +97,7 @@ public static class Extensions
         StackFrame frame      = new StackFrame(1, true);
         var        lineNumber = frame.GetFileLineNumber();
 
-        // Console.WriteLine("{0} [@ Line#: {1}] ---> {2} ", UpperString, lineNumber - 1, Object);
-
-        Console.WriteLine($"//  {UpperString} ---> {Object} ---> [@ Line#: {lineNumber - 1}]");
+        Console.WriteLine($"// {UpperString} ---> {Object} ---> [@ Line#: {lineNumber - 1}]");
 
         Console.ResetColor();
         Console.WriteLine();
@@ -166,77 +164,99 @@ public static class Extensions
     }
 
 
-    // public static void TableIt(params object[] Object)
-    // {
-    //     int countCheck = Object.Count();
+    public static void TableIt(params object[] Object)
+    {
+        int countCheck = Object.Count();
 
-    //     if(countCheck == 1)
-    //     {
-    //         var data = new[]
-    //         {
-    //             new {Num = 1, Name = Object[0], Type = Object[0].GetType()},
-    //         };
-    //         Console.WriteLine();
-    //         Console.Write(data.ToMarkdownTable());
-    //         Console.WriteLine();
-    //     }
-    //     if(countCheck == 2)
-    //     {
-    //         var data = new[]
-    //         {
-    //             new {Num = 1, Name = Object[0], Type = Object[0].GetType()},
-    //             new {Num = 2, Name = Object[1], Type = Object[1].GetType()},
-    //         };
-    //         Console.WriteLine();
-    //         Console.Write(data.ToMarkdownTable());
-    //         Console.WriteLine();
-    //     }
-    //     if(countCheck == 3)
-    //     {
-    //         var data = new[]
-    //         {
-    //             new {Num = 1, Name = Object[0], Type = Object[0].GetType()},
-    //             new {Num = 2, Name = Object[1], Type = Object[1].GetType()},
-    //             new {Num = 3, Name = Object[2], Type = Object[2].GetType()}
-    //         };
-    //         Console.WriteLine();
-    //         Console.Write(data.ToMarkdownTable());
-    //         Console.WriteLine();
-    //     }
-    //     if(countCheck == 4)
-    //     {
-    //         var data = new[]
-    //         {
-    //             new {Num = 1, Name = Object[0], Type = Object[0].GetType()},
-    //             new {Num = 2, Name = Object[1], Type = Object[1].GetType()},
-    //             new {Num = 3, Name = Object[2], Type = Object[2].GetType()},
-    //             new {Num = 4, Name = Object[3], Type = Object[3].GetType()},
-    //         };
-    //         Console.WriteLine();
-    //         Console.Write(data.ToMarkdownTable());
-    //         Console.WriteLine();
-    //     }
-    //     if(countCheck == 5)
-    //     {
-    //         var data = new[]
-    //         {
-    //             new {Num = 1, Name = Object[0], Type = Object[0].GetType()},
-    //             new {Num = 2, Name = Object[1], Type = Object[1].GetType()},
-    //             new {Num = 3, Name = Object[2], Type = Object[2].GetType()},
-    //             new {Num = 4, Name = Object[3], Type = Object[3].GetType()},
-    //             new {Num = 5, Name = Object[4], Type = Object[4].GetType()},
-    //         };
-    //         Console.WriteLine();
-    //         Console.Write(data.ToMarkdownTable());
-    //         Console.WriteLine();
-    //     }
+        if(countCheck == 1)
+        {
+            var data = new[]
+            {
+                new {Num = 1, Name = Object[0], Type = Object[0].GetType()},
+            };
+            Console.WriteLine();
+            Console.Write(data.ToMarkdownTable());
+            Console.WriteLine();
+        }
+        if(countCheck == 2)
+        {
+            var data = new[]
+            {
+                new {Num = 1, Name = Object[0], Type = Object[0].GetType()},
+                new {Num = 2, Name = Object[1], Type = Object[1].GetType()},
+            };
+            Console.WriteLine();
+            Console.Write(data.ToMarkdownTable());
+            Console.WriteLine();
+        }
+        if(countCheck == 3)
+        {
+            var data = new[]
+            {
+                new {Num = 1, Name = Object[0], Type = Object[0].GetType()},
+                new {Num = 2, Name = Object[1], Type = Object[1].GetType()},
+                new {Num = 3, Name = Object[2], Type = Object[2].GetType()}
+            };
+            Console.WriteLine();
+            Console.Write(data.ToMarkdownTable());
+            Console.WriteLine();
+        }
+        if(countCheck == 4)
+        {
+            var data = new[]
+            {
+                new {Num = 1, Name = Object[0], Type = Object[0].GetType()},
+                new {Num = 2, Name = Object[1], Type = Object[1].GetType()},
+                new {Num = 3, Name = Object[2], Type = Object[2].GetType()},
+                new {Num = 4, Name = Object[3], Type = Object[3].GetType()},
+            };
+            Console.WriteLine();
+            Console.Write(data.ToMarkdownTable());
+            Console.WriteLine();
+        }
+        if(countCheck == 5)
+        {
+            var data = new[]
+            {
+                new {Num = 1, Name = Object[0], Type = Object[0].GetType()},
+                new {Num = 2, Name = Object[1], Type = Object[1].GetType()},
+                new {Num = 3, Name = Object[2], Type = Object[2].GetType()},
+                new {Num = 4, Name = Object[3], Type = Object[3].GetType()},
+                new {Num = 5, Name = Object[4], Type = Object[4].GetType()},
+            };
+            Console.WriteLine();
+            Console.Write(data.ToMarkdownTable());
+            Console.WriteLine();
+        }
 
-    //     if(countCheck > 6)
-    //     {
-    //         Console.WriteLine("!!!!! TOO MANY THINGS TO TABLE !!!!!");
-    //     }
-    //     return;
-    // }
+        if(countCheck > 6)
+        {
+            Console.WriteLine("!!!!! TOO MANY THINGS TO TABLE !!!!!");
+        }
+        return;
+    }
+
+    /// <summary> </summary>
+    /// <param name="itemsToList"> e.g., string[] planet = { "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune" };</param>
+    public static void CreateNumberedList(string[] itemsToList)
+    {
+        Console.Write(itemsToList.ToMarkdownNumberedList());
+    }
+    public static void CreateBulletedList(string[] itemsToList)
+    {
+        Console.Write(itemsToList.ToMarkdownBulletedList());
+    }
+
+
+    /// <summary> </summary>
+    /// <example>
+        /// Step 1: var text = "Lolita, light of my life, fire of my loins. My sin, my soul.";
+        /// Step 2: Extensions.CreateMarkdownParagraph(text); </example>
+    /// <param name="text"></param>
+    public static void CreateMarkdownParagraph(string text)
+    {
+        Console.Write(text.ToMarkdownParagraph());
+    }
 
 
     public static void TestTypes (Type type)
@@ -247,4 +267,13 @@ public static class Extensions
         Console.WriteLine("BaseType.Name: {0}", type.BaseType.Name);
         Console.WriteLine();
     }
+}
+
+
+
+
+public class Constants
+{
+    public string Start { get; set; }    = "START";
+    public string Complete { get; set; } = "COMPLETE";
 }

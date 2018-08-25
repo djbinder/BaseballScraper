@@ -4,16 +4,16 @@ using BaseballScraper.Models.Yahoo;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
+using BaseballScraper.EndPoints;
 
 namespace BaseballScraper.Controllers.YahooControllers
 {
     #pragma warning disable CS0414, CS0219
     public class YahooTeamStandingController: Controller
     {
-        private static String Start    = "STARTED";
-        private static String Complete = "COMPLETED";
+        private Constants _c = new Constants();
         private readonly TheGameIsTheGameConfiguration _theGameConfig;
-        private static ApiEndPoints endPoints = new ApiEndPoints();
+        private static YahooApiEndPoints endPoints = new YahooApiEndPoints();
         private static YahooHomeController _yahooHomeController;
 
         public YahooTeamStandingController(IOptions<TheGameIsTheGameConfiguration> theGameConfig, YahooHomeController yahooHomeController)
@@ -23,18 +23,18 @@ namespace BaseballScraper.Controllers.YahooControllers
         }
 
 
-
+        // TODO: most of this has been broken out into other methods; needs to be cleaned up
         // standings model returns: rank, playoff seed, games back, wins, losses, ties, winning percentage
         [HttpGet]
         [Route("yahoo/teamstanding/create")]
         public YahooTeamStanding CreateYahooTeamStandingModel ()
         {
-            Start.ThisMethod();
+            _c.Start.ThisMethod();
 
             // retrieve the league key from user secrets / yahoo league config
             string leagueKey = _theGameConfig.LeagueKey;
 
-            // create the uri that will be used to generate the appropriate json; in this case, it's the League Standings endpoint (view ApiEndPoints.cs)
+            // create the uri that will be used to generate the appropriate json; in this case, it's the League Standings endpoint (view YahooApiEndPoints.cs)
             var uriLeagueStandings = endPoints.LeagueStandingsEndPoint(leagueKey).EndPointUri;
 
             JObject           leagueStandings = _yahooHomeController.GenerateYahooResourceJObject(uriLeagueStandings);
