@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Net;
 using System.Text;
-using System.Text.Encodings.Web;
 using BaseballScraper.Models.Configuration;
 using BaseballScraper.EndPoints;
 using Microsoft.AspNetCore.Builder;
@@ -15,8 +13,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using BaseballScraper.Models;
+using BaseballScraper.Infrastructure;
 
 namespace BaseballScraper
 {
