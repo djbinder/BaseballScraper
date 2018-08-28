@@ -8,19 +8,17 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Debug;
+using BaseballScraper.Controllers.MlbDataApiControllers;
 
 namespace BaseballScraper
 {
     #pragma warning disable CS0414
     public class Program
     {
-        private static String Start    = "STARTED";
-        private static String Complete = "COMPLETED";
-
+        private readonly MlbDataApiHomeController _m;
 
         public static void Main (string[] args)
         {
-            // Start.ThisMethod();
             Console.WriteLine();
             Console.WriteLine("***** ---> READY TO ROLL <--- *****");
             // Console.WriteLine ($"Version: {Environment.Version}");
