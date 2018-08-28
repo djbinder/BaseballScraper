@@ -1,3 +1,6 @@
+using System;
+using Newtonsoft.Json.Linq;
+
 namespace BaseballScraper.EndPoints
 {
     public class MlbDataApiEndPoints
@@ -15,7 +18,7 @@ namespace BaseballScraper.EndPoints
             public string EndPointUri { get { return BaseUri + EndPoint; }}
         }
 
-        // http://lookup-service-prod.mlb.com/json/named.search_player_all.bam?sport_code='mlb'&active_sw='Y'&name_part='hernandez%25'
+        // https://appac.github.io/mlb-data-api-docs/#player-data-player-search-get
         public MlbDataEndPoint PlayerSearchEndPoint(string lastName)
         {
             // _c.Start.ThisMethod();
@@ -51,6 +54,42 @@ namespace BaseballScraper.EndPoints
             };
         }
 
+        // https://appac.github.io/mlb-data-api-docs/#player-data-player-info-get
+        public MlbDataEndPoint PlayerInfoEndPoint (int playerId)
+        {
+            endPointType = "player_info";
+            return new MlbDataEndPoint
+            {
+                BaseUri  = baseUri,
+                EndPoint = $"{endPointType}.bam?sport_code='mlb'&player_id='{playerId}'"
+            };
+        }
+
+        // https://appac.github.io/mlb-data-api-docs/#stats-data-projected-pitching-stats-get
+        public MlbDataEndPoint ProjectedPitchingStatsEndPoint(int year, int playerId)
+        {
+            endPointType = "proj_pecota_pitching";
+
+            return new MlbDataEndPoint
+            {
+                BaseUri  = baseUri,
+                EndPoint = $"{endPointType}.bam?season={year}&player_id={playerId}"
+            };
+        }
+
+        // https://appac.github.io/mlb-data-api-docs/#stats-data-projected-hitting-stats-get
+        public MlbDataEndPoint ProjectedHittingStatsEndPoint(int year, int playerId)
+        {
+            endPointType = "proj_pecota_batting";
+
+            return new MlbDataEndPoint
+            {
+                BaseUri  = baseUri,
+                EndPoint = $"{endPointType}.bam?season={year}&player_id={playerId}"
+            };
+        }
+
+        // https://appac.github.io/mlb-data-api-docs/#stats-data-season-pitching-stats-get
         /// <summary> Creates end point for a selected regular season </summary>
         /// <param name="results"> The number of pitchers to include in the results </param>
         /// <param name="year"> The year of the season you want to query </param>
@@ -68,6 +107,7 @@ namespace BaseballScraper.EndPoints
             };
         }
 
+        // https://appac.github.io/mlb-data-api-docs/#stats-data-season-pitching-stats-get
         /// <summary> Creates end point for a selected year and part of the season (e.g. Spring Training, Regular Season, etc. ) </summary>
         /// <remarks> This is a more specific version of the previous end point </remarks>
         /// <param name="results"> The number of pitchers to include in the results </param>
@@ -94,5 +134,9 @@ namespace BaseballScraper.EndPoints
                 EndPoint = $"http://lookup-service-prod.mlb.com/json/named.leader_pitching_repeater.bam?sport_code='mlb'&results={results}&game_type='{gameType}'&season='{year}'&sort_column='{sortColumn}'"
             };
         }
+
+
+
+
     }
 }

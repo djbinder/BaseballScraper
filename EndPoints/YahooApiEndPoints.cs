@@ -214,125 +214,125 @@ namespace BaseballScraper.EndPoints
                 {
                     #region LeagueTeam
                         // string teamKey = endPoints.LeagueTeamItem(leagueStandings, 0, "TeamKey");
-                        case "TeamKey":
+                        case "TeamKey": 
                             return LeagueTeam["team_key"].ToString();
 
-                        case "TeamId":
+                        case "TeamId": 
                             return LeagueTeam["team_id"].ToString();
 
-                        case "TeamName":
+                        case "TeamName": 
                             return LeagueTeam["team_name"].ToString();
 
-                        case "IsOwnedByCurrentLogin":
+                        case "IsOwnedByCurrentLogin": 
                             return LeagueTeam["is_owned_by_current_login"].ToString();
 
-                        case "Url":
+                        case "Url": 
                             return LeagueTeam["url"].ToString();
 
-                        case "WaiverPriority":
+                        case "WaiverPriority": 
                             return LeagueTeam["waiver_priority"].ToString();
 
-                        case "NumberOfMoves":
+                        case "NumberOfMoves": 
                             return LeagueTeam["number_of_moves"].ToString();
 
-                        case "NumberOfTrades":
+                        case "NumberOfTrades": 
                             return LeagueTeam["number_of_trades"].ToString();
 
-                        case "LeagueScoringType":
+                        case "LeagueScoringType": 
                             return LeagueTeam["league_scoring_type"].ToString();
 
-                        case "HasDraftGrade":
+                        case "HasDraftGrade": 
                             return LeagueTeam["has_draft_grade"].ToString();
                     #endregion LeagueTeam
 
                     #region RosterAdds
-                        case "RosterCoverageType":
+                        case "RosterCoverageType": 
                             return RosterAdds["coverage_type"].ToString();
 
-                        case "CoverageValue":
+                        case "CoverageValue": 
                             return RosterAdds["coverage_value"].ToString();
 
-                        case "Value":
+                        case "Value": 
                             return RosterAdds["value"].ToString();
                     #endregion RosterAdds
 
                     #region TeamStandings
                         // string teamRank = endPoints.LeagueTeamItem(leagueStandings, 0, "Rank");
-                        case "Rank":
+                        case "Rank": 
                             return TeamStandings["rank"].ToString();
 
-                        case "PlayoffSeed":
+                        case "PlayoffSeed": 
                             return TeamStandings["playoff_seed"].ToString();
 
-                        case "GamesBack":
+                        case "GamesBack": 
                             return TeamStandings["games_back"].ToString();
                     #endregion TeamStandings
 
                     #region TeamLogos
-                        case "TeamLogos":
+                        case "TeamLogos": 
                             return TeamLogos["team_logo"].ToString();
                     #endregion TeamLogos
 
                     // 'team_logo' is nested under 'team_logos'
                     #region TeamLogo
-                        case "TeamLogoSize":
+                        case "TeamLogoSize": 
                             return TeamLogo["size"].ToString();
 
-                        case "TeamLogoUrl":
+                        case "TeamLogoUrl": 
                             return TeamLogo["url"].ToString();
                     #endregion TeamLogo
 
                     // 'outcome_totals' is nested under TeamStandings
                     #region TeamOutcomes
-                        case "Wins":
+                        case "Wins": 
                             return TeamOutcomes["wins"].ToString();
 
-                        case "Losses":
+                        case "Losses": 
                             return TeamOutcomes["losses"].ToString();
 
-                        case "Ties":
+                        case "Ties": 
                             return TeamOutcomes["ties"].ToString();
 
-                        case "WinningPercentage":
+                        case "WinningPercentage": 
                             return TeamOutcomes["percentage"].ToString();
                     #endregion TeamOutcomes
 
                     #region TeamPoints
-                        case "PointsCoverageType":
+                        case "PointsCoverageType": 
                             return TeamPoints["coverage_type"].ToString();
 
-                        case "Season":
+                        case "Season": 
                             return TeamPoints["season"].ToString();
 
-                        case "Total":
+                        case "Total": 
                             return TeamPoints["total"].ToString();
                     #endregion TeamPoints
 
                     #region Manager
-                        case "Manager":
+                        case "Manager": 
                             return Managers["manager"].ToString();
                     #endregion Manager
 
                     #region Manager
-                        case "ManagerId":
+                        case "ManagerId": 
                             return Manager["manager_id"].ToString();
 
-                        case "Nickname":
+                        case "Nickname": 
                             return Manager["nickname"].ToString();
 
-                        case "Guid":
+                        case "Guid": 
                             return Manager["guid"].ToString();
 
-                        case "IsCommissioner":
+                        case "IsCommissioner": 
                             return Manager["is_commissioner"].ToString();
 
-                        case "IsCurrentLogin":
+                        case "IsCurrentLogin": 
                             return Manager["is_current_login"].ToString();
 
-                        case "Email":
+                        case "Email": 
                             return Manager["email"].ToString();
 
-                        case "ImageUrl":
+                        case "ImageUrl": 
                             return Manager["image_url"].ToString();
                     #endregion Manager
                 }
