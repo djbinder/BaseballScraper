@@ -11,13 +11,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Configuration.UserSecrets;
 
-namespace BaseballScraper
+namespace BaseballScraper.Controllers
 {
     #pragma warning disable CS0414
+    [Route("api/twitter")]
+    [ApiController]
     public class TwitterController: Controller
     {
-        private static String Start    = "STARTED";
-        private static String Complete = "COMPLETED";
+        private Constants _c = new Constants();
         private readonly TwitterConfiguration _twitterConfig;
         private readonly AirtableConfiguration _airtableConfig;
 
@@ -27,47 +28,6 @@ namespace BaseballScraper
             _airtableConfig = airtableConfig.Value;
             _twitterConfig  = twitterConfig.Value;
         }
-
-
-        // THIS DOES NOT WORK
-        [HttpGet]
-        [Route("/consumerkey")]
-        public string GetConsumerKey ()
-        {
-            Start.ThisMethod();
-            var twitterConsumerKey = _twitterConfig.ConsumerKey;
-            return twitterConsumerKey;
-            // return Content($"Consumer Key Is: {twitterConsumerKey}");
-        }
-
-        [HttpGet]
-        [Route("/consumersecret")]
-        public string GetConsumerSecret ()
-        {
-            Start.ThisMethod();
-            var twitterConsumerSecret = _twitterConfig.ConsumerSecret;
-            return twitterConsumerSecret;
-        }
-
-
-        [HttpGet]
-        [Route("/accesstoken")]
-        public string GetAccessToken ()
-        {
-            Start.ThisMethod();
-            var twitterAccessToken = _twitterConfig.AccessToken;
-            return twitterAccessToken;
-        }
-
-        [HttpGet]
-        [Route("/accesstokensecret")]
-        public string GetAccessTokenSecret ()
-        {
-            Start.ThisMethod();
-            var twitterAcccessTokenSecret = _twitterConfig.AccessTokenSecret;
-            return twitterAcccessTokenSecret;
-        }
-
 
         public SingleUserAuthorizer AuthorizeTwitterUser()
         {
@@ -79,47 +39,61 @@ namespace BaseballScraper
                     ConsumerSecret    = _twitterConfig.ConsumerSecret,
                     AccessToken       = _twitterConfig.AccessToken,
                     AccessTokenSecret = _twitterConfig.AccessTokenSecret
-
                 }
             };
             return auth;
         }
 
 
+        /// <summary>
+        // FILE NOTE: provides three options on how to initialize method
+            // OPTION 1 - search string defined within the method
+            // OPTION 2 - search string is passed to the method as a parameter (i.e., 'searchString')
+            // OPTION 3 - search string is passed as a parameter within the url
+        /// </summary>
+
+
+
+        // OPTION 1: search string defined within the method
+        /// <summary> Scrapes twitter to find most recent tweets that include 'searchString' that is defined within the method </summary>
+        /// <remarks> In Option 1, there are no parameters passed into the method. To change what you are searching for, modify the variable 'searchString' within the method itself </remarks>
+        /// <example> https://127.0.0.1:5001/api/twitter/playersearch </example>
+        /// <returns> A list of tweets </returns>
         [HttpGet]
-        [Route("/playersearch")]
-        public async Task TwitterStringSearch (String searchString)
+        [Route("playersearch")]
+        public async Task TwitterStringSearch ()
         {
-            Start.ThisMethod();
-            //  AUTHORIZED USER ---> LinqToTwitter.SingleUserAuthorizer
+            _c.Start.ThisMethod();
+            Extensions.Spotlight("executing twitter string search method option 1");
+            // AUTHORIZED USER ---> LinqToTwitter.SingleUserAuthorizer
             var authorizedUser = AuthorizeTwitterUser();
 
             var twitterConsumerKey = _twitterConfig.ConsumerKey;
             twitterConsumerKey.Intro("consumer key");
 
-            //  TWITTER CTX ---> LinqToTwitter.TwitterContext
+            // TWITTER CTX ---> LinqToTwitter.TwitterContext
             var twitterCtx = new TwitterContext(authorizedUser);
 
-            // test string
-            string searchThis = "Anthony Rizzo";
+            // string to search twitter for
+            string searchString = "Anthony Rizzo";
 
-            //  SEARCH RESPONSE ---> LinqToTwitter.Search
+            // SEARCH RESPONSE ---> LinqToTwitter.Search
             var searchResponse = 
                 await
                     (from search in twitterCtx.Search
                     where search.Type == SearchType.Search &&
-                    search.Query == searchThis
+                    search.Query == searchString
                     select search)
                     .SingleOrDefaultAsync();
 
             if (searchResponse != null && searchResponse.Statuses != null)
             {
-                // searchResponse.Statuses.ForEach(tweet =>
-                //         Console.WriteLine(
-                //         "User: {0}, Tweet: {1}",
-                //         tweet.User.ScreenNameResponse,
-                //         tweet.Text)
-                //         );
+                searchResponse.Statuses.ForEach(tweet =>
+                        Console.WriteLine(
+                        "User: {0}, Tweet: {1}",
+                        tweet.User.ScreenNameResponse,
+                        tweet.Text)
+                        );
 
                 int searchResponseCount = searchResponse.Statuses.Count();
                 searchResponseCount.Intro("search response count");
@@ -128,8 +102,182 @@ namespace BaseballScraper
 
                 for (var i = 0; i <=searchResponseCount - 1; i++)
                 {
-                    Extensions.Spotlight("start of new loop");
-                    i.Intro("loop number");
+                    // Extensions.Spotlight("start of new loop");
+                    // i.Intro("loop number");
+                    TwitterStatus newStatus = new TwitterStatus
+                    {
+                        ScreenName     = searchResponse.Statuses[i].ScreenName,
+                        StatusType     = (int)searchResponse.Statuses[i].Type,
+                        UserId         = (int)searchResponse.Statuses[i].UserID,
+                        CreatedAt      = searchResponse.Statuses[i].CreatedAt,
+                        StatusIdString = searchResponse.Statuses[i].StatusID,
+                        Text           = searchResponse.Statuses[i].Text
+
+                    };
+
+                    statuses.Add(newStatus);
+                }
+
+                // int xCount = 1;
+                // foreach(var item in statuses)
+                // {
+                //     Extensions.Spotlight("next status");
+                //     xCount.Intro("status #");
+                //     item.ScreenName.Intro("screen name");
+                //     item.StatusType.Intro("status type");
+                //     item.UserId.Intro("user id");
+                //     item.CreatedAt.Intro("created at");
+                //     item.StatusIdString.Intro("status id string");
+                //     item.Text.Intro("text");
+
+                //     xCount++;
+                // }
+            }
+        }
+
+        // OPTION 2: search string is passed to the method as a parameter (i.e., 'searchString')
+        /// <summary> Scrapes twitter to find most recent tweets that include 'searchString' parameter </summary>
+        /// <remarks> In Option 2, there is one parameter passed into the method. To change what you are searching for, modify the parameter when calling the method </remarks>
+        /// <param name="searchString"> The string that you would like to search twitter for </param>
+        /// <example> TwitterStringSearch("anthony rizzo"); </example>
+        /// <returns> A list of tweets </returns>
+        public async Task TwitterStringSearch (String searchString)
+        {
+            _c.Start.ThisMethod();
+            Extensions.Spotlight("executing twitter string search method option 2");
+            // AUTHORIZED USER ---> LinqToTwitter.SingleUserAuthorizer
+            var authorizedUser = AuthorizeTwitterUser();
+
+            var twitterConsumerKey = _twitterConfig.ConsumerKey;
+            twitterConsumerKey.Intro("consumer key");
+
+            // TWITTER CTX ---> LinqToTwitter.TwitterContext
+            var twitterCtx = new TwitterContext(authorizedUser);
+
+            // SEARCH RESPONSE ---> LinqToTwitter.Search
+            var searchResponse = 
+                await
+                    (from search in twitterCtx.Search
+                    where search.Type == SearchType.Search &&
+                    search.Query == searchString
+                    select search)
+                    .SingleOrDefaultAsync();
+
+            if (searchResponse != null && searchResponse.Statuses != null)
+            {
+                searchResponse.Statuses.ForEach(tweet =>
+                        Console.WriteLine(
+                        "User: {0}, Tweet: {1}",
+                        tweet.User.ScreenNameResponse,
+                        tweet.Text)
+                        );
+
+                int searchResponseCount = searchResponse.Statuses.Count();
+                searchResponseCount.Intro("search response count");
+
+                List<TwitterStatus> statuses = new List<TwitterStatus>();
+
+                for (var i = 0; i <=searchResponseCount - 1; i++)
+                {
+                    // Extensions.Spotlight("start of new loop");
+                    // i.Intro("loop number");
+                    TwitterStatus newStatus = new TwitterStatus
+                    {
+                        ScreenName     = searchResponse.Statuses[i].ScreenName,
+                        StatusType     = (int)searchResponse.Statuses[i].Type,
+                        UserId         = (int)searchResponse.Statuses[i].UserID,
+                        CreatedAt      = searchResponse.Statuses[i].CreatedAt,
+                        StatusIdString = searchResponse.Statuses[i].StatusID,
+                        Text           = searchResponse.Statuses[i].Text
+
+                    };
+
+                    statuses.Add(newStatus);
+                }
+
+                // int xCount = 1;
+                // foreach(var item in statuses)
+                // {
+                //     Extensions.Spotlight("next status");
+                //     xCount.Intro("status #");
+                //     item.ScreenName.Intro("screen name");
+                //     item.StatusType.Intro("status type");
+                //     item.UserId.Intro("user id");
+                //     item.CreatedAt.Intro("created at");
+                //     item.StatusIdString.Intro("status id string");
+                //     item.Text.Intro("text");
+
+                //     xCount++;
+                // }
+            }
+        }
+
+        // OPTION 2B: View for Option 2
+        /// <summary> This allows viewing / testing of Option 2; The method is called and a string is passed as a parameter </summary>
+        /// <returns> A view and a list of tweets </returns>
+        [HttpGet]
+        [Route("")]
+        public async Task<IActionResult> ViewTwitterStringSearchResults()
+        {
+            string searchString = "Anthony Rizzo";
+            await TwitterStringSearch(searchString);
+
+            string currently = $"SEARCHING FOR STRING: {searchString}";
+            return Content(currently);
+        }
+
+
+
+        // TODO: Figure out how to differentiate Option 2 and Option 3 so that 'blankString' is not needed to differentiate the two
+        // OPTION 3: search string is passed as a parameter within the url
+        /// <summary> Scrapes twitter to find most recent tweets that include 'searchString' parameter </summary>
+        /// <remarks> In Option 3, there are two parameters called into method. To change what you are searching for, modify the end of the url </remarks>
+        /// <param name="searchString"> The string that you would like to search twitter for </param>
+        /// <param name="blankString"> This parameter doesn't actually do anything; needed to make this method different than the previous; there is probably a better way to do this </param>
+        /// <example> https://127.0.0.1:5001/api/twitter/playersearch/anthony+rizzo </example>
+        /// <returns> A list of tweets </returns>
+        [HttpGet]
+        [Route("playersearch/{searchString}")]
+        public async Task TwitterStringSearch (string searchString, string blankString)
+        {
+            _c.Start.ThisMethod();
+            Extensions.Spotlight("executing twitter string search method option 3");
+            // AUTHORIZED USER ---> LinqToTwitter.SingleUserAuthorizer
+            var authorizedUser = AuthorizeTwitterUser();
+
+            var twitterConsumerKey = _twitterConfig.ConsumerKey;
+            twitterConsumerKey.Intro("consumer key");
+
+            // TWITTER CTX ---> LinqToTwitter.TwitterContext
+            var twitterCtx = new TwitterContext(authorizedUser);
+
+            // SEARCH RESPONSE ---> LinqToTwitter.Search
+            var searchResponse = 
+                await
+                    (from search in twitterCtx.Search
+                    where search.Type == SearchType.Search &&
+                    search.Query == searchString
+                    select search)
+                    .SingleOrDefaultAsync();
+
+            if (searchResponse != null && searchResponse.Statuses != null)
+            {
+                searchResponse.Statuses.ForEach(tweet =>
+                        Console.WriteLine(
+                        "User: {0}, Tweet: {1}",
+                        tweet.User.ScreenNameResponse,
+                        tweet.Text)
+                        );
+
+                int searchResponseCount = searchResponse.Statuses.Count();
+                searchResponseCount.Intro("search response count");
+
+                List<TwitterStatus> statuses = new List<TwitterStatus>();
+
+                for (var i = 0; i <=searchResponseCount - 1; i++)
+                {
+                    // Extensions.Spotlight("start of new loop");
+                    // i.Intro("loop number");
                     TwitterStatus newStatus = new TwitterStatus
                     {
                         ScreenName     = searchResponse.Statuses[i].ScreenName,
@@ -162,20 +310,3 @@ namespace BaseballScraper
         }
     }
 }
-
-
-
-
-
-// to get 'TwitterStringSearch' to work
-// try {
-//     linqToTwitter.TwitterStringSearch("Anthony Rizzo").Wait();
-// }
-
-// catch (Exception ex)
-// {
-//     Console.WriteLine(ex);
-//     Console.WriteLine("error");
-// }
-
-

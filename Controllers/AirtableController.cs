@@ -1,4 +1,5 @@
-// https://gist.githubusercontent.com/deanebarker/2b4520f290ece96be40436bc5c8915c5/raw/0cf6005f41ac27c46c9ce1f9bdbf8b5faeb62f8d/AirtableGetObjects.cs
+//REFERENCE:
+    // https://gist.githubusercontent.com/deanebarker/2b4520f290ece96be40436bc5c8915c5/raw/0cf6005f41ac27c46c9ce1f9bdbf8b5faeb62f8d/AirtableGetObjects.cs
 
 using System;
 using BaseballScraper.Models.Configuration;
@@ -9,49 +10,34 @@ using RestSharp;
 
 namespace BaseballScraper.Controllers
 {
-
+    [Route("api/airtable")]
+    [ApiController]
     public class AirtableController: Controller
     {
-        private static String Start    = "STARTED";
-        private static String Complete = "COMPLETED";
-
-        private readonly TwitterConfiguration _twitterConfig;
+        private Constants _c = new Constants();
         private readonly AirtableConfiguration _airtableConfig;
-        private readonly YahooConfiguration _yahooConfig;
 
-
-        public AirtableController(IOptions<AirtableConfiguration> airtableConfig, IOptions<TwitterConfiguration> twitterConfig, IOptions<YahooConfiguration> yahooConfig)
+        public AirtableController(IOptions<AirtableConfiguration> airtableConfig)
         {
             _airtableConfig = airtableConfig.Value;
-            _twitterConfig  = twitterConfig.Value;
-            _yahooConfig    = yahooConfig.Value;
         }
 
 
-
-        // [Authorize]
+        /// <summary> Retrieves managers listed in league manager database </summary>
+        /// <example> https://127.0.0.1:5001/api/airtable/managers </example>
+        /// <returns> ManagerFullName, ManagerFirstName, ManagerListName, TeamIds, etc.</returns>
         [HttpGet]
-        [Route("/airtablekey")]
-        public string GetAirtableKey()
-        {
-            Start.ThisMethod();
-            var airtableApiKey = _airtableConfig.ApiKey;
-
-            return airtableApiKey;
-        }
-
-
-
-        // THIS WORKS
-        [HttpGet]
-        [Route("/managers")]
+        [Route("managers")]
         public JObject GetAirtableManagers ()
         {
-            Start.ThisMethod();
-            string airTableKey = GetAirtableKey();
-            airTableKey.Intro("air table key");
+            _c.Start.ThisMethod();
+            // string airTableKey = GetAirtableKey();
+            string airTableKey = _airtableConfig.ApiKey;
+            Console.WriteLine($"AIR TABLE KEY IS: {airTableKey}");
 
-            var client = new RestClient($"https://api.airtable.com/v0/appeokc0jzuDMQ31H/YahooManager?api_key={airTableKey}");
+            string tableName = "TgManagers";
+
+            var client = new RestClient($"https://api.airtable.com/v0/appeokc0jzuDMQ31H/{tableName}?api_key={airTableKey}");
 
             var request = new RestRequest(Method.GET);
             request.AddHeader("Postman-Token", "af978745-112b-40d2-b760-a86945ce4095");
@@ -65,7 +51,7 @@ namespace BaseballScraper.Controllers
             JObject structuredJson = JObject.Parse(initialJson);
             structuredJson.Intro("structured json");
 
-            Complete.ThisMethod();
+            _c.Complete.ThisMethod();
             return structuredJson;
 
         }

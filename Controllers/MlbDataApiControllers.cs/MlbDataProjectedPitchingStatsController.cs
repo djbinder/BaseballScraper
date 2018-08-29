@@ -23,6 +23,7 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers.cs
 
         // https://appac.github.io/mlb-data-api-docs/#stats-data-projected-pitching-stats-get
         /// <summary> View instantiated pecota projections for a selected pitcher in a selected season  </summary>
+        /// <example> https://127.0.0.1:5001/api/mlb/projectedpitchingstats/592789 </example>
         /// <returns> A view of a projectedpitchingstats model </returns>
         [Route("projectedpitchingstats/{playerId}")]
         public IActionResult ViewPlayerInfo(int playerId)
