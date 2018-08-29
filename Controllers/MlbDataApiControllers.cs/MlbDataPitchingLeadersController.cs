@@ -23,35 +23,27 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers.cs
 
         private static PostmanMethods _postman = new PostmanMethods();
 
-        private static MlbDataApiHomeController _home = new MlbDataApiHomeController();
+
+        /// <summary>
+        // FILE NOTE: provides two options on how to generate leading hitter model
+            // OPTION 1 - endpoint parameters defined within the method
+            // OPTION 2 - endpoint parameters passed as parameters to method
+        /// </summary>
 
 
-        // https://127.0.0.1:5001/api/mlb/leaders/pitchingleaders
-        [HttpGet]
-        [Route("pitchingleaders")]
-        public async Task<IActionResult> ViewPitchingLeadersAsync()
-        {
-            await GetPitchingLeadersAsync();
-
-            return Content($"Hello");
-        }
-
-        public async Task GetPitchingLeadersAsync()
-        {
-            await Task.Run(() => { CreatePitchingLeadersModel(); });
-        }
-
+        // OPTION 1 : Step 1 - endpoint parameters defined within method
         /// <summary> Get the current seasons pitching leaders </summary>
-        /// <returns> A list of instantiated 'LeadingPitching' for x number of pitchers </returns>
+        /// <remarks> Parameters for 'PitchingLeadersEndPoint' are defined within the method </remarks>
+        /// <returns> A list of instantiated 'LeadingPitching' for 'numberToReturn' number of pitchers </returns>
         public PitchingLeaders CreatePitchingLeadersModel ()
         {
-            _c.Start.ThisMethod();
+            // _c.Start.ThisMethod();
 
             // retrieve the 'PitchingLeaders' end point
                 // param 1: number of pitchers to include in search
                 // param 2: season that you want to query
                 // param 3: stat that you would like to sort by
-            var newEndPoint = _endPoints.PitchingLeadersEndPoint(3, "2018", "era");
+            var newEndPoint = _endPoints.PitchingLeadersEndPoint(200, "2018", "era");
             // Console.WriteLine(newEndPoint);
 
             // Postman actions
@@ -62,39 +54,128 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers.cs
                 // type --> IRestResponse
                 var response = postmanResponse.Response;
                 // type --> string
-                var responseToJson = response.Content;
+                // var responseToJson = response.Content;
 
-            JObject obj = CreatePitchingLeadersJObject(responseToJson);
-            // Extensions.PrintJObjectItems(obj);
+            JObject leadersJObject = _a.CreateModelJObject(response);
+            // Extensions.PrintJObjectItems(leadersJObject);
 
-            JToken leadersToken = CreatePitchingLeadersJToken(obj);
-            CreateLeadingPitcherModel(leadersToken);
+            JToken leadersJToken = _a.CreateModelJToken(leadersJObject, "PitchingLeaders");
 
-            var responseToJsonString = responseToJson.ToString();
-            // Console.WriteLine(responseToJsonString);
+            // This will return an object that contains multiple 'LeadingPitcher'; The number returned depends on first parameter passed when retrieving the 'PitchingLeadersEndPoint' (see above)
+            PitchingLeaders newPitchingLeadersInstance = new PitchingLeaders();
 
-            // type = BaseballScraper.Models.MlbDataApi.PitchingLeaders
-            var pitchingLeaders = PitchingLeaders.FromJson(responseToJson);
+            _a.CreateInstanceOfModel(leadersJToken, newPitchingLeadersInstance, "PitchingLeaders");
 
-            _c.Complete.ThisMethod();
-            return pitchingLeaders;
+            LeadingPitcher newLeadingPitcherInstance = new LeadingPitcher();
+            _a.CreateMultipleInstancesOfModelByLooping(leadersJToken, newLeadingPitcherInstance, "LeadingPitcher");
+
+            // _c.Complete.ThisMethod();
+            return newPitchingLeadersInstance;
         }
 
-        public JObject CreatePitchingLeadersJObject(string response)
+        // OPTION 1 : Step 2
+        public async Task GetPitchingLeadersAsync()
         {
-            _c.Start.ThisMethod();
-            JObject obj = JObject.Parse(response);
-            // Console.WriteLine($"OBJ: {obj}");
-            return obj;
+            await Task.Run(() => { CreatePitchingLeadersModel(); });
         }
 
-        public JToken CreatePitchingLeadersJToken(JObject obj)
+        // OPTION 1 : Step 3
+        /// <summary> Initiate retrieval of mlb Pitching leaders for current season </summary>
+        /// <example> https://127.0.0.1:5001/api/mlb/pitchingleaders </example>
+        /// <returns> Pitching leaders for current season </returns>
+        [HttpGet]
+        [Route("pitchingleaders")]
+        public async Task<IActionResult> ViewPitchingLeadersAsync()
         {
-            _c.Start.ThisMethod();
-            JToken leadersToken = obj["leader_pitching_repeater"]["leader_pitching_mux"]["queryResults"]["row"];
-            // Console.WriteLine($"TOKEN: {leadersToken}");
-            return leadersToken;
+            await GetPitchingLeadersAsync();
+
+            string currently = "retrieving pitching leaders";
+
+            return Content($"CURRENT TASK: {currently}");
         }
+
+
+
+        // OPTION 2 - endpoint parameters passed as parameters to method
+        /// <summary> Get the current seasons pitching leaders </summary>
+        /// <remarks> Parameters for 'PitchingLeadersEndPoint' (i.e. numberToReturn, year, sortColumn) are passed as parameters to the method </remarks>
+        ///     <param name="numberToReturn"> The number of pitchers to return in the results (e.g. 50 would show you the top 50 leaders) </param>
+        ///     <param name="year"> The year that you want to retrieve the leaders for (e.g. 2018 gets you leaders for 2018 mlb season) </param>
+        ///     <param name="sortColumn"> This is the stat you want to retrieve the leaders for (e.g., Era, Wins, etc) </param>
+        ///         <see> View 'LeadingPitcher' model for options that you can sort by for this method
+        /// <returns> A list of instantiated 'LeadingPitching' for 'numberToReturn' number of pitchers </returns>
+        public PitchingLeaders CreatePitchingLeadersModel (int numberToReturn, string year, string sortColumn)
+        {
+            // _c.Start.ThisMethod();
+
+            // retrieve the 'PitchingLeaders' end point
+                // param 1: number of pitchers to include in search
+                // param 2: season that you want to query
+                // param 3: stat that you would like to sort by
+            var newEndPoint = _endPoints.PitchingLeadersEndPoint(numberToReturn, year, sortColumn);
+            // Console.WriteLine(newEndPoint);
+
+            // Postman actions
+                // type --> PostmanRequest
+                var postmanRequest = _postman.CreatePostmanRequest(newEndPoint, "PitchingLeaders");
+                // type --> PostmanResponse
+                var postmanResponse = _postman.GetPostmanResponse(postmanRequest);
+                // type --> IRestResponse
+                var response = postmanResponse.Response;
+                // type --> string
+                // var responseToJson = response.Content;
+
+            JObject leadersJObject = _a.CreateModelJObject(response);
+            // Extensions.PrintJObjectItems(leadersJObject);
+
+            JToken leadersJToken = _a.CreateModelJToken(leadersJObject, "PitchingLeaders");
+
+            // This will return an object that contains multiple 'LeadingPitcher'; The number returned depends on first parameter passed when retrieving the 'PitchingLeadersEndPoint' (see above)
+            PitchingLeaders newPitchingLeadersInstance = new PitchingLeaders();
+
+            _a.CreateInstanceOfModel(leadersJToken, newPitchingLeadersInstance, "PitchingLeaders");
+
+            LeadingPitcher newLeadingPitcherInstance = new LeadingPitcher();
+            _a.CreateMultipleInstancesOfModelByLooping(leadersJToken, newLeadingPitcherInstance, "LeadingPitcher");
+
+            // _c.Complete.ThisMethod();
+            return newPitchingLeadersInstance;
+        }
+
+
+
+        // OPTION 2 : Step 2
+        /// <param name="numberToReturn"> The number of pitchers to return in the results (e.g. 50 would show you the top 50 leaders) </param>
+        /// <param name="year"> The year that you want to retrieve the leaders for (e.g. 2018 gets you leaders for 2018 mlb season) </param>
+        /// <param name="sortColumn"> This is the stat you want to retrieve the leaders for (e.g., era, wins etc) </param>
+        ///         <see> View 'LeadingPitcher' model for options that you can sort by for this method </see>
+        public async Task GetPitchingLeadersAsync(int numberToReturn, string year, string sortColumn)
+        {
+            await Task.Run(() => { CreatePitchingLeadersModel(numberToReturn, year, sortColumn); });
+        }
+
+
+        // OPTION 2: Step 3
+        /// <summary> Initiate retrieval of mlb pitching leaders for current season </summary>
+        /// <param name="numberToReturn"> The number of pitchers to return in the results (e.g. 50 would show you the top 50 leaders) </param>
+        /// <param name="year"> The year that you want to retrieve the leaders for (e.g. 2018 gets you leaders for 2018 mlb season) </param>
+        /// <param name="sortColumn"> This is the stat you want to retrieve the leaders for (e.g., era, wins etc) </param>
+        ///         <see> View 'LeadingPitcher' model for options that you can sort by for this method </see>
+        /// <example> https://127.0.0.1:5001/api/mlb/pitchingleaders </example>
+        /// <returns> Pitching leaders for current season </returns>
+        [HttpGet]
+        [Route("pitchingleaders/{year}")]
+        public async Task<IActionResult> ViewHittingLeadersAsync(int numberToReturn, string year, string sortColumn)
+        {
+            // OPTION 2 --> three parameters needed to call the method
+            await GetPitchingLeadersAsync(5, "2018", "era");
+
+            string currently = "retrieving Pitching leaders";
+
+            return Content($"CURRENT TASK: {currently}");
+        }
+
+
 
         public Dictionary<string,string>[] CreatePitchingLeadersDictionary(PitchingLeaders leaders)
         {
@@ -104,19 +185,19 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers.cs
             // The lengths of 'row' is equal to the first parameter passed when creating the endpoint
             var leadersDictionary = leaders.LeaderPitchingRepeater.LeaderPitchingMux.QueryResults.Row;
 
-            // // R type = System.Collections.Generic.Dictionary`2[System.String,System.String]
-            // // R.KEYS ---> System.Collections.Generic.Dictionary`2+KeyCollection[System.String,System.String]
-            // // R.VALUES ---> System.Collections.Generic.Dictionary`2+ValueCollection[System.String,System.String]
-            // int count = 1;
-            // foreach (var r in leadersDictionary)
-            // {
-            //     Console.WriteLine($"Leader #: {count}");
-            //     foreach (KeyValuePair<string, string> pair in r)
-            //     {
-            //         Console.WriteLine("{0}, {1}", pair.Key, pair.Value);
-            //     }
-            //     count++;
-            // }
+            // R type = System.Collections.Generic.Dictionary`2[System.String,System.String]
+            // R.KEYS ---> System.Collections.Generic.Dictionary`2+KeyCollection[System.String,System.String]
+            // R.VALUES ---> System.Collections.Generic.Dictionary`2+ValueCollection[System.String,System.String]
+            int count = 1;
+            foreach (var r in leadersDictionary)
+            {
+                Console.WriteLine($"Leader #: {count}");
+                foreach (KeyValuePair<string, string> pair in r)
+                {
+                    Console.WriteLine("{0}, {1}", pair.Key, pair.Value);
+                }
+                count++;
+            }
             string dictString = leadersDictionary.ToString();
             // Console.WriteLine(dictString);
 
@@ -135,34 +216,6 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers.cs
             _c.Complete.ThisMethod();
 
             return leadersDictionary;
-        }
-
-        public LeadingPitcher CreateLeadingPitcherModel(JToken leadersToken)
-        {
-            _c.Start.ThisMethod();
-
-            LeadingPitcher lP = new LeadingPitcher();
-
-            foreach(var leaderObject in leadersToken)
-            {
-                // Console.WriteLine(leaderObject.GetType());
-                // Console.WriteLine("check");
-
-                string leaderObjectToString = leaderObject.ToString();
-
-                MemoryStream mS = new MemoryStream(Encoding.UTF8.GetBytes(leaderObjectToString));
-
-                DataContractJsonSerializer serializer = new DataContractJsonSerializer(lP.GetType());
-
-                lP = serializer.ReadObject(mS) as LeadingPitcher;
-
-                mS.Close();
-
-                Extensions.Spotlight("begin writing from object");
-                _a.ReturnJsonFromObject(lP);
-            }
-
-            return lP;
         }
     }
 }

@@ -1,9 +1,8 @@
-/// <summary>
-// code generated using https://app.quicktype.io/
-// the json that was inputted to app.quicktype.io was generated using Postman
-// the uri provided to postman was pulled from https://appac.github.io/mlb-data-api-docs/#reports-pitching-leaders-get
-// the uri was: GET http://lookup-service-prod.mlb.com/json/named.leader_pitching_repeater.bam?sport_code='mlb'&results=5&game_type='R'&season='2017'&sort_column='era'&leader_pitching_repeater.col_in=era
-/// </summary>
+
+// SOURCE:
+    // https://appac.github.io/mlb-data-api-docs/#reports-pitching-leaders-get
+// EXAMPLE:
+    // the uri was: GET http://lookup-service-prod.mlb.com/json/named.leader_pitching_repeater.bam?sport_code='mlb'&results=5&game_type='R'&season='2017'&sort_column='era'&leader_pitching_repeater.col_in=era
 
 using System;
 using System.Collections.Generic;
@@ -256,7 +255,7 @@ namespace BaseballScraper.Models.MlbDataApi
         public static PitchingLeaders FromJson(string json) => JsonConvert.DeserializeObject<PitchingLeaders>(json, BaseballScraper.Models.MlbDataApi.Converter.Settings);
     }
 
-    public static class Serialize
+    public static class SerializePitchingLeaders
     {
         public static string ToJson(this PitchingLeaders self) => JsonConvert.SerializeObject(self, BaseballScraper.Models.MlbDataApi.Converter.Settings);
     }

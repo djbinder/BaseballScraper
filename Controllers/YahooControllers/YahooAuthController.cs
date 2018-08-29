@@ -38,7 +38,7 @@ namespace BaseballScraper.Controllers.YahooControllers
         {
             _c.Start.ThisMethod();
 
-            return View("yahooauthhome");
+            return View("yahoohome");
         }
 
 

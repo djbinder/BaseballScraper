@@ -10,6 +10,8 @@ using Newtonsoft.Json.Linq;
 namespace BaseballScraper.Controllers.YahooControllers
 {
     #pragma warning disable CS0414, CS0219
+    [Route("api/yahoo")]
+    [ApiController]
     public class YahooManagerController: Controller
     {
         private Constants _c = new Constants();
@@ -24,9 +26,10 @@ namespace BaseballScraper.Controllers.YahooControllers
         }
 
         /// <summary> Instantiate new instance of a yahoo manager </summary>
-        /// <param name="managerId"> A number 0 - X; Where X is the total number of teams in the league; Basically every manager has their own single number Id </param>
+        /// <param name="managerId"> A number 0 - X; Where X is the total number of teams in the league; Basically every manager has their own single number Id; Select the Id of the Manager you would want to view </param>
+        /// <example> https://127.0.0.1:5001/api/yahoo/manager/1 </example>
         /// <returns> A new YahooManager </returns>
-        [Route("yahoo/manager/create")]
+        [Route("manager/{managerId}")]
         public YahooManager CreateYahooManagerModel (int managerId)
         {
             _c.Start.ThisMethod();
@@ -43,19 +46,28 @@ namespace BaseballScraper.Controllers.YahooControllers
             // int          managerId = 0;
 
             // these pull from the yahoo response (xml or json) to set each item
-            yM.ManagerId      = endPoints.TeamItem(leagueStandings, managerId, "ManagerId");
-            yM.NickName       = endPoints.TeamItem(leagueStandings, managerId, "Nickname");
-            yM.Guid           = endPoints.TeamItem(leagueStandings, managerId, "Guid");
-            yM.IsCommissioner = endPoints.TeamItem(leagueStandings, managerId, "IsCommissioner");
-            yM.IsCurrentLogin = endPoints.TeamItem(leagueStandings, managerId, "IsCurrentLogin");
-            yM.Email          = endPoints.TeamItem(leagueStandings, managerId, "Email");
-            yM.ImageUrl       = endPoints.TeamItem(leagueStandings, managerId, "ImageUrl");
+            yM.ManagerId = endPoints.TeamItem(leagueStandings, managerId, "ManagerId");
+            yM.NickName  = endPoints.TeamItem(leagueStandings, managerId, "Nickname");
+            yM.Guid      = endPoints.TeamItem(leagueStandings, managerId, "Guid");
+            try
+            {
+                yM.IsCommissioner = endPoints.TeamItem(leagueStandings, managerId, "IsCommissioner");
+                yM.IsCurrentLogin = endPoints.TeamItem(leagueStandings, managerId, "IsCurrentLogin");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"EXCEPTION MESSAGE: {ex.Message} --> because they are not the current login and/or they are not the league commissioner");
+            }
+            yM.Email    = endPoints.TeamItem(leagueStandings, managerId, "Email");
+            yM.ImageUrl = endPoints.TeamItem(leagueStandings, managerId, "ImageUrl");
 
             return yM;
         }
 
-        // View the yahoo manager
-        [Route("yahoo/manager/view")]
+        /// <summary> View the yahoo manager page</summary>
+        /// <example> https://127.0.0.1:5001/api/yahoo/manager/view </example>
+        /// <returns> A view with instantiated model </returns>
+        [Route("manager/view")]
         public IActionResult ViewYahooManagerModel ()
         {
             _c.Start.ThisMethod();

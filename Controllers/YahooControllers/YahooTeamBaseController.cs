@@ -12,6 +12,8 @@ using Newtonsoft.Json.Linq;
 namespace BaseballScraper.Controllers.YahooControllers
 {
     #pragma warning disable CS0414, CS0219
+    [Route("api/yahoo")]
+    [ApiController]
     public class YahooTeamBaseController
     {
         private Constants _c = new Constants();
@@ -27,9 +29,10 @@ namespace BaseballScraper.Controllers.YahooControllers
 
 
         /// <summary> Create instance of yahoo team model; save it to the database</summary>
+        /// <example> https://127.0.0.1:5001/api/yahoo/teambase </example>
         /// <returns> new YahooTeamBase </returns>
         [HttpGet]
-        [Route("/yahoo/teambase/create")]
+        [Route("teambase")]
         public YahooTeamBase CreateYahooTeamBaseModel ()
         {
             _c.Start.ThisMethod();
@@ -80,11 +83,18 @@ namespace BaseballScraper.Controllers.YahooControllers
                         // if the manager type is JObject, there is only one manager for the team; so you would go this path to finish creating the new YahooTeamBase
                         if(managerPathChildrenType == jObjectType)
                         {
-                            tB.PrimaryTeamManager.ManagerId      = managerPath["manager_id"].ToString();
-                            tB.PrimaryTeamManager.NickName       = managerPath["nickname"].ToString();
-                            tB.PrimaryTeamManager.Guid           = managerPath["guid"].ToString();
-                            tB.PrimaryTeamManager.IsCommissioner = managerPath["is_commissioner"].ToString();
-                            tB.PrimaryTeamManager.IsCurrentLogin = managerPath["is_current_login"].ToString();
+                            tB.PrimaryTeamManager.ManagerId = managerPath["manager_id"].ToString();
+                            tB.PrimaryTeamManager.NickName  = managerPath["nickname"].ToString();
+                            tB.PrimaryTeamManager.Guid      = managerPath["guid"].ToString();
+                            try
+                            {
+                                tB.PrimaryTeamManager.IsCommissioner = managerPath["is_commissioner"].ToString();
+                                tB.PrimaryTeamManager.IsCurrentLogin = managerPath["is_current_login"].ToString();
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine($"EXCEPTION MESSAGE: {ex.Message} --> because they are not the current login and/or they are not the league commissioner");
+                            }
 
                             // some managers may keep their email address private / hidden; if that's the cause, you'll get an error;
                             // this checks if there is an email; if there isn't, it sets the email as 'hidden'
@@ -118,9 +128,9 @@ namespace BaseballScraper.Controllers.YahooControllers
                                 tB.PrimaryTeamManager.NickName = nickname = managerPath[i]["nickname"].ToString();
                                     Console.WriteLine($"generating managers for {nickname}");
 
-                                tB.PrimaryTeamManager.Guid           = managerPath[i]["guid"].ToString();
-                                tB.PrimaryTeamManager.IsCommissioner = managerPath[i]["is_commissioner"].ToString();
-                                tB.PrimaryTeamManager.IsCurrentLogin = managerPath[i]["is_current_login"].ToString();
+                                tB.PrimaryTeamManager.Guid = managerPath[i]["guid"].ToString();
+                                // tB.PrimaryTeamManager.IsCommissioner = managerPath[i]["is_commissioner"].ToString();
+                                // tB.PrimaryTeamManager.IsCurrentLogin = managerPath[i]["is_current_login"].ToString();
 
                                 // some managers may keep their email address private / hidden; if that's the case, you'll get an error;
                                 // this checks if there is an email; if there isn't, it sets the email as 'hidden' so you don't get an error
@@ -137,13 +147,13 @@ namespace BaseballScraper.Controllers.YahooControllers
 
                                 YahooManager manager = new YahooManager()
                                 {
-                                    ManagerId      = managerPath[i]["manager_id"].ToString(),
-                                    NickName       = managerPath[i]["nickname"].ToString(),
-                                    Guid           = managerPath[i]["guid"].ToString(),
-                                    IsCommissioner = managerPath[i]["is_commissioner"].ToString(),
-                                    IsCurrentLogin = managerPath[i]["is_current_login"].ToString(),
-                                    Email          = tB.PrimaryTeamManager.Email,
-                                    ImageUrl       = managerPath[i]["image_url"].ToString()
+                                    ManagerId = managerPath[i]["manager_id"].ToString(),
+                                    NickName  = managerPath[i]["nickname"].ToString(),
+                                    Guid      = managerPath[i]["guid"].ToString(),
+                                    // IsCommissioner = managerPath[i]["is_commissioner"].ToString(),
+                                    // IsCurrentLogin = managerPath[i]["is_current_login"].ToString(),
+                                    Email    = tB.PrimaryTeamManager.Email,
+                                    ImageUrl = managerPath[i]["image_url"].ToString()
                                 };
 
                                 teamManagersList.Add(manager);
@@ -163,7 +173,7 @@ namespace BaseballScraper.Controllers.YahooControllers
 
 
         // optional; a different way to set a YahooTeamBase
-        [Route("/yahoo/teambase/hashtable")]
+        [Route("teambase/hashtable")]
         public Hashtable CreateYahooTeamBaseHashTable ()
         {
             _c.Start.ThisMethod();

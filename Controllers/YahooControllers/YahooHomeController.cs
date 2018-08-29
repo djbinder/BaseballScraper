@@ -13,7 +13,9 @@ using BaseballScraper.Models.Configuration;
 
 namespace BaseballScraper.Controllers.YahooControllers
 {
-#pragma warning disable CS0414, CS0219
+    #pragma warning disable CS0414, CS0219
+    [Route("api/yahoo")]
+    [ApiController]
     public class YahooHomeController: Controller
     {
         private Constants _c = new Constants();
@@ -56,26 +58,11 @@ namespace BaseballScraper.Controllers.YahooControllers
 
 
         [HttpGet]
-        [Route("/yahoohome")]
+        [Route("")]
         public IActionResult ViewYahooHomePage()
         {
-            // var sessionInfoDictionary = _yahooAuthController.CreateSessionInfoDictionary();
-
-            // if(_yahooAuthController.CheckSession() == 0)
-            // {
-            //     Console.WriteLine();
-            //     Console.WriteLine("NEW SESSION IS NEEDED");
-            //     ViewBag.SessionIdExists = " NO session exists";
-            //     // return RedirectToAction("setsessioninfo");
-            // }
-            // else
-            // {
-            //     Console.WriteLine("SESSION ALREADY IN PROGRESS");
-            //     ViewBag.AuthCodeBag     = sessionInfoDictionary["authcode"];
-            //     ViewBag.SessionIdExists = " YES session exists";
-            //     ViewBag.Now             = DateTime.Now;
-            // }
-            return View("yahoohome");
+            string currently = $"currently doing nothing";
+            return Content(currently);
         }
 
 
@@ -177,19 +164,19 @@ namespace BaseballScraper.Controllers.YahooControllers
         }
 
 
-        [Route("yahoo/leaguescoreboard/create")]
-        public void CreateYahooScoreboard ()
-        {
-            _c.Start.ThisMethod();
+        // [Route("yahoo/leaguescoreboard/create")]
+        // public void CreateYahooScoreboard ()
+        // {
+        //     _c.Start.ThisMethod();
 
-            // retrieve the league key from user secrets / yahoo league config
-            string leagueKey = _theGameConfig.LeagueKey;
+        //     // retrieve the league key from user secrets / yahoo league config
+        //     string leagueKey = _theGameConfig.LeagueKey;
 
-            var uriLeagueScoreboard = endPoints.LeagueSeasonScoreboardEndPoint(leagueKey).EndPointUri;
+        //     var uriLeagueScoreboard = endPoints.LeagueSeasonScoreboardEndPoint(leagueKey).EndPointUri;
 
-            JObject leagueScoreboard = GenerateYahooResourceJObject(uriLeagueScoreboard);
+        //     JObject leagueScoreboard = GenerateYahooResourceJObject(uriLeagueScoreboard);
 
-            Extensions.PrintJObjectItems(leagueScoreboard);
-        }
+        //     Extensions.PrintJObjectItems(leagueScoreboard);
+        // }
     }
 }
