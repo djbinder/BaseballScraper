@@ -71,6 +71,9 @@ namespace BaseballScraper.Infrastructure
 
                 case "PitchingLeaders": 
                     return "81596fc7-3027-4c1a-8288-8baca8d9a7e3";
+
+                case "HittingLeaders": 
+                    return "bc59dbdc-2968-4c03-9fe4-eededd57c016";
             }
 
             throw new System.Exception("no api type found");

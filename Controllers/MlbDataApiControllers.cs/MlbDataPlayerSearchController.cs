@@ -23,7 +23,9 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
         private static PostmanMethods _postman        = new PostmanMethods();
 
 
-
+        // https://appac.github.io/mlb-data-api-docs/#player-data-player-search-get
+        /// <summary> View instantiated PlayerSearch object  </summary>
+        /// <returns> Instantiated PlayerSearch </returns>
         [Route("playersearch/{playerLastName}")]
         public IActionResult ViewPlayerSearchModel(string playerLastName)
         {
@@ -60,62 +62,9 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
             var postmanResponse = _postman.GetPostmanResponse(postmanRequest);
 
             // type --> IRestResponse
-            // RESPONSE ---> RestSharp.RestResponse
             var response = postmanResponse.Response;
 
             return response;
         }
-
-        // /// <summary> Returns a JToken that lists keys/values for player items in PlayerSearch api </summary>
-        // /// <param name="name"> The Mlb player's last name </param>
-        // /// <example> https://127.0.0.1:5001/api/mlb/bryant </example>
-        // /// <returns></returns>
-        // public JObject CreatePlayerSearchModelJObject(IRestResponse response)
-        // {
-        //     _c.Start.ThisMethod();
-
-        //     var responseToJson = response.Content;
-        //     // clean up / better structure the json
-        //     JObject playerSearchJObject = JObject.Parse(responseToJson);
-        //     // Extensions.PrintJObjectItems(playerSearchJObject);
-
-        //     CreatePlayerSearchModelJToken(playerSearchJObject);
-        //     return playerSearchJObject;
-        // }
-
-        // public JToken CreatePlayerSearchModelJToken(JObject obj)
-        // {
-        //     _c.Start.ThisMethod();
-
-        //     // type = Newtonsoft.Json.Linq.JObject
-        //     // this data is used to create a new instance of PlayerSearch
-        //     JToken playerInfoItems = obj["search_player_all"]["queryResults"]["row"];
-
-        //     return playerInfoItems;
-        // }
-
-
-        // public PlayerSearch CreatePlayerSearchModel (JToken token)
-        // {
-        //     _c.Start.ThisMethod();
-        //     // Console.WriteLine($"OBJECT TYPE IS: {objectType}");
-
-        //     string tokenToString = token.ToString();
-
-        //     MemoryStream createPlayerMemoryStream = new MemoryStream(Encoding.UTF8.GetBytes(tokenToString));
-
-        //     PlayerSearch deserializedPlayer = new PlayerSearch();
-
-        //     DataContractJsonSerializer createPlayerJsonSerializer = new DataContractJsonSerializer(deserializedPlayer.GetType());
-
-        //     // deserializedPlayer = BaseballScraper.Models.MlbDataApi.PlayerSearch
-        //     deserializedPlayer = createPlayerJsonSerializer.ReadObject(createPlayerMemoryStream) as PlayerSearch;
-        //     createPlayerMemoryStream.Close();
-
-        //     Extensions.Spotlight("begin writing from object");
-        //     _a.ReturnJsonFromObject(deserializedPlayer);
-
-        //     return deserializedPlayer;
-        // }
     }
 }
