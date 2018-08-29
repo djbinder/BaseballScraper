@@ -9,108 +9,216 @@
 </head>
 
 <body>
-
-    <a href="/player/form">player / form</a>
-    <a href="/player/form/notes">player / form / notes</a>
-    <a href="/notes">notes</a>
     <br>
-    <h4>Twitter Tests</h4>
-    <table>
+    <h1>Baseball Scraper Dashboard</h1>
+    <hr style="border: 3px solid slateblue">
+    <br>
+
+    <h4>FanGraphs</h4>
+    <table class="table">
         <tr>
-            <th>Button</th>
-            <th>Purpose</th>
+            <th>Type </th>
+            <th>Link </th>
+            <th>Route End Point </th>
         </tr>
         <tr>
-            <td>
-                <a href="/consumerkey">
-                    <button>Click</button>
-                </a>
-            </td>
-            <td>Twitter Consumer Key</td>
+            <td> FanGraphs Home </td>
+            <td><a href="/fangraphs">Link</a></td>
+            <td> /fangraphs </td>
         </tr>
         <tr>
-            <td>
-                <a href="/consumersecret">
-                    <button>Click</button>
-                </a>
-            </td>
-            <td>Twitter Consumer Secret</td>
-        </tr>
-        <tr>
-            <td>
-                <a href="/accesstoken">
-                    <button>Click</button>
-                </a>
-            </td>
-            <td>Twitter Access Token</td>
-        </tr>
-        <tr>
-            <td>
-                <a href="/accesstokensecret">
-                    <button>Click</button>
-                </a>
-            </td>
-            <td>Twitter Access Token Secret</td>
-        </tr>
-        <tr>
-            <td>
-                <a href="/playersearch">
-                    <button>Click</button>
-                </a>
-            </td>
-            <td>Twitter Player Search</td>
+            <td> FanGraphs Starting Pitchers </td>
+            <td><a href="https://127.0.0.1:5001/fangraphs/sp">Link</a></td>
+            <td> /fangraphs/sp </td>
         </tr>
     </table>
 
     <br>
     <hr>
+
+    <h4>Yahoo Api</h4>
+    <table class="table">
+        <tr>
+            <th>Type </th>
+            <th>Link </th>
+            <th>Route End Point </th>
+        </tr>
+        <tr>
+            <td> Yahoo Auth Process </td>
+            <td><a href="/yahoo/authorize/accesstokenresponse">Link</a></td>
+            <td> /yahoo/authorize/accesstokenresponse </td>
+        </tr>
+        <tr>
+            <td> Manager </td>
+            <td><a href="https://127.0.0.1:5001/api/yahoo/manager/6">Link</a></td>
+            <td> /api/yahoo/manager/{managerId} </td>
+        </tr>
+        <tr>
+            <td> Team Base </td>
+            <td><a href="https://127.0.0.1:5001/api/yahoo/teambase">Link</a></td>
+            <td> /api/yahoo/teambase </td>
+        </tr>
+        <tr>
+            <td> Team Standing </td>
+            <td><a href="https://127.0.0.1:5001/api/yahoo/teamstanding">Link</a></td>
+            <td> /api/yahoo/teamstanding </td>
+        </tr>
+        <tr>
+            <td> Team Stats : Option 1</td>
+            <td><a href="https://127.0.0.1:5001/api/yahoo/teamstats/season">Link</a></td>
+            <td> /api/yahoo/teamstats/season </td>
+        </tr>
+        <tr>
+            <td> Team Stats : Option 2</td>
+            <td><a href="https://127.0.0.1:5001/api/yahoo/teamstats">Link</a></td>
+            <td> /api/yahoo/teamstats </td>
+        </tr>
+        <tr>
+            <td> Team Stats : Option 3</td>
+            <td><a href="https://127.0.0.1:5001/api/yahoo/teamstats/season/1">Link</a></td>
+            <td> /api/yahoo/teamstats/season/{teamId} </td>
+        </tr>
+        <tr>
+            <td>Scoreboard</td>
+            <td><a href="https://127.0.0.1:5001/api/yahoo/scoreboard">Link</a></td>
+            <td> /yahoo/scoreboard</td>
+        </tr>
+        <tr>
+            <td>Team Points : Option 1 </td>
+            <td><a href="https://127.0.0.1:5001/api/yahoo/teampoints/season">Link</a></td>
+            <td> /yahoo/teampoints/season</td>
+        </tr>
+        <tr>
+            <td>Team Points : Option 2 </td>
+            <td><a href="https://127.0.0.1:5001/api/yahoo/teampoints">Link</a></td>
+            <td> /yahoo/teampoints</td>
+        </tr>
+        <tr>
+            <td> Yahoo Home </td>
+            <td><a href="https://127.0.0.1:5001/api/yahoo">Link</a> </td>
+            <td>/api/yahoo</td>
+        </tr>
+    </table>
+
+    <br>
+    <hr>
+
+    <h4>Player Form</h4>
+    <table class=" table ">
+        <tr>
+            <th>Type </th>
+            <th>Link </th>
+        </tr>
+        <tr>
+            <td>View Player Form </td>
+            <td><a href="https://127.0.0.1:5001/player/form ">Form Link </a></td>
+        </tr>
+    </table>
+
+    <br>
+    <hr>
+
+    <h4>Mlb Data Api</h4>
+    <table class="table ">
+        <tr>
+            <th>Type </th>
+            <th>Link </th>
+            <th>Route End Point </th>
+        </tr>
+
+        <tr>
+            <td>Player Info</td>
+            <td><a href="https://127.0.0.1:5001/api/mlb/playerinfo/493316 ">Link</a></td>
+            <td> /api/mlb/playerinfo/{playerId}</td>
+        </tr>
+        <tr>
+            <td>Player Search </td>
+            <td><a href="https://127.0.0.1:5001/api/mlb/playersearch/trout "> Link</a></td>
+            <td>/api/mlb/playersearch/{playerLastName}</td>
+        </tr>
+        <tr>
+            <td>Projected Pitching </td>
+            <td><a href="https://127.0.0.1:5001/api/mlb/projectedpitchingstats/592789 "> Link</a></td>
+            <td>/api/mlb/projectedpitchingstats/{playerId}</td>
+        </tr>
+        <tr>
+            <td>Projected Hitting </td>
+            <td><a href="https://127.0.0.1:5001/api/mlb/projectedhittingstats/493316 "> Link</a></td>
+            <td>/api/mlb/projectedhittingstats/{playerId}</td>
+        </tr>
+        <tr>
+            <td>Pitching Leaders : Option 1 </td>
+            <td><a href="https://127.0.0.1:5001/api/mlb/pitchingleaders "> Link</a></td>
+            <td>/api/mlb/pitchingleaders</td>
+        </tr>
+        <tr>
+            <td>Pitching Leaders : Option 2 </td>
+            <td><a href="https://127.0.0.1:5001/api/mlb/pitchingleaders/2018 "> Link</a></td>
+            <td>/api/mlb/pitchingleaders/{year}</td>
+        </tr>
+        <tr>
+            <td>Hitting Leaders : Option 1</td>
+            <td><a href="https://127.0.0.1:5001/api/mlb/hittingleaders "> Link</a></td>
+            <td>/api/mlb/hittingleaders</td>
+        </tr>
+        <tr>
+            <td>Hitting Leaders : Option 2</td>
+            <td><a href="https://127.0.0.1:5001/api/mlb/hittingleaders/2018 "> Link</a></td>
+            <td>/api/mlb/hittingleaders/{year}</td>
+        </tr>
+    </table>
+
+    <br>
+    <hr>
+
+    <h4>Twitter</h4>
+    <table class="table ">
+        <tr>
+            <th>Purpose</th>
+            <th>Button</th>
+            <th>Note </th>
+            <th>Route End Point </th>
+        </tr>
+        <tr>
+            <td>Twitter String Search Option 1 </td>
+            <td><a href="https://127.0.0.1:5001/api/twitter/playersearch "><button> Option 1</button></a></td>
+            <td> Search string is defined within the method </td>
+            <td> /api/twitter/playersearch </td>
+        </tr>
+        <tr>
+            <td>Twitter String Search Option 2 </td>
+            <td><a href="https://127.0.0.1:5001/api/twitter "><button> Option 2</button></a></td>
+            <td> Search string is passed as a parameter to the method </td>
+            <td> /api/twitter </td>
+        </tr>
+        <tr>
+            <td>Twitter String Search Option 3 </td>
+            <td><a href="https://127.0.0.1:5001/api/twitter/playersearch/anthony+rizzo "><button> Option 3</button></a></td>
+            <td> Search string is passed as part of the route </td>
+            <td> /api/twitter/playersearch/{searchString} </td>
+        </tr>
+    </table>
+
+    <br>
+    <hr>
+
     <h4>Airtable Tests</h4>
-    <table>
+    <table class="table ">
         <tr>
-            <th>Button</th>
             <th>Purpose</th>
+            <th>Button</th>
         </tr>
         <tr>
-            <td>
-                <a href="/airtablekey">
-                    <button>Click</button>
-                </a>
-            </td>
-            <td>Airtable Api Key</td>
-        </tr>
-        <tr>
-            <td>
-                <a href="/managers">
-                    <button>Click</button>
-                </a>
-            </td>
             <td>Airtable Managers</td>
+            <td><a href="/api/airtable/managers "><button>Click</button></a></td>
         </tr>
     </table>
 
-    <br>
     <hr>
 
-
-    <h2>Airtable Config</h2>
-    <p>Api Key: @ViewData["ApiKey2"]</p>
-    <hr>
-
-    <h2>Twitter Config</h2>
-    <p>C Key: @ViewData["ConsumerKey"]</p>
-    <p>C Secret: @ViewData["ConsumerSecret"]</p>
-    <p>A Token: @ViewData["AccessToken"]</p>
-    <p>A Secret: @ViewData["AccessTokenSecret"]</p>
-
-    <hr>
-
-
-
-
-
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-        crossorigin="anonymous"></script>
-    <script src="site.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js " integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin=" anonymous "></script>
+    <script src="site.js "></script>
 </body>
 
 </html>

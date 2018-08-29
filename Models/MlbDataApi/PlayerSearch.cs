@@ -1,3 +1,7 @@
+// SOURCE
+    // https://appac.github.io/mlb-data-api-docs/#player-data-player-search-get
+
+
 using System;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;

@@ -22,16 +22,14 @@ namespace BaseballScraper.Mappers
 {
     public class NpoiMapper
     {
-        private static String Start    = "STARTED";
-        private static String Complete = "COMPLETED";
-
+        private Constants _c = new Constants();
 
         // THIS WORKS
         public static void CreateEmptyXlsx (string FileName, string SheetName, int StartStop)
         {
             if (StartStop == 1)
             {
-                Start.ThisMethod ();
+                // _c.Start.ThisMethod ();
 
                 System.Text.Encoding.RegisterProvider (System.Text.CodePagesEncodingProvider.Instance);
 
@@ -42,7 +40,6 @@ namespace BaseballScraper.Mappers
                 Dummy  dummy        = new Dummy ();
 
                 // ModifyFormatXLSX(mapper, NewSheetName);
-
 
                 mapper.Save (NewFileName, new [] { dummy }, NewSheetName);
                 var dateCell = mapper.Workbook.GetSheetAt (0).GetRow (1).GetCell (1);
@@ -96,7 +93,7 @@ namespace BaseballScraper.Mappers
         {
             if (StartStop == 1)
             {
-                Start.ThisMethod ();
+                // _c.Start.ThisMethod ();
 
                 System.Text.Encoding.RegisterProvider (System.Text.CodePagesEncodingProvider.Instance);
 
@@ -116,7 +113,7 @@ namespace BaseballScraper.Mappers
         {
             if (StartStop == 1)
             {
-                Start.ThisMethod ();
+                // _c.Start.ThisMethod ();
 
                 Thread.CurrentThread.CurrentCulture = new CultureInfo ("en-US");
 
@@ -148,7 +145,7 @@ namespace BaseballScraper.Mappers
                     workbook.Write (fs);
                 }
 
-                Complete.ThisMethod ();
+                // _c.Complete.ThisMethod ();
             }
         }
 
@@ -157,7 +154,7 @@ namespace BaseballScraper.Mappers
         // THIS WORKS
         public static Object MergeRowsInXls (IWorkbook TargetWB, ISheet TargetS)
         {
-            Start.ThisMethod ();
+            // _c.Start.ThisMethod ();
 
             // NPOI.HSSF.UserModel.HSSFWorkbook
             IWorkbook wb = TargetWB;
@@ -188,7 +185,7 @@ namespace BaseballScraper.Mappers
 
         public static void CreateEmptyWorkbook ()
         {
-            Start.ThisMethod ();
+            // _c.Start.ThisMethod ();
 
             var newFile = @"newbook.core.xls";
 
@@ -244,57 +241,8 @@ namespace BaseballScraper.Mappers
 
                 workbook.Write (fs);
             }
-            Complete.ThisMethod ();
+            // _c.Complete.ThisMethod ();
         }
-
-
-
-        // // from: https://github.com/donnytian/Npoi.Mapper
-        // public static void ExportObject ()
-        // {
-        //     var mapper = new Mapper ();
-        //     mapper.Save ("test.xlsx", objects, "newSheet", overwrite : false);
-        //     return;
-        // }
-
-        // // from: https://github.com/donnytian/Npoi.Mapper
-        // public static void ExportTrackedObject ()
-        // {
-        //     var mapper = new Mapper ("Book1.xlsx");
-
-        //     // It's default true.
-        //     mapper.TrackObjects = true;
-
-        //     // You can Take first then modify tracked objects.
-        //     var objectInfos = mapper.Take<SampleClass> ("sheet2");
-
-        //     // Also you can directly access objects in a sheet by property.
-        //     var objectsDict = mapper.Objects;
-        //     mapper.Save ("test.xlsx", "sheet2");
-        // }
-
-
-
-        // // from: https://github.com/donnytian/Npoi.Mapper
-        // public static void CombineObjectsAndExport ()
-        // {
-        //     var mapper = new Mapper ("Book1.xlsx");
-        //     mapper.Put (products, "sheet1", true);
-        //     mapper.Put (orders, "sheet2", false);
-        //     mapper.Save ("Book1.xlsx");
-        // }
-
-
-
-        // IWorkbook workbook = new XSSFWorkbook();
-        // workbook.CreateSheet("Sheet A1");
-        // workbook.CreateSheet("Sheet A2");
-        // workbook.CreateSheet("Sheet A3");
-
-        // FileStream sw = File.Create("test.xlsx");
-        // workbook.Write(sw);
-        // sw.Close();
-
     }
 }
 

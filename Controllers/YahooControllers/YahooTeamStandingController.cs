@@ -9,6 +9,8 @@ using BaseballScraper.EndPoints;
 namespace BaseballScraper.Controllers.YahooControllers
 {
     #pragma warning disable CS0414, CS0219
+    [Route("api/yahoo")]
+    [ApiController]
     public class YahooTeamStandingController: Controller
     {
         private Constants _c = new Constants();
@@ -24,9 +26,11 @@ namespace BaseballScraper.Controllers.YahooControllers
 
 
         // TODO: most of this has been broken out into other methods; needs to be cleaned up
-        // standings model returns: rank, playoff seed, games back, wins, losses, ties, winning percentage
+        /// <summary> Return instantiated 'YahooTeamStanding' </summary>
+        /// <example> https://127.0.0.1:5001/api/yahoo/teamstanding </example>
+        /// <returns> rank, playoff seed, games back, wins, losses, ties, winning percentage </returns>
         [HttpGet]
-        [Route("yahoo/teamstanding/create")]
+        [Route("teamstanding")]
         public YahooTeamStanding CreateYahooTeamStandingModel ()
         {
             _c.Start.ThisMethod();
@@ -37,60 +41,31 @@ namespace BaseballScraper.Controllers.YahooControllers
             // create the uri that will be used to generate the appropriate json; in this case, it's the League Standings endpoint (view YahooApiEndPoints.cs)
             var uriLeagueStandings = endPoints.LeagueStandingsEndPoint(leagueKey).EndPointUri;
 
-            JObject           leagueStandings = _yahooHomeController.GenerateYahooResourceJObject(uriLeagueStandings);
-            YahooTeamStanding yS              = new YahooTeamStanding();
+            JObject leagueStandings = _yahooHomeController.GenerateYahooResourceJObject(uriLeagueStandings);
+            int     teamsInLeague   = 10;
 
-            yS.Rank                     = endPoints.TeamItem(leagueStandings, 0, "Rank");
-            yS.PlayoffSeed              = endPoints.TeamItem(leagueStandings, 0, "PlayoffSeed");
-            yS.GamesBack                = endPoints.TeamItem(leagueStandings, 0, "GamesBack");
-            yS.OutcomeTotals.Wins       = endPoints.TeamItem(leagueStandings, 0, "Wins");
-            yS.OutcomeTotals.Losses     = endPoints.TeamItem(leagueStandings, 0, "Losses");
-            yS.OutcomeTotals.Ties       = endPoints.TeamItem(leagueStandings, 0, "Ties");
-            yS.OutcomeTotals.Percentage = endPoints.TeamItem(leagueStandings, 0, "WinningPercentage");
+            YahooTeamStanding yS = new YahooTeamStanding();
 
-            // STANDINGS PATH type ---> Newtonsoft.Json.Linq.JObject
-                // starts with "teams"
-            // var standingsPath = leagueStandings["fantasy_content"]["league"]["standings"];
-            // standingsPath.Intro("standings path");
-                // STANDINGS PATH CHILDREN type ---> Newtonsoft.Json.Linq.JEnumerable`1[Newtonsoft.Json.Linq.JToken]
-                    // Count is 1 for children
-                    // var standingsPathChildren = standingsPath.Children();
+            for(var teamId = 0; teamId <= teamsInLeague - 1; teamId++)
+            {
+                yS.Rank                     = endPoints.TeamItem(leagueStandings, 0, "Rank");
+                yS.PlayoffSeed              = endPoints.TeamItem(leagueStandings, 0, "PlayoffSeed");
+                yS.GamesBack                = endPoints.TeamItem(leagueStandings, 0, "GamesBack");
+                yS.OutcomeTotals.Wins       = endPoints.TeamItem(leagueStandings, 0, "Wins");
+                yS.OutcomeTotals.Losses     = endPoints.TeamItem(leagueStandings, 0, "Losses");
+                yS.OutcomeTotals.Ties       = endPoints.TeamItem(leagueStandings, 0, "Ties");
+                yS.OutcomeTotals.Percentage = endPoints.TeamItem(leagueStandings, 0, "WinningPercentage");
 
-            // TEAMS PATH type ---> Newtonsoft.Json.Linq.JObject
-                // 2 Children
-                    // @count, 'team'
-            // var leagueStandingsTeams = leagueStandings["fantasy_content"]["league"]["standings"]["teams"];
+                Console.WriteLine($"TEAM STANDINGS FOR TEAM ID {teamId}");
+                Console.WriteLine(yS);
+                Console.WriteLine();
+            }
+            // int X = 0;
 
-            // TEAM PATH type ---> Newtonsoft.Json.Linq.JArray
-                // 10 Children
-                    // I believe this is for each team
-            var leagueStandingsTeamsTeam = leagueStandings["fantasy_content"]["league"]["standings"]["teams"]["team"];
+            // var leagueStandingsTeamsTeamX = leagueStandings["fantasy_content"]["league"]["standings"]["teams"]["team"][X];
 
-            int X = 0;
+            // Console.WriteLine(leagueStandingsTeamsTeamX["team_stats"].GetType());
 
-            // TEAM PATH X type ---> Newtonsoft.Json.Linq.JObject
-                // 16 Children
-
-            var leagueStandingsTeamsTeamX = leagueStandings["fantasy_content"]["league"]["standings"]["teams"]["team"][X];
-
-                // foreach(var y in leagueStandingsTeamsTeamX)
-                // {
-                //     Console.WriteLine(y.GetType());
-                // }
-
-                // JObjects
-                // Console.WriteLine(leagueStandingsTeamsTeamX["team_logos"].GetType());
-                // Console.WriteLine(leagueStandingsTeamsTeamX["roster_adds"].GetType());
-                // Console.WriteLine(leagueStandingsTeamsTeamX["managers"].GetType());
-                Console.WriteLine(leagueStandingsTeamsTeamX["team_stats"].GetType());
-                // Console.WriteLine(leagueStandingsTeamsTeamX["team_points"].GetType());
-                // Console.WriteLine(leagueStandingsTeamsTeamX["team_standings"].GetType());
-
-            // TEAM POINTS PATH type ---> Newtonsoft.Json.Linq.JObject
-                // 3 Children
-                    // coverage type, season, total
-            // var teamPointsPath = leagueStandings["fantasy_content"]["league"]["standings"]["teams"]["team"][0]["team_points"];
-                // CreateYahooTeamPointsModel(teamPointsPath);
             return yS;
         }
     }
