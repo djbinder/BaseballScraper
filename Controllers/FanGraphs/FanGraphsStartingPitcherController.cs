@@ -1,6 +1,11 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization.Json;
+using System.Text;
 using BaseballScraper.EndPoints;
 using BaseballScraper.Models.FanGraphs;
 using HtmlAgilityPack;
@@ -14,7 +19,8 @@ namespace BaseballScraper.Controllers.FanGraphs
         private Constants _c                            = new Constants();
         private static FanGraphsUriEndPoints _endPoints = new FanGraphsUriEndPoints();
         private string pathToGetNumberOfPagesToScrape   = "//*[@id='LeaderBoard1_dg1_ctl00']/thead/tr[1]/td/div/div[5]/strong[2]";
-        private string pathOfTableToScrape              = "//*[@id='LeaderBoard1_dg1_ctl00']/tbody";
+        private string pathOfTableBodyToScrape          = "//*[@id='LeaderBoard1_dg1_ctl00']/tbody";
+        private string pathOfTableHeaderToScrape        = "//*[@id='LeaderBoard1_dg1_ctl00']/thead/tr[2]";
 
         public FanGraphsStartingPitcherController() {}
 
@@ -24,8 +30,6 @@ namespace BaseballScraper.Controllers.FanGraphs
         public IActionResult ViewFanGraphsStartingPitcherPage()
         {
             _c.Start.ThisMethod();
-
-            PitcherCrawler();
 
             string action = "viewing FG starting pitcher page";
 
@@ -49,15 +53,21 @@ namespace BaseballScraper.Controllers.FanGraphs
         {
             string uriToBeginScraping = SetInitialUrlToScrape(minInningsPitched, year, page, recordsPerPage);
 
-            HtmlWeb htmlWeb       = new HtmlWeb();
-            var     htmlWebLoaded = htmlWeb.Load(uriToBeginScraping);
+            HtmlWeb htmlWeb  = new HtmlWeb();
+            var     urisHtml = htmlWeb.Load(uriToBeginScraping);
 
-            var htmlElement = htmlWebLoaded.DocumentNode.SelectNodes(pathToGetNumberOfPagesToScrape);
+            var htmlElement = urisHtml.DocumentNode.SelectNodes(pathToGetNumberOfPagesToScrape);
 
             string numberOfPagesToScrapeString = htmlElement[0].InnerText;
             int    numberOfPagesToScrapeInt    = Convert.ToInt32(numberOfPagesToScrapeString);
 
-            Console.WriteLine($"NUMBER OF PAGES TO SCRAPE IS: {numberOfPagesToScrapeInt}");
+           bool showGuardRails = false;
+            if(showGuardRails == true)
+            {
+                Extensions.Spotlight("----- GET NUMBER OF PAGES TO SCRAPE -----");
+                Console.WriteLine($"NUMBER OF PAGES TO SCRAPE IS: {numberOfPagesToScrapeInt}");
+                Console.WriteLine();
+            }
 
             return numberOfPagesToScrapeInt;
         }
@@ -80,106 +90,161 @@ namespace BaseballScraper.Controllers.FanGraphs
 
                 var urlToScrapeEndPointUri = urlToScrape.EndPointUri;
 
-                // Console.WriteLine($"URL TO SCRAPE # {i}: {urlToScrapeEndPointUri}");
+                string urlToScrapeEndPointUriToString = urlToScrapeEndPointUri.ToString();
+                urlsOfPagesToScrape.Add (urlToScrapeEndPointUri);
+
+                bool showGuardRails = false;
+                if(showGuardRails == true)
+                {
+                    Extensions.Spotlight("----- GET URLS OF PAGES TO SCRAPE -----");
+                    Console.WriteLine($"URL TO SCRAPE # {i}: {urlToScrapeEndPointUri}");
+                    Console.WriteLine();
+                }
+
+            }
+            return urlsOfPagesToScrape;
+        }
+        private List<string> GetUrlsOfPagesToScrape(int minInningsPitched, int year, int recordsPerPage)
+        {
+            _c.Start.ThisMethod();
+
+            List<string> urlsOfPagesToScrape = new List<string> ();
+
+            int numberOfPagesToScrape = GetNumberOfPagesToScrape (minInningsPitched, year, 1, recordsPerPage);
+
+            for (var i = 1; i <= numberOfPagesToScrape; i++)
+            {
+                var urlToScrape = _endPoints.PitchingLeadersMasterStatsReportEndPoint(minInningsPitched, year, i, recordsPerPage);
+
+                var urlToScrapeEndPointUri = urlToScrape.EndPointUri;
 
                 string urlToScrapeEndPointUriToString = urlToScrapeEndPointUri.ToString();
-
                 urlsOfPagesToScrape.Add (urlToScrapeEndPointUri);
+
+                bool showGuardRails = false;
+                if(showGuardRails == true)
+                {
+                    Extensions.Spotlight("----- GET URLS OF PAGES TO SCRAPE -----");
+                    Console.WriteLine($"URL TO SCRAPE # {i}: {urlToScrapeEndPointUri}");
+                    Console.WriteLine();
+                }
+
             }
             return urlsOfPagesToScrape;
         }
 
 
-        public void PitcherCrawler ()
+        /// <summary></summary>
+        /// <remarks> Any XPath can be pulled from Chrome; right-click 'Inspect', view the html for the table, right click on any item and select Copy > tableBodyXpath </remarks>
+        [Route("scrape")]
+        public void ScrapePitchersAndCreateList ()
         {
             _c.Start.ThisMethod ();
 
-            List<string> listOfUrls = GetUrlsOfPagesToScrape ().ToList ();
+            List<string> listOfUrlsToLoopThrough = GetUrlsOfPagesToScrape ().ToList ();
+            int  numberOfUrlsToScrape            = listOfUrlsToLoopThrough.Count();
+            Console.WriteLine($"THERE IS {numberOfUrlsToScrape} tables to scrape");
 
             HtmlWeb htmlWeb = new HtmlWeb ();
 
-            // int loopCount = 1;
-            foreach (var urlForThisPageInLoop in listOfUrls)
+            int urlNumber = 1;
+            // THIS URL type --> string
+            foreach (var thisUrl in listOfUrlsToLoopThrough)
             {
-                // Console.WriteLine($"THIS IS LOOP NUMBER: {loopCount} and THE URL IS {urlForThisPageInLoop}");
-                // loopCount++;
+                Console.WriteLine($"THIS IS URL {urlNumber}/{numberOfUrlsToScrape}");
+                urlNumber++;
 
-                var htmlWebLoad = htmlWeb.Load (urlForThisPageInLoop);
+                var thisUrlsHtml = htmlWeb.Load (thisUrl);
 
-                // TABLE BODY NODE COLLECTION --> HtmlAgilityPack.HtmlNodeCollection (COUNT --> 1)
-                var tableBodyNodeCollection = htmlWebLoad.DocumentNode.SelectNodes (pathOfTableToScrape);
+                GetTableHeaderValues(thisUrl);
 
-                foreach (var tableBodyNode in tableBodyNodeCollection)
+                // THIS TABLES BODY type --> HtmlAgilityPack.HtmlNodeCollection (COUNT --> 1)
+                // PATH OF TABLE TO SCRAPE --> "//*[@id='LeaderBoard1_dg1_ctl00']/tbody";
+                var thisTablesBody = thisUrlsHtml.DocumentNode.SelectNodes (pathOfTableBodyToScrape);
+
+                // THIS TABLE type --> HtmlAgilityPack.HtmlNode
+                foreach (var thisTable in thisTablesBody)
                 {
-                    // this can be gotten from Chrome; right-click 'Inspect', view the html for the table, right click on any item(in this case a row) and select Copy > tableBodyXpath
-                    string preForRows  = "//*[@id='LeaderBoard1_dg1_ctl00__";
-                    string postForRows = "']";
 
-                    // 52 for first page; 13 for last page
-                    int tableBodyNodeChildCount = tableBodyNode.ChildNodes.Count ();
-                    // tableBodyNodeChildCount.Intro ("count of child nodes / rows");
-                    int adjustedCount = tableBodyNodeChildCount - 2;
-                    // Console.WriteLine($"ADJUSTED COUNT: {adjustedCount}");
 
-                    for (var i = 0; i <= adjustedCount - 1; i++)
+                    // NUMBER OF ROWS IN THIS TABLE --> equal to the number of rows/player records returned + 2;
+                    int numberOfRowsInThisTable = CountTheNodesChildren(thisTable);
+
+                    // NUMBER OF ROWS TO SCRAPE IN THIS TABLE --> you only want player data, so remove the header and footer
+                    int numberOfRowsToScrapeInThisTable = numberOfRowsInThisTable - 2;
+                    // Console.WriteLine($"ADJUSTED COUNT: {numberOfRowsToScrapeInThisTable}");
+
+                    for (var row = 0; row <= numberOfRowsToScrapeInThisTable - 1; row++)
                     {
-                        // TR FOR EACH PLAYER --> //*[@id='LeaderBoard1_dg1_ctl00__11']
-                        string tableRowForEachPlayer = $"{preForRows}{i}{postForRows}";
+                        // Console.WriteLine($"READING ROW {row}/{numberOfRowsToScrapeInThisTable}");
 
-                        // NODE ROW FOR EACH PLAYER ---> HtmlAgilityPack.HtmlNodeCollection (COUNT --> 1)
-                        var nodeRowForEachPlayer = tableBodyNode.SelectNodes (tableRowForEachPlayer);
+                        // HTML --> <table id= 'LeaderBoard1_dg1_ctl00'
+                        // string preForRows  = "//*[@id='LeaderBoard1_dg1_ctl00__";
+                        // string postForRows = "']";
 
-                        foreach (var playerItem in nodeRowForEachPlayer)
+                        // THIS PLAYERS TABLE ROW PATH return example --> //*[@id='LeaderBoard1_dg1_ctl00__11']
+                            // HTML --> <tr id='LeaderBoard1_dg1_ctl00__0'
+                        string thisPlayersTableRowPath = $"//*[@id='LeaderBoard1_dg1_ctl00__{row}']";
+                        // Console.WriteLine($"THIS PLAYERS TABLE ROW PATH: {thisPlayersTableRowPath}");
+
+                        // THIS PLAYERS TABLE ROW NODE COLLECTION type --> HtmlAgilityPack.HtmlNodeCollection (COUNT --> 1; i.e., each player has one row/record)
+                        var thisPlayersTableRowNodeCollection = thisTable.SelectNodes (thisPlayersTableRowPath);
+
+                        // PLAYER ITEM type --> HtmlAgilityPack.HtmlNode
+                        foreach (var playerItem in thisPlayersTableRowNodeCollection)
                         {
-                            // PLAYER ITEM CHILDREN COUNT --> counts the total number columns listed in the table
-                            var playerItemChildrenCount = playerItem.ChildNodes.Count ();
-                            // Console.WriteLine($"PLAYER ITEM CHILDREN COUNT: {playerItemChildrenCount}");
+                            // TOTAL NUMBER OF COLUMNS IN TABLE --> counts the total number columns listed in the table
+                            var totalNumberOfColumnsInTable = playerItem.ChildNodes.Count ();
+                            // Console.WriteLine($"TOTAL COLUMNS: {totalNumberOfColumnsInTable}");
 
-                            // e.g. --> 12Manny Machado- - -101440245066710.9 %12.5 %.252.310.311.384.563.393152-0.526.3-3.23.9
-                            string prePathForData  = $"{tableRowForEachPlayer}/td[";
-                            string postPathForData = "]";
+                            int numberOfColumnsToScrape = totalNumberOfColumnsInTable - 2;
+                            // Console.WriteLine($"COUNT OF COLUMNS TO SCRAPE: {numberOfColumnsToScrape}");
+
+                            // PRE PATH FOR DATA --> the column number to scrape will be added between these two strings
+                                // return example --> //*[@id='LeaderBoard1_dg1_ctl00__0']/td[
+                            // string prePathForData  = $"{thisPlayersTableRowPath}/td[";
+                            // string postPathForData = "]";
 
                             List<string> playerItems = new List<string> ();
 
-                            int numberOfColumns = playerItemChildrenCount - 2;
-                            // int numberOfColumns = 57;
-                            int keyCount = 1;
-
-                            for (var j = 1; j <= numberOfColumns; j++)
+                            /// <summary> Loops through every column in the table </summary>
+                            for (var column = 1; column <= numberOfColumnsToScrape; column++)
                             {
-                                // TD FOR EACH PLAYER ---> //*[@id='LeaderBoard1_dg1_ctl00__11']/td[1]
-                                string tdForEachPlayer = $"{prePathForData}{j}{postPathForData}";
+                                // THIS STATS TABLE ROW PATH return example --> //*[@id='LeaderBoard1_dg1_ctl00__11']/td[1]
+                                string thisStatsTableRowPath = $"{thisPlayersTableRowPath}/td[{column}]";
 
                                 // PLAYERS NODE COLLECTION ---> HtmlAgilityPack.HtmlNodeCollection (COUNT --> 1)
-                                var playersNodeCollection = playerItem.SelectNodes (tdForEachPlayer);
+                                var playersNodeCollection = playerItem.SelectNodes (thisStatsTableRowPath);
 
-                                // go this way if looking for player name or player team
-                                if (j == 2 || j == 3)
+                                /// <summary> If the column is player name or team name, go this way; Column 2 is the player's team and Column 3 is the player's team </summary>
+                                /// <remarks> Player name and team name are hyperlinks; because of this the html structure is slightly different than other data cells so a unique approach is needed </remarks>
+                                if (column == 2 || column == 3)
                                 {
                                     try
                                     {
-                                        // Extensions.Spotlight("MARK A");
                                         string postPost = "/a";
 
-                                        // NAME AND TEAM TABLE BODY X-PATHS --> //*[@id='LeaderBoard1_dg1_ctl00__11']/td[2]/a
-                                        string nameAndTeamTableBodyXpaths = $"{tdForEachPlayer}{postPost}";
+                                        // NAME AND TEAM NODE COLLECTION PATH return example --> //*[@id='LeaderBoard1_dg1_ctl00__11']/td[2]/a
+                                        string nameAndTeamNodeCollectionPath = $"{thisStatsTableRowPath}/a";
+                                        // nameAndTeamNodeCollectionPath.Intro("name and team node collection path");
 
-                                        // NAME AND TEAM --> HtmlAgilityPack.HtmlNodeCollection (COUNT --> 1)
-                                        var nameAndTeamNodeCollection = playerItem.SelectNodes (nameAndTeamTableBodyXpaths);
+                                        // NAME AND TEAM NODE COLLECTION type --> HtmlAgilityPack.HtmlNodeCollection (COUNT --> 1)
+                                        var nameAndTeamNodeCollection = playerItem.SelectNodes (nameAndTeamNodeCollectionPath);
 
-                                        foreach (var nameOrTeamNode in nameAndTeamNodeCollection)
+                                        // NAME OR TEAM VALUE NODE type --> HtmlAgilityPack.HtmlNode
+                                        foreach (var nameOrTeamValueNode in nameAndTeamNodeCollection)
                                         {
-                                            // Extensions.Spotlight("MARK B");
-                                            var nameOrTeamValue = nameOrTeamNode.InnerText;
+                                            // NAME OR TEAM VALUE --> this is where you get the player's actual name and team name
+                                            var nameOrTeamValue = nameOrTeamValueNode.InnerText;
+                                            // Console.WriteLine($"NAME OR TEAM: {nameOrTeamValue}");
                                             playerItems.Add (nameOrTeamValue);
-                                            Console.WriteLine($"NAME OR TEAM: {nameOrTeamValue}");
                                         }
                                     }
 
                                     catch
                                     {
-                                        // if the team is empty, the 'try' will not work; this happens in cases where a player has played for multiple teams within a season; It shows up as '---' in their table data
-                                        Extensions.Spotlight ("NAME or TEAM is broken");
+                                        // error description: if the team is empty, the 'try' will not work; this happens in cases where a player has played for multiple teams within a season; It shows up as '---' in their table data
+                                        // Extensions.Spotlight ("NAME or TEAM is broken");
                                         string cellIsBlank = "";
                                         playerItems.Add (cellIsBlank);
                                     }
@@ -187,56 +252,151 @@ namespace BaseballScraper.Controllers.FanGraphs
 
                                 else
                                 {
-                                    // Extensions.Spotlight("MARK D");
+                                    // STAT VALUE NODE type --> HtmlAgilityPack.HtmlNode
                                     foreach (var statValueNode in playersNodeCollection)
                                     {
-                                        // e.g. '3.9', '26.3' etc. The players actual numbers for each stats
+                                        // STAT VALUE --> The players actual numbers for each stat; the numerical value
+                                            // return example --> 3.9', '26.3' etc.
                                         var statValue = statValueNode.InnerText;
                                         playerItems.Add (statValue);
                                         // Console.WriteLine($"STAT: {statValue}");
                                     }
                                 }
-                                keyCount++;
                             }
-
-                            // List<FGHitter> hitters = new List<FGHitter> ();
-
-                            // FGHitter newFGHitter = new FGHitter
-                            // {
-                            //     FanGraphsName = playerItems[1],
-                            //     FanGraphsTeam = playerItems[2],
-                            //     GP            = playerItems[3],
-                            //     PA            = playerItems[4],
-                            //     HR            = playerItems[5],
-                            //     R             = playerItems[6],
-                            //     RBI           = playerItems[7],
-                            //     SB            = playerItems[8],
-                            //     BB_percent    = playerItems[9],
-                            //     K_percent     = playerItems[10],
-                            //     ISO           = playerItems[11],
-                            //     BABIP         = playerItems[12],
-                            //     AVG           = playerItems[13],
-                            //     OBP           = playerItems[14],
-                            //     SLG           = playerItems[15],
-                            //     wOBA          = playerItems[16],
-                            //     wRC_plus      = playerItems[17],
-                            //     BsR           = playerItems[18],
-                            //     Off           = playerItems[19],
-                            //     Def           = playerItems[20],
-                            //     WAR           = playerItems[21],
-                            // };
-
-                            // hitters.Add (newFGHitter);
-
-                            // foreach (var hitter in hitters)
-                            // {
-                            //     Console.WriteLine (hitter.FanGraphsName);
-                            //     Console.WriteLine (hitter.WAR);
-                            // }
-                        string listToString = playerItems.ToString();
-                        Console.WriteLine($"PLAYER ITEMS STRING: {listToString}");
+                            CreateNewFanGraphsPitcher(playerItems);
                         }
+                    }
+                }
+            }
+            _c.Complete.ThisMethod();
+        }
 
+        public int CountTheNodesChildren(HtmlNode node)
+        {
+            _c.Start.ThisMethod();
+
+            int countOfChildren = node.ChildNodes.Count ();
+
+            return countOfChildren;
+        }
+
+        public FanGraphsPitcher CreateNewFanGraphsPitcher(List<string> playerItems)
+        {
+            _c.Start.ThisMethod();
+
+            int count = 1;
+
+            FanGraphsPitcher newFanGraphsPitcher = new FanGraphsPitcher
+            {
+                RecordNumber              = playerItems[0],
+                FanGraphsName             = playerItems[count++],
+                FanGraphsTeam             = playerItems[count++],
+                FanGraphsAge              = playerItems[count++],
+                GamesStarted              = playerItems[count++],
+                InningsPitched            = playerItems[count++],
+                TotalBattersFaced         = playerItems[count++],
+                Wins                      = playerItems[count++],
+                Saves                     = playerItems[count++],
+                Ks                        = playerItems[count++],
+                Holds                     = playerItems[count++],
+                Era                       = playerItems[count++],
+                Whip                      = playerItems[count++],
+                StrikeoutPercentage       = playerItems[count++],
+                WalkPercentage            = playerItems[count++],
+                StrikeoutsMinusWalks      = playerItems[count++],
+                StrikeoutsPer9            = playerItems[count++],
+                WalksPer9                 = playerItems[count++],
+                StrikeoutsDividedByWalks  = playerItems[count++],
+                Balls                     = playerItems[count++],
+                Strikes                   = playerItems[count++],
+                Pitches                   = playerItems[count++],
+                HomeRunsPer9              = playerItems[count++],
+                GroundballPercent         = playerItems[count++],
+                LinedrivePercent          = playerItems[count++],
+                FlyballPercent            = playerItems[count++],
+                InfieldFlyballPercent     = playerItems[count++],
+                OSwingPercent             = playerItems[count++],
+                OSwingPercentPfx          = playerItems[count++],
+                OSwingPercentPi           = playerItems[count++],
+                ZContactPercent           = playerItems[count++],
+                ZContactPercentPfx        = playerItems[count++],
+                ZContactPercentPi         = playerItems[count++],
+                ContactPercent            = playerItems[count++],
+                ContactPercentPfx         = playerItems[count++],
+                ContactPercentPi          = playerItems[count++],
+                ZonePercent               = playerItems[count++],
+                ZonePercentPfx            = playerItems[count++],
+                ZonePercentPi             = playerItems[count++],
+                FStrikePercent            = playerItems[count++],
+                SwStrPercent              = playerItems[count++],
+                PullPercent               = playerItems[count++],
+                SoftPercent               = playerItems[count++],
+                sHardPercent              = playerItems[count++],
+                Babip                     = playerItems[count++],
+                LeftOnBasePercent         = playerItems[count++],
+                HomerunsDividedByFlyballs = playerItems[count++],
+                FastballVelocityPfx       = playerItems[count++],
+                EraRepeat                 = playerItems[count++],
+                EraMinus                  = playerItems[count++],
+                Fip                       = playerItems[count++],
+                FipMinus                  = playerItems[count++],
+                EraMinusFip               = playerItems[count++],
+                XFip                      = playerItems[count++],
+                XFipMinus                 = playerItems[count++],
+                Siera                     = playerItems[count++],
+                RunsPer9                  = playerItems[count++],
+            };
+
+            Console.WriteLine($"NAME: {newFanGraphsPitcher.FanGraphsName}");
+
+            // PrintFanGraphsPitcher(newFanGraphsPitcher);
+            // Extensions.PrintKeysAndValues(newFanGraphsPitcher);
+
+            return newFanGraphsPitcher;
+        }
+
+
+        // public void PrintFanGraphsPitcher(Object obj)
+        // {
+        //     foreach(PropertyInfo property in obj.GetType().GetProperties())
+        //     {
+        //         var propertyValue = property.GetValue(obj, null).ToString();
+        //         Console.WriteLine($"{property.Name} --> {propertyValue}");
+        //     }
+        // }
+
+
+        public void GetTableHeaderValues (string thisUrl)
+        {
+            _c.Start.ThisMethod();
+
+            HtmlWeb htmlWeb = new HtmlWeb ();
+
+            var thisUrlsHtml = htmlWeb.Load (thisUrl);
+
+            // THIS TABLES HEADER type --> HtmlAgilityPack.HtmlNodeCollection (COUNT --> 1)
+            // <thead> Xpath --> //*[@id="LeaderBoard1_dg1_ctl00"]/thead/tr[2]";
+                // Note: The 2 in '/tr[2]' is hard coded into the variable; the first row in the header (i.e., '/tr[1]') is the navigation part of the header; We don't want that row. We want the second row which actually has the header values
+            var thisTablesHeader = thisUrlsHtml.DocumentNode.SelectNodes(pathOfTableHeaderToScrape);
+
+            // THIS HEADER type: HtmlAgilityPack.HtmlNode
+            foreach(var thisHeader in thisTablesHeader)
+            {
+                int numberOfHeaderColumns = thisTablesHeader.First().ChildNodes.Count();
+                // numberOfHeaderColumns.Intro("number of header columns");
+                int numberOfHeaderColumnsToScrape = numberOfHeaderColumns - 2;
+
+                for(var headerColumn = 1; headerColumn <= numberOfHeaderColumnsToScrape; headerColumn++)
+                {
+                    // HEADER STAT NAME PATH return example --> //*[@id='LeaderBoard1_dg1_ctl00']/thead/tr[2]/th[16]
+                    var headerStatNamePath = $"{pathOfTableHeaderToScrape}/th[{headerColumn}]";
+
+                    // HEADER STAT NAME DATA CELL ---> HtmlAgilityPack.HtmlNodeCollection
+                    var headerStatNameDataCell = thisHeader.SelectNodes(headerStatNamePath);
+                    foreach(var headerStatName in headerStatNameDataCell)
+                    {
+                        // HEADER STAT NAME INNER TEXT --> this is the value that you want; the name of the stat (e.g., ERA, WHIP, etc.)
+                        // Console.WriteLine($"STAT NAME: {headerStatName.InnerText}");
                     }
                 }
             }
