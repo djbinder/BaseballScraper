@@ -59,7 +59,7 @@ namespace BaseballScraper.Models.FanGraphs
         private string _sSiera;
         private string _sRsPer9;
 
-        public string FanGraphsId { get => _fanGraphsId; set => _fanGraphsId = value; }
+        public string RecordNumber { get => _fanGraphsId; set => _fanGraphsId = value; }
         public string FanGraphsName { get => _fanGraphsName; set => _fanGraphsName = value; }
         public string FanGraphsTeam { get => _fanGraphsTeam; set => _fanGraphsTeam = value; }
         public string FanGraphsAge { get => _sFanGraphsAge; set => _sFanGraphsAge = value; }
@@ -107,6 +107,7 @@ namespace BaseballScraper.Models.FanGraphs
         public string LeftOnBasePercent { get => _sLobPercent; set => _sLobPercent = value; }
         public string HomerunsDividedByFlyballs { get => _sHrDividedByFb; set => _sHrDividedByFb = value; }
         public string FastballVelocityPfx { get => _sFastballVelocityPfx; set => _sFastballVelocityPfx = value; }
+        public string EraRepeat { get; set; }
         public string EraMinus { get => _sEraMinus; set => _sEraMinus = value; }
         public string Fip { get => _sFip; set => _sFip = value; }
         public string FipMinus { get => _sFipMinus; set => _sFipMinus = value; }
