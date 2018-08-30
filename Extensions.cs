@@ -7,12 +7,25 @@ using ConsoleTables;
 using System.Linq;
 using Newtonsoft.Json.Linq;
 using MarkdownLog;
+using System.Reflection;
 
 public static class Extensions
 {
 
-    public const String Start    = "START";
-    public const String Complete = "COMPLETE";
+    public  const String Start        = "START";
+    public  const String Complete     = "COMPLETE";
+    private static string currentTime = DateTime.Now.ToShortTimeString();
+
+
+    public static void PrintKeysAndValues(Object obj)
+    {
+        foreach(PropertyInfo property in obj.GetType().GetProperties())
+        {
+            var propertyValue = property.GetValue(obj, null).ToString();
+            Console.WriteLine($"{property.Name} --> {propertyValue}");
+        }
+    }
+
 
     // https://msdn.microsoft.com/en-us/library/system.consolekeyinfo(v=vs.110).aspx
     public static void ConsoleKey ()
@@ -27,7 +40,6 @@ public static class Extensions
     }
 
 
-
     // retrieve high-level info about 'this'
     public static void Dig<T>(this T x)
     {
@@ -37,9 +49,7 @@ public static class Extensions
         string json = JsonConvert.SerializeObject(x, Formatting.Indented);
 
         Console.WriteLine($"{x} --------------------------- {json} --------------------------- {x}");
-
         Console.WriteLine();
-
         Console.ResetColor();
     }
 
@@ -55,8 +65,7 @@ public static class Extensions
             ObjectDumper.Dumper.Dump(x, "Object Dumper", writer);
             Console.Write(writer.ToString());
         }
-
-        Console.WriteLine("'DIG DEEP extension METHOD' COMPLETE");
+        Console.WriteLine();
         Console.ResetColor();
     }
 
@@ -66,21 +75,18 @@ public static class Extensions
     // public static void Spotlight<T>(this T x, string Message)
     public static void Spotlight (this string Message)
     {
-        string FullMessage = JsonConvert.SerializeObject(Message, Formatting.Indented).ToUpper();
-        // string UpperMessage = jsonMessage.ToUpper();
+        string fullMessage = JsonConvert.SerializeObject(Message, Formatting.Indented).ToUpper();
 
         StackFrame frame      = new StackFrame(1, true);
         var        lineNumber = frame.GetFileLineNumber();
+        // var lineNumber = GetCurrentLineNumber();
 
         using (var writer = new System.IO.StringWriter())
         {
             // change text color
             Console.ForegroundColor = ConsoleColor.Magenta;
-
-            Console.WriteLine($"{FullMessage} @ Line#: {lineNumber}");
-
+            Console.WriteLine($"{fullMessage} @ Line#: {lineNumber}");
             Console.Write(writer.ToString());
-
             Console.ResetColor();
         }
     }
@@ -92,17 +98,15 @@ public static class Extensions
         Console.WriteLine();
         Console.ForegroundColor = ConsoleColor.Green;
 
-        string UpperString = String.ToUpper();
+        string     upperString = String.ToUpper();
+        StackFrame frame       = new StackFrame(1, true);
 
-        StackFrame frame      = new StackFrame(1, true);
-        var        lineNumber = frame.GetFileLineNumber();
+        var lineNumber = frame.GetFileLineNumber();
 
-        Console.WriteLine($"// {UpperString} ---> {Object} ---> [@ Line#: {lineNumber - 1}]");
+        Console.WriteLine($"// {upperString} --> {Object} --> [@ Line# {lineNumber}]");
 
         Console.ResetColor();
         Console.WriteLine();
-
-        return;
     }
 
     public static void TypeAndIntro(Object o, string x)
@@ -120,35 +124,25 @@ public static class Extensions
 
         StackTrace stackTrace = new StackTrace();
 
-        var MethodName = stackTrace.GetFrame(1).GetMethod().Name;
+        // var methodName = GetMethodName();
+        var methodName = stackTrace.GetFrame(1).GetMethod().Name;
 
         StackFrame frame    = new StackFrame(1, true);
         var        method   = frame.GetMethod();
         var        fileName = frame.GetFileName();
-        // var path = @"/Users/DanBinder/Google_Drive/Coding/Projects/movieGame/movieGame/Controllers/";
+
         var lineNumber = frame.GetFileLineNumber();
 
-        string FileNameTrimmed = Path.GetFileName(fileName);
+        string fileNameTrimmed = Path.GetFileName(fileName);
 
-        var timing = DateTime.Now.ToShortTimeString();
-
-        // var MessageToWriteToConsole = $"---------------File: {FileNameTrimmed} ---> {MethodName} {String} [Line#: {lineNumber} @ {timing}] ---------------";
-        // Console.WriteLine(MessageToWriteToConsole);
-
-        Console.WriteLine($"--------------->|     {FileNameTrimmed} ---> {MethodName} {String} [Line: {lineNumber} @ {timing}]     |<---------------");
+        Console.WriteLine($"--------------->|     {fileNameTrimmed} ---> {methodName} {String} [Line: {lineNumber} @ {currentTime}]     |<---------------");
 
         Console.ResetColor();
         Console.WriteLine();
-
-        return;
     }
-
-
 
     public static void PrintJObjectItems(JObject JObjectToPrint)
     {
-        // Start.ThisMethod();
-
         var responseToJson = JObjectToPrint;
 
         foreach(var jsonItem in responseToJson)
@@ -159,10 +153,7 @@ public static class Extensions
             Console.WriteLine(jsonItem.Value);
             Console.WriteLine();
         }
-
-        // Complete.ThisMethod();
     }
-
 
     public static void TableIt(params object[] Object)
     {
