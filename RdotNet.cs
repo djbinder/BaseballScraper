@@ -5,19 +5,37 @@
 
 using System;
 using System.Linq;
-
+using Microsoft.AspNetCore.Mvc;
 using RDotNet;
 
-namespace BaseballScraper
+namespace BaseballScraper.Controllers.RController
 {
-    public class RdotNet
+    [Route("r")]
+    public class RdotNetController: Controller
     {
-        private static String Start = "STARTED";
-        // private static String Complete = "COMPLETED";
-        public static void RExample1 ()
+        private Constants _c    = new Constants();
+        public  REngine _engine = REngine.GetInstance();
+
+
+        [HttpGet]
+        [Route("")]
+        public IActionResult CreatePitcherWinsVector()
+        {
+            REngine.SetEnvironmentVariables();
+            REngine engine = REngine.GetInstance();
+            _c.Start.ThisMethod();
+            NumericVector pitcherWins = engine.CreateNumericVector(new double[] { 8 ,21, 15, 21, 21, 22, 14 });
+            Console.WriteLine($"PITCHER WINS {pitcherWins}");
+
+            return Content($"PITCHER WINS: {pitcherWins}");
+        }
+
+
+
+        public void RExample1 ()
         {
 
-            Start.ThisMethod ();
+            _c.Start.ThisMethod ();
 
 
             REngine.SetEnvironmentVariables ();
