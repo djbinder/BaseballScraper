@@ -17,6 +17,8 @@
 
   <ItemGroup>
 
+    <PackageReference Include="IronPython" Version="2.7.8.1" />
+
     <PackageReference Include="MarkdownLog.NS20" Version="0.10.1" />
 
     <PackageReference Include="Microsoft.AspNetCore.App" />
@@ -51,9 +53,6 @@
     <!-- <PackageReference Include="log4net" Version="2.0.8" /> -->
 
     <PackageReference Include="MarkdownLog" Version="0.9.3" />
-
-
-
 
     <!-- R stats -->
     <PackageReference Include="R.NET" Version="1.7.0" />
