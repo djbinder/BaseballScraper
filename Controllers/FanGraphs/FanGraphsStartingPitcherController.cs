@@ -36,7 +36,13 @@ namespace BaseballScraper.Controllers.FanGraphs
             return Content($"CURRENTLY: {action}");
         }
 
-
+        // Step 1:
+        /// <summary> This defines the first url to scrape; At times, you may need to loop through multiple urls and the url defined here is the first url in the loop </summary>
+        /// <param name="minInningsPitched"> The minimum number of innings pitched a pitcher needs to be included in the results of the scrape </param>
+        /// <param name="year"> The Mlb season year </param>
+        /// <param name="page"> The page to being scraping; this typically will be one. But if you want to start on page 2 (for example), just set 'page' to 2 </param>
+        /// <param name="recordsPerPage"> The number of rows in the table; Standard options include 30, 50 , 100; This will ultimately influence the total number of urls and their tables to scrape </param>
+        /// <returns> A string url </returns>
         public string SetInitialUrlToScrape(int minInningsPitched, int year, int page, int recordsPerPage)
         {
             _c.Start.ThisMethod();
@@ -49,6 +55,14 @@ namespace BaseballScraper.Controllers.FanGraphs
             return uriToBeginScraping;
         }
 
+        // Step 2:
+        /// <summary> This counts the number of urls that will be scraped; It examines a specific html element on the fangraphs html page that shows the number of pages </summary>
+        ///     <example> '70 items in 3 page' --> the '3' is what this method is looking for </example>
+        /// <param name="minInningsPitched"> The minimum number of innings pitched a pitcher needs to be included in the results of the scrape </param>
+        /// <param name="year"> The Mlb season year </param>
+        /// <param name="page"> The page to being scraping; this typically will be one. But if you want to start on page 2 (for example), just set 'page' to 2 </param>
+        /// <param name="recordsPerPage"> The number of rows in the table; Standard options include 30, 50 , 100; This will ultimately influence the total number of urls and their tables to scrape </param>
+        /// <returns> A number of the number of pages to scrape as part of the loop </returns>
         public int GetNumberOfPagesToScrape(int minInningsPitched, int year, int page, int recordsPerPage)
         {
             string uriToBeginScraping = SetInitialUrlToScrape(minInningsPitched, year, page, recordsPerPage);
@@ -72,6 +86,14 @@ namespace BaseballScraper.Controllers.FanGraphs
             return numberOfPagesToScrapeInt;
         }
 
+        // Step 3 - OPTION 1: variables defined within the method (i.e minInningsPitched, year, page, recordsPerPage )
+        /// <summary> Retrieves all urls of pages that will be scraped and adds them to a list  </summary>
+        ///     <example> '70 items in 3 page' --> the '3' is what this method is looking for </example>
+        /// <param name="minInningsPitched"> The minimum number of innings pitched a pitcher needs to be included in the results of the scrape </param>
+        /// <param name="year"> The Mlb season year </param>
+        /// <param name="page"> The page to being scraping; this typically will be one. But if you want to start on page 2 (for example), just set 'page' to 2 </param>
+        /// <param name="recordsPerPage"> The number of rows in the table; Standard options include 30, 50 , 100; This will ultimately influence the total number of urls and their tables to scrape </param>
+        /// <returns> A list of strings representing urls to be scraped </returns>
         private List<string> GetUrlsOfPagesToScrape()
         {
             _c.Start.ThisMethod();
@@ -104,6 +126,15 @@ namespace BaseballScraper.Controllers.FanGraphs
             }
             return urlsOfPagesToScrape;
         }
+
+        // Step 3 - OPTION 2: parameters are passed into the  method (i.e minInningsPitched, year, page, recordsPerPage )
+        /// <summary> Retrieves all urls of pages that will be scraped and adds them to a list  </summary>
+        ///     <example> '70 items in 3 page' --> the '3' is what this method is looking for </example>
+        /// <param name="minInningsPitched"> The minimum number of innings pitched a pitcher needs to be included in the results of the scrape </param>
+        /// <param name="year"> The Mlb season year </param>
+        /// <param name="page"> The page to being scraping; this typically will be one. But if you want to start on page 2 (for example), just set 'page' to 2 </param>
+        /// <param name="recordsPerPage"> The number of rows in the table; Standard options include 30, 50 , 100; This will ultimately influence the total number of urls and their tables to scrape </param>
+        /// <returns> A list of strings representing urls to be scraped </returns>
         private List<string> GetUrlsOfPagesToScrape(int minInningsPitched, int year, int recordsPerPage)
         {
             _c.Start.ThisMethod();
@@ -133,8 +164,8 @@ namespace BaseballScraper.Controllers.FanGraphs
             return urlsOfPagesToScrape;
         }
 
-
-        /// <summary></summary>
+        // Step 4
+        /// <summary> Scrape the pitchers table and get all their data </summary>
         /// <remarks> Any XPath can be pulled from Chrome; right-click 'Inspect', view the html for the table, right click on any item and select Copy > tableBodyXpath </remarks>
         [Route("scrape")]
         public void ScrapePitchersAndCreateList ()
@@ -163,10 +194,9 @@ namespace BaseballScraper.Controllers.FanGraphs
                 var thisTablesBody = thisUrlsHtml.DocumentNode.SelectNodes (pathOfTableBodyToScrape);
 
                 // THIS TABLE type --> HtmlAgilityPack.HtmlNode
+                // HTML --> <table id= 'LeaderBoard1_dg1_ctl00'
                 foreach (var thisTable in thisTablesBody)
                 {
-
-
                     // NUMBER OF ROWS IN THIS TABLE --> equal to the number of rows/player records returned + 2;
                     int numberOfRowsInThisTable = CountTheNodesChildren(thisTable);
 
@@ -177,10 +207,6 @@ namespace BaseballScraper.Controllers.FanGraphs
                     for (var row = 0; row <= numberOfRowsToScrapeInThisTable - 1; row++)
                     {
                         // Console.WriteLine($"READING ROW {row}/{numberOfRowsToScrapeInThisTable}");
-
-                        // HTML --> <table id= 'LeaderBoard1_dg1_ctl00'
-                        // string preForRows  = "//*[@id='LeaderBoard1_dg1_ctl00__";
-                        // string postForRows = "']";
 
                         // THIS PLAYERS TABLE ROW PATH return example --> //*[@id='LeaderBoard1_dg1_ctl00__11']
                             // HTML --> <tr id='LeaderBoard1_dg1_ctl00__0'
@@ -200,11 +226,6 @@ namespace BaseballScraper.Controllers.FanGraphs
                             int numberOfColumnsToScrape = totalNumberOfColumnsInTable - 2;
                             // Console.WriteLine($"COUNT OF COLUMNS TO SCRAPE: {numberOfColumnsToScrape}");
 
-                            // PRE PATH FOR DATA --> the column number to scrape will be added between these two strings
-                                // return example --> //*[@id='LeaderBoard1_dg1_ctl00__0']/td[
-                            // string prePathForData  = $"{thisPlayersTableRowPath}/td[";
-                            // string postPathForData = "]";
-
                             List<string> playerItems = new List<string> ();
 
                             /// <summary> Loops through every column in the table </summary>
@@ -222,8 +243,6 @@ namespace BaseballScraper.Controllers.FanGraphs
                                 {
                                     try
                                     {
-                                        string postPost = "/a";
-
                                         // NAME AND TEAM NODE COLLECTION PATH return example --> //*[@id='LeaderBoard1_dg1_ctl00__11']/td[2]/a
                                         string nameAndTeamNodeCollectionPath = $"{thisStatsTableRowPath}/a";
                                         // nameAndTeamNodeCollectionPath.Intro("name and team node collection path");
@@ -280,6 +299,10 @@ namespace BaseballScraper.Controllers.FanGraphs
             return countOfChildren;
         }
 
+
+        /// <summary> Instantiates a new instance of class FanGraphsPitcher </summary>
+        /// <param name="playerItems"> A list of values for each of the stats / properties of the FanGraphsPitcher class </param>
+        /// <returns> New instance of FanGraphsPitcher class </returns>
         public FanGraphsPitcher CreateNewFanGraphsPitcher(List<string> playerItems)
         {
             _c.Start.ThisMethod();
@@ -356,16 +379,8 @@ namespace BaseballScraper.Controllers.FanGraphs
         }
 
 
-        // public void PrintFanGraphsPitcher(Object obj)
-        // {
-        //     foreach(PropertyInfo property in obj.GetType().GetProperties())
-        //     {
-        //         var propertyValue = property.GetValue(obj, null).ToString();
-        //         Console.WriteLine($"{property.Name} --> {propertyValue}");
-        //     }
-        // }
-
-
+        /// <summary> Scrapers the headers of the table to get the stat names (e.g., ERA, WHIP, etc.) </summary>
+        /// <param name="thisUrl"> The url of the table you are scraping </param>
         public void GetTableHeaderValues (string thisUrl)
         {
             _c.Start.ThisMethod();

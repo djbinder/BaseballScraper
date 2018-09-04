@@ -1,17 +1,13 @@
-using System;
 using BaseballScraper.Models.Configuration;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using NLog;
-using Serilog;
 
 namespace BaseballScraper.Controllers
 {
 #pragma warning disable CS0414
     public class HomeController: Controller
     {
-        private static String Start    = "STARTED";
-        private static String Complete = "COMPLETED";
+        private Constants _c = new Constants();
 
         // this is referencing the model
         private readonly AirtableConfiguration _airtableConfig;
@@ -60,5 +56,8 @@ namespace BaseballScraper.Controllers
 
             return View();
         }
+
+
+
     }
 }
