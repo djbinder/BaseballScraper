@@ -8,36 +8,12 @@ namespace BaseballScraper
 {
     public class HtmlTableParser
     {
-        private static String _start    = "STARTED";
-        private static String _complete = "COMPLETED";
-        public static string Start { get => _start; set => _start = value; }
-        public static string Complete { get => _complete; set => _complete = value; }
-
-
-        // THIS WORKS
-        // private void CreateListFromHTML(object sender, EventArgs e)
-        // {
-        //     WebClient webClient = new WebClient();
-        //     string page = webClient.DownloadString("http://racing.hkjc.com/racing/Info/Meeting/Results/English/Local/20161116/HV/3");
-
-        //     HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
-        //     doc.LoadHtml(page);
-
-        //     List<List<string>> table = doc.DocumentNode.SelectSingleNode("//table[@class='tableBorder trBgBlue tdAlignC number12 draggable']")
-        //         .Descendants("tr")
-        //         .Where(tr => tr.Elements("td").Count() == 12)
-        //         .Select(tr => tr.Elements("td").Select(td => td.InnerText.Trim()).ToList())
-        //         .ToList();
-        // }
-
-        // public List<string> str = new List<String>();
-
-
+        private Constants _c = new Constants();
 
         // https://msdn.microsoft.com/en-us/library/system.data.datatable(v=vs.110).aspx
-        public static DataTable Create_TableHeaders_FromList (List<string> list)
+        public DataTable Create_TableHeaders_FromList (List<string> list)
         {
-            Start.ThisMethod ();
+            _c.Start.ThisMethod ();
             DataTable testTable = new DataTable ("test table");
 
             foreach (var col in list)
@@ -52,7 +28,7 @@ namespace BaseballScraper
         // THIS WORKS
         public void PublishTable ()
         {
-            Start.ThisMethod ();
+            _c.Start.ThisMethod ();
 
             List<string> list = new List<string> ();
             list.Add ("H");
@@ -124,9 +100,9 @@ namespace BaseballScraper
             Console.ReadKey ();
         }
 
-        private static DataTable CreateOrderTable ()
+        private DataTable CreateOrderTable ()
         {
-            Start.ThisMethod ();
+            _c.Start.ThisMethod ();
             DataTable orderTable = new DataTable ("Order");
 
             // Define one column.
@@ -144,9 +120,9 @@ namespace BaseballScraper
 
 
 
-        private static DataTable CreateOrderDetailTable ()
+        private DataTable CreateOrderDetailTable ()
         {
-            Start.ThisMethod ();
+            _c.Start.ThisMethod ();
             DataTable orderDetailTable = new DataTable ("OrderDetail");
 
             // Define all the columns once.
@@ -165,9 +141,9 @@ namespace BaseballScraper
         }
 
 
-        private static void InsertOrders (DataTable orderTable)
+        private void InsertOrders (DataTable orderTable)
         {
-            Start.ThisMethod ();
+            _c.Start.ThisMethod ();
             // Add one row once.
             DataRow row1          = orderTable.NewRow ();
             row1    ["OrderId"]   = "O0001";
@@ -186,9 +162,9 @@ namespace BaseballScraper
         }
 
 
-        private static void InsertOrderDetails (DataTable orderDetailTable)
+        private void InsertOrderDetails (DataTable orderDetailTable)
         {
-            Start.ThisMethod ();
+            _c.Start.ThisMethod ();
             // Use an Object array to insert all the rows .
             // Values in the array are matched sequentially to the columns, based on the order in which they appear in the table.
             Object[] rows = {
@@ -208,9 +184,9 @@ namespace BaseballScraper
         }
 
 
-        private static void ShowTable (DataTable table)
+        private void ShowTable (DataTable table)
         {
-            Start.ThisMethod ();
+            _c.Start.ThisMethod ();
             foreach (DataColumn col in table.Columns)
             {
                 Console.Write ("{0,-14}", col.ColumnName);
