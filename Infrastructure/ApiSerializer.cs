@@ -159,21 +159,21 @@ namespace BaseballScraper.Infrastructure
 
             switch(modelType)
             {
-                case "PlayerSearch": 
+                case "PlayerSearch":
                     return serializer.ReadObject(memoryStream) as PlayerSearch;
-                case "PlayerInfo": 
+                case "PlayerInfo":
                     return serializer.ReadObject(memoryStream) as PlayerInfo;
-                case "ProjectedPitchingStats": 
+                case "ProjectedPitchingStats":
                     return serializer.ReadObject(memoryStream) as ProjectedPitchingStats;
-                case "ProjectedHittingStats": 
+                case "ProjectedHittingStats":
                     return serializer.ReadObject(memoryStream) as ProjectedHittingStats;
-                case "PitchingLeaders": 
+                case "PitchingLeaders":
                     return serializer.ReadObject(memoryStream) as PitchingLeaders;
-                case "HittingLeaders": 
+                case "HittingLeaders":
                     return serializer.ReadObject(memoryStream) as HittingLeaders;
-                case "LeadingPitcher": 
+                case "LeadingPitcher":
                     return serializer.ReadObject(memoryStream) as LeadingPitcher;
-                case "LeadingHitter": 
+                case "LeadingHitter":
                     return serializer.ReadObject(memoryStream) as LeadingHitter;
             }
             throw new System.Exception("no model type found");
@@ -188,28 +188,28 @@ namespace BaseballScraper.Infrastructure
             // Console.WriteLine();
             switch(tokenName)
             {
-                case "PlayerSearch": 
+                case "PlayerSearch":
                     return obj["search_player_all"]["queryResults"]["row"];
 
-                case "PlayerInfo": 
+                case "PlayerInfo":
                     return obj["player_info"]["queryResults"]["row"];
 
-                case "ProjectedPitchingStats": 
+                case "ProjectedPitchingStats":
                     return obj["proj_pecota_pitching"]["queryResults"]["row"];
 
-                case "ProjectedHittingStats": 
+                case "ProjectedHittingStats":
                     return obj["proj_pecota_batting"]["queryResults"]["row"];
 
-                case "PitchingLeaders": 
+                case "PitchingLeaders":
                     return obj["leader_pitching_repeater"]["leader_pitching_mux"]["queryResults"]["row"];
 
-                case "HittingLeaders": 
+                case "HittingLeaders":
                     return obj["leader_hitting_repeater"]["leader_hitting_mux"]["queryResults"]["row"];
 
-                case "LeadingPitcher": 
+                case "LeadingPitcher":
                     return obj["leader_pitching_repeater"]["leader_pitching_mux"]["queryResults"]["row"];
 
-                case "LeadingHitter": 
+                case "LeadingHitter":
                     return obj["leader_hitting_repeater"]["leader_hitting_mux"]["queryResults"]["row"];
             }
             // _c.Complete.ThisMethod();

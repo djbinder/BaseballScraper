@@ -7,7 +7,7 @@ using System.Threading;
 
 using BaseballScraper.Models;
 using BaseballScraper.Models.FanGraphs;
-
+using Microsoft.AspNetCore.Mvc;
 using Npoi.Mapper;
 
 using NPOI.HSSF.UserModel;
@@ -16,44 +16,49 @@ using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
 
+using Export.XLS;
+
 
 
 namespace BaseballScraper.Mappers
 {
-    public class NpoiMapper
+    public class NpoiMapper: Controller
     {
         private Constants _c = new Constants();
 
         // THIS WORKS
-        public static void CreateEmptyXlsx (string FileName, string SheetName, int StartStop)
+        public void CreateEmptyXlsx (string FileName, string SheetName, int StartStop)
         {
+            _c.Start.ThisMethod ();
             if (StartStop == 1)
             {
-                // _c.Start.ThisMethod ();
-
                 System.Text.Encoding.RegisterProvider (System.Text.CodePagesEncodingProvider.Instance);
-
+                Extensions.Spotlight("A");
                 // Npoi.Mapper.Mapper
                 var    mapper       = new Mapper ();
                 string NewFileName  = $"{FileName}.xlsx";
                 string NewSheetName = SheetName;
                 Dummy  dummy        = new Dummy ();
 
+                Extensions.Spotlight("B");
                 // ModifyFormatXLSX(mapper, NewSheetName);
 
                 mapper.Save (NewFileName, new [] { dummy }, NewSheetName);
+                Extensions.Spotlight("C");
                 var dateCell = mapper.Workbook.GetSheetAt (0).GetRow (1).GetCell (1);
                 dateCell.Intro ("date cell");
                 Console.WriteLine (dateCell.GetType ());
 
+                Extensions.Spotlight("D");
                 string xD = dateCell.ToString ();
                 xD.Intro ("xd");
                 Console.WriteLine (xD.GetType ());
+                Extensions.Spotlight("E");
             }
         }
 
         // THIS WORKS
-        public static void GetAllRecordsInSheet (string FileName, string SheetName)
+        public void GetAllRecordsInSheet (string FileName, string SheetName)
         {
             System.Text.Encoding.RegisterProvider (System.Text.CodePagesEncodingProvider.Instance);
 
@@ -75,7 +80,7 @@ namespace BaseballScraper.Mappers
         // }
 
 
-        public static void ModifyFormatXlsx (Mapper mapper, string sheetName)
+        public void ModifyFormatXlsx (Mapper mapper, string sheetName)
         {
             var dateFormat   = "yyyy.MM.dd hh.mm.ss";
             var doubleFormat = "0%";
@@ -89,7 +94,7 @@ namespace BaseballScraper.Mappers
 
         // THIS WORKS
         // add a new row to an existing sheet
-        public static void AddRowToExistingXlsx (FGHitter hitter, int StartStop)
+        public void AddRowToExistingXlsx (FGHitter hitter, int StartStop)
         {
             if (StartStop == 1)
             {
@@ -109,50 +114,46 @@ namespace BaseballScraper.Mappers
 
         // THIS WORKS
         // https://github.com/dotnetcore/NPOI/blob/master/samples/Npoi.Samples.CreateNewSpreadsheet/Program.cs
-        public static void CreateEmptyXls (string FileName, string SheetName, int StartStop)
+        public void CreateEmptyXls (string FileName, string SheetName, int StartStop)
         {
-            if (StartStop == 1)
+            _c.Start.ThisMethod ();
+
+            Thread.CurrentThread.CurrentCulture = new CultureInfo ("en-US");
+
+            var NewFile = $"{FileName}.xls";
+
+            using (var fs = new FileStream (NewFile, FileMode.Create, FileAccess.Write))
             {
-                // _c.Start.ThisMethod ();
+                // WORKBOOK ---> NPOI.HSSF.UserModel.HSSFWorkbook
+                IWorkbook workbook = new HSSFWorkbook ();
 
-                Thread.CurrentThread.CurrentCulture = new CultureInfo ("en-US");
+                // SHEET 1 ---> NPOI.HSSF.UserModel.HSSFSheet
+                // ISheet sheet1 = workbook.CreateSheet (SheetName);
+                // sheet1.Intro ("sheet 1");
 
-                var NewFile = $"{FileName}.xls";
-
-                using (var fs = new FileStream (NewFile, FileMode.Create, FileAccess.Write))
-                {
-                    // WORKBOOK ---> NPOI.HSSF.UserModel.HSSFWorkbook
-                    IWorkbook workbook = new HSSFWorkbook ();
-
-                    // SHEET 1 ---> NPOI.HSSF.UserModel.HSSFSheet
-                    ISheet sheet1 = workbook.CreateSheet (SheetName);
-                    sheet1.Intro ("sheet 1");
-
-                    MergeRowsInXls (workbook, sheet1);
+                // MergeRowsInXls (workbook, sheet1);
 
 
 
-                    // var rowIndex = 0;
+                // var rowIndex = 0;
 
-                    // // ROW ---> NPOI.HSSF.UserModel.HSSFRow
-                    // IRow row = sheet1.CreateRow (rowIndex);
-                    //         row.Height = 30 * 80;
+                // // ROW ---> NPOI.HSSF.UserModel.HSSFRow
+                // IRow row = sheet1.CreateRow (rowIndex);
+                //         row.Height = 30 * 80;
 
-                    // var cell = sheet1.CreateRow (1).CreateCell (1);
-                    //     cell.SetCellValue (1);
-                    // // var sheet2 = workbook.CreateSheet("sheet2");
+                // var cell = sheet1.CreateRow (1).CreateCell (1);
+                //     cell.SetCellValue (1);
+                // // var sheet2 = workbook.CreateSheet("sheet2");
 
-                    workbook.Write (fs);
-                }
-
-                // _c.Complete.ThisMethod ();
+                workbook.Write (fs);
             }
+            _c.Complete.ThisMethod ();
         }
 
 
 
         // THIS WORKS
-        public static Object MergeRowsInXls (IWorkbook TargetWB, ISheet TargetS)
+        public Object MergeRowsInXls (IWorkbook TargetWB, ISheet TargetS)
         {
             // _c.Start.ThisMethod ();
 
@@ -183,7 +184,7 @@ namespace BaseballScraper.Mappers
         }
 
 
-        public static void CreateEmptyWorkbook ()
+        public void CreateEmptyWorkbook ()
         {
             // _c.Start.ThisMethod ();
 
