@@ -27,6 +27,7 @@ namespace BaseballScraper.Controllers
             var scope = ConnectToPythonFile("HelloWorld.py");
         }
 
+        // STATUS: this works
         /// <summary> Create a connection between .NET and a Python file; This must be run before any of the other methods will work </summary>
         /// <remarks> This must be run before any of the other below methods </remarks>
         /// <returns> A connection between .NET and Python </returns>

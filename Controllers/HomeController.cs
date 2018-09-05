@@ -1,6 +1,7 @@
 using BaseballScraper.Models.Configuration;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using BaseballScraper.Infrastructure;
 
 namespace BaseballScraper.Controllers
 {
@@ -12,6 +13,7 @@ namespace BaseballScraper.Controllers
         // this is referencing the model
         private readonly AirtableConfiguration _airtableConfig;
         private readonly TwitterConfiguration _twitterConfiguration;
+        private readonly ExcelMapper _eM = new ExcelMapper();
 
 
         public HomeController (IOptions<AirtableConfiguration> airtableConfig, IOptions<TwitterConfiguration> twitterConfig)
@@ -58,6 +60,16 @@ namespace BaseballScraper.Controllers
         }
 
 
+        [HttpGet]
+        [Route("mapper")]
+        public void ConnectToMapperHome()
+        {
+            _c.Start.ThisMethod();
 
+            // _eM.CreateNewExcelDocument("BaseballScraper", "djb");
+            // _eM.CreateNewExcelDocument();
+
+            _eM.AddRecordToSheet("BaseballScraper", "FgHitters");
+        }
     }
 }
