@@ -75,14 +75,10 @@ namespace BaseballScraper.Infrastructure
 
         public JObject CreateModelJObject(IRestResponse response)
         {
-            // _c.Start.ThisMethod();
-
-            var responseToJson = response.Content;
-            // clean up / better structure the json
+            var     responseToJson    = response.Content;
             JObject responseToJObject = JObject.Parse(responseToJson);
             // Extensions.PrintJObjectItems(responseToJObject);
 
-            // _c.Complete.ThisMethod();
             return responseToJObject;
         }
 
@@ -97,18 +93,11 @@ namespace BaseballScraper.Infrastructure
 
             JToken modelToken = CreateObjectJTokenFromSwitch(obj, modelType);
 
-            // _c.Complete.ThisMethod();
             return modelToken;
         }
 
         public Object CreateInstanceOfModel (JToken token, Object obj, string modelType)
         {
-            // _c.Start.ThisMethod();
-
-            // Extensions.Spotlight("API SERIALIZER | Create instance of model");
-            // Console.WriteLine($"CREATING NEW INSTANCE OF {obj.GetType()}");
-            // Console.WriteLine();
-
             string tokenToString = token.ToString();
 
             MemoryStream memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(tokenToString));
@@ -123,14 +112,11 @@ namespace BaseballScraper.Infrastructure
 
             ReturnJsonFromObject(obj);
 
-            // _c.Complete.ThisMethod();
             return obj;
         }
 
         public Object CreateMultipleInstancesOfModelByLooping(JToken token, Object obj, string modelType)
         {
-            // _c.Start.ThisMethod();
-
             int instance = 1;
 
             foreach(var playerObject in token)
@@ -155,25 +141,23 @@ namespace BaseballScraper.Infrastructure
 
         internal Object SetTypeToReadObjectAs (Object obj, MemoryStream memoryStream, DataContractJsonSerializer serializer, string modelType)
         {
-            // _c.Start.ThisMethod();
-
             switch(modelType)
             {
-                case "PlayerSearch":
+                case "PlayerSearch": 
                     return serializer.ReadObject(memoryStream) as PlayerSearch;
-                case "PlayerInfo":
+                case "PlayerInfo": 
                     return serializer.ReadObject(memoryStream) as PlayerInfo;
-                case "ProjectedPitchingStats":
+                case "ProjectedPitchingStats": 
                     return serializer.ReadObject(memoryStream) as ProjectedPitchingStats;
-                case "ProjectedHittingStats":
+                case "ProjectedHittingStats": 
                     return serializer.ReadObject(memoryStream) as ProjectedHittingStats;
-                case "PitchingLeaders":
+                case "PitchingLeaders": 
                     return serializer.ReadObject(memoryStream) as PitchingLeaders;
-                case "HittingLeaders":
+                case "HittingLeaders": 
                     return serializer.ReadObject(memoryStream) as HittingLeaders;
-                case "LeadingPitcher":
+                case "LeadingPitcher": 
                     return serializer.ReadObject(memoryStream) as LeadingPitcher;
-                case "LeadingHitter":
+                case "LeadingHitter": 
                     return serializer.ReadObject(memoryStream) as LeadingHitter;
             }
             throw new System.Exception("no model type found");
@@ -181,39 +165,32 @@ namespace BaseballScraper.Infrastructure
 
         internal JToken CreateObjectJTokenFromSwitch(JObject obj, string tokenName)
         {
-            // _c.Start.ThisMethod();
-
-            // Extensions.Spotlight("API SERIALIZER | Create object j token from switch");
-            // Console.WriteLine($"CREATING J TOKEN FOR OBJECT TYPE: {tokenName}");
-            // Console.WriteLine();
             switch(tokenName)
             {
-                case "PlayerSearch":
+                case "PlayerSearch": 
                     return obj["search_player_all"]["queryResults"]["row"];
 
-                case "PlayerInfo":
+                case "PlayerInfo": 
                     return obj["player_info"]["queryResults"]["row"];
 
-                case "ProjectedPitchingStats":
+                case "ProjectedPitchingStats": 
                     return obj["proj_pecota_pitching"]["queryResults"]["row"];
 
-                case "ProjectedHittingStats":
+                case "ProjectedHittingStats": 
                     return obj["proj_pecota_batting"]["queryResults"]["row"];
 
-                case "PitchingLeaders":
+                case "PitchingLeaders": 
                     return obj["leader_pitching_repeater"]["leader_pitching_mux"]["queryResults"]["row"];
 
-                case "HittingLeaders":
+                case "HittingLeaders": 
                     return obj["leader_hitting_repeater"]["leader_hitting_mux"]["queryResults"]["row"];
 
-                case "LeadingPitcher":
+                case "LeadingPitcher": 
                     return obj["leader_pitching_repeater"]["leader_pitching_mux"]["queryResults"]["row"];
 
-                case "LeadingHitter":
+                case "LeadingHitter": 
                     return obj["leader_hitting_repeater"]["leader_hitting_mux"]["queryResults"]["row"];
             }
-            // _c.Complete.ThisMethod();
-            // Console.WriteLine("------ API J TOKEN IS BROKEN ------");
             throw new System.Exception("no api type found");
         }
     }

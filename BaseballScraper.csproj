@@ -19,6 +19,10 @@
 
     <PackageReference Include="excel-export" Version="2.1.0" />
 
+    <PackageReference Include="ExcelDataReader" Version="3.4.1" />
+
+    <PackageReference Include="ExcelDataReader.DataSet" Version="3.4.1" />
+
     <PackageReference Include="IronPython" Version="2.7.8.1" />
 
     <PackageReference Include="MarkdownLog.NS20" Version="0.10.1" />
