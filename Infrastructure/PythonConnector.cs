@@ -1,4 +1,4 @@
-/// <summary> Create connection between .NET and Python; Get and Set variables </summary>
+﻿/// <summary> Create connection between .NET and Python; Get and Set variables </summary>
 /// <list> Resources used
 ///     <item> https://medium.com/emoney-engineering/running-python-script-from-c-and-working-with-the-results-843e68d230e5 </item>
 /// </list>
@@ -10,22 +10,12 @@ using IronPython.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Scripting.Hosting;
 
-namespace BaseballScraper.Controllers
+namespace BaseballScraper.Infrastructure
 {
     #pragma warning disable CS0414
-    public class PythonController: Controller
+    public class PythonConnector
     {
         private Constants _c = new Constants();
-
-        [HttpGet]
-        [Route("python/start")]
-
-        public void ViewPythonHome()
-        {
-            _c.Start.ThisMethod();
-
-            var scope = ConnectToPythonFile("HelloWorld.py");
-        }
 
         // STATUS: this works
         /// <summary> Create a connection between .NET and a Python file; This must be run before any of the other methods will work </summary>

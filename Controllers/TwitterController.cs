@@ -53,7 +53,7 @@ namespace BaseballScraper.Controllers
         /// </summary>
 
 
-
+        // STATUS: this works
         // OPTION 1: search string defined within the method
         /// <summary> Scrapes twitter to find most recent tweets that include 'searchString' that is defined within the method </summary>
         /// <remarks> In Option 1, there are no parameters passed into the method. To change what you are searching for, modify the variable 'searchString' within the method itself </remarks>
@@ -63,8 +63,6 @@ namespace BaseballScraper.Controllers
         [Route("playersearch")]
         public async Task TwitterStringSearch ()
         {
-            _c.Start.ThisMethod();
-            Extensions.Spotlight("executing twitter string search method option 1");
             // AUTHORIZED USER ---> LinqToTwitter.SingleUserAuthorizer
             var authorizedUser = AuthorizeTwitterUser();
 
@@ -102,8 +100,6 @@ namespace BaseballScraper.Controllers
 
                 for (var i = 0; i <=searchResponseCount - 1; i++)
                 {
-                    // Extensions.Spotlight("start of new loop");
-                    // i.Intro("loop number");
                     TwitterStatus newStatus = new TwitterStatus
                     {
                         ScreenName     = searchResponse.Statuses[i].ScreenName,
@@ -117,24 +113,11 @@ namespace BaseballScraper.Controllers
 
                     statuses.Add(newStatus);
                 }
-
-                // int xCount = 1;
-                // foreach(var item in statuses)
-                // {
-                //     Extensions.Spotlight("next status");
-                //     xCount.Intro("status #");
-                //     item.ScreenName.Intro("screen name");
-                //     item.StatusType.Intro("status type");
-                //     item.UserId.Intro("user id");
-                //     item.CreatedAt.Intro("created at");
-                //     item.StatusIdString.Intro("status id string");
-                //     item.Text.Intro("text");
-
-                //     xCount++;
-                // }
+                PrintTwitterResponse(statuses);
             }
         }
 
+        // STATUS: this works
         // OPTION 2: search string is passed to the method as a parameter (i.e., 'searchString')
         /// <summary> Scrapes twitter to find most recent tweets that include 'searchString' parameter </summary>
         /// <remarks> In Option 2, there is one parameter passed into the method. To change what you are searching for, modify the parameter when calling the method </remarks>
@@ -143,8 +126,6 @@ namespace BaseballScraper.Controllers
         /// <returns> A list of tweets </returns>
         public async Task TwitterStringSearch (String searchString)
         {
-            _c.Start.ThisMethod();
-            Extensions.Spotlight("executing twitter string search method option 2");
             // AUTHORIZED USER ---> LinqToTwitter.SingleUserAuthorizer
             var authorizedUser = AuthorizeTwitterUser();
 
@@ -179,8 +160,6 @@ namespace BaseballScraper.Controllers
 
                 for (var i = 0; i <=searchResponseCount - 1; i++)
                 {
-                    // Extensions.Spotlight("start of new loop");
-                    // i.Intro("loop number");
                     TwitterStatus newStatus = new TwitterStatus
                     {
                         ScreenName     = searchResponse.Statuses[i].ScreenName,
@@ -194,21 +173,7 @@ namespace BaseballScraper.Controllers
 
                     statuses.Add(newStatus);
                 }
-
-                // int xCount = 1;
-                // foreach(var item in statuses)
-                // {
-                //     Extensions.Spotlight("next status");
-                //     xCount.Intro("status #");
-                //     item.ScreenName.Intro("screen name");
-                //     item.StatusType.Intro("status type");
-                //     item.UserId.Intro("user id");
-                //     item.CreatedAt.Intro("created at");
-                //     item.StatusIdString.Intro("status id string");
-                //     item.Text.Intro("text");
-
-                //     xCount++;
-                // }
+                // PrintTwitterResponse(statuses);
             }
         }
 
@@ -240,8 +205,6 @@ namespace BaseballScraper.Controllers
         [Route("playersearch/{searchString}")]
         public async Task TwitterStringSearch (string searchString, string blankString)
         {
-            _c.Start.ThisMethod();
-            Extensions.Spotlight("executing twitter string search method option 3");
             // AUTHORIZED USER ---> LinqToTwitter.SingleUserAuthorizer
             var authorizedUser = AuthorizeTwitterUser();
 
@@ -276,8 +239,6 @@ namespace BaseballScraper.Controllers
 
                 for (var i = 0; i <=searchResponseCount - 1; i++)
                 {
-                    // Extensions.Spotlight("start of new loop");
-                    // i.Intro("loop number");
                     TwitterStatus newStatus = new TwitterStatus
                     {
                         ScreenName     = searchResponse.Statuses[i].ScreenName,
@@ -288,24 +249,28 @@ namespace BaseballScraper.Controllers
                         Text           = searchResponse.Statuses[i].Text
 
                     };
-
                     statuses.Add(newStatus);
                 }
+                PrintTwitterResponse(statuses);
+            }
+        }
 
-                // int xCount = 1;
-                // foreach(var item in statuses)
-                // {
-                //     Extensions.Spotlight("next status");
-                //     xCount.Intro("status #");
-                //     item.ScreenName.Intro("screen name");
-                //     item.StatusType.Intro("status type");
-                //     item.UserId.Intro("user id");
-                //     item.CreatedAt.Intro("created at");
-                //     item.StatusIdString.Intro("status id string");
-                //     item.Text.Intro("text");
 
-                //     xCount++;
-                // }
+        private void PrintTwitterResponse(List<TwitterStatus> statuses)
+        {
+            int xCount = 1;
+            foreach(var item in statuses)
+            {
+                Extensions.Spotlight("next status");
+                xCount.Intro("status #");
+                item.ScreenName.Intro("screen name");
+                item.StatusType.Intro("status type");
+                item.UserId.Intro("user id");
+                item.CreatedAt.Intro("created at");
+                item.StatusIdString.Intro("status id string");
+                item.Text.Intro("text");
+
+                xCount++;
             }
         }
     }
