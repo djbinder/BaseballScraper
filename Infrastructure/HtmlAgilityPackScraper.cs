@@ -7,7 +7,7 @@ using HtmlAgilityPack;
 
 
 
-namespace BaseballScraper.Scrapers
+namespace BaseballScraper.Infrastructure
 {
     public class HtmlAgilityPackScraper
     {

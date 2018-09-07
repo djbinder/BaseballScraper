@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using BaseballScraper.Infrastructure;
 using BaseballScraper.Models.FanGraphs;
-using BaseballScraper.Scrapers;
 using BaseballScraper.EndPoints;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Mvc;

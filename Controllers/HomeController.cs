@@ -2,10 +2,13 @@ using BaseballScraper.Models.Configuration;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using BaseballScraper.Infrastructure;
+using RDotNet;
+using System;
+using BaseballScraper.Models.FanGraphs;
 
 namespace BaseballScraper.Controllers
 {
-#pragma warning disable CS0414
+#pragma warning disable CS0414, CS0169
     public class HomeController: Controller
     {
         private Constants _c = new Constants();
@@ -13,28 +16,63 @@ namespace BaseballScraper.Controllers
         // this is referencing the model
         private readonly AirtableConfiguration _airtableConfig;
         private readonly TwitterConfiguration _twitterConfiguration;
-        private readonly ExcelMapper _eM = new ExcelMapper();
+        private readonly ExcelMapper _eM     = new ExcelMapper();
+        private readonly PythonConnector _pC = new PythonConnector();
+        private readonly RdotNetConnector _r = new RdotNetConnector();
+        private readonly DataTabler _dT      = new DataTabler();
 
-
-        public HomeController (IOptions<AirtableConfiguration> airtableConfig, IOptions<TwitterConfiguration> twitterConfig)
-        {
-            _airtableConfig       = airtableConfig.Value;
-            _twitterConfiguration = twitterConfig.Value;
-        }
+        // public HomeController (IOptions<AirtableConfiguration> airtableConfig, IOptions<TwitterConfiguration> twitterConfig)
+        // {
+        //     _airtableConfig       = airtableConfig.Value;
+        //     _twitterConfiguration = twitterConfig.Value;
+        // }
 
         [HttpGet]
         [Route("")]
         public IActionResult Index()
         {
-            // Start.ThisMethod();
+            return View();
+        }
 
-            // ViewData["ApiKey2"] = _airtableConfig.ApiKey;
+        [HttpGet]
+        [Route("datatable")]
+        public void DoDataTableThings()
+        {
+            _c.Start.ThisMethod();
 
-            // ViewData["ConsumerKey"]       = _twitterConfiguration.ConsumerKey;
-            // ViewData["ConsumerSecret"]    = _twitterConfiguration.ConsumerSecret;
-            // ViewData["AccessToken"]       = _twitterConfiguration.AccessToken;
-            // ViewData["AccessTokenSecret"] = _twitterConfiguration.AccessTokenSecret;
+            // _dT.GetModelProperties();
 
+            _dT.CreateDataTable("BaseballScraper");
+        }
+
+
+        [HttpGet]
+        [Route("mapper")]
+        public void ConnectToMapperHome()
+        {
+            Type thisObjectsType = typeof(FGHitter);
+        }
+
+        [HttpGet]
+        [Route("python/start")]
+
+        public void ViewPythonHome()
+        {
+            var scope = _pC.ConnectToPythonFile("HelloWorld.py");
+        }
+
+        [HttpGet]
+        [Route("r/pitchers")]
+        public void CreatePitcherWinsVector()
+        {
+            _r.RPractice();
+        }
+
+
+        [HttpGet]
+        [Route("logging")]
+        public IActionResult Logging()
+        {
             // Log.Logger = new LoggerConfiguration()
             // .MinimumLevel.Debug()
             // .WriteTo.Console()
@@ -58,18 +96,36 @@ namespace BaseballScraper.Controllers
 
             return View();
         }
+    }
 
 
-        [HttpGet]
-        [Route("mapper")]
-        public void ConnectToMapperHome()
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ValuesController: ControllerBase
+    {
+        // GET api/values/5
+        [HttpGet("{id}")]
+        public ActionResult<string> Get(int id)
         {
-            _c.Start.ThisMethod();
+            return "value";
+        }
 
-            // _eM.CreateNewExcelDocument("BaseballScraper", "djb");
-            // _eM.CreateNewExcelDocument();
+        // POST api/values
+        [HttpPost]
+        public void Post([FromBody] string value)
+        {
+        }
 
-            _eM.AddRecordToSheet("BaseballScraper", "FgHitters");
+        // PUT api/values/5
+        [HttpPut("{id}")]
+        public void Put(int id, [FromBody] string value)
+        {
+        }
+
+        // DELETE api/values/5
+        [HttpDelete("{id}")]
+        public void Delete(int id)
+        {
         }
     }
 }
