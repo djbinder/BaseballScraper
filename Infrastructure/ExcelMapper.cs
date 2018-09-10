@@ -1,6 +1,3 @@
-// reference: https://github.com/perevoznyk/excel-export/blob/master/README.md
-// https://github.com/dotnetcore/NPOI/blob/master/samples/Npoi.Samples.CreateNewSpreadsheet/Program.cs
-
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -16,29 +13,71 @@ using NPOI.XSSF.UserModel;
 
 namespace BaseballScraper.Infrastructure
 {
+    /// <summary> </summary>
+    /// <list> INDEX
+        /// RegisterProviderToStart <see cref="ExcelMapper.RegisterProviderToStart()" />
+        /// SetThreadCurrentCulture <see cref="ExcelMapper.SetThreadCurrentCulture()" />
+        /// CreateNewExcelWorkbook <see cref="ExcelMapper.CreateNewExcelWorkbook(string)" />
+        /// CreateNewExcelWorkbook <see cref="ExcelMapper.CreateNewExcelWorkbook()" />
+        /// CreateNewExcelWorkbook <see cref="ExcelMapper.CreateNewExcelWorkbook(string, string)" />
+        /// ManageWorkbookNames <see cref="ExcelMapper.ManageWorkbookNames(string)" />
+        /// AddSheetToExistingExcelWorkbook <see cref="ExcelMapper.AddSheetToExistingExcelWorkbook(string, string)" />
+        /// GetAllWorkbookSheets <see cref="ExcelMapper.GetAllWorkbookSheets(string)" />
+        /// AddRecordToSheet <see cref="ExcelMapper.AddRecordToSheet(string, string)" />
+        /// GetAllRecordsInSheet <see cref="ExcelMapper.GetAllRecordsInSheet(string, string)" />
+        /// AddRecordsToList <see cref="ExcelMapper.AddRecordsToList{T}(IList{T}, T)" />
+        /// PrintRecord <see cref="ExcelMapper.PrintRecord{T}(RowInfo{T})" />
+        /// SetColumnWidth <see cref="ExcelMapper.SetColumnWidth(ExcelDocument, string, int)" />
+        /// SetColumnWidth <see cref="ExcelMapper.SetColumnWidth(ExcelDocument, int, int)" />
+        /// SetCellValue <see cref="ExcelMapper.SetCellValue(ExcelDocument, int, string, object)" />
+        /// SetCellValue <see cref="ExcelMapper.SetCellValue(ExcelDocument, int, int, object)" />
+        /// SetFont <see cref="ExcelMapper.SetFont(ExcelDocument, int, string, string, int)" />
+        /// SetFont <see cref="ExcelMapper.SetFont(ExcelDocument, int, int, string, int)" />
+        /// FormatDate <see cref="ExcelMapper.FormatDate(ExcelDocument, int, int)" />
+        /// ColumnHeaderLetterToNumber <see cref="ExcelMapper.ColumnHeaderLetterToNumber(string)" />
+    /// </list>
+    ///
+    /// <list> RESOURCES
+        /// <item> https://github.com/perevoznyk/excel-export/blob/master/README.md </item>
+        /// <item> https://github.com/dotnetcore/NPOI/blob/master/samples/Npoi.Samples.CreateNewSpreadsheet/Program.cs </item>
+    /// </list>
+
     public class ExcelMapper
     {
         private Constants _c = new Constants();
 
-        // STATUS: this works
-        /// <summary> Needs to be run before most Excel methods </summary>
-        private void RegisterProviderToStart()
+        public class Excel
         {
-            System.Text.Encoding.RegisterProvider (System.Text.CodePagesEncodingProvider.Instance);
+            public int Cell { get; set; }
+            public string Value { get; set; }
         }
 
-        // STATUS: this works
-        /// <summary> Needs to be run before most Excel methods </summary>
-        private void SetThreadCurrentCulture()
-        {
-            Thread.CurrentThread.CurrentCulture = new CultureInfo ("en-US");
-        }
 
-        #region EXCEL WORKBOOK / DOCUMENT
+        #region EXCEL SETUP ------------------------------------------------------------
+
             // STATUS: this works
-            /// <summary> This creates and saves a new Excel (XLS) existingFile </summary>
-            /// <type> XLSX </type>
-            /// <param name="fileName"> What you want the existingFile to be named </param>
+            /// <summary> Needs to be run before most Excel methods </summary>
+            private void RegisterProviderToStart()
+            {
+                System.Text.Encoding.RegisterProvider (System.Text.CodePagesEncodingProvider.Instance);
+            }
+
+            // STATUS: this works
+            /// <summary> Needs to be run before most Excel methods </summary>
+            private void SetThreadCurrentCulture()
+            {
+                Thread.CurrentThread.CurrentCulture = new CultureInfo ("en-US");
+            }
+        #endregion EXCEL SETUP ------------------------------------------------------------
+
+
+
+        #region EXCEL WORKBOOK / DOCUMENT ------------------------------------------------------------
+
+            // STATUS: this works
+            /// <summary> This creates and saves a new Excel (XLS) file </summary>
+            /// <remarks> File Type: XLSX </remarks>
+            /// <param name="fileName"> What you want the file to be named </param>
             /// <example> _eM.CreateNewExcelWorkbook("BaseballScraper"); </example>
             public void CreateNewExcelWorkbook(string fileName)
             {
@@ -59,11 +98,10 @@ namespace BaseballScraper.Infrastructure
                 stream.Close();
             }
 
-            // OPTION 1
             // STATUS: this works
-            /// <summary> Create and save a new Excel (xlsx) file </summary>
-            /// <type> XLSX </type>
-            /// <remarks> The new of the new Excel document and its first tab are defined within the method </remarks>
+            /// <summary> OPTION 1 --> Create and save a new Excel (xlsx) file </summary>
+            /// <remarks> File Type: XLSX </remarks>
+            /// <remarks> The name of the new Excel document and its first tab are defined within the method </remarks>
             public void CreateNewExcelWorkbook()
             {
                 RegisterProviderToStart();
@@ -80,10 +118,9 @@ namespace BaseballScraper.Infrastructure
                 }
             }
 
-            // OPTION 2
             // TODO: the class/model type (FanGraphsPitcher) is defined within the method. This needs to be passed as an argument
-            /// <summary> Create and save a new Excel (xlsx) file </summary>
-            /// <type> XLSX </type>
+            /// <summary> OPTION 2 --> Create and save a new Excel (xlsx) file </summary>
+            /// <remarks> File Type: XLSX </remarks>
             /// <param name="fileName"> The name of the new Excel document that you want to create </param>
             /// <param name="sheetName"> The name of the first tab / sheet of the new Excel document </param>
             /// <example> _eM.CreateNewExcelWorkbook("BaseballScraper", "FgPitchers"); </example>
@@ -123,14 +160,16 @@ namespace BaseballScraper.Infrastructure
 
                 return targetWorkbook;
             }
-        #endregion EXCEL WORKBOOK / DOCUMENT
+
+        #endregion EXCEL WORKBOOK / DOCUMENT ------------------------------------------------------------
 
 
 
-        #region TABS/SHEETS
+        #region TABS/SHEETS ------------------------------------------------------------
+
             // STATUS: this works
             /// <summary> Adds a new tab / sheet to an existing Excel file </summary>
-            /// <type> XLSX </type>
+            /// <remarks> File Type: XLSX </remarks>
             /// <param name="fileName"> The name of the file that you want to add a new tab / sheet too </param>
             /// <param name="sheetName"> The new tab / sheet's name </param>
             public void AddSheetToExistingExcelWorkbook(string fileName, string sheetName)
@@ -212,11 +251,13 @@ namespace BaseballScraper.Infrastructure
                     }
                 }
             }
-        #endregion TABS/SHEETS
+
+        #endregion TABS/SHEETS ------------------------------------------------------------
 
 
 
-        #region ROWS / RECORDS
+        #region ROWS / RECORDS ------------------------------------------------------------
+
             // STATUS: in progress
             // TODO: the class/model type (FGHitter) is defined within the method. This needs to be passed as an argument
             /// <summary> Add a new row / record to a sheet in an existing xlsx </summary>
@@ -284,13 +325,15 @@ namespace BaseballScraper.Infrastructure
                 // Console.WriteLine(obj.Value.FanGraphsName);
                 Console.WriteLine();
             }
-        #endregion ROWS / RECORDS
+
+        #endregion ROWS / RECORDS ------------------------------------------------------------
 
 
-        #region MODIFY TAB/SHEET COLUMN(S)
-            // OPTION 1
+
+        #region MODIFY TAB/SHEET COLUMN(S) ------------------------------------------------------------
+
             // STATUS: this works
-            /// <summary> Set the width of a given column </summary>
+            /// <summary> OPTION 1 --> Set the width of a given column </summary>
             /// <remarks> In option 1, you provide a letter; this is more intuitive than providing a number since Excel column headers are letters. A switch is used to convert the letter you provide to the right number so that the mapper understands it </remarks>
             /// <param name="document"> Excel document that the column is in </param>
             /// <param name="columnLetter"> The header letter (e.g, "A" or "AA" or "Z")</param>
@@ -301,20 +344,27 @@ namespace BaseballScraper.Infrastructure
                 int columnNumber = ColumnHeaderLetterToNumber(columnLetter);
                 document.ColumnWidth(columnNumber, columnWidth);
             }
-            // OPTION 2
+
             // STATUS: this works
+            /// <summary> OPTION 2 --> Set the width of a given column </summary>
+            /// <remarks> In option 2, you provide a number that corresponds to column number </remarks>
+            /// <param name="document"> Excel document that the column is in </param>
+            /// <param name="columnNumber"> The target column number </param>
+            /// <param name="columnWidth"> The width that you want the column to be </param>
             private void SetColumnWidth(ExcelDocument document, int columnNumber, int columnWidth)
             {
                 // document.ColumnWidth(0, 120);
                 document.ColumnWidth(columnNumber, columnWidth);
             }
-        #endregion MODIFY TAB/SHEET COLUMN(S)
+
+        #endregion MODIFY TAB/SHEET COLUMN(S) ------------------------------------------------------------
 
 
-        #region CELLS / VALUES
-            // OPTION 1
+
+        #region CELLS / VALUES ------------------------------------------------------------
+
             // STATUS: this works
-            /// <summary> Set the contents of a cell </summary>
+            /// <summary> OPTION 1 --> Set the contents of a cell </summary>
             /// <remarks> In option 1, you provide a letter; this is more intuitive than providing a number since Excel column headers are letters. A switch is used to convert the letter you provide to the right number so that the mapper understands it </remarks>
             /// <param name="document"> Excel document that the cell is in </param>
             /// <param name="rowNumber"> The row of the cell </param>
@@ -326,9 +376,8 @@ namespace BaseballScraper.Infrastructure
                 document[rowNumber, columnNumber].Value = cellValue;
             }
 
-            // OPTION 2
             // STATUS: this works
-            /// <summary> Set the contents of a cell </summary>
+            /// <summary> OPTION 2 --> Set the contents of a cell </summary>
             /// <remarks> In option 2, you provide a number to represent the target column </remarks>
             /// <param name="document"> Excel document that the cell is in </param>
             /// <param name="rowNumber"> The row of the cell </param>
@@ -339,16 +388,16 @@ namespace BaseballScraper.Infrastructure
                 document[rowNumber, columnNumber].Value = cellValue;
             }
 
-
-            // OPTION 1
             // STATUS: // TODO: neither option accounts for bold, italic etc. that can be added as third parameter to new Font()
+            /// <summary> OPTION 1 --> Set font of a target cell </summary>
             public void SetFont(ExcelDocument document, int rowNumber, string columnLetter,  string fontName, int fontSize)
             {
                 int      columnNumber                  = ColumnHeaderLetterToNumber(columnLetter);
                 document[rowNumber, columnNumber].Font = new Font(fontName, fontSize);
             }
-            // OPTION 2
+
             // STATUS: // TODO: neither option accounts for bold, italic etc. that can be added as third parameter to new Font()
+            /// <summary> OPTION 2 --> Set font of a target cell </summary>
             public void SetFont(ExcelDocument document, int rowNumber, int columnNumber, string fontName, int fontSize)
             {
                 document[rowNumber, columnNumber].Font = new Font(fontName, fontSize);
@@ -360,10 +409,84 @@ namespace BaseballScraper.Infrastructure
             {
                 document.Cell(rowNumber, columnNumber).Format = @"dd/mm/yyyy";
             }
-        #endregion CELLS / VALUES
+
+        #endregion CELLS / VALUES ------------------------------------------------------------
 
 
-        #region HELPERS
+
+        #region HELPERS ------------------------------------------------------------
+
+            // STATUS: this works
+            /// <summary> Converts a given letter to it's corresponding number </summary>
+            /// <remark> This makes it so you can enter a letter instead of a number when identifying an Excel column; basically it makes it more intuitive / natural - you don't have to figure out what column number each letter is </remark>
+            /// <param name="letter"> A letter that corresponds to an Excel column </param>
+            /// <returns> The column number of an Excel column </returns>
+            internal int ColumnHeaderLetterToNumber(string letter)
+            {
+                _c.Start.ThisMethod();
+                switch(letter)
+                {
+                    case "A":
+                        return 0;
+                    case "B":
+                        return 1;
+                    case "C":
+                        return 2;
+                    case "D":
+                        return 3;
+                    case "E":
+                        return 4;
+                    case "F":
+                        return 5;
+                    case "G":
+                        return 6;
+                    case "H":
+                        return 7;
+                    case "I":
+                        return 8;
+                    case "J":
+                        return 9;
+                    case "K":
+                        return 10;
+                    case "L":
+                        return 11;
+                    case "M":
+                        return 12;
+                    case "N":
+                        return 13;
+                    case "O":
+                        return 14;
+                    case "P":
+                        return 15;
+                    case "Q":
+                        return 16;
+                    case "R":
+                        return 17 ;
+                    case "S":
+                        return 18;
+                    case "T":
+                        return 19;
+                    case "U":
+                        return 20;
+                    case "V":
+                        return 21;
+                    case "W":
+                        return 22;
+                    case "X":
+                        return 23;
+                    case "Y":
+                        return 24;
+                    case "Z":
+                        return 25;
+                }
+                throw new System.Exception("no column found for that letter; need to add more to switch");
+            }
+
+        #endregion HELPERS ------------------------------------------------------------
+
+
+
+        #region TESTING HELP ------------------------------------------------------------
             public FGHitter CreateHitterForTesting(string playerName)
             {
                 FGHitter newFGHitter = new FGHitter
@@ -393,72 +516,7 @@ namespace BaseballScraper.Infrastructure
 
                 return newFGHitter;
             }
+        #endregion TESTING HELP ------------------------------------------------------------
 
-            // STATUS: this works
-            /// <summary> Converts a given letter to it's corresponding number </summary>
-            /// <remark> This makes it so you can enter a letter instead of a number when identifying an Excel column; basically it makes it more intuitive / natural - you don't have to figure out what column number each letter is </remark>
-            /// <param name="letter"> A letter that corresponds to an Excel column </param>
-            /// <returns> The column number of an Excel column </returns>
-            internal int ColumnHeaderLetterToNumber(string letter)
-            {
-                _c.Start.ThisMethod();
-                switch(letter)
-                {
-                    case "A": 
-                        return 0;
-                    case "B": 
-                        return 1;
-                    case "C": 
-                        return 2;
-                    case "D": 
-                        return 3;
-                    case "E": 
-                        return 4;
-                    case "F": 
-                        return 5;
-                    case "G": 
-                        return 6;
-                    case "H": 
-                        return 7;
-                    case "I": 
-                        return 8;
-                    case "J": 
-                        return 9;
-                    case "K": 
-                        return 10;
-                    case "L": 
-                        return 11;
-                    case "M": 
-                        return 12;
-                    case "N": 
-                        return 13;
-                    case "O": 
-                        return 14;
-                    case "P": 
-                        return 15;
-                    case "Q": 
-                        return 16;
-                    case "R": 
-                        return 17 ;
-                    case "S": 
-                        return 18;
-                    case "T": 
-                        return 19;
-                    case "U": 
-                        return 20;
-                    case "V": 
-                        return 21;
-                    case "W": 
-                        return 22;
-                    case "X": 
-                        return 23;
-                    case "Y": 
-                        return 24;
-                    case "Z": 
-                        return 25;
-                }
-                throw new System.Exception("no column found for that letter; need to add more to switch");
-            }
-        #endregion HELPERS
     }
 }

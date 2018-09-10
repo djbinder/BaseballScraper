@@ -17,22 +17,16 @@
 
   <ItemGroup>
 
-    <PackageReference Include="excel-export" Version="2.1.0" />
 
-    <PackageReference Include="ExcelDataReader" Version="3.4.1" />
-
-    <PackageReference Include="ExcelDataReader.DataSet" Version="3.4.1" />
-
+    <!-- Python -->
     <PackageReference Include="IronPython" Version="2.7.8.1" />
-
-    <PackageReference Include="MarkdownLog.NS20" Version="0.10.1" />
 
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="2.1.1" />
-    <PackageReference Include="Microsoft.NETCore.Platforms" Version="2.1.0" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" />
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.5.0" />
+    <!-- <PackageReference Include="Microsoft.NETCore.Platforms" Version="2.1.0" /> -->
+    <!-- <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" /> -->
+    <!-- <PackageReference Include="System.Text.Encoding.CodePages" Version="4.5.0" /> -->
 
 
     <!-- Database -->
@@ -40,49 +34,50 @@
     <PackageReference Include="MySql.Data" Version="8.0.9-*" />
 
 
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+
 
     <!-- OAuth -->
-    <PackageReference Include="OAuth" Version="1.0.3" />
-    <!-- <PackageReference Include="Nemiro.OAuth" Version="1.13.0" /> -->
     <!-- this package is causing the conflict error MSB3276 that shows up console log -->
     <PackageReference Include="DotNetOpenAuth.Core" Version="4.3.4.13329" />
+    <PackageReference Include="OAuth" Version="1.0.3" />
 
     <!-- Logging -->
     <PackageReference Include="NLog" Version="4.5.8" />
     <PackageReference Include="ObjectPrinter" Version="2.0.35" />
+    <PackageReference Include="ObjectDumper" Version="1.*" />
+    <PackageReference Include="ConsoleTables" Version="2.2.0" />
+    <PackageReference Include="log4net" Version="2.0.8" />
+    <PackageReference Include="MarkdownLog" Version="0.9.3" />
     <!-- <PackageReference Include="Serilog" Version="2.7.2-dev-01024" /> -->
     <!-- <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" /> -->
     <!-- <PackageReference Include="Serilog.Sinks.File" Version="4.0.0" /> -->
-    <PackageReference Include="ObjectDumper" Version="1.*" />
-    <PackageReference Include="ObjectDumper.NET" Version="1.0.3" />
-    <PackageReference Include="ConsoleTables" Version="2.2.0" />
-    <!-- <PackageReference Include="log4net" Version="2.0.8" /> -->
+    <!-- <PackageReference Include="ObjectDumper.NET" Version="1.0.3" /> -->
 
-    <PackageReference Include="MarkdownLog" Version="0.9.3" />
 
-    <!-- R stats -->
+    <!-- R -->
     <PackageReference Include="R.NET" Version="1.7.0" />
-    <PackageReference Include="R.NET.Community" Version="1.7.0" />
+    <!-- <PackageReference Include="R.NET.Community" Version="1.7.0" /> -->
 
-    <!-- Excel Mapping -->
+
+    <!-- Excel -->
     <PackageReference Include="NPOI" Version="2.3.0" />
     <PackageReference Include="Npoi.Mapper" Version="3.2.0" />
+    <PackageReference Include="excel-export" Version="2.1.0" />
+    <PackageReference Include="ExcelDataReader" Version="3.4.1" />
+    <PackageReference Include="ExcelDataReader.DataSet" Version="3.4.1" />
+    <PackageReference Include="CsvHelper" Version="7.1.1" />
+
 
     <!-- APIs - General -->
     <PackageReference Include="RestSharp" Version="106.2.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+
 
     <!-- Yahoo API -->
     <!-- <PackageReference Include="YahooFantasyWrapper" Version="1.2.2" /> -->
 
     <!-- scrapers -->
     <PackageReference Include="HtmlAgilityPack" Version="1.8.5" />
-    <!-- <PackageReference Include="NScrape" Version="0.4.0" /> -->
-    <!-- <PackageReference Include="AngleSharp" Version="0.9.10" /> -->
-    <!-- <PackageReference Include="AngleSharp.Scripting.JavaScript" Version="0.5.1" /> -->
-    <!-- <PackageReference Include="OpenScraping" Version="1.0.1" /> -->
-    <!-- <PackageReference Include="IronWebScraper" Version="4.0.4.3" /> -->
-    <!-- <PackageReference Include="System.Windows.Forms.Ribbon35" Version="3.5.8" /> -->
 
     <!-- twitter -->
     <PackageReference Include="TweetinviAPI" Version="3.0.0" />
