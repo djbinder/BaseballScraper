@@ -250,14 +250,14 @@ public static class Extensions
     }
 
 
-    public static void TestTypes (Type type)
-    {
-        Console.WriteLine("IsArray: {0}", type.IsArray);
-        Console.WriteLine("Name: {0}", type.Name);
-        Console.WriteLine("IsSealed: {0}", type.IsSealed);
-        Console.WriteLine("BaseType.Name: {0}", type.BaseType.Name);
-        Console.WriteLine();
-    }
+    // public static void TestTypes (Type type)
+    // {
+    //     Console.WriteLine("IsArray: {0}", type.IsArray);
+    //     Console.WriteLine("Name: {0}", type.Name);
+    //     Console.WriteLine("IsSealed: {0}", type.IsSealed);
+    //     Console.WriteLine("BaseType.Name: {0}", type.BaseType.Name);
+    //     Console.WriteLine();
+    // }
 }
 
 

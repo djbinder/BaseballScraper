@@ -3,6 +3,7 @@
 > Current Priorities
 
 1. Log4Net
+2. Clean up github repository
 
 ---
 
@@ -21,3 +22,5 @@
 1. [Links example](https://www.google.com)
 
 ---
+
+## **GLOSSARY (for my own sanity) **
