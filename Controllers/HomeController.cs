@@ -5,44 +5,83 @@ using BaseballScraper.Infrastructure;
 using RDotNet;
 using System;
 using BaseballScraper.Models.FanGraphs;
+using CsvHelper;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace BaseballScraper.Controllers
 {
 #pragma warning disable CS0414, CS0169
     public class HomeController: Controller
     {
-        private Constants _c = new Constants();
-
-        // this is referencing the model
+        private readonly Helpers _h = new Helpers();
         private readonly AirtableConfiguration _airtableConfig;
         private readonly TwitterConfiguration _twitterConfiguration;
         private readonly ExcelMapper _eM     = new ExcelMapper();
         private readonly PythonConnector _pC = new PythonConnector();
         private readonly RdotNetConnector _r = new RdotNetConnector();
         private readonly DataTabler _dT      = new DataTabler();
+        private readonly CsvHandler _cH      = new CsvHandler();
 
-        // public HomeController (IOptions<AirtableConfiguration> airtableConfig, IOptions<TwitterConfiguration> twitterConfig)
-        // {
-        //     _airtableConfig       = airtableConfig.Value;
-        //     _twitterConfiguration = twitterConfig.Value;
-        // }
+
+        public HomeController (IOptions<AirtableConfiguration> airtableConfig, IOptions<TwitterConfiguration> twitterConfig)
+        {
+            _airtableConfig       = airtableConfig.Value;
+            _twitterConfiguration = twitterConfig.Value;
+        }
 
         [HttpGet]
         [Route("")]
         public IActionResult Index()
         {
+            _h.Start.ThisMethod();
+
             return View();
         }
+
+
+        [HttpGet]
+        [Route("lahman")]
+        public void DoLahmanThings()
+        {
+            _h.Start.ThisMethod();
+
+            _cH.ReadCsv("BaseballData/Lahman/Teams.csv");
+        }
+
+        [HttpGet]
+        [Route("lahman/async")]
+        public async Task<ActionResult> DoLahmanThingsAsync()
+        {
+            _h.Start.ThisMethod();
+
+            await _cH.ReadCsvAsync("BaseballData/Lahman/Teams.csv");
+
+            string x = "x";
+            return Content(x);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         [HttpGet]
         [Route("datatable")]
         public void DoDataTableThings()
         {
-            _c.Start.ThisMethod();
 
-            // _dT.GetModelProperties();
 
-            _dT.CreateDataTable("BaseballScraper");
+
+
         }
 
 
@@ -50,7 +89,7 @@ namespace BaseballScraper.Controllers
         [Route("mapper")]
         public void ConnectToMapperHome()
         {
-            Type thisObjectsType = typeof(FGHitter);
+
         }
 
         [HttpGet]
@@ -58,16 +97,16 @@ namespace BaseballScraper.Controllers
 
         public void ViewPythonHome()
         {
-            var scope = _pC.ConnectToPythonFile("HelloWorld.py");
+
         }
 
         [HttpGet]
         [Route("r/pitchers")]
         public void CreatePitcherWinsVector()
         {
-            _r.RPractice();
+            _r.GetLahmanPlayerInfo("betts");
+            // _r.GetLahmanTeamInfo("CH");
         }
-
 
         [HttpGet]
         [Route("logging")]
