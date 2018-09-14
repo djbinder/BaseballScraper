@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Configuration.UserSecrets;
+using BaseballScraper.Infrastructure;
 
 namespace BaseballScraper.Controllers
 {
@@ -18,7 +19,7 @@ namespace BaseballScraper.Controllers
     [ApiController]
     public class TwitterController: Controller
     {
-        private Constants _c = new Constants();
+        private Helpers _h = new Helpers();
         private readonly TwitterConfiguration _twitterConfig;
         private readonly AirtableConfiguration _airtableConfig;
 
@@ -67,7 +68,7 @@ namespace BaseballScraper.Controllers
             var authorizedUser = AuthorizeTwitterUser();
 
             var twitterConsumerKey = _twitterConfig.ConsumerKey;
-            twitterConsumerKey.Intro("consumer key");
+            _h.Intro(twitterConsumerKey, "consumer key");
 
             // TWITTER CTX ---> LinqToTwitter.TwitterContext
             var twitterCtx = new TwitterContext(authorizedUser);
@@ -94,7 +95,7 @@ namespace BaseballScraper.Controllers
                         );
 
                 int searchResponseCount = searchResponse.Statuses.Count();
-                searchResponseCount.Intro("search response count");
+                _h.Intro(searchResponseCount, "search response count");
 
                 List<TwitterStatus> statuses = new List<TwitterStatus>();
 
@@ -130,7 +131,7 @@ namespace BaseballScraper.Controllers
             var authorizedUser = AuthorizeTwitterUser();
 
             var twitterConsumerKey = _twitterConfig.ConsumerKey;
-            twitterConsumerKey.Intro("consumer key");
+            _h.Intro(twitterConsumerKey, "consumer key");
 
             // TWITTER CTX ---> LinqToTwitter.TwitterContext
             var twitterCtx = new TwitterContext(authorizedUser);
@@ -154,7 +155,7 @@ namespace BaseballScraper.Controllers
                         );
 
                 int searchResponseCount = searchResponse.Statuses.Count();
-                searchResponseCount.Intro("search response count");
+                _h.Intro(searchResponseCount, "search response count");
 
                 List<TwitterStatus> statuses = new List<TwitterStatus>();
 
@@ -209,7 +210,7 @@ namespace BaseballScraper.Controllers
             var authorizedUser = AuthorizeTwitterUser();
 
             var twitterConsumerKey = _twitterConfig.ConsumerKey;
-            twitterConsumerKey.Intro("consumer key");
+            _h.Intro(twitterConsumerKey, "consumer key");
 
             // TWITTER CTX ---> LinqToTwitter.TwitterContext
             var twitterCtx = new TwitterContext(authorizedUser);
@@ -233,7 +234,7 @@ namespace BaseballScraper.Controllers
                         );
 
                 int searchResponseCount = searchResponse.Statuses.Count();
-                searchResponseCount.Intro("search response count");
+                _h.Intro(searchResponseCount, "search response count");
 
                 List<TwitterStatus> statuses = new List<TwitterStatus>();
 
@@ -261,14 +262,14 @@ namespace BaseballScraper.Controllers
             int xCount = 1;
             foreach(var item in statuses)
             {
-                Extensions.Spotlight("next status");
-                xCount.Intro("status #");
-                item.ScreenName.Intro("screen name");
-                item.StatusType.Intro("status type");
-                item.UserId.Intro("user id");
-                item.CreatedAt.Intro("created at");
-                item.StatusIdString.Intro("status id string");
-                item.Text.Intro("text");
+                _h.Spotlight("next status");
+                _h.Intro(xCount, "status #");
+                _h.Intro(item.ScreenName, "screen name");
+                _h.Intro(item.StatusType, "status type");
+                _h.Intro(item.UserId, "user id");
+                _h.Intro(item.CreatedAt, "created at");
+                _h.Intro(item.StatusIdString, "status id string");
+                _h.Intro(item.Text, "text");
 
                 xCount++;
             }

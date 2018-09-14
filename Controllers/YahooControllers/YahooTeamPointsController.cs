@@ -5,6 +5,7 @@ using BaseballScraper.Models.Yahoo;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
+using BaseballScraper.Infrastructure;
 
 namespace BaseballScraper.Controllers.YahooControllers
 {
@@ -13,7 +14,7 @@ namespace BaseballScraper.Controllers.YahooControllers
     [ApiController]
     public class YahooTeamPointsController: Controller
     {
-        private Constants _c = new Constants();
+        private Helpers _h = new Helpers();
         private readonly TheGameIsTheGameConfiguration _theGameConfig;
         private static YahooApiEndPoints endPoints = new YahooApiEndPoints();
         private static YahooHomeController _yahooHomeController;
@@ -40,7 +41,7 @@ namespace BaseballScraper.Controllers.YahooControllers
         [Route("season")]
         public YahooTeamPoints CreateYahooTeamPointsModel ()
         {
-            _c.Start.ThisMethod();
+            _h.StartMethod();
             YahooTeamPoints yTP = new YahooTeamPoints();
 
             // TEAMID --> A number between 0 and the total number of teams in the league with each number in between representing one of the teams (i.e., each team has its own unique team id number)
@@ -73,7 +74,7 @@ namespace BaseballScraper.Controllers.YahooControllers
         /// <returns> Instance of YahooTeamPoints model; includes CoverageType, WeekOrYear, and Total points  </returns>
         public YahooTeamPoints CreateYahooTeamPointsModel (int teamId, JObject o)
         {
-            _c.Start.ThisMethod();
+            _h.StartMethod();
             YahooTeamPoints yTP = new YahooTeamPoints();
 
             var teamPointsPath = o["fantasy_content"]["team"]["team_points"];
@@ -100,7 +101,7 @@ namespace BaseballScraper.Controllers.YahooControllers
         [Route("")]
         public IActionResult ViewTeamPoints()
         {
-            _c.Start.ThisMethod();
+            _h.StartMethod();
 
             int teamId      = 1;
             var uriTeamBase = endPoints.TeamSeasonStatsEndPoint(_theGameConfig.LeagueKey, teamId).EndPointUri;

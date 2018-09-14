@@ -436,7 +436,7 @@ namespace BaseballScraper.Infrastructure
             /// <reference> https://billpetti.github.io/baseballr/data-acquisition-functions/ </reference>
             public void GetMlbStandingsOnDate(string mlbLeagueAndDivision, string standingsDate)
             {
-                _h.Start.ThisMethod();
+                _h.StartMethod();
 
                 Console.WriteLine($"League/Division: {mlbLeagueAndDivision}");
                 Console.WriteLine($"On Date: {standingsDate}");

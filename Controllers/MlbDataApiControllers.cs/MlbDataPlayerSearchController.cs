@@ -17,7 +17,7 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
     [ApiController]
     public class MlbDataPlayerSearchController: Controller
     {
-        private Constants _c                          = new Constants();
+        private Helpers _h                            = new Helpers();
         private ApiInfrastructure _a                  = new ApiInfrastructure();
         private static MlbDataApiEndPoints _endPoints = new MlbDataApiEndPoints();
         private static PostmanMethods _postman        = new PostmanMethods();
@@ -29,7 +29,7 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
         [Route("playersearch/{playerLastName}")]
         public IActionResult ViewPlayerSearchModel(string playerLastName)
         {
-            _c.Start.ThisMethod();
+            _h.StartMethod();
 
             Console.WriteLine($"SEARCHING FOR PLAYER: {playerLastName}");
 
@@ -48,7 +48,7 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
 
         public IRestResponse GetPlayerSearchModelPostmanResponse(string name)
         {
-            _c.Start.ThisMethod();
+            _h.StartMethod();
 
             // type ---> BaseballScraper.EndPoints.MlbDataApiEndPoints+MlbDataEndPoint
             var newEndPoint = _endPoints.PlayerSearchEndPoint(name);

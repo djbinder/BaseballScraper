@@ -16,7 +16,7 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers.cs
     [ApiController]
     public class MlbDataProjectedPitchingStatsController: Controller
     {
-        private Constants _c                          = new Constants();
+        private Helpers _h                            = new Helpers();
         private ApiInfrastructure _a                  = new ApiInfrastructure();
         private static MlbDataApiEndPoints _endPoints = new MlbDataApiEndPoints();
         private static PostmanMethods _postman        = new PostmanMethods();
@@ -28,7 +28,7 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers.cs
         [Route("projectedpitchingstats/{playerId}")]
         public IActionResult ViewPlayerInfo(int playerId)
         {
-            _c.Start.ThisMethod();
+            _h.StartMethod();
 
             // this gets you Syndergaard
             // int playerIdPlaceHolder = 592789;
@@ -50,7 +50,7 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers.cs
 
         public IRestResponse GetProjectedPitchingStatsPostmanResponse(int playerId)
         {
-            _c.Start.ThisMethod();
+            _h.StartMethod();
 
             // type ---> BaseballScraper.EndPoints.MlbDataApiEndPoints+MlbDataEndPoint
             var newEndPoint = _endPoints.ProjectedPitchingStatsEndPoint(2018, playerId);

@@ -1,6 +1,7 @@
 // DJB WORKING ON
 
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Xml.Serialization;
 
 namespace BaseballScraper.Models.Yahoo
@@ -52,6 +53,9 @@ namespace BaseballScraper.Models.Yahoo
     // All matchups: /fantasy/v2/team/{team_key}/matchups
     public class YahooMatchup
     {
+        [Key]
+        public int YahooMatchupRecordId { get; set; }
+
         [XmlElement (ElementName = "week")]
         public string WeekNumber { get; set; }
 

@@ -8,6 +8,7 @@ using BaseballScraper.Models.Yahoo;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
+using BaseballScraper.Infrastructure;
 
 namespace BaseballScraper.Controllers.YahooControllers
 {
@@ -16,7 +17,7 @@ namespace BaseballScraper.Controllers.YahooControllers
     [ApiController]
     public class YahooTeamBaseController
     {
-        private Constants _c = new Constants();
+        private Helpers _h = new Helpers();
         private readonly TheGameIsTheGameConfiguration _theGameConfig;
         private static YahooApiEndPoints endPoints = new YahooApiEndPoints();
         private static YahooHomeController _yahooHomeController;
@@ -35,7 +36,7 @@ namespace BaseballScraper.Controllers.YahooControllers
         [Route("teambase")]
         public YahooTeamBase CreateYahooTeamBaseModel ()
         {
-            _c.Start.ThisMethod();
+            _h.StartMethod();
 
             YahooTeamBase tB = new YahooTeamBase();
 
@@ -160,13 +161,13 @@ namespace BaseballScraper.Controllers.YahooControllers
                                 tB.TeamManagersList.Add(manager);
                             }
 
-                            teamManagersList.Dig();
+                            _h.Dig(teamManagersList);
                         }
-                tB.Dig();
+                _h.Dig(tB);
             }
             // SaveObjectToDatabase(tB);
 
-            _c.Complete.ThisMethod();
+            _h.CompleteMethod();
 
             return tB;
         }
@@ -176,7 +177,7 @@ namespace BaseballScraper.Controllers.YahooControllers
         [Route("teambase/hashtable")]
         public Hashtable CreateYahooTeamBaseHashTable ()
         {
-            _c.Start.ThisMethod();
+            _h.StartMethod();
 
             int teamId      = 1;
             var uriTeamBase = endPoints.TeamBaseEndPoint(_theGameConfig.LeagueKey, teamId).EndPointUri;
@@ -230,7 +231,7 @@ namespace BaseballScraper.Controllers.YahooControllers
                 _enumeratorCount++;
             }
 
-            _c.Complete.ThisMethod();
+            _h.CompleteMethod();
            return teamHashTable;
         }
     }

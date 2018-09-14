@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using BaseballScraper.Infrastructure;
 using BaseballScraper.Models.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +20,7 @@ namespace BaseballScraper.Controllers.YahooControllers
     #pragma warning disable CS0414, CS0219
     public class YahooAuthController: Controller
     {
-        private Constants _c = new Constants();
+        private Helpers _h = new Helpers();
         private readonly YahooConfiguration _yahooConfig;
         private readonly IHttpContextAccessor _contextAccessor;
 
@@ -36,7 +37,7 @@ namespace BaseballScraper.Controllers.YahooControllers
         [Route("/yahoo/authorize")]
         public IActionResult ViewYahooAuthHomePage()
         {
-            _c.Start.ThisMethod();
+            _h.StartMethod();
 
             return View("yahoohome");
         }
@@ -49,22 +50,22 @@ namespace BaseballScraper.Controllers.YahooControllers
         [Route("/yahoo/authorize/authorizationcode")]
         public string GenerateUserAuthorizationCode ()
         {
-            _c.Start.ThisMethod();
+            _h.StartMethod();
 
             string requestUrl = $"https://api.login.yahoo.com/oauth2/request_auth?client_id={_yahooConfig.ClientId}&redirect_uri={_yahooConfig.RedirectUri}&response_type=code&language=en-us";
 
             Process.Start("open", requestUrl);
 
-            Extensions.Spotlight("Enter Code:");
+            _h.Spotlight("Enter Code:");
             // get approval code from console input _____ AUTHORIZATION CODE FROM CONSOLE ---> System.String
             // the code comes from https://api.login.yahoo.com/oauth2/authorize
             var authorizationCodeFromConsole = Console.ReadLine();
 
-            authorizationCodeFromConsole.Intro("code entered in console");
+            _h.Intro(authorizationCodeFromConsole, "code entered in console");
 
             SetSessionAuthorizationCode(authorizationCodeFromConsole);
 
-            // _c.Complete.ThisMethod();
+            // _h.CompleteMethod();
             return authorizationCodeFromConsole;
         }
 
@@ -77,11 +78,11 @@ namespace BaseballScraper.Controllers.YahooControllers
             try {
                 HttpContext.Session.SetString("authorizationcode", authorizationCodeFromConsole);
                     authCodeCheck = HttpContext.Session.GetString("authorizationcode");
-                    authCodeCheck.Intro("setting auth code as");
+                    _h.Intro(authCodeCheck, "setting auth code as");
 
                 HttpContext.Session.SetInt32("sessionid", 1);
-                    int? sessionid = HttpContext.Session.GetInt32("sessionid");
-                    sessionid.Intro("setting session code as");
+                    int? sessionId = HttpContext.Session.GetInt32("sessionid");
+                    _h.Intro(sessionId, "setting session code as");
             }
             catch (Exception ex)
             {
@@ -99,7 +100,7 @@ namespace BaseballScraper.Controllers.YahooControllers
         [Route("/yahoo/authorize/accesstokenjobject")]
         public JObject CreateYahooAccessTokenResponseJObject()
         {
-            _c.Start.ThisMethod();
+            _h.StartMethod();
 
             // consumerKey and consumerSecret are unique to each yahoo app; Here, they are called from Secrets/ Config File
             var consumerKey    = _yahooConfig.ClientId;
@@ -176,7 +177,7 @@ namespace BaseballScraper.Controllers.YahooControllers
             JObject responseToJson = JObject.Parse(responseFromServer);
 
             // REQUEST ---> following are added through beginning to end: ContentLength, HaveResponse, Method, ContentType
-            // _c.Complete.ThisMethod();
+            // _h.CompleteMethod();
             return responseToJson;
         }
 
@@ -185,7 +186,7 @@ namespace BaseballScraper.Controllers.YahooControllers
         [Route("/yahoo/authorize/accesstokenrequest")]
         public HttpWebRequest CreateYahooAccessTokenRequest()
         {
-            _c.Start.ThisMethod();
+            _h.StartMethod();
 
             // consumerKey and consumerSecret are unique to each yahoo app; Here, they are called from Secrets/ Config File
             var consumerKey    = _yahooConfig.ClientId;
@@ -232,7 +233,7 @@ namespace BaseballScraper.Controllers.YahooControllers
             // Set the content length in the request headers ___ // changes 'Content Length' of HttpWebRequest to 218
             request.ContentLength = byteData.Length;
 
-            // _c.Complete.ThisMethod();
+            // _h.CompleteMethod();
             return request;
         }
 
@@ -243,7 +244,7 @@ namespace BaseballScraper.Controllers.YahooControllers
         [Route("/yahoo/authorize/accesstokenresponse")]
         public AccessTokenResponse GetYahooAccessTokenResponse ()
         {
-            _c.Start.ThisMethod();
+            _h.StartMethod();
 
             JObject responseToJson = CreateYahooAccessTokenResponseJObject();
 
@@ -265,7 +266,7 @@ namespace BaseballScraper.Controllers.YahooControllers
             // set the items in session
             SetSessionAccessTokenItems(newAccessTokenResponse);
 
-            // _c.Complete.ThisMethod();
+            // _h.CompleteMethod();
             return newAccessTokenResponse;
         }
 
@@ -295,10 +296,10 @@ namespace BaseballScraper.Controllers.YahooControllers
         [Route("/yahoo/authorize/checkyahoosession")]
         public ActionResult CheckYahooSession(HttpResponseMessage response = null)
         {
-            _c.Start.ThisMethod();
+            _h.StartMethod();
 
             var initialAuthCodeCheck = HttpContext.Session.GetString("authorizationcode");
-            initialAuthCodeCheck.Intro("initial auth code check");
+            _h.Intro(initialAuthCodeCheck, "initial auth code check");
 
             try {
                 if(HttpContext.Session.GetString("authorizationcode") == null)
@@ -342,7 +343,7 @@ namespace BaseballScraper.Controllers.YahooControllers
                 Console.WriteLine(ex.StackTrace);
 
                 try {
-                    Extensions.Spotlight("trying more...");
+                    _h.Spotlight("trying more...");
                     throw new RequestFailedException(String.Format("HTTP error. Request Message - '{0}', Content - {1}, Status Code - {2}", response.RequestMessage, response.Content != null ? response.Content.ReadAsStringAsync().Result : "", response.StatusCode), response);
                 }
 
@@ -445,7 +446,7 @@ namespace BaseballScraper.Controllers.YahooControllers
         // [Route("/yahoo/refreshtoken")]
         // public IActionResult GetYahooRefreshToken()
         // {
-        //     _c.Start.ThisMethod();
+        //     _h.StartMethod();
 
         //     var consumerKey    = _yahooConfig.ClientId;
         //     var consumerSecret = _yahooConfig.ClientSecret;
@@ -504,7 +505,7 @@ namespace BaseballScraper.Controllers.YahooControllers
         //     try {
         //         JObject responseToJson = JObject.Parse(responseFromServer);
 
-        //         Extensions.Spotlight("refresh token response");
+        //         _h.Spotlight("refresh token response");
         //         foreach(var jsonItem in responseToJson)
         //         {
         //             Console.ForegroundColor = ConsoleColor.DarkMagenta;
@@ -521,7 +522,7 @@ namespace BaseballScraper.Controllers.YahooControllers
         //         ex.SetContext("response from server", responseFromServer);
         //     }
 
-        //     Complete.ThisMethod();
+        //     CompleteMethod();
         //     return RedirectToAction("viewnflgames");
         // }
         #endregion
@@ -530,9 +531,9 @@ namespace BaseballScraper.Controllers.YahooControllers
         #region OTHER SESSION THINGS
             // public static void SetObjectAsJson(this ISession session, string key, object value)
             // {
-            //     _c.Start.ThisMethod();
+            //     _h.StartMethod();
             //     session.SetString(key, JsonConvert.SerializeObject(value));
-            //     Complete.ThisMethod();
+            //     CompleteMethod();
             // }
 
             // public static async Task Set<T>(this ISession session, string key, T value)

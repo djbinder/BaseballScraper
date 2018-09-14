@@ -15,7 +15,13 @@ namespace BaseballScraper.Infrastructure
     #pragma warning disable CS0414
     public class PythonConnector
     {
-        private Constants _c = new Constants();
+        private Helpers _h = new Helpers();
+
+        public ScriptEngine CreatePythonScriptEngine()
+        {
+            var engine = Python.CreateEngine();
+            return engine;
+        }
 
         // STATUS: this works
         /// <summary> Create a connection between .NET and a Python file; This must be run before any of the other methods will work </summary>
@@ -88,7 +94,7 @@ namespace BaseballScraper.Infrastructure
         /// </example>
         public void SetPythonKeyValueDictionary(ScriptScope scope, Dictionary<string, object> keysAndValuesDictionary, string dictionaryName)
         {
-            _c.Start.ThisMethod();
+            _h.StartMethod();
 
             // this sets the entire dictionary as a Python variable
             scope.SetVariable(dictionaryName, keysAndValuesDictionary);
