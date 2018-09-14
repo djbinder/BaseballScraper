@@ -12,7 +12,7 @@ namespace BaseballScraper.Infrastructure
 {
     public class DataTabler
     {
-        private Constants _c = new Constants();
+        private Helpers _h = new Helpers();
 
 
         #region MODEL HANDLERS ----------------------------------------
@@ -143,7 +143,7 @@ namespace BaseballScraper.Infrastructure
             /// <param name="cellValue"> The value that you want to insert into the cell of the column </param>
             public void InsertDataRowIntoTable(DataTable dataTable, string dataTableColumn, string cellValue)
             {
-                _c.Start.ThisMethod();
+                _h.StartMethod();
 
                 DataRow row               = dataTable.NewRow();
                 row     [dataTableColumn] = cellValue;
@@ -156,7 +156,7 @@ namespace BaseballScraper.Infrastructure
             /// <param name="dataTable"> The target data table that you want to insert a row into </param>
             public void InsertDataRowIntoTable(DataTable dataTable)
             {
-                _c.Start.ThisMethod();
+                _h.StartMethod();
 
                 DataRow row     = dataTable.NewRow();
                 row     ["H"]   = "100";

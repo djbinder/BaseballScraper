@@ -2,8 +2,6 @@ namespace BaseballScraper.EndPoints
 {
     public class FanGraphsUriEndPoints
     {
-        private Constants _c = new Constants();
-
         private readonly string baseUri = "https://www.fangraphs.com/leaders.aspx?";
         public  string endPointType     = "";
 

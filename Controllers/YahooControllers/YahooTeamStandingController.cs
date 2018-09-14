@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using BaseballScraper.EndPoints;
+using BaseballScraper.Infrastructure;
 
 namespace BaseballScraper.Controllers.YahooControllers
 {
@@ -13,7 +14,7 @@ namespace BaseballScraper.Controllers.YahooControllers
     [ApiController]
     public class YahooTeamStandingController: Controller
     {
-        private Constants _c = new Constants();
+        private Helpers _h = new Helpers();
         private readonly TheGameIsTheGameConfiguration _theGameConfig;
         private static YahooApiEndPoints endPoints = new YahooApiEndPoints();
         private static YahooHomeController _yahooHomeController;
@@ -33,7 +34,7 @@ namespace BaseballScraper.Controllers.YahooControllers
         [Route("teamstanding")]
         public YahooTeamStanding CreateYahooTeamStandingModel ()
         {
-            _c.Start.ThisMethod();
+            _h.StartMethod();
 
             // retrieve the league key from user secrets / yahoo league config
             string leagueKey = _theGameConfig.LeagueKey;

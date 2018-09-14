@@ -1,6 +1,7 @@
 // DJB WORKING ON
 
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Xml.Serialization;
 
 namespace BaseballScraper.Models.Yahoo
@@ -10,6 +11,9 @@ namespace BaseballScraper.Models.Yahoo
     // Roster for a particular week: /fantasy/v2/team/{team_key}/roster;week={week}
     public class YahooTeamRoster
     {
+        [Key]
+        public int YahooTeamRosterRecordId { get; set; }
+
         [XmlElement (ElementName = "coverage_type", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
         public string RosterCoverageType { get ; set; }
 

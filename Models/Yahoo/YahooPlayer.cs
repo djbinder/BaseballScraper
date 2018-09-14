@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Xml.Serialization;
 
@@ -8,6 +9,7 @@ namespace BaseballScraper.Models.Yahoo
     [XmlRoot (ElementName = "player", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
     public class YahooPlayerBase
     {
+        [Key]
         [XmlElement (ElementName = "player_key")]
         public string PlayerKey { get; set; }
 

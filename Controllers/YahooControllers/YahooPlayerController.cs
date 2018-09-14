@@ -1,4 +1,5 @@
 using System;
+using BaseballScraper.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BaseballScraper.Controllers.YahooControllers
@@ -8,12 +9,12 @@ namespace BaseballScraper.Controllers.YahooControllers
     [ApiController]
     public class YahooPlayerController: Controller
     {
-        private Constants _c = new Constants();
+        private Helpers _h = new Helpers();
 
         [Route("player")]
         public void PlayerInfo()
         {
-            _c.Start.ThisMethod();
+            _h.StartMethod();
             // these are for paul goldschmidt
             string pKey = "378.p.8967";
             string pId  = "8967";

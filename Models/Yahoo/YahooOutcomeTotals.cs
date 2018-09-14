@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Xml.Serialization;
 
 namespace BaseballScraper.Models.Yahoo
@@ -6,6 +7,9 @@ namespace BaseballScraper.Models.Yahoo
     [XmlRoot (ElementName = "outcome_totals")]
     public class YahooOutcomeTotals
     {
+        [Key]
+        public int YahooOutcomeRecordId { get; set; }
+
         [XmlElement (ElementName = "wins")]
         public string Wins { get; set; }
 

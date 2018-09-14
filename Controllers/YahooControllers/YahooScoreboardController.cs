@@ -11,6 +11,7 @@ using BaseballScraper.Models;
 using BaseballScraper.EndPoints;
 using BaseballScraper.Models.Configuration;
 using System.Threading.Tasks;
+using BaseballScraper.Infrastructure;
 
 namespace BaseballScraper.Controllers.YahooControllers
 {
@@ -19,7 +20,7 @@ namespace BaseballScraper.Controllers.YahooControllers
     [ApiController]
     public class YahooScoreboardController: Controller
     {
-        private Constants _c                       = new Constants();
+        private Helpers _h                         = new Helpers();
         private static YahooApiEndPoints endPoints = new YahooApiEndPoints();
         private readonly TheGameIsTheGameConfiguration _theGameConfig;
         private static YahooHomeController _yahooHomeController;
@@ -34,7 +35,7 @@ namespace BaseballScraper.Controllers.YahooControllers
         // Step 1
         public void CreateYahooLeagueScoreboard ()
         {
-            _c.Start.ThisMethod();
+            _h.StartMethod();
 
             // retrieve the league key from user secrets / yahoo league config
             string leagueKey = _theGameConfig.LeagueKey;
@@ -43,7 +44,7 @@ namespace BaseballScraper.Controllers.YahooControllers
 
             JObject leagueScoreboard = _yahooHomeController.GenerateYahooResourceJObject(uriLeagueScoreboard);
 
-            Extensions.PrintJObjectItems(leagueScoreboard);
+            _h.PrintJObjectItems(leagueScoreboard);
         }
 
         // Step 2
