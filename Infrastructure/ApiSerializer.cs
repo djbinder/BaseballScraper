@@ -42,7 +42,7 @@ namespace BaseballScraper.Infrastructure
 
     public class ApiInfrastructure
     {
-        private Constants _c                          = new Constants();
+        private Helpers _h                            = new Helpers();
         private static MlbDataApiEndPoints _endPoints = new MlbDataApiEndPoints();
 
         /// <summary> Serialize a given object to a JSON stream (i.e., take a given object and convert it to JSON ) </summary>
@@ -50,7 +50,7 @@ namespace BaseballScraper.Infrastructure
         /// <returns></returns>
         public string ReturnJsonFromObject (Object obj)
         {
-            // _c.Start.ThisMethod();
+            // _h.StartMethod();
             //Create a stream to serialize the object to.
             MemoryStream mS = new MemoryStream();
 
@@ -86,8 +86,8 @@ namespace BaseballScraper.Infrastructure
         /// <returns> A JToken</returns>
         public JToken CreateModelJToken(JObject obj, string modelType)
         {
-            // _c.Start.ThisMethod();
-            // Extensions.Spotlight("API SERIALIZER | Create model j token");
+            // _h.StartMethod();
+            // _h.Spotlight("API SERIALIZER | Create model j token");
             // Console.WriteLine($"CREATING J TOKEN FOR MODEL TYPE: {modelType}");
             // Console.WriteLine();
 
@@ -108,7 +108,7 @@ namespace BaseballScraper.Infrastructure
 
             memoryStream.Close();
 
-            Extensions.Spotlight("CREATED MODEL INSTANCE");
+            _h.Spotlight("CREATED MODEL INSTANCE");
 
             ReturnJsonFromObject(obj);
 
@@ -131,7 +131,7 @@ namespace BaseballScraper.Infrastructure
 
                 memoryStream.Close();
 
-                Extensions.Spotlight($"CREATED MODEL INSTANCE #{instance}");
+                _h.Spotlight($"CREATED MODEL INSTANCE #{instance}");
                 ReturnJsonFromObject(obj);
 
                 instance++;
@@ -143,21 +143,21 @@ namespace BaseballScraper.Infrastructure
         {
             switch(modelType)
             {
-                case "PlayerSearch": 
+                case "PlayerSearch":
                     return serializer.ReadObject(memoryStream) as PlayerSearch;
-                case "PlayerInfo": 
+                case "PlayerInfo":
                     return serializer.ReadObject(memoryStream) as PlayerInfo;
-                case "ProjectedPitchingStats": 
+                case "ProjectedPitchingStats":
                     return serializer.ReadObject(memoryStream) as ProjectedPitchingStats;
-                case "ProjectedHittingStats": 
+                case "ProjectedHittingStats":
                     return serializer.ReadObject(memoryStream) as ProjectedHittingStats;
-                case "PitchingLeaders": 
+                case "PitchingLeaders":
                     return serializer.ReadObject(memoryStream) as PitchingLeaders;
-                case "HittingLeaders": 
+                case "HittingLeaders":
                     return serializer.ReadObject(memoryStream) as HittingLeaders;
-                case "LeadingPitcher": 
+                case "LeadingPitcher":
                     return serializer.ReadObject(memoryStream) as LeadingPitcher;
-                case "LeadingHitter": 
+                case "LeadingHitter":
                     return serializer.ReadObject(memoryStream) as LeadingHitter;
             }
             throw new System.Exception("no model type found");
@@ -167,28 +167,28 @@ namespace BaseballScraper.Infrastructure
         {
             switch(tokenName)
             {
-                case "PlayerSearch": 
+                case "PlayerSearch":
                     return obj["search_player_all"]["queryResults"]["row"];
 
-                case "PlayerInfo": 
+                case "PlayerInfo":
                     return obj["player_info"]["queryResults"]["row"];
 
-                case "ProjectedPitchingStats": 
+                case "ProjectedPitchingStats":
                     return obj["proj_pecota_pitching"]["queryResults"]["row"];
 
-                case "ProjectedHittingStats": 
+                case "ProjectedHittingStats":
                     return obj["proj_pecota_batting"]["queryResults"]["row"];
 
-                case "PitchingLeaders": 
+                case "PitchingLeaders":
                     return obj["leader_pitching_repeater"]["leader_pitching_mux"]["queryResults"]["row"];
 
-                case "HittingLeaders": 
+                case "HittingLeaders":
                     return obj["leader_hitting_repeater"]["leader_hitting_mux"]["queryResults"]["row"];
 
-                case "LeadingPitcher": 
+                case "LeadingPitcher":
                     return obj["leader_pitching_repeater"]["leader_pitching_mux"]["queryResults"]["row"];
 
-                case "LeadingHitter": 
+                case "LeadingHitter":
                     return obj["leader_hitting_repeater"]["leader_hitting_mux"]["queryResults"]["row"];
             }
             throw new System.Exception("no api type found");

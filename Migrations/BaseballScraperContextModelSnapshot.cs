@@ -19,39 +19,41 @@ namespace BaseballScraper.Migrations
                 .HasAnnotation("ProductVersion", "2.1.1-rtm-30846")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            modelBuilder.Entity("BaseballScraper.Models.Yahoo.RosterAdds", b =>
+            modelBuilder.Entity("BaseballScraper.Models.Player.PlayerNote", b =>
                 {
-                    b.Property<int>("RosterAddsId")
+                    b.Property<int>("idPlayerNotes")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("CoverageType");
+                    b.Property<int?>("CalendarYear");
 
-                    b.Property<string>("CoverageValue");
+                    b.Property<DateTime>("CreatedAt");
 
-                    b.Property<string>("Value");
+                    b.Property<int?>("MlbSeason");
 
-                    b.HasKey("RosterAddsId");
+                    b.Property<string>("Note");
 
-                    b.ToTable("RosterAdds");
+                    b.Property<string>("NoteTone");
+
+                    b.Property<string>("NoteWriter");
+
+                    b.Property<string>("PlayerName");
+
+                    b.Property<string>("Position");
+
+                    b.Property<string>("PositionType");
+
+                    b.Property<string>("SourceSite");
+
+                    b.Property<DateTime>("UpdatedAt");
+
+                    b.HasKey("idPlayerNotes");
+
+                    b.ToTable("PlayerNotes");
                 });
 
-            modelBuilder.Entity("BaseballScraper.Models.Yahoo.TeamLogo", b =>
+            modelBuilder.Entity("BaseballScraper.Models.Yahoo.YahooManager", b =>
                 {
-                    b.Property<int>("TeamLogoId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Size");
-
-                    b.Property<string>("Url");
-
-                    b.HasKey("TeamLogoId");
-
-                    b.ToTable("TeamLogo");
-                });
-
-            modelBuilder.Entity("BaseballScraper.Models.Yahoo.TeamManagers", b =>
-                {
-                    b.Property<int>("TeamManagersId")
+                    b.Property<int>("YahooManagerRecordId")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Email");
@@ -60,33 +62,31 @@ namespace BaseballScraper.Migrations
 
                     b.Property<string>("ImageUrl");
 
-                    b.Property<int?>("IsCommissioner");
+                    b.Property<string>("IsCommissioner");
 
-                    b.Property<int?>("IsCurrentLogin");
+                    b.Property<string>("IsCurrentLogin");
 
                     b.Property<string>("ManagerId");
 
                     b.Property<string>("NickName");
 
-                    b.Property<int?>("YahooTeamBaseId");
+                    b.Property<int?>("YahooTeamBaseRecordId");
 
-                    b.HasKey("TeamManagersId");
+                    b.HasKey("YahooManagerRecordId");
 
-                    b.HasIndex("YahooTeamBaseId");
+                    b.HasIndex("YahooTeamBaseRecordId");
 
-                    b.ToTable("TeamManagers");
+                    b.ToTable("YahooManager");
                 });
 
             modelBuilder.Entity("BaseballScraper.Models.Yahoo.YahooTeamBase", b =>
                 {
-                    b.Property<int>("YahooTeamBaseId")
+                    b.Property<int>("YahooTeamBaseRecordId")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("HasDraftGrade");
 
                     b.Property<int?>("IsOwnedByCurrentLogin");
-
-                    b.Property<string>("Key");
 
                     b.Property<string>("LeagueScoringType");
 
@@ -94,51 +94,85 @@ namespace BaseballScraper.Migrations
 
                     b.Property<int?>("NumberOfTrades");
 
-                    b.Property<int?>("RosterAddsId");
+                    b.Property<int?>("PrimaryTeamManagerYahooManagerRecordId");
 
                     b.Property<int?>("TeamId");
 
-                    b.Property<int?>("TeamLogoId");
+                    b.Property<string>("TeamKey");
 
-                    b.Property<int?>("TeamManagersId");
+                    b.Property<int?>("TeamLogoYahooTeamLogoRecordId");
 
                     b.Property<string>("TeamName");
+
+                    b.Property<int?>("TeamRosterAddsYahooTeamRosterAddsRecordId");
 
                     b.Property<string>("Url");
 
                     b.Property<int?>("WaiverPriority");
 
-                    b.HasKey("YahooTeamBaseId");
+                    b.HasKey("YahooTeamBaseRecordId");
 
-                    b.HasIndex("RosterAddsId");
+                    b.HasIndex("PrimaryTeamManagerYahooManagerRecordId");
 
-                    b.HasIndex("TeamLogoId");
+                    b.HasIndex("TeamLogoYahooTeamLogoRecordId");
 
-                    b.HasIndex("TeamManagersId");
+                    b.HasIndex("TeamRosterAddsYahooTeamRosterAddsRecordId");
 
                     b.ToTable("YahooTeamBase");
                 });
 
-            modelBuilder.Entity("BaseballScraper.Models.Yahoo.TeamManagers", b =>
+            modelBuilder.Entity("BaseballScraper.Models.Yahoo.YahooTeamLogo", b =>
+                {
+                    b.Property<int>("YahooTeamLogoRecordId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Size");
+
+                    b.Property<int>("TeamLogoId");
+
+                    b.Property<string>("Url");
+
+                    b.HasKey("YahooTeamLogoRecordId");
+
+                    b.ToTable("YahooTeamLogo");
+                });
+
+            modelBuilder.Entity("BaseballScraper.Models.Yahoo.YahooTeamRosterAdds", b =>
+                {
+                    b.Property<int>("YahooTeamRosterAddsRecordId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("CoverageType");
+
+                    b.Property<string>("CoverageValue");
+
+                    b.Property<string>("Value");
+
+                    b.HasKey("YahooTeamRosterAddsRecordId");
+
+                    b.ToTable("YahooTeamRosterAdds");
+                });
+
+            modelBuilder.Entity("BaseballScraper.Models.Yahoo.YahooManager", b =>
                 {
                     b.HasOne("BaseballScraper.Models.Yahoo.YahooTeamBase")
-                        .WithMany("ManagersList")
-                        .HasForeignKey("YahooTeamBaseId");
+                        .WithMany("TeamManagersList")
+                        .HasForeignKey("YahooTeamBaseRecordId");
                 });
 
             modelBuilder.Entity("BaseballScraper.Models.Yahoo.YahooTeamBase", b =>
                 {
-                    b.HasOne("BaseballScraper.Models.Yahoo.RosterAdds", "RosterAdds")
+                    b.HasOne("BaseballScraper.Models.Yahoo.YahooManager", "PrimaryTeamManager")
                         .WithMany()
-                        .HasForeignKey("RosterAddsId");
+                        .HasForeignKey("PrimaryTeamManagerYahooManagerRecordId");
 
-                    b.HasOne("BaseballScraper.Models.Yahoo.TeamLogo", "TeamLogo")
+                    b.HasOne("BaseballScraper.Models.Yahoo.YahooTeamLogo", "TeamLogo")
                         .WithMany()
-                        .HasForeignKey("TeamLogoId");
+                        .HasForeignKey("TeamLogoYahooTeamLogoRecordId");
 
-                    b.HasOne("BaseballScraper.Models.Yahoo.TeamManagers", "TeamManager")
+                    b.HasOne("BaseballScraper.Models.Yahoo.YahooTeamRosterAdds", "TeamRosterAdds")
                         .WithMany()
-                        .HasForeignKey("TeamManagersId");
+                        .HasForeignKey("TeamRosterAddsYahooTeamRosterAddsRecordId");
                 });
 #pragma warning restore 612, 618
         }

@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Xml.Serialization;
 
@@ -16,7 +17,8 @@ namespace BaseballScraper.Models.Yahoo
     [XmlRoot(ElementName = "team")]
     public class YahooTeamBase
     {
-        // public int YahooTeamBaseId { get; set; }
+        [Key]
+        public int YahooTeamBaseRecordId { get; set; }
 
         [JsonProperty("team_key")]
         [XmlElement (ElementName = "team_key")]

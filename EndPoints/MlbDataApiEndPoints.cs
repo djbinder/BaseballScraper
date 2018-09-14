@@ -5,7 +5,6 @@ namespace BaseballScraper.EndPoints
 {
     public class MlbDataApiEndPoints
     {
-        private Constants _c            = new Constants();
         private readonly string baseUri = $"http://lookup-service-prod.mlb.com/json/named.";
         public  string endPointType     = "";
 
@@ -21,7 +20,7 @@ namespace BaseballScraper.EndPoints
         // /json/named.proj_pecota_batting.bam?season={season}&player_id={player_id}
         public MlbDataEndPoint PlayerSearchEndPoint(string lastName)
         {
-            // _c.Start.ThisMethod();
+            // _c.StartMethod();
 
             endPointType = "search_player_all";
 

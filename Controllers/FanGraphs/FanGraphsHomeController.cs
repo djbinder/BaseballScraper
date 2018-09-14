@@ -9,10 +9,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BaseballScraper.Controllers.FanGraphs
 {
-    [Route("fangraphs")]
+    // TODO: need to extract hitter info
+    [Route("fangraphs/hitter")]
     public class FanGraphsHomeController: Controller
     {
-        private Constants _c                            = new Constants();
+        private Helpers _h                              = new Helpers();
         private static FanGraphsUriEndPoints _endPoints = new FanGraphsUriEndPoints();
 
         public FanGraphsHomeController() {}
@@ -22,7 +23,7 @@ namespace BaseballScraper.Controllers.FanGraphs
         [Route("")]
         public IActionResult ViewFanGraphsHomePage()
         {
-            _c.Start.ThisMethod();
+            _h.StartMethod();
 
             SetInitialUrlToScrape();
 
@@ -33,7 +34,7 @@ namespace BaseballScraper.Controllers.FanGraphs
 
         private string SetInitialUrlToScrape ()
         {
-            _c.Start.ThisMethod ();
+            _h.StartMethod();
 
             // original
             string initialUrl = "https://www.fangraphs.com/leaders.aspx?pos=all&stats=bat&lg=all&qual=y&type=8&season=2018&month=0&season1=2018&ind=0&page=1_50";
@@ -44,7 +45,7 @@ namespace BaseballScraper.Controllers.FanGraphs
 
         private string GetPathForNumberOfPagesToScrape()
         {
-            _c.Start.ThisMethod();
+            _h.StartMethod();
 
             string tableBodyXpath = "//*[@id='LeaderBoard1_dg1_ctl00']/thead/tr[1]/td/div/div[5]/strong[2]";
 
@@ -55,7 +56,7 @@ namespace BaseballScraper.Controllers.FanGraphs
         // THIS WORKS
         private int GetNumOfPagesToScrape ()
         {
-            _c.Start.ThisMethod ();
+            _h.StartMethod();
             string urlToBeginScraping = SetInitialUrlToScrape ();
 
             HtmlWeb htmlWeb = new HtmlWeb ();
@@ -81,7 +82,7 @@ namespace BaseballScraper.Controllers.FanGraphs
         // THIS WORKS
         private List<string> GetUrlsOfPagesToScrape ()
         {
-            _c.Start.ThisMethod ();
+            _h.StartMethod();
 
             List<string> urlsOfPagesToScrape = new List<string> ();
 
@@ -107,7 +108,7 @@ namespace BaseballScraper.Controllers.FanGraphs
         // THIS WORKS
         private string GetXPathOfTableBodyToScrape ()
         {
-            _c.Start.ThisMethod ();
+            _h.StartMethod();
             string tableBodyXpath = "//*[@id='LeaderBoard1_dg1_ctl00']/tbody";
 
             // Complete.ThisMethod ();
@@ -118,11 +119,11 @@ namespace BaseballScraper.Controllers.FanGraphs
         // THIS WORKS
         public void HitterCrawler ()
         {
-            _c.Start.ThisMethod ();
+            _h.StartMethod();
 
             List<string> listOfUrls = GetUrlsOfPagesToScrape ().ToList ();
             var  numOfUrls          = listOfUrls.Count ();
-            numOfUrls.Intro ("url count");
+            _h.Intro (numOfUrls, "url count");
 
             string tableBodyXpath = GetXPathOfTableBodyToScrape ();
 
@@ -131,8 +132,8 @@ namespace BaseballScraper.Controllers.FanGraphs
             int loopCount = 1;
             foreach (var urlForThisPageInLoop in listOfUrls)
             {
-                urlForThisPageInLoop.Intro ("single page url");
-                loopCount.Intro ("this is loop number");
+                _h.Intro (urlForThisPageInLoop, "single page url");
+                _h.Intro (loopCount, "this is loop number");
                 loopCount++;
 
                 var htmlWeb1 = htmlWeb.Load (urlForThisPageInLoop);
@@ -191,7 +192,7 @@ namespace BaseballScraper.Controllers.FanGraphs
                                 {
                                     try
                                     {
-                                        // Extensions.Spotlight("MARK A");
+                                        // _h.Spotlight("MARK A");
                                         string postPost = "/a";
 
                                         // NAME AND TEAM X-PATHS ---> //*[@id='LeaderBoard1_dg1_ctl00__11']/td[2]/a
@@ -205,7 +206,7 @@ namespace BaseballScraper.Controllers.FanGraphs
 
                                         foreach (var actualNumber in nameAndTeam)
                                         {
-                                            // Extensions.Spotlight("MARK B");
+                                            // _h.Spotlight("MARK B");
                                             // e.g. '3.9', '26.3' etc. The players actual numbers for each stats
                                             var numToAddToList = actualNumber.InnerText;
                                             playerItems.Add (numToAddToList);
@@ -215,7 +216,7 @@ namespace BaseballScraper.Controllers.FanGraphs
 
                                     catch
                                     {
-                                        Extensions.Spotlight ("NAME or TEAM is broken");
+                                        _h.Spotlight ("NAME or TEAM is broken");
                                         string cellIsBlank = "";
                                         playerItems.Add (cellIsBlank);
                                     }
@@ -223,7 +224,7 @@ namespace BaseballScraper.Controllers.FanGraphs
 
                                 else
                                 {
-                                    // Extensions.Spotlight("MARK D");
+                                    // _h.Spotlight("MARK D");
                                     foreach (var actualNumber in playersNodeCollection)
                                     {
                                         // e.g. '3.9', '26.3' etc. The players actual numbers for each stats
