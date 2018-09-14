@@ -15,16 +15,13 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using BaseballScraper.Models;
 using BaseballScraper.Infrastructure;
+// using BaseballScraper.Configuration;
 
 namespace BaseballScraper
 {
-#pragma warning disable CS0414
+    #pragma warning disable CS0414
     public class Startup
     {
-        private static String Start    = "STARTED";
-        private static String Complete = "COMPLETED";
-
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -32,13 +29,13 @@ namespace BaseballScraper
 
         public Startup (IHostingEnvironment env)
         {
-            // Start.ThisMethod();
+            // StartMethod();
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile($"Configuration/appsettings.json", optional: false, reloadOnChange: true)
                 .AddJsonFile($"Configuration/appsettings.{env.EnvironmentName}.json", optional: false, reloadOnChange: true)
-                .AddJsonFile("secrets.json", optional:false, reloadOnChange:true)
                 .AddEnvironmentVariables();
+                // .AddJsonFile("secrets.json", optional:false, reloadOnChange:true)
 
             if (env.IsDevelopment())
             {
@@ -48,17 +45,18 @@ namespace BaseballScraper
                 builder.AddUserSecrets<YahooConfiguration>();
                 builder.AddUserSecrets<TheGameIsTheGameConfiguration>();
             }
-
             Configuration = builder.Build();
         }
 
+
+
+
         //  CONFIGURATION ---> Microsoft.Extensions.Configuration.ConfigurationRoot
         public IConfiguration Configuration { get; set; }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices (IServiceCollection services)
         {
-            // Start.ThisMethod();
-
             // Required to use the Options<T> pattern
             services.AddOptions();
 
@@ -81,7 +79,6 @@ namespace BaseballScraper
                 config.GetTokenBase    = Configuration["YahooConfiguration:GetTokenBase"];
             });
 
-
             // TWITTER CONFIGURATION
             services.Configure<TwitterConfiguration>(Configuration.GetSection("TwitterConfiguration"));
             services.AddScoped(cfg => cfg.GetService<IOptionsSnapshot<TwitterConfiguration>>().Value);
@@ -94,9 +91,6 @@ namespace BaseballScraper
                 config.ConsumerSecret    = Configuration["TwitterConfiguration:ConsumerSecret"];
             });
 
-
-            // AIRTABLE CONFIGURATION
-            // adds airtable from configuration
             services.Configure<AirtableConfiguration>(Configuration);
             services.Configure<AirtableConfiguration>(config =>
             {
@@ -107,13 +101,11 @@ namespace BaseballScraper
                 Encoding.UTF8.GetBytes(Configuration["AirtableConfiguration:ApiKey"])
             );
 
-
             services.Configure<TheGameIsTheGameConfiguration>(Configuration);
             services.Configure<TheGameIsTheGameConfiguration>(config =>
             {
                 config.LeagueKey = Configuration["TheGameIsTheGame:2018Season:LeagueKey"];
             });
-
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(options =>
@@ -123,57 +115,52 @@ namespace BaseballScraper
                             IssuerSigningKey    = airtableKey,
                             RequireSignedTokens = true,
                         };
-
                         options.IncludeErrorDetails = true;
                     });
-
-            // services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            //         .AddCookie();
-
-
-
-            // this is related to session
-            // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/app-state?view=aspnetcore-2.1
-            // services.AddDistributedMemoryCache();
-
-            // services.AddSession(options =>
-            // {
-            //     // Set a short timeout for easy testing.
-            //     options.IdleTimeout     = TimeSpan.FromSeconds(10);
-            //     options.Cookie.HttpOnly = true;
-            // });
-
             services.AddSingleton<YahooApiEndPoints>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddMvc ()
                 .SetCompatibilityVersion (CompatibilityVersion.Version_2_1)
-                .AddSessionStateTempDataProvider();
+                .AddSessionStateTempDataProvider()
+                .AddControllersAsServices();
 
-            services.AddMvc().AddControllersAsServices();
+            // services.AddMvc().AddControllersAsServices();
             services.AddTransient<BaseballScraper.Controllers.YahooControllers.YahooAuthController>();
             services.AddSession ();
 
             services.Configure<BaseballScraperContext>(Configuration);
             services.Configure<BaseballScraperContext>(config =>
             {
-                config.ConnectionString = Configuration["DBInfo:ConnectionString"];
-                config.Name             = Configuration["DBInfo:Name"];
+                config.ConnectionString    = Configuration["DBInfo:ConnectionString"];
+                config.Name                = Configuration["DBInfo:Name"];
+                config.SqlConnectionString = Configuration["DBInfo2:ConnectionString"];
+                config.SqlName             = Configuration["DBInfo2:Name"];
             });
-            services.AddDbContext<BaseballScraperContext> (options => options.UseNpgsql (Configuration["DBInfo:ConnectionString"]));
+            services.AddDbContext<BaseballScraperContext>(options => options.UseNpgsql (Configuration["DBInfo:ConnectionString"]));
+            services.AddDbContext<BaseballScraperContext>(options => options.UseMySQL(Configuration["DBInfo2:ConnectionString"]));
+
+
+
+            // services.AddDbContext<BaseballScraperContext>(options => options.UseMySQL(Configuration["DBInfo:ConnectionString"]));
+            Console.WriteLine(Configuration["DBInfo:Name"]);
+            Console.WriteLine(Configuration["DBInfo:ConnectionString"]);
+            Console.WriteLine(Configuration["DBInfo2:Name"]);
+            Console.WriteLine(Configuration["DBInfo2:ConnectionString"]);
+
 
             // example of how to console config items
                 // Console.WriteLine("THE GAME KEY");
                 // Console.WriteLine(Configuration["TheGameIsTheGame:2018Season:LeagueKey"]);
 
-            // Complete.ThisMethod();
+            // CompleteMethod();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure (IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IOptionsMonitor<TwitterConfiguration> twitterConfigMonitor)
         {
-            // Start.ThisMethod();
+            // StartMethod();
 
             HttpHelper.Configure(app.ApplicationServices.GetRequiredService<IHttpContextAccessor>());
 

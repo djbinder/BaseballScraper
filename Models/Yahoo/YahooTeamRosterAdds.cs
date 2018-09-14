@@ -1,5 +1,6 @@
 // DJB this is right
 
+using System.ComponentModel.DataAnnotations;
 using System.Xml.Serialization;
 
 namespace BaseballScraper.Models.Yahoo
@@ -7,7 +8,8 @@ namespace BaseballScraper.Models.Yahoo
     [XmlRoot (ElementName = "roster_adds")]
     public class YahooTeamRosterAdds
     {
-        public int RosterAddsId { get; set; }
+        [Key]
+        public int YahooTeamRosterAddsRecordId { get; set; }
 
         [XmlElement (ElementName = "coverage_type")]
         public string CoverageType { get; set; }

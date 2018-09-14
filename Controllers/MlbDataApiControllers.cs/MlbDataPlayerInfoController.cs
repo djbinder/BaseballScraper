@@ -16,7 +16,7 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
     [ApiController]
     public class MlbDataPlayerInfoController: Controller
     {
-        private Constants _c                          = new Constants();
+        private Helpers _h                            = new Helpers();
         private ApiInfrastructure _a                  = new ApiInfrastructure();
         private static MlbDataApiEndPoints _endPoints = new MlbDataApiEndPoints();
         private static PostmanMethods _postman        = new PostmanMethods();
@@ -28,7 +28,7 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
         [Route("playerinfo/{playerId}")]
         public IActionResult ViewPlayerInfo(int playerId)
         {
-            _c.Start.ThisMethod();
+            _h.StartMethod();
 
             // this gets you Cespedes
             // int playerIdPlaceHolder = 493316;
@@ -49,7 +49,7 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
 
         public IRestResponse GetPlayerInfoPostmanResponse(int playerId)
         {
-            _c.Start.ThisMethod();
+            _h.StartMethod();
 
             // type ---> BaseballScraper.EndPoints.MlbDataApiEndPoints+MlbDataEndPoint
             var newEndPoint = _endPoints.PlayerInfoEndPoint(playerId);

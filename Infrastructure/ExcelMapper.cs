@@ -44,7 +44,7 @@ namespace BaseballScraper.Infrastructure
 
     public class ExcelMapper
     {
-        private Constants _c = new Constants();
+        private Helpers _h = new Helpers();
 
         public class Excel
         {
@@ -81,7 +81,7 @@ namespace BaseballScraper.Infrastructure
             /// <example> _eM.CreateNewExcelWorkbook("BaseballScraper"); </example>
             public void CreateNewExcelWorkbook(string fileName)
             {
-                _c.Start.ThisMethod();
+                _h.StartMethod();
                 RegisterProviderToStart();
                 SetThreadCurrentCulture();
 
@@ -199,7 +199,7 @@ namespace BaseballScraper.Infrastructure
             // TODO: make this work?
             public void GetAllWorkbookSheets(string fileName)
             {
-                _c.Start.ThisMethod();
+                _h.StartMethod();
 
                 RegisterProviderToStart();
                 SetThreadCurrentCulture();
@@ -237,7 +237,7 @@ namespace BaseballScraper.Infrastructure
 
                             Object headerFooter = reader.HeaderFooter;
                             Console.WriteLine($"HEADER FOOTER: {headerFooter}");
-                            headerFooter.Dig();
+                            _h.Dig(headerFooter);
 
                             Console.WriteLine();
                         }
@@ -293,7 +293,7 @@ namespace BaseballScraper.Infrastructure
                 // ALL RECORDS --> IEnumerable<RowInfo<FGHitter>>
                 // ALL RECORDS type --> IEnumerable<RowInfo<FGHitter>>
                 var allRecords = mapper.Take<FGHitter> (sheetName);
-                Extensions.TypeAndIntro(allRecords, "all records");
+                _h.TypeAndIntro(allRecords, "all records");
 
                 List<FGHitter> fgHitters = new List<FGHitter>();
 
@@ -310,7 +310,7 @@ namespace BaseballScraper.Infrastructure
             /// <summary> Add retrieved records / rows to a list </summary>
             public IList<T> AddRecordsToList<T>(IList<T> objectList, T t)
             {
-                // _c.Start.ThisMethod();
+                // _h.StartMethod();
                 objectList.Add(t);
                 Console.WriteLine($"Object #{objectList.Count()} has been added to list");
                 return objectList;
@@ -423,7 +423,7 @@ namespace BaseballScraper.Infrastructure
             /// <returns> The column number of an Excel column </returns>
             internal int ColumnHeaderLetterToNumber(string letter)
             {
-                _c.Start.ThisMethod();
+                _h.StartMethod();
                 switch(letter)
                 {
                     case "A":

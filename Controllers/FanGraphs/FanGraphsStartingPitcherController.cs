@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using BaseballScraper.EndPoints;
+using BaseballScraper.Infrastructure;
 using BaseballScraper.Models.FanGraphs;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Mvc;
@@ -29,10 +30,11 @@ namespace BaseballScraper.Controllers.FanGraphs
         /// <item> FanGraphs custom report this scraper targets: https://bit.ly/2N2somI </item>
     /// </list>
 
+
     [Route("fangraphs/sp")]
     public class FanGraphsStartingPitcherController: Controller
     {
-        private Constants _c                            = new Constants();
+        private Helpers _h                              = new Helpers();
         private static FanGraphsUriEndPoints _endPoints = new FanGraphsUriEndPoints();
         private string pathToGetNumberOfPagesToScrape   = "//*[@id='LeaderBoard1_dg1_ctl00']/thead/tr[1]/td/div/div[5]/strong[2]";
         private string pathOfTableBodyToScrape          = "//*[@id='LeaderBoard1_dg1_ctl00']/tbody";
@@ -93,7 +95,7 @@ namespace BaseballScraper.Controllers.FanGraphs
                 bool showGuardRails = false;
                 if(showGuardRails == true)
                 {
-                    Extensions.Spotlight("----- GET NUMBER OF PAGES TO SCRAPE -----");
+                    _h.Spotlight("----- GET NUMBER OF PAGES TO SCRAPE -----");
                     Console.WriteLine($"NUMBER OF PAGES TO SCRAPE IS: {numberOfPagesToScrapeInt}");
                     Console.WriteLine();
                 }
@@ -131,7 +133,7 @@ namespace BaseballScraper.Controllers.FanGraphs
                     bool showGuardRails = false;
                     if(showGuardRails == true)
                     {
-                        Extensions.Spotlight("----- GET URLS OF PAGES TO SCRAPE -----");
+                        _h.Spotlight("----- GET URLS OF PAGES TO SCRAPE -----");
                         Console.WriteLine($"URL TO SCRAPE # {i}: {urlToScrapeEndPointUri}");
                         Console.WriteLine();
                     }
@@ -166,7 +168,7 @@ namespace BaseballScraper.Controllers.FanGraphs
                     bool showGuardRails = false;
                     if(showGuardRails == true)
                     {
-                        Extensions.Spotlight("----- GET URLS OF PAGES TO SCRAPE -----");
+                        _h.Spotlight("----- GET URLS OF PAGES TO SCRAPE -----");
                         Console.WriteLine($"URL TO SCRAPE # {i}: {urlToScrapeEndPointUri}");
                         Console.WriteLine();
                     }
@@ -291,7 +293,7 @@ namespace BaseballScraper.Controllers.FanGraphs
                         }
                     }
                 }
-                _c.Complete.ThisMethod();
+                _h.CompleteMethod();
             }
 
         #endregion SCRAPING ------------------------------------------------------------
@@ -303,7 +305,7 @@ namespace BaseballScraper.Controllers.FanGraphs
             // STATUS: this works
             public int CountTheNodesChildren(HtmlNode node)
             {
-                _c.Start.ThisMethod();
+                _h.StartMethod();
 
                 int countOfChildren = node.ChildNodes.Count ();
 
@@ -315,7 +317,7 @@ namespace BaseballScraper.Controllers.FanGraphs
             /// <param name="thisUrl"> The url of the table you are scraping </param>
             public void GetTableHeaderValues (string thisUrl)
             {
-                _c.Start.ThisMethod();
+                _h.StartMethod();
 
                 HtmlWeb htmlWeb = new HtmlWeb ();
 
@@ -362,7 +364,7 @@ namespace BaseballScraper.Controllers.FanGraphs
             /// <returns> New instance of FanGraphsPitcher class </returns>
             public FanGraphsPitcher CreateNewFanGraphsPitcher(List<string> playerItems)
             {
-                _c.Start.ThisMethod();
+                _h.StartMethod();
 
                 int count = 1;
 

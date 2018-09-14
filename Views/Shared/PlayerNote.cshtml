@@ -1,0 +1,74 @@
+@model BaseballScraper.Models.Player.PlayerNote
+
+<h1>Player Notes</h1>
+
+<div class="row">
+    <form asp-controller="PlayerControllers.PlayerNote" asp-action="CreatePlayerNote" method="post">
+        <div class="col">
+            <label>Player Name</label>
+            <input asp-for="PlayerName" class="form-control" type="text" value="pj">
+
+            <br>
+
+            <div class="row">
+                <div class="col">
+
+                    <label>Position</label>
+                    <input asp-for="Position" class="form-control" type="text" value="ss">
+
+                </div>
+
+                <div class="col">
+
+                    <label>Position Type</label>
+                    <input asp-for="PositionType" class="form-control" type="text" value="hitter">
+
+                </div>
+            </div>
+            <br>
+
+            <label>Note</label>
+            <input asp-for="Note" class="form-control" type="text">
+
+            <br>
+
+            <label>Note Tone</label>
+            <input asp-for="NoteTone" class="form-control" type="text">
+
+            <br>
+
+            <div class="row">
+                <div class="col">
+
+                    <label>Site</label>
+                    <input asp-for="SourceSite" class="form-control" type="text">
+
+                </div>
+                <div class="col">
+
+                    <label>Article Writer</label>
+                    <input asp-for="NoteWriter" class="form-control" type="text">
+
+                </div>
+            </div>
+            <br>
+
+            <div class="row">
+                <div class="col">
+                    <label>Calendar Year</label>
+                    <input asp-for="CalendarYear" class="form-control" type="Date">
+                </div>
+                <div class="col">
+                    <label>Season</label>
+                    <input asp-for="MlbSeason" class="form-control" type="Date">
+                </div>
+            </div>
+            <br>
+            <button class="btn btn-info">Add</button>
+            <!-- <button class="btn btn-info" type="submit" name="CreatePlayerNote">Add</button> -->
+            <!-- <input type="submit" name="CreatePlayerNote" value="Add"> -->
+            <a href="https://127.0.0.1:5001/player/CreatePlayerNote ">Create Note </a>
+
+        </div>
+    </form>
+</div>

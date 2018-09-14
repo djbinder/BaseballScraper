@@ -2,6 +2,7 @@
     // https://gist.githubusercontent.com/deanebarker/2b4520f290ece96be40436bc5c8915c5/raw/0cf6005f41ac27c46c9ce1f9bdbf8b5faeb62f8d/AirtableGetObjects.cs
 
 using System;
+using BaseballScraper.Infrastructure;
 using BaseballScraper.Models.Configuration;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -14,7 +15,7 @@ namespace BaseballScraper.Controllers
     [ApiController]
     public class AirtableController: Controller
     {
-        private Constants _c = new Constants();
+        private Helpers _h = new Helpers();
         private readonly AirtableConfiguration _airtableConfig;
 
         public AirtableController(IOptions<AirtableConfiguration> airtableConfig)
@@ -30,7 +31,7 @@ namespace BaseballScraper.Controllers
         [Route("managers")]
         public JObject GetAirtableManagers ()
         {
-            _c.Start.ThisMethod();
+            _h.StartMethod();
             // string airTableKey = GetAirtableKey();
             string airTableKey = _airtableConfig.ApiKey;
             Console.WriteLine($"AIR TABLE KEY IS: {airTableKey}");
@@ -45,13 +46,13 @@ namespace BaseballScraper.Controllers
             request.AddHeader("Authorization", "Bearer aXJUKynsTUXLVY");
 
             IRestResponse response = client.Execute(request);
-            response.Intro("response");
+            _h.Intro(response, "response");
 
             var     initialJson    = response.Content;
             JObject structuredJson = JObject.Parse(initialJson);
-            structuredJson.Intro("structured json");
+            _h.Intro(structuredJson, "structured json");
 
-            _c.Complete.ThisMethod();
+            _h.CompleteMethod();
             return structuredJson;
 
         }

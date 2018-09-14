@@ -8,6 +8,7 @@ using BaseballScraper.Models.FanGraphs;
 using CsvHelper;
 using System.IO;
 using System.Threading.Tasks;
+using BaseballScraper.Models.Lahman;
 
 namespace BaseballScraper.Controllers
 {
@@ -34,68 +35,20 @@ namespace BaseballScraper.Controllers
         [Route("")]
         public IActionResult Index()
         {
-            _h.Start.ThisMethod();
-
+            _h.StartMethod();
             return View();
         }
-
-
-        [HttpGet]
-        [Route("lahman")]
-        public void DoLahmanThings()
-        {
-            _h.Start.ThisMethod();
-
-            _cH.ReadCsv("BaseballData/Lahman/Teams.csv");
-        }
-
-        [HttpGet]
-        [Route("lahman/async")]
-        public async Task<ActionResult> DoLahmanThingsAsync()
-        {
-            _h.Start.ThisMethod();
-
-            await _cH.ReadCsvAsync("BaseballData/Lahman/Teams.csv");
-
-            string x = "x";
-            return Content(x);
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         [HttpGet]
         [Route("datatable")]
         public void DoDataTableThings()
         {
 
-
-
-
         }
-
 
         [HttpGet]
         [Route("mapper")]
         public void ConnectToMapperHome()
-        {
-
-        }
-
-        [HttpGet]
-        [Route("python/start")]
-
-        public void ViewPythonHome()
         {
 
         }

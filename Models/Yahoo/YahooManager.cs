@@ -1,6 +1,7 @@
 // DJB WORKING ON
 // DJB: this is correct
 
+using System.ComponentModel.DataAnnotations;
 using System.Xml.Serialization;
 
 namespace BaseballScraper.Models.Yahoo
@@ -12,6 +13,7 @@ namespace BaseballScraper.Models.Yahoo
 
     public class YahooManager
     {
+        [Key]
         public int YahooManagerRecordId { get; set; }
 
         [XmlElement (ElementName = "manager_id")]

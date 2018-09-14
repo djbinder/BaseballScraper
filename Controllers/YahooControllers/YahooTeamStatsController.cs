@@ -5,6 +5,7 @@ using BaseballScraper.Models.Yahoo;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
+using BaseballScraper.Infrastructure;
 
 namespace BaseballScraper.Controllers.YahooControllers
 {
@@ -13,7 +14,7 @@ namespace BaseballScraper.Controllers.YahooControllers
     [ApiController]
     public class YahooTeamStatsController: Controller
     {
-        private Constants _c = new Constants();
+        private Helpers _h = new Helpers();
         private readonly TheGameIsTheGameConfiguration _theGameConfig;
         private static YahooApiEndPoints endPoints = new YahooApiEndPoints();
         private static YahooHomeController _yahooHomeController;
@@ -43,7 +44,7 @@ namespace BaseballScraper.Controllers.YahooControllers
         [Route("season")]
         public YahooTeamStatsList CreateYahooTeamStatsModel()
         {
-            Extensions.Spotlight("executing create yahoo team stats method option 1");
+            _h.Spotlight("executing create yahoo team stats method option 1");
             int teamId      = 1;
             var uriTeamBase = endPoints.TeamSeasonStatsEndPoint(_theGameConfig.LeagueKey, teamId).EndPointUri;
 
@@ -157,7 +158,7 @@ namespace BaseballScraper.Controllers.YahooControllers
         ///     <remarks> Includes: H/AB, R, HR, RBI, SB, BB, IP, W, SV, H, ERA, WHIP </remarks>
         public YahooTeamStatsList CreateYahooTeamStatsModel(int teamId)
         {
-            Extensions.Spotlight("executing create yahoo team stats method option 2");
+            _h.Spotlight("executing create yahoo team stats method option 2");
             var uriTeamBase = endPoints.TeamSeasonStatsEndPoint(_theGameConfig.LeagueKey, teamId).EndPointUri;
 
             JObject teamStatsJson = _yahooHomeController.GenerateYahooResourceJObject(uriTeamBase);
@@ -289,7 +290,7 @@ namespace BaseballScraper.Controllers.YahooControllers
         [Route("season/{teamId}")]
         public YahooTeamStatsList CreateYahooTeamStatsModel(int teamId, string blankString)
         {
-            Extensions.Spotlight("executing create yahoo team stats method option 3");
+            _h.Spotlight("executing create yahoo team stats method option 3");
             var uriTeamBase = endPoints.TeamSeasonStatsEndPoint(_theGameConfig.LeagueKey, teamId).EndPointUri;
 
             JObject teamStatsJson = _yahooHomeController.GenerateYahooResourceJObject(uriTeamBase);

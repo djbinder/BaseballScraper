@@ -14,15 +14,12 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
     [ApiController]
     public class MlbDataApiHomeController: Controller
     {
-        private Constants _c = new Constants();
-
         private static MlbDataApiEndPoints _endPoints = new MlbDataApiEndPoints();
 
         private static PostmanMethods _postman = new PostmanMethods();
 
         public IActionResult ViewMlbDataApiPage ()
         {
-            _c.Start.ThisMethod();
             string message = "viewing mlb data api main page";
             return Content($"Message is {message}");
         }

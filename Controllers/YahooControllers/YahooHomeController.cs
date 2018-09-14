@@ -10,6 +10,7 @@ using Newtonsoft.Json.Linq;
 using BaseballScraper.Models;
 using BaseballScraper.EndPoints;
 using BaseballScraper.Models.Configuration;
+using BaseballScraper.Infrastructure;
 
 namespace BaseballScraper.Controllers.YahooControllers
 {
@@ -18,7 +19,7 @@ namespace BaseballScraper.Controllers.YahooControllers
     [ApiController]
     public class YahooHomeController: Controller
     {
-        private Constants _c = new Constants();
+        private Helpers _h = new Helpers();
         private BaseballScraperContext _context;
         private static YahooApiEndPoints endPoints = new YahooApiEndPoints();
         private readonly BaseballScraper.Controllers.YahooControllers.YahooAuthController _yahooAuthController;
@@ -72,7 +73,7 @@ namespace BaseballScraper.Controllers.YahooControllers
         /// <returns> HttpWebRequest request </returns>
         public HttpWebRequest GenerateWebRequest(string uri)
         {
-            // _c.Start.ThisMethod();
+            // _h.StartMethod();
 
             // pull access token from session; this is generated through the yahooauth controller
             // access token is a long mix of letters and numbers;
@@ -86,7 +87,7 @@ namespace BaseballScraper.Controllers.YahooControllers
             // set the method of the request header
             request.Method = "GET";
 
-            // _c.Complete.ThisMethod();
+            // _h.CompleteMethod();
             return request;
         }
 
@@ -96,7 +97,7 @@ namespace BaseballScraper.Controllers.YahooControllers
         /// <returns> serverResponse string; that looks like Xml </returns>
         public string GetResponseFromServer(HttpWebRequest request)
         {
-            // _c.Start.ThisMethod();
+            // _h.StartMethod();
             string serverResponse = "";
 
             using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
@@ -105,7 +106,7 @@ namespace BaseballScraper.Controllers.YahooControllers
 
                 serverResponse = reader.ReadToEnd();
             }
-            // _c.Complete.ThisMethod();
+            // _h.CompleteMethod();
             // serverResponse comes back as xml in string format
             return serverResponse;
         }
@@ -117,7 +118,7 @@ namespace BaseballScraper.Controllers.YahooControllers
         /// <see cref=\"${GenerateYahooResourceJObject}\"/>
         public XmlDocument TranslateServerResponseToXml (string serverResponse)
         {
-            // _c.Start.ThisMethod();
+            // _h.StartMethod();
             // DOC type ---> System.Xml.XmlDocument
             XmlDocument doc       = new XmlDocument();
             XmlReader   xmlReader = XmlReader.Create(new System.IO.StringReader(serverResponse));
@@ -125,7 +126,7 @@ namespace BaseballScraper.Controllers.YahooControllers
             doc.LoadXml(serverResponse);
             // doc.Dig();
 
-            // _c.Complete.ThisMethod();
+            // _h.CompleteMethod();
             return doc;
         }
 
@@ -135,7 +136,7 @@ namespace BaseballScraper.Controllers.YahooControllers
         /// <returns> json / a jobject of the resource type requested</returns>
         public JObject GenerateYahooResourceJObject(string uri)
         {
-            // _c.Start.ThisMethod();
+            // _h.StartMethod();
 
             HttpWebRequest request = GenerateWebRequest(uri);
 
@@ -149,7 +150,7 @@ namespace BaseballScraper.Controllers.YahooControllers
             // clean the json up
             JObject resourceJson = JObject.Parse(json);
 
-            // _c.Complete.ThisMethod();
+            // _h.CompleteMethod();
             return resourceJson;
         }
 
@@ -157,7 +158,7 @@ namespace BaseballScraper.Controllers.YahooControllers
         /// <param name="yahoomodel"></param>
         public void SaveObjectToDatabase(Object yahoomodel)
         {
-            _c.Start.ThisMethod();
+            _h.StartMethod();
 
             _context.Add(yahoomodel);
             _context.SaveChanges();
@@ -167,7 +168,7 @@ namespace BaseballScraper.Controllers.YahooControllers
         // [Route("yahoo/leaguescoreboard/create")]
         // public void CreateYahooScoreboard ()
         // {
-        //     _c.Start.ThisMethod();
+        //     _c.StartMethod();
 
         //     // retrieve the league key from user secrets / yahoo league config
         //     string leagueKey = _theGameConfig.LeagueKey;

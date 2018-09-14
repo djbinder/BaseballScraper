@@ -39,27 +39,27 @@ namespace BaseballScraper.Infrastructure
                 Console.WriteLine();
             }
 
-            // // shortcut console writer
-            // public static void Intro(this object Object, string String)
-            // {
-            //     Console.WriteLine();
-            //     Console.ForegroundColor = ConsoleColor.Green;
+            public void GuardRails(string logMessage, int numberOfRails)
+            {
+                for(int topRails = 1; numberOfRails >= topRails; topRails++)
+                {
+                    Console.WriteLine("////////////////////////////////////////////////////////////");
+                }
+                Console.WriteLine();
 
-            //     string     upperString = String.ToUpper();
-            //     StackFrame frame       = new StackFrame(1, true);
+                Console.WriteLine(logMessage);
 
-            //     var lineNumber = frame.GetFileLineNumber();
-
-            //     Console.WriteLine($"// {upperString} --> {Object} --> [@ Line# {lineNumber}]");
-
-            //     Console.ResetColor();
-            //     Console.WriteLine();
-            // }
+                Console.WriteLine();
+                for(int bottomRails = 1; numberOfRails >= bottomRails; bottomRails++)
+                {
+                    Console.WriteLine("////////////////////////////////////////////////////////////");
+                }
+            }
 
             public void TypeAndIntro(Object o, string x)
             {
-                o.Intro(x);
-                o.GetType().Intro($"TYPE for {x}");
+                Intro(o, x);
+                Console.WriteLine($"Type for {x} --> {o.GetType()}");
             }
 
             public void PrintKeysAndValues(Object obj)
@@ -88,7 +88,7 @@ namespace BaseballScraper.Infrastructure
             /// <param name="obj"> An object; typically a JObject (not certain how it deals with objects besides JObjects) </param>
             public void PrintJsonFromObject (Object obj)
             {
-                // _c.Start.ThisMethod();
+                // _c.StartMethod();
                 //Create a stream to serialize the object to.
                 MemoryStream mS = new MemoryStream();
 
@@ -166,6 +166,17 @@ namespace BaseballScraper.Infrastructure
                 }
             }
 
+            public void PrintKeyValuePairs(JObject obj)
+            {
+                // KEY VALUE PAIR --> KeyValuePair<string, JToken> recordObject
+                foreach(var keyValuePair in obj)
+                {
+                    var key   = keyValuePair.Key;
+                    var value = keyValuePair.Value;
+                    // Console.WriteLine($"Key: {keyValuePair.Key}    Value: {keyValuePair.Value}");
+                }
+            }
+
         #endregion LOGGERS ------------------------------------------------------------
 
 
@@ -207,8 +218,6 @@ namespace BaseballScraper.Infrastructure
 
 
 
-
-
         #region MARKERS ------------------------------------------------------------
 
             // set color of console message
@@ -247,7 +256,7 @@ namespace BaseballScraper.Infrastructure
             }
 
             // https://msdn.microsoft.com/en-us/library/system.io.path.getfilename(v=vs.110).aspx
-            public void ThisMethod(String startOrComplete)
+            public void StartMethod()
             {
                 Console.ForegroundColor = ConsoleColor.Blue;
                 Console.WriteLine();
@@ -265,7 +274,31 @@ namespace BaseballScraper.Infrastructure
 
                 string fileNameTrimmed = Path.GetFileName(fileName);
 
-                Console.WriteLine($"--------------->|     {fileNameTrimmed} ---> {methodName} {startOrComplete} [Line: {lineNumber} @ {currentTime}]     |<---------------");
+                Console.WriteLine($"--------------->|     {fileNameTrimmed} ---> START {methodName}  [Line: {lineNumber} @ {currentTime}]     |<---------------");
+
+                Console.ResetColor();
+                Console.WriteLine();
+            }
+            // https://msdn.microsoft.com/en-us/library/system.io.path.getfilename(v=vs.110).aspx
+            public void CompleteMethod()
+            {
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine();
+
+                StackTrace stackTrace = new StackTrace();
+
+                // var methodName = GetMethodName();
+                var methodName = stackTrace.GetFrame(1).GetMethod().Name;
+
+                StackFrame frame    = new StackFrame(1, true);
+                var        method   = frame.GetMethod();
+                var        fileName = frame.GetFileName();
+
+                var lineNumber = frame.GetFileLineNumber();
+
+                string fileNameTrimmed = Path.GetFileName(fileName);
+
+                Console.WriteLine($"--------------->|     {fileNameTrimmed} ---> Complete {methodName}  [Line: {lineNumber} @ {currentTime}]     |<---------------");
 
                 Console.ResetColor();
                 Console.WriteLine();
@@ -307,6 +340,60 @@ namespace BaseballScraper.Infrastructure
 
 
 
+        #region CONVERTERS ------------------------------------------------------------
+
+            public string ConvertJTokenToString(JToken valueJToken)
+            {
+                string valueString = valueJToken.ToObject<string>();
+                return valueString;
+            }
+            public int ConvertStringToInt(string valueString)
+            {
+                int valueInt = Int32.Parse(valueString);
+                return valueInt;
+            }
+
+        #endregion CONVERTERS ------------------------------------------------------------
+
+
+
+        #region ENUMERATORS ------------------------------------------------------------
+
+            // STATUS: this works
+            // example:
+                // var dynamicRecords = csvReader.GetRecords<dynamic>();
+                // EnumerateOverRecordsDynamic(dynamicRecords);
+            public void EnumerateOverRecordsDynamic(IEnumerable<dynamic> records)
+            {
+                // DYNAMIC RECORDS --> CsvHelper.CsvReader+<GetRecords>d__63`1[System.Object]
+                // DYNAMIC RECORDS --> System.Collections.Generic.IEnumerable<dynamic> dynamicRecords
+                // DYNAMIC RECORD type --> System.Dynamic.ExpandoObject
+                foreach(var record in records)
+                {
+                    Console.WriteLine(record);
+                }
+            }
+            public void EnumerateOverRecordsObject(IEnumerable<object> records)
+            {
+                foreach(var record in records)
+                {
+                    // Console.WriteLine(record);
+                    Dig(record);
+                }
+            }
+            public void EnumerateOverRecords(IEnumerable<object> records)
+            {
+                var recordsEnumerator = records.GetEnumerator();
+                while(recordsEnumerator.MoveNext())
+                {
+                    Console.WriteLine(recordsEnumerator.Current);
+                    // recordsEnumerator.Dig();
+                }
+            }
+
+        #endregion ENUMERATORS ------------------------------------------------------------
+
+
         #region UTILS ------------------------------------------------------------
 
             // https://msdn.microsoft.com/en-us/library/system.consolekeyinfo(v=vs.110).aspx
@@ -330,8 +417,18 @@ namespace BaseballScraper.Infrastructure
                 Console.Write(itemsToList.ToMarkdownBulletedList());
             }
 
-        #endregion UTILS ------------------------------------------------------------
+            public int CountRecords(IEnumerable<object> records)
+            {
+                int count = 0;
+                foreach(var record in records)
+                {
+                    count++;
+                }
+                Console.WriteLine($"Retrieved {count} records from csv");
+                return count;
+            }
 
+        #endregion UTILS ------------------------------------------------------------
 
     }
 }
