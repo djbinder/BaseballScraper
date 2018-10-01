@@ -55,8 +55,8 @@ namespace BaseballScraper.Models.Yahoo
 
     public class YahooTeamStatsList
     {
-        public string HitsAtBatsId { get; set; } = "60";
-        public string HitsAtBatsTotal { get; set; }
+        public string HitsDividedByAtBatsId { get; set; } = "60";
+        public string HitsDividedByAtBatsTotal { get; set; }
 
         public string RunsId { get; set; } = "7";
         public string RunsTotal { get; set; }
@@ -64,8 +64,8 @@ namespace BaseballScraper.Models.Yahoo
         public string HomeRunsId { get; set; } = "12";
         public string HomeRunsTotal { get; set; }
 
-        public string RbiId { get; set; } = "13";
-        public string RbiTotal { get; set; }
+        public string RunsBattedInId { get; set; } = "13";
+        public string RunsBattedInTotal { get; set; }
 
         public string StolenBasesId { get; set; } = "16";
         public string StolenBasesTotal { get; set; }
@@ -91,8 +91,8 @@ namespace BaseballScraper.Models.Yahoo
         public string HoldsId { get; set; } = "48";
         public string HoldsTotal { get; set; }
 
-        public string EraId { get; set; } = "26";
-        public string EraTotal { get; set; }
+        public string EarnedRunAverageId { get; set; } = "26";
+        public string EarnedRunAverageTotal { get; set; }
 
         public string WhipId { get; set; } = "27";
         public string WhipTotal { get; set; }

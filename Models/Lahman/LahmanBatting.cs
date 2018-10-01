@@ -7,10 +7,10 @@ namespace BaseballScraper.Models.Lahman
 {
 public class LahmanBatting
 {
-    public string PlayerId { get; set; }
-    public string Year { get; set; }
+    public string LahmanPlayerId { get; set; }
+    public string Season { get; set; }
     public string Stint { get; set; }
-    public string TeamId { get; set; }
+    public string LahmanTeamId { get; set; }
     public string League { get; set; }
     public string Games { get; set; }
     public string AtBats { get; set; }
@@ -25,7 +25,7 @@ public class LahmanBatting
     public string Walks { get; set; }
     public string Strikeouts { get; set; }
     public string IntentionalWalks { get; set; }
-    public string HitByPitchers { get; set; }
+    public string HitByPitches { get; set; }
     public string SacrificeHits { get; set; }
     public string SacrificeFlies { get; set; }
     public string GroundedIntoDoublePlays { get; set; }
@@ -35,10 +35,10 @@ public class LahmanBattingClassMap: ClassMap<LahmanBatting>
 {
     public LahmanBattingClassMap()
     {
-        Map(m => m.PlayerId).Name("playerID");
-        Map(m => m.Year).Name("yearID");
+        Map(m => m.LahmanPlayerId).Name("playerID");
+        Map(m => m.Season).Name("yearID");
         Map(m => m.Stint).Name("stint");
-        Map(m => m.TeamId).Name("teamID");
+        Map(m => m.LahmanTeamId).Name("teamID");
         Map(m => m.League).Name("lgID");
         Map(m => m.Games).Name("G");
         Map(m => m.AtBats).Name("AB");
@@ -53,7 +53,7 @@ public class LahmanBattingClassMap: ClassMap<LahmanBatting>
         Map(m => m.Walks).Name("BB");
         Map(m => m.Strikeouts).Name("SO");
         Map(m => m.IntentionalWalks).Name("IBB");
-        Map(m => m.HitByPitchers).Name("HBP");
+        Map(m => m.HitByPitches).Name("HBP");
         Map(m => m.SacrificeHits).Name("SH");
         Map(m => m.SacrificeFlies).Name("SF");
         Map(m => m.GroundedIntoDoublePlays).Name("GIDP");

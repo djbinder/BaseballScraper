@@ -237,31 +237,31 @@ namespace BaseballScraper.Controllers.FanGraphs
                                 keyCount++;
                             }
 
-                            List<FGHitter> hitters = new List<FGHitter> ();
+                            List<FanGraphsHitter> hitters = new List<FanGraphsHitter> ();
 
-                            FGHitter newFGHitter = new FGHitter
+                            FanGraphsHitter newFGHitter = new FanGraphsHitter
                             {
                                 FanGraphsName = playerItems[1],
                                 FanGraphsTeam = playerItems[2],
-                                GP            = playerItems[3],
-                                PA            = playerItems[4],
-                                HR            = playerItems[5],
-                                R             = playerItems[6],
-                                RBI           = playerItems[7],
-                                SB            = playerItems[8],
-                                BB_percent    = playerItems[9],
-                                K_percent     = playerItems[10],
-                                ISO           = playerItems[11],
-                                BABIP         = playerItems[12],
-                                AVG           = playerItems[13],
-                                OBP           = playerItems[14],
-                                SLG           = playerItems[15],
-                                wOBA          = playerItems[16],
-                                wRC_plus      = playerItems[17],
-                                BsR           = playerItems[18],
-                                Off           = playerItems[19],
-                                Def           = playerItems[20],
-                                WAR           = playerItems[21],
+                                GamesPlayed            = playerItems[3],
+                                PlateAppearances            = playerItems[4],
+                                HomeRuns            = playerItems[5],
+                                Runs             = playerItems[6],
+                                RunsBattedIn           = playerItems[7],
+                                StolenBases            = playerItems[8],
+                                WalkPercentage    = playerItems[9],
+                                StrikeoutPercentage     = playerItems[10],
+                                Iso           = playerItems[11],
+                                Babip         = playerItems[12],
+                                BattingAverage           = playerItems[13],
+                                OnBasePercentage           = playerItems[14],
+                                SluggingPercentage           = playerItems[15],
+                                wOba          = playerItems[16],
+                                wRcPlus      = playerItems[17],
+                                BaseRunningRunsAboveReplacement           = playerItems[18],
+                                Offense           = playerItems[19],
+                                Defense           = playerItems[20],
+                                WinsAboveReplacement           = playerItems[21],
                             };
 
                             hitters.Add (newFGHitter);
@@ -269,7 +269,7 @@ namespace BaseballScraper.Controllers.FanGraphs
                             foreach (var hitter in hitters)
                             {
                                 Console.WriteLine (hitter.FanGraphsName);
-                                Console.WriteLine (hitter.WAR);
+                                Console.WriteLine (hitter.WinsAboveReplacement);
                             }
                         }
                     }

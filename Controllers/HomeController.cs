@@ -23,6 +23,7 @@ namespace BaseballScraper.Controllers
         private readonly RdotNetConnector _r = new RdotNetConnector();
         private readonly DataTabler _dT      = new DataTabler();
         private readonly CsvHandler _cH      = new CsvHandler();
+        private readonly HtmlScraper _hS = new HtmlScraper();
 
 
         public HomeController (IOptions<AirtableConfiguration> airtableConfig, IOptions<TwitterConfiguration> twitterConfig)
@@ -38,6 +39,14 @@ namespace BaseballScraper.Controllers
             _h.StartMethod();
             return View();
         }
+
+        [HttpGet]
+        [Route("cbs")]
+        public void CbsMostAdded()
+        {
+            _hS.ScrapeHtmlPage();
+        }
+
 
         [HttpGet]
         [Route("datatable")]

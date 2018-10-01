@@ -18,7 +18,7 @@ namespace BaseballScraper.Models.MlbDataApi
     public class LeadingHitter
     {
         [DataMember(Name="gidp")]
-        public int? Gidp { get; set; }
+        public int? GroundedIntoDoublePlays { get; set; }
 
         [DataMember(Name="sac")]
         public int? Sacrifices { get; set; }
@@ -27,7 +27,7 @@ namespace BaseballScraper.Models.MlbDataApi
         public int? Np { get; set; }
 
         [DataMember(Name="name_display_first_last")]
-        public string NameDisplayFirstLast { get; set; }
+        public string NameFirstLast { get; set; }
 
         [DataMember(Name="pos")]
         public string Position { get; set; }
@@ -36,10 +36,10 @@ namespace BaseballScraper.Models.MlbDataApi
         public int? TotalBases { get; set; }
 
         [DataMember(Name="team_brief")]
-        public string TeamBrief { get; set; }
+        public string TeamNameShort { get; set; }
 
         [DataMember(Name="sport_id")]
-        public int? SportId { get; set; }
+        public int? MlbDataSportId { get; set; }
 
         [DataMember(Name="name_display_last_init")]
         public string NameDisplayLastInit { get; set; }
@@ -51,10 +51,10 @@ namespace BaseballScraper.Models.MlbDataApi
         public decimal? SluggingPercentage { get; set; }
 
         [DataMember(Name="ops")]
-        public decimal? Ops { get; set; }
+        public decimal? OnBasePlusSlugging { get; set; }
 
         [DataMember(Name="hbp")]
-        public int? Hbp { get; set; }
+        public int? HitByPitches { get; set; }
 
         [DataMember(Name="team_abbrev")]
         public string TeamAbbreviation { get; set; }
@@ -63,13 +63,13 @@ namespace BaseballScraper.Models.MlbDataApi
         public int? Strikeouts { get; set; }
 
         [DataMember(Name="league_id")]
-        public int? LeagueId { get; set; }
+        public int? MlbDataApiLeagueId { get; set; }
 
         [DataMember(Name="sf")]
-        public int? SacrificeFlys { get; set; }
+        public int? SacrificeFlies { get; set; }
 
         [DataMember(Name="team")]
-        public string Team { get; set; }
+        public string TeamNameFull { get; set; }
 
         [DataMember(Name="league")]
         public string League { get; set; }
@@ -83,11 +83,9 @@ namespace BaseballScraper.Models.MlbDataApi
         [DataMember(Name="go_ao")]
         public decimal? GroundBallToFlyBallRatio { get; set; }
 
-        [DataMember(Name="last_name")]
-        public string LastName { get; set; }
 
         [DataMember(Name="player_id")]
-        public int? PlayerId { get; set; }
+        public int? MlbDataApiPlayerId { get; set; }
 
         [DataMember(Name="ibb")]
         public int? IntentionalWalks { get; set; }
@@ -96,7 +94,7 @@ namespace BaseballScraper.Models.MlbDataApi
         public int? PlayerQualifier { get; set; }
 
         [DataMember(Name="team_id")]
-        public int? TeamId { get; set; }
+        public int? MlbDataApiTeamId { get; set; }
 
         [DataMember(Name="go")]
         public int? GroundOuts { get; set; }
@@ -107,17 +105,15 @@ namespace BaseballScraper.Models.MlbDataApi
         [DataMember(Name="minimum_qualifier")]
         public int? MinimumQualifier { get; set; }
 
-        [DataMember(Name="gdp")]
-        public int? Gdp { get; set; }
 
         [DataMember(Name="name_display_roster")]
-        public string NameDisplayRoster { get; set; }
+        public string NameLastCommaFirstInitial { get; set; }
 
         [DataMember(Name="qualifies")]
         public string Qualifies { get; set; }
 
         [DataMember(Name="rbi")]
-        public int? Rbi { get; set; }
+        public int? RunsBattedIn { get; set; }
 
         [DataMember(Name="name_first")]
         public string NameFirst { get; set; }
@@ -134,26 +130,26 @@ namespace BaseballScraper.Models.MlbDataApi
         [DataMember(Name="d")]
         public int? Doubles { get; set; }
 
-        [DataMember(Name="team_name")]
-        public string TeamName { get; set; }
+        // [DataMember(Name="team_name")]
+        // public string TeamNameFull { get; set; }
 
         [DataMember(Name="tpa")]
         public int? TotalPlateAppearances { get; set; }
 
         [DataMember(Name="name_display_last_first")]
-        public string NameDisplayLastFirst { get; set; }
+        public string NameLastCommaFirst { get; set; }
 
         [DataMember(Name="h")]
         public int? Hits { get; set; }
 
         [DataMember(Name="obp")]
-        public decimal? Obp { get; set; }
+        public decimal? OnBasePercentage { get; set; }
 
         [DataMember(Name="t")]
         public int? T { get; set; }
 
         [DataMember(Name="ao")]
-        public int? Flyouts { get; set; }
+        public int? FlyOuts { get; set; }
 
         [DataMember(Name="r")]
         public int? Runs { get; set; }

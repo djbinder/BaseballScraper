@@ -15,8 +15,6 @@ namespace BaseballScraper
     #pragma warning disable CS0414
     public class Program
     {
-        private readonly MlbDataApiHomeController _m;
-
         public static void Main (string[] args)
         {
             Console.WriteLine();

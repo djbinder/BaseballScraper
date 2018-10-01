@@ -9,16 +9,16 @@ namespace BaseballScraper.Models.MlbDataApi
     public class ProjectedPitchingStats
     {
         [DataMember(Name="hr")]
-        public int? Hr { get; set; }
+        public int? HomeRuns { get; set; }
 
         [DataMember(Name="player")]
-        public string Player { get; set; }
+        public string NameLastCommaFirst { get; set; }
 
         [DataMember(Name="wpct")]
         public decimal? WinningPercentage { get; set; }
 
         [DataMember(Name="era")]
-        public decimal? Era { get; set; }
+        public decimal? EarnedRunAverage { get; set; }
 
         [DataMember(Name="bsv")]
         public string BlownSaves { get; set; }
@@ -27,7 +27,7 @@ namespace BaseballScraper.Models.MlbDataApi
         public int? Outs { get; set; }
 
         [DataMember(Name="sho")]
-        public int ShutOuts { get; set; }
+        public int Shutouts { get; set; }
 
         [DataMember(Name="sv")]
         public int? Saves { get; set; }
@@ -75,7 +75,7 @@ namespace BaseballScraper.Models.MlbDataApi
         public int? PlateAppearances { get; set; }
 
         [DataMember(Name="player_id")]
-        public int? PlayerId { get; set; }
+        public int? MlbDataApiPlayerId { get; set; }
 
         [DataMember(Name="cg")]
         public int? CompleteGames { get; set; }
