@@ -6,9 +6,9 @@ namespace BaseballScraper.Models.Lahman
 {
     public class LahmanTeams
     {
-        public string Year { get; set; }
+        public string Season { get; set; }
         public string League { get; set; }
-        public string TeamId { get; set; }
+        public string LahmanTeamId { get; set; }
         public string FranchiseId { get; set; }
         public string Division { get; set; }
         public string PlaceInStandings { get; set; }
@@ -36,7 +36,7 @@ namespace BaseballScraper.Models.Lahman
         public string EarnedRuns { get; set; }
         public string EarnedRunAverage { get; set; }
         public string CompleteGames { get; set; }
-        public string ShutOuts { get; set; }
+        public string Shutouts { get; set; }
         public string Saves { get; set; }
         public string IpOuts { get; set; }
         public string HitsAgainst { get; set; }
@@ -61,9 +61,9 @@ namespace BaseballScraper.Models.Lahman
     {
         public LahmanTeamsClassMap()
         {
-            Map( m => m.Year ).Name("yearID");
-            Map( m => m.League ).Name("lgID");
-            Map( m => m.TeamId ).Name("teamID");
+            Map( m => m.Season).Name("yearID");
+            Map( m => m.League).Name("lgID");
+            Map( m => m.LahmanTeamId).Name("teamID");
             Map( m => m.FranchiseId ).Name("franchID");
             Map( m => m.Division).Name("divID");
             Map( m => m.PlaceInStandings).Name("Rank");
@@ -91,7 +91,7 @@ namespace BaseballScraper.Models.Lahman
             Map( m => m.EarnedRuns).Name("ER");
             Map( m => m.EarnedRunAverage).Name("ERA");
             Map( m => m.CompleteGames).Name("CG");
-            Map( m => m.ShutOuts).Name("SHO");
+            Map( m => m.Shutouts).Name("SHO");
             Map( m => m.Saves).Name("SV");
             Map( m => m.IpOuts).Name("IPouts");
             Map( m => m.HitsAgainst).Name("HA");

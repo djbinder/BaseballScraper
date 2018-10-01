@@ -6,7 +6,7 @@ namespace BaseballScraper.Models.Lahman
 {
     public class LahmanPeople
     {
-        public string PlayerId { get; set; }
+        public string LahmanPlayerId { get; set; }
         public int? BirthYear { get; set; }
         public int? BirthMonth { get; set; }
         public int? BirthDay { get; set; }
@@ -21,7 +21,7 @@ namespace BaseballScraper.Models.Lahman
         public string DeathCity { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string GivenName { get; set; }
+        public string NameFirstLast { get; set; }
         public int? Weight { get; set; }
         public int? Height { get; set; }
         public string Bats { get; set; }
@@ -37,7 +37,7 @@ namespace BaseballScraper.Models.Lahman
     {
         public LahmanPeopleClassMap()
         {
-            Map(m => m.PlayerId).Name("playerID");
+            Map(m => m.LahmanPlayerId).Name("playerID");
             Map(m => m.BirthYear).Name("birthYear");
             Map(m => m.BirthMonth).Name("birthMonth");
             Map(m => m.BirthDay).Name("birthDay");
@@ -52,7 +52,7 @@ namespace BaseballScraper.Models.Lahman
             Map(m => m.DeathCity).Name("deathCity");
             Map(m => m.FirstName).Name("nameFirst");
             Map(m => m.LastName).Name("nameLast");
-            Map(m => m.GivenName).Name("nameGiven");
+            Map(m => m.NameFirstLast).Name("nameGiven");
             Map(m => m.Weight).Name("weight");
             Map(m => m.Height).Name("height");
             Map(m => m.Bats).Name("bats");

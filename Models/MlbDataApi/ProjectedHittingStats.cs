@@ -13,16 +13,16 @@ namespace BaseballScraper.Models.MlbDataApi
         public int? HomeRuns { get; set; }
 
         [DataMember(Name="gidp")]
-        public int? Gidp { get; set; }
+        public int? GroundedIntoDoublePlays { get; set; }
 
         [DataMember(Name="player")]
-        public string Player { get; set; }
+        public string NameLastCommaFirst { get; set; }
 
         [DataMember(Name="sac")]
         public int? Sacrifices { get; set; }
 
         [DataMember(Name="rbi")]
-        public int? Rbi { get; set; }
+        public int? RunsBattedIn { get; set; }
 
         [DataMember(Name="tb")]
         public int? TotalBases { get; set; }
@@ -37,10 +37,10 @@ namespace BaseballScraper.Models.MlbDataApi
         public int? Walks { get; set; }
 
         [DataMember(Name="ops")]
-        public decimal? Ops { get; set; }
+        public decimal? OnBasePlusSlugging { get; set; }
 
         [DataMember(Name="hbp")]
-        public int? Hbp { get; set; }
+        public int? HitByPitches { get; set; }
 
         [DataMember(Name="g")]
         public int? Games { get; set; }
@@ -55,7 +55,7 @@ namespace BaseballScraper.Models.MlbDataApi
         public int? Strikeouts { get; set; }
 
         [DataMember(Name="sf")]
-        public int? SacrificeFlys { get; set; }
+        public int? SacrificeFlies { get; set; }
 
         [DataMember(Name="tpa")]
         public int? TotalPlateAppearances { get; set; }
@@ -67,7 +67,7 @@ namespace BaseballScraper.Models.MlbDataApi
         public int? CaughtStealing { get; set; }
 
         [DataMember(Name="obp")]
-        public decimal? Obp { get; set; }
+        public decimal? OnBasePercentage { get; set; }
 
         [DataMember(Name="t")]
         public int? T { get; set; }
@@ -85,7 +85,7 @@ namespace BaseballScraper.Models.MlbDataApi
         public decimal? StolenBasePercentage { get; set; }
 
         [DataMember(Name="player_id")]
-        public int? PlayerId { get; set; }
+        public int? MlbDataApiPlayerId { get; set; }
 
         [DataMember(Name="ab")]
         public int? AtBats { get; set; }

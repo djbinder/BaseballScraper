@@ -6,10 +6,10 @@ namespace BaseballScraper.Models.Lahman
 {
     public class LahmanAppearances
     {
-        public string Year { get; set; }
-        public string TeamId { get; set; }
+        public string Season { get; set; }
+        public string LahmanTeamId { get; set; }
         public string League { get; set; }
-        public string PlayerId { get; set; }
+        public string LahmanPlayerId { get; set; }
         public string TotalGamesPlayed { get; set; }
         public string GamesStarted { get; set; }
         public string GamesWhenPlayerBatted { get; set; }
@@ -33,10 +33,10 @@ namespace BaseballScraper.Models.Lahman
     {
         public LahmanAppearancesClassMap()
         {
-            Map(m => m.Year).Name("yearID");
-            Map(m => m.TeamId).Name("teamID");
+            Map(m => m.Season).Name("yearID");
+            Map(m => m.LahmanTeamId).Name("teamID");
             Map(m => m.League).Name("lgID");
-            Map(m => m.PlayerId).Name("playerID");
+            Map(m => m.LahmanPlayerId).Name("playerID");
             Map(m => m.TotalGamesPlayed).Name("G_all");
             Map(m => m.GamesStarted).Name("GS");
             Map(m => m.GamesWhenPlayerBatted).Name("G_batting");

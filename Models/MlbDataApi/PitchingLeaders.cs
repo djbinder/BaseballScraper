@@ -18,19 +18,19 @@ namespace BaseballScraper.Models.MlbDataApi
     public class LeadingPitcher
     {
         [DataMember(Name="gidp")]
-        public string Gidp { get; set; }
+        public string GroundedIntoDoublePlays { get; set; }
 
         [DataMember(Name="np")]
         public string Np { get; set; }
 
         [DataMember(Name="name_display_first_last")]
-        public string NameDisplayFirstLast { get; set; }
+        public string NameFirstLast { get; set; }
 
         [DataMember(Name="gf")]
         public string Gf { get; set; }
 
         [DataMember(Name="k_9")]
-        public string K9 { get; set; }
+        public string StrikeoutsPerNine { get; set; }
 
         [DataMember(Name="rank")]
         public string Rank { get; set; }
@@ -42,10 +42,10 @@ namespace BaseballScraper.Models.MlbDataApi
         public string TotalBases { get; set; }
 
         [DataMember(Name="bk")]
-        public string Bk { get; set; }
+        public string Balks { get; set; }
 
         [DataMember(Name="sport_id")]
-        public string SportId { get; set; }
+        public string MlbDataApiSportId { get; set; }
 
         [DataMember(Name="sv")]
         public string Saves { get; set; }
@@ -54,10 +54,10 @@ namespace BaseballScraper.Models.MlbDataApi
         public string NameDisplayLastInit { get; set; }
 
         [DataMember(Name="slg")]
-        public string SluggingAgainst { get; set; }
+        public string SluggingPercentageAgainst { get; set; }
 
         [DataMember(Name="avg")]
-        public string AverageAgainst { get; set; }
+        public string BattingAverageAgainst { get; set; }
 
         [DataMember(Name="whip")]
         public string Whip { get; set; }
@@ -66,13 +66,13 @@ namespace BaseballScraper.Models.MlbDataApi
         public string Walks { get; set; }
 
         [DataMember(Name="ops")]
-        public string OpsAgainst { get; set; }
+        public string OnBasePlusSluggingAgainst { get; set; }
 
         [DataMember(Name="p_ip")]
-        public string PIp { get; set; }
+        public string PitchesPerInningPitched { get; set; }
 
         [DataMember(Name="team_abbrev")]
-        public string TeamAbbreviations { get; set; }
+        public string TeamAbbreviation { get; set; }
 
         [DataMember(Name="so")]
         public string Strikeouts { get; set; }
@@ -84,7 +84,7 @@ namespace BaseballScraper.Models.MlbDataApi
         public string Throws { get; set; }
 
         [DataMember(Name="league_id")]
-        public string LeagueId { get; set; }
+        public string MlbDataApiLeagueId { get; set; }
 
         [DataMember(Name="wp")]
         public string WildPitches { get; set; }
@@ -93,7 +93,7 @@ namespace BaseballScraper.Models.MlbDataApi
         public string Team { get; set; }
 
         [DataMember(Name="league")]
-        public string MlbLeague { get; set; }
+        public string League { get; set; }
 
         [DataMember(Name="hb")]
         public string HitBatters { get; set; }
@@ -105,19 +105,17 @@ namespace BaseballScraper.Models.MlbDataApi
         public string PlateAppearances { get; set; }
 
         [DataMember(Name="go_ao")]
-        public string GroundOutAirOutRatio { get; set; }
+        public string GroundBallToFlyBallRatio { get; set; }
 
         [DataMember(Name="sb")]
         public string StolenBasesAgainst { get; set; }
 
-        [DataMember(Name="last_name")]
-        public string LastName { get; set; }
 
         [DataMember(Name="cg")]
         public string CompleteGames { get; set; }
 
         [DataMember(Name="player_id")]
-        public string PlayerId { get; set; }
+        public string MlbDataApiPlayerId { get; set; }
 
         [DataMember(Name="gs")]
         public string GamesStarted { get; set; }
@@ -126,16 +124,16 @@ namespace BaseballScraper.Models.MlbDataApi
         public string IntentionalWalks { get; set; }
 
         [DataMember(Name="h_9")]
-        public string H9 { get; set; }
+        public string HitsPerNine { get; set; }
 
         [DataMember(Name="player_qualifier")]
         public string PlayerQualifier { get; set; }
 
         [DataMember(Name="team_id")]
-        public string TeamId { get; set; }
+        public string MlbDataApiTeamId { get; set; }
 
         [DataMember(Name="go")]
-        public string GroundOut { get; set; }
+        public string GroundOuts { get; set; }
 
         [DataMember(Name="pk")]
         public string Pk { get; set; }
@@ -144,7 +142,7 @@ namespace BaseballScraper.Models.MlbDataApi
         public string HomeRunsAgainst { get; set; }
 
         [DataMember(Name="bb_9")]
-        public string BB9 { get; set; }
+        public string WalksPerNine { get; set; }
 
         [DataMember(Name="minimum_qualifier")]
         public string MinimumQualifier { get; set; }
@@ -153,13 +151,13 @@ namespace BaseballScraper.Models.MlbDataApi
         public string WinningPercentage { get; set; }
 
         [DataMember(Name="gdp")]
-        public string InducedDouplePlays { get; set; }
+        public string DoublePlaysInduced { get; set; }
 
         [DataMember(Name="era")]
-        public string Era { get; set; }
+        public string EarnedRunAverage { get; set; }
 
         [DataMember(Name="name_display_roster")]
-        public string NameDisplayRoster { get; set; }
+        public string NameLastCommaFirstInitial { get; set; }
 
         [DataMember(Name="qualifies")]
         public string Qualifies { get; set; }
@@ -171,10 +169,10 @@ namespace BaseballScraper.Models.MlbDataApi
         public string Holds { get; set; }
 
         [DataMember(Name="k_bb")]
-        public string StrikeoutsToWalkRatio { get; set; }
+        public string StrikeoutsToWalksRatio { get; set; }
 
         [DataMember(Name="team_name")]
-        public string TeamName { get; set; }
+        public string TeamNameFull { get; set; }
 
         [DataMember(Name="sport")]
         public string Sport { get; set; }
@@ -186,7 +184,7 @@ namespace BaseballScraper.Models.MlbDataApi
         public string SaveOpportunities { get; set; }
 
         [DataMember(Name="name_display_last_first")]
-        public string NameDisplayLastFirst { get; set; }
+        public string NameLastCommaFirst { get; set; }
 
         [DataMember(Name="h")]
         public string HitsAgainst { get; set; }
@@ -195,13 +193,13 @@ namespace BaseballScraper.Models.MlbDataApi
         public string InningsPitched { get; set; }
 
         [DataMember(Name="obp")]
-        public string ObpAgainst { get; set; }
+        public string OnBasePercentageAgainst { get; set; }
 
         [DataMember(Name="w")]
         public string Wins { get; set; }
 
         [DataMember(Name="ao")]
-        public string AirOuts { get; set; }
+        public string FlyOuts { get; set; }
 
         [DataMember(Name="r")]
         public string RunsAgainst { get; set; }
