@@ -3,81 +3,30 @@ using System.Collections.Generic;
 
 namespace BaseballScraper.Models.FanGraphs
 {
-    public class FGHitter
+    public class FanGraphsHitter
     {
         public string FanGraphsId { get; set; }
         public string FanGraphsName { get; set; }
         public string FanGraphsTeam { get; set; }
-        public string GP { get; set; }
-        public string PA { get; set; }
-        public string HR { get; set; }
-        public string R { get; set; }
-        public string RBI { get; set; }
-        public string SB { get; set; }
-        public string BB_percent { get; set; }
-        public string K_percent { get; set; }
-        public string ISO { get; set; }
-        public string BABIP { get; set; }
-        public string AVG { get; set; }
-        public string OBP { get; set; }
-        public string SLG { get; set; }
-        public string wOBA { get; set; }
-        public string wRC_plus { get; set; }
-        public string BsR { get; set; }
-        public string Off { get; set; }
-        public string Def { get; set; }
-        public string WAR { get; set; }
-
-        public FGHitter () { }
-    }
-
-    public class FanGraphsHitter
-    {
-        private int _rowId;
-        private String _name;
-        private String _team;
-        private int _gP;
-        private int _pA;
-        private int _hR;
-        private int _r;
-        private int _rBI;
-        private int _sB;
-        private decimal _bB_percent;
-        private decimal _k_percent;
-        private decimal _iSO;
-        private decimal _bABIP;
-        private decimal _aVG;
-        private decimal _oBP;
-        private decimal _sLG;
-        private decimal _wOBA;
-        private int _wRC_plus;
-        private float _bsR;
-        private float _off;
-        private float _def;
-        private float _wAR;
-
-        public int RowId { get => _rowId; set => _rowId = value; }
-        public string Name { get => _name; set => _name = value; }
-        public string Team { get => _team; set => _team = value; }
-        public int GP { get => _gP; set => _gP = value; }
-        public int PA { get => _pA; set => _pA = value; }
-        public int HR { get => _hR; set => _hR = value; }
-        public int R { get => _r; set => _r = value; }
-        public int RBI { get => _rBI; set => _rBI = value; }
-        public int SB { get => _sB; set => _sB = value; }
-        public decimal BB_percent { get => _bB_percent; set => _bB_percent = value; }
-        public decimal K_percent { get => _k_percent; set => _k_percent = value; }
-        public decimal ISO { get => _iSO; set => _iSO = value; }
-        public decimal BABIP { get => _bABIP; set => _bABIP = value; }
-        public decimal AVG { get => _aVG; set => _aVG = value; }
-        public decimal OBP { get => _oBP; set => _oBP = value; }
-        public decimal SLG { get => _sLG; set => _sLG = value; }
-        public decimal wOBA { get => _wOBA; set => _wOBA = value; }
-        public int wRC_plus { get => _wRC_plus; set => _wRC_plus = value; }
-        public float BsR { get => _bsR; set => _bsR = value; }
-        public float Off { get => _off; set => _off = value; }
-        public float Def { get => _def; set => _def = value; }
-        public float WAR { get => _wAR; set => _wAR = value; }
+        public string GamesPlayed { get; set; }
+        public string PlateAppearances { get; set; }
+        public string HomeRuns { get; set; }
+        public string Runs { get; set; }
+        public string RunsBattedIn { get; set; }
+        public string StolenBases { get; set; }
+        public string WalkPercentage { get; set; }
+        public string StrikeoutPercentage { get; set; }
+        public string Iso { get; set; }
+        public string Babip { get; set; }
+        public string BattingAverage { get; set; }
+        public string OnBasePercentage { get; set; }
+        public string SluggingPercentage { get; set; }
+        public string wOba { get; set; }
+        public string wRcPlus { get; set; }
+        public string BaseRunningRunsAboveReplacement { get; set; }
+        public string Offense { get; set; }
+        public string Defense { get; set; }
+        public string WinsAboveReplacement { get; set; }
 
         public FanGraphsHitter () { }
     }

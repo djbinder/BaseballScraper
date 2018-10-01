@@ -8,15 +8,15 @@ namespace BaseballScraper.Models.FanGraphs
             public int Season { get; set; }
             public int wOba { get; set; }
             public int wObaScale { get; set;}
-            public int wBb { get; set; }
-            public int wHbp { get; set; }
-            public int w1B { get; set; }
-            public int w2B { get; set; }
-            public int w3B { get; set; }
-            public int wHr { get; set; }
-            public int RunSb { get; set; }
-            public int RunCs { get; set; }
-            public int RPa{ get; set; }
+            public int wWalks { get; set; }
+            public int wHitByPitches { get; set; }
+            public int wSingles { get; set; }
+            public int wDoubles { get; set; }
+            public int wTriples { get; set; }
+            public int wHomeRuns { get; set; }
+            public int RunStolenBases { get; set; }
+            public int RunCaughtStealing { get; set; }
+            public int RunsPerPlateAppearance{ get; set; }
             public int RW { get; set; }
             public int cFip { get; set; }
         }
@@ -25,37 +25,37 @@ namespace BaseballScraper.Models.FanGraphs
         public class ParkFactors
         {
             public int Season { get; set; }
-            public string Team { get; set; }
-            public int Basic5yr { get; set; }
-            public int Yr3 { get; set; }
-            public int Yr1 { get; set; }
-            public int Pf1B { get; set; }
-            public int Pf2B { get; set; }
-            public int Pf3B { get; set; }
-            public int PfHr { get; set; }
-            public int PfSO { get; set; }
-            public int PfBb { get; set; }
-            public int PfGb { get; set; }
-            public int PfFb { get; set; }
-            public int PfLd { get; set; }
-            public int PfIffb { get; set; }
-            public int PfFip { get; set; }
+            public string TeamNameShort { get; set; }
+            public int FiveYear { get; set; }
+            public int ThreeYear { get; set; }
+            public int OneYear { get; set; }
+            public int ParkFactorSingles { get; set; }
+            public int ParkFactorDoubles { get; set; }
+            public int ParkFactorTriples { get; set; }
+            public int ParkFactorHomeRuns { get; set; }
+            public int ParkFactorStrikeouts { get; set; }
+            public int ParkFactorWalks { get; set; }
+            public int ParkFactorGroundBalls { get; set; }
+            public int ParkFactorFlyBalls { get; set; }
+            public int ParkFactorLineDrives { get; set; }
+            public int ParkFactorInfieldFlyBalls { get; set; }
+            public int ParkFactorFip { get; set; }
 
         }
 
 
-        public class HandedNessParkFactors
+        public class HandednessParkFactors
         {
             public int Season { get; set; }
-            public string Team { get; set; }
-            public int Hpf1BasL { get; set; }
-            public int Hpf1BasR { get; set; }
-            public int Hpf2BasL { get; set; }
-            public int Hpf2BasR { get; set; }
-            public int Hpf3BasL { get; set; }
-            public int Hpf3BasR { get; set; }
-            public int HpfHRasL { get; set; }
-            public int HpfHRasR { get; set; }
+            public string TeamNameShort { get; set; }
+            public int HpfSinglesAsL { get; set; }
+            public int HpfSinglesAsR { get; set; }
+            public int HpfDoublesAsL { get; set; }
+            public int HpfDoublesAsR { get; set; }
+            public int HpfTriplesAsL { get; set; }
+            public int HpfTriplesAsR { get; set; }
+            public int HpfHomeRunsAsL { get; set; }
+            public int HpfHomeRunsAsR { get; set; }
         }
     }
 }

@@ -25,7 +25,7 @@ namespace BaseballScraper.Models.MlbDataApi
         public string BirthState { get; set; }
 
         [DataMember(Name="name_display_first_last")]
-        public string NameDisplayFirstLast { get; set; }
+        public string NameFirstLast { get; set; }
 
         [DataMember(Name="college")]
         public string College { get; set; }
@@ -34,7 +34,7 @@ namespace BaseballScraper.Models.MlbDataApi
         public int? HeightInches { get; set; }
 
         [DataMember(Name="name_display_roster")]
-        public string NameDisplayRoster { get; set; }
+        public string NameLastCommaFirstInitial { get; set; }
 
         [DataMember(Name="sport_code")]
         public string SportCode { get; set; }
@@ -59,13 +59,13 @@ namespace BaseballScraper.Models.MlbDataApi
         public string ProDebutDate { get; set; }
 
         [DataMember(Name="team_full")]
-        public string TeamFull { get; set; }
+        public string TeamNameFull { get; set; }
 
         [DataMember(Name="team_abbrev")]
-        public string TeamAbbrev { get; set; }
+        public string TeamAbbreviation { get; set; }
 
         [DataMember(Name="birth_date")]
-        public string BirthDate { get; set; }
+        public string BirthDay { get; set; }
 
         [DataMember(Name="throws")]
         public string Throws { get; set; }
@@ -74,7 +74,7 @@ namespace BaseballScraper.Models.MlbDataApi
         public string League { get; set; }
 
         [DataMember(Name="name_display_last_first")]
-        public string NameDisplayLastFirst { get; set; }
+        public string NameLastComaFirst { get; set; }
 
         [DataMember(Name="position_id")]
         public int? PositionId { get; set; }
@@ -86,13 +86,13 @@ namespace BaseballScraper.Models.MlbDataApi
         public string NameUse { get; set; }
 
         [DataMember(Name="player_id")]
-        public int? PlayerId { get; set; }
+        public int? MlbDataApiPlayerId { get; set; }
 
         [DataMember(Name="name_last")]
         public string NameLast { get; set; }
 
         [DataMember(Name="team_id")]
-        public int? TeamId { get; set; }
+        public int? MlbDataApiTeamId { get; set; }
 
         [DataMember(Name="service_years")]
         public string ServiceYears { get; set; }

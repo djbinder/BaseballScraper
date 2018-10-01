@@ -15,7 +15,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using BaseballScraper.Models;
 using BaseballScraper.Infrastructure;
-// using BaseballScraper.Configuration;
 
 namespace BaseballScraper
 {
@@ -133,28 +132,14 @@ namespace BaseballScraper
             services.Configure<BaseballScraperContext>(Configuration);
             services.Configure<BaseballScraperContext>(config =>
             {
-                config.ConnectionString    = Configuration["DBInfo:ConnectionString"];
-                config.Name                = Configuration["DBInfo:Name"];
-                config.SqlConnectionString = Configuration["DBInfo2:ConnectionString"];
-                config.SqlName             = Configuration["DBInfo2:Name"];
+                config.ConnectionString = Configuration["DBInfo:ConnectionString"];
+                config.Name             = Configuration["DBInfo:Name"];
             });
             services.AddDbContext<BaseballScraperContext>(options => options.UseNpgsql (Configuration["DBInfo:ConnectionString"]));
-            services.AddDbContext<BaseballScraperContext>(options => options.UseMySQL(Configuration["DBInfo2:ConnectionString"]));
-
-
-
-            // services.AddDbContext<BaseballScraperContext>(options => options.UseMySQL(Configuration["DBInfo:ConnectionString"]));
-            Console.WriteLine(Configuration["DBInfo:Name"]);
-            Console.WriteLine(Configuration["DBInfo:ConnectionString"]);
-            Console.WriteLine(Configuration["DBInfo2:Name"]);
-            Console.WriteLine(Configuration["DBInfo2:ConnectionString"]);
-
 
             // example of how to console config items
                 // Console.WriteLine("THE GAME KEY");
                 // Console.WriteLine(Configuration["TheGameIsTheGame:2018Season:LeagueKey"]);
-
-            // CompleteMethod();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -189,7 +174,12 @@ namespace BaseballScraper
             app.UseSession ();
             app.UseHttpsRedirection ();
             app.UseAuthentication();
-            app.UseMvc ();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name    : "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+            });
         }
     }
 }

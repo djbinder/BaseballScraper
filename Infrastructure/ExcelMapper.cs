@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using BaseballScraper.Models;
 using BaseballScraper.Models.FanGraphs;
 using ExcelDataReader;
 using Export.XLS;
@@ -259,7 +260,7 @@ namespace BaseballScraper.Infrastructure
         #region ROWS / RECORDS ------------------------------------------------------------
 
             // STATUS: in progress
-            // TODO: the class/model type (FGHitter) is defined within the method. This needs to be passed as an argument
+            // TODO: the class/model type (FanGraphsHitter) is defined within the method. This needs to be passed as an argument
             /// <summary> Add a new row / record to a sheet in an existing xlsx </summary>
             /// <param name="fileName"> The name of the file you are targeting </param>
             /// <param name="sheetName"> The name of the tab / sheet you are targeting </param>
@@ -269,7 +270,7 @@ namespace BaseballScraper.Infrastructure
                 RegisterProviderToStart();
                 SetThreadCurrentCulture();
 
-                FGHitter newFGHitter = CreateHitterForTesting("Kenny Lofton");
+                FanGraphsHitter newFanGraphsHitter = CreateHitterForTesting("Kenny Lofton");
 
                 var mapper = new Mapper();
 
@@ -278,7 +279,7 @@ namespace BaseballScraper.Infrastructure
                 // ARGUMENTS --> (1) string path  (2) IEnumerable<T> Objects  (3) string sheetName (4) bool overwrite
                     // (4A) true = create new workbook
                     // (4B) false = workbook already exists so update the existing workbook instead of creating a new one
-                mapper.Save(targetWorkbook, new[] { newFGHitter }, sheetName, overwrite: false);
+                mapper.Save(targetWorkbook, new[] { newFanGraphsHitter }, sheetName, overwrite: false);
             }
 
             // STATUS: this works
@@ -288,21 +289,43 @@ namespace BaseballScraper.Infrastructure
             /// <param name="sheetName"> The name of the tab / sheet you are targeting </param>
             public void GetAllRecordsInSheet(string fileName, string sheetName)
             {
+                RegisterProviderToStart();
+                SetThreadCurrentCulture();
                 var mapper = new Mapper (fileName);
 
-                // ALL RECORDS --> IEnumerable<RowInfo<FGHitter>>
-                // ALL RECORDS type --> IEnumerable<RowInfo<FGHitter>>
-                var allRecords = mapper.Take<FGHitter> (sheetName);
+                // ALL RECORDS --> IEnumerable<RowInfo<FanGraphsHitter>>
+                // ALL RECORDS type --> IEnumerable<RowInfo<FanGraphsHitter>>
+                var allRecords = mapper.Take<FanGraphsHitter> (sheetName);
                 _h.TypeAndIntro(allRecords, "all records");
 
-                List<FGHitter> fgHitters = new List<FGHitter>();
+                List<FanGraphsHitter> fgHitters = new List<FanGraphsHitter>();
 
-                // RECORD --> RowInfo<FGHitter>
-                // RECORD type --> Npoi.Mapper.RowInfo`1[BaseballScraper.Models.FanGraphs.FGHitter]
-                foreach(var record in allRecords)
+                // RECORD --> RowInfo<FanGraphsHitter>
+                // RECORD type --> Npoi.Mapper.RowInfo`1[BaseballScraper.Models.FanGraphs.FanGraphsHitter]
+                // foreach(var record in allRecords)
+                // {
+                //     AddRecordsToList(fgHitters, record.Value);
+                //     PrintRecord(record);
+                // }
+
+                var getRecords = mapper.Take<PlayerBase>(sheetName);
+                _h.TypeAndIntro(getRecords, "get records");
+                // Console.WriteLine(getRecords.Count());
+
+
+                // List<dynamic> dynamicList = new List<dynamic>();
+
+                int getRecordsCounter = 1;
+                foreach(var rec in getRecords)
                 {
-                    AddRecordsToList(fgHitters, record.Value);
-                    PrintRecord(record);
+                    if(getRecordsCounter == 1 || getRecordsCounter == 2)
+                    {
+                        Console.WriteLine(rec.Value.BaseballHqPlayerId);
+                        PrintRecord(rec);
+
+                    }
+
+                    getRecordsCounter++;
                 }
             }
 
@@ -487,34 +510,34 @@ namespace BaseballScraper.Infrastructure
 
 
         #region TESTING HELP ------------------------------------------------------------
-            public FGHitter CreateHitterForTesting(string playerName)
+            public FanGraphsHitter CreateHitterForTesting(string playerName)
             {
-                FGHitter newFGHitter = new FGHitter
+                FanGraphsHitter newFanGraphsHitter = new FanGraphsHitter
                 {
                     FanGraphsName = playerName,
                     FanGraphsTeam = "Chicago Cubs",
-                    GP            = "123",
-                    PA            = "123",
-                    HR            = "123",
-                    R             = "123",
-                    RBI           = "123",
-                    SB            = "123",
-                    BB_percent    = "23%",
-                    K_percent     = "23%",
-                    ISO           = ".321",
-                    BABIP         = ".321",
-                    AVG           = ".321",
-                    OBP           = ".321",
-                    SLG           = ".321",
-                    wOBA          = ".321",
-                    wRC_plus      = "789",
-                    BsR           = "789",
-                    Off           = "789",
-                    Def           = "789",
-                    WAR           = "6",
+                    GamesPlayed            = "123",
+                    PlateAppearances            = "123",
+                    HomeRuns            = "123",
+                    Runs             = "123",
+                    RunsBattedIn           = "123",
+                    StolenBases            = "123",
+                    WalkPercentage    = "23%",
+                    StrikeoutPercentage     = "23%",
+                    Iso           = ".321",
+                    Babip         = ".321",
+                    BattingAverage           = ".321",
+                    OnBasePercentage           = ".321",
+                    SluggingPercentage           = ".321",
+                    wOba          = ".321",
+                    wRcPlus      = "789",
+                    BaseRunningRunsAboveReplacement           = "789",
+                    Offense           = "789",
+                    Defense           = "789",
+                    WinsAboveReplacement           = "6",
                 };
 
-                return newFGHitter;
+                return newFanGraphsHitter;
             }
         #endregion TESTING HELP ------------------------------------------------------------
 

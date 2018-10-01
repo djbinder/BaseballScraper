@@ -16,7 +16,7 @@ namespace BaseballScraper.Models.MlbDataApi
         public string NamePrefix { get; set; }
 
         [DataMember(Name="name_display_first_last")]
-        public string NameDisplayFirstLast { get; set; }
+        public string NameFirstLast { get; set; }
 
         [DataMember(Name="college")]
         public string College { get; set; }
@@ -28,7 +28,7 @@ namespace BaseballScraper.Models.MlbDataApi
         public int? Age { get; set; }
 
         [DataMember(Name="name_display_first_last_html")]
-        public string NameDisplayFirstLastHtml { get; set; }
+        public string NameFirstLastHtml { get; set; }
 
         [DataMember(Name="height_feet")]
         public string HeightFeet { get; set; }
@@ -41,12 +41,14 @@ namespace BaseballScraper.Models.MlbDataApi
         public string ProDebutDate { get; set; }
 
         [DataMember(Name="team_abbrev")]
-        public string TeamAbbrev { get; set; }
+        public string TeamAbbreviation { get; set; }
+
         [DataMember(Name="status")]
         public string Status { get; set; }
 
+
         [DataMember(Name="name_display_last_first_html")]
-        public string NameDisplayLastFirstHtml { get; set; }
+        public string NameLastFirstHtml { get; set; }
 
         [DataMember(Name="throws")]
         public string Throws { get; set; }
@@ -58,13 +60,13 @@ namespace BaseballScraper.Models.MlbDataApi
         public string HighSchool { get; set; }
 
         [DataMember(Name="name_display_roster_html")]
-        public string NameDisplayRosterHtml { get; set; }
+        public string NameRosterHtml { get; set; }
 
         [DataMember(Name="name_use")]
         public string NameUse { get; set; }
 
         [DataMember(Name="player_id")]
-        public int? PlayerId { get; set; }
+        public int? MlbDataApiPlayerId { get; set; }
 
         [DataMember(Name="status_date")]
         public string StatusDate { get; set; }
@@ -73,7 +75,7 @@ namespace BaseballScraper.Models.MlbDataApi
         public string PrimaryStatType { get; set; }
 
         [DataMember(Name="team_id")]
-        public int? TeamId { get; set; }
+        public int? MlbDataApiTeamId { get; set; }
 
         [DataMember(Name="active_sw")]
         public string Active { get; set; }
@@ -88,7 +90,7 @@ namespace BaseballScraper.Models.MlbDataApi
         public string NameMiddle { get; set; }
 
         [DataMember(Name="name_display_roster")]
-        public string NameDisplayRoster { get; set; }
+        public string NameLastCommaFirstInitial { get; set; }
 
         [DataMember(Name="jersey_number")]
         public int? JerseyNumber { get; set; }
@@ -106,7 +108,7 @@ namespace BaseballScraper.Models.MlbDataApi
         public string BirthCity { get; set; }
 
         [DataMember(Name="name_nick")]
-        public string NameNick { get; set; }
+        public string Nickname { get; set; }
 
         [DataMember(Name="status_code")]
         public string StatusCode { get; set; }
@@ -115,10 +117,10 @@ namespace BaseballScraper.Models.MlbDataApi
         public string NameMatrilineal { get; set; }
 
         [DataMember(Name="team_name")]
-        public string TeamName { get; set; }
+        public string TeamNameFull { get; set; }
 
         [DataMember(Name="name_display_last_first")]
-        public string NameDisplayLastFirst { get; set; }
+        public string NameLastCommaFirst { get; set; }
 
         [DataMember(Name="twitter_id")]
         public string TwitterId { get; set; }
