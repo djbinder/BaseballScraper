@@ -6,8 +6,8 @@ namespace BaseballScraper.Models.Lahman
 {
 public class LahmanPitching
 {
-    public string PlayerId { get; set; }
-    public string Year { get; set; }
+    public string LahmanPlayerId { get; set; }
+    public string Season { get; set; }
     public string Stint { get; set; }
     public string TeamId { get; set; }
     public string League { get; set; }
@@ -16,7 +16,7 @@ public class LahmanPitching
     public string Games { get; set; }
     public string GamesStarted { get; set; }
     public string CompleteGames { get; set; }
-    public string ShutOuts { get; set; }
+    public string Shutouts { get; set; }
     public string Saves { get; set; }
     public string IpOuts { get; set; }
     public string HitsAgainst { get; set; }
@@ -27,7 +27,7 @@ public class LahmanPitching
     public string BattingAverageAgainst { get; set; }
     public string EarnedRunAverage { get; set; }
     public string IntentionalWalks { get; set; }
-    public string WildPitchers { get; set; }
+    public string WildPitches { get; set; }
     public string HitByPitches { get; set; }
     public string Balks { get; set; }
     public string BattersFacedByPitcher { get; set; }
@@ -42,8 +42,8 @@ public class LahmanPitchingClassMap: ClassMap<LahmanPitching>
 {
     public LahmanPitchingClassMap()
     {
-        Map(m => m.PlayerId).Name("playerID");
-        Map(m => m.Year).Name("yearID");
+        Map(m => m.LahmanPlayerId).Name("playerID");
+        Map(m => m.Season).Name("yearID");
         Map(m => m.Stint).Name("stint");
         Map(m => m.TeamId).Name("teamID");
         Map(m => m.League).Name("lgID");
@@ -52,7 +52,7 @@ public class LahmanPitchingClassMap: ClassMap<LahmanPitching>
         Map(m => m.Games).Name("G");
         Map(m => m.GamesStarted).Name("GS");
         Map(m => m.CompleteGames).Name("CG");
-        Map(m => m.ShutOuts).Name("SHO");
+        Map(m => m.Shutouts).Name("SHO");
         Map(m => m.Saves).Name("SV");
         Map(m => m.IpOuts).Name("IPouts");
         Map(m => m.HitsAgainst).Name("H");
@@ -63,7 +63,7 @@ public class LahmanPitchingClassMap: ClassMap<LahmanPitching>
         Map(m => m.BattingAverageAgainst).Name("BAOpp");
         Map(m => m.EarnedRunAverage).Name("ERA");
         Map(m => m.IntentionalWalks).Name("IBB");
-        Map(m => m.WildPitchers).Name("WP");
+        Map(m => m.WildPitches).Name("WP");
         Map(m => m.HitByPitches).Name("HBP");
         Map(m => m.Balks).Name("BK");
         Map(m => m.BattersFacedByPitcher).Name("BFP");

@@ -1,74 +1,52 @@
-@model BaseballScraper.Models.Player.PlayerNote
+@model BaseballScraper.Models.PlayerNote
+
 
 <h1>Player Notes</h1>
 
-<div class="row">
-    <form asp-controller="PlayerControllers.PlayerNote" asp-action="CreatePlayerNote" method="post">
-        <div class="col">
-            <label>Player Name</label>
-            <input asp-for="PlayerName" class="form-control" type="text" value="pj">
+<a asp-action="Index">Home</a>
 
-            <br>
+<form asp-controller="PlayerNote" asp-action="CreateNote" method="POST">
 
-            <div class="row">
-                <div class="col">
+    <label>Player Name</label>
+    <input asp-for="PlayerName" value="katie">
+    <br>
 
-                    <label>Position</label>
-                    <input asp-for="Position" class="form-control" type="text" value="ss">
+    <label>Position</label>
+    <input for="Position" id="Position" name="Position" type="text" value="sp">
+    <br>
 
-                </div>
+    <label>Position Type</label>
+    <input for="PositionType" id="PositionType" name="PositionType" type="text" value="pitcher">
+    <br>
 
-                <div class="col">
+    <label for="Note">Note</label>
+    <input for="Note" id="Note" name="Note" type="text">
+    <br>
+    <!--
+    <label asp-for="NoteTone">Note Tone</label>
+    <input asp-for="NoteTone" id="NoteTone" name="NoteTone" type="text">
+    <br>
 
-                    <label>Position Type</label>
-                    <input asp-for="PositionType" class="form-control" type="text" value="hitter">
+    <label asp-for="SourceSite">Source Site</label>
+    <input asp-for="SourceSite" id="SourceSite" name="SourceSite" type="text">
+    <br>
 
-                </div>
-            </div>
-            <br>
+    <label asp-for="NoteWriter">Writer </label>
+    <input asp-for="NoteWriter" id="NoteWriter" name="NoteWriter" type="text">
+    <br>
 
-            <label>Note</label>
-            <input asp-for="Note" class="form-control" type="text">
+    <label asp-for="CalendarYear">Calendar Year </label>
+    <input asp-for="CalendarYear" id="CalendarYear" name="CalendarYear" type="text">
+    <br>
 
-            <br>
+    <label asp-for="MlbSeason">Season </label>
+    <input asp-for="MlbSeason" id="MlbSeason" name="MlbSeason" type="text">
+    <br> -->
 
-            <label>Note Tone</label>
-            <input asp-for="NoteTone" class="form-control" type="text">
+    <a asp-action="CreateNote">Create Note</a>
+    <input type="submit" name="CreateNote" id="CreateNote" value="Save" class="btn btn-default" />
+    <button type="submit">Save</button>
+    <a href="https://127.0.0.1:5001/playernote/create ">Create Note </a>
+    <br>
 
-            <br>
-
-            <div class="row">
-                <div class="col">
-
-                    <label>Site</label>
-                    <input asp-for="SourceSite" class="form-control" type="text">
-
-                </div>
-                <div class="col">
-
-                    <label>Article Writer</label>
-                    <input asp-for="NoteWriter" class="form-control" type="text">
-
-                </div>
-            </div>
-            <br>
-
-            <div class="row">
-                <div class="col">
-                    <label>Calendar Year</label>
-                    <input asp-for="CalendarYear" class="form-control" type="Date">
-                </div>
-                <div class="col">
-                    <label>Season</label>
-                    <input asp-for="MlbSeason" class="form-control" type="Date">
-                </div>
-            </div>
-            <br>
-            <button class="btn btn-info">Add</button>
-            <!-- <button class="btn btn-info" type="submit" name="CreatePlayerNote">Add</button> -->
-            <!-- <input type="submit" name="CreatePlayerNote" value="Add"> -->
-            <a href="https://127.0.0.1:5001/player/CreatePlayerNote ">Create Note </a>
-
-        </div>
-    </form>
-</div>
+</form>

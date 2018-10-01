@@ -60,7 +60,7 @@ namespace BaseballScraper.Controllers.YahooControllers
 
                 int statIdIndexLocation = 0;
 
-                    tS.HitsAtBatsId = statPath[statIdIndexLocation]["stat_id"].ToString();
+                    tS.HitsDividedByAtBatsId = statPath[statIdIndexLocation]["stat_id"].ToString();
                     statIdIndexLocation++;
 
                     tS.RunsId = statPath[statIdIndexLocation]["stat_id"].ToString();
@@ -69,7 +69,7 @@ namespace BaseballScraper.Controllers.YahooControllers
                     tS.HomeRunsId = statPath[statIdIndexLocation]["stat_id"].ToString();
                     statIdIndexLocation++;
 
-                    tS.RbiId = statPath[statIdIndexLocation]["stat_id"].ToString();
+                    tS.RunsBattedInId = statPath[statIdIndexLocation]["stat_id"].ToString();
                     statIdIndexLocation++;
 
                     tS.StolenBasesId = statPath[statIdIndexLocation]["stat_id"].ToString();
@@ -96,14 +96,14 @@ namespace BaseballScraper.Controllers.YahooControllers
                     tS.HoldsId = statPath[statIdIndexLocation]["stat_id"].ToString();
                     statIdIndexLocation++;
 
-                    tS.EraId = statPath[statIdIndexLocation]["stat_id"].ToString();
+                    tS.EarnedRunAverageId = statPath[statIdIndexLocation]["stat_id"].ToString();
                     statIdIndexLocation++;
 
                     tS.WhipId = statPath[statIdIndexLocation]["stat_id"].ToString();
 
                 int statValueIndexLocation = 0;
 
-                    tS.HitsAtBatsTotal = statPath[statValueIndexLocation]["value"].ToString();
+                    tS.HitsDividedByAtBatsTotal = statPath[statValueIndexLocation]["value"].ToString();
                     statValueIndexLocation++;
 
                     tS.RunsTotal = statPath[statValueIndexLocation]["value"].ToString();
@@ -112,7 +112,7 @@ namespace BaseballScraper.Controllers.YahooControllers
                     tS.HomeRunsTotal = statPath[statValueIndexLocation]["value"].ToString();
                     statValueIndexLocation++;
 
-                    tS.RbiTotal = statPath[statValueIndexLocation]["value"].ToString();
+                    tS.RunsBattedInTotal = statPath[statValueIndexLocation]["value"].ToString();
                     statValueIndexLocation++;
 
                     tS.StolenBasesTotal = statPath[statValueIndexLocation]["value"].ToString();
@@ -139,7 +139,7 @@ namespace BaseballScraper.Controllers.YahooControllers
                     tS.HoldsTotal = statPath[statValueIndexLocation]["value"].ToString();
                     statValueIndexLocation++;
 
-                    tS.EraTotal = statPath[statValueIndexLocation]["value"].ToString();
+                    tS.EarnedRunAverageTotal = statPath[statValueIndexLocation]["value"].ToString();
                     statValueIndexLocation++;
 
                     tS.WhipTotal = statPath[statValueIndexLocation]["value"].ToString();
@@ -173,7 +173,7 @@ namespace BaseballScraper.Controllers.YahooControllers
 
                 int statIdIndexLocation = 0;
 
-                    tS.HitsAtBatsId = statPath[statIdIndexLocation]["stat_id"].ToString();
+                    tS.HitsDividedByAtBatsId = statPath[statIdIndexLocation]["stat_id"].ToString();
                     statIdIndexLocation++;
 
                     tS.RunsId = statPath[statIdIndexLocation]["stat_id"].ToString();
@@ -182,7 +182,7 @@ namespace BaseballScraper.Controllers.YahooControllers
                     tS.HomeRunsId = statPath[statIdIndexLocation]["stat_id"].ToString();
                     statIdIndexLocation++;
 
-                    tS.RbiId = statPath[statIdIndexLocation]["stat_id"].ToString();
+                    tS.RunsBattedInId = statPath[statIdIndexLocation]["stat_id"].ToString();
                     statIdIndexLocation++;
 
                     tS.StolenBasesId = statPath[statIdIndexLocation]["stat_id"].ToString();
@@ -209,14 +209,14 @@ namespace BaseballScraper.Controllers.YahooControllers
                     tS.HoldsId = statPath[statIdIndexLocation]["stat_id"].ToString();
                     statIdIndexLocation++;
 
-                    tS.EraId = statPath[statIdIndexLocation]["stat_id"].ToString();
+                    tS.EarnedRunAverageId = statPath[statIdIndexLocation]["stat_id"].ToString();
                     statIdIndexLocation++;
 
                     tS.WhipId = statPath[statIdIndexLocation]["stat_id"].ToString();
 
                 int statValueIndexLocation = 0;
 
-                    tS.HitsAtBatsTotal = statPath[statValueIndexLocation]["value"].ToString();
+                    tS.HitsDividedByAtBatsTotal = statPath[statValueIndexLocation]["value"].ToString();
                     statValueIndexLocation++;
 
                     tS.RunsTotal = statPath[statValueIndexLocation]["value"].ToString();
@@ -225,7 +225,7 @@ namespace BaseballScraper.Controllers.YahooControllers
                     tS.HomeRunsTotal = statPath[statValueIndexLocation]["value"].ToString();
                     statValueIndexLocation++;
 
-                    tS.RbiTotal = statPath[statValueIndexLocation]["value"].ToString();
+                    tS.RunsBattedInTotal = statPath[statValueIndexLocation]["value"].ToString();
                     statValueIndexLocation++;
 
                     tS.StolenBasesTotal = statPath[statValueIndexLocation]["value"].ToString();
@@ -252,7 +252,7 @@ namespace BaseballScraper.Controllers.YahooControllers
                     tS.HoldsTotal = statPath[statValueIndexLocation]["value"].ToString();
                     statValueIndexLocation++;
 
-                    tS.EraTotal = statPath[statValueIndexLocation]["value"].ToString();
+                    tS.EarnedRunAverageTotal = statPath[statValueIndexLocation]["value"].ToString();
                     statValueIndexLocation++;
 
                     tS.WhipTotal = statPath[statValueIndexLocation]["value"].ToString();
@@ -305,7 +305,7 @@ namespace BaseballScraper.Controllers.YahooControllers
 
                 int statIdIndexLocation = 0;
 
-                    tS.HitsAtBatsId = statPath[statIdIndexLocation]["stat_id"].ToString();
+                    tS.HitsDividedByAtBatsId = statPath[statIdIndexLocation]["stat_id"].ToString();
                     statIdIndexLocation++;
 
                     tS.RunsId = statPath[statIdIndexLocation]["stat_id"].ToString();
@@ -314,7 +314,7 @@ namespace BaseballScraper.Controllers.YahooControllers
                     tS.HomeRunsId = statPath[statIdIndexLocation]["stat_id"].ToString();
                     statIdIndexLocation++;
 
-                    tS.RbiId = statPath[statIdIndexLocation]["stat_id"].ToString();
+                    tS.RunsBattedInId = statPath[statIdIndexLocation]["stat_id"].ToString();
                     statIdIndexLocation++;
 
                     tS.StolenBasesId = statPath[statIdIndexLocation]["stat_id"].ToString();
@@ -341,14 +341,14 @@ namespace BaseballScraper.Controllers.YahooControllers
                     tS.HoldsId = statPath[statIdIndexLocation]["stat_id"].ToString();
                     statIdIndexLocation++;
 
-                    tS.EraId = statPath[statIdIndexLocation]["stat_id"].ToString();
+                    tS.EarnedRunAverageId = statPath[statIdIndexLocation]["stat_id"].ToString();
                     statIdIndexLocation++;
 
                     tS.WhipId = statPath[statIdIndexLocation]["stat_id"].ToString();
 
                 int statValueIndexLocation = 0;
 
-                    tS.HitsAtBatsTotal = statPath[statValueIndexLocation]["value"].ToString();
+                    tS.HitsDividedByAtBatsTotal = statPath[statValueIndexLocation]["value"].ToString();
                     statValueIndexLocation++;
 
                     tS.RunsTotal = statPath[statValueIndexLocation]["value"].ToString();
@@ -357,7 +357,7 @@ namespace BaseballScraper.Controllers.YahooControllers
                     tS.HomeRunsTotal = statPath[statValueIndexLocation]["value"].ToString();
                     statValueIndexLocation++;
 
-                    tS.RbiTotal = statPath[statValueIndexLocation]["value"].ToString();
+                    tS.RunsBattedInTotal = statPath[statValueIndexLocation]["value"].ToString();
                     statValueIndexLocation++;
 
                     tS.StolenBasesTotal = statPath[statValueIndexLocation]["value"].ToString();
@@ -384,7 +384,7 @@ namespace BaseballScraper.Controllers.YahooControllers
                     tS.HoldsTotal = statPath[statValueIndexLocation]["value"].ToString();
                     statValueIndexLocation++;
 
-                    tS.EraTotal = statPath[statValueIndexLocation]["value"].ToString();
+                    tS.EarnedRunAverageTotal = statPath[statValueIndexLocation]["value"].ToString();
                     statValueIndexLocation++;
 
                     tS.WhipTotal = statPath[statValueIndexLocation]["value"].ToString();
