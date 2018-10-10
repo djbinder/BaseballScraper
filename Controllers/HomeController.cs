@@ -9,16 +9,18 @@ using CsvHelper;
 using System.IO;
 using System.Threading.Tasks;
 using BaseballScraper.Models.Lahman;
+using HtmlAgilityPack;
+using System.Linq;
 
 namespace BaseballScraper.Controllers
 {
-#pragma warning disable CS0414, CS0169
+#pragma warning disable CS0414, CS0169, CS0219
     public class HomeController: Controller
     {
         private readonly Helpers _h = new Helpers();
         private readonly AirtableConfiguration _airtableConfig;
         private readonly TwitterConfiguration _twitterConfiguration;
-        private readonly ExcelMapper _eM     = new ExcelMapper();
+        private readonly ExcelHandler _eM     = new ExcelHandler();
         private readonly PythonConnector _pC = new PythonConnector();
         private readonly RdotNetConnector _r = new RdotNetConnector();
         private readonly DataTabler _dT      = new DataTabler();
@@ -40,12 +42,10 @@ namespace BaseballScraper.Controllers
             return View();
         }
 
-        [HttpGet]
-        [Route("cbs")]
-        public void CbsMostAdded()
-        {
-            _hS.ScrapeHtmlPage();
-        }
+
+
+
+
 
 
         [HttpGet]
@@ -100,33 +100,5 @@ namespace BaseballScraper.Controllers
     }
 
 
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ValuesController: ControllerBase
-    {
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
-        {
-            return "value";
-        }
 
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
-    }
 }

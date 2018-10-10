@@ -86,11 +86,16 @@ namespace BaseballScraper.Infrastructure
 
                     // RECORDS type --> CsvHelper.CsvReader+<GetRecords>d__65
                     records = csvReader.GetRecords(modelType);
+                    foreach(var record in records)
+                    {
+                        Console.WriteLine(record);
+                    }
 
                     int recordsCount = _h.CountRecords(records);
 
                     // Run EnumerateOverRecordsDynamic to loop through records
-                    // _h.EnumerateOverRecordsDynamic(records);
+                    _h.EnumerateOverRecordsDynamic(records);
+                    _h.EnumerateOverRecordsObject(records);
                 }
                 return records;
             }

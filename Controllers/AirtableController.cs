@@ -9,6 +9,8 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 
+
+
 namespace BaseballScraper.Controllers
 {
     [Route("api/airtable")]

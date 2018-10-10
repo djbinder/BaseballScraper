@@ -55,16 +55,13 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
             // type ---> BaseballScraper.EndPoints.MlbDataApiEndPoints+MlbDataEndPoint
             var newEndPoint = _endPoints.ProjectedHittingStatsEndPoint(2017, playerId);
 
-            // type --> PostmanRequest
             // PostmanRequest has Client(i.e., RestSharp.RestClient) and Request (i.e., RestSharp.RestRequest)
             var postmanRequest = _postman.CreatePostmanRequest(newEndPoint, "ProjectedHittingStats");
 
-            // type --> PostmanResponse
             // PostmanResponse Class only has Response
             var postmanResponse = _postman.GetPostmanResponse(postmanRequest);
 
-            // type --> IRestResponse
-            var response = postmanResponse.Response;
+            IRestResponse response = postmanResponse.Response;
 
             return response;
         }

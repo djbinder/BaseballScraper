@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -16,26 +16,26 @@ namespace BaseballScraper.Infrastructure
 {
     /// <summary> </summary>
     /// <list> INDEX
-        /// RegisterProviderToStart <see cref="ExcelMapper.RegisterProviderToStart()" />
-        /// SetThreadCurrentCulture <see cref="ExcelMapper.SetThreadCurrentCulture()" />
-        /// CreateNewExcelWorkbook <see cref="ExcelMapper.CreateNewExcelWorkbook(string)" />
-        /// CreateNewExcelWorkbook <see cref="ExcelMapper.CreateNewExcelWorkbook()" />
-        /// CreateNewExcelWorkbook <see cref="ExcelMapper.CreateNewExcelWorkbook(string, string)" />
-        /// ManageWorkbookNames <see cref="ExcelMapper.ManageWorkbookNames(string)" />
-        /// AddSheetToExistingExcelWorkbook <see cref="ExcelMapper.AddSheetToExistingExcelWorkbook(string, string)" />
-        /// GetAllWorkbookSheets <see cref="ExcelMapper.GetAllWorkbookSheets(string)" />
-        /// AddRecordToSheet <see cref="ExcelMapper.AddRecordToSheet(string, string)" />
-        /// GetAllRecordsInSheet <see cref="ExcelMapper.GetAllRecordsInSheet(string, string)" />
-        /// AddRecordsToList <see cref="ExcelMapper.AddRecordsToList{T}(IList{T}, T)" />
-        /// PrintRecord <see cref="ExcelMapper.PrintRecord{T}(RowInfo{T})" />
-        /// SetColumnWidth <see cref="ExcelMapper.SetColumnWidth(ExcelDocument, string, int)" />
-        /// SetColumnWidth <see cref="ExcelMapper.SetColumnWidth(ExcelDocument, int, int)" />
-        /// SetCellValue <see cref="ExcelMapper.SetCellValue(ExcelDocument, int, string, object)" />
-        /// SetCellValue <see cref="ExcelMapper.SetCellValue(ExcelDocument, int, int, object)" />
-        /// SetFont <see cref="ExcelMapper.SetFont(ExcelDocument, int, string, string, int)" />
-        /// SetFont <see cref="ExcelMapper.SetFont(ExcelDocument, int, int, string, int)" />
-        /// FormatDate <see cref="ExcelMapper.FormatDate(ExcelDocument, int, int)" />
-        /// ColumnHeaderLetterToNumber <see cref="ExcelMapper.ColumnHeaderLetterToNumber(string)" />
+        /// RegisterProviderToStart <see cref="ExcelHandler.RegisterProviderToStart()" />
+        /// SetThreadCurrentCulture <see cref="ExcelHandler.SetThreadCurrentCulture()" />
+        /// CreateNewExcelWorkbook <see cref="ExcelHandler.CreateNewExcelWorkbook(string)" />
+        /// CreateNewExcelWorkbook <see cref="ExcelHandler.CreateNewExcelWorkbook()" />
+        /// CreateNewExcelWorkbook <see cref="ExcelHandler.CreateNewExcelWorkbook(string, string)" />
+        /// ManageWorkbookNames <see cref="ExcelHandler.ManageWorkbookNames(string)" />
+        /// AddSheetToExistingExcelWorkbook <see cref="ExcelHandler.AddSheetToExistingExcelWorkbook(string, string)" />
+        /// GetAllWorkbookSheets <see cref="ExcelHandler.GetAllWorkbookSheets(string)" />
+        /// AddRecordToSheet <see cref="ExcelHandler.AddRecordToSheet(string, string)" />
+        /// GetAllRecordsInSheet <see cref="ExcelHandler.GetAllRecordsInSheet(string, string)" />
+        /// AddRecordsToList <see cref="ExcelHandler.AddRecordsToList{T}(IList{T}, T)" />
+        /// PrintRecord <see cref="ExcelHandler.PrintRecord{T}(RowInfo{T})" />
+        /// SetColumnWidth <see cref="ExcelHandler.SetColumnWidth(ExcelDocument, string, int)" />
+        /// SetColumnWidth <see cref="ExcelHandler.SetColumnWidth(ExcelDocument, int, int)" />
+        /// SetCellValue <see cref="ExcelHandler.SetCellValue(ExcelDocument, int, string, object)" />
+        /// SetCellValue <see cref="ExcelHandler.SetCellValue(ExcelDocument, int, int, object)" />
+        /// SetFont <see cref="ExcelHandler.SetFont(ExcelDocument, int, string, string, int)" />
+        /// SetFont <see cref="ExcelHandler.SetFont(ExcelDocument, int, int, string, int)" />
+        /// FormatDate <see cref="ExcelHandler.FormatDate(ExcelDocument, int, int)" />
+        /// ColumnHeaderLetterToNumber <see cref="ExcelHandler.ColumnHeaderLetterToNumber(string)" />
     /// </list>
     ///
     /// <list> RESOURCES
@@ -43,7 +43,7 @@ namespace BaseballScraper.Infrastructure
         /// <item> https://github.com/dotnetcore/NPOI/blob/master/samples/Npoi.Samples.CreateNewSpreadsheet/Program.cs </item>
     /// </list>
 
-    public class ExcelMapper
+    public class ExcelHandler
     {
         private Helpers _h = new Helpers();
 
@@ -82,7 +82,6 @@ namespace BaseballScraper.Infrastructure
             /// <example> _eM.CreateNewExcelWorkbook("BaseballScraper"); </example>
             public void CreateNewExcelWorkbook(string fileName)
             {
-                _h.StartMethod();
                 RegisterProviderToStart();
                 SetThreadCurrentCulture();
 
@@ -200,8 +199,6 @@ namespace BaseballScraper.Infrastructure
             // TODO: make this work?
             public void GetAllWorkbookSheets(string fileName)
             {
-                _h.StartMethod();
-
                 RegisterProviderToStart();
                 SetThreadCurrentCulture();
 
@@ -296,7 +293,7 @@ namespace BaseballScraper.Infrastructure
                 // ALL RECORDS --> IEnumerable<RowInfo<FanGraphsHitter>>
                 // ALL RECORDS type --> IEnumerable<RowInfo<FanGraphsHitter>>
                 var allRecords = mapper.Take<FanGraphsHitter> (sheetName);
-                _h.TypeAndIntro(allRecords, "all records");
+                // _h.TypeAndIntro(allRecords, "all records");
 
                 List<FanGraphsHitter> fgHitters = new List<FanGraphsHitter>();
 
@@ -307,33 +304,12 @@ namespace BaseballScraper.Infrastructure
                 //     AddRecordsToList(fgHitters, record.Value);
                 //     PrintRecord(record);
                 // }
-
-                var getRecords = mapper.Take<PlayerBase>(sheetName);
-                _h.TypeAndIntro(getRecords, "get records");
-                // Console.WriteLine(getRecords.Count());
-
-
-                // List<dynamic> dynamicList = new List<dynamic>();
-
-                int getRecordsCounter = 1;
-                foreach(var rec in getRecords)
-                {
-                    if(getRecordsCounter == 1 || getRecordsCounter == 2)
-                    {
-                        Console.WriteLine(rec.Value.BaseballHqPlayerId);
-                        PrintRecord(rec);
-
-                    }
-
-                    getRecordsCounter++;
-                }
             }
 
             // STATUS: this works
             /// <summary> Add retrieved records / rows to a list </summary>
             public IList<T> AddRecordsToList<T>(IList<T> objectList, T t)
             {
-                // _h.StartMethod();
                 objectList.Add(t);
                 Console.WriteLine($"Object #{objectList.Count()} has been added to list");
                 return objectList;
@@ -446,7 +422,6 @@ namespace BaseballScraper.Infrastructure
             /// <returns> The column number of an Excel column </returns>
             internal int ColumnHeaderLetterToNumber(string letter)
             {
-                _h.StartMethod();
                 switch(letter)
                 {
                     case "A":

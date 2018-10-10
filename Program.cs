@@ -15,19 +15,20 @@ namespace BaseballScraper
     #pragma warning disable CS0414
     public class Program
     {
+
+
         public static void Main (string[] args)
         {
             Console.WriteLine();
             Console.WriteLine("***** ---> READY TO ROLL <--- *****");
-            // Console.WriteLine ($"Version: {Environment.Version}");
+            Console.WriteLine ($"Version: {Environment.Version}");
             Console.WriteLine();
-
             CreateWebHostBuilder(args).Build().Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) => 
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                // .UseSetting(WebHostDefaults.SuppressStatusMessagesKey, "True")
+                .UseSetting(WebHostDefaults.SuppressStatusMessagesKey, "False")
                 .UseStartup<Startup>()
                 .ConfigureLogging(logging =>
                     logging.SetMinimumLevel(LogLevel.Warning)
@@ -35,10 +36,3 @@ namespace BaseballScraper
     }
 }
 
-
-
-
-// public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-//     WebHost.CreateDefaultBuilder(args)
-//         .UseSetting(WebHostDefaults.SuppressStatusMessagesKey, "True")
-//         .UseStartup<Startup>();
