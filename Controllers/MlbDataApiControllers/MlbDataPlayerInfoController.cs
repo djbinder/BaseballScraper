@@ -1,13 +1,9 @@
 using BaseballScraper.EndPoints;
 using BaseballScraper.Infrastructure;
 using BaseballScraper.Models.MlbDataApi;
-using BaseballScraper.Controllers.MlbDataApiControllers;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using RestSharp;
-using System.IO;
-using System.Text;
-using System.Runtime.Serialization.Json;
 using System;
 
 namespace BaseballScraper.Controllers.MlbDataApiControllers

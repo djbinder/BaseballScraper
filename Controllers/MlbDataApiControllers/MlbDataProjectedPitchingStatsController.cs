@@ -1,13 +1,9 @@
 using BaseballScraper.EndPoints;
 using BaseballScraper.Infrastructure;
 using BaseballScraper.Models.MlbDataApi;
-using BaseballScraper.Controllers.MlbDataApiControllers;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using RestSharp;
-using System.IO;
-using System.Text;
-using System.Runtime.Serialization.Json;
 using System;
 
 namespace BaseballScraper.Controllers.MlbDataApiControllers.cs
@@ -28,8 +24,6 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers.cs
         [Route("projectedpitchingstats/{playerId}")]
         public IActionResult ViewPlayerInfo(int playerId)
         {
-            _h.StartMethod();
-
             // this gets you Syndergaard
             // int playerIdPlaceHolder = 592789;
             Console.WriteLine($"GETTING INFO FOR PLAYER ID: {playerId}");
@@ -50,21 +44,16 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers.cs
 
         public IRestResponse GetProjectedPitchingStatsPostmanResponse(int playerId)
         {
-            _h.StartMethod();
-
             // type ---> BaseballScraper.EndPoints.MlbDataApiEndPoints+MlbDataEndPoint
             var newEndPoint = _endPoints.ProjectedPitchingStatsEndPoint(2018, playerId);
 
-            // type --> PostmanRequest
             // PostmanRequest has Client(i.e., RestSharp.RestClient) and Request (i.e., RestSharp.RestRequest)
             var postmanRequest = _postman.CreatePostmanRequest(newEndPoint, "ProjectedPitchingStats");
 
-            // type --> PostmanResponse
             // PostmanResponse Class only has Response
             var postmanResponse = _postman.GetPostmanResponse(postmanRequest);
 
-            // type --> IRestResponse
-            var response = postmanResponse.Response;
+            IRestResponse response = postmanResponse.Response;
 
             return response;
         }

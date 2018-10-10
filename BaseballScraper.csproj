@@ -17,6 +17,7 @@
   <ItemGroup>
     <!-- Python -->
     <PackageReference Include="Dapper" Version="1.50.5" />
+    <PackageReference Include="ExcelMapper" Version="4.0.20" />
     <PackageReference Include="IronPython" Version="2.7.8.1" />
 
     <PackageReference Include="Microsoft.AspNetCore.App" />
@@ -63,6 +64,12 @@
     <!-- twitter -->
     <PackageReference Include="TweetinviAPI" Version="3.0.0" />
     <PackageReference Include="linqtotwitter" Version="4.2.1" />
+
+    <!-- Razor Pages -->
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.5" />
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.1.0-preview1-final" />
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.2" />
+    <!-- <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.1" /> -->
 
   </ItemGroup>
 

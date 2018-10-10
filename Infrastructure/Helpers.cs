@@ -218,6 +218,27 @@ namespace BaseballScraper.Infrastructure
 
 
 
+        #region ITERATORS ------------------------------------------------------------
+
+            public void IterateForEach(List<dynamic> list)
+            {
+                foreach(var listItem in list)
+                {
+                    Console.WriteLine(listItem);
+                }
+            }
+            public void IterateForEach(IEnumerable<dynamic> list)
+            {
+                foreach(var listItem in list)
+                {
+                    Console.WriteLine(listItem);
+                }
+            }
+
+        #endregion ITERATORS ------------------------------------------------------------
+
+
+
         #region MARKERS ------------------------------------------------------------
 
             // set color of console message
@@ -392,6 +413,7 @@ namespace BaseballScraper.Infrastructure
             }
 
         #endregion ENUMERATORS ------------------------------------------------------------
+
 
 
         #region UTILS ------------------------------------------------------------
