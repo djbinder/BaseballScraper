@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using HtmlAgilityPack;
 
@@ -7,65 +8,58 @@ namespace BaseballScraper.Infrastructure
     #pragma warning disable CS0219
     public class HtmlScraper
     {
-        public void ScrapeHtmlPage()
+        // STATUS
+        public void ScrapeHtmlPage(string urlToScrape, string pathOfTableBodyToScrape)
         {
             HtmlWeb htmlWeb = new HtmlWeb();
 
-            string urlToScrape = "https://www.cbssports.com/fantasy/football/trends/added/all";
             var thisUrlsHtml = htmlWeb.Load(urlToScrape);
-            Console.WriteLine(thisUrlsHtml);
+        }
 
-            var doc = thisUrlsHtml;
 
-            var dataPath = "//*[@id='layoutRailRight']/div[1]/table/tbody/tr[3]";
-            var dataSelector = "#layoutRailRight > div.column1 > table > tbody > tr:nth-child(3)";
+        public List<IEnumerable<HtmlNode>> GetAllTableRowsOnPage(HtmlDocument doc, string urlToScrape)
+        {
+            HtmlWeb htmlWeb = new HtmlWeb();
+            var thisUrlsHtml = htmlWeb.Load(urlToScrape);
 
-            var tableClass = "data compact";
-            var trClass1 = "row1";
-            var trClass2 = "row2";
-            var trAlign = "right";
-            var tdFirstCellAlign = "left";
-            var tdAllOtherCellsAlign = "center";
-            var playerNameLinkPath = "//*[@id='layoutRailRight']/div[1]/table/tbody/tr[3]/td[1]/a";
-            var tableTitlePath = "//*[@id='layoutRailRight']/div[1]/table/tbody/tr[1]";
-            var pathOfTableBodyToScrape = "//*[@id='layoutRailRight']/div[1]/table/tbody";
+            // ----- ROWS -----
+                // ALL TABLE ROW NODES IN TABLE
+                    // List<IEnumerable<HtmlNode>> allTableRowNodesInTable
+                    // System.Collections.Generic.List`1[System.Collections.Generic.IEnumerable`1[HtmlAgilityPack.HtmlNode]]
+                    // 'IterateForEach' item => HtmlAgilityPack.HtmlNode+<Descendants>d__125
+                var allTableRowNodesInTable = thisUrlsHtml.DocumentNode.Descendants("tr")
+                    .Select(y => y.Descendants())
+                    .ToList();
 
-            var thisTablesBody = thisUrlsHtml.DocumentNode.SelectNodes(pathOfTableBodyToScrape);
+                Console.WriteLine("----- ROWS -----");
+                Console.WriteLine($"Count: {allTableRowNodesInTable.Count()}");
+                Console.WriteLine($"Type: {allTableRowNodesInTable.GetType()}");
+                Console.WriteLine();
 
-            // int nodeCount = 0;
-            // foreach(var node in htmlNodes)
-            // {
-            //     nodeCount++;
-            // }
+            return allTableRowNodesInTable;
+        }
 
-            // Console.WriteLine(nodeCount);
+        public List<IEnumerable<HtmlNode>> GetAllTableCellsOnPage(HtmlDocument doc, string urlToScrape)
+        {
+            HtmlWeb htmlWeb = new HtmlWeb();
+            var thisUrlsHtml = htmlWeb.Load(urlToScrape);
 
-            var htmlDoc = new HtmlDocument();
-            htmlDoc.LoadHtml(urlToScrape);
+            // ----- CELLS -----
+                // ALL TABLE DATA NODES IN TABLE
+                    // Count = 405
+                    // List<IEnumerable<HtmlNode>> allTableDataNodesInTable
+                    // System.Collections.Generic.List`1[System.Collections.Generic.IEnumerable`1[HtmlAgilityPack.HtmlNode]]
+                    // 'IterateForEach' item => HtmlAgilityPack.HtmlNode+<Descendants>d__125
+                var allTableDataNodesInTable = thisUrlsHtml.DocumentNode.Descendants("td")
+                    .Select(y => y.Descendants())
+                    .ToList();
 
-            var value = htmlDoc.DocumentNode
-                .SelectNodes("//td/a")
-                .First()
-                .Attributes["value"].Value;
+                Console.WriteLine("----- TABLE DATA -----");
+                Console.WriteLine($"Count: {allTableDataNodesInTable.Count()}");
+                Console.WriteLine($"Type: {allTableDataNodesInTable.GetType()}");
+                Console.WriteLine();
 
-            Console.WriteLine(value);
-
-            var nodes = thisUrlsHtml.DocumentNode.Descendants("td")
-                .Select(y => y.Descendants()
-                .Where(x => x.Attributes["class"].Value == trClass1))
-                .ToList();
-
-            Console.WriteLine(nodes.Count());
-
-            int rowCount = 0;
-
-            foreach(var player in nodes)
-            {
-                rowCount++;
-
-            }
-
-            Console.WriteLine(rowCount);
+            return allTableDataNodesInTable;
         }
     }
 }

@@ -1,0 +1,27 @@
+@page
+@model BaseballScraper.Pages.PlayerBaseModel
+@{
+ViewData["Title"] = "Player Base Model";
+}
+
+
+<h1>Player Base Model Home</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Player Name</th>
+            <th>Position</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model.PlayerBases)
+        {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.MlbName)</td>
+            <td data-value="@Html.DisplayFor(modelItem => item.MlbPosition)">@Html.DisplayFor(modelItem =>
+                item.MlbPosition)</td>
+        </tr>
+        }
+    </tbody>
+</table>

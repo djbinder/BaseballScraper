@@ -6,24 +6,27 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BaseballScraper.Controllers
 {
-    /// <summary> Methods to read and get records from the Lahman database / csv files </summary>
-    ///
-    /// <list> RESOURCES
-    ///     <item> Lahman Csv File Descriptions
-    ///         <description> http://www.seanlahman.com/files/database/readme58.txt </description>
-    ///     </item>
-    /// </list>
-    /// <list> LAHMAN CSV FILES
-    ///     <item> Appearances </item>
-    ///     <item> Batting </item>
-    ///     <item> Parks </item>
-    ///     <item> People </item>
-    ///     <item> Pitching </item>
-    ///     <item> Teams </item>
-    /// </list>
-    /// <remarks> Files will need to be updated after each Mlb season </remarks>
-    /// <remarks> There are many more Lahman csv files; those are not included at this point; </remarks>
-    ///     TODO: should the other csv files be included?
+
+    #region OVERVIEW ------------------------------------------------------------
+
+        /// <summary> Methods to read and get records from the Lahman database / csv files </summary>
+        /// <remarks> Files will need to be updated after each Mlb season </remarks>
+        /// <remarks> There are many more Lahman csv files; those are not included at this point; </remarks>
+        /// <list> RESOURCES
+        ///     <item> Lahman Csv File Descriptions
+        ///         <description> http://www.seanlahman.com/files/database/readme58.txt </description>
+        ///     </item>
+        /// </list>
+        /// <list> LAHMAN CSV FILES
+        ///     <item> Appearances </item>
+        ///     <item> Batting </item>
+        ///     <item> Parks </item>
+        ///     <item> People </item>
+        ///     <item> Pitching </item>
+        ///     <item> Teams </item>
+        /// </list>
+
+    #endregion OVERVIEW ------------------------------------------------------------
 
 
 
@@ -61,6 +64,7 @@ namespace BaseballScraper.Controllers
                     // GetAllLahmanCsvFileRecords(LahmanTeamsFilePath);
             }
 
+
             // STATUS: this works
             /// <summary> Read a lahman csv file non-async </summary>
             /// <param name="filePath"> One of the six Lahman csv file paths </param>
@@ -96,6 +100,7 @@ namespace BaseballScraper.Controllers
                     // await GetAllLahmanCsvFileRecordsAsync(LahmanTeamsFilePath);
             }
 
+
             // STATUS: this works
             /// <summary> Read a lahman csv file async </summary>
             /// <param name="filePath"> One of the six Lahman csv file paths </param>
@@ -109,6 +114,7 @@ namespace BaseballScraper.Controllers
                 // await _cH.ReadCsvRecordsAsync(filePath, typeof(LahmanTeams), typeof(LahmanTeamsClassMap));
             }
 
+
             // TODO: This works but is it necessary? If so, create for the other five Lahman classes/ csv file types
             [Route("async/appearances")]
             // public async Task<IEnumerable<dynamic>> GetAllLahmanAppearancesRecords()
@@ -117,6 +123,7 @@ namespace BaseballScraper.Controllers
                 var records = await _cH.ReadCsvRecordsAsync(LahmanAppearancesFilePath, typeof(LahmanAppearances), typeof(LahmanAppearancesClassMap));
                 // return records;
             }
+
 
             // TODO: This doesn't work; You get an error that the file textReader closes before the CsvHandler function completes; Need to determine if this method is necessary;
             public async Task<IEnumerable<dynamic>> GetAllLahmanAppearancesRecordsEnumerable()
