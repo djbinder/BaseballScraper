@@ -15,7 +15,7 @@ namespace BaseballScraper.Controllers.YahooControllers
     #pragma warning disable CS0414, CS0219
     [Route("api/yahoo")]
     [ApiController]
-    public class YahooTeamBaseController
+    public class YahooTeamBaseController : Controller
     {
         private Helpers _h = new Helpers();
         private readonly TheGameIsTheGameConfiguration _theGameConfig;

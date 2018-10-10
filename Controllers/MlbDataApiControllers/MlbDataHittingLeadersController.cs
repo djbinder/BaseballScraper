@@ -1,7 +1,3 @@
-using System;
-using System.IO;
-using System.Runtime.Serialization.Json;
-using System.Text;
 using System.Threading.Tasks;
 using BaseballScraper.EndPoints;
 using BaseballScraper.Infrastructure;
@@ -12,10 +8,24 @@ using RestSharp;
 
 namespace BaseballScraper.Controllers.MlbDataApiControllers
 {
-    /// <summary> Provides two options on how to generate leading hitter model
-        /// <item> OPTION 1 - endpoint parameters defined within the method </item>
-        /// <item> OPTION 2 - endpoint parameters passed as parameters to method </item>
-    /// </summary>
+
+    #region OVERVIEW ------------------------------------------------------------
+
+        /// <summary> Provides two options on how to generate leading hitter model
+        ///     OPTION 1 - endpoint parameters passed as parameters to method
+        ///     OPTION 2 - endpoint parameters defined within the method
+        /// </summary>
+        /// <list> INDEX
+        ///     <item> Create Hitting Leaders Model (Option 1) <see cref="MlbDataHittingLeadersController.CreateHittingLeadersModel(int, string, string)" /> </item>
+        ///     <item> Create Hitting Leaders Model (Option 2) <see cref="MlbDataHittingLeadersController.CreateHittingLeadersModel()" /> </item>
+        ///     <item> Get Hitting Leaders Async (Option 1) <see cref="MlbDataHittingLeadersController.GetHittingLeadersAsync(int, string, string)" /> </item>
+        ///     <item> Get Hitting Leaders Async (Option 2) <see cref="MlbDataHittingLeadersController.GetHittingLeadersAsync()" /> </item>
+        ///     <item> View Hitting Leaders Async (Option 1) <see cref="MlbDataHittingLeadersController.ViewHittingLeadersAsync(int, string, string)" /> </item>
+        ///     <item> View Hitting Leaders Async (Option 2) <see cref="MlbDataHittingLeadersController.ViewHittingLeadersAsync()" /> </item>
+        /// </list>
+
+    #endregion OVERVIEW ------------------------------------------------------------
+
 
 
     [Route("api/mlb")]
@@ -35,34 +45,25 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
             // STEP 1
             /// <summary> OPTION 1: Get the current seasons hitting leaders; Endpoint parameters passed as parameters to method  </summary>
             /// <remarks> Parameters for 'HittingLeadersEndPoint' (i.e. numberToReturn, year, sortColumn) are passed as parameters to the method </remarks>
-            ///     <param name="numberToReturn"> The number of hitters to return in the results (e.g. 50 would show you the top 50 leaders) </param>
-            ///     <param name="year"> The year that you want to retrieve the leaders for (e.g. 2018 gets you leaders for 2018 mlb season) </param>
-            ///     <param name="sortColumn"> This is the stat you want to retrieve the leaders for (e.g., Hr, Rbi etc) </param>
-            ///         <see> View 'LeadingHitter' model for options that you can sort by for this method </see>
+            /// <param name="numberToReturn"> The number of hitters to return in the results (e.g. 50 would show you the top 50 leaders) </param>
+            /// <param name="year"> The year that you want to retrieve the leaders for (e.g. 2018 gets you leaders for 2018 mlb season) </param>
+            /// <param name="sortColumn"> This is the stat you want to retrieve the leaders for (e.g., Hr, Rbi etc) </param>
+            /// <see> View 'LeadingHitter' model for options that you can sort by for this method </see>
             /// <returns> A list of instantiated 'LeadingHitter' for 'numberToReturn' number of hitters </returns>
             public HittingLeaders CreateHittingLeadersModel (int numberToReturn, string year, string sortColumn)
             {
-                _h.StartMethod();
-
                 // retrieve the 'HittingLeaders' end point
                     // param 1: number of hitters to include in search
                     // param 2: season that you want to query
                     // param 3: stat that you would like to sort by
                 var newEndPoint = _endPoints.HittingLeadersEndPoint(5, "2018", "hr");
-                // Console.WriteLine(newEndPoint);
 
-                // Postman actions
-                    // type --> PostmanRequest
-                    var postmanRequest = _postman.CreatePostmanRequest(newEndPoint, "HittingLeaders");
-                    // type --> PostmanResponse
-                    var postmanResponse = _postman.GetPostmanResponse(postmanRequest);
-                    // type --> IRestResponse
-                    IRestResponse response = postmanResponse.Response;
-                    // type --> string
-                    // var responseToJson = response.Content;
+                var postmanRequest = _postman.CreatePostmanRequest(newEndPoint, "HittingLeaders");
+                var postmanResponse = _postman.GetPostmanResponse(postmanRequest);
+
+                IRestResponse response = postmanResponse.Response;
 
                 JObject leadersJObject = _a.CreateModelJObject(response);
-                // Extensions.PrintJObjectItems(leadersJObject);
 
                 JToken leadersJToken = _a.CreateModelJToken(leadersJObject, "HittingLeaders");
 
@@ -74,7 +75,6 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
                 LeadingHitter newLeadingHitterInstance = new LeadingHitter();
                 _a.CreateMultipleInstancesOfModelByLooping(leadersJToken, newLeadingHitterInstance, "LeadingHitter");
 
-                // _h.CompleteMethod();
                 return newHittingLeadersInstance;
             }
 
@@ -86,27 +86,18 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
             /// <returns> A list of instantiated 'LeadingHitter' for 'numberToReturn' number of hitters </returns>
             public HittingLeaders CreateHittingLeadersModel ()
             {
-                _h.StartMethod();
-
                 // retrieve the 'HittingLeaders' end point
                     // param 1: number of hitters to include in search
                     // param 2: season that you want to query
                     // param 3: stat that you would like to sort by
                 var newEndPoint = _endPoints.HittingLeadersEndPoint(5, "2018", "hr");
-                // Console.WriteLine(newEndPoint);
 
-                // Postman actions
-                    // type --> PostmanRequest
-                    var postmanRequest = _postman.CreatePostmanRequest(newEndPoint, "HittingLeaders");
-                    // type --> PostmanResponse
-                    var postmanResponse = _postman.GetPostmanResponse(postmanRequest);
-                    // type --> IRestResponse
-                    IRestResponse response = postmanResponse.Response;
-                    // type --> string
-                    // var responseToJson = response.Content;
+                var postmanRequest = _postman.CreatePostmanRequest(newEndPoint, "HittingLeaders");
+                var postmanResponse = _postman.GetPostmanResponse(postmanRequest);
+
+                IRestResponse response = postmanResponse.Response;
 
                 JObject leadersJObject = _a.CreateModelJObject(response);
-                // Extensions.PrintJObjectItems(leadersJObject);
 
                 JToken leadersJToken = _a.CreateModelJToken(leadersJObject, "HittingLeaders");
 
@@ -118,7 +109,6 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
                 LeadingHitter newLeadingHitterInstance = new LeadingHitter();
                 _a.CreateMultipleInstancesOfModelByLooping(leadersJToken, newLeadingHitterInstance, "LeadingHitter");
 
-                // _h.CompleteMethod();
                 return newHittingLeadersInstance;
             }
 
@@ -140,6 +130,7 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
                 await Task.Run(() => { CreateHittingLeadersModel(numberToReturn, year, sortColumn); });
             }
 
+
             // STATUS: this works
             // STEP 2
             /// <summary> OPTION 2: Gets a list of Mlb hitting leaders for a defined season; The variables are defined within the 'CreateHittingLeadersModel' function </summary>
@@ -160,20 +151,18 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
             /// <param name="numberToReturn"> The number of hitters to return in the results (e.g. 50 would show you the top 50 leaders) </param>
             /// <param name="year"> The year that you want to retrieve the leaders for (e.g. 2018 gets you leaders for 2018 mlb season) </param>
             /// <param name="sortColumn"> This is the stat you want to retrieve the leaders for (e.g., Hr, Rbi etc) </param>
-            ///         <see> View 'LeadingHitter' model for options that you can sort by for this method </see>
+            /// <see> View 'LeadingHitter' model for options that you can sort by for this method </see>
             /// <example> https://127.0.0.1:5001/api/mlb/hittingleaders </example>
             /// <returns> Hitting leaders for current season </returns>
             [HttpGet]
             [Route("hittingleaders/{year}")]
             public async Task<IActionResult> ViewHittingLeadersAsync(int numberToReturn, string year, string sortColumn)
             {
-                // OPTION 2 --> three parameters needed to call the method
                 await GetHittingLeadersAsync(5, "2018", "hr");
-
                 string currently = "retrieving hitting leaders";
-
                 return Content($"CURRENT TASK: {currently}");
             }
+
 
             // STATUS: this works
             // STEP 3
@@ -184,11 +173,8 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
             [Route("hittingleaders")]
             public async Task<IActionResult> ViewHittingLeadersAsync()
             {
-                // OPTION 1 --> no parameters are provided to the method; search criteria is defined within the Step 1
                 await GetHittingLeadersAsync();
-
                 string currently = "retrieving hitting leaders";
-
                 return Content($"CURRENT TASK: {currently}");
             }
 

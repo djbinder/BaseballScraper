@@ -29,8 +29,6 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
         [Route("playersearch/{playerLastName}")]
         public IActionResult ViewPlayerSearchModel(string playerLastName)
         {
-            _h.StartMethod();
-
             Console.WriteLine($"SEARCHING FOR PLAYER: {playerLastName}");
 
             IRestResponse response = GetPlayerSearchModelPostmanResponse(playerLastName);
@@ -48,21 +46,16 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
 
         public IRestResponse GetPlayerSearchModelPostmanResponse(string name)
         {
-            _h.StartMethod();
-
             // type ---> BaseballScraper.EndPoints.MlbDataApiEndPoints+MlbDataEndPoint
             var newEndPoint = _endPoints.PlayerSearchEndPoint(name);
 
-            // type --> PostmanRequest
             // PostmanRequest has Client(i.e., RestSharp.RestClient) and Request (i.e., RestSharp.RestRequest)
             var postmanRequest = _postman.CreatePostmanRequest(newEndPoint, "PlayerSearch");
 
-            // type --> PostmanResponse
             // PostmanResponse Class only has Response
             var postmanResponse = _postman.GetPostmanResponse(postmanRequest);
 
-            // type --> IRestResponse
-            var response = postmanResponse.Response;
+            IRestResponse response = postmanResponse.Response;
 
             return response;
         }
