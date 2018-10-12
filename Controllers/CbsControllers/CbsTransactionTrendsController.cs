@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using HtmlAgilityPack;
@@ -12,13 +12,13 @@ namespace BaseballScraper.Controllers.CbsControllers
 
         /// <summary> Retrieve Cbs player trends: Most added, most dropped, most viewed, most traded </summary>
         /// <list> INDEX
-        ///     <item> Get Most Added / Dropped All <see cref="CbsRosterTrendsController.GetListOfCbsMostAddedOrDropped(string)" /> </item>
-        ///     <item> Get Most Added / Dropped By Position <see cref="CbsRosterTrendsController.GetListOfCbsMostAddedOrDroppedByPosition(string, string)"/></item>
-        ///     <item> Print Most Added / Dropped <see cref="CbsRosterTrendsController.PrintCbsAddedOrDroppedListOfPlayers(List{CbsMostAddedOrDroppedPlayer})" /> </item>
-        ///     <item> Get Most Viewed All <see cref="CbsRosterTrendsController.GetListOfCbsMostViewedPlayers(string)" /></item>
-        ///     <item> Get Most Viewed <see cref="CbsRosterTrendsController.GetListOfCbsMostViewedPlayersByPosition(string, string)"/></item>
-        ///     <item> Get Most Traded All <see cref="CbsRosterTrendsController.GetListOfCbsMostTradedPlayers(string)" /> </item>
-        ///     <item> Get Most Traded By Position <see cref="CbsRosterTrendsController.GetListOfCbsMostTradedPlayersByPosition(string, string)"/> </item>
+        ///     <item> Get Most Added / Dropped All <see cref="CbsTransactionTrendsController.GetListOfCbsMostAddedOrDropped(string)" /> </item>
+        ///     <item> Get Most Added / Dropped By Position <see cref="CbsTransactionTrendsController.GetListOfCbsMostAddedOrDroppedByPosition(string, string)"/></item>
+        ///     <item> Print Most Added / Dropped <see cref="CbsTransactionTrendsController.PrintCbsAddedOrDroppedListOfPlayers(List{CbsMostAddedOrDroppedPlayer})" /> </item>
+        ///     <item> Get Most Viewed All <see cref="CbsTransactionTrendsController.GetListOfCbsMostViewedPlayers(string)" /></item>
+        ///     <item> Get Most Viewed <see cref="CbsTransactionTrendsController.GetListOfCbsMostViewedPlayersByPosition(string, string)"/></item>
+        ///     <item> Get Most Traded All <see cref="CbsTransactionTrendsController.GetListOfCbsMostTradedPlayers(string)" /> </item>
+        ///     <item> Get Most Traded By Position <see cref="CbsTransactionTrendsController.GetListOfCbsMostTradedPlayersByPosition(string, string)"/> </item>
         /// <list> RESOURCES
         ///     <item> Most Added: https://www.cbssports.com/fantasy/baseball/trends/added/all </item>
         ///     <item> Most Dropped: https://www.cbssports.com/fantasy/baseball/trends/dropped/all </item>
@@ -32,7 +32,7 @@ namespace BaseballScraper.Controllers.CbsControllers
 
     [Route("cbs")]
     #pragma warning disable CS0219
-    public class CbsRosterTrendsController : Controller
+    public class CbsTransactionTrendsController : Controller
     {
         private readonly Helpers _h = new Helpers();
 
@@ -84,25 +84,41 @@ namespace BaseballScraper.Controllers.CbsControllers
 
                 foreach(HtmlNode table in thisUrlsHtml.DocumentNode.SelectNodes("//table"))
                 {
+                    int rowCount = 1;
                     foreach(HtmlNode row in table.SelectNodes("tr"))
                     {
                         CbsMostAddedOrDroppedPlayer player = new CbsMostAddedOrDroppedPlayer();
 
-                        int cellNumber = 1;
-                        foreach(HtmlNode cell in row.SelectNodes("td"))
+                        // the first two rows are table headers, not player data; So you don't want to get them.
+                        if(rowCount > 2)
                         {
-                            if(cellNumber == 1)
-                                player.CbsRosterTrendPlayerName = cell.InnerText;
-                            if(cellNumber == 2)
-                                player.CbsRankPreviousWeek = cell.InnerText;
-                            if(cellNumber == 3)
-                                player.CbsRankCurrentWeek = cell.InnerText;
-                            if(cellNumber == 4)
-                                player.CbsDifferenceBetweenCurrentWeekAndPreviousWeek = cell.InnerText;
+                            int cellNumber = 1;
+                            foreach(HtmlNode cell in row.SelectNodes("td"))
+                            {
+                                // player name cell (ie cellNumber 1) comes back like -> Smallwood, Wendell RB PHI &nbsp;
+                                // this code cleans that text up to return firstName lastName (e.g. Wendell Smallwood)
+                                if(cellNumber == 1)
+                                {
+                                    string playerNameAndDetails = cell.InnerText;
 
-                            cellNumber++;
+                                    string[] playersLastName = playerNameAndDetails.Split(',');
+                                    string[] playersFirstName = playersLastName[1].Trim().Split(' ');
+                                    var playerName = $"{playersFirstName[0]} {playersLastName[0]}";
+
+                                    player.CbsRosterTrendPlayerName = playerName;
+                                }
+                                if(cellNumber == 2)
+                                    player.CbsRankPreviousWeek = cell.InnerText;
+                                if(cellNumber == 3)
+                                    player.CbsRankCurrentWeek = cell.InnerText;
+                                if(cellNumber == 4)
+                                    player.CbsDifferenceBetweenCurrentWeekAndPreviousWeek = cell.InnerText;
+
+                                cellNumber++;
+                            }
+                            players.Add(player);
                         }
-                        players.Add(player);
+                        rowCount++;
                     }
                 }
                 // PrintCbsAddedOrDroppedListOfPlayers(players);

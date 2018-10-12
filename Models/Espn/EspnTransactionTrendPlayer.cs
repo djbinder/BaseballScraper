@@ -1,4 +1,4 @@
-namespace BaseballScraper.Models
+namespace BaseballScraper.Models.Espn
 {
     public class EspnTransactionTrendPlayer
     {
