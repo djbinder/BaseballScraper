@@ -1,0 +1,84 @@
+@page
+@model BaseballScraper.Pages.TransactionTrends
+
+@{
+ViewData["Title"] = "Transaction Trends";
+}
+
+<hr style="border: 1px solid slateblue">
+<h3><b>@ViewData["Title"]</b></h3>
+<hr style="border: 1px solid slateblue">
+<br>
+
+<h4>Cbs Trends</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Player Name</th>
+            <th>Previous Week</th>
+            <th>Current Week</th>
+            <th>Change</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model.CbsPlayers)
+        {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.CbsRosterTrendPlayerName)</td>
+            <td>@Html.DisplayFor(modelItem => item.CbsRankPreviousWeek)</td>
+            <td>@Html.DisplayFor(modelItem => item.CbsRankCurrentWeek)</td>
+            <td>@Html.DisplayFor(modelItem => item.CbsDifferenceBetweenCurrentWeekAndPreviousWeek)</td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+<br>
+
+<h4>Espn Trends</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Player Name</th>
+            <th>Previous Week</th>
+            <th>Current Week</th>
+            <th>Change</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model.EspnPlayers)
+        {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.EspnTrendPlayerName)</td>
+            <td>@Html.DisplayFor(modelItem => item.EspnPlayerAddsLastWeek)</td>
+            <td>@Html.DisplayFor(modelItem => item.EspnPlayerAddsCurrentWeek)</td>
+            <td>@Html.DisplayFor(modelItem => item.EspnPlayerTrendSevenDayChange)</td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+<br>
+
+<h4>Yahoo Trends</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Player Name</th>
+            <th>Adds</th>
+            <th>Drops</th>
+            <th>Trades</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model.YahooPlayers)
+        {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.YahooPlayerName)</td>
+            <td>@Html.DisplayFor(modelItem => item.YahooPlayerAdds)</td>
+            <td>@Html.DisplayFor(modelItem => item.YahooPlayerDrops)</td>
+            <td>@Html.DisplayFor(modelItem => item.YahooPlayerTrades)</td>
+        </tr>
+        }
+    </tbody>
+</table>

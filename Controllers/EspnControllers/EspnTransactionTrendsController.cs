@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using BaseballScraper.Infrastructure;
 using BaseballScraper.Models;
+using BaseballScraper.Models.Espn;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Mvc;
 
@@ -59,6 +60,7 @@ namespace BaseballScraper.Controllers.EspnControllers
                 // Child nodes --> 28
                 foreach(HtmlNode tableBody in transactionTrendTable)
                 {
+                    int rowCount = 1;
                     // Child nodes --> 13
                     foreach(HtmlNode tableRow in tableBody.SelectNodes("tr"))
                     {
@@ -66,36 +68,41 @@ namespace BaseballScraper.Controllers.EspnControllers
 
                         int dataCellNumber = 1;
 
-                        // the rows in the table are odd; the first row includes BOTH the most added player AND the most dropped player; The most added player is cells 1- - 6; the most dropped player is cells 8 - 13;
-                        foreach(HtmlNode dataCell in tableRow.SelectNodes("td"))
+                        // the first two rows are table headers, not player data; So you don't want to get them.
+                        if(rowCount > 2)
                         {
-                            if(dataCellNumber == 1)
-                                eAddedPlayer.EspnTrendRankNumber = dataCell.InnerText;
-
-                            // player name comes back with team attached to it (split by the comma)
-                            // player names comes back with an asterisk if player is on the DL (split by the *)
-                            if(dataCellNumber == 2)
+                            // the rows in the table are odd; the first row includes BOTH the most added player AND the most dropped player; The most added player is cells 1- - 6; the most dropped player is cells 8 - 13;
+                            foreach(HtmlNode dataCell in tableRow.SelectNodes("td"))
                             {
-                                string playerNameAndDetails = dataCell.InnerText;
-                                string[] splitDetails = playerNameAndDetails.Split('*', ',');
-                                var playerName = splitDetails[0];
-                                eAddedPlayer.EspnTrendPlayerName = playerName;
-                            }
+                                if(dataCellNumber == 1)
+                                    eAddedPlayer.EspnTrendRankNumber = dataCell.InnerText;
 
-                            if(dataCellNumber == 3)
-                                eAddedPlayer.EspnPlayerPosition = dataCell.InnerText;
-                            if(dataCellNumber == 4)
-                                eAddedPlayer.EspnPlayerAddsLastWeek = dataCell.InnerText;
-                            if(dataCellNumber == 5)
-                                eAddedPlayer.EspnPlayerAddsCurrentWeek = dataCell.InnerText;
-                            if(dataCellNumber == 6)
-                                eAddedPlayer.EspnPlayerTrendSevenDayChange = dataCell.InnerText;
-                            dataCellNumber++;
+                                // player name comes back with team attached to it (split by the comma)
+                                // player names comes back with an asterisk if player is on the DL (split by the *)
+                                if(dataCellNumber == 2)
+                                {
+                                    string playerNameAndDetails = dataCell.InnerText;
+                                    string[] splitDetails = playerNameAndDetails.Split('*', ',');
+                                    var playerName = splitDetails[0];
+                                    eAddedPlayer.EspnTrendPlayerName = playerName;
+                                }
+
+                                if(dataCellNumber == 3)
+                                    eAddedPlayer.EspnPlayerPosition = dataCell.InnerText;
+                                if(dataCellNumber == 4)
+                                    eAddedPlayer.EspnPlayerAddsLastWeek = dataCell.InnerText;
+                                if(dataCellNumber == 5)
+                                    eAddedPlayer.EspnPlayerAddsCurrentWeek = dataCell.InnerText;
+                                if(dataCellNumber == 6)
+                                    eAddedPlayer.EspnPlayerTrendSevenDayChange = dataCell.InnerText;
+                                dataCellNumber++;
+                            }
+                            listOfAddedPlayers.Add(eAddedPlayer);
                         }
-                        listOfAddedPlayers.Add(eAddedPlayer);
+                        rowCount++;
                     }
                 }
-                PrintEspnTrendsList(listOfAddedPlayers);
+                // PrintEspnTrendsList(listOfAddedPlayers);
                 return listOfAddedPlayers;
             }
 

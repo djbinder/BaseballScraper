@@ -227,6 +227,7 @@ namespace BaseballScraper.Infrastructure
                     Console.WriteLine(listItem);
                 }
             }
+
             public void IterateForEach(IEnumerable<dynamic> list)
             {
                 foreach(var listItem in list)
@@ -394,6 +395,7 @@ namespace BaseballScraper.Infrastructure
                     Console.WriteLine(record);
                 }
             }
+
             public void EnumerateOverRecordsObject(IEnumerable<object> records)
             {
                 foreach(var record in records)
@@ -402,6 +404,7 @@ namespace BaseballScraper.Infrastructure
                     Dig(record);
                 }
             }
+
             public void EnumerateOverRecords(IEnumerable<object> records)
             {
                 var recordsEnumerator = records.GetEnumerator();

@@ -1,0 +1,512 @@
+@page
+@model BaseballScraper.Pages.Dashboard
+
+@{
+ViewData["Title"] = "Dashboard";
+}
+
+<hr style="border: 1px solid slateblue">
+<h3><b>@ViewData["Title"]</b></h3>
+<hr style="border: 1px solid slateblue">
+<br>
+
+<h4>Espn Trends</h4>
+<table class=" table ">
+    <tr>
+        <th>Type </th>
+        <th>Link </th>
+        <th>Path </th>
+        <th>Status </th>
+        <th>Notes </th>
+    </tr>
+    <tr>
+        <td>Transaction Trends </td>
+        <td><a href="https://127.0.0.1:5001/espn/trends ">Link </a></td>
+        <td> /espn/trends </td>
+        <td> Oct8: WORKS</td>
+        <td> --- </td>
+    </tr>
+</table>
+
+<br>
+<hr>
+<h4>Yahoo Trends</h4>
+<table class=" table ">
+    <tr>
+        <th>Type </th>
+        <th>Link </th>
+        <th>Path </th>
+        <th>Status </th>
+        <th>Notes </th>
+    </tr>
+    <tr>
+        <td>Transaction Trends </td>
+        <td><a href="https://127.0.0.1:5001/yahoo/trends ">Link </a></td>
+        <td> /yahoo/trends </td>
+        <td> Oct8: WORKS </td>
+        <td> --- </td>
+    </tr>
+</table>
+
+<br>
+<hr>
+<h4>Player Base</h4>
+<table class=" table ">
+    <tr>
+        <th>Type </th>
+        <th>Link </th>
+        <th>Path </th>
+        <th>Status </th>
+        <th>Notes </th>
+    </tr>
+    <tr>
+        <td>PlayerBase </td>
+        <td><a href="https://127.0.0.1:5001/playerbase ">Link </a></td>
+        <td> /playerbase </td>
+        <td> Oct6: WORKS</td>
+        <td> --- </td>
+    </tr>
+    <tr>
+        <td>PlayerBaseModel </td>
+        <td><a href="https://127.0.0.1:5001/playerbasemodel ">Link </a></td>
+        <td> /playerbasemodel </td>
+        <td> Oct6: WORKS</td>
+        <td> --- </td>
+    </tr>
+</table>
+
+<br>
+<hr>
+<h4>CBS Scraper</h4>
+<table class=" table ">
+    <tr>
+        <th>Type </th>
+        <th>Link </th>
+        <th>Path </th>
+        <th>Status </th>
+        <th>Notes </th>
+    </tr>
+    <tr>
+        <td>Most Added </td>
+        <td><a href="https://127.0.0.1:5001/cbs/trends ">Link </a></td>
+        <td> /cbs/trends </td>
+        <td> Oct6: WORKS </td>
+        <td> --- </td>
+    </tr>
+</table>
+
+<br>
+<hr>
+<h4>Player Form</h4>
+<table class=" table ">
+    <tr>
+        <th>Type </th>
+        <th>Link </th>
+        <th>Path </th>
+        <th>Status </th>
+        <th>Notes </th>
+    </tr>
+    <tr>
+        <td>View Form </td>
+        <td><a href="https://127.0.0.1:5001/playernote/create ">Link </a></td>
+        <td> /playernote/create </td>
+        <td> Oct6: WORKS </td>
+        <td></td>
+    </tr>
+    <tr>
+        <td> List </td>
+        <td><a href="https://127.0.0.1:5001/playernote/list "> Link </a></td>
+        <td> /playernote/list </td>
+        <td> Oct6: BROKEN </td>
+        <td> --- </td>
+    </tr>
+</table>
+
+<br>
+<hr>
+
+<h4>Python</h4>
+<table class="table">
+    <tr>
+        <th>Type </th>
+        <th>Link </th>
+        <th>Path </th>
+        <th>Status </th>
+        <th>Notes </th>
+    </tr>
+    <tr>
+        <td> Python </td>
+        <td><a href="https://127.0.0.1:5001/python">Link</a></td>
+        <td> /python </td>
+        <td> Oct6: BROKEN </td>
+        <td> --- </td>
+    </tr>
+    <tr>
+        <td> Python Start </td>
+        <td><a href="https://127.0.0.1:5001/python/start">Link</a></td>
+        <td> /python/start </td>
+        <td> Oct6: BROKEN </td>
+        <td> --- </td>
+    </tr>
+</table>
+
+<br>
+<hr>
+
+<h4>Lahman </h4>
+<table class="table">
+    <tr>
+        <th>Type </th>
+        <th>Link </th>
+        <th>Path </th>
+        <th>Status </th>
+        <th>Notes </th>
+    </tr>
+    <tr>
+        <td> Lahman Records- Non Async </td>
+        <td><a href="https://127.0.0.1:5001/lahman/records">Link</a></td>
+        <td> /lahman/records </td>
+        <td> Oct6: ??? </td>
+        <td> --- </td>
+    </tr>
+    <tr>
+        <td> Lahman Records - Async </td>
+        <td><a href="https://127.0.0.1:5001/lahman/async">Link</a></td>
+        <td> /lahman/async </td>
+        <td> Oct6: WORKS </td>
+        <td> --- </td>
+    </tr>
+    <tr>
+        <td> Lahman Appearances - Async </td>
+        <td><a href="https://127.0.0.1:5001/lahman/async/appearances">Link</a></td>
+        <td> /lahman/async/appearances </td>
+        <td> Oct6: WORKS </td>
+        <td> --- </td>
+    </tr>
+</table>
+
+<br>
+<hr>
+
+<h4>Data Tables </h4>
+<table class="table">
+    <tr>
+        <th>Type </th>
+        <th>Link </th>
+        <th>Path</th>
+        <th>Status</th>
+        <th>Notes </th>
+    </tr>
+    <tr>
+        <td> Data Table </td>
+        <td><a href="https://127.0.0.1:5001/datatable">Link</a></td>
+        <td> /datatable </td>
+        <td>Oct6: WORKS </td>
+        <td> --- </td>
+    </tr>
+</table>
+
+<br>
+<hr>
+
+<h4>Mapper </h4>
+<table class="table">
+    <tr>
+        <th>Type </th>
+        <th>Link </th>
+        <th>Path</th>
+        <th>Status</th>
+        <th>Notes </th>
+    </tr>
+    <tr>
+        <td> Mappers Home </td>
+        <td><a href="https://127.0.0.1:5001/mapper">Link</a></td>
+        <td> /mapper </td>
+        <td>Oct6: WORKS</td>
+        <td> Need to call excel methods within this method </td>
+    </tr>
+</table>
+
+<br>
+<hr>
+
+
+
+<h4>FanGraphs</h4>
+<table class="table ">
+    <tr>
+        <th>Type </th>
+        <th>Link </th>
+        <th>Path</th>
+        <th>Status</th>
+        <th>Notes </th>
+    </tr>
+    <tr>
+        <td> FanGraphs Home </td>
+        <td><a href="/fangraphs ">Link</a></td>
+        <td> /fangraphs </td>
+        <td>Oct6: WORKS</td>
+        <td> --- </td>
+    </tr>
+    <tr>
+        <td> SP Home </td>
+        <td><a href="https://127.0.0.1:5001/fangraphs/sp ">Link</a></td>
+        <td> /fangraphs/sp </td>
+        <td>Oct6: WORKS</td>
+        <td> --- </td>
+    </tr>
+    <tr>
+        <td> SP Scrape </td>
+        <td><a href="https://127.0.0.1:5001/fangraphs/sp/scrape ">Link</a></td>
+        <td> /fangraphs/sp/scrape </td>
+        <td>Oct6: WORKS</td>
+        <td> --- </td>
+    </tr>
+</table>
+
+<br>
+<hr>
+
+<h4>Yahoo Api</h4>
+<table class="table ">
+    <tr>
+        <th>Type </th>
+        <th>Link </th>
+        <th>Path</th>
+        <th>Status</th>
+        <th>Notes </th>
+    </tr>
+    <tr>
+        <td> Yahoo Auth Process </td>
+        <td><a href="/yahoo/authorize/accesstokenresponse ">Link</a></td>
+        <td> /yahoo/authorize/accesstokenresponse </td>
+        <td>Oct6: WORKS</td>
+        <td> --- </td>
+    </tr>
+    <tr>
+        <td> Manager </td>
+        <td><a href="https://127.0.0.1:5001/api/yahoo/manager/6 ">Link</a></td>
+        <td> /api/yahoo/manager/{managerId} </td>
+        <td>Oct6: WORKS</td>
+        <td> --- </td>
+    </tr>
+    <tr>
+        <td> Team Base </td>
+        <td><a href="https://127.0.0.1:5001/api/yahoo/teambase ">Link</a></td>
+        <td> /api/yahoo/teambase </td>
+        <td>Oct6: WORKS</td>
+        <td> --- </td>
+    </tr>
+    <tr>
+        <td> Team Standing </td>
+        <td><a href="https://127.0.0.1:5001/api/yahoo/teamstanding ">Link</a></td>
+        <td> /api/yahoo/teamstanding </td>
+        <td>Oct6: WORKS</td>
+        <td> --- </td>
+    </tr>
+    <tr>
+        <td> Team Stats : Option 1</td>
+        <td><a href="https://127.0.0.1:5001/api/yahoo/teamstats/season ">Link</a></td>
+        <td> /api/yahoo/teamstats/season </td>
+        <td>Oct6: WORKS</td>
+        <td> --- </td>
+    </tr>
+    <tr>
+        <td> Team Stats : Option 2</td>
+        <td><a href="https://127.0.0.1:5001/api/yahoo/teamstats ">Link</a></td>
+        <td> /api/yahoo/teamstats </td>
+        <td>Oct6: WORKS</td>
+        <td> --- </td>
+    </tr>
+    <tr>
+        <td> Team Stats : Option 3</td>
+        <td><a href="https://127.0.0.1:5001/api/yahoo/teamstats/season/1 ">Link</a></td>
+        <td> /api/yahoo/teamstats/season/{teamId} </td>
+        <td>Oct6: WORKS</td>
+        <td> --- </td>
+    </tr>
+    <tr>
+        <td>Scoreboard</td>
+        <td><a href="https://127.0.0.1:5001/api/yahoo/scoreboard ">Link</a></td>
+        <td> /yahoo/scoreboard</td>
+        <td>Oct6: WORKS</td>
+        <td> --- </td>
+    </tr>
+    <tr>
+        <td>Team Points : Option 1 </td>
+        <td><a href="https://127.0.0.1:5001/api/yahoo/teampoints/season ">Link</a></td>
+        <td> /yahoo/teampoints/season</td>
+        <td>Oct6: WORKS</td>
+        <td> --- </td>
+    </tr>
+    <tr>
+        <td>Team Points : Option 2 </td>
+        <td><a href="https://127.0.0.1:5001/api/yahoo/teampoints ">Link</a></td>
+        <td> /yahoo/teampoints</td>
+        <td>Oct6: WORKS</td>
+        <td> --- </td>
+    </tr>
+    <tr>
+        <td> Yahoo Home </td>
+        <td><a href="https://127.0.0.1:5001/api/yahoo ">Link</a> </td>
+        <td>/api/yahoo</td>
+        <td>Oct6: WORKS</td>
+        <td> --- </td>
+    </tr>
+</table>
+
+<br>
+<hr>
+
+
+
+<h4>Mlb Data Api</h4>
+<table class="table ">
+    <tr>
+        <th>Type </th>
+        <th>Link </th>
+        <th>Path</th>
+        <th>Status</th>
+        <th>Notes </th>
+    </tr>
+
+    <tr>
+        <td>Player Info</td>
+        <td><a href="https://127.0.0.1:5001/api/mlb/playerinfo/493316 ">Link</a></td>
+        <td> /api/mlb/playerinfo/{playerId}</td>
+        <td>Oct6: WORKS</td>
+        <td> --- </td>
+    </tr>
+    <tr>
+        <td>Player Search </td>
+        <td><a href="https://127.0.0.1:5001/api/mlb/playersearch/trout "> Link</a></td>
+        <td>/api/mlb/playersearch/{playerLastName}</td>
+        <td>Oct6: WORKS</td>
+        <td> --- </td>
+    </tr>
+    <tr>
+        <td>Projected Pitching </td>
+        <td><a href="https://127.0.0.1:5001/api/mlb/projectedpitchingstats/592789 "> Link</a></td>
+        <td>/api/mlb/projectedpitchingstats/{playerId}</td>
+        <td>Oct6: WORKS</td>
+        <td> --- </td>
+    </tr>
+    <tr>
+        <td>Projected Hitting </td>
+        <td><a href="https://127.0.0.1:5001/api/mlb/projectedhittingstats/493316 "> Link</a></td>
+        <td>/api/mlb/projectedhittingstats/{playerId}</td>
+        <td>Oct6: WORKS</td>
+        <td> --- </td>
+    </tr>
+    <tr>
+        <td>Pitching Leaders : Option 1 </td>
+        <td><a href="https://127.0.0.1:5001/api/mlb/pitchingleaders "> Link</a></td>
+        <td>/api/mlb/pitchingleaders</td>
+        <td>Oct6: WORKS</td>
+        <td> --- </td>
+    </tr>
+    <tr>
+        <td>Pitching Leaders : Option 2 </td>
+        <td><a href="https://127.0.0.1:5001/api/mlb/pitchingleaders/2018 "> Link</a></td>
+        <td>/api/mlb/pitchingleaders/{year}</td>
+        <td>Oct6: WORKS</td>
+        <td> --- </td>
+    </tr>
+    <tr>
+        <td>Hitting Leaders : Option 1</td>
+        <td><a href="https://127.0.0.1:5001/api/mlb/hittingleaders "> Link</a></td>
+        <td>/api/mlb/hittingleaders</td>
+        <td>Oct6: WORKS</td>
+        <td> --- </td>
+    </tr>
+    <tr>
+        <td>Hitting Leaders : Option 2</td>
+        <td><a href="https://127.0.0.1:5001/api/mlb/hittingleaders/2018 "> Link</a></td>
+        <td>/api/mlb/hittingleaders/{year}</td>
+        <td>Oct6: WORKS</td>
+        <td> --- </td>
+    </tr>
+</table>
+
+<br>
+<hr>
+
+<h4>Twitter</h4>
+<table class="table ">
+    <tr>
+        <th>Type</th>
+        <th>Button</th>
+        <th>Path</th>
+        <th>Status</th>
+        <th>Notes </th>
+    </tr>
+    <tr>
+        <td>Twitter String Search Option 1 </td>
+        <td><a href="https://127.0.0.1:5001/api/twitter/playersearch "><button> Option 1</button></a></td>
+        <td> /api/twitter/playersearch </td>
+        <td>Oct6: WORKS</td>
+        <td> Search string is defined within the method </td>
+    </tr>
+    <tr>
+        <td>Twitter String Search Option 2 </td>
+        <td><a href="https://127.0.0.1:5001/api/twitter "><button> Option 2</button></a></td>
+        <td> /api/twitter </td>
+        <td>Oct6: WORKS</td>
+        <td> Search string is passed as a parameter to the method </td>
+    </tr>
+    <tr>
+        <td>Twitter String Search Option 3 </td>
+        <td><a href="https://127.0.0.1:5001/api/twitter/playersearch/anthony+rizzo "><button> Option 3</button></a></td>
+        <td> /api/twitter/playersearch/{searchString} </td>
+        <td>Oct6: WORKS</td>
+        <td> Search string is passed as part of the route </td>
+    </tr>
+</table>
+
+<br>
+<hr>
+
+<h4>Airtable Tests</h4>
+<table class="table ">
+    <tr>
+        <th>Type</th>
+        <th>Button</th>
+        <th>Path</th>
+        <th>Status</th>
+        <th>Notes </th>
+    </tr>
+    <tr>
+        <td>Airtable Managers</td>
+        <td><a href="/api/airtable/managers "><button>Click</button></a></td>
+        <td>/api/airtable/managers</td>
+        <td>Oct6: WORKS</td>
+        <td> --- </td>
+    </tr>
+</table>
+
+<br>
+<hr>
+
+<h4>R </h4>
+<table class="table">
+    <tr>
+        <th>Type </th>
+        <th>Link </th>
+        <th>Path</th>
+        <th>Status</th>
+        <th>Notes </th>
+    </tr>
+    <tr>
+        <td> R Pitchers </td>
+        <td><a href="https://127.0.0.1:5001/r/pitchers">Link</a></td>
+        <td> /r/pitchers </td>
+        <td> Oct6: ???</td>
+        <td> --- </td>
+    </tr>
+</table>
+
+<hr>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js " integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin=" anonymous "></script>
+<script src="site.js "></script>
