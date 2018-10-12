@@ -34,13 +34,13 @@ namespace BaseballScraper.Controllers
             _twitterConfiguration = twitterConfig.Value;
         }
 
-        [HttpGet]
-        [Route("")]
-        public IActionResult Index()
-        {
-            _h.StartMethod();
-            return View();
-        }
+        // [HttpGet]
+        // [Route("")]
+        // public IActionResult Index()
+        // {
+        //     _h.StartMethod();
+        //     return View();
+        // }
 
 
 

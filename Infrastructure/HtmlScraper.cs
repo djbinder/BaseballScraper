@@ -39,6 +39,7 @@ namespace BaseballScraper.Infrastructure
             return allTableRowNodesInTable;
         }
 
+
         public List<IEnumerable<HtmlNode>> GetAllTableCellsOnPage(HtmlDocument doc, string urlToScrape)
         {
             HtmlWeb htmlWeb = new HtmlWeb();
@@ -61,5 +62,7 @@ namespace BaseballScraper.Infrastructure
 
             return allTableDataNodesInTable;
         }
+
+
     }
 }

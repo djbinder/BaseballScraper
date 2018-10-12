@@ -7,24 +7,23 @@ namespace BaseballScraper.Infrastructure
 {
     // TODO: everything needs to be converted to async
     /// <summary> Includes various R functions / actions </summary>
-    ///
     /// <list> RESOURCES
-        /// <item> https://billpetti.github.io/baseballr/data-acquisition-functions/ </item>
-        /// <item> https://pitchrx.cpsievert.me </item>
-        /// <item> Book: Analyzing Baseball Data With R </item>
-        /// <item> http://lahman.r-forge.r-project.org/doc/ </item>
+    ///     <item> https://billpetti.github.io/baseballr/data-acquisition-functions/ </item>
+    ///     <item> https://pitchrx.cpsievert.me </item>
+    ///     <item> Book: Analyzing Baseball Data With R </item>
+    ///     <item> http://lahman.r-forge.r-project.org/doc/ </item>
     /// </list>
     ///
     /// <list> PROCESS TO START: three steps needed to get csharp and R to work together; enter these in terminal in succession before attempting to run any of the below
-        /// <item> (1) export LD_LIBRARY_PATH=/Library/Frameworks/R.framework/Libraries/:$LD_LIBRARY_PATH </item>
-        /// <item> (2) export PATH=/Library/Frameworks/R.framework/Libraries/:$PATH </item>
-        /// <item> (3) export R_HOME=/Library/Frameworks/R.framework/Resources </item>
+    ///     <item> (1) export LD_LIBRARY_PATH=/Library/Frameworks/R.framework/Libraries/:$LD_LIBRARY_PATH </item>
+    ///     <item> (2) export PATH=/Library/Frameworks/R.framework/Libraries/:$PATH </item>
+    ///     <item> (3) export R_HOME=/Library/Frameworks/R.framework/Resources </item>
     /// </list>
     ///
     /// <list> REQUIRED R PACKAGES
-        /// <item> install.packages("pitchRx") </item>
-        /// <item> install.packages("baseballr") </item>
-        /// <item> install.packages("Lahman") </item>
+    ///     <item> install.packages("pitchRx") </item>
+    ///     <item> install.packages("baseballr") </item>
+    ///     <item> install.packages("Lahman") </item>
     /// </list>
 
 
@@ -92,6 +91,7 @@ namespace BaseballScraper.Infrastructure
                 engine.Evaluate("eligibleHitters <- subset(batting, yearID >=1900 & PA > 450)");
             }
 
+
             // STATUS: this works
             /// <summary> Get Mlb player's Player Id, First Name, Last Name</summary>
             /// <reference> http://lahman.r-forge.r-project.org/doc/ </reference>
@@ -113,11 +113,6 @@ namespace BaseballScraper.Infrastructure
             }
 
 
-
-
-
-
-
             public void GetLahmanTeamInfo(string lastName)
             {
                 REngine engine = CreateNewREngine();
@@ -130,11 +125,7 @@ namespace BaseballScraper.Infrastructure
                 // engine.Evaluate("playerInfo(lastNameVector)");
             }
 
-
-
         #endregion LAHMAN ------------------------------------------------------------
-
-
 
 
 
@@ -148,11 +139,11 @@ namespace BaseballScraper.Infrastructure
             /// <param name="startDate"> First date of the range you are looking for (e.g, "2016-04-06") </param>
             /// <param name="endDate"> Last date of the range you are looking for (e.g, "2016-06-21") </param>
             /// <returns>
-                /// <list>
-                    /// <item> AT BAT: pitcher (id), batter (id), num (pitch number?), b, s, o, start_tfs, start_tfs_zulu, stand, b_height, p_throws, atbat_des, home_team_runs, away_team_runs, url (for XML), inning_side(top OR bottom), inning, next_, event2, batter_name, pitcher_name, gameday_link, date </item>
-                    /// <item> ACTION: b, s, o, des, event, tfs_zulu, player (id), pitch (number), event_num, home_team_runs, away_team_runs, url (for XML), inning_side (top OR bottom), inning, next_, num, score, event2, gameday_link </item>
-                    /// <item> PITCH: des, id, type (B, S, X), tfs, tfs_zulu, x, y, event_num, sv_id, play_guid, start_speed, end_speed, sz_top, sz_top, pfx_x, pfx_z, px, pz, x0, y0, z0, vx0, vy0, vz0, ax, ay, az, break_y </item>
-                /// </list>
+            ///     <list>
+            ///         <item> AT BAT: pitcher (id), batter (id), num (pitch number?), b, s, o, start_tfs, start_tfs_zulu, stand, b_height, p_throws, atbat_des, home_team_runs, away_team_runs, url (for XML), inning_side(top OR bottom), inning, next_, event2, batter_name, pitcher_name, gameday_link, date </item>
+            ///         <item> ACTION: b, s, o, des, event, tfs_zulu, player (id), pitch (number), event_num, home_team_runs, away_team_runs, url (for XML), inning_side (top OR bottom), inning, next_, num, score, event2, gameday_link </item>
+            ///         <item> PITCH: des, id, type (B, S, X), tfs, tfs_zulu, x, y, event_num, sv_id, play_guid, start_speed, end_speed, sz_top, sz_top, pfx_x, pfx_z, px, pz, x0, y0, z0, vx0, vy0, vz0, ax, ay, az, break_y </item>
+            ///     </list>
             /// </returns>
             /// <reference> https://pitchrx.cpsievert.me </reference>
             public void GetPitchRxData(string startDate, string endDate)
@@ -234,6 +225,7 @@ namespace BaseballScraper.Infrastructure
                 engine.Evaluate("fgHittersLeaderBoard <- fg_bat_leaders(x = yearVector, y = yearVector, league = 'all', qual = qualifyingVector, ind = 0)");
             }
 
+
             // STATUS: this works
             /// <summary> OPTION 1B --> Retrieve FanGraphs hitter leader board for:  SINGLE SEASON | ALL MLB | players with PLATE APPEARANCES greater than defined # </summary>
             /// <example> _r.GetFanGraphsHitterLeaderboard(2018, 200); </example>
@@ -253,6 +245,7 @@ namespace BaseballScraper.Infrastructure
 
                 engine.Evaluate("fgHittersLeaderBoard <- fg_bat_leaders(x = yearVector, y = yearVector, league = 'all', qual = minPlateAppearancesVector, ind = 0)");
             }
+
 
             // STATUS: this works
             /// <summary> OPTION 2 --> Retrieve FanGraphs hitter leader board for:  SINGLE SEASON | ALL or AL or NL | QUALIFIED or UNQUALIFIED </summary>
@@ -275,6 +268,7 @@ namespace BaseballScraper.Infrastructure
 
                 engine.Evaluate("fgHittersLeaderBoard <- fg_bat_leaders(x = yearVector, y = yearVector, league = leagueVector, qual = qualifyingVector, ind = 0)");
             }
+
 
             // STATUS: this works
             /// <summary> OPTION 3A --> Retrieve FanGraphs hitter leader board for:  RANGE OF SEASON | ALL or AL or NL | QUALIFIED or UNQUALIFIED | display in AGGREGATE or by SEASON </summary>
@@ -315,6 +309,7 @@ namespace BaseballScraper.Infrastructure
 
                 engine.Evaluate("fgHittersLeaderBoard <- fg_bat_leaders(x = startYearVector, y = endYearVector, league = leagueVector, qual = qualifyingVector, ind = statDisplayType)");
             }
+
 
             // STATUS: this works
             /// <summary> OPTION 3B --> Retrieve FanGraphs hitter leader board for:  RANGE OF SEASON | ALL or AL or NL | players with PLATE APPEARANCES greater than defined # | display in AGGREGATE or by SEASON </summary>
@@ -372,6 +367,7 @@ namespace BaseballScraper.Infrastructure
                 engine.Evaluate("fgGuts <- fg_guts()");
             }
 
+
             // STATUS: this works
             /// <summary> Retrieves park factors for mlb stadiums for a given year </summary>
             /// <reference> https://www.fangraphs.com/guts.aspx?type=pf&teamid=0&season=2017 </reference>
@@ -385,6 +381,7 @@ namespace BaseballScraper.Infrastructure
 
                 engine.Evaluate("fgParkFactors <- fg_park(year)");
             }
+
 
             // STATUS: this works
             /// <summary> Retrieves park factors for mlb stadiums for a given year and splits it between righties and lefties </summary>
@@ -424,6 +421,7 @@ namespace BaseballScraper.Infrastructure
                 engine.Evaluate("player <- playerid_lookup(lastName)");
             }
 
+
             // STATUS: this works
             /// <summary> Get mlb standings on a specific date for a particular league (AL or NL) and division </summary>
             /// <remarks> Differs from 'GetMlbStandingsFromDateForward' in that the 'from' parameter is FALSE </remarks>
@@ -453,6 +451,7 @@ namespace BaseballScraper.Infrastructure
                 engine.Evaluate("standings <- standings_on_date_bref(date = standingsDate, division = leagueAndDivision, from = FALSE)");
             }
 
+
             // STATUS: this works
             /// <summary> Get mlb standings from a specific date moving forward for a particular league (AL or NL) and division </summary>
             /// <remarks> Differs from 'GetMlbStandingsOnDate' in that the 'from' parameter is TRUE </remarks>
@@ -479,6 +478,7 @@ namespace BaseballScraper.Infrastructure
 
                 engine.Evaluate("standings <- standings_on_date_bref(date = standingsDate, division = leagueAndDivision, from = TRUE)");
             }
+
 
             // STATUS: this works
             /// <summary> The edge_scrape() function allows the user to scrape PITCHf/x data from the GameDay application using Carson Sievert’s pitchRx package and to calculate metrics associated with Edge%. </summary>
@@ -534,6 +534,7 @@ namespace BaseballScraper.Infrastructure
 
 
         #region HELPERS ------------------------------------------------------------
+
             public CharacterVector CreateCharVect(REngine engine, String str)
             {
                 CharacterVector cV = engine.CreateCharacterVector(new [] { str });
@@ -544,6 +545,7 @@ namespace BaseballScraper.Infrastructure
                 NumericVector nV = engine.CreateNumericVector(new double [] { num });
                 return nV;
             }
+
         #endregion HELPERS ------------------------------------------------------------
 
 

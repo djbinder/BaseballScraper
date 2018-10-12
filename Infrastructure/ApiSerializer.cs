@@ -19,12 +19,14 @@ namespace BaseballScraper.Infrastructure
         public static object FromJson(string json) => JsonConvert.DeserializeObject<object>(json, Converter.Settings);
     }
 
+
     // code generated using https://app.quicktype.io/
     // the json that was inputted to app.quicktype.io was generated using Postman
     public static class Serialize
     {
         public static string ToJson(this object self) => JsonConvert.SerializeObject(self, Converter.Settings);
     }
+
 
     // code generated using https://app.quicktype.io/
     // the json that was inputted to app.quicktype.io was generated using Postman
@@ -40,10 +42,13 @@ namespace BaseballScraper.Infrastructure
         };
     }
 
+
     public class ApiInfrastructure
     {
         private Helpers _h                            = new Helpers();
+
         private static MlbDataApiEndPoints _endPoints = new MlbDataApiEndPoints();
+
 
         /// <summary> Serialize a given object to a JSON stream (i.e., take a given object and convert it to JSON ) </summary>
         /// <param name="obj"> An object; typically a JObject (not certain how it deals with objects besides JObjects) </param>
@@ -73,14 +78,15 @@ namespace BaseballScraper.Infrastructure
             return Encoding.UTF8.GetString(json, 0, json.Length);
         }
 
+
         public JObject CreateModelJObject(IRestResponse response)
         {
             var     responseToJson    = response.Content;
             JObject responseToJObject = JObject.Parse(responseToJson);
             // Extensions.PrintJObjectItems(responseToJObject);
-
             return responseToJObject;
         }
+
 
         /// <summary> Returns a JToken that lists keys/values for player items in PlayerSearch api </summary>
         /// <returns> A JToken</returns>
@@ -95,6 +101,7 @@ namespace BaseballScraper.Infrastructure
 
             return modelToken;
         }
+
 
         public Object CreateInstanceOfModel (JToken token, Object obj, string modelType)
         {
@@ -114,6 +121,7 @@ namespace BaseballScraper.Infrastructure
 
             return obj;
         }
+
 
         public Object CreateMultipleInstancesOfModelByLooping(JToken token, Object obj, string modelType)
         {
@@ -139,6 +147,7 @@ namespace BaseballScraper.Infrastructure
             return obj;
         }
 
+
         internal Object SetTypeToReadObjectAs (Object obj, MemoryStream memoryStream, DataContractJsonSerializer serializer, string modelType)
         {
             switch(modelType)
@@ -162,6 +171,7 @@ namespace BaseballScraper.Infrastructure
             }
             throw new System.Exception("no model type found");
         }
+
 
         internal JToken CreateObjectJTokenFromSwitch(JObject obj, string tokenName)
         {
