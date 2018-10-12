@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using BaseballScraper.Infrastructure;
 using BaseballScraper.Models;
+using BaseballScraper.Models.Player;
 using Ganss.Excel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;

@@ -17,7 +17,7 @@ using Dapper;
 namespace BaseballScraper.Controllers
 {
     // #pragma warning disable CS0414, CS0219
-    [Route("playernote")]
+    // [Route("playernote")]
     public class PlayerNoteController: Controller
     {
         private Helpers _h = new Helpers();
@@ -31,7 +31,7 @@ namespace BaseballScraper.Controllers
         }
 
         [HttpGet]
-        [Route("")]
+        [Route("main")]
         public IActionResult PlayerNoteMain()
         {
             string content = "player note main content";

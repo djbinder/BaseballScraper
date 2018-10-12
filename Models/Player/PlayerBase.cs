@@ -6,7 +6,7 @@ using System;
 using CsvHelper.Configuration;
 using Ganss.Excel;
 
-namespace BaseballScraper.Models
+namespace BaseballScraper.Models.Player
 {
     public class PlayerBase
     {

@@ -151,7 +151,7 @@ namespace BaseballScraper.Controllers.YahooControllers
                         }
                     }
                 }
-                PrintYahooTrendPlayers(listOfPlayers);
+                // PrintYahooTrendPlayers(listOfPlayers);
                 return listOfPlayers;
             }
 
@@ -167,17 +167,16 @@ namespace BaseballScraper.Controllers.YahooControllers
             /// <returns> A list of YahooTransactionTrendsPlayer --> Name, Drops, Adds, Trades, Total </returns>
             public List<YahooTransactionTrendsPlayer> GetTrendsForTodayAllPositions()
             {
-                _h.StartMethod();
                 HtmlWeb htmlWeb = new HtmlWeb();
 
                 var urlToScrape = SetSearchDateAsToday();
-                Console.WriteLine($"Url To Scrape: {urlToScrape}");
+                // Console.WriteLine($"Url To Scrape: {urlToScrape}");
 
                 HtmlDocument thisUrlsHtml = htmlWeb.Load(urlToScrape);
 
                 List<YahooTransactionTrendsPlayer> listOfPlayers = GenerateList(thisUrlsHtml);
 
-                PrintYahooTrendPlayers(listOfPlayers);
+                // PrintYahooTrendPlayers(listOfPlayers);
                 return listOfPlayers;
             }
 
@@ -199,7 +198,7 @@ namespace BaseballScraper.Controllers.YahooControllers
 
                 List<YahooTransactionTrendsPlayer> listOfPlayers = GenerateList(thisUrlsHtml);
 
-                PrintYahooTrendPlayers(listOfPlayers);
+                // PrintYahooTrendPlayers(listOfPlayers);
                 return listOfPlayers;
             }
 

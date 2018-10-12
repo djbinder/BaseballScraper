@@ -59,6 +59,7 @@ namespace BaseballScraper.Infrastructure
                 }
             }
 
+
             // STATUS: this works
             /// <summary> Reads a csv file, async </summary>
             /// <remarks> This does not enumerate over the records </remarks>
@@ -100,6 +101,7 @@ namespace BaseballScraper.Infrastructure
                 return records;
             }
 
+
             // STATUS: this works
             /// <summary> Register the map for the class within a csv you are trying read </summary>
             /// <remarks> This is required any type you want to use a model map </remarks>
@@ -123,6 +125,7 @@ namespace BaseballScraper.Infrastructure
                 return recordJObject;
             }
 
+
             // STATUS: this works
             public JObject CreateRecordJObject(Object record)
             {
@@ -130,6 +133,7 @@ namespace BaseballScraper.Infrastructure
                 JObject recordJObject = JObject.Parse(recordString);
                 return recordJObject;
             }
+
 
             // STATUS: this works
             public void FilterRecordsByKey(JObject obj, string filterCriteria)
@@ -159,6 +163,7 @@ namespace BaseballScraper.Infrastructure
                 Console.WriteLine($"field: {fieldName}");
                 return fieldName;
             }
+
 
             // STATUS: this works
             public int GetFieldPosition(CsvReader csvReader, int indexNumber)

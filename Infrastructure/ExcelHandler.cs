@@ -98,6 +98,7 @@ namespace BaseballScraper.Infrastructure
                 stream.Close();
             }
 
+
             // STATUS: this works
             /// <summary> OPTION 1 --> Create and save a new Excel (xlsx) file </summary>
             /// <remarks> File Type: XLSX </remarks>
@@ -117,6 +118,7 @@ namespace BaseballScraper.Infrastructure
                     newWorkbook.Write(fileStream);
                 }
             }
+
 
             // TODO: the class/model type (FanGraphsPitcher) is defined within the method. This needs to be passed as an argument
             /// <summary> OPTION 2 --> Create and save a new Excel (xlsx) file </summary>
@@ -138,6 +140,7 @@ namespace BaseballScraper.Infrastructure
 
                 mapper.Save(thisFilesName, new [] { newFanGraphsPitcher }, newSheetName );
             }
+
 
             // STATUS: this works
             /// <summary> This will format file names entered as string correctly to ensure the file name can be used by other methods; It will check if a the string entered as an argument to a method includes the '.xlsx' appended to the end of it; If it doesn't, it will add it; If it does, it will do nothing </summary>
@@ -194,6 +197,7 @@ namespace BaseballScraper.Infrastructure
                 updatedWorkbook.Write(fileStream);
                 fileStream.Close();
             }
+
 
             // STATUS: this does NOT work
             // TODO: make this work?
@@ -279,6 +283,7 @@ namespace BaseballScraper.Infrastructure
                 mapper.Save(targetWorkbook, new[] { newFanGraphsHitter }, sheetName, overwrite: false);
             }
 
+
             // STATUS: this works
             /// <summary> Retrieve all records of a given class / model from an existing tab / sheet within an existing workbook </summary>
             /// <remarks> Class / model type is defined within the method
@@ -306,6 +311,7 @@ namespace BaseballScraper.Infrastructure
                 // }
             }
 
+
             // STATUS: this works
             /// <summary> Add retrieved records / rows to a list </summary>
             public IList<T> AddRecordsToList<T>(IList<T> objectList, T t)
@@ -314,6 +320,7 @@ namespace BaseballScraper.Infrastructure
                 Console.WriteLine($"Object #{objectList.Count()} has been added to list");
                 return objectList;
             }
+
 
             // STATUS: this works
             /// <summary> Prints records to a list </summary>
@@ -343,6 +350,7 @@ namespace BaseballScraper.Infrastructure
                 int columnNumber = ColumnHeaderLetterToNumber(columnLetter);
                 document.ColumnWidth(columnNumber, columnWidth);
             }
+
 
             // STATUS: this works
             /// <summary> OPTION 2 --> Set the width of a given column </summary>
@@ -375,6 +383,7 @@ namespace BaseballScraper.Infrastructure
                 document[rowNumber, columnNumber].Value = cellValue;
             }
 
+
             // STATUS: this works
             /// <summary> OPTION 2 --> Set the contents of a cell </summary>
             /// <remarks> In option 2, you provide a number to represent the target column </remarks>
@@ -387,6 +396,7 @@ namespace BaseballScraper.Infrastructure
                 document[rowNumber, columnNumber].Value = cellValue;
             }
 
+
             // STATUS: // TODO: neither option accounts for bold, italic etc. that can be added as third parameter to new Font()
             /// <summary> OPTION 1 --> Set font of a target cell </summary>
             public void SetFont(ExcelDocument document, int rowNumber, string columnLetter,  string fontName, int fontSize)
@@ -395,12 +405,14 @@ namespace BaseballScraper.Infrastructure
                 document[rowNumber, columnNumber].Font = new Font(fontName, fontSize);
             }
 
+
             // STATUS: // TODO: neither option accounts for bold, italic etc. that can be added as third parameter to new Font()
             /// <summary> OPTION 2 --> Set font of a target cell </summary>
             public void SetFont(ExcelDocument document, int rowNumber, int columnNumber, string fontName, int fontSize)
             {
                 document[rowNumber, columnNumber].Font = new Font(fontName, fontSize);
             }
+
 
             // STATUS: this works
             /// <summary> Format a date cell </summary>
@@ -485,6 +497,7 @@ namespace BaseballScraper.Infrastructure
 
 
         #region TESTING HELP ------------------------------------------------------------
+
             public FanGraphsHitter CreateHitterForTesting(string playerName)
             {
                 FanGraphsHitter newFanGraphsHitter = new FanGraphsHitter
@@ -514,6 +527,7 @@ namespace BaseballScraper.Infrastructure
 
                 return newFanGraphsHitter;
             }
+
         #endregion TESTING HELP ------------------------------------------------------------
 
     }

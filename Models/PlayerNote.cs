@@ -7,7 +7,7 @@ namespace BaseballScraper.Models
         [Key]
         public int idPlayerNotes { get; set; }
 
-        // [Display(Name="Player Name")]
+        [Display(Name="Player Name")]
         public string PlayerName { get; set; }
 
 
@@ -38,10 +38,10 @@ namespace BaseballScraper.Models
 
         // pre-season, in-season
 
-        [Display(Name="Cal Year")]
+        [Display(Name="Calendar Year")]
         public int? CalendarYear { get; set; }
 
-        [Display(Name="Mlb Season")]
+        [Display(Name="Mlb Season Year")]
         public int? Season { get; set; }
 
 
