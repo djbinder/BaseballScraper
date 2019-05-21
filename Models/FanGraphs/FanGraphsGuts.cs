@@ -1,6 +1,7 @@
 namespace BaseballScraper.Models.FanGraphs
 {
     // https://www.fangraphs.com/guts.aspx?type=pfh&teamid=0&season=2017
+    #pragma warning disable IDE1006, CS1591
     public class FanGraphsGuts
     {
         public class wObaFipConstants

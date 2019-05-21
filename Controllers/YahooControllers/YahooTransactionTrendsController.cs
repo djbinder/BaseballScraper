@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using HtmlAgilityPack;
+using Vereyon.Web;
 using BaseballScraper.Infrastructure;
 using BaseballScraper.Models.Yahoo;
+using System.Linq;
 
 namespace BaseballScraper.Controllers.YahooControllers
 {
@@ -22,6 +24,7 @@ namespace BaseballScraper.Controllers.YahooControllers
         /// </list>
         /// <list> RESOURCES
         ///     <item> https://baseball.fantasysports.yahoo.com/f1/buzzindex </item>
+        ///     <item> https://baseball.fantasysports.yahoo.com/b1/buzzindex </item>
         /// </list>
 
     #endregion OVERVIEW ------------------------------------------------------------
@@ -32,13 +35,39 @@ namespace BaseballScraper.Controllers.YahooControllers
     public class YahooTransactionTrendsController : Controller
     {
         private readonly Helpers _h = new Helpers();
+        private readonly GoogleSheetsConnector _gSC = new GoogleSheetsConnector();
 
 
-        [HttpGet]
-        [Route("trends")]
+        [HttpGet("practice")]
+        public void YahooPractice()
+        {
+            ConnectYahooTrendsToGoogleSheets();
+
+            List<IList<YahooTransactionTrendsPlayer>> primaryList = new List<IList<YahooTransactionTrendsPlayer>>();
+
+            List<YahooTransactionTrendsPlayer> trendsList = GetTrendsForTodayAllPositions();
+
+            primaryList.Add(trendsList);
+
+
+            var convertedList = _gSC.ConvertIListOfAnyTypeToObjectType(primaryList);
+
+            AddTrendsToGoogleSheets();
+
+            // _gSC.UpdateData(convertedList);
+        }
+
+
+        [HttpGet("trends")]
         public void ViewYahooTransactionTrends()
         {
+            _h.StartMethod();
+        }
 
+
+        public void ConnectYahooTrendsToGoogleSheets()
+        {
+            _gSC.ConnectToGoogle();
         }
 
 
@@ -169,14 +198,17 @@ namespace BaseballScraper.Controllers.YahooControllers
             {
                 HtmlWeb htmlWeb = new HtmlWeb();
 
-                var urlToScrape = SetSearchDateAsToday();
+                var urlToScrape = "https://baseball.fantasysports.yahoo.com/b1/buzzindex";
+                // var urlToScrape = SetSearchDateAsToday();
                 // Console.WriteLine($"Url To Scrape: {urlToScrape}");
 
                 HtmlDocument thisUrlsHtml = htmlWeb.Load(urlToScrape);
 
                 List<YahooTransactionTrendsPlayer> listOfPlayers = GenerateList(thisUrlsHtml);
 
-                // PrintYahooTrendPlayers(listOfPlayers);
+                Console.WriteLine($"total count: {listOfPlayers.Count}");
+
+                PrintYahooTrendPlayers(listOfPlayers);
                 return listOfPlayers;
             }
 
@@ -251,6 +283,74 @@ namespace BaseballScraper.Controllers.YahooControllers
 
         #endregion GET TRENDS ------------------------------------------------------------
 
+
+
+        #region GENERATE GOOGLE SHEETS LISTS ------------------------------------------------------------
+
+            public void AddTrendsToGoogleSheets()
+            {
+                ConnectYahooTrendsToGoogleSheets();
+                List<YahooTransactionTrendsPlayer> allTrendInfo = GetTrendsForTodayAllPositions();
+
+                List<object> playerNames = new List<object>();
+                List<object> playerDrops = new List<object>();
+                List<object> playerAdds = new List<object>();
+                List<object> playerTrades = new List<object>();
+                List<object> playerTransactionsTotals = new List<object>();
+
+                playerNames.Add("Player Name");
+                playerDrops.Add("Drops");
+                playerAdds.Add("Adds");
+                playerTrades.Add("Trades");
+                playerTransactionsTotals.Add("Total");
+
+                foreach(var player in allTrendInfo)
+                {
+                    playerNames.Add(player.YahooPlayerName);
+                    playerDrops.Add(player.YahooPlayerDrops);
+                    playerAdds.Add(player.YahooPlayerAdds);
+                    playerTrades.Add(player.YahooPlayerTrades);
+                    playerTransactionsTotals.Add(player.YahooTransactionsTotal);
+                }
+
+                List<IList<object>> listOfLists = new List<IList<object>>
+                {
+                    playerNames,
+                    playerDrops,
+                    playerAdds,
+                    playerTrades,
+                    playerTransactionsTotals
+                };
+
+                _gSC.UpdateColumn(playerNames,"test_sheet2","B",2);
+                // _gSC.UpdateData(listOfLists,"test_sheet2");
+            }
+
+
+            public List<string> CreatePlayerNameList()
+            {
+                List<string> playerNames = new List<string>();
+                return playerNames;
+            }
+
+            // public List<IList<object>> CreateListOfLists ()
+            // {
+            //     List<IList<object>> primaryList = new List<IList<object>>();
+            //     IList<List<object>> listOfLists = new List<List<object>>();
+
+            //     List<object> playerNames = new List<object>();
+            //     List<string> testStrings = new List<string>();
+
+            //     var targetList = testStrings.ConvertAll(x => (object)x);
+
+
+            //     listOfLists.Add(playerNames);
+            //     listOfLists.Add(targetList);
+            //     return listOfLists;
+            // }
+
+
+        #endregion GENERATE GOOGLE SHEETS LISTS ------------------------------------------------------------
 
 
         #region HELPERS ------------------------------------------------------------

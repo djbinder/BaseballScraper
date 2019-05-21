@@ -30,7 +30,7 @@ namespace BaseballScraper.Controllers
 
 
 
-    #pragma warning disable CS0414
+    #pragma warning disable CS0414, CS0219, IDE0051, IDE0059, CS1591, IDE0044
     [Route("lahman")]
     public class LahmanController: Controller
     {
