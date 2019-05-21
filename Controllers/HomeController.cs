@@ -11,10 +11,11 @@ using System.Threading.Tasks;
 using BaseballScraper.Models.Lahman;
 using HtmlAgilityPack;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace BaseballScraper.Controllers
 {
-#pragma warning disable CS0414, CS0169, CS0219
+#pragma warning disable CS0414, CS0169, CS0219, IDE0052, CS1591
     public class HomeController: Controller
     {
         private readonly Helpers _h = new Helpers();
@@ -27,6 +28,8 @@ namespace BaseballScraper.Controllers
         private readonly CsvHandler _cH      = new CsvHandler();
         private readonly HtmlScraper _hS = new HtmlScraper();
 
+        private readonly GoogleSheetsConnector _gSC = new GoogleSheetsConnector();
+
 
         public HomeController (IOptions<AirtableConfiguration> airtableConfig, IOptions<TwitterConfiguration> twitterConfig)
         {
@@ -34,13 +37,53 @@ namespace BaseballScraper.Controllers
             _twitterConfiguration = twitterConfig.Value;
         }
 
+
         // [HttpGet]
         // [Route("")]
         // public IActionResult Index()
         // {
-        //     _h.StartMethod();
-        //     return View();
+        //     Console.WriteLine("INDEX");
+        //     return RedirectToAction("OnGet","Pages/Dashboard.cshtml.cs");
         // }
+
+        public void MainTest()
+        {
+            Console.WriteLine("test");
+        }
+
+
+        [HttpGet("google_sheets")]
+        public void ConnectToGoogleSheetsConnector()
+        {
+            _h.StartMethod();
+            Console.WriteLine("connecting to google_sheets");
+            _gSC.ConnectToGoogle();
+
+            // List<IList<object>> data
+            List<IList<object>> objectsListMain = new List<IList<object>>();
+
+            List<object> objects = new List<object>();
+
+            var object1 = "CUBS!!!";
+            objects.Add(object1);
+            objects.Add("CUBS2");
+            objects.Add("CUBS3");
+
+            List<object> objectsList2 = new List<object>();
+            objectsList2.Add("BREWERS");
+            objectsList2.Add("cards");
+
+
+
+            objectsListMain.Add(objects);
+            objectsListMain.Add(objectsList2);
+
+            Console.WriteLine();
+            Console.WriteLine("HOME > starting UpdateData");
+            Console.WriteLine();
+
+            _gSC.UpdateData(objectsListMain);
+        }
 
 
 

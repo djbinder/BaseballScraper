@@ -130,6 +130,7 @@ namespace BaseballScraper.Infrastructure
             public JObject CreateRecordJObject(Object record)
             {
                 string  recordString  = record.ToJson();
+
                 JObject recordJObject = JObject.Parse(recordString);
                 return recordJObject;
             }

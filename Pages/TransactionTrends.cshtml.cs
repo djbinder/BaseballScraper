@@ -12,9 +12,10 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BaseballScraper.Pages
 {
+    #pragma warning disable CS0414
     public class TransactionTrends : PageModel
     {
-        private Helpers _h = new Helpers();
+        private readonly Helpers _h = new Helpers();
         private readonly CbsTransactionTrendsController _c = new CbsTransactionTrendsController();
         private readonly EspnTransactionTrendsController _e = new EspnTransactionTrendsController();
         private readonly YahooTransactionTrendsController _y = new YahooTransactionTrendsController();
@@ -24,6 +25,9 @@ namespace BaseballScraper.Pages
         public IList<YahooTransactionTrendsPlayer> YahooPlayers { get; set; }
 
         private const string cbsUrlForMostAddedAllFootball = "https://www.cbssports.com/fantasy/football/trends/added/all";
+        private const string cbsUrlForMostAddedAllBaseball = "https://www.cbssports.com/fantasy/baseball/trends/added/all";
+
+
 
         public TransactionTrends() {}
 
@@ -32,17 +36,17 @@ namespace BaseballScraper.Pages
         {
             _h.StartMethod();
 
-            List<CbsMostAddedOrDroppedPlayer> cbsPlayers = _c.GetListOfCbsMostAddedOrDropped(cbsUrlForMostAddedAllFootball);
-            Console.WriteLine($"Cbs Count: {cbsPlayers.Count}");
-            CbsPlayers = cbsPlayers;
+            // List<CbsMostAddedOrDroppedPlayer> cbsPlayers = _c.GetListOfCbsMostAddedOrDropped(cbsUrlForMostAddedAllBaseball);
+            // Console.WriteLine($"Cbs Count: {cbsPlayers.Count}");
+            // CbsPlayers = cbsPlayers;
 
-            List<EspnTransactionTrendPlayer> espnPlayers = _e.GetListOfMostAddedPlayers();
-            Console.WriteLine($"Espn Count: {espnPlayers.Count}");
-            EspnPlayers = espnPlayers;
+            // List<EspnTransactionTrendPlayer> espnPlayers = _e.GetListOfMostAddedPlayers();
+            // Console.WriteLine($"Espn Count: {espnPlayers.Count}");
+            // EspnPlayers = espnPlayers;
 
 
             List<YahooTransactionTrendsPlayer> yahooPlayers = _y.GetTrendsForTodayAllPositions();
-            Console.WriteLine($"Yahoo Count: {yahooPlayers.Count}");
+            // Console.WriteLine($"Yahoo Count: {yahooPlayers.Count}");
             YahooPlayers = yahooPlayers;
 
             return Page();

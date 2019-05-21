@@ -191,63 +191,63 @@ namespace BaseballScraper.Models.MlbDataApi
         public DateTimeOffset Created { get; set; }
 
         [JsonProperty("totalSize")]
-        [JsonConverter(typeof(HitterParseStringConverter))]
+        [JsonConverter(typeof(ParseStringConverter))]
         public long TotalSize { get; set; }
 
         [JsonProperty("row")]
         public Dictionary<string, string>[] Row { get; set; }
     }
 
-    public partial class HittingLeaders
-    {
-        public static HittingLeaders FromJson(string json) => JsonConvert.DeserializeObject<HittingLeaders>(json, BaseballScraper.Models.MlbDataApi.HittingLeaderConverter.Settings);
-    }
+    // public partial class HittingLeaders
+    // {
+    //     public static HittingLeaders FromJson(string json) => JsonConvert.DeserializeObject<HittingLeaders>(json, BaseballScraper.Models.MlbDataApi.HittingLeaderConverter.Settings);
+    // }
 
-    public static class SerializeHittingLeaders
-    {
-        public static string ToJson(this HittingLeaders self) => JsonConvert.SerializeObject(self, BaseballScraper.Models.MlbDataApi.HittingLeaderConverter.Settings);
-    }
+    // public static class SerializeHittingLeaders
+    // {
+    //     public static string ToJson(this HittingLeaders self) => JsonConvert.SerializeObject(self, BaseballScraper.Models.MlbDataApi.HittingLeaderConverter.Settings);
+    // }
 
-    internal static class HittingLeaderConverter
-    {
-        public static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
-        {
-            MetadataPropertyHandling = MetadataPropertyHandling.Ignore,
-            DateParseHandling        = DateParseHandling.None,
-            Converters               = {
-                new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal }
-            },
-        };
-    }
+    // internal static class HittingLeaderConverter
+    // {
+    //     public static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
+    //     {
+    //         MetadataPropertyHandling = MetadataPropertyHandling.Ignore,
+    //         DateParseHandling        = DateParseHandling.None,
+    //         Converters               = {
+    //             new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal }
+    //         },
+    //     };
+    // }
 
-    internal class HitterParseStringConverter: JsonConverter
-    {
-        public override bool CanConvert(Type t) => t == typeof(long) || t == typeof(long?);
+    // internal class HitterParseStringConverter: JsonConverter
+    // {
+    //     public override bool CanConvert(Type t) => t == typeof(long) || t == typeof(long?);
 
-        public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
-        {
-            if (reader.TokenType == JsonToken.Null) return null;
-            var value = serializer.Deserialize<string>(reader);
-            long l;
-            if (Int64.TryParse(value, out l))
-            {
-                return l;
-            }
-            throw new Exception("Cannot unmarshal type long");
-        }
+    //     public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
+    //     {
+    //         if (reader.TokenType == JsonToken.Null) return null;
+    //         var value = serializer.Deserialize<string>(reader);
+    //         long l;
+    //         if (Int64.TryParse(value, out l))
+    //         {
+    //             return l;
+    //         }
+    //         throw new Exception("Cannot unmarshal type long");
+    //     }
 
-        public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
-        {
-            if (untypedValue == null)
-            {
-                serializer.Serialize(writer, null);
-                return;
-            }
-            var value = (long)untypedValue;
-            serializer.Serialize(writer, value.ToString());
-            return;
-        }
+    //     public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
+    //     {
+    //         if (untypedValue == null)
+    //         {
+    //             serializer.Serialize(writer, null);
+    //             return;
+    //         }
+    //         var value = (long)untypedValue;
+    //         serializer.Serialize(writer, value.ToString());
+    //         return;
+    //     }
 
-        public static readonly HitterParseStringConverter Singleton = new HitterParseStringConverter();
-    }
+    //     public static readonly HitterParseStringConverter Singleton = new HitterParseStringConverter();
+    // }
 }
