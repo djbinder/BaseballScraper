@@ -6,7 +6,7 @@ namespace BaseballScraper.Pages
 {
     public class Dashboard : PageModel
     {
-        private Helpers _h = new Helpers();
+        private readonly Helpers _h = new Helpers();
 
 
         public IActionResult OnGet()

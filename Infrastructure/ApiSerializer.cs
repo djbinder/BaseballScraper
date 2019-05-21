@@ -5,6 +5,7 @@ using System.Runtime.Serialization.Json;
 using System.Text;
 using BaseballScraper.EndPoints;
 using BaseballScraper.Models.MlbDataApi;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
@@ -43,11 +44,46 @@ namespace BaseballScraper.Infrastructure
     }
 
 
+    // code generated using https://app.quicktype.io/
+    // the json that was inputted to app.quicktype.io was generated using Postman
+    internal class ParseStringConverter : JsonConverter
+    {
+        public override bool CanConvert(Type t) => t == typeof(long) || t == typeof(long?);
+
+        public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
+        {
+            if (reader.TokenType == JsonToken.Null) return null;
+            var value = serializer.Deserialize<string>(reader);
+                if (Int64.TryParse(value, out long l))
+                {
+                    return l;
+                }
+                throw new Exception("Cannot unmarshal type long");
+        }
+
+        public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
+        {
+            if (untypedValue == null)
+            {
+                serializer.Serialize(writer, null);
+                return;
+            }
+            var value = (long)untypedValue;
+            serializer.Serialize(writer, value.ToString());
+            return;
+        }
+
+        // code generated using https://app.quicktype.io/
+        // the json that was inputted to app.quicktype.io was generated using Postman
+        public static readonly ParseStringConverter Singleton = new ParseStringConverter();
+    }
+
+
     public class ApiInfrastructure
     {
-        private Helpers _h                            = new Helpers();
+        private readonly Helpers _h                            = new Helpers();
 
-        private static MlbDataApiEndPoints _endPoints = new MlbDataApiEndPoints();
+        private static readonly MlbDataApiEndPoints _endPoints = new MlbDataApiEndPoints();
 
 
         /// <summary> Serialize a given object to a JSON stream (i.e., take a given object and convert it to JSON ) </summary>
@@ -168,6 +204,8 @@ namespace BaseballScraper.Infrastructure
                     return serializer.ReadObject(memoryStream) as LeadingPitcher;
                 case "LeadingHitter":
                     return serializer.ReadObject(memoryStream) as LeadingHitter;
+                case "HitterSeasonStats":
+                    return serializer.ReadObject(memoryStream) as HitterSeasonStats;
             }
             throw new System.Exception("no model type found");
         }
@@ -200,6 +238,9 @@ namespace BaseballScraper.Infrastructure
 
                 case "LeadingHitter":
                     return obj["leader_hitting_repeater"]["leader_hitting_mux"]["queryResults"]["row"];
+
+                case "HitterSeasonStats":
+                    return obj["sport_hitting_tm"]["queryResults"]["row"];
             }
             throw new System.Exception("no api type found");
         }

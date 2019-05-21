@@ -12,10 +12,10 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
     [ApiController]
     public class MlbDataPlayerInfoController: Controller
     {
-        private Helpers _h                            = new Helpers();
-        private ApiInfrastructure _a                  = new ApiInfrastructure();
-        private static MlbDataApiEndPoints _endPoints = new MlbDataApiEndPoints();
-        private static PostmanMethods _postman        = new PostmanMethods();
+        private readonly Helpers _h                            = new Helpers();
+        private readonly ApiInfrastructure _a                  = new ApiInfrastructure();
+        private static readonly MlbDataApiEndPoints _endPoints = new MlbDataApiEndPoints();
+        private static readonly PostmanMethods _postman        = new PostmanMethods();
 
 
         // https://appac.github.io/mlb-data-api-docs/#player-data-player-info-get

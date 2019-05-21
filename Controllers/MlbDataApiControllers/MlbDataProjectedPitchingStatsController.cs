@@ -12,10 +12,10 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers.cs
     [ApiController]
     public class MlbDataProjectedPitchingStatsController: Controller
     {
-        private Helpers _h                            = new Helpers();
-        private ApiInfrastructure _a                  = new ApiInfrastructure();
-        private static MlbDataApiEndPoints _endPoints = new MlbDataApiEndPoints();
-        private static PostmanMethods _postman        = new PostmanMethods();
+        private readonly Helpers _h                            = new Helpers();
+        private readonly ApiInfrastructure _a                  = new ApiInfrastructure();
+        private static readonly MlbDataApiEndPoints _endPoints = new MlbDataApiEndPoints();
+        private static readonly PostmanMethods _postman        = new PostmanMethods();
 
         // https://appac.github.io/mlb-data-api-docs/#stats-data-projected-pitching-stats-get
         /// <summary> View instantiated pecota projections for a selected pitcher in a selected season  </summary>
