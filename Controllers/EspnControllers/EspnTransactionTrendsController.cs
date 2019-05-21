@@ -9,25 +9,38 @@ using Microsoft.AspNetCore.Mvc;
 namespace BaseballScraper.Controllers.EspnControllers
 {
 
+
+    //STATUS --> THIS IS VERY BROKEN!!!!
+
     #region OVERVIEW ------------------------------------------------------------
 
-        /// <summary> Gets lists of ESPN most added or dropped players (top 25) </summary>
-        /// <list> INDEX
-        ///     <item> Get most added players <a cref="EspnTransactionTrendsController.GetListOfMostAddedPlayers" /> </item>
-        ///     <item> Get most dropped players <a cref="EspnTransactionTrendsController.GetListOfMostDroppedPlayers" /> </item>
-        /// </list>
-        /// <list> RESOURCES
-        ///     <item> http://games.espn.com/flb/addeddropped </item>
-        /// </list>
+    /// <summary> Gets lists of ESPN most added or dropped players (top 25) </summary>
+    /// <list> INDEX
+    ///     <item> Get most added players <a cref="EspnTransactionTrendsController.GetListOfMostAddedPlayers" /> </item>
+    ///     <item> Get most dropped players <a cref="EspnTransactionTrendsController.GetListOfMostDroppedPlayers" /> </item>
+    /// </list>
+    /// <list> RESOURCES
+    ///     <item> http://games.espn.com/flb/addeddropped </item>
+    /// </list>
 
     #endregion OVERVIEW ------------------------------------------------------------
 
-
+    #pragma warning disable CS0414, CS0219, IDE0051, IDE0059, CS1591
 
     [Route("espn")]
     public class EspnTransactionTrendsController : Controller
     {
         private readonly Helpers _h = new Helpers();
+        private readonly string espnMostAddedTableHtmlSelectorString = "#espn-analytics > div > div.jsx-1612911345.shell-container > div.page-container.cf > div.layout.is-full > div > div > div.InnerLayout.flex.flex-auto.flex-wrap > div:nth-child(1) > div > section > table > tbody > tr > td > div > div > div.Table2__shadow-scroller > table";
+
+        private readonly string espnMostAddedTableHtmlXPathString = "//*[@id='espn-analytics']/div/div[5]/div[2]/div[1]/div/div/div[2]/div[1]/div/section/table/tbody/tr/td/div/div/div[2]/table";
+
+        private readonly string espnMostAddedTableHtmlJsPathString = "document.querySelector('#espn-analytics > div > div.jsx-1612911345.shell-container > div.page-container.cf > div.layout.is-full > div > div > div.InnerLayout.flex.flex-auto.flex-wrap > div:nth-child(1) > div > section > table > tbody > tr > td > div > div > div.Table2__shadow-scroller > table')";
+
+
+
+
+
 
         [Route("trends")]
         [HttpGet]
@@ -49,61 +62,112 @@ namespace BaseballScraper.Controllers.EspnControllers
             {
                 HtmlWeb htmlWeb = new HtmlWeb();
 
-                var urlToScrape = "http://games.espn.com/flb/addeddropped";
+                var urlToScrape = "http://fantasy.espn.com/baseball/addeddropped";
+                // var urlToScrape = "http://games.espn.com/flb/addeddropped";
 
-                HtmlDocument thisUrlsHtml = htmlWeb.Load(urlToScrape);
+                // thisUrlsHtml --> HtmlAgilityPack.HtmlDocument
+                HtmlDocument thisUrlsHtmlAndScripts = htmlWeb.Load(urlToScrape);
+
 
                 List<EspnTransactionTrendPlayer> listOfAddedPlayers = new List<EspnTransactionTrendPlayer>();
 
-                HtmlNodeCollection transactionTrendTable = thisUrlsHtml.DocumentNode.SelectNodes("//table[contains(@class, 'tableBody')]");
+                // htmlChildNodes has 2 children: 1) #comment 2) html
+                HtmlNodeCollection thisUrlsNodeCollection = thisUrlsHtmlAndScripts.DocumentNode.ChildNodes;
 
-                // Child nodes --> 28
-                foreach(HtmlNode tableBody in transactionTrendTable)
+                HtmlNode thisUrlsHtmlNode = thisUrlsNodeCollection[1];
+
+                HtmlNodeCollection htmlHeadAndBodyNodeCollection = thisUrlsHtmlNode.ChildNodes;
+
+                HtmlNode bodyNode = htmlHeadAndBodyNodeCollection[1];
+                // Console.WriteLine($"htmlBodyNode: {bodyNode.ChildNodes}");
+
+                HtmlNodeCollection bodyNodeChildrenCollection = bodyNode.ChildNodes;
+
+                int childCount = 0;
+
+                foreach(var child in bodyNodeChildrenCollection)
                 {
-                    int rowCount = 1;
-                    // Child nodes --> 13
-                    foreach(HtmlNode tableRow in tableBody.SelectNodes("tr"))
+                    if(childCount == 0)
                     {
-                        EspnTransactionTrendPlayer eAddedPlayer = new EspnTransactionTrendPlayer();
+                        // Console.WriteLine(child);
+                        // Console.WriteLine(child.Name);
+                        // Console.WriteLine("CHILD NODES");
+                        // Console.WriteLine(child.ChildNodes);
 
-                        int dataCellNumber = 1;
-
-                        // the first two rows are table headers, not player data; So you don't want to get them.
-                        if(rowCount > 2)
+                        foreach(var child2 in child.ChildNodes)
                         {
-                            // the rows in the table are odd; the first row includes BOTH the most added player AND the most dropped player; The most added player is cells 1- - 6; the most dropped player is cells 8 - 13;
-                            foreach(HtmlNode dataCell in tableRow.SelectNodes("td"))
-                            {
-                                if(dataCellNumber == 1)
-                                    eAddedPlayer.EspnTrendRankNumber = dataCell.InnerText;
-
-                                // player name comes back with team attached to it (split by the comma)
-                                // player names comes back with an asterisk if player is on the DL (split by the *)
-                                if(dataCellNumber == 2)
-                                {
-                                    string playerNameAndDetails = dataCell.InnerText;
-                                    string[] splitDetails = playerNameAndDetails.Split('*', ',');
-                                    var playerName = splitDetails[0];
-                                    eAddedPlayer.EspnTrendPlayerName = playerName;
-                                }
-
-                                if(dataCellNumber == 3)
-                                    eAddedPlayer.EspnPlayerPosition = dataCell.InnerText;
-                                if(dataCellNumber == 4)
-                                    eAddedPlayer.EspnPlayerAddsLastWeek = dataCell.InnerText;
-                                if(dataCellNumber == 5)
-                                    eAddedPlayer.EspnPlayerAddsCurrentWeek = dataCell.InnerText;
-                                if(dataCellNumber == 6)
-                                    eAddedPlayer.EspnPlayerTrendSevenDayChange = dataCell.InnerText;
-                                dataCellNumber++;
-                            }
-                            listOfAddedPlayers.Add(eAddedPlayer);
+                            Console.WriteLine(child2.Name);
+                            Console.WriteLine(child2.XPath);
+                            Console.WriteLine(child2.InnerText);
                         }
-                        rowCount++;
                     }
+                    childCount++;
                 }
-                // PrintEspnTrendsList(listOfAddedPlayers);
-                return listOfAddedPlayers;
+
+
+
+
+
+
+
+
+
+                HtmlNode transactionTrendTable = thisUrlsHtmlAndScripts.DocumentNode.SelectSingleNode("//*[@id='espn-analytics']/div/div[5]/div[2]/footer/p[1]/a[2]");
+                // HtmlNodeCollection transactionTrendTable = thisUrlsHtmlAndScripts.DocumentNode.SelectNodes("//table[contains(@class, 'Table2__table-scroller Table2__table')]");
+                // Console.WriteLine($"transactionTrendTable: {transactionTrendTable}");
+                // Console.WriteLine($"transactionTrendTable: {transactionTrendTable.InnerText}");
+            //     Console.WriteLine($"transactionTrendTable.Count: {transactionTrendTable.Count}");
+
+            //     // Child nodes --> 28
+                // foreach(HtmlNode tableBody in transactionTrendTable)
+                // {
+                //     Console.WriteLine($"tableBody > ChildNodes: {tableBody}");
+                //     int rowCount = 1;
+
+
+            //         // Child nodes --> 13
+            //         foreach(HtmlNode tableRow in tableBody.SelectNodes("tr"))
+            //         {
+            //             EspnTransactionTrendPlayer eAddedPlayer = new EspnTransactionTrendPlayer();
+
+            //             int dataCellNumber = 1;
+
+            //             // the first two rows are table headers, not player data; So you don't want to get them.
+            //             if(rowCount > 2)
+            //             {
+            //                 // the rows in the table are odd; the first row includes BOTH the most added player AND the most dropped player; The most added player is cells 1- - 6; the most dropped player is cells 8 - 13;
+            //                 foreach(HtmlNode dataCell in tableRow.SelectNodes("td"))
+            //                 {
+            //                     if(dataCellNumber == 1)
+            //                         eAddedPlayer.EspnTrendRankNumber = dataCell.InnerText;
+
+            //                     // player name comes back with team attached to it (split by the comma)
+            //                     // player names comes back with an asterisk if player is on the DL (split by the *)
+            //                     if(dataCellNumber == 2)
+            //                     {
+            //                         string playerNameAndDetails = dataCell.InnerText;
+            //                         string[] splitDetails = playerNameAndDetails.Split('*', ',');
+            //                         var playerName = splitDetails[0];
+            //                         eAddedPlayer.EspnTrendPlayerName = playerName;
+            //                     }
+
+            //                     if(dataCellNumber == 3)
+            //                         eAddedPlayer.EspnPlayerPosition = dataCell.InnerText;
+            //                     if(dataCellNumber == 4)
+            //                         eAddedPlayer.EspnPlayerAddsLastWeek = dataCell.InnerText;
+            //                     if(dataCellNumber == 5)
+            //                         eAddedPlayer.EspnPlayerAddsCurrentWeek = dataCell.InnerText;
+            //                     if(dataCellNumber == 6)
+            //                         eAddedPlayer.EspnPlayerTrendSevenDayChange = dataCell.InnerText;
+            //                     dataCellNumber++;
+            //                 }
+            //                 listOfAddedPlayers.Add(eAddedPlayer);
+            //             }
+            //             rowCount++;
+            //         }
+            //     }
+            //     // PrintEspnTrendsList(listOfAddedPlayers);
+            return listOfAddedPlayers;
             }
 
 
@@ -114,7 +178,8 @@ namespace BaseballScraper.Controllers.EspnControllers
             {
                 HtmlWeb htmlWeb = new HtmlWeb();
 
-                var urlToScrape = "http://games.espn.com/flb/addeddropped";
+                var urlToScrape = "http://fantasy.espn.com/baseball/addeddropped";
+                // var urlToScrape = "http://games.espn.com/flb/addeddropped";
 
                 HtmlDocument thisUrlsHtml = htmlWeb.Load(urlToScrape);
 

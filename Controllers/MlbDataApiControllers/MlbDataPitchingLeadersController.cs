@@ -23,11 +23,11 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers.cs
     [ApiController]
     public class MlbDataPitchingLeadersController: Controller
     {
-        private Helpers _h           = new Helpers();
-        private ApiInfrastructure _a = new ApiInfrastructure();
+        private readonly Helpers _h           = new Helpers();
+        private readonly ApiInfrastructure _a = new ApiInfrastructure();
 
-        private static MlbDataApiEndPoints _endPoints = new MlbDataApiEndPoints();
-        private static PostmanMethods _postman        = new PostmanMethods();
+        private static readonly MlbDataApiEndPoints _endPoints = new MlbDataApiEndPoints();
+        private static readonly PostmanMethods _postman        = new PostmanMethods();
 
 
 

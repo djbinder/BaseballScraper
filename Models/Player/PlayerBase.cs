@@ -157,6 +157,137 @@ namespace BaseballScraper.Models.Player
     }
 
 
+    // this references SfbbPlayerIdMap in BaseballScraper/Configuration/gSheetNames.json
+    public class SfbbPlayerBase
+    {
+        [Column("IDPLAYER")]
+        public string IDPLAYER  { get; set; }
+
+        [Column("PLAYERNAME")]
+        public string PLAYERNAME  { get; set; }
+
+        [Column("BIRTHDATE")]
+        public string BIRTHDATE  { get; set; }
+
+        [Column("FIRSTNAME")]
+        public string FIRSTNAME  { get; set; }
+
+        [Column("LASTNAME")]
+        public string LASTNAME  { get; set; }
+
+        [Column("TEAM")]
+        public string TEAM  { get; set; }
+
+        [Column("LG")]
+        public string LG  { get; set; }
+
+        [Column("POS")]
+        public string POS  { get; set; }
+
+        [Column("IDFANGRAPHS")]
+        public string IDFANGRAPHS  { get; set; }
+
+        [Column("FANGRAPHSNAME")]
+        public string FANGRAPHSNAME  { get; set; }
+
+        [Column("MLBID")]
+        public string MLBID  { get; set; }
+
+        [Column("MLBNAME")]
+        public string MLBNAME  { get; set; }
+
+        [Column("CBSID")]
+        public string CBSID  { get; set; }
+
+        [Column("CBSNAME")]
+        public string CBSNAME  { get; set; }
+
+        [Column("RETROID")]
+        public string RETROID  { get; set; }
+
+        [Column("BREFID")]
+        public string BREFID  { get; set; }
+
+        [Column("NFBCID")]
+        public string NFBCID  { get; set; }
+
+        [Column("NFBCNAME")]
+        public string NFBCNAME  { get; set; }
+
+        [Column("ESPNID")]
+        public string ESPNID  { get; set; }
+
+        [Column("ESPNNAME")]
+        public string ESPNNAME  { get; set; }
+
+        [Column("KFFLNAME")]
+        public string KFFLNAME  { get; set; }
+
+        [Column("DAVENPORTID")]
+        public string DAVENPORTID  { get; set; }
+
+        [Column("BPID")]
+        public string BPID  { get; set; }
+
+        [Column("YAHOOID")]
+        public string YAHOOID  { get; set; }
+
+        [Column("YAHOONAME")]
+        public string YAHOONAME  { get; set; }
+
+        [Column("MSTRBLLNAME")]
+        public string MSTRBLLNAME  { get; set; }
+
+        [Column("BATS")]
+        public string BATS  { get; set; }
+
+        [Column("THROWS")]
+        public string THROWS  { get; set; }
+
+        [Column("FANPROSNAME")]
+        public string FANPROSNAME  { get; set; }
+
+        [Column("LASTCOMMAFIRST")]
+        public string LASTCOMMAFIRST  { get; set; }
+
+        [Column("ROTOWIREID")]
+        public string ROTOWIREID  { get; set; }
+
+        [Column("FANDUELNAME")]
+        public string FANDUELNAME  { get; set; }
+
+        [Column("FANDUELID")]
+        public string FANDUELID  { get; set; }
+
+        [Column("DRAFTKINGSNAME")]
+        public string DRAFTKINGSNAME  { get; set; }
+
+        [Column("OTTONEUID")]
+        public string OTTONEUID  { get; set; }
+
+        [Column("HQID")]
+        public string HQID  { get; set; }
+
+        [Column("RAZZBALLNAME")]
+        public string RAZZBALLNAME  { get; set; }
+
+        [Column("FANTRAXID")]
+        public string FANTRAXID  { get; set; }
+
+        [Column("FANTRAXNAME")]
+        public string FANTRAXNAME  { get; set; }
+
+        [Column("ROTOWIRENAME")]
+        public string ROTOWIRENAME  { get; set; }
+
+        [Column("ALLPOS")]
+        public string ALLPOS  { get; set; }
+
+        [Column("NFBCLASTFIRST")]
+        public string NFBCLASTFIRST  { get; set; }
+    }
+
+
     // public class PlayerBaseClassMap: ClassMap<PlayerBase>
     // {
     //     public PlayerBaseClassMap()

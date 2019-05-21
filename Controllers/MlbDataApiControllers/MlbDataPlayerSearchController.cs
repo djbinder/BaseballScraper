@@ -15,12 +15,13 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
 {
     [Route("api/mlb")]
     [ApiController]
+    #pragma warning disable CS0414, CS0219, IDE0051, IDE0059, CS1591, IDE0052
     public class MlbDataPlayerSearchController: Controller
     {
-        private Helpers _h                            = new Helpers();
-        private ApiInfrastructure _a                  = new ApiInfrastructure();
-        private static MlbDataApiEndPoints _endPoints = new MlbDataApiEndPoints();
-        private static PostmanMethods _postman        = new PostmanMethods();
+        private readonly Helpers _h                            = new Helpers();
+        private readonly ApiInfrastructure _a                  = new ApiInfrastructure();
+        private static readonly MlbDataApiEndPoints _endPoints = new MlbDataApiEndPoints();
+        private static readonly PostmanMethods _postman        = new PostmanMethods();
 
 
         // https://appac.github.io/mlb-data-api-docs/#player-data-player-search-get
@@ -58,6 +59,12 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
             IRestResponse response = postmanResponse.Response;
 
             return response;
+        }
+
+
+        public void GetPlayerHittingStats()
+        {
+
         }
     }
 }
