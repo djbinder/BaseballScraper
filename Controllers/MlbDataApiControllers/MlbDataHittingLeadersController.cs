@@ -18,10 +18,10 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
         /// <list> INDEX
         ///     <item> Create Hitting Leaders Model (Option 1) <see cref="MlbDataHittingLeadersController.CreateHittingLeadersModel(int, string, string)" /> </item>
         ///     <item> Create Hitting Leaders Model (Option 2) <see cref="MlbDataHittingLeadersController.CreateHittingLeadersModel()" /> </item>
-        ///     <item> Get Hitting Leaders Async (Option 1) <see cref="MlbDataHittingLeadersController.GetHittingLeadersAsync(int, string, string)" /> </item>
-        ///     <item> Get Hitting Leaders Async (Option 2) <see cref="MlbDataHittingLeadersController.GetHittingLeadersAsync()" /> </item>
-        ///     <item> View Hitting Leaders Async (Option 1) <see cref="MlbDataHittingLeadersController.ViewHittingLeadersAsync(int, string, string)" /> </item>
-        ///     <item> View Hitting Leaders Async (Option 2) <see cref="MlbDataHittingLeadersController.ViewHittingLeadersAsync()" /> </item>
+        ///     <item> Get Hitting Leaders Async    (Option 1) <see cref="MlbDataHittingLeadersController.GetHittingLeadersAsync(int, string, string)" /> </item>
+        ///     <item> Get Hitting Leaders Async    (Option 2) <see cref="MlbDataHittingLeadersController.GetHittingLeadersAsync()" /> </item>
+        ///     <item> View Hitting Leaders Async   (Option 1) <see cref="MlbDataHittingLeadersController.ViewHittingLeadersAsync(int, string, string)" /> </item>
+        ///     <item> View Hitting Leaders Async   (Option 2) <see cref="MlbDataHittingLeadersController.ViewHittingLeadersAsync()" /> </item>
         /// </list>
 
     #endregion OVERVIEW ------------------------------------------------------------
@@ -30,12 +30,13 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
 
     [Route("api/mlb")]
     [ApiController]
+    #pragma warning disable CS0414, CS0219, IDE0051, IDE0059, CS1591
     public class MlbDataHittingLeadersController: Controller
     {
-        private Helpers _h                            = new Helpers();
-        private ApiInfrastructure _a                  = new ApiInfrastructure();
-        private static MlbDataApiEndPoints _endPoints = new MlbDataApiEndPoints();
-        private static PostmanMethods _postman        = new PostmanMethods();
+        private readonly Helpers _h                            = new Helpers();
+        private readonly ApiInfrastructure _a                  = new ApiInfrastructure();
+        private static readonly MlbDataApiEndPoints _endPoints = new MlbDataApiEndPoints();
+        private static readonly PostmanMethods _postman        = new PostmanMethods();
 
 
 
@@ -56,7 +57,8 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
                     // param 1: number of hitters to include in search
                     // param 2: season that you want to query
                     // param 3: stat that you would like to sort by
-                var newEndPoint = _endPoints.HittingLeadersEndPoint(5, "2018", "hr");
+                var newEndPoint = _endPoints.HittingLeadersEndPoint(numberToReturn, year, sortColumn);
+                // var newEndPoint = _endPoints.HittingLeadersEndPoint(5, "2018", "hr");
 
                 var postmanRequest = _postman.CreatePostmanRequest(newEndPoint, "HittingLeaders");
                 var postmanResponse = _postman.GetPostmanResponse(postmanRequest);
@@ -158,7 +160,8 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
             [Route("hittingleaders/{year}")]
             public async Task<IActionResult> ViewHittingLeadersAsync(int numberToReturn, string year, string sortColumn)
             {
-                await GetHittingLeadersAsync(5, "2018", "hr");
+                await GetHittingLeadersAsync(numberToReturn, year, sortColumn);
+                // await GetHittingLeadersAsync(5, "2018", "hr");
                 string currently = "retrieving hitting leaders";
                 return Content($"CURRENT TASK: {currently}");
             }

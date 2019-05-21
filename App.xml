@@ -1,0 +1,944 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BaseballScraper</name>
+    </assembly>
+    <members>
+        <member name="M:BaseballScraper.Controllers.AirtableController.GetAirtableManagers">
+            <summary> Retrieves managers listed in league manager database </summary>
+            <example> https://127.0.0.1:5001/api/airtable/managers </example>
+            <returns> ManagerFullName, ManagerFirstName, ManagerListName, TeamIds, etc.</returns>
+        </member>
+        <member name="T:BaseballScraper.Controllers.CbsControllers.CbsTransactionTrendsController">
+            <summary> Retrieve Cbs player trends: Most added, most dropped, most viewed, most traded </summary>
+            <list> INDEX
+                <item> Get Most Added / Dropped All <see cref="M:BaseballScraper.Controllers.CbsControllers.CbsTransactionTrendsController.GetListOfCbsMostAddedOrDropped(System.String)" /> </item>
+                <item> Get Most Added / Dropped By Position <see cref="M:BaseballScraper.Controllers.CbsControllers.CbsTransactionTrendsController.GetListOfCbsMostAddedOrDroppedByPosition(System.String,System.String)"/></item>
+                <item> Print Most Added / Dropped <see cref="M:BaseballScraper.Controllers.CbsControllers.CbsTransactionTrendsController.PrintCbsAddedOrDroppedListOfPlayers(System.Collections.Generic.List{BaseballScraper.Models.Cbs.CbsMostAddedOrDroppedPlayer})" /> </item>
+                <item> Get Most Viewed All <see cref="M:BaseballScraper.Controllers.CbsControllers.CbsTransactionTrendsController.GetListOfCbsMostViewedPlayers(System.String)" /></item>
+                <item> Get Most Viewed <see cref="M:BaseballScraper.Controllers.CbsControllers.CbsTransactionTrendsController.GetListOfCbsMostViewedPlayersByPosition(System.String,System.String)"/></item>
+                <item> Get Most Traded All <see cref="M:BaseballScraper.Controllers.CbsControllers.CbsTransactionTrendsController.GetListOfCbsMostTradedPlayers(System.String)" /> </item>
+                <item> Get Most Traded By Position <see cref="M:BaseballScraper.Controllers.CbsControllers.CbsTransactionTrendsController.GetListOfCbsMostTradedPlayersByPosition(System.String,System.String)"/> </item>
+            </list>
+            <list> RESOURCES
+                <item> Most Added: https://www.cbssports.com/fantasy/baseball/trends/added/all </item>
+                <item> Most Dropped: https://www.cbssports.com/fantasy/baseball/trends/dropped/all </item>
+                <item> Most Viewed: https://www.cbssports.com/fantasy/baseball/trends/viewed/all </item>
+                <item> Most Traded https://www.cbssports.com/fantasy/baseball/trends/traded/all </item>
+            </list>
+        </member>
+        <member name="M:BaseballScraper.Controllers.CbsControllers.CbsTransactionTrendsController.GetListOfCbsMostAddedOrDropped(System.String)">
+            <summary> Returns a list of the most added or dropped players according to Cbs trends; Does not filter by position </summary>
+            <remarks>
+                CbsRankCurrentWeek - % of leagues that have the player on a roster this week
+                CbsRankPreviousWeek - % of leagues that have the player on a roster last week
+            </remarks>
+            <param name="urlToScrape"> The url of the Cbs roster trends; Should be either the url for most added or most dropped </param>
+            <example> Most Added --> GetListOfCbsMostAddedOrDropped(urlForMostAddedAll); </example>
+            <example> Most Dropped --> GetListOfCbsMostAddedOrDropped(urlForMostDroppedAll); </example>
+            <returns> A list of most added or dropped players</returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.CbsControllers.CbsTransactionTrendsController.GetListOfCbsMostAddedOrDroppedByPosition(System.String,System.String)">
+            <summary> Returns a list of the most added or dropped players according to Cbs trends filtered by position </summary>
+            <remarks>
+                CbsRankCurrentWeek - % of leagues that have the player on a roster this week
+                CbsRankPreviousWeek - % of leagues that have the player on a roster last week
+            </remarks>
+            <param name="urlToScrapePrefix"> The url of the Cbs roster trends; Should be either the url for most added or most dropped </param>
+            <param name="position"> Position type: 1B, 2B, 3B, SS, OF, C, DH, SP, RP </param>
+            <example> Most Added --> GetListOfCbsMostAddedOrDroppedByPosition(urlForMostAddedByPositionPrefix,"1B"); </example>
+            <example> Most Dropped --> GetListOfCbsMostAddedOrDroppedByPosition(urlForMostDroppedByPositionPrefix,"1B"); </example>
+            <returns> A list of most added or dropped players for one position </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.CbsControllers.CbsTransactionTrendsController.PrintCbsAddedOrDroppedListOfPlayers(System.Collections.Generic.List{BaseballScraper.Models.Cbs.CbsMostAddedOrDroppedPlayer})">
+            <summary> Print the lists from previous two methods </summary>
+            <param name="players"> A list of added or dropped players</param>
+        </member>
+        <member name="M:BaseballScraper.Controllers.CbsControllers.CbsTransactionTrendsController.GetListOfCbsMostViewedPlayers(System.String)">
+            <summary> Returns a list of the most viewed players according to Cbs trends; Does not filter by position </summary>
+            <param name="urlToScrape"> The url of the Cbs roster trends for most viewed </param>
+            <example> GetListOfCbsMostViewedPlayers(urlForMostViewedAll); </example>
+            <returns> A list of most viewed players </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.CbsControllers.CbsTransactionTrendsController.GetListOfCbsMostViewedPlayersByPosition(System.String,System.String)">
+            <summary> Returns a list of the most viewed players according to Cbs trends for one position </summary>
+            <param name="urlToScrapePrefix"> The url of the Cbs roster trends for most viewed </param>
+            <param name="position"> Position type: 1B, 2B, 3B, SS, OF, C, DH, SP, RP </param>
+            <example> GetListOfCbsMostViewedPlayersByPosition(urlForMostViewedByPositionPrefix, "1B"); </example>
+            <returns> A list of most viewed players for one position </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.CbsControllers.CbsTransactionTrendsController.GetListOfCbsMostTradedPlayers(System.String)">
+            <summary> Returns a list of the most traded players according to Cbs trends; Does not filter by position </summary>
+            <param name="urlToScrape"> The url of the Cbs roster trends for most traded </param>
+            <example> GetListOfCbsMostTradedPlayers(urlForMostTradedAll); </example>
+            <returns> A list of most traded players </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.CbsControllers.CbsTransactionTrendsController.GetListOfCbsMostTradedPlayersByPosition(System.String,System.String)">
+            <summary> Returns a list of the most traded players according to Cbs trends for one position </summary>
+            <param name="urlToScrapePrefix"> The url of the Cbs roster trends for most traded </param>
+            <param name="position"> Position type: 1B, 2B, 3B, SS, OF, C, DH, SP, RP </param>
+            <example> GetListOfCbsMostTradedPlayersByPosition(urlForMostTradedByPositionPrefix, "1B"); </example>
+            <returns> A list of most traded players for one position </returns>
+        </member>
+        <member name="T:BaseballScraper.Controllers.EspnControllers.EspnTransactionTrendsController">
+            <summary> Gets lists of ESPN most added or dropped players (top 25) </summary>
+            <list> INDEX
+                <item> Get most added players <a cref="M:BaseballScraper.Controllers.EspnControllers.EspnTransactionTrendsController.GetListOfMostAddedPlayers" /> </item>
+                <item> Get most dropped players <a cref="M:BaseballScraper.Controllers.EspnControllers.EspnTransactionTrendsController.GetListOfMostDroppedPlayers" /> </item>
+            </list>
+            <list> RESOURCES
+                <item> http://games.espn.com/flb/addeddropped </item>
+            </list>
+        </member>
+        <member name="M:BaseballScraper.Controllers.EspnControllers.EspnTransactionTrendsController.GetListOfMostAddedPlayers">
+            <summary> Gets the top 25 most added players from ESPN </summary>
+            <returns> A list of EspnTransactionTrendPlayer </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.EspnControllers.EspnTransactionTrendsController.GetListOfMostDroppedPlayers">
+            <summary> Gets the top 25 most dropped players from ESPN </summary>
+            <returns> A list of EspnTransactionTrendPlayer </returns>
+        </member>
+        <member name="T:BaseballScraper.Controllers.FanGraphs.FanGraphsStartingPitcherController">
+             <summary> </summary>
+             <list> INDEX
+                 <item> View Page <see cref="M:BaseballScraper.Controllers.FanGraphs.FanGraphsStartingPitcherController.ViewFanGraphsStartingPitcherPage"/> </item>
+                 <item> Set Initial Url to Scrape <see cref="M:BaseballScraper.Controllers.FanGraphs.FanGraphsStartingPitcherController.SetInitialUrlToScrape(System.Int32,System.Int32,System.Int32,System.Int32)"/> </item>
+                 <item> Get Number of Pages to Scrape <see cref="M:BaseballScraper.Controllers.FanGraphs.FanGraphsStartingPitcherController.GetNumberOfPagesToScrape(System.Int32,System.Int32,System.Int32,System.Int32)"/> </item>
+                 <item> Get Urls of Pages to Scrape <see cref="M:BaseballScraper.Controllers.FanGraphs.FanGraphsStartingPitcherController.GetUrlsOfPagesToScrape"/> </item>
+                 <item> Get Urls of Pages to Scrape <see cref="M:BaseballScraper.Controllers.FanGraphs.FanGraphsStartingPitcherController.GetUrlsOfPagesToScrape(System.Int32,System.Int32,System.Int32)"/> </item>
+                 <item> Scrape Pitchers and Create List <see cref="M:BaseballScraper.Controllers.FanGraphs.FanGraphsStartingPitcherController.ScrapePitchersAndCreateList(System.Int32,System.Int32,System.Int32)"/> </item>
+                 <item> Count the Nodes Children <see cref="M:BaseballScraper.Controllers.FanGraphs.FanGraphsStartingPitcherController.CountTheNodesChildren(HtmlAgilityPack.HtmlNode)"/> </item>
+                 <item> Get Table Header Values <see cref="M:BaseballScraper.Controllers.FanGraphs.FanGraphsStartingPitcherController.GetTableHeaderValues(System.String)"/> </item>
+             </list>
+            
+             <list> RESOURCES
+                 <item> FanGraphs custom report this scraper targets: https://bit.ly/2N2somI </item>
+             </list>
+        </member>
+        <member name="M:BaseballScraper.Controllers.FanGraphs.FanGraphsStartingPitcherController.SetInitialUrlToScrape(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary> This defines the first url to scrape; At times, you may need to loop through multiple urls and the url defined here is the first url in the loop </summary>
+            <param name="minInningsPitched"> The minimum number of innings pitched a pitcher needs to be included in the results of the scrape </param>
+            <param name="year"> The Mlb season year </param>
+            <param name="page"> The page to being scraping; this typically will be one. But if you want to start on page 2 (for example), just set 'page' to 2 </param>
+            <param name="recordsPerPage"> The number of rows in the table; Standard options include 30, 50 , 100; This will ultimately influence the total number of urls and their tables to scrape </param>
+            <returns> A string url </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.FanGraphs.FanGraphsStartingPitcherController.GetNumberOfPagesToScrape(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary> This counts the number of urls that will be scraped; It examines a specific html element on the fangraphs html page that shows the number of pages </summary>
+            <example> '70 items in 3 page' --> the '3' is what this method is looking for </example>
+            <param name="minInningsPitched"> The minimum number of innings pitched a pitcher needs to be included in the results of the scrape </param>
+            <param name="year"> The Mlb season year </param>
+            <param name="page"> The page to being scraping; this typically will be one. But if you want to start on page 2 (for example), just set 'page' to 2 </param>
+            <param name="recordsPerPage"> The number of rows in the table; Standard options include 30, 50 , 100; This will ultimately influence the total number of urls and their tables to scrape </param>
+            <returns> A number of the number of pages to scrape as part of the loop </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.FanGraphs.FanGraphsStartingPitcherController.GetUrlsOfPagesToScrape">
+            <returns> A list of strings representing urls to be scraped </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.FanGraphs.FanGraphsStartingPitcherController.GetUrlsOfPagesToScrape(System.Int32,System.Int32,System.Int32)">
+            <summary> OPTION 2: parameters are passed into the  method (i.e minInningsPitched, year, page, recordsPerPage ). Retrieves all urls of pages that will be scraped and adds them to a list  </summary>
+            <example> '70 items in 3 page' --> the '3' is what this method is looking for </example>
+            <param name="minInningsPitched"> The minimum number of innings pitched a pitcher needs to be included in the results of the scrape </param>
+            <param name="year"> The Mlb season year </param>
+            <param name="page"> The page to being scraping; this typically will be one. But if you want to start on page 2 (for example), just set 'page' to 2 </param>
+            <param name="recordsPerPage"> The number of rows in the table; Standard options include 30, 50 , 100; This will ultimately influence the total number of urls and their tables to scrape </param>
+            <returns> A list of strings representing urls to be scraped </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.FanGraphs.FanGraphsStartingPitcherController.ScrapePitchersAndCreateList(System.Int32,System.Int32,System.Int32)">
+            <summary> Scrape the pitchers table and get all their data </summary>
+            <remarks> Any XPath can be pulled from Chrome; right-click 'Inspect', view the html for the table, right click on any item and select Copy > tableBodyXpath </remarks>
+        </member>
+        <member name="M:BaseballScraper.Controllers.FanGraphs.FanGraphsStartingPitcherController.GetTableHeaderValues(System.String)">
+            <summary> Scrapes the headers of the table to get the stat names (e.g., ERA, WHIP, etc.) </summary>
+            <param name="thisUrl"> The url of the table you are scraping </param>
+        </member>
+        <member name="M:BaseballScraper.Controllers.FanGraphs.FanGraphsStartingPitcherController.CreateNewFanGraphsPitcher(System.Collections.Generic.List{System.String})">
+            <summary> Instantiates a new instance of class FanGraphsPitcher </summary>
+            <param name="playerItems"> A list of values for each of the stats / properties of the FanGraphsPitcher class </param>
+            <returns> New instance of FanGraphsPitcher class </returns>
+        </member>
+        <member name="T:BaseballScraper.Controllers.LahmanController">
+            <summary> Methods to read and get records from the Lahman database / csv files </summary>
+            <remarks> Files will need to be updated after each Mlb season </remarks>
+            <remarks> There are many more Lahman csv files; those are not included at this point; </remarks>
+            <list> RESOURCES
+                <item> Lahman Csv File Descriptions
+                    <description> http://www.seanlahman.com/files/database/readme58.txt </description>
+                </item>
+            </list>
+            <list> LAHMAN CSV FILES
+                <item> Appearances </item>
+                <item> Batting </item>
+                <item> Parks </item>
+                <item> People </item>
+                <item> Pitching </item>
+                <item> Teams </item>
+            </list>
+        </member>
+        <member name="M:BaseballScraper.Controllers.LahmanController.RunLahmanFunction">
+            <summary> Call non-async function to read a lahman csv file </summary>
+            <remarks> You would only be calling one of the included six functions at a time; all six included below for ease / consolidation </remarks>
+        </member>
+        <member name="M:BaseballScraper.Controllers.LahmanController.GetAllLahmanCsvFileRecords(System.String)">
+            <summary> Read a lahman csv file non-async </summary>
+            <param name="filePath"> One of the six Lahman csv file paths </param>
+        </member>
+        <member name="M:BaseballScraper.Controllers.LahmanController.RunLahmanFunctionAsync">
+            <summary> Call async function to read a lahman csv file </summary>
+            <remarks> You would only be calling one of the included six functions at a time; all six included below for ease / consolidation </remarks>
+        </member>
+        <member name="M:BaseballScraper.Controllers.LahmanController.GetAllLahmanCsvFileRecordsAsync(System.String)">
+            <summary> Read a lahman csv file async </summary>
+            <param name="filePath"> One of the six Lahman csv file paths </param>
+        </member>
+        <member name="T:BaseballScraper.Controllers.MlbDataApiControllers.MlbDataHittingLeadersController">
+            <summary> Provides two options on how to generate leading hitter model
+                OPTION 1 - endpoint parameters passed as parameters to method
+                OPTION 2 - endpoint parameters defined within the method
+            </summary>
+            <list> INDEX
+                <item> Create Hitting Leaders Model (Option 1) <see cref="M:BaseballScraper.Controllers.MlbDataApiControllers.MlbDataHittingLeadersController.CreateHittingLeadersModel(System.Int32,System.String,System.String)" /> </item>
+                <item> Create Hitting Leaders Model (Option 2) <see cref="M:BaseballScraper.Controllers.MlbDataApiControllers.MlbDataHittingLeadersController.CreateHittingLeadersModel" /> </item>
+                <item> Get Hitting Leaders Async    (Option 1) <see cref="M:BaseballScraper.Controllers.MlbDataApiControllers.MlbDataHittingLeadersController.GetHittingLeadersAsync(System.Int32,System.String,System.String)" /> </item>
+                <item> Get Hitting Leaders Async    (Option 2) <see cref="M:BaseballScraper.Controllers.MlbDataApiControllers.MlbDataHittingLeadersController.GetHittingLeadersAsync" /> </item>
+                <item> View Hitting Leaders Async   (Option 1) <see cref="M:BaseballScraper.Controllers.MlbDataApiControllers.MlbDataHittingLeadersController.ViewHittingLeadersAsync(System.Int32,System.String,System.String)" /> </item>
+                <item> View Hitting Leaders Async   (Option 2) <see cref="M:BaseballScraper.Controllers.MlbDataApiControllers.MlbDataHittingLeadersController.ViewHittingLeadersAsync" /> </item>
+            </list>
+        </member>
+        <member name="M:BaseballScraper.Controllers.MlbDataApiControllers.MlbDataHittingLeadersController.CreateHittingLeadersModel(System.Int32,System.String,System.String)">
+            <summary> OPTION 1: Get the current seasons hitting leaders; Endpoint parameters passed as parameters to method  </summary>
+            <remarks> Parameters for 'HittingLeadersEndPoint' (i.e. numberToReturn, year, sortColumn) are passed as parameters to the method </remarks>
+            <param name="numberToReturn"> The number of hitters to return in the results (e.g. 50 would show you the top 50 leaders) </param>
+            <param name="year"> The year that you want to retrieve the leaders for (e.g. 2018 gets you leaders for 2018 mlb season) </param>
+            <param name="sortColumn"> This is the stat you want to retrieve the leaders for (e.g., Hr, Rbi etc) </param>
+            <see> View 'LeadingHitter' model for options that you can sort by for this method </see>
+            <returns> A list of instantiated 'LeadingHitter' for 'numberToReturn' number of hitters </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.MlbDataApiControllers.MlbDataHittingLeadersController.CreateHittingLeadersModel">
+            <summary> OPTION 2: Get the current seasons hitting leaders; Endpoint parameters defined within the method </summary>
+            <remarks> Parameters for 'HittingLeadersEndPoint' are defined within the method </remarks>
+            <returns> A list of instantiated 'LeadingHitter' for 'numberToReturn' number of hitters </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.MlbDataApiControllers.MlbDataHittingLeadersController.GetHittingLeadersAsync(System.Int32,System.String,System.String)">
+            <summary> OPTION 1: Gets a list of Mlb hitting leaders for a defined season </summary>
+            <param name="numberToReturn"> OPTION 2: The number of hitters to return in the results (e.g. 50 would show you the top 50 leaders) </param>
+            <param name="year"> The year that you want to retrieve the leaders for (e.g. 2018 gets you leaders for 2018 mlb season) </param>
+            <param name="sortColumn"> This is the stat you want to retrieve the leaders for (e.g., Hr, Rbi etc) </param>
+                    <see> View 'LeadingHitter' model for options that you can sort by for this method </see>
+        </member>
+        <member name="M:BaseballScraper.Controllers.MlbDataApiControllers.MlbDataHittingLeadersController.GetHittingLeadersAsync">
+            <summary> OPTION 2: Gets a list of Mlb hitting leaders for a defined season; The variables are defined within the 'CreateHittingLeadersModel' function </summary>
+        </member>
+        <member name="M:BaseballScraper.Controllers.MlbDataApiControllers.MlbDataHittingLeadersController.ViewHittingLeadersAsync(System.Int32,System.String,System.String)">
+            <summary> OPTION 1: Initiate retrieval of mlb hitting leaders for current season </summary>
+            <param name="numberToReturn"> The number of hitters to return in the results (e.g. 50 would show you the top 50 leaders) </param>
+            <param name="year"> The year that you want to retrieve the leaders for (e.g. 2018 gets you leaders for 2018 mlb season) </param>
+            <param name="sortColumn"> This is the stat you want to retrieve the leaders for (e.g., Hr, Rbi etc) </param>
+            <see> View 'LeadingHitter' model for options that you can sort by for this method </see>
+            <example> https://127.0.0.1:5001/api/mlb/hittingleaders </example>
+            <returns> Hitting leaders for current season </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.MlbDataApiControllers.MlbDataHittingLeadersController.ViewHittingLeadersAsync">
+            <summary> OPTION 2: Initiate retrieval of mlb hitting leaders for current season </summary>
+            <example> https://127.0.0.1:5001/api/mlb/hittingleaders </example>
+            <returns> Hitting leaders for current season </returns>
+        </member>
+        <member name="T:BaseballScraper.Controllers.MlbDataApiControllers.cs.MlbDataPitchingLeadersController">
+            <summary> Provides two options on how to generate leading pitcher model
+            <item> OPTION 1 - endpoint parameters defined within the method </item>
+            <item> OPTION 2 - endpoint parameters passed as parameters to method </item>
+            </summary>
+        </member>
+        <member name="M:BaseballScraper.Controllers.MlbDataApiControllers.cs.MlbDataPitchingLeadersController.CreatePitchingLeadersModel">
+            <summary> OPTION 1: Get the current seasons pitching leaders; Endpoint parameters defined within method </summary>
+            <remarks> Parameters for 'PitchingLeadersEndPoint' are defined within the method </remarks>
+            <returns> A list of instantiated 'LeadingPitching' for 'numberToReturn' number of pitchers </returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Controllers.MlbDataApiControllers.cs.MlbDataPitchingLeadersController.CreatePitchingLeadersModel(System.Int32,System.String,System.String)" -->
+        <member name="M:BaseballScraper.Controllers.MlbDataApiControllers.cs.MlbDataPitchingLeadersController.GetPitchingLeadersAsync(System.Int32,System.String,System.String)">
+            <summary> OPTION 1: Get pitchin leaders w parameters </summary>
+            <param name="numberToReturn"> OPTION 1: The number of pitchers to return in the results (e.g. 50 would show you the top 50 leaders) </param>
+            <param name="year"> The year that you want to retrieve the leaders for (e.g. 2018 gets you leaders for 2018 mlb season) </param>
+            <param name="sortColumn"> This is the stat you want to retrieve the leaders for (e.g., era, wins etc) </param>
+            <see> View 'LeadingPitcher' model for options that you can sort by for this method </see>
+        </member>
+        <member name="M:BaseballScraper.Controllers.MlbDataApiControllers.cs.MlbDataPitchingLeadersController.GetPitchingLeadersAsync">
+            <summary> OPTION 2: Get pitchin leaders w filters defined within method </summary>
+        </member>
+        <member name="M:BaseballScraper.Controllers.MlbDataApiControllers.cs.MlbDataPitchingLeadersController.ViewPitchingLeadersAsync(System.Int32,System.String,System.String)">
+            <summary> OPTION 1: Initiate retrieval of mlb pitching leaders for current season </summary>
+            <param name="numberToReturn"> The number of pitchers to return in the results (e.g. 50 would show you the top 50 leaders) </param>
+            <param name="year"> The year that you want to retrieve the leaders for (e.g. 2018 gets you leaders for 2018 mlb season) </param>
+            <param name="sortColumn"> This is the stat you want to retrieve the leaders for (e.g., era, wins etc) </param>
+            <see> View 'LeadingPitcher' model for options that you can sort by for this method </see>
+            <example> https://127.0.0.1:5001/api/mlb/pitchingleaders </example>
+            <returns> Pitching leaders for current season </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.MlbDataApiControllers.cs.MlbDataPitchingLeadersController.ViewPitchingLeadersAsync">
+            <summary> OPTION 2: Initiate retrieval of mlb Pitching leaders for current season </summary>
+            <example> https://127.0.0.1:5001/api/mlb/pitchingleaders </example>
+            <returns> Pitching leaders for current season </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.MlbDataApiControllers.cs.MlbDataProjectedPitchingStatsController.ViewPlayerInfo(System.Int32)">
+            <summary> View instantiated pecota projections for a selected pitcher in a selected season  </summary>
+            <example> https://127.0.0.1:5001/api/mlb/projectedpitchingstats/592789 </example>
+            <returns> A view of a projectedpitchingstats model </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.MlbDataApiControllers.MlbDataPlayerInfoController.ViewPlayerInfo(System.Int32)">
+            <summary> View instantiated player model with player's info </summary>
+            <returns> A view of a playerinfo model </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.MlbDataApiControllers.MlbDataPlayerSearchController.ViewPlayerSearchModel(System.String)">
+            <summary> View instantiated PlayerSearch object  </summary>
+            <returns> Instantiated PlayerSearch </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.MlbDataApiControllers.MlbDataProjectedHittingStatsController.ViewPlayerInfo(System.Int32)">
+            <summary> View instantiated pecota projections for a selected hitter in a selected season  </summary>
+            <example> https://127.0.0.1:5001/api/mlb/projectedhittingstats/493316 </example>
+            <returns> A view of a projectedhittingstats model </returns>
+        </member>
+        <member name="T:BaseballScraper.Controllers.Player.PlayerBaseController">
+            <summary> Retrieve all records from PlayerBase.xlsx; retrieve individual player records from PlayerBase.xlsx </summary>
+            <list> INDEX
+                <item> View all player bases <see cref="M:BaseballScraper.Controllers.Player.PlayerBaseController.ViewPlayerBaseHome" /> </item>
+                <item> Get all players bases <see cref="M:BaseballScraper.Controllers.Player.PlayerBaseController.GetAllPlayerBasesFromExcel" /> </item>
+                <item> Get all players bases by team <see cref="M:BaseballScraper.Controllers.Player.PlayerBaseController.GetAllPlayerBasesForOneMlbTeam(System.String)" /> </item>
+                <item> Get one player's base by mlb id <see cref="M:BaseballScraper.Controllers.Player.PlayerBaseController.GetOnePlayersBaseFromMlbId(System.String)" /> </item>
+                <item> Get one player's base by sfbb id <see cref="M:BaseballScraper.Controllers.Player.PlayerBaseController.GetOnePlayersBaseFromSfbbId(System.String)" /> </item>
+                <item> Get one player's base by baseball hq id <see cref="M:BaseballScraper.Controllers.Player.PlayerBaseController.GetOnePlayersBaseFromBaseballHqId(System.String)" /> </item>
+                <item> Get one player's base by davenport id <see cref="M:BaseballScraper.Controllers.Player.PlayerBaseController.GetOnePlayersBaseFromDavenportId(System.String)" /> </item>
+                <item> Get one player's base by baseball prospectus id <see cref="M:BaseballScraper.Controllers.Player.PlayerBaseController.GetOnePlayersBaseFromBaseballProspectusId(System.String)" /> </item>
+                <item> Get one player's base by baseball reference id <see cref="M:BaseballScraper.Controllers.Player.PlayerBaseController.GetOnePlayersBaseFromBaseballReferenceId(System.String)" /> </item>
+                <item> Get one player's base by cbs id <see cref="M:BaseballScraper.Controllers.Player.PlayerBaseController.GetOnePlayersBaseFromCbsId(System.String)" /> </item>
+                <item> Get one player's base by espn id <see cref="M:BaseballScraper.Controllers.Player.PlayerBaseController.GetOnePlayersBaseFromEspnId(System.String)" /> </item>
+                <item> Get one player's base by fangraphs id <see cref="M:BaseballScraper.Controllers.Player.PlayerBaseController.GetOnePlayersBaseFromFanGraphsId(System.String)" /> </item>
+                <item> Get one player's base by lahman id <see cref="M:BaseballScraper.Controllers.Player.PlayerBaseController.GetOnePlayersBaseFromLahmanId(System.String)" /> </item>
+                <item> Get one player's base by nfbc id <see cref="M:BaseballScraper.Controllers.Player.PlayerBaseController.GetOnePlayersBaseFromNfbcId(System.String)" /> </item>
+                <item> Get one player's base by retro id <see cref="M:BaseballScraper.Controllers.Player.PlayerBaseController.GetOnePlayersBaseFromRetroId(System.String)" /> </item>
+                <item> Get one player's base by yahoo id <see cref="M:BaseballScraper.Controllers.Player.PlayerBaseController.GetOnePlayersBaseFromYahooId(System.String)" /> </item>
+                <item> Get one player's base by ottoneu id <see cref="M:BaseballScraper.Controllers.Player.PlayerBaseController.GetOnePlayersBaseFromOttoneuId(System.String)" /> </item>
+                <item> Get one player's base by rotowire id <see cref="M:BaseballScraper.Controllers.Player.PlayerBaseController.GetOnePlayersBaseFromRotoWireId(System.String)" /> </item>
+            </list>
+            <list> RESOURCES
+                <item> https://github.com/mganss/ExcelMapper </item>
+                <item> https://www.smartfantasybaseball.com/tools/ </item>
+                <item> http://crunchtimebaseball.com/baseball_map.html </item>
+            </list>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Controllers.Player.PlayerBaseController.GetAllPlayerBasesFromExcel" -->
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Controllers.Player.PlayerBaseController.GetAllPlayerBasesForOneMlbTeam(System.String)" -->
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Controllers.Player.PlayerBaseController.GetOnePlayersBaseFromMlbId(System.String)" -->
+        <member name="M:BaseballScraper.Controllers.Player.PlayerBaseController.GetAllPlayerIdsList(BaseballScraper.Models.Player.PlayerBase)">
+            <summary> This method created a list of a player's ids from all id types available in the PlayerBase Excel file </summary>
+            <param name="playersBase"> An instantiated PlayerBase</param>
+            <returns> A list of all of a player's ids </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.Player.PlayerBaseController.GetAllPlayerIdsDictionary(BaseballScraper.Models.Player.PlayerBase)">
+            <summary> This method created a dictionary of a player's ids from all id types available in the PlayerBase; The keys are the id type, the values are the actual id number  </summary>
+            <param name="playersBase"> An instantiated PlayerBase </param>
+            <returns> A dictionary of all of a player's ids with key value pairs of Key: Id type, Value: id number/string </returns>
+        </member>
+        <member name="T:BaseballScraper.Controllers.TwitterController">
+            <summary> Provides three options on how to initialize method
+                OPTION 1 - search string defined within the method
+                OPTION 2 - search string is passed to the method as a parameter (i.e., 'searchString')
+                OPTION 3 - search string is passed as a parameter within the url
+            </summary>
+            <list> INDEX
+                <item> Execute Twitter string search [Option 1] <see cref="M:BaseballScraper.Controllers.TwitterController.ExecuteTwitterStringSearch" /> </item>
+                <item> Execute Twitter string search [Option 2] <see cref="M:BaseballScraper.Controllers.TwitterController.ExecuteTwitterStringSearch(System.String)" /> </item>
+                <item> View Twitter search results <see cref="M:BaseballScraper.Controllers.TwitterController.ViewTwitterStringSearchResults" /> </item>
+                <item> Execute Twitter string search [Option 3] <see cref="M:BaseballScraper.Controllers.TwitterController.ExecuteTwitterStringSearch(System.String,System.String)" /> </item>
+            </list>
+        </member>
+        <member name="M:BaseballScraper.Controllers.TwitterController.ExecuteTwitterStringSearch">
+            <summary> Scrapes twitter to find most recent tweets that include 'searchString' that is defined within the method </summary>
+            <remarks> In Option 1, there are no parameters passed into the method. To change what you are searching for, modify the variable 'searchString' within the method itself </remarks>
+            <example> https://127.0.0.1:5001/api/twitter/playersearch </example>
+            <returns> A list of tweets </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.TwitterController.ExecuteTwitterStringSearch(System.String)">
+            <summary> Scrapes twitter to find most recent tweets that include 'searchString' parameter </summary>
+            <remarks> In Option 2, there is one parameter passed into the method. To change what you are searching for, modify the parameter when calling the method </remarks>
+            <param name="searchString"> The string that you would like to search twitter for </param>
+            <example> TwitterStringSearch("anthony rizzo"); </example>
+            <returns> A list of tweets </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.TwitterController.ViewTwitterStringSearchResults">
+            <summary> This allows viewing / testing of Option 2; The method is called and a string is passed as a parameter </summary>
+            <returns> A view and a list of tweets </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.TwitterController.ExecuteTwitterStringSearch(System.String,System.String)">
+            <summary> Scrapes twitter to find most recent tweets that include 'searchString' parameter </summary>
+            <remarks> In Option 3, there are two parameters called into method. To change what you are searching for, modify the end of the url </remarks>
+            <param name="searchString"> The string that you would like to search twitter for </param>
+            <param name="blankString"> This parameter doesn't actually do anything; needed to make this method different than the previous; there is probably a better way to do this </param>
+            <example> https://127.0.0.1:5001/api/twitter/playersearch/anthony+rizzo </example>
+            <returns> A list of tweets </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooAuthController.GenerateUserAuthorizationCode">
+            <summary> This triggers the browser to open a new window that asks the user to authorize the usage of their data within the app. When the user approves, they will receive a short authorization code. This code should then be entered in the terminal </summary>
+            <returns> AuthorizationCode which is a string entered in the console </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooAuthController.SetSessionAuthorizationCode(System.String)">
+            <summary> Takes the authorization code and sets it within session / This is called within the GenerateUserAuthorizationCode method </summary>
+            <returns> Void </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooAuthController.CreateYahooAccessTokenResponseJObject">
+            <summary> Generate the 'request' for authorization / Then convert it to a JObject </summary>
+            <returns> The HttpWebRequest for authorization converted to a JObject </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooAuthController.GetYahooAccessTokenResponse">
+            <summary> Retrieve response from Yahoo. Create a new instance of AccessTokenResponse from yahoo response </summary>
+            <returns> A new AccessTokenResponse --> includes AccessToken, TokenType, ExpiresIn, RefreshToken, XOAuthYahooGuid</returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooAuthController.SetSessionAccessTokenItems(BaseballScraper.Models.Configuration.AccessTokenResponse)">
+            <summary> Take access token response and set the various items in session </summary>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooHomeController.GenerateWebRequest(System.String)">
+            <summary> Generates the web request using a yahoo api endpoint. This is followed by the method GetResponseFromServer.static It is ultimately called within GenerateYahooResourceJObject Method </summary>
+            <param name="uri"></param>
+            <returns> HttpWebRequest request </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooHomeController.GetResponseFromServer(System.Net.HttpWebRequest)">
+            <summary> Follows GenerateWebRequest method. It receives the response from the request and returns a string of xml.static This is followed by the TranslateServerResponseToXml Method. It is ultimatelly called within GenerateYahooResourceJObject Method</summary>
+            <param name="request"></param>
+            <returns> serverResponse string; that looks like Xml </returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Controllers.YahooControllers.YahooHomeController.TranslateServerResponseToXml(System.String)" -->
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooHomeController.GenerateYahooResourceJObject(System.String)">
+            <summary> generate json for any given yahoo resource (e.g., game, league, player, team, etc.)</summary>
+            <param name="uri"> uri will typically be generated from an endpoint within YahooApiEndPoints.cs</param>
+            <returns> json / a jobject of the resource type requested</returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooHomeController.SaveObjectToDatabase(System.Object)">
+            <summary> take in an instance of a yahoo model and save it to the database</summary>
+            <param name="yahoomodel"></param>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooManagerController.CreateYahooManagerModel(System.Int32)">
+            <summary> Instantiate new instance of a yahoo manager </summary>
+            <param name="managerId"> A number 0 - X; Where X is the total number of teams in the league; Basically every manager has their own single number Id; Select the Id of the Manager you would want to view </param>
+            <example> https://127.0.0.1:5001/api/yahoo/manager/1 </example>
+            <returns> A new YahooManager </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooManagerController.ViewYahooManagerModel">
+            <summary> View the yahoo manager page</summary>
+            <example> https://127.0.0.1:5001/api/yahoo/manager/view </example>
+            <returns> A view with instantiated model </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooScoreboardController.ViewLeagueScoreboardAsync">
+            <example> https://127.0.0.1:5001/api/yahoo/scoreboard </example>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTeamBaseController.CreateYahooTeamBaseModel">
+            <summary> Create instance of yahoo team model; save it to the database</summary>
+            <example> https://127.0.0.1:5001/api/yahoo/teambase </example>
+            <returns> new YahooTeamBase </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTeamPointsController.CreateYahooTeamPointsModel">
+            <summary> Create new instance of YahooTeamPoints model </summary>
+            <example> https://127.0.0.1:5001/api/yahoo/teampoints/season </example>
+            <returns> Instance of YahooTeamPoints model; includes CoverageType, WeekOrYear, and Total points </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTeamPointsController.CreateYahooTeamPointsModel(System.Int32,Newtonsoft.Json.Linq.JObject)">
+            <summary> Create new instance of YahooTeamPoints model </summary>
+            <param name="teamId"> A number between 0 and the total number of teams in the league with each number in between representing one of the teams (i.e., each team has its own unique team id number) </param>
+            <param name="o"> An object that contains the json needed to instantiate new instance of YahooTeamPoints model</param>
+            <returns> Instance of YahooTeamPoints model; includes CoverageType, WeekOrYear, and Total points  </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTeamPointsController.ViewTeamPoints">
+            <summary> This allows viewing / testing of Option 2; The method is called and a team id and a JObject are passed parameters </summary>
+            <example> https://127.0.0.1:5001/api/yahoo/teampoints </example>
+            <returns> A view of points for a selected team </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTeamStandingController.CreateYahooTeamStandingModel">
+            <summary> Return instantiated 'YahooTeamStanding' </summary>
+            <example> https://127.0.0.1:5001/api/yahoo/teamstanding </example>
+            <returns> rank, playoff seed, games back, wins, losses, ties, winning percentage </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTeamStatsController.CreateYahooTeamStatsModel">
+            <summary> Create new instance of YahooTeamStats Model; Show full season stats for one team </summary>
+            <remarks> Within Option 1, the 'teamId' is defined within the method itself; to change the team Id you're searching for, change the 'teamId' variable; </remarks>
+            <example> https://127.0.0.1:5001/api/yahoo/teamstats/season </example>
+            <returns> new YahooTeamStatsModel </returns>
+                <remarks> Includes: H/AB, R, HR, RBI, SB, BB, IP, W, SV, H, ERA, WHIP </remarks>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTeamStatsController.CreateYahooTeamStatsModel(System.Int32)">
+            <summary> Create new instance of YahooTeamStats Mode; Show full season stats for one team </summary>
+            <remarks> Within Option 2, there is one parameter passed into the method - the 'teamId'; This option must be called by another method. To change the team you want to view the stats for, change the id number you are passing when calling the method </remarks>
+            <param name="teamId"> A number between 0 and the total number of teams in the league with each number in between representing one of the teams (i.e., each team has its own unique team id number) </param>
+            <example> CreateYahooTeamStatsModel(1) </example>
+            <returns> new YahooTeamStatsModel </returns>
+                <remarks> Includes: H/AB, R, HR, RBI, SB, BB, IP, W, SV, H, ERA, WHIP </remarks>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTeamStatsController.ViewTeamStats">
+            <summary> This allows viewing / testing of Option 2; The method is called and a team id is passed as a parameter </summary>
+            <example> https://127.0.0.1:5001/api/yahoo/teamstats </example>
+            <returns> A view of team stats for a selected team </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTeamStatsController.CreateYahooTeamStatsModel(System.Int32,System.String)">
+            <summary> Create new instance of YahooTeamStats Mode; Show full season stats for one team </summary>
+            <remarks> Within Option 3, there are two parameters. To change the team you are searching for, change the team id within the url itself </remarks>
+            <param name="teamId"> A number between 0 and the total number of teams in the league with each number in between representing one of the teams (i.e., each team has its own unique team id number) </param>
+            <param name="blankString"> This parameter doesn't actually do anything; needed to make this method different than the previous method; there is probably a better way to do this </param>
+            <example> https://127.0.0.1:5001/api/yahoo/teamstats/season/2 </example>
+            <returns> new YahooTeamStatsModel </returns>
+                <remarks> Includes: H/AB, R, HR, RBI, SB, BB, IP, W, SV, H, ERA, WHIP </remarks>
+        </member>
+        <member name="T:BaseballScraper.Controllers.YahooControllers.YahooTransactionTrendsController">
+            <summary> Scrapes Yahoo transaction trend data </summary>
+            <list> INDEX
+                <item> Set search date <a cref="M:BaseballScraper.Controllers.YahooControllers.YahooTransactionTrendsController.SetSearchDate(System.String,System.String,System.String)" /> </item>
+                <item> Set search date as today <a cref="M:BaseballScraper.Controllers.YahooControllers.YahooTransactionTrendsController.SetSearchDateAsToday" /> </item>
+                <item> Generate list <a cref="M:BaseballScraper.Controllers.YahooControllers.YahooTransactionTrendsController.GenerateList(HtmlAgilityPack.HtmlDocument)" /> </item>
+                <item> Get trends for today, all positions <a cref="M:BaseballScraper.Controllers.YahooControllers.YahooTransactionTrendsController.GetTrendsForTodayAllPositions" /> </item>
+                <item> Get trends for today, one position <a cref="M:BaseballScraper.Controllers.YahooControllers.YahooTransactionTrendsController.GetTrendsForTodayOnePosition(System.String)" /> </item>
+                <item> Get trends for specific date, all positions <a cref="M:BaseballScraper.Controllers.YahooControllers.YahooTransactionTrendsController.GetTrendsForDateAllPositions(System.String,System.String,System.String)" /> </item>
+                <item> Get trends for specific date, one position <a cref="M:BaseballScraper.Controllers.YahooControllers.YahooTransactionTrendsController.GetTrendsForDateOnePosition(System.String,System.String,System.String,System.String)" /> </item>
+            </list>
+            <list> RESOURCES
+                <item> https://baseball.fantasysports.yahoo.com/f1/buzzindex </item>
+                <item> https://baseball.fantasysports.yahoo.com/b1/buzzindex </item>
+            </list>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTransactionTrendsController.SetSearchDate(System.String,System.String,System.String)">
+            <summary> Sets a query url for a specific date </summary>
+            <param name="fourDigitYear"> string year e.g. "2018" </param>
+            <param name="twoDigitMonth"> string month e.g. "10" </param>
+            <param name="twoDigitDay"> string day e.g. "08" </param>
+            <example> var urlToScrape = SetSearchDate("2018", "10" "01"); </example>
+            <returns> A concatenated string of the url to scrape </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTransactionTrendsController.SetSearchDateAsToday">
+            <summary> Sets date as today's date to be added to search query url </summary>
+            <returns> A concatenated string of the url to scrape </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTransactionTrendsController.GenerateList(HtmlAgilityPack.HtmlDocument)">
+            <summary> Generates a list of trends given a specific Html page </summary>
+            <remarks> This method is used by all methods in the 'Get Trends' Region </remarks>
+            <param name="thisUrlsHtml"> The html to scrape </param>
+            <returns> A list of trends of YahooTransactionTrendsPlayers </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTransactionTrendsController.GetTrendsForTodayAllPositions">
+            <summary> Get trends for all positions for today's dates </summary>
+            <example> GetTrendsForTodayAllPositions(); </example>
+            <returns> A list of YahooTransactionTrendsPlayer --> Name, Drops, Adds, Trades, Total </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTransactionTrendsController.GetTrendsForTodayOnePosition(System.String)">
+            <summary> Get trends for one position for today's date </summary>
+            <param name="positionShort"> Shortened position string ("1B", "2B", "3B", "SS", "OF", "P", "SP", "RP", "C", "Util")</param>
+            <example> GetTrendsForTodayOnePosition("QB"); </example>
+            <returns> A list of YahooTransactionTrendsPlayer --> Name, Drops, Adds, Trades, Total </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTransactionTrendsController.GetTrendsForDateAllPositions(System.String,System.String,System.String)">
+            <summary> Get trends for all positions for a specific date </summary>
+            <param name="fourDigitYear"> string year e.g. "2018" </param>
+            <param name="twoDigitMonth"> string month e.g. "10" </param>
+            <param name="twoDigitDay"> string day e.g. "08" </param>
+            <example> GetTrendsForDateAllPositions("2018", "10", "01"); </example>
+            <returns> A list of YahooTransactionTrendsPlayer --> Name, Drops, Adds, Trades, Total </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTransactionTrendsController.GetTrendsForDateOnePosition(System.String,System.String,System.String,System.String)">
+            <summary> Get trends for one position for a specific date </summary>
+            <param name="fourDigitYear"> string year e.g. "2018" </param>
+            <param name="twoDigitMonth"> string month e.g. "10" </param>
+            <param name="twoDigitDay"> string day e.g. "08" </param>
+            <param name="positionShort"> Shortened position string ("1B", "2B", "3B", "SS", "OF", "P", "SP", "RP", "C", "Util")</param>
+            <example> GetTrendsForDateOnePosition("2018", "10", "01", "QB"); </example>
+            <returns> A list of YahooTransactionTrendsPlayer --> Name, Drops, Adds, Trades, Total </returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.EndPoints.MlbDataApiEndPoints.PitchingLeadersEndPoint(System.Int32,System.String,System.String)" -->
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.EndPoints.MlbDataApiEndPoints.PitchingLeadersEndPoint(System.Int32,System.String,System.String,System.String)" -->
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.EndPoints.MlbDataApiEndPoints.HittingLeadersEndPoint(System.Int32,System.String,System.String)" -->
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.EndPoints.MlbDataApiEndPoints.HittingLeadersEndPoint(System.Int32,System.String,System.String,System.String)" -->
+        <member name="M:BaseballScraper.Infrastructure.ApiInfrastructure.ReturnJsonFromObject(System.Object)">
+            <summary> Serialize a given object to a JSON stream (i.e., take a given object and convert it to JSON ) </summary>
+            <param name="obj"> An object; typically a JObject (not certain how it deals with objects besides JObjects) </param>
+            <returns></returns>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.ApiInfrastructure.CreateModelJToken(Newtonsoft.Json.Linq.JObject,System.String)">
+            <summary> Returns a JToken that lists keys/values for player items in PlayerSearch api </summary>
+            <returns> A JToken</returns>
+        </member>
+        <member name="T:BaseballScraper.Infrastructure.CsvHandler">
+            <summary> </summary>
+            <list> RESOURCES
+                <item> Csv Helper
+                    <description> https://joshclose.github.io/CsvHelper/reading/#getting-all-records </description>
+                </item>
+                <item> Generate Class From CSV
+                    <description> https://toolslick.com/generation/code/class-from-csv </description>
+                </item>
+            </list>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.CsvHandler.ReadCsvRecords(System.String,System.Type,System.Type)">
+            <summary> Reads a csv file, non async </summary>
+            <param name="csvFilePath"> The location / path of the file that you want to read </param>
+            <example> _cH.ReadCsv("BaseballData/Lahman/Teams.csv"); </example>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.CsvHandler.ReadCsvRecordsAsync(System.String,System.Type,System.Type)">
+            <summary> Reads a csv file, async </summary>
+            <remarks> This does not enumerate over the records </remarks>
+                <seealso cref="M:BaseballScraper.Infrastructure.Helpers.EnumerateOverRecords(System.Collections.Generic.IEnumerable{System.Object})" />
+                <seealso cref="M:BaseballScraper.Infrastructure.Helpers.EnumerateOverRecordsDynamic(System.Collections.Generic.IEnumerable{System.Object})" />
+                <seealso cref="M:BaseballScraper.Infrastructure.Helpers.EnumerateOverRecordsObject(System.Collections.Generic.IEnumerable{System.Object})" />
+            <param name="csvFilePath"> The location / path of the file that you want to read </param>
+            <param name="modelType"> The Lahman class / model that is in the csv file </param>
+                <example> typeof(LahmanPeople) </example>
+            <param name="modelMapType"> The map of the Lahman class / model that is in the csv file </param>
+                <example> typeof(LahmanPeopleMap) </example>
+            <example> await _cH.ReadCsvRecordsAsync(filePath, typeof(LahmanPeople), typeof(LahmanPeopleMap)); </example>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.CsvHandler.RegisterMapForClass(CsvHelper.CsvReader,System.Type)">
+            <summary> Register the map for the class within a csv you are trying read </summary>
+            <remarks> This is required any type you want to use a model map </remarks>
+            <param name="csvReader"> A reader reading a csv file </param>
+            <param name="modelType"> The Lahman class / model that is in the csv file </param>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.DataTabler.GetModelProperties">
+            <summary> Given a model / class, get the properties of that model </summary>
+            <returns> Model properties for a given class (e.g, FanGraphsPitcher) </returns>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.DataTabler.CreateListOfModelProperties">
+            <summary> Given a model / class, create a list(string) of the models property names (e.g, Wins) </summary>
+            <returns> A list of property names </returns>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.DataTabler.CreateDataTable(System.String)">
+            <summary> Create a new data table </summary>
+            <returns> A new data table based on the model of your choosing </returns>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.DataTabler.SetDataTableColumnHeaders(System.Collections.Generic.List{System.String},System.Data.DataTable)">
+            <summary> Given a data table, set the tables headers with the values given in a list </summary>
+            <param name="list"> A list of strings that you want to be the headers </param>
+            <param name="dataTable"> The target data table that you want to set the headers for </param>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.DataTabler.SetDataTableColumnHeaders(System.Data.DataColumn[],System.Data.DataTable)">
+            <summary> Given a data table, set the tables headers with a group of given data columns </summary>
+            <param name="dataTableColumns"> A column including the column name / text </param>
+            <param name="dataTable"> The target data table that you want to set the headers for </param>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.DataTabler.SetDataTablePrimaryKeyColumn(System.Data.DataTable,System.String)">
+            <summary> Set one data table column as the primary key column </summary>
+            <param name="dataTable"> The target data table that you want to set the primary key column for </param>
+            <param name="keyColumnName"> The column that you want to make the primary key column </param>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.DataTabler.InsertDataRowIntoTable(System.Data.DataTable,System.String,System.String)">
+            <summary> Insert a row of data within a data table; desired cell value is passed in as a parameter </summary>
+            <param name="dataTable"> The target data table that you want to insert a row into </param>
+            <param name="dataTableColumn"> The target column that you want to insert data into </param>
+            <param name="cellValue"> The value that you want to insert into the cell of the column </param>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.DataTabler.InsertDataRowIntoTable(System.Data.DataTable)">
+            <summary> Insert a row of data within a data table; desired cell values are set within the method </summary>
+            <param name="dataTable"> The target data table that you want to insert a row into </param>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.DataTabler.InsertDataRowIntoTable(System.Data.DataTable,System.Int32)">
+            <summary> Insert a row of data within a data table; desired row/cell values are set within a group of objects </summary>
+            <param name="dataTable"> The target data table that you want to insert a row into </param>
+            <param name="rowNumber"> ? Not sure this is needed </param>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.DataTabler.PrintTable(System.Data.DataTable)">
+            <summary> Print a data table in console </summary>
+            <param name="dataTable"> The data table that you want to print in console </param>
+        </member>
+        <member name="T:BaseballScraper.Infrastructure.ExcelHandler">
+             <summary> </summary>
+             <list> INDEX
+             RegisterProviderToStart <see cref="M:BaseballScraper.Infrastructure.ExcelHandler.RegisterProviderToStart" />
+             SetThreadCurrentCulture <see cref="M:BaseballScraper.Infrastructure.ExcelHandler.SetThreadCurrentCulture" />
+             CreateNewExcelWorkbook <see cref="M:BaseballScraper.Infrastructure.ExcelHandler.CreateNewExcelWorkbook(System.String)" />
+             CreateNewExcelWorkbook <see cref="M:BaseballScraper.Infrastructure.ExcelHandler.CreateNewExcelWorkbook" />
+             CreateNewExcelWorkbook <see cref="M:BaseballScraper.Infrastructure.ExcelHandler.CreateNewExcelWorkbook(System.String,System.String)" />
+             ManageWorkbookNames <see cref="M:BaseballScraper.Infrastructure.ExcelHandler.ManageWorkbookNames(System.String)" />
+             AddSheetToExistingExcelWorkbook <see cref="M:BaseballScraper.Infrastructure.ExcelHandler.AddSheetToExistingExcelWorkbook(System.String,System.String)" />
+             GetAllWorkbookSheets <see cref="M:BaseballScraper.Infrastructure.ExcelHandler.GetAllWorkbookSheets(System.String)" />
+             AddRecordToSheet <see cref="M:BaseballScraper.Infrastructure.ExcelHandler.AddRecordToSheet(System.String,System.String)" />
+             GetAllRecordsInSheet <see cref="M:BaseballScraper.Infrastructure.ExcelHandler.GetAllRecordsInSheet(System.String,System.String)" />
+             AddRecordsToList <see cref="M:BaseballScraper.Infrastructure.ExcelHandler.AddRecordsToList``1(System.Collections.Generic.IList{``0},``0)" />
+             PrintRecord <see cref="M:BaseballScraper.Infrastructure.ExcelHandler.PrintRecord``1(Npoi.Mapper.RowInfo{``0})" />
+             SetColumnWidth <see cref="M:BaseballScraper.Infrastructure.ExcelHandler.SetColumnWidth(Export.XLS.ExcelDocument,System.String,System.Int32)" />
+             SetColumnWidth <see cref="M:BaseballScraper.Infrastructure.ExcelHandler.SetColumnWidth(Export.XLS.ExcelDocument,System.Int32,System.Int32)" />
+             SetCellValue <see cref="M:BaseballScraper.Infrastructure.ExcelHandler.SetCellValue(Export.XLS.ExcelDocument,System.Int32,System.String,System.Object)" />
+             SetCellValue <see cref="M:BaseballScraper.Infrastructure.ExcelHandler.SetCellValue(Export.XLS.ExcelDocument,System.Int32,System.Int32,System.Object)" />
+             SetFont <see cref="M:BaseballScraper.Infrastructure.ExcelHandler.SetFont(Export.XLS.ExcelDocument,System.Int32,System.String,System.String,System.Int32)" />
+             SetFont <see cref="M:BaseballScraper.Infrastructure.ExcelHandler.SetFont(Export.XLS.ExcelDocument,System.Int32,System.Int32,System.String,System.Int32)" />
+             FormatDate <see cref="M:BaseballScraper.Infrastructure.ExcelHandler.FormatDate(Export.XLS.ExcelDocument,System.Int32,System.Int32)" />
+             ColumnHeaderLetterToNumber <see cref="M:BaseballScraper.Infrastructure.ExcelHandler.ColumnHeaderLetterToNumber(System.String)" />
+             </list>
+            
+             <list> RESOURCES
+             <item> https://github.com/perevoznyk/excel-export/blob/master/README.md </item>
+             <item> https://github.com/dotnetcore/NPOI/blob/master/samples/Npoi.Samples.CreateNewSpreadsheet/Program.cs </item>
+             </list>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.ExcelHandler.RegisterProviderToStart">
+            <summary> Needs to be run before most Excel methods </summary>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.ExcelHandler.SetThreadCurrentCulture">
+            <summary> Needs to be run before most Excel methods </summary>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.ExcelHandler.CreateNewExcelWorkbook(System.String)">
+            <summary> This creates and saves a new Excel (XLS) file </summary>
+            <remarks> File Type: XLSX </remarks>
+            <param name="fileName"> What you want the file to be named </param>
+            <example> _eM.CreateNewExcelWorkbook("BaseballScraper"); </example>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.ExcelHandler.CreateNewExcelWorkbook">
+            <summary> OPTION 1 --> Create and save a new Excel (xlsx) file </summary>
+            <remarks> File Type: XLSX </remarks>
+            <remarks> The name of the new Excel document and its first tab are defined within the method </remarks>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.ExcelHandler.CreateNewExcelWorkbook(System.String,System.String)">
+            <summary> OPTION 2 --> Create and save a new Excel (xlsx) file </summary>
+            <remarks> File Type: XLSX </remarks>
+            <param name="fileName"> The name of the new Excel document that you want to create </param>
+            <param name="sheetName"> The name of the first tab / sheet of the new Excel document </param>
+            <example> _eM.CreateNewExcelWorkbook("BaseballScraper", "FgPitchers"); </example>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.ExcelHandler.ManageWorkbookNames(System.String)">
+            <summary> This will format file names entered as string correctly to ensure the file name can be used by other methods; It will check if a the string entered as an argument to a method includes the '.xlsx' appended to the end of it; If it doesn't, it will add it; If it does, it will do nothing </summary>
+            <param name="fileName"> The string, representing a file name, that needs to be checked </param>
+            <returns> Properly formatted file name (as a string) that includes '.xlsx' appended to the file name </returns>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.ExcelHandler.AddSheetToExistingExcelWorkbook(System.String,System.String)">
+            <summary> Adds a new tab / sheet to an existing Excel file </summary>
+            <remarks> File Type: XLSX </remarks>
+            <param name="fileName"> The name of the file that you want to add a new tab / sheet too </param>
+            <param name="sheetName"> The new tab / sheet's name </param>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.ExcelHandler.AddRecordToSheet(System.String,System.String)">
+            <summary> Add a new row / record to a sheet in an existing xlsx </summary>
+            <param name="fileName"> The name of the file you are targeting </param>
+            <param name="sheetName"> The name of the tab / sheet you are targeting </param>
+            <example> _eM.AddRecordToSheet("BaseballScraper", "FgHitters"); </example>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Infrastructure.ExcelHandler.GetAllRecordsInSheet(System.String,System.String)" -->
+        <member name="M:BaseballScraper.Infrastructure.ExcelHandler.AddRecordsToList``1(System.Collections.Generic.IList{``0},``0)">
+            <summary> Add retrieved records / rows to a list </summary>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.ExcelHandler.PrintRecord``1(Npoi.Mapper.RowInfo{``0})">
+            <summary> Prints records to a list </summary>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.ExcelHandler.SetColumnWidth(Export.XLS.ExcelDocument,System.String,System.Int32)">
+            <summary> OPTION 1 --> Set the width of a given column </summary>
+            <remarks> In option 1, you provide a letter; this is more intuitive than providing a number since Excel column headers are letters. A switch is used to convert the letter you provide to the right number so that the mapper understands it </remarks>
+            <param name="document"> Excel document that the column is in </param>
+            <param name="columnLetter"> The header letter (e.g, "A" or "AA" or "Z")</param>
+            <param name="columnWidth"> The width that you want the column to be </param>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.ExcelHandler.SetColumnWidth(Export.XLS.ExcelDocument,System.Int32,System.Int32)">
+            <summary> OPTION 2 --> Set the width of a given column </summary>
+            <remarks> In option 2, you provide a number that corresponds to column number </remarks>
+            <param name="document"> Excel document that the column is in </param>
+            <param name="columnNumber"> The target column number </param>
+            <param name="columnWidth"> The width that you want the column to be </param>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.ExcelHandler.SetCellValue(Export.XLS.ExcelDocument,System.Int32,System.String,System.Object)">
+            <summary> OPTION 1 --> Set the contents of a cell </summary>
+            <remarks> In option 1, you provide a letter; this is more intuitive than providing a number since Excel column headers are letters. A switch is used to convert the letter you provide to the right number so that the mapper understands it </remarks>
+            <param name="document"> Excel document that the cell is in </param>
+            <param name="rowNumber"> The row of the cell </param>
+            <param name="columnLetter"> The column letter of the cell </param>
+            <param name="cellValue"> What you want to add to the cell </param>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.ExcelHandler.SetCellValue(Export.XLS.ExcelDocument,System.Int32,System.Int32,System.Object)">
+            <summary> OPTION 2 --> Set the contents of a cell </summary>
+            <remarks> In option 2, you provide a number to represent the target column </remarks>
+            <param name="document"> Excel document that the cell is in </param>
+            <param name="rowNumber"> The row of the cell </param>
+            <param name="columnLetter"> The column number of the cell </param>
+            <param name="cellValue"> What you want to add to the cell </param>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.ExcelHandler.SetFont(Export.XLS.ExcelDocument,System.Int32,System.String,System.String,System.Int32)">
+            <summary> OPTION 1 --> Set font of a target cell </summary>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.ExcelHandler.SetFont(Export.XLS.ExcelDocument,System.Int32,System.Int32,System.String,System.Int32)">
+            <summary> OPTION 2 --> Set font of a target cell </summary>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.ExcelHandler.FormatDate(Export.XLS.ExcelDocument,System.Int32,System.Int32)">
+            <summary> Format a date cell </summary>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.ExcelHandler.ColumnHeaderLetterToNumber(System.String)">
+            <summary> Converts a given letter to it's corresponding number </summary>
+            <remark> This makes it so you can enter a letter instead of a number when identifying an Excel column; basically it makes it more intuitive / natural - you don't have to figure out what column number each letter is </remark>
+            <param name="letter"> A letter that corresponds to an Excel column </param>
+            <returns> The column number of an Excel column </returns>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.GoogleSheetsConnector.UpdateData(System.Collections.Generic.IList{System.Collections.Generic.IList{System.Object}},System.String,System.String,System.String)">
+            <example>
+                var data = ReadDataFromSheetRange(string documentName, string tabName, string range)
+                UpdateData(data, "A1:Z1000","SfbbPlayerIdMap","1qKnB5z6qVeHD_eSGFJdJsWKh2muJt_-Cn-ZzdjuSbDw")
+            </example>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.Helpers.PrintJsonFromObject(System.Object)">
+            <summary> Serialize a given object to a JSON stream (i.e., take a given object and convert it to JSON ) and print to console </summary>
+            <param name="obj"> An object; typically a JObject (not certain how it deals with objects besides JObjects) </param>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.Helpers.PrintDataTable(System.Data.DataTable)">
+            <summary> Print a data table in console </summary>
+            <param name="dataTable"> The data table that you want to print in console </param>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Infrastructure.Helpers.PrintKeyValuePairs(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.Object}})" -->
+        <member name="M:BaseballScraper.Infrastructure.Helpers.GetModelProperties">
+            <summary> Given a model / class, get the properties of that model </summary>
+            <returns> Model properties for a given class (e.g, FanGraphsPitcher) </returns>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.Helpers.CreateListOfModelProperties">
+            <summary> Given a model / class, create a list(string) of the models property names (e.g, Wins) </summary>
+            <returns> A list of property names </returns>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.Helpers.CreateNumberedList(System.String[])">
+            <summary> </summary>
+            <param name="itemsToList"> e.g., string[] planet = { "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune" };</param>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.PostmanMethods.PostmanToken(System.String)">
+            <summary> A switch that returns a postman token depending upon the end type you are use </summary>
+            <remarks> Each of the return values were generated by Postman </remarks>
+            <param name="apiType"> The api method / endpoinot you are querying </param>
+            <returns> A string that represents an api Postman token</returns>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.PythonConnector.ConnectToPythonFile(System.String)">
+            <summary> Create a connection between .NET and a Python file; This must be run before any of the other methods will work </summary>
+            <remarks> This must be run before any of the other below methods </remarks>
+            <returns> A connection between .NET and Python </returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Infrastructure.PythonConnector.SetPythonVariableKeyAndValue(Microsoft.Scripting.Hosting.ScriptScope,System.String,System.String)" -->
+        <member name="M:BaseballScraper.Infrastructure.PythonConnector.CreateDictionaryOfPythonKeysAndValuesToSet">
+            <summary> Create a dictionary of keys and values that will be set as Python keys and values </summary>
+            <remarks> Note that keys and values are defined within this function; a dictionary is not passed in as a parameter / argument </remarks>
+            <example> var dictionaryForPython = CreateDictionaryOfPythonKeysAndValuesToSet(); </example>
+            <returns> A dictionary of keys and values where keys are strings and values are objects </returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Infrastructure.PythonConnector.SetPythonKeyValueDictionary(Microsoft.Scripting.Hosting.ScriptScope,System.Collections.Generic.Dictionary{System.String,System.Object},System.String)" -->
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Infrastructure.PythonConnector.GetPythonVariableValue(Microsoft.Scripting.Hosting.ScriptScope,System.String)" -->
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Infrastructure.PythonConnector.GetPythonVariableNames(Microsoft.Scripting.Hosting.ScriptScope)" -->
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Infrastructure.PythonConnector.GetPythonKeyValuePairs(Microsoft.Scripting.Hosting.ScriptScope)" -->
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Infrastructure.PythonConnector.PrintPythonKeyValuePairs(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.Object}})" -->
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Infrastructure.PythonConnector.PrintPythonKeyValuePairs(System.Collections.Generic.Dictionary{System.String,System.Object})" -->
+        <member name="T:BaseballScraper.Infrastructure.RdotNetConnector">
+             <summary> Includes various R functions / actions </summary>
+             <list> RESOURCES
+                 <item> https://billpetti.github.io/baseballr/data-acquisition-functions/ </item>
+                 <item> https://pitchrx.cpsievert.me </item>
+                 <item> Book: Analyzing Baseball Data With R </item>
+                 <item> http://lahman.r-forge.r-project.org/doc/ </item>
+             </list>
+            
+             <list> PROCESS TO START: three steps needed to get csharp and R to work together; enter these in terminal in succession before attempting to run any of the below
+                 <item> (1) export LD_LIBRARY_PATH=/Library/Frameworks/R.framework/Libraries/:$LD_LIBRARY_PATH </item>
+                 <item> (2) export PATH=/Library/Frameworks/R.framework/Libraries/:$PATH </item>
+                 <item> (3) export R_HOME=/Library/Frameworks/R.framework/Resources </item>
+             </list>
+            
+             <list> REQUIRED R PACKAGES
+                 <item> install.packages("pitchRx") </item>
+                 <item> install.packages("baseballr") </item>
+                 <item> install.packages("Lahman") </item>
+             </list>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.RdotNetConnector.CreateNewREngine">
+            <summary> Creates a new engine that drives other R functions </summary>
+            <returns> A new R Engine </returns>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.RdotNetConnector.ImportBaseballR">
+            <summary> Imports the baseballr library </summary>
+            <reference> https://billpetti.github.io/baseballr/data-acquisition-functions/ </reference>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.RdotNetConnector.GetLahmanBattingStats">
+            <summary> </summary>
+            <reference> http://lahman.r-forge.r-project.org/doc/ </reference>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.RdotNetConnector.GetLahmanPlayerInfo(System.String)">
+            <summary> Get Mlb player's Player Id, First Name, Last Name</summary>
+            <reference> http://lahman.r-forge.r-project.org/doc/ </reference>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.RdotNetConnector.GetPitchRxData(System.String,System.String)">
+            <summary> Scrapes and returns a significant amount of data about each individual at bat within a given date range </summary>
+            <example> _r.GetPitchRxData("2013-06-01", "2013-06-01"); </example>
+            <param name="startDate"> First date of the range you are looking for (e.g, "2016-04-06") </param>
+            <param name="endDate"> Last date of the range you are looking for (e.g, "2016-06-21") </param>
+            <returns>
+                <list>
+                    <item> AT BAT: pitcher (id), batter (id), num (pitch number?), b, s, o, start_tfs, start_tfs_zulu, stand, b_height, p_throws, atbat_des, home_team_runs, away_team_runs, url (for XML), inning_side(top OR bottom), inning, next_, event2, batter_name, pitcher_name, gameday_link, date </item>
+                    <item> ACTION: b, s, o, des, event, tfs_zulu, player (id), pitch (number), event_num, home_team_runs, away_team_runs, url (for XML), inning_side (top OR bottom), inning, next_, num, score, event2, gameday_link </item>
+                    <item> PITCH: des, id, type (B, S, X), tfs, tfs_zulu, x, y, event_num, sv_id, play_guid, start_speed, end_speed, sz_top, sz_top, pfx_x, pfx_z, px, pz, x0, y0, z0, vx0, vy0, vz0, ax, ay, az, break_y </item>
+                </list>
+            </returns>
+            <reference> https://pitchrx.cpsievert.me </reference>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.RdotNetConnector.ScrapeBaseballSavantStatcast(System.String,System.String,System.Int32)">
+            <summary> Get statcast data for individual games between a start and end date </summary>
+            <example> _r.ScrapeBaseballSavantStatcast("2016-04-06", "2016-04-15", 592789); </example>
+            <param name="startDate"> First date of the range you are looking for (e.g, "2016-04-06") </param>
+            <param name="endDate"> Last date of the range you are looking for (e.g, "2016-06-21") </param>
+            <param name="playerId"> The player's MLBAMID you are looking for </param>
+                <see cref="M:BaseballScraper.Infrastructure.RdotNetConnector.SearchForPlayer(System.String)"/> to get a player's playerId
+            <returns> pitch_type, game_date, release_speed, release_pos_x, release_pos_z, player_name, and many more </returns>
+            <reference> https://billpetti.github.io/baseballr/data-acquisition-functions/ </reference>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.RdotNetConnector.GetFanGraphsHitterLeaderboard(System.Int32,System.String)">
+            <summary> OPTION 1A --> Retrieve FanGraphs hitter leader board for:  SINGLE SEASON | ALL MLB | QUALIFIED or UNQUALIFIED </summary>
+            <example> _r.GetFanGraphsHitterLeaderboard(2017, "y"); </example>
+            <param name="year"> The year of the season you want to get the leaders for </param>
+            <param name="qual"> Whether to include only batters that were qualified. Defaults to 'y'. Alternatively, you can pass a minimum number of plate appearances to restrict the data to. </param>
+            <reference> https://billpetti.github.io/baseballr/data-acquisition-functions/ </reference>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.RdotNetConnector.GetFanGraphsHitterLeaderboard(System.Int32,System.Int32)">
+            <summary> OPTION 1B --> Retrieve FanGraphs hitter leader board for:  SINGLE SEASON | ALL MLB | players with PLATE APPEARANCES greater than defined # </summary>
+            <example> _r.GetFanGraphsHitterLeaderboard(2018, 200); </example>
+            <param name="year"> The year of the season you want to get the leaders for </param>
+            <param name="minPlateAppearances"> Number of plate appearances a hitter needs to show up in the results. </param>
+            <reference> https://billpetti.github.io/baseballr/data-acquisition-functions/ </reference>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.RdotNetConnector.GetFanGraphsHitterLeaderboard(System.Int32,System.String,System.String)">
+            <summary> OPTION 2 --> Retrieve FanGraphs hitter leader board for:  SINGLE SEASON | ALL or AL or NL | QUALIFIED or UNQUALIFIED </summary>
+            <example> _r.GetFanGraphsHitterLeaderboard(2017, "nl", "y"); </example>
+            <param name="year"> The year of the season you want to get the leaders for </param>
+            <param name="league">  You can get records for all of MLB ('all'), the National League ('nl'), or the American League ('al') </param>
+            <param name="qual"> Whether to include only batters that were qualified. Defaults to 'y'. Alternatively, you can pass a minimum number of plate appearances to restrict the data to. </param>
+            <reference> https://billpetti.github.io/baseballr/data-acquisition-functions/ </reference>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Infrastructure.RdotNetConnector.GetFanGraphsHitterLeaderboard(System.Int32,System.Int32,System.String,System.String,System.String)" -->
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Infrastructure.RdotNetConnector.GetFanGraphsHitterLeaderboard(System.Int32,System.Int32,System.String,System.Int32,System.String)" -->
+        <member name="M:BaseballScraper.Infrastructure.RdotNetConnector.GetFanGraphsGuts">
+            <summary> Retrieves components and constants FanGraphs uses for calculating metrics such as wOBA and FIP</summary>
+            <reference> https://www.fangraphs.com/guts.aspx?type=cn </reference>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Infrastructure.RdotNetConnector.GetFanGraphsParkFactors(System.Int32)" -->
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Infrastructure.RdotNetConnector.GetFanGraphsParkFactorsByBatterHandedness(System.Int32)" -->
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Infrastructure.RdotNetConnector.SearchForPlayer(System.String)" -->
+        <member name="M:BaseballScraper.Infrastructure.RdotNetConnector.GetMlbStandingsOnDate(System.String,System.String)">
+            <summary> Get mlb standings on a specific date for a particular league (AL or NL) and division </summary>
+            <remarks> Differs from 'GetMlbStandingsFromDateForward' in that the 'from' parameter is FALSE </remarks>
+            <param name="mlbLeagueAndDivision"> A combination of league and division (e.g, "AL Central") </param>
+                <example> If you want league/division do something like "AL Central" </example>
+                <example> If you want overall league standings do "AL Overall" </example>
+            <param name="standingsDate"> The date that you want to view standings for (e.g, "2015-08-01")</param>
+            <example> _r.GetMlbStandingsOnDate("NL East", "2015-08-01"); </example>
+            <returns> tm, W, L, W-L%, GB, RS, RA, pythW-L% </returns>
+            <reference> https://billpetti.github.io/baseballr/data-acquisition-functions/ </reference>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.RdotNetConnector.GetMlbStandingsFromDateForward(System.String,System.String)">
+            <summary> Get mlb standings from a specific date moving forward for a particular league (AL or NL) and division </summary>
+            <remarks> Differs from 'GetMlbStandingsOnDate' in that the 'from' parameter is TRUE </remarks>
+            <param name="mlbLeagueAndDivision"> A combination of league and division (e.g, "AL Central") </param>
+                <example> If you want league/division do something like "AL Central" </example>
+                <example> If you want overall league standings do "AL Overall" </example>
+            <param name="standingsDate"> The date that you want to view standings forward from (e.g, "2015-08-01")</param>
+            <example> _r.GetMlbStandingsFromDateForward("NL East", "2015-08-01"); </example>
+            <returns> tm, W, L, W-L%, GB, RS, RA, pythW-L% </returns>
+            <reference> https://billpetti.github.io/baseballr/data-acquisition-functions/ </reference>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.RdotNetConnector.GetPlayerEdgePercentage(System.String,System.String,System.String)">
+            <summary> The edge_scrape() function allows the user to scrape PITCHf/x data from the GameDay application using Carson Sievert’s pitchRx package and to calculate metrics associated with Edge%. </summary>
+            <example> _r.GetPlayerEdgePercentage("2015-04-06", "2015-04-07", "pitcher"); </example>
+            <param name="startDate"> First date of the range you are looking for (e.g, "2016-04-06") </param>
+            <param name="endDate"> Last date of the range you are looking for (e.g, "2016-06-21") </param>
+            <param name="pitcherOrBatter"> Position type. Two options: 'pitcher' OR 'batter' </param>
+            <reference> https://billpetti.github.io/baseballr/data-acquisition-functions/ </reference>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.RdotNetConnector.CalculatePitcherWinningPercentage">
+            <summary> Get a single pitcher's winning percentage </summary>
+            <reference> Calculating Baseball Data with R </reference>
+        </member>
+    </members>
+</doc>

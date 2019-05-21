@@ -19,6 +19,7 @@ namespace BaseballScraper.Controllers.CbsControllers
         ///     <item> Get Most Viewed <see cref="CbsTransactionTrendsController.GetListOfCbsMostViewedPlayersByPosition(string, string)"/></item>
         ///     <item> Get Most Traded All <see cref="CbsTransactionTrendsController.GetListOfCbsMostTradedPlayers(string)" /> </item>
         ///     <item> Get Most Traded By Position <see cref="CbsTransactionTrendsController.GetListOfCbsMostTradedPlayersByPosition(string, string)"/> </item>
+        /// </list>
         /// <list> RESOURCES
         ///     <item> Most Added: https://www.cbssports.com/fantasy/baseball/trends/added/all </item>
         ///     <item> Most Dropped: https://www.cbssports.com/fantasy/baseball/trends/dropped/all </item>
@@ -31,7 +32,7 @@ namespace BaseballScraper.Controllers.CbsControllers
 
 
     [Route("cbs")]
-    #pragma warning disable CS0219
+    #pragma warning disable CS0219, IDE0051
     public class CbsTransactionTrendsController : Controller
     {
         private readonly Helpers _h = new Helpers();
@@ -55,6 +56,7 @@ namespace BaseballScraper.Controllers.CbsControllers
 
         [HttpGet]
         [Route("trends")]
+        #pragma warning disable CS0414, CS0219, CS1591
         public void CbsMostAdded()
         {
             _h.StartMethod();
@@ -63,7 +65,7 @@ namespace BaseballScraper.Controllers.CbsControllers
 
         #region MOST ADDED OR DROPPED ------------------------------------------------------------
 
-            // STATUS: this works
+            // STATUS: May 7, 2019 --> this works
             /// <summary> Returns a list of the most added or dropped players according to Cbs trends; Does not filter by position </summary>
             /// <remarks>
             ///     CbsRankCurrentWeek - % of leagues that have the player on a roster this week
@@ -75,6 +77,8 @@ namespace BaseballScraper.Controllers.CbsControllers
             /// <returns> A list of most added or dropped players</returns>
             public List<CbsMostAddedOrDroppedPlayer> GetListOfCbsMostAddedOrDropped(string urlToScrape)
             {
+                _h.StartMethod();
+
                 HtmlWeb htmlWeb = new HtmlWeb();
 
                 // THIS URLS HTML --> HtmlAgilityPack.HtmlDocument
@@ -82,48 +86,71 @@ namespace BaseballScraper.Controllers.CbsControllers
 
                 List<CbsMostAddedOrDroppedPlayer> players = new List<CbsMostAddedOrDroppedPlayer>();
 
-                foreach(HtmlNode table in thisUrlsHtml.DocumentNode.SelectNodes("//table"))
+                string tableBase =  "//*[@id='TableBase']/div/div/table";
+
+                foreach(HtmlNode table in thisUrlsHtml.DocumentNode.SelectNodes(tableBase))
                 {
-                    int rowCount = 1;
-                    foreach(HtmlNode row in table.SelectNodes("tr"))
+                    // tBody.Name == 'tbody'
+                    HtmlNode tBody = table.ChildNodes[2];
+
+                    HtmlNodeCollection tBodyRowNodes = tBody.ChildNodes;
+
+                    // tBodyRowNodesCount == 100
+                    var tBodyRowNodesCount = tBodyRowNodes.Count;
+
+                    int tBodyRowCount = 1;
+
+                    // there are 100 rows
+                    foreach(HtmlNode row in tBody.SelectNodes("tr"))
                     {
                         CbsMostAddedOrDroppedPlayer player = new CbsMostAddedOrDroppedPlayer();
 
-                        // the first two rows are table headers, not player data; So you don't want to get them.
-                        if(rowCount > 2)
+                        HtmlNodeCollection playerNamePositionTeamNode = row.ChildNodes[0].ChildNodes;
+
+                        // html for player's full name, player's abbreviated name, position, and team
+                            // [1] html structure - abbreviated name
+                                // <span class="CellPlayerName--short">
+                                    // <a href = "/mlb/players/playerpage/1757975/jake-odorizzi" class="">J.Odorizzi</a>
+                                    // <span class="CellPlayerName-position"> SP </span>
+                                    // <span class="CellPlayerName-team">• MIN </span>
+                                // </span>
+                            // [2] html structure - full name
+                                // <span class="CellPlayerName--long">
+                                    // <a href = "/mlb/players/playerpage/1757975/jake-odorizzi" class="">Jake Odorizzi</a>
+                                    // <span class="CellPlayerName-position"> SP </span>
+                                    // <span class="CellPlayerName-team">• MIN </span>
+                                // </span>
+                        string playerNamePositionTeamHtmlInRow = row.ChildNodes[0].InnerHtml;
+
+                        // player name team and position are in the same node to start; this goes through that node to get subnode for the player's name
+                        foreach(HtmlNode node in playerNamePositionTeamNode)
                         {
-                            int cellNumber = 1;
-                            foreach(HtmlNode cell in row.SelectNodes("td"))
+                            int secondNodeCount = 1;
+                            foreach(HtmlNode secondNode in node.ChildNodes)
                             {
-                                // player name cell (ie cellNumber 1) comes back like -> Smallwood, Wendell RB PHI &nbsp;
-                                // this code cleans that text up to return firstName lastName (e.g. Wendell Smallwood)
-                                if(cellNumber == 1)
+                                if(secondNodeCount == 2)
                                 {
-                                    string playerNameAndDetails = cell.InnerText;
-
-                                    string[] playersLastName = playerNameAndDetails.Split(',');
-                                    string[] playersFirstName = playersLastName[1].Trim().Split(' ');
-                                    var playerName = $"{playersFirstName[0]} {playersLastName[0]}";
-
+                                    string playerName = secondNode.InnerText;
                                     player.CbsRosterTrendPlayerName = playerName;
                                 }
-                                if(cellNumber == 2)
-                                    player.CbsRankPreviousWeek = cell.InnerText;
-                                if(cellNumber == 3)
-                                    player.CbsRankCurrentWeek = cell.InnerText;
-                                if(cellNumber == 4)
-                                    player.CbsDifferenceBetweenCurrentWeekAndPreviousWeek = cell.InnerText;
-
-                                cellNumber++;
+                                secondNodeCount++;
                             }
-                            players.Add(player);
                         }
-                        rowCount++;
+
+                        player.CbsRankPreviousWeek = row.ChildNodes[2].InnerText.Trim();
+                        player.CbsRankCurrentWeek = row.ChildNodes[4].InnerText.Trim();
+                        player.CbsDifferenceBetweenCurrentWeekAndPreviousWeek = row.ChildNodes[6].InnerText.Trim();
+
+                        Console.WriteLine();
+
+                        players.Add(player);
+                        tBodyRowCount++;
                     }
                 }
                 // PrintCbsAddedOrDroppedListOfPlayers(players);
                 return players;
             }
+
 
 
             // STATUS: this works
@@ -137,7 +164,6 @@ namespace BaseballScraper.Controllers.CbsControllers
             /// <example> Most Added --> GetListOfCbsMostAddedOrDroppedByPosition(urlForMostAddedByPositionPrefix,"1B"); </example>
             /// <example> Most Dropped --> GetListOfCbsMostAddedOrDroppedByPosition(urlForMostDroppedByPositionPrefix,"1B"); </example>
             /// <returns> A list of most added or dropped players for one position </returns>
-
 
             public List<CbsMostAddedOrDroppedPlayer> GetListOfCbsMostAddedOrDroppedByPosition(string urlToScrapePrefix, string position)
             {
@@ -356,7 +382,7 @@ namespace BaseballScraper.Controllers.CbsControllers
 
             // STATUS: this works
             /// <summary> Returns a list of the most traded players according to Cbs trends for one position </summary>
-            /// <param name="urlToScrape"> The url of the Cbs roster trends for most traded </param>
+            /// <param name="urlToScrapePrefix"> The url of the Cbs roster trends for most traded </param>
             /// <param name="position"> Position type: 1B, 2B, 3B, SS, OF, C, DH, SP, RP </param>
             /// <example> GetListOfCbsMostTradedPlayersByPosition(urlForMostTradedByPositionPrefix, "1B"); </example>
             /// <returns> A list of most traded players for one position </returns>

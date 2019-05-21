@@ -195,5 +195,21 @@ namespace BaseballScraper.EndPoints
 
 
 
+        // https://appac.github.io/mlb-data-api-docs/#stats-data-season-hitting-stats-get
+        // /json/named.sport_hitting_tm.bam?league_list_id='mlb'&game_type={game_type}&season={season}&player_id={player_id}
+        // GET http://lookup-service-prod.mlb.com/json/named.sport_hitting_tm.bam?league_list_id='mlb'&game_type='R'&season='2017'&player_id='493316'
+        public MlbDataEndPoint HitterSeasonEndPoint(string gameType, string year, string playerId)
+        {
+            endPointType = "sport_hitting_tm";
+
+            return new MlbDataEndPoint
+            {
+                BaseUri  = baseUri,
+                EndPoint = $"{endPointType}.bam?league_list_id='mlb'&game_type='{gameType}'&season='{year}'&player_id='{playerId}'"
+            };
+        }
+
+
+
     }
 }

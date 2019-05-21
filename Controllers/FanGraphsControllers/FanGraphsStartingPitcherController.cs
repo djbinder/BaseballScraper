@@ -18,12 +18,12 @@ namespace BaseballScraper.Controllers.FanGraphs
 
         /// <summary> </summary>
         /// <list> INDEX
-        ///     <item> View Page <see cref="FanGraphsStartingPitcherController.ViewFanGraphsStartingPitcherPage()"/>
+        ///     <item> View Page <see cref="FanGraphsStartingPitcherController.ViewFanGraphsStartingPitcherPage()"/> </item>
         ///     <item> Set Initial Url to Scrape <see cref="FanGraphsStartingPitcherController.SetInitialUrlToScrape(int, int, int, int)"/> </item>
         ///     <item> Get Number of Pages to Scrape <see cref="FanGraphsStartingPitcherController.GetNumberOfPagesToScrape(int, int, int, int)"/> </item>
         ///     <item> Get Urls of Pages to Scrape <see cref="FanGraphsStartingPitcherController.GetUrlsOfPagesToScrape()"/> </item>
         ///     <item> Get Urls of Pages to Scrape <see cref="FanGraphsStartingPitcherController.GetUrlsOfPagesToScrape(int, int, int)"/> </item>
-        ///     <item> Scrape Pitchers and Create List <see cref="FanGraphsStartingPitcherController.ScrapePitchersAndCreateList()"/> </item>
+        ///     <item> Scrape Pitchers and Create List <see cref="FanGraphsStartingPitcherController.ScrapePitchersAndCreateList(int, int, int)"/> </item>
         ///     <item> Count the Nodes Children <see cref="FanGraphsStartingPitcherController.CountTheNodesChildren(HtmlNode)"/> </item>
         ///     <item> Get Table Header Values <see cref="FanGraphsStartingPitcherController.GetTableHeaderValues(string)"/> </item>
         /// </list>
@@ -36,13 +36,14 @@ namespace BaseballScraper.Controllers.FanGraphs
 
 
     [Route("fangraphs")]
+    #pragma warning disable CS0414, CS0219, IDE0051, IDE0059, CS1591, IDE0044
     public class FanGraphsStartingPitcherController: Controller
     {
-        private Helpers _h                              = new Helpers();
-        private static FanGraphsUriEndPoints _endPoints = new FanGraphsUriEndPoints();
-        private string pathToGetNumberOfPagesToScrape   = "//*[@id='LeaderBoard1_dg1_ctl00']/thead/tr[1]/td/div/div[5]/strong[2]";
-        private string pathOfTableBodyToScrape          = "//*[@id='LeaderBoard1_dg1_ctl00']/tbody";
-        private string pathOfTableHeaderToScrape        = "//*[@id='LeaderBoard1_dg1_ctl00']/thead/tr[2]";
+        private readonly Helpers _h                              = new Helpers();
+        private static readonly FanGraphsUriEndPoints _endPoints = new FanGraphsUriEndPoints();
+        private readonly string pathToGetNumberOfPagesToScrape   = "//*[@id='LeaderBoard1_dg1_ctl00']/thead/tr[1]/td/div/div[5]/strong[2]";
+        private readonly string pathOfTableBodyToScrape          = "//*[@id='LeaderBoard1_dg1_ctl00']/tbody";
+        private readonly string pathOfTableHeaderToScrape        = "//*[@id='LeaderBoard1_dg1_ctl00']/thead/tr[2]";
 
         public FanGraphsStartingPitcherController() {}
 
@@ -50,7 +51,8 @@ namespace BaseballScraper.Controllers.FanGraphs
         [Route("sp")]
         public void ViewFanGraphsStartingPitcherPage()
         {
-
+            _h.StartMethod();
+            ScrapePitchersAndCreateList(20,2019,50);
         }
 
 
@@ -109,17 +111,17 @@ namespace BaseballScraper.Controllers.FanGraphs
             // Step 3 [1 of 2 Options]
             /// <summary> OPTION 1: variables defined within the method (i.e minInningsPitched, year, page, recordsPerPage ). Retrieves all urls of pages that will be scraped and adds them to a list  </summary>
             /// <example> '70 items in 3 page' --> the '3' is what this method is looking for </example>
-            /// <param name="minInningsPitched"> The minimum number of innings pitched a pitcher needs to be included in the results of the scrape </param>
-            /// <param name="year"> The Mlb season year </param>
-            /// <param name="page"> The page to being scraping; this typically will be one. But if you want to start on page 2 (for example), just set 'page' to 2 </param>
-            /// <param name="recordsPerPage"> The number of rows in the table; Standard options include 30, 50 , 100; This will ultimately influence the total number of urls and their tables to scrape </param>
+            // / <param name="minInningsPitched"> The minimum number of innings pitched a pitcher needs to be included in the results of the scrape </param>
+            // / <param name="year"> The Mlb season year </param>
+            // / <param name="page"> The page to being scraping; this typically will be one. But if you want to start on page 2 (for example), just set 'page' to 2 </param>
+            // / <param name="recordsPerPage"> The number of rows in the table; Standard options include 30, 50 , 100; This will ultimately influence the total number of urls and their tables to scrape </param>
             /// <returns> A list of strings representing urls to be scraped </returns>
             private List<string> GetUrlsOfPagesToScrape()
             {
                 List<string> urlsOfPagesToScrape = new List<string> ();
 
-                int minInningsPitched = 170;
-                int year              = 2018;
+                int minInningsPitched = 20;
+                int year              = 2019;
                 int recordsPerPage    = 50;
 
                 int numberOfPagesToScrape = GetNumberOfPagesToScrape (minInningsPitched, year, 1, recordsPerPage);
@@ -191,9 +193,9 @@ namespace BaseballScraper.Controllers.FanGraphs
             /// <summary> Scrape the pitchers table and get all their data </summary>
             /// <remarks> Any XPath can be pulled from Chrome; right-click 'Inspect', view the html for the table, right click on any item and select Copy > tableBodyXpath </remarks>
             [Route("scrape")]
-            public List<FanGraphsPitcher> ScrapePitchersAndCreateList ()
+            public List<FanGraphsPitcher> ScrapePitchersAndCreateList (int minInningsPitched, int year, int recordsPerPage)
             {
-                List<string> listOfUrlsToLoopThrough = GetUrlsOfPagesToScrape ().ToList ();
+                List<string> listOfUrlsToLoopThrough = GetUrlsOfPagesToScrape (minInningsPitched, year, recordsPerPage).ToList ();
                 int  numberOfUrlsToScrape            = listOfUrlsToLoopThrough.Count();
                 Console.WriteLine($"THERE IS {numberOfUrlsToScrape} tables to scrape");
 
