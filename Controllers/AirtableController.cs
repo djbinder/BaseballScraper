@@ -13,11 +13,12 @@ using RestSharp;
 
 namespace BaseballScraper.Controllers
 {
+    #pragma warning disable CS0414, CS0219, CS1591
     [Route("api/airtable")]
     [ApiController]
     public class AirtableController: Controller
     {
-        private Helpers _h = new Helpers();
+        private readonly Helpers _h = new Helpers();
         private readonly AirtableConfiguration _airtableConfig;
 
         public AirtableController(IOptions<AirtableConfiguration> airtableConfig)

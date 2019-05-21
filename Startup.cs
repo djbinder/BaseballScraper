@@ -18,7 +18,7 @@ using BaseballScraper.Infrastructure;
 
 namespace BaseballScraper
 {
-    #pragma warning disable CS0414
+    #pragma warning disable CS0414, CS0219, IDE0051, IDE0059, CS1591, IDE0044
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -33,8 +33,8 @@ namespace BaseballScraper
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile($"Configuration/appsettings.json", optional: false, reloadOnChange: true)
                 .AddJsonFile($"Configuration/appsettings.{env.EnvironmentName}.json", optional: false, reloadOnChange: true)
+                .AddJsonFile("secrets.json", optional:false, reloadOnChange:true)
                 .AddEnvironmentVariables();
-                // .AddJsonFile("secrets.json", optional:false, reloadOnChange:true)
 
             if (env.IsDevelopment())
             {
@@ -96,10 +96,11 @@ namespace BaseballScraper
                 config.ConsumerSecret    = Configuration["TwitterConfiguration:ConsumerSecret"];
             });
 
-            services.Configure<AirtableConfiguration>(Configuration);
+            services.Configure<AirtableConfiguration>(Configuration.GetSection("AirtableConfiguration"));
             services.Configure<AirtableConfiguration>(config =>
             {
                 config.ApiKey = Configuration["AirtableConfiguration:ApiKey"];
+                Console.WriteLine(config.ApiKey);
             });
 
             var airtableKey = new SymmetricSecurityKey(
@@ -126,10 +127,16 @@ namespace BaseballScraper
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+
             services.AddMvc ()
                 .SetCompatibilityVersion (CompatibilityVersion.Version_2_1)
                 .AddSessionStateTempDataProvider()
-                .AddControllersAsServices();
+                .AddControllersAsServices()
+                .AddRazorPagesOptions(options =>
+                {
+                    // this sets the apps default (i.e., index, home) route to be /Pages/Dashboard
+                    options.Conventions.AddPageRoute("/Dashboard","");
+                });
 
             // services.AddMvc().AddControllersAsServices();
             services.AddTransient<BaseballScraper.Controllers.YahooControllers.YahooAuthController>();
@@ -144,8 +151,8 @@ namespace BaseballScraper
             services.AddDbContext<BaseballScraperContext>(options => options.UseNpgsql (Configuration["DBInfo:ConnectionString"]));
 
             // example of how to console config items
-                // Console.WriteLine("THE GAME KEY");
-                // Console.WriteLine(Configuration["TheGameIsTheGame:2018Season:LeagueKey"]);
+            // Console.WriteLine(Configuration["YahooConfiguration:Name"]);
+            // Console.WriteLine(Configuration["TheGameIsTheGame:2018Season:LeagueKey"]);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -160,6 +167,7 @@ namespace BaseballScraper
                 loggerFactory.AddConsole ();
                 loggerFactory.AddDebug();
                 app.UseDeveloperExceptionPage ();
+                app.UseDatabaseErrorPage();
             }
             else
             {
@@ -176,18 +184,19 @@ namespace BaseballScraper
                 }
             );
 
-            app.UseDefaultFiles();
-            app.UseSession ();
             app.UseHttpsRedirection ();
+            app.UseDefaultFiles();
             app.UseStaticFiles ();
+            app.UseSession ();
             app.UseCookiePolicy ();
             app.UseAuthentication();
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name    : "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+            app.UseMvc();
+            // app.UseMvc(routes =>
+            // {
+            //     routes.MapRoute(
+            //         name    : "default",
+            //         template: "{controller=Home}/{action=Index}/{id?}");
+            // });
         }
     }
 }

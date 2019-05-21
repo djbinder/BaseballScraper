@@ -10,14 +10,16 @@ ViewData["Title"] = "Transaction Trends";
 <hr style="border: 1px solid slateblue">
 <br>
 
+
+
 <h4>Cbs Trends</h4>
 <table class="table">
     <thead>
         <tr>
             <th>Player Name</th>
-            <th>Previous Week</th>
-            <th>Current Week</th>
-            <th>Change</th>
+            <th>Own% - Last Wk</th>
+            <th>Own% - This Wk</th>
+            <th>Own% - Change w/w</th>
         </tr>
     </thead>
     <tbody>
@@ -28,31 +30,6 @@ ViewData["Title"] = "Transaction Trends";
             <td>@Html.DisplayFor(modelItem => item.CbsRankPreviousWeek)</td>
             <td>@Html.DisplayFor(modelItem => item.CbsRankCurrentWeek)</td>
             <td>@Html.DisplayFor(modelItem => item.CbsDifferenceBetweenCurrentWeekAndPreviousWeek)</td>
-        </tr>
-        }
-    </tbody>
-</table>
-
-<br>
-
-<h4>Espn Trends</h4>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Player Name</th>
-            <th>Previous Week</th>
-            <th>Current Week</th>
-            <th>Change</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach(var item in Model.EspnPlayers)
-        {
-        <tr>
-            <td>@Html.DisplayFor(modelItem => item.EspnTrendPlayerName)</td>
-            <td>@Html.DisplayFor(modelItem => item.EspnPlayerAddsLastWeek)</td>
-            <td>@Html.DisplayFor(modelItem => item.EspnPlayerAddsCurrentWeek)</td>
-            <td>@Html.DisplayFor(modelItem => item.EspnPlayerTrendSevenDayChange)</td>
         </tr>
         }
     </tbody>

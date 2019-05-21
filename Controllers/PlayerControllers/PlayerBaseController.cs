@@ -20,7 +20,7 @@ namespace BaseballScraper.Controllers.Player
         /// <summary> Retrieve all records from PlayerBase.xlsx; retrieve individual player records from PlayerBase.xlsx </summary>
         /// <list> INDEX
         ///     <item> View all player bases <see cref="PlayerBaseController.ViewPlayerBaseHome" /> </item>
-        ///     <item> Get all players bases <see cref="PlayerBaseController.GetAllPlayerBases" /> </item>
+        ///     <item> Get all players bases <see cref="PlayerBaseController.GetAllPlayerBasesFromExcel" /> </item>
         ///     <item> Get all players bases by team <see cref="PlayerBaseController.GetAllPlayerBasesForOneMlbTeam(string)" /> </item>
         ///     <item> Get one player's base by mlb id <see cref="PlayerBaseController.GetOnePlayersBaseFromMlbId(string)" /> </item>
         ///     <item> Get one player's base by sfbb id <see cref="PlayerBaseController.GetOnePlayersBaseFromSfbbId(string)" /> </item>
@@ -48,18 +48,164 @@ namespace BaseballScraper.Controllers.Player
 
 
 
-    #pragma warning disable CS0414, CS0219
+    #pragma warning disable CS0414, CS0219, IDE0051, IDE0059, CS1591, CS1570
     public class PlayerBaseController: Controller
     {
-        private Helpers _h = new Helpers();
+        private readonly Helpers _h = new Helpers();
+
+        public GoogleSheetsConnector _gSC = new GoogleSheetsConnector();
 
 
-        [HttpGet]
-        [Route("playerbase")]
+
+        [HttpGet("player_base")]
         public IActionResult ViewPlayerBaseHome()
         {
             string content = "player note main content";
+            PlayerBaseFromGoogleSheet.GetAllPlayerBaseObjectsFromGoogleSheet("A5:AP2284");
             return Content(content);
+        }
+
+
+
+        public class PlayerBaseFromGoogleSheet
+        {
+            private static readonly Helpers _h = new Helpers();
+            private static readonly GoogleSheetsConnector _gSC = new GoogleSheetsConnector();
+            private static readonly string sfbbMapDocName = "SfbbPlayerIdMap";
+            private static readonly string sfbbMapTabId = "SFBB_PLAYER_ID_MAP";
+
+            public PlayerBaseFromGoogleSheet()
+            {
+            }
+
+
+            // PlayerBaseFromGoogleSheet.GetAllPlayerBaseObjectsFromGoogleSheet("A5:AP2284");
+            public static IList<IList<Object>> GetAllPlayerBaseObjectsFromGoogleSheet(string range)
+            {
+                var allPlayerBases = _gSC.ReadDataFromSheetRange(sfbbMapDocName,sfbbMapTabId,range);
+
+                var countOfAllPlayerBases = allPlayerBases.ToList().Count();
+                    // Console.WriteLine($"Current # of Players (sheets): {countOfAllPlayerBases}");
+
+                return allPlayerBases;
+            }
+
+
+            // STATUS May 13, 2019: In progress; currently only returns an empty IEnumerable
+            public static IEnumerable<SfbbPlayerBase> GetAllPlayerBasesFromGoogleSheet(string range)
+            {
+                // _h.StartMethod();
+                // Console.WriteLine($"range: {range}");
+                IList<IList<object>> allPlayerBaseObjects = _gSC.ReadDataFromSheetRange(sfbbMapDocName,sfbbMapTabId,range);
+                    // var countOfAllPlayerBases = allPlayerBaseObjects.ToList().Count();
+                    // Console.WriteLine($"Current # of Players: {countOfAllPlayerBases}");
+
+                // IEnumerable<SfbbPlayerBase> allPlayerBases = Enumerable.Empty<SfbbPlayerBase>();
+                List<SfbbPlayerBase> allPlayerBases = new List<SfbbPlayerBase>();
+
+                var intHolder = 0;
+                foreach(var row in allPlayerBaseObjects)
+                {
+                    // Console.WriteLine(row.Count);
+                    // int rowCounter = 0;
+                    SfbbPlayerBase playerBase = new SfbbPlayerBase
+                    {
+                        IDPLAYER        = row[0].ToString(),
+                        PLAYERNAME      = row[1].ToString(),
+                        BIRTHDATE       = row[2].ToString(),
+                        FIRSTNAME       = row[3].ToString(),
+                        LASTNAME        = row[4].ToString(),
+                        TEAM            = row[5].ToString(),
+                        LG              = row[6].ToString(),
+                        POS             = row[7].ToString(),
+                        IDFANGRAPHS     = row[8].ToString(),
+                        FANGRAPHSNAME   = row[9].ToString(),
+                        MLBID           = row[10].ToString(),
+                        MLBNAME         = row[11].ToString(),
+                        CBSID           = row[12].ToString(),
+                        CBSNAME         = row[13].ToString(),
+                        RETROID         = row[14].ToString(),
+                        BREFID          = row[15].ToString(),
+                        NFBCID          = row[16].ToString(),
+                        NFBCNAME        = row[17].ToString(),
+                        ESPNID          = row[18].ToString(),
+                        ESPNNAME        = row[19].ToString(),
+                        KFFLNAME        = row[20].ToString(),
+                        DAVENPORTID     = row[21].ToString(),
+                        BPID            = row[22].ToString(),
+                        YAHOOID         = row[23].ToString(),
+                        YAHOONAME       = row[24].ToString(),
+                        MSTRBLLNAME     = row[25].ToString(),
+                        BATS            = row[26].ToString(),
+                        THROWS          = row[27].ToString(),
+                        FANPROSNAME     = row[28].ToString(),
+                        LASTCOMMAFIRST  = row[29].ToString(),
+                        ROTOWIREID      = row[30].ToString(),
+                        FANDUELNAME     = row[31].ToString(),
+                        FANDUELID       = row[32].ToString(),
+                        DRAFTKINGSNAME  = row[33].ToString(),
+                        OTTONEUID       = row[34].ToString(),
+                        HQID            = row[35].ToString(),
+                        RAZZBALLNAME    = row[36].ToString(),
+                        FANTRAXID       = row[37].ToString(),
+                        FANTRAXNAME     = row[38].ToString(),
+                        ROTOWIRENAME    = row[39].ToString(),
+                        ALLPOS          = row[40].ToString(),
+                        NFBCLASTFIRST   = row[41].ToString()
+                    };
+                    allPlayerBases.Add(playerBase);
+
+                    // try {
+                    //     playerBase.NFBCLASTFIRST = row[41].ToString();
+                    // }
+                    // catch {
+                    //     Console.WriteLine("error");
+                    // }
+
+                //     if(intHolder == 0)
+                //     {
+                //         Console.WriteLine($"ID PLAYER 1: {playerBase.IDPLAYER}");
+                //         Console.WriteLine($"PLAYERNAME: {playerBase.PLAYERNAME}");
+                //         Console.WriteLine($"RETROID: {playerBase.RETROID}");
+                //         Console.WriteLine($"BIRTHDATE: {playerBase.ESPNNAME}");
+                //         Console.WriteLine($"NFBCLASTFIRST: {playerBase.NFBCLASTFIRST}");
+                //     }
+
+                //     Console.WriteLine($"intHolder: {intHolder}");
+                //     Console.WriteLine($"PLAYERNAME: {playerBase.PLAYERNAME}");
+                //     Console.WriteLine($"RETROID: {playerBase.RETROID}");
+                //     Console.WriteLine($"NFBCLASTFIRST: {playerBase.NFBCLASTFIRST}");
+
+                //     intHolder++;
+                // }
+
+                // Console.WriteLine();
+
+                // var intHolder2 = 0;
+                // foreach(var player in allPlayerBases)
+                // {
+                //     if(intHolder2 == 0 )
+                //     {
+                //         Console.WriteLine(player.IDPLAYER);
+                //         Console.WriteLine(player.PLAYERNAME);
+                //         Console.WriteLine(player.RETROID);
+
+                //         Console.WriteLine(player.ESPNNAME);
+                //         Console.WriteLine(player.NFBCLASTFIRST);
+
+                //     }
+                //     intHolder2++;
+                }
+                return allPlayerBases;
+            }
+
+
+            public static void GetOnePlayerBaseColumnFromGoogleSheet(string range)
+            {
+                _h.StartMethod();
+                var allPlayerBaseObjects = _gSC.ReadDataFromSheetRange(sfbbMapDocName,sfbbMapTabId,range);
+                IEnumerable<SfbbPlayerBase> allPlayerBases = Enumerable.Empty<SfbbPlayerBase>();
+            }
         }
 
 
@@ -69,14 +215,14 @@ namespace BaseballScraper.Controllers.Player
             // STATUS: this works
             /// <summary> Retrieves all records from PlayerBase.xlsx document </summary>
             /// <returns> IEnumerable<PlayerBase> allPlayerBases </returns>
-            public IEnumerable<PlayerBase> GetAllPlayerBases()
+            public IEnumerable<PlayerBase> GetAllPlayerBasesFromExcel()
             {
                 // Ganss.Excel.ExcelMapper+<Fetch>d__34`1[BaseballScraper.Models.PlayerBase]
                 // IEnumerable<PlayerBase> allPlayerBases
                 var allPlayerBases = new ExcelMapper("BaseballData/PlayerBase/PlayerBase.xlsx").Fetch<PlayerBase>();
 
                 var countOfAllPlayerBases = allPlayerBases.ToList().Count();
-                    // Console.WriteLine($"Current # of Players: {countOfAllPlayerBases}");
+                    Console.WriteLine($"Current # of Players: {countOfAllPlayerBases}");
 
                 return allPlayerBases;
             }
@@ -89,17 +235,17 @@ namespace BaseballScraper.Controllers.Player
             /// <returns> IEnumerable<PlayerBase> allPlayerBases </returns>
             public IEnumerable<PlayerBase> GetAllPlayerBasesForOneMlbTeam(string teamNameFull)
             {
-                var allPlayerBases = GetAllPlayerBases();
+                var allPlayerBases = GetAllPlayerBasesFromExcel();
 
                 var playerBasesForOneMlbTeam  =
                     from playerBases in allPlayerBases
                     where playerBases.MlbTeamLong == teamNameFull
                     select playerBases;
 
-                foreach(var player in playerBasesForOneMlbTeam)
-                {
-                    Console.WriteLine(player.MlbName);
-                }
+                // foreach(var player in playerBasesForOneMlbTeam)
+                // {
+                //     Console.WriteLine(player.MlbName);
+                // }
 
                 return playerBasesForOneMlbTeam;
             }
@@ -113,12 +259,14 @@ namespace BaseballScraper.Controllers.Player
             // STATUS: these all work
             // TODO: there has got to be a way where you only need one method vs. separating into each like below
             /// <summary> Each of methods in this section returns a player (from IEnumerable<PlayerBase>). The only difference is the type of Id you are passing in (e.g. MlbId, FanGraphsPlayerId, EspnPlayerId etc.) </summary>
-            /// <returns> IEnumerable<PlayerBase> playerbase (i.e. a PlayerBase for one player) </returns>
+            /// <returns>
+            /// IEnumerable<PlayerBase> playerbase (i.e. a PlayerBase for one player)
+            /// </returns>
 
             // NOTE: see XML comments at beginning of region
             public IEnumerable<PlayerBase> GetOnePlayersBaseFromMlbId(string playersMlbId)
             {
-                var allPlayerBases = GetAllPlayerBases();
+                var allPlayerBases = GetAllPlayerBasesFromExcel();
 
                 // IEnumerable<PlayerBase> onePlayersBase
                 var onePlayersBase = from playerBases in allPlayerBases
@@ -137,7 +285,7 @@ namespace BaseballScraper.Controllers.Player
             // NOTE: see XML comments at beginning of region
             public IEnumerable<PlayerBase> GetOnePlayersBaseFromSfbbId(string playersSfbbPlayerId)
             {
-                var allPlayerBases = GetAllPlayerBases();
+                var allPlayerBases = GetAllPlayerBasesFromExcel();
 
                 var onePlayersBase =
                     from playerBases in allPlayerBases
@@ -156,7 +304,7 @@ namespace BaseballScraper.Controllers.Player
             // NOTE: see XML comments at beginning of region
             public IEnumerable<PlayerBase> GetOnePlayersBaseFromBaseballHqId(string playersBaseballHqPlayerId)
             {
-                var allPlayerBases = GetAllPlayerBases();
+                var allPlayerBases = GetAllPlayerBasesFromExcel();
 
                 var onePlayersBase =
                     from playerBases in allPlayerBases
@@ -175,7 +323,7 @@ namespace BaseballScraper.Controllers.Player
             // NOTE: see XML comments at beginning of region
             public IEnumerable<PlayerBase> GetOnePlayersBaseFromDavenportId(string playersDavenportPlayerId)
             {
-                var allPlayerBases = GetAllPlayerBases();
+                var allPlayerBases = GetAllPlayerBasesFromExcel();
 
                 var onePlayersBase =
                     from playerBases in allPlayerBases
@@ -194,7 +342,7 @@ namespace BaseballScraper.Controllers.Player
             // NOTE: see XML comments at beginning of region
             public IEnumerable<PlayerBase> GetOnePlayersBaseFromBaseballProspectusId(string playersBaseballProspectusPlayerId)
             {
-                var allPlayerBases = GetAllPlayerBases();
+                var allPlayerBases = GetAllPlayerBasesFromExcel();
 
                 var onePlayersBase =
                     from playerBases in allPlayerBases
@@ -213,7 +361,7 @@ namespace BaseballScraper.Controllers.Player
             // NOTE: see XML comments at beginning of region
             public IEnumerable<PlayerBase> GetOnePlayersBaseFromBaseballReferenceId(string playersBaseballReferencePlayerId)
             {
-                var allPlayerBases = GetAllPlayerBases();
+                var allPlayerBases = GetAllPlayerBasesFromExcel();
 
                 var onePlayersBase =
                     from playerBases in allPlayerBases
@@ -232,7 +380,7 @@ namespace BaseballScraper.Controllers.Player
             // NOTE: see XML comments at beginning of region
             public IEnumerable<PlayerBase> GetOnePlayersBaseFromCbsId(string playersCbsPlayerId)
             {
-                var allPlayerBases = GetAllPlayerBases();
+                var allPlayerBases = GetAllPlayerBasesFromExcel();
 
                 var onePlayersBase =
                     from playerBases in allPlayerBases
@@ -251,7 +399,7 @@ namespace BaseballScraper.Controllers.Player
             // NOTE: see XML comments at beginning of region
             public IEnumerable<PlayerBase> GetOnePlayersBaseFromEspnId(string playersEspnPlayerId)
             {
-                var allPlayerBases = GetAllPlayerBases();
+                var allPlayerBases = GetAllPlayerBasesFromExcel();
 
                 var onePlayersBase =
                     from playerBases in allPlayerBases
@@ -270,7 +418,7 @@ namespace BaseballScraper.Controllers.Player
             // NOTE: see XML comments at beginning of region
             public IEnumerable<PlayerBase> GetOnePlayersBaseFromFanGraphsId(string playersFanGraphsPlayerId)
             {
-                var allPlayerBases = GetAllPlayerBases();
+                var allPlayerBases = GetAllPlayerBasesFromExcel();
 
                 var onePlayersBase =
                     from playerBases in allPlayerBases
@@ -289,7 +437,7 @@ namespace BaseballScraper.Controllers.Player
             // NOTE: see XML comments at beginning of region
             public IEnumerable<PlayerBase> GetOnePlayersBaseFromLahmanId(string playersLahmanPlayerId)
             {
-                var allPlayerBases = GetAllPlayerBases();
+                var allPlayerBases = GetAllPlayerBasesFromExcel();
 
                 var onePlayersBase =
                     from playerBases in allPlayerBases
@@ -308,7 +456,7 @@ namespace BaseballScraper.Controllers.Player
             // NOTE: see XML comments at beginning of region
             public IEnumerable<PlayerBase> GetOnePlayersBaseFromNfbcId(string playersNfbcPlayerId)
             {
-                var allPlayerBases = GetAllPlayerBases();
+                var allPlayerBases = GetAllPlayerBasesFromExcel();
 
                 var onePlayersBase =
                     from playerBases in allPlayerBases
@@ -327,7 +475,7 @@ namespace BaseballScraper.Controllers.Player
             // NOTE: see XML comments at beginning of region
             public IEnumerable<PlayerBase> GetOnePlayersBaseFromRetroId(string playersRetroPlayerId)
             {
-                var allPlayerBases = GetAllPlayerBases();
+                var allPlayerBases = GetAllPlayerBasesFromExcel();
 
                 var onePlayersBase =
                     from playerBases in allPlayerBases
@@ -346,7 +494,7 @@ namespace BaseballScraper.Controllers.Player
             // NOTE: see XML comments at beginning of region
             public IEnumerable<PlayerBase> GetOnePlayersBaseFromYahooId(string playersYahooPlayerId)
             {
-                var allPlayerBases = GetAllPlayerBases();
+                var allPlayerBases = GetAllPlayerBasesFromExcel();
 
                 var onePlayersBase =
                     from playerBases in allPlayerBases
@@ -365,7 +513,7 @@ namespace BaseballScraper.Controllers.Player
             // NOTE: see XML comments at beginning of region
             public IEnumerable<PlayerBase> GetOnePlayersBaseFromOttoneuId(string playersOttoneuPlayerId)
             {
-                var allPlayerBases = GetAllPlayerBases();
+                var allPlayerBases = GetAllPlayerBasesFromExcel();
 
                 var onePlayersBase =
                     from playerBases in allPlayerBases
@@ -384,7 +532,7 @@ namespace BaseballScraper.Controllers.Player
             // NOTE: see XML comments at beginning of region
             public IEnumerable<PlayerBase> GetOnePlayersBaseFromRotoWireId(string playersRotoWirePlayerId)
             {
-                var allPlayerBases = GetAllPlayerBases();
+                var allPlayerBases = GetAllPlayerBasesFromExcel();
 
                 var onePlayersBase =
                     from playerBases in allPlayerBases
@@ -449,25 +597,26 @@ namespace BaseballScraper.Controllers.Player
             /// <returns> A list of all of a player's ids </returns>
             public List<string> GetAllPlayerIdsList(PlayerBase playersBase)
             {
-                List<string> listOfPlayersIds = new List<string>();
+            List<string> listOfPlayersIds = new List<string>
+            {
+                playersBase.MlbId,
+                playersBase.SfbbPlayerId,
+                playersBase.BaseballHqPlayerId,
+                playersBase.DavenportId,
+                playersBase.BaseballProspectusPlayerId,
+                playersBase.BaseballReferencePlayerId,
+                playersBase.CbsPlayerId,
+                playersBase.EspnPlayerId,
+                playersBase.FanGraphsPlayerId,
+                playersBase.LahmanPlayerId,
+                playersBase.NfbcPlayerId,
+                playersBase.RetroPlayerId,
+                playersBase.YahooPlayerId,
+                playersBase.OttoneuPlayerId,
+                playersBase.RotoWirePlayerId
+            };
 
-                listOfPlayersIds.Add(playersBase.MlbId);
-                listOfPlayersIds.Add(playersBase.SfbbPlayerId);
-                listOfPlayersIds.Add(playersBase.BaseballHqPlayerId);
-                listOfPlayersIds.Add(playersBase.DavenportId);
-                listOfPlayersIds.Add(playersBase.BaseballProspectusPlayerId);
-                listOfPlayersIds.Add(playersBase.BaseballReferencePlayerId);
-                listOfPlayersIds.Add(playersBase.CbsPlayerId);
-                listOfPlayersIds.Add(playersBase.EspnPlayerId);
-                listOfPlayersIds.Add(playersBase.FanGraphsPlayerId);
-                listOfPlayersIds.Add(playersBase.LahmanPlayerId);
-                listOfPlayersIds.Add(playersBase.NfbcPlayerId);
-                listOfPlayersIds.Add(playersBase.RetroPlayerId);
-                listOfPlayersIds.Add(playersBase.YahooPlayerId);
-                listOfPlayersIds.Add(playersBase.OttoneuPlayerId);
-                listOfPlayersIds.Add(playersBase.RotoWirePlayerId);
-
-                foreach(var id in listOfPlayersIds)
+            foreach (var id in listOfPlayersIds)
                 {
                     Console.WriteLine(id);
                 }
@@ -482,25 +631,26 @@ namespace BaseballScraper.Controllers.Player
             /// <returns> A dictionary of all of a player's ids with key value pairs of Key: Id type, Value: id number/string </returns>
             public Dictionary<string, string> GetAllPlayerIdsDictionary(PlayerBase playersBase)
             {
-                Dictionary<string, string> dictionaryOfPlayersIds = new Dictionary<string, string>();
+            Dictionary<string, string> dictionaryOfPlayersIds = new Dictionary<string, string>
+            {
+                { "MlbId", playersBase.MlbId },
+                { "SfbbPlayerId", playersBase.SfbbPlayerId },
+                { "BaseballHqPlayerId", playersBase.BaseballHqPlayerId },
+                { "DavenportId", playersBase.DavenportId },
+                { "BaseballProspectusPlayerId", playersBase.BaseballProspectusPlayerId },
+                { "BaseballReferencePlayerId", playersBase.BaseballReferencePlayerId },
+                { "CbsPlayerId", playersBase.CbsPlayerId },
+                { "EspnPlayerId", playersBase.EspnPlayerId },
+                { "FanGraphsPlayerId", playersBase.FanGraphsPlayerId },
+                { "LahmanPlayerId", playersBase.LahmanPlayerId },
+                { "NfbcPlayerId", playersBase.NfbcPlayerId },
+                { "RetroPlayerId", playersBase.RetroPlayerId },
+                { "YahooPlayerId", playersBase.YahooPlayerId },
+                { "OttoneuPlayerId", playersBase.OttoneuPlayerId },
+                { "RotoWirePlayerId", playersBase.RotoWirePlayerId }
+            };
 
-                dictionaryOfPlayersIds.Add("MlbId", playersBase.MlbId);
-                dictionaryOfPlayersIds.Add("SfbbPlayerId", playersBase.SfbbPlayerId);
-                dictionaryOfPlayersIds.Add("BaseballHqPlayerId", playersBase.BaseballHqPlayerId);
-                dictionaryOfPlayersIds.Add("DavenportId", playersBase.DavenportId);
-                dictionaryOfPlayersIds.Add("BaseballProspectusPlayerId", playersBase.BaseballProspectusPlayerId);
-                dictionaryOfPlayersIds.Add("BaseballReferencePlayerId", playersBase.BaseballReferencePlayerId);
-                dictionaryOfPlayersIds.Add("CbsPlayerId", playersBase.CbsPlayerId);
-                dictionaryOfPlayersIds.Add("EspnPlayerId", playersBase.EspnPlayerId);
-                dictionaryOfPlayersIds.Add("FanGraphsPlayerId", playersBase.FanGraphsPlayerId);
-                dictionaryOfPlayersIds.Add("LahmanPlayerId", playersBase.LahmanPlayerId);
-                dictionaryOfPlayersIds.Add("NfbcPlayerId", playersBase.NfbcPlayerId);
-                dictionaryOfPlayersIds.Add("RetroPlayerId", playersBase.RetroPlayerId);
-                dictionaryOfPlayersIds.Add("YahooPlayerId", playersBase.YahooPlayerId);
-                dictionaryOfPlayersIds.Add("OttoneuPlayerId", playersBase.OttoneuPlayerId);
-                dictionaryOfPlayersIds.Add("RotoWirePlayerId", playersBase.RotoWirePlayerId);
-
-                foreach(var kvp in dictionaryOfPlayersIds)
+            foreach (var kvp in dictionaryOfPlayersIds)
                 {
                     Console.WriteLine($"{kvp.Key} -->  {kvp.Value}");
                 }
@@ -532,7 +682,7 @@ namespace BaseballScraper.Controllers.Player
 
             public void GetAllPlayersByMlbTeam()
             {
-                var allPlayerBases = GetAllPlayerBases();
+                var allPlayerBases = GetAllPlayerBasesFromExcel();
 
                 var mlbTeamsPlayers =
                     from onePlayersBase in allPlayerBases
