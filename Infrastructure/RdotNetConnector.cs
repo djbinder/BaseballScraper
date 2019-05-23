@@ -3,6 +3,8 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using RDotNet;
 
+
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Infrastructure
 {
     // TODO: everything needs to be converted to async

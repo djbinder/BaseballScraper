@@ -75,7 +75,7 @@ namespace BaseballScraper.Controllers
                 // _cH.ReadCsvRecords(filePath, typeof(LahmanParks), typeof(LahmanParksClassMap));
                 // _cH.ReadCsvRecords(filePath, typeof(LahmanPeople), typeof(LahmanPeopleClassMap));
                 // _cH.ReadCsvRecords(filePath, typeof(LahmanPitching), typeof(LahmanPitchingClassMap));
-                // _cH.ReadCsvRecords(filePath, typeof(LahmanTeams), typeof(LahmanTeamsClassMap));
+                _cH.ReadCsvRecords(filePath, typeof(LahmanTeams), typeof(LahmanTeamsClassMap));
             }
 
         #endregion LAHMAN NON-ASYNC ------------------------------------------------------------

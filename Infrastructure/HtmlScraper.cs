@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using HtmlAgilityPack;
 
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Infrastructure
 {
-    #pragma warning disable CS0219
     public class HtmlScraper
     {
         // STATUS

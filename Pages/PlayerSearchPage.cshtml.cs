@@ -17,7 +17,8 @@ namespace BaseballScraper.Pages
     public class PlayerSearchPage : PageModel
     {
         private readonly Helpers _h = new Helpers();
-        private readonly MlbDataApiHome _mD = new MlbDataApiHome();
+        private readonly MlbDataSeasonHittingStats _sHS = new MlbDataSeasonHittingStats();
+        private readonly MlbDataPlayerTeams _pT = new MlbDataPlayerTeams();
 
         // private readonly PlayerBaseController _pBC = new PlayerBaseController();
         public SfbbPlayerBase SfbbPlayer { get; set; }
@@ -44,7 +45,11 @@ namespace BaseballScraper.Pages
 
             SelectPlayerToSearch();
 
-            _mD.ViewMlbDataApiPage();
+
+            _pT.GetTeamsForPlayerAllSeasons("493316");
+
+            // _sHS.GetStatsForSeason();
+
 
             return Page();
         }
