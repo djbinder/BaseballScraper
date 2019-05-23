@@ -17,10 +17,10 @@ using ObjectPrinter;
 
 namespace BaseballScraper.Controllers.YahooControllers
 {
-    #pragma warning disable CS0414, CS0219
+    #pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
     public class YahooAuthController: Controller
     {
-        private Helpers _h = new Helpers();
+        private readonly Helpers _h = new Helpers();
         private readonly YahooConfiguration _yahooConfig;
         private readonly IHttpContextAccessor _contextAccessor;
 
@@ -316,12 +316,13 @@ namespace BaseballScraper.Controllers.YahooControllers
                     var yahooGuidCheck    = HttpContext.Session.GetString("yahooguid");
                     var sessionIdCheck    = HttpContext.Session.GetInt32("sessionid").ToString();
 
-                    Dictionary<string, string> sessionInfoDictionary = new Dictionary<string, string>();
-                        sessionInfoDictionary.Add("authcode", authCodeCheck);
-                        sessionInfoDictionary.Add("accesstoken", accessTokenCheck);
-                        sessionInfoDictionary.Add("refreshtoken", refreshTokenCheck);
-                        sessionInfoDictionary.Add("yahooguid", yahooGuidCheck);
-                        sessionInfoDictionary.Add("sessionid", sessionIdCheck);
+                    Dictionary<string, string> sessionInfoDictionary = new Dictionary<string, string>
+                    { { "authcode", authCodeCheck },
+                        { "accesstoken", accessTokenCheck },
+                        { "refreshtoken", refreshTokenCheck },
+                        { "yahooguid", yahooGuidCheck },
+                        { "sessionid", sessionIdCheck }
+                    };
 
                     int itemCount = 1;
                     foreach(var item in sessionInfoDictionary)

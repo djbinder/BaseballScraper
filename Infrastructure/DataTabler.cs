@@ -8,11 +8,13 @@ using System.Net;
 using System.Reflection;
 using BaseballScraper.Models;
 
+
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Infrastructure
 {
     public class DataTabler
     {
-        private Helpers _h = new Helpers();
+        private readonly Helpers _h = new Helpers();
 
 
         #region MODEL HANDLERS ----------------------------------------

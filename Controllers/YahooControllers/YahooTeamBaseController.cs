@@ -12,14 +12,14 @@ using BaseballScraper.Infrastructure;
 
 namespace BaseballScraper.Controllers.YahooControllers
 {
-    #pragma warning disable CS0414, CS0219
+    #pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
     [Route("api/yahoo")]
     [ApiController]
     public class YahooTeamBaseController : Controller
     {
-        private Helpers _h = new Helpers();
+        private readonly Helpers _h = new Helpers();
         private readonly TheGameIsTheGameConfiguration _theGameConfig;
-        private static YahooApiEndPoints endPoints = new YahooApiEndPoints();
+        private static readonly YahooApiEndPoints endPoints = new YahooApiEndPoints();
         private static YahooHomeController _yahooHomeController;
 
         public YahooTeamBaseController(IOptions<TheGameIsTheGameConfiguration> theGameConfig, YahooHomeController yahooHomeController)
@@ -184,29 +184,30 @@ namespace BaseballScraper.Controllers.YahooControllers
 
             JObject resourceJson = _yahooHomeController.GenerateYahooResourceJObject(uriTeamBase);
 
-            Hashtable teamHashTable = new Hashtable();
-                teamHashTable.Add("Key", resourceJson["fantasy_content"]["team"]["team_key"].ToString());
-                teamHashTable.Add("TeamId", (int?)resourceJson["fantasy_content"]["team"]["team_id"]);
-                teamHashTable.Add("Name", resourceJson["fantasy_content"]["team"]["name"].ToString());
-                teamHashTable.Add("Is Owned By Current Login?", (int?)resourceJson["fantasy_content"]["team"]["is_owned_by_current_login"]);
-                teamHashTable.Add("Url", resourceJson["fantasy_content"]["team"]["url"].ToString());
-                teamHashTable.Add("Team Logo", resourceJson["fantasy_content"]["team"]["team_logos"]["team_logo"]["url"].ToString());
-                teamHashTable.Add("Waiver Priority", (int?)resourceJson["fantasy_content"]["team"]["waiver_priority"]);
-                teamHashTable.Add("Number of Moves", (int?)resourceJson["fantasy_content"]["team"]["number_of_moves"]);
-                teamHashTable.Add("Number of Trades", (int?)resourceJson["fantasy_content"]["team"]["number_of_trades"]);
-                teamHashTable.Add("Coverage Type", resourceJson["fantasy_content"]["team"]["roster_adds"]["coverage_type"].ToString());
-                teamHashTable.Add("Coverage Value", resourceJson["fantasy_content"]["team"]["roster_adds"]["coverage_value"].ToString());
-                teamHashTable.Add("Value", resourceJson["fantasy_content"]["team"]["roster_adds"]["value"].ToString());
-                teamHashTable.Add("League Scoring Type", resourceJson["fantasy_content"]["team"]["league_scoring_type"].ToString());
-                teamHashTable.Add("Has Draft Grade?", resourceJson["fantasy_content"]["team"]["has_draft_grade"].ToString());
+            Hashtable teamHashTable = new Hashtable
+            { { "Key", resourceJson["fantasy_content"]["team"]["team_key"].ToString() },
+                { "TeamId", (int?)resourceJson["fantasy_content"]["team"]["team_id"] },
+                { "Name", resourceJson["fantasy_content"]["team"]["name"].ToString() },
+                { "Is Owned By Current Login?", (int?)resourceJson["fantasy_content"]["team"]["is_owned_by_current_login"] },
+                { "Url", resourceJson["fantasy_content"]["team"]["url"].ToString() },
+                { "Team Logo", resourceJson["fantasy_content"]["team"]["team_logos"]["team_logo"]["url"].ToString() },
+                { "Waiver Priority", (int?)resourceJson["fantasy_content"]["team"]["waiver_priority"] },
+                { "Number of Moves", (int?)resourceJson["fantasy_content"]["team"]["number_of_moves"] },
+                { "Number of Trades", (int?)resourceJson["fantasy_content"]["team"]["number_of_trades"] },
+                { "Coverage Type", resourceJson["fantasy_content"]["team"]["roster_adds"]["coverage_type"].ToString() },
+                { "Coverage Value", resourceJson["fantasy_content"]["team"]["roster_adds"]["coverage_value"].ToString() },
+                { "Value", resourceJson["fantasy_content"]["team"]["roster_adds"]["value"].ToString() },
+                { "League Scoring Type", resourceJson["fantasy_content"]["team"]["league_scoring_type"].ToString() },
+                { "Has Draft Grade?", resourceJson["fantasy_content"]["team"]["has_draft_grade"].ToString() },
 
-                teamHashTable.Add("Manager Id", resourceJson["fantasy_content"]["team"]["managers"]["manager"]["manager_id"].ToString());
-                teamHashTable.Add("NickName", resourceJson["fantasy_content"]["team"]["managers"]["manager"]["nickname"].ToString());
-                teamHashTable.Add("Guid", resourceJson["fantasy_content"]["team"]["managers"]["manager"]["guid"].ToString());
-                teamHashTable.Add("Is Commish?", (int?)resourceJson["fantasy_content"]["team"]["managers"]["manager"]["is_commissioner"]);
-                teamHashTable.Add("Is Current Login?", (int?)resourceJson["fantasy_content"]["team"]["managers"]["manager"]["is_current_login"]);
-                teamHashTable.Add("Email", resourceJson["fantasy_content"]["team"]["managers"]["manager"]["email"].ToString());
-                teamHashTable.Add("Image Url", resourceJson["fantasy_content"]["team"]["managers"]["manager"]["image_url"].ToString());
+                { "Manager Id", resourceJson["fantasy_content"]["team"]["managers"]["manager"]["manager_id"].ToString() },
+                { "NickName", resourceJson["fantasy_content"]["team"]["managers"]["manager"]["nickname"].ToString() },
+                { "Guid", resourceJson["fantasy_content"]["team"]["managers"]["manager"]["guid"].ToString() },
+                { "Is Commish?", (int?)resourceJson["fantasy_content"]["team"]["managers"]["manager"]["is_commissioner"] },
+                { "Is Current Login?", (int?)resourceJson["fantasy_content"]["team"]["managers"]["manager"]["is_current_login"] },
+                { "Email", resourceJson["fantasy_content"]["team"]["managers"]["manager"]["email"].ToString() },
+                { "Image Url", resourceJson["fantasy_content"]["team"]["managers"]["manager"]["image_url"].ToString() }
+            };
 
             IDictionaryEnumerator _enumerator = teamHashTable.GetEnumerator();
 

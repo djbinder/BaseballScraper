@@ -30,7 +30,7 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
 
     [Route("api/mlb")]
     [ApiController]
-    #pragma warning disable CS0414, CS0219, IDE0051, IDE0059, CS1591
+    #pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE1006
     public class MlbDataHittingLeadersController: Controller
     {
         private readonly Helpers _h                            = new Helpers();

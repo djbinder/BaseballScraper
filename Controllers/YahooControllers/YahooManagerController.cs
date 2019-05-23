@@ -15,9 +15,9 @@ namespace BaseballScraper.Controllers.YahooControllers
     [ApiController]
     public class YahooManagerController: Controller
     {
-        private Helpers _h = new Helpers();
+        private readonly Helpers _h = new Helpers();
         private readonly TheGameIsTheGameConfiguration _theGameConfig;
-        private static YahooApiEndPoints endPoints = new YahooApiEndPoints();
+        private static readonly YahooApiEndPoints endPoints = new YahooApiEndPoints();
         private static YahooHomeController _yahooHomeController;
 
         public YahooManagerController(IOptions<TheGameIsTheGameConfiguration> theGameConfig, YahooHomeController yahooHomeController)
@@ -43,13 +43,15 @@ namespace BaseballScraper.Controllers.YahooControllers
 
             JObject leagueStandings = _yahooHomeController.GenerateYahooResourceJObject(uriLeagueStandings);
 
-            YahooManager yM = new YahooManager();
-            // int          managerId = 0;
+            YahooManager yM = new YahooManager
+            {
+                // int          managerId = 0;
 
-            // these pull from the yahoo response (xml or json) to set each item
-            yM.ManagerId = endPoints.TeamItem(leagueStandings, managerId, "ManagerId");
-            yM.NickName  = endPoints.TeamItem(leagueStandings, managerId, "Nickname");
-            yM.Guid      = endPoints.TeamItem(leagueStandings, managerId, "Guid");
+                // these pull from the yahoo response (xml or json) to set each item
+                ManagerId = endPoints.TeamItem(leagueStandings, managerId, "ManagerId"),
+                NickName = endPoints.TeamItem(leagueStandings, managerId, "Nickname"),
+                Guid = endPoints.TeamItem(leagueStandings, managerId, "Guid")
+            };
             try
             {
                 yM.IsCommissioner = endPoints.TeamItem(leagueStandings, managerId, "IsCommissioner");
