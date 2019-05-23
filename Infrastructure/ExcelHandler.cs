@@ -43,9 +43,11 @@ namespace BaseballScraper.Infrastructure
         /// <item> https://github.com/dotnetcore/NPOI/blob/master/samples/Npoi.Samples.CreateNewSpreadsheet/Program.cs </item>
     /// </list>
 
+
+    #pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE1006
     public class ExcelHandler
     {
-        private Helpers _h = new Helpers();
+        private readonly Helpers _h = new Helpers();
 
         public class Excel
         {
@@ -85,12 +87,14 @@ namespace BaseballScraper.Infrastructure
                 RegisterProviderToStart();
                 SetThreadCurrentCulture();
 
-                ExcelDocument document = new ExcelDocument();
+            ExcelDocument document = new ExcelDocument
+            {
 
                 // document.UserName = "dan";
-                document.CodePage = CultureInfo.CurrentCulture.TextInfo.ANSICodePage;
+                CodePage = CultureInfo.CurrentCulture.TextInfo.ANSICodePage
+            };
 
-                string thisFilesName = $"{fileName}.xls";
+            string thisFilesName = $"{fileName}.xls";
 
                 FileStream stream = new FileStream(fileName, FileMode.Create);
 

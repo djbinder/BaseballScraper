@@ -16,12 +16,12 @@ using Dapper;
 
 namespace BaseballScraper.Controllers
 {
-    // #pragma warning disable CS0414, CS0219
+    #pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
     // [Route("playernote")]
     public class PlayerNoteController: Controller
     {
-        private Helpers _h = new Helpers();
-        private BaseballScraperContext _context;
+        private readonly Helpers _h = new Helpers();
+        private readonly BaseballScraperContext _context;
         private readonly AirtableConfiguration _airtableConfig;
 
         public PlayerNoteController(BaseballScraperContext context, IOptions<AirtableConfiguration> airtableConfig)

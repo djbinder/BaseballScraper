@@ -1,9 +1,4 @@
 ﻿using System;
-using System.IO;
-using System.Runtime.Serialization.Json;
-using System.Text;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
 using BaseballScraper.EndPoints;
 using BaseballScraper.Models.MlbDataApi;
 using BaseballScraper.Infrastructure;
@@ -11,13 +6,11 @@ using BaseballScraper.Infrastructure;
 using RestSharp;
 using static BaseballScraper.Infrastructure.PostmanMethods;
 using static BaseballScraper.EndPoints.MlbDataApiEndPoints;
-using Echovoice.JSON;
 
 namespace BaseballScraper.Controllers.MlbDataApiControllers
 {
-    // [Route("api/mlb")]
-    // [ApiController]
-    public class MlbDataApiHome
+
+    public class MlbDataSeasonHittingStats
     {
         private static readonly HitterSeasonStats _hSS = new HitterSeasonStats();
 
@@ -31,7 +24,7 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
 
 
         // /json/named.sport_pitching_tm.bam?league_list_id='mlb'&game_type={game_type}&season={season}&player_id={player_id}
-        public void ViewMlbDataApiPage ()
+        public void GetStatsForSeason ()
         {
             // http://lookup-service-prod.mlb.com/json/named.sport_hitting_tm.bam?league_list_id='mlb'&game_type='R'&season='2017'&player_id='592789'
             MlbDataEndPoint newEndPoint = _endPoints.HitterSeasonEndPoint("R","2017","592789");
@@ -57,17 +50,6 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
             var hitter = _apI.CreateInstanceOfModel(jToken,_hSS,"HitterSeasonStats");
             Console.WriteLine($"hitter: {hitter}");
             Console.WriteLine();
-
-
-
-
-
-
-
-
-
         }
     }
-
-
 }

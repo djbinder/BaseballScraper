@@ -20,8 +20,8 @@ namespace BaseballScraper.Controllers.YahooControllers
     [ApiController]
     public class YahooScoreboardController: Controller
     {
-        private Helpers _h                         = new Helpers();
-        private static YahooApiEndPoints endPoints = new YahooApiEndPoints();
+        private readonly Helpers _h                         = new Helpers();
+        private static readonly YahooApiEndPoints endPoints = new YahooApiEndPoints();
         private readonly TheGameIsTheGameConfiguration _theGameConfig;
         private static YahooHomeController _yahooHomeController;
 

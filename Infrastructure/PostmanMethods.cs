@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using BaseballScraper.EndPoints;
 using BaseballScraper.Infrastructure;
 using RestSharp;
@@ -75,9 +76,17 @@ namespace BaseballScraper.Infrastructure
 
                 case "HitterSeasonStats":
                     return "b037e4c8-be75-4604-ab5b-74f7033a5fb4";
+
+                case "PlayerTeams":
+                    return "0d865811-639b-41e2-a5db-93623f323098";
             }
 
             throw new System.Exception("no api type found");
         }
+
+
+
+
+
     }
 }

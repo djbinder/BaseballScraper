@@ -10,9 +10,11 @@ using BaseballScraper.Models.Yahoo;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
+
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Pages
 {
-    #pragma warning disable CS0414
+
     public class TransactionTrends : PageModel
     {
         private readonly Helpers _h = new Helpers();

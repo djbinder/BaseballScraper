@@ -69,9 +69,11 @@ namespace BaseballScraper.Controllers
             objects.Add("CUBS2");
             objects.Add("CUBS3");
 
-            List<object> objectsList2 = new List<object>();
-            objectsList2.Add("BREWERS");
-            objectsList2.Add("cards");
+            List<object> objectsList2 = new List<object>
+            {
+                "BREWERS",
+                "cards"
+            };
 
 
 
