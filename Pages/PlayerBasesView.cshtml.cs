@@ -13,7 +13,7 @@ namespace BaseballScraper.Pages
 {
     public class PlayerBasesView : PageModel
     {
-        private Helpers _h = new Helpers();
+        private readonly Helpers _h = new Helpers();
         private readonly PlayerBaseController _pBC = new PlayerBaseController();
 
         public PlayerBasesView() {}

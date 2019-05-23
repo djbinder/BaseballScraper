@@ -61,13 +61,15 @@ namespace BaseballScraper.Controllers.BaseballReference
         [Route("modules")]
         public List<string> GetListOfPythonModules()
         {
-            List<string> moduleList = new List<string>();
-            moduleList.Add("os");
-            moduleList.Add("requests");
-            moduleList.Add("pandas");
-            moduleList.Add("datetime");
-            moduleList.Add("io");
-            moduleList.Add("BeautifulSoup");
+            List<string> moduleList = new List<string>
+            {
+                "os",
+                "requests",
+                "pandas",
+                "datetime",
+                "io",
+                "BeautifulSoup"
+            };
 
             return moduleList;
         }

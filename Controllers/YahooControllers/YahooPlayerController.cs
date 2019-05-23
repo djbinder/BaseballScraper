@@ -4,12 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BaseballScraper.Controllers.YahooControllers
 {
-    #pragma warning disable CS0414, CS0219
+    #pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
     [Route("api/yahoo")]
     [ApiController]
     public class YahooPlayerController: Controller
     {
-        private Helpers _h = new Helpers();
+        private readonly Helpers _h = new Helpers();
 
         [Route("player")]
         public void PlayerInfo()

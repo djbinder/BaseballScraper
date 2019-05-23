@@ -8,6 +8,7 @@ using System;
 
 namespace BaseballScraper.Controllers.MlbDataApiControllers.cs
 {
+    #pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
     [Route("api/mlb")]
     [ApiController]
     public class MlbDataProjectedPitchingStatsController: Controller

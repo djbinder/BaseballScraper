@@ -20,8 +20,6 @@ namespace BaseballScraper.EndPoints
         // /json/named.proj_pecota_batting.bam?season={season}&player_id={player_id}
         public MlbDataEndPoint PlayerSearchEndPoint(string lastName)
         {
-            // _c.StartMethod();
-
             endPointType = "search_player_all";
 
             return new MlbDataEndPoint
@@ -60,6 +58,7 @@ namespace BaseballScraper.EndPoints
         public MlbDataEndPoint PlayerInfoEndPoint (int playerId)
         {
             endPointType = "player_info";
+
             return new MlbDataEndPoint
             {
                 BaseUri  = baseUri,
@@ -206,6 +205,35 @@ namespace BaseballScraper.EndPoints
             {
                 BaseUri  = baseUri,
                 EndPoint = $"{endPointType}.bam?league_list_id='mlb'&game_type='{gameType}'&season='{year}'&player_id='{playerId}'"
+            };
+        }
+
+
+        // Retrieve the teams a player has played for over the course of a season, or their career.
+        // https://appac.github.io/mlb-data-api-docs/#player-data-player-teams-get
+        // /json/named.player_teams.bam?season={season}&player_id={player_id}
+            // Omitting the season parameter will retrieve all teams the player has played for since the start of their career.
+            // season string (optional) Example: '2014'
+            // player_id string (required) Example: '493316'
+        // GET http://lookup-service-prod.mlb.com/json/named.player_teams.bam?season='2014'&player_id='493316'
+        public MlbDataEndPoint PlayerTeamsEndPoint(string season, string playerId)
+        {
+            endPointType = "player_teams";
+
+            return new MlbDataEndPoint
+            {
+                BaseUri  = baseUri,
+                EndPoint = $"{endPointType}.bam?season={season}&player_id={playerId}"
+            };
+        }
+        public MlbDataEndPoint PlayerTeamsEndPoint(string playerId)
+        {
+            endPointType = "player_teams";
+
+            return new MlbDataEndPoint
+            {
+                BaseUri  = baseUri,
+                EndPoint = $"{endPointType}.bam?player_id={playerId}"
             };
         }
 

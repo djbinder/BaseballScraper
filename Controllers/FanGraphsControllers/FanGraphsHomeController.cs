@@ -11,7 +11,7 @@ namespace BaseballScraper.Controllers.FanGraphs
 {
     // TODO: need to extract hitter info
     [Route("fangraphs/hitter")]
-    #pragma warning disable CS0414, CS0219, IDE0051, IDE0059, CS1591, IDE0044
+    #pragma warning disable CS0414, CS0219, IDE0051, IDE0059, CS1591, IDE0044, IDE0052
     public class FanGraphsHomeController: Controller
     {
         private readonly Helpers _h                              = new Helpers();

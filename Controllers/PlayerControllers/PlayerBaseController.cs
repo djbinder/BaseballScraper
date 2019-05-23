@@ -48,7 +48,7 @@ namespace BaseballScraper.Controllers.Player
 
 
 
-    #pragma warning disable CS0414, CS0219, IDE0051, IDE0059, CS1591, CS1570
+    #pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
     public class PlayerBaseController: Controller
     {
         private readonly Helpers _h = new Helpers();

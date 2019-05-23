@@ -11,6 +11,8 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 
+
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Infrastructure
 {
     // code generated using https://app.quicktype.io/
@@ -96,7 +98,7 @@ namespace BaseballScraper.Infrastructure
             MemoryStream mS = new MemoryStream();
 
             var objType = obj.GetType();
-            Console.WriteLine($"OBJECT TYPE BEING SERIALIZED IS: {objType}");
+            // Console.WriteLine($"ApiSerializer > ReturnJsonFromObject.objType: {objType}");
 
             // Serializer the given object to the stream
             DataContractJsonSerializer serializer = new DataContractJsonSerializer(objType);
@@ -107,7 +109,7 @@ namespace BaseballScraper.Infrastructure
 
             StreamReader sR = new StreamReader(mS);
             // this prints all object content in json format
-            Console.WriteLine(sR.ReadToEnd());
+            // Console.WriteLine($"Streamreader: {sR.ReadToEnd()}");
 
             mS.Close();
 
@@ -151,9 +153,11 @@ namespace BaseballScraper.Infrastructure
 
             memoryStream.Close();
 
-            _h.Spotlight("CREATED MODEL INSTANCE");
+            // _h.Spotlight($"CREATED MODEL INSTANCE for {obj.GetType()}");
 
             ReturnJsonFromObject(obj);
+            // _h.Intro(obj,"obj");
+            // Console.WriteLine($"Object type: {obj.GetType()}");
 
             return obj;
         }
@@ -175,7 +179,8 @@ namespace BaseballScraper.Infrastructure
 
                 memoryStream.Close();
 
-                _h.Spotlight($"CREATED MODEL INSTANCE #{instance}");
+                // _h.Spotlight($"CREATED MODEL INSTANCE #{instance} for {obj.GetType()}");
+                // Console.WriteLine($"Object type: {obj.GetType()}");
                 ReturnJsonFromObject(obj);
 
                 instance++;
@@ -206,6 +211,10 @@ namespace BaseballScraper.Infrastructure
                     return serializer.ReadObject(memoryStream) as LeadingHitter;
                 case "HitterSeasonStats":
                     return serializer.ReadObject(memoryStream) as HitterSeasonStats;
+                case "PlayerTeams":
+                    return serializer.ReadObject(memoryStream) as PlayerTeams;
+                case "PlayerTeam":
+                    return serializer.ReadObject(memoryStream) as PlayerTeam;
             }
             throw new System.Exception("no model type found");
         }
@@ -241,6 +250,12 @@ namespace BaseballScraper.Infrastructure
 
                 case "HitterSeasonStats":
                     return obj["sport_hitting_tm"]["queryResults"]["row"];
+
+                case "PlayerTeams":
+                    return obj["player_teams"];
+
+                case "PlayerTeam":
+                    return obj["player_teams"]["queryResults"]["row"];
             }
             throw new System.Exception("no api type found");
         }
