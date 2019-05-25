@@ -6,12 +6,13 @@ using Newtonsoft.Json.Linq;
 using RestSharp;
 using System;
 
+
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Controllers.MlbDataApiControllers.cs
 {
-    #pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
-    [Route("api/mlb")]
+    [Route("api/mlb/[controller]")]
     [ApiController]
-    public class MlbDataProjectedPitchingStatsController: Controller
+    public class MlbDataProjectedPitchingStatsController: ControllerBase
     {
         private readonly Helpers _h                            = new Helpers();
         private readonly ApiInfrastructure _a                  = new ApiInfrastructure();

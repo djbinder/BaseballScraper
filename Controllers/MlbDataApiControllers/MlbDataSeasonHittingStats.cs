@@ -2,16 +2,20 @@
 using BaseballScraper.EndPoints;
 using BaseballScraper.Models.MlbDataApi;
 using BaseballScraper.Infrastructure;
-
+using Microsoft.AspNetCore.Mvc;
 using RestSharp;
 using static BaseballScraper.Infrastructure.PostmanMethods;
 using static BaseballScraper.EndPoints.MlbDataApiEndPoints;
 
+
 namespace BaseballScraper.Controllers.MlbDataApiControllers
 {
 
-    public class MlbDataSeasonHittingStats
+    [Route("api/mlb/[controller]")]
+    [ApiController]
+    public class MlbDataSeasonHittingStats : ControllerBase
     {
+
         private static readonly HitterSeasonStats _hSS = new HitterSeasonStats();
 
         private static readonly MlbDataApiEndPoints _endPoints = new MlbDataApiEndPoints();
