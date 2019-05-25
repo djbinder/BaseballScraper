@@ -1,10 +1,12 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseballScraper.Infrastructure;
 using BaseballScraper.Models.Lahman;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BaseballScraper.Controllers
+
+#pragma warning disable CS0414, CS0219, IDE0051, IDE0059, CS1591, IDE0044
+namespace BaseballScraper.LahmanControllers
 {
 
     #region OVERVIEW ------------------------------------------------------------
@@ -30,9 +32,10 @@ namespace BaseballScraper.Controllers
 
 
 
-    #pragma warning disable CS0414, CS0219, IDE0051, IDE0059, CS1591, IDE0044
-    [Route("lahman")]
-    public class LahmanController: Controller
+
+    [Route("api/lahman/[controller]")]
+    [ApiController]
+    public class LahmanCsvController: ControllerBase
     {
         private readonly Helpers _h     = new Helpers();
         private readonly CsvHandler _cH = new CsvHandler();

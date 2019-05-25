@@ -106,12 +106,82 @@ namespace BaseballScraper.Infrastructure
         ///     var data = ReadDataFromSheetRange(string documentName, string tabName, string range)
         ///     UpdateData(data, "A1:Z1000","SfbbPlayerIdMap","1qKnB5z6qVeHD_eSGFJdJsWKh2muJt_-Cn-ZzdjuSbDw")
         /// </example>
-        public string UpdateData(IList<IList<object>> data, String range, String jsonGroupName, string spreadSheetId)
+        public string UpdateGoogleSheetRows(IList<IList<object>> data, String sheetName, String range, String jsonGroupName)
         {
+            _h.StartMethod();
+
+            ConnectToGoogle();
+
+            // helper function to print everything to console
+            PrintUpdateRangeDetails(sheetName, range, jsonGroupName);
+
+            // The new values to apply to the spreadsheet.
+            List<ValueRange> updateData = new List<ValueRange>();
+
+            string majorDimension = "ROWS";
+            // string majorDimension = "COLUMNS";
+
+            // dataValueRange: Google.Apis.Sheets.v4.Data.ValueRange
+            // dataValueRange.Range: test_sheet!A2
+            // dataValueRange.Values: System.Collections.Generic.List`1[System.Collections.Generic.IList`1[System.Object]]
+            ValueRange dataValueRange = new ValueRange
+            {
+                MajorDimension = majorDimension,
+                Range = $"{sheetName}!{range}",
+                Values = data
+            };
+
+            updateData.Add(dataValueRange);
+
+
+            string valueInputOption = "USER_ENTERED";
+
+            // requestBody: Google.Apis.Sheets.v4.Data.BatchUpdateValuesRequest
+            // requestBody.ValueInputOption: USER_ENTERED
+            // requestBody.Data: System.Collections.Generic.List`1[Google.Apis.Sheets.v4.Data.ValueRange]
+            BatchUpdateValuesRequest requestBody = new BatchUpdateValuesRequest
+            {
+                ValueInputOption = valueInputOption,
+                Data = updateData
+            };
+
+            // helper function to console log all data points to be added to the sheet
+            // PrintRequestBodyData(requestBody);
+
+            // "SpreadsheetId" is the name of the field in the gSheetNames.json file
+            var _spreadsheetId = SelectGoogleSheetToRead(jsonGroupName,"SpreadsheetId");
+
+            // request: Google.Apis.Sheets.v4.SpreadsheetsResource+ValuesResource+BatchUpdateRequest
+            SpreadsheetsResource.ValuesResource.BatchUpdateRequest request = _sheetsService.Spreadsheets.Values.BatchUpdate(requestBody, _spreadsheetId);
+
+            // response: Google.Apis.Sheets.v4.Data.BatchUpdateValuesResponse
+            // To do this async --> Data.BatchUpdateValuesResponse response = await request.ExecuteAsync();
+            BatchUpdateValuesResponse response = request.Execute();
+
+            // helper function to console log all the response details
+            LogSpreadsheetUpdateDetails(response);
+
+
+            // string serializedObject = JsonConvert.SerializeObject(response);
+            return JsonConvert.SerializeObject(response);
+        }
+
+
+
+
+        public string UpdateDataFromListList(List<List<object>> data, String range, String jsonGroupName, string spreadSheetId)
+        {
+            ConnectToGoogle();
             string valueInputOption = "USER_ENTERED";
 
             // The new values to apply to the spreadsheet.
             List<ValueRange> updateData = new List<ValueRange>();
+            IList<IList<object>> dataToIList = new List<IList<object>>();
+
+            foreach(var d in data)
+            {
+                dataToIList.Add(d);
+            }
 
             // dataValueRange: Google.Apis.Sheets.v4.Data.ValueRange
             // dataValueRange.Range: test_sheet!A2
@@ -120,7 +190,7 @@ namespace BaseballScraper.Infrastructure
             {
                 MajorDimension = "COLUMNS",
                 Range = range,
-                Values = data
+                Values = dataToIList
             };
 
             updateData.Add(dataValueRange);
@@ -151,6 +221,7 @@ namespace BaseballScraper.Infrastructure
 
         public string UpdateColumn(List<object> list, String sheetName, String column, int startingRow)
         {
+            ConnectToGoogle();
             String range = $"{sheetName}!{column}{startingRow}:{column}";
             // Console.WriteLine($"range is: {range}");
             string valueInputOption = "USER_ENTERED";
@@ -184,7 +255,8 @@ namespace BaseballScraper.Infrastructure
                 Data = updateData
             };
 
-            var _spreadsheetId = SelectGoogleSheetToRead("SheetsTestDoc","SpreadsheetId");
+            // var _spreadsheetId = SelectGoogleSheetToRead("SheetsTestDoc","SpreadsheetId");
+            var _spreadsheetId = SelectGoogleSheetToRead("CoreCalculator","SpreadsheetId");
 
             // request: Google.Apis.Sheets.v4.SpreadsheetsResource+ValuesResource+BatchUpdateRequest
             var request = _sheetsService.Spreadsheets.Values.BatchUpdate(requestBody, _spreadsheetId);
@@ -336,6 +408,7 @@ namespace BaseballScraper.Infrastructure
         public void LogSpreadsheetUpdateDetails(BatchUpdateValuesResponse response)
         {
             Console.WriteLine();
+            _h.Spotlight("UPDATE OUTCOMES");
             Console.WriteLine("-------------------------------------------------------");
             Console.WriteLine($"SPREADSHEET ID:         | {response.SpreadsheetId}");
             Console.WriteLine($"# of SHEETS updated:    | {response.TotalUpdatedSheets}");
@@ -343,6 +416,54 @@ namespace BaseballScraper.Infrastructure
             Console.WriteLine($"# of ROWS updated:      | {response.TotalUpdatedRows}");
             Console.WriteLine($"# of CELLS updated:     | {response.TotalUpdatedCells}");
             Console.WriteLine($"response.ETag:          | {response.ETag}");
+            Console.WriteLine("-------------------------------------------------------");
+            Console.WriteLine();
+        }
+
+        public void PrintUpdateRangeDetails(String sheetName, String range, String jsonGroupName)
+        {
+            Console.WriteLine();
+            _h.Spotlight("UPDATING THE FOLLOWING");
+            Console.WriteLine("-------------------------------------------------------");
+            Console.WriteLine($"JSON GROUP NAME:    | {jsonGroupName}");
+            Console.WriteLine($"RANGE:              | {range}");
+            Console.WriteLine($"SHEET NAME:         | {sheetName}");
+            Console.WriteLine("-------------------------------------------------------");
+            Console.WriteLine();
+        }
+
+        public void PrintRequestBodyData(BatchUpdateValuesRequest requestBody)
+        {
+            // Count = 1;
+            IList<ValueRange> requestBodyData = requestBody.Data;
+
+            Console.WriteLine();
+            _h.Spotlight("DATA TO BE ADDED");
+            Console.WriteLine("-------------------------------------------------------");
+
+            foreach(ValueRange vR in requestBodyData)
+            {
+                // listOfLists: System.Collections.Generic.List`1[System.Collections.Generic.IList`1[System.Object]]
+                // count = the # of lists within the listOfLists
+                IList<IList<object>> listOfLists = vR.Values;
+
+                int listCount = 1;
+                // list: System.Collections.Generic.List`1[System.Object]
+                foreach(IList<object> list in listOfLists)
+                {
+                    Console.WriteLine($"LIST: {listCount}");
+
+                    int dataCounter = 1;
+                    foreach(object data in list)
+                    {
+                        Console.WriteLine($"{dataCounter}. {data}");
+                        dataCounter++;
+                    }
+
+                    Console.WriteLine();
+                    listCount++;
+                }
+            }
             Console.WriteLine("-------------------------------------------------------");
             Console.WriteLine();
         }
