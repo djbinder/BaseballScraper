@@ -10,6 +10,8 @@ using BaseballScraper.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 
+
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Controllers.MlbDataApiControllers.cs
 {
     /// <summary> Provides two options on how to generate leading pitcher model
@@ -18,10 +20,11 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers.cs
     /// </summary>
 
 
-    #pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
-    [Route("api/mlb")]
+
+
+    [Route("api/mlb/[controller]")]
     [ApiController]
-    public class MlbDataPitchingLeadersController: Controller
+    public class MlbDataPitchingLeadersController: ControllerBase
     {
         private readonly Helpers _h           = new Helpers();
         private readonly ApiInfrastructure _a = new ApiInfrastructure();

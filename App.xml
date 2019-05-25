@@ -98,24 +98,24 @@
             <summary> Gets the top 25 most dropped players from ESPN </summary>
             <returns> A list of EspnTransactionTrendPlayer </returns>
         </member>
-        <member name="T:BaseballScraper.Controllers.FanGraphs.FanGraphsStartingPitcherController">
+        <member name="T:BaseballScraper.Controllers.FanGraphs.FgSpMasterReportController">
              <summary> </summary>
              <list> INDEX
-                 <item> View Page <see cref="M:BaseballScraper.Controllers.FanGraphs.FanGraphsStartingPitcherController.ViewFanGraphsStartingPitcherPage"/> </item>
-                 <item> Set Initial Url to Scrape <see cref="M:BaseballScraper.Controllers.FanGraphs.FanGraphsStartingPitcherController.SetInitialUrlToScrape(System.Int32,System.Int32,System.Int32,System.Int32)"/> </item>
-                 <item> Get Number of Pages to Scrape <see cref="M:BaseballScraper.Controllers.FanGraphs.FanGraphsStartingPitcherController.GetNumberOfPagesToScrape(System.Int32,System.Int32,System.Int32,System.Int32)"/> </item>
-                 <item> Get Urls of Pages to Scrape <see cref="M:BaseballScraper.Controllers.FanGraphs.FanGraphsStartingPitcherController.GetUrlsOfPagesToScrape"/> </item>
-                 <item> Get Urls of Pages to Scrape <see cref="M:BaseballScraper.Controllers.FanGraphs.FanGraphsStartingPitcherController.GetUrlsOfPagesToScrape(System.Int32,System.Int32,System.Int32)"/> </item>
-                 <item> Scrape Pitchers and Create List <see cref="M:BaseballScraper.Controllers.FanGraphs.FanGraphsStartingPitcherController.ScrapePitchersAndCreateList(System.Int32,System.Int32,System.Int32)"/> </item>
-                 <item> Count the Nodes Children <see cref="M:BaseballScraper.Controllers.FanGraphs.FanGraphsStartingPitcherController.CountTheNodesChildren(HtmlAgilityPack.HtmlNode)"/> </item>
-                 <item> Get Table Header Values <see cref="M:BaseballScraper.Controllers.FanGraphs.FanGraphsStartingPitcherController.GetTableHeaderValues(System.String)"/> </item>
+                 <item> View Page <see cref="M:BaseballScraper.Controllers.FanGraphs.FgSpMasterReportController.ViewFanGraphsStartingPitcherPage"/> </item>
+                 <item> Set Initial Url to Scrape <see cref="M:BaseballScraper.Controllers.FanGraphs.FgSpMasterReportController.SetInitialUrlToScrape(System.Int32,System.Int32,System.Int32,System.Int32)"/> </item>
+                 <item> Get Number of Pages to Scrape <see cref="M:BaseballScraper.Controllers.FanGraphs.FgSpMasterReportController.GetNumberOfPagesToScrape(System.Int32,System.Int32,System.Int32,System.Int32)"/> </item>
+                 <item> Get Urls of Pages to Scrape <see cref="M:BaseballScraper.Controllers.FanGraphs.FgSpMasterReportController.GetUrlsOfPagesToScrape"/> </item>
+                 <item> Get Urls of Pages to Scrape <see cref="M:BaseballScraper.Controllers.FanGraphs.FgSpMasterReportController.GetUrlsOfPagesToScrape(System.Int32,System.Int32,System.Int32)"/> </item>
+                 <item> Scrape Pitchers and Create List <see cref="M:BaseballScraper.Controllers.FanGraphs.FgSpMasterReportController.ScrapePitchersAndCreateList(System.Int32,System.Int32,System.Int32)"/> </item>
+                 <item> Count the Nodes Children <see cref="M:BaseballScraper.Controllers.FanGraphs.FgSpMasterReportController.CountTheNodesChildren(HtmlAgilityPack.HtmlNode)"/> </item>
+                 <item> Get Table Header Values <see cref="M:BaseballScraper.Controllers.FanGraphs.FgSpMasterReportController.GetTableHeaderValues(System.String)"/> </item>
              </list>
             
              <list> RESOURCES
                  <item> FanGraphs custom report this scraper targets: https://bit.ly/2N2somI </item>
              </list>
         </member>
-        <member name="M:BaseballScraper.Controllers.FanGraphs.FanGraphsStartingPitcherController.SetInitialUrlToScrape(System.Int32,System.Int32,System.Int32,System.Int32)">
+        <member name="M:BaseballScraper.Controllers.FanGraphs.FgSpMasterReportController.SetInitialUrlToScrape(System.Int32,System.Int32,System.Int32,System.Int32)">
             <summary> This defines the first url to scrape; At times, you may need to loop through multiple urls and the url defined here is the first url in the loop </summary>
             <param name="minInningsPitched"> The minimum number of innings pitched a pitcher needs to be included in the results of the scrape </param>
             <param name="year"> The Mlb season year </param>
@@ -123,7 +123,7 @@
             <param name="recordsPerPage"> The number of rows in the table; Standard options include 30, 50 , 100; This will ultimately influence the total number of urls and their tables to scrape </param>
             <returns> A string url </returns>
         </member>
-        <member name="M:BaseballScraper.Controllers.FanGraphs.FanGraphsStartingPitcherController.GetNumberOfPagesToScrape(System.Int32,System.Int32,System.Int32,System.Int32)">
+        <member name="M:BaseballScraper.Controllers.FanGraphs.FgSpMasterReportController.GetNumberOfPagesToScrape(System.Int32,System.Int32,System.Int32,System.Int32)">
             <summary> This counts the number of urls that will be scraped; It examines a specific html element on the fangraphs html page that shows the number of pages </summary>
             <example> '70 items in 3 page' --> the '3' is what this method is looking for </example>
             <param name="minInningsPitched"> The minimum number of innings pitched a pitcher needs to be included in the results of the scrape </param>
@@ -132,10 +132,10 @@
             <param name="recordsPerPage"> The number of rows in the table; Standard options include 30, 50 , 100; This will ultimately influence the total number of urls and their tables to scrape </param>
             <returns> A number of the number of pages to scrape as part of the loop </returns>
         </member>
-        <member name="M:BaseballScraper.Controllers.FanGraphs.FanGraphsStartingPitcherController.GetUrlsOfPagesToScrape">
+        <member name="M:BaseballScraper.Controllers.FanGraphs.FgSpMasterReportController.GetUrlsOfPagesToScrape">
             <returns> A list of strings representing urls to be scraped </returns>
         </member>
-        <member name="M:BaseballScraper.Controllers.FanGraphs.FanGraphsStartingPitcherController.GetUrlsOfPagesToScrape(System.Int32,System.Int32,System.Int32)">
+        <member name="M:BaseballScraper.Controllers.FanGraphs.FgSpMasterReportController.GetUrlsOfPagesToScrape(System.Int32,System.Int32,System.Int32)">
             <summary> OPTION 2: parameters are passed into the  method (i.e minInningsPitched, year, page, recordsPerPage ). Retrieves all urls of pages that will be scraped and adds them to a list  </summary>
             <example> '70 items in 3 page' --> the '3' is what this method is looking for </example>
             <param name="minInningsPitched"> The minimum number of innings pitched a pitcher needs to be included in the results of the scrape </param>
@@ -144,52 +144,22 @@
             <param name="recordsPerPage"> The number of rows in the table; Standard options include 30, 50 , 100; This will ultimately influence the total number of urls and their tables to scrape </param>
             <returns> A list of strings representing urls to be scraped </returns>
         </member>
-        <member name="M:BaseballScraper.Controllers.FanGraphs.FanGraphsStartingPitcherController.ScrapePitchersAndCreateList(System.Int32,System.Int32,System.Int32)">
+        <member name="M:BaseballScraper.Controllers.FanGraphs.FgSpMasterReportController.ScrapePitchersAndCreateList(System.Int32,System.Int32,System.Int32)">
             <summary> Scrape the pitchers table and get all their data </summary>
             <remarks> Any XPath can be pulled from Chrome; right-click 'Inspect', view the html for the table, right click on any item and select Copy > tableBodyXpath </remarks>
         </member>
-        <member name="M:BaseballScraper.Controllers.FanGraphs.FanGraphsStartingPitcherController.GetTableHeaderValues(System.String)">
+        <member name="M:BaseballScraper.Controllers.FanGraphs.FgSpMasterReportController.GetTableHeaderValues(System.String)">
             <summary> Scrapes the headers of the table to get the stat names (e.g., ERA, WHIP, etc.) </summary>
             <param name="thisUrl"> The url of the table you are scraping </param>
         </member>
-        <member name="M:BaseballScraper.Controllers.FanGraphs.FanGraphsStartingPitcherController.CreateNewFanGraphsPitcher(System.Collections.Generic.List{System.String})">
+        <member name="M:BaseballScraper.Controllers.FanGraphs.FgSpMasterReportController.GetTableHeaderValuesList(System.String)">
+            <summary> Scrapes the headers of the table to get the stat names (e.g., ERA, WHIP, etc.) </summary>
+            <param name="thisUrl"> The url of the table you are scraping </param>
+        </member>
+        <member name="M:BaseballScraper.Controllers.FanGraphs.FgSpMasterReportController.CreateNewFanGraphsPitcher(System.Collections.Generic.List{System.String})">
             <summary> Instantiates a new instance of class FanGraphsPitcher </summary>
             <param name="playerItems"> A list of values for each of the stats / properties of the FanGraphsPitcher class </param>
             <returns> New instance of FanGraphsPitcher class </returns>
-        </member>
-        <member name="T:BaseballScraper.Controllers.LahmanController">
-            <summary> Methods to read and get records from the Lahman database / csv files </summary>
-            <remarks> Files will need to be updated after each Mlb season </remarks>
-            <remarks> There are many more Lahman csv files; those are not included at this point; </remarks>
-            <list> RESOURCES
-                <item> Lahman Csv File Descriptions
-                    <description> http://www.seanlahman.com/files/database/readme58.txt </description>
-                </item>
-            </list>
-            <list> LAHMAN CSV FILES
-                <item> Appearances </item>
-                <item> Batting </item>
-                <item> Parks </item>
-                <item> People </item>
-                <item> Pitching </item>
-                <item> Teams </item>
-            </list>
-        </member>
-        <member name="M:BaseballScraper.Controllers.LahmanController.RunLahmanFunction">
-            <summary> Call non-async function to read a lahman csv file </summary>
-            <remarks> You would only be calling one of the included six functions at a time; all six included below for ease / consolidation </remarks>
-        </member>
-        <member name="M:BaseballScraper.Controllers.LahmanController.GetAllLahmanCsvFileRecords(System.String)">
-            <summary> Read a lahman csv file non-async </summary>
-            <param name="filePath"> One of the six Lahman csv file paths </param>
-        </member>
-        <member name="M:BaseballScraper.Controllers.LahmanController.RunLahmanFunctionAsync">
-            <summary> Call async function to read a lahman csv file </summary>
-            <remarks> You would only be calling one of the included six functions at a time; all six included below for ease / consolidation </remarks>
-        </member>
-        <member name="M:BaseballScraper.Controllers.LahmanController.GetAllLahmanCsvFileRecordsAsync(System.String)">
-            <summary> Read a lahman csv file async </summary>
-            <param name="filePath"> One of the six Lahman csv file paths </param>
         </member>
         <member name="T:BaseballScraper.Controllers.MlbDataApiControllers.MlbDataHittingLeadersController">
             <summary> Provides two options on how to generate leading hitter model
@@ -546,6 +516,40 @@
             <example> GetTrendsForDateOnePosition("2018", "10", "01", "QB"); </example>
             <returns> A list of YahooTransactionTrendsPlayer --> Name, Drops, Adds, Trades, Total </returns>
         </member>
+        <member name="T:BaseballScraper.LahmanControllers.LahmanCsvController">
+            <summary> Methods to read and get records from the Lahman database / csv files </summary>
+            <remarks> Files will need to be updated after each Mlb season </remarks>
+            <remarks> There are many more Lahman csv files; those are not included at this point; </remarks>
+            <list> RESOURCES
+                <item> Lahman Csv File Descriptions
+                    <description> http://www.seanlahman.com/files/database/readme58.txt </description>
+                </item>
+            </list>
+            <list> LAHMAN CSV FILES
+                <item> Appearances </item>
+                <item> Batting </item>
+                <item> Parks </item>
+                <item> People </item>
+                <item> Pitching </item>
+                <item> Teams </item>
+            </list>
+        </member>
+        <member name="M:BaseballScraper.LahmanControllers.LahmanCsvController.RunLahmanFunction">
+            <summary> Call non-async function to read a lahman csv file </summary>
+            <remarks> You would only be calling one of the included six functions at a time; all six included below for ease / consolidation </remarks>
+        </member>
+        <member name="M:BaseballScraper.LahmanControllers.LahmanCsvController.GetAllLahmanCsvFileRecords(System.String)">
+            <summary> Read a lahman csv file non-async </summary>
+            <param name="filePath"> One of the six Lahman csv file paths </param>
+        </member>
+        <member name="M:BaseballScraper.LahmanControllers.LahmanCsvController.RunLahmanFunctionAsync">
+            <summary> Call async function to read a lahman csv file </summary>
+            <remarks> You would only be calling one of the included six functions at a time; all six included below for ease / consolidation </remarks>
+        </member>
+        <member name="M:BaseballScraper.LahmanControllers.LahmanCsvController.GetAllLahmanCsvFileRecordsAsync(System.String)">
+            <summary> Read a lahman csv file async </summary>
+            <param name="filePath"> One of the six Lahman csv file paths </param>
+        </member>
         <!-- Badly formed XML comment ignored for member "M:BaseballScraper.EndPoints.MlbDataApiEndPoints.PitchingLeadersEndPoint(System.Int32,System.String,System.String)" -->
         <!-- Badly formed XML comment ignored for member "M:BaseballScraper.EndPoints.MlbDataApiEndPoints.PitchingLeadersEndPoint(System.Int32,System.String,System.String,System.String)" -->
         <!-- Badly formed XML comment ignored for member "M:BaseballScraper.EndPoints.MlbDataApiEndPoints.HittingLeadersEndPoint(System.Int32,System.String,System.String)" -->
@@ -763,7 +767,7 @@
             <param name="letter"> A letter that corresponds to an Excel column </param>
             <returns> The column number of an Excel column </returns>
         </member>
-        <member name="M:BaseballScraper.Infrastructure.GoogleSheetsConnector.UpdateData(System.Collections.Generic.IList{System.Collections.Generic.IList{System.Object}},System.String,System.String,System.String)">
+        <member name="M:BaseballScraper.Infrastructure.GoogleSheetsConnector.UpdateGoogleSheetRows(System.Collections.Generic.IList{System.Collections.Generic.IList{System.Object}},System.String,System.String,System.String)">
             <example>
                 var data = ReadDataFromSheetRange(string documentName, string tabName, string range)
                 UpdateData(data, "A1:Z1000","SfbbPlayerIdMap","1qKnB5z6qVeHD_eSGFJdJsWKh2muJt_-Cn-ZzdjuSbDw")

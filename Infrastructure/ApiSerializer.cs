@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Runtime.Serialization.Json;
@@ -15,70 +16,7 @@ using RestSharp;
 #pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Infrastructure
 {
-    // code generated using https://app.quicktype.io/
-    // the json that was inputted to app.quicktype.io was generated using Postman
-    public class ApiSerializer
-    {
-        public static object FromJson(string json) => JsonConvert.DeserializeObject<object>(json, Converter.Settings);
-    }
 
-
-    // code generated using https://app.quicktype.io/
-    // the json that was inputted to app.quicktype.io was generated using Postman
-    public static class Serialize
-    {
-        public static string ToJson(this object self) => JsonConvert.SerializeObject(self, Converter.Settings);
-    }
-
-
-    // code generated using https://app.quicktype.io/
-    // the json that was inputted to app.quicktype.io was generated using Postman
-    internal static class Converter
-    {
-        public static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
-        {
-            MetadataPropertyHandling = MetadataPropertyHandling.Ignore,
-            DateParseHandling        = DateParseHandling.None,
-            Converters               = {
-                new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal }
-            },
-        };
-    }
-
-
-    // code generated using https://app.quicktype.io/
-    // the json that was inputted to app.quicktype.io was generated using Postman
-    internal class ParseStringConverter : JsonConverter
-    {
-        public override bool CanConvert(Type t) => t == typeof(long) || t == typeof(long?);
-
-        public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
-        {
-            if (reader.TokenType == JsonToken.Null) return null;
-            var value = serializer.Deserialize<string>(reader);
-                if (Int64.TryParse(value, out long l))
-                {
-                    return l;
-                }
-                throw new Exception("Cannot unmarshal type long");
-        }
-
-        public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
-        {
-            if (untypedValue == null)
-            {
-                serializer.Serialize(writer, null);
-                return;
-            }
-            var value = (long)untypedValue;
-            serializer.Serialize(writer, value.ToString());
-            return;
-        }
-
-        // code generated using https://app.quicktype.io/
-        // the json that was inputted to app.quicktype.io was generated using Postman
-        public static readonly ParseStringConverter Singleton = new ParseStringConverter();
-    }
 
 
     public class ApiInfrastructure
@@ -140,7 +78,10 @@ namespace BaseballScraper.Infrastructure
             return modelToken;
         }
 
-
+        // May 22, 2019 status: this works
+        // Example: check MlbDataPlayerTeams.GetTeamsforPlayerAllSeasons
+        // IMPORTANT: every attribute in the model needs to have the 'DataMember' tag
+            // E.g., [DataMember(Name="season_state")]
         public Object CreateInstanceOfModel (JToken token, Object obj, string modelType)
         {
             string tokenToString = token.ToString();
@@ -163,6 +104,10 @@ namespace BaseballScraper.Infrastructure
         }
 
 
+        // May 22, 2019 status: this works
+        // Example: check MlbDataPlayerTeams.GetTeamsforPlayerAllSeasons
+        // IMPORTANT: every attribute in the model needs to have the 'DataMember' tag
+            // E.g., [DataMember(Name="season_state")]
         public Object CreateMultipleInstancesOfModelByLooping(JToken token, Object obj, string modelType)
         {
             int instance = 1;
@@ -180,12 +125,54 @@ namespace BaseballScraper.Infrastructure
                 memoryStream.Close();
 
                 // _h.Spotlight($"CREATED MODEL INSTANCE #{instance} for {obj.GetType()}");
-                // Console.WriteLine($"Object type: {obj.GetType()}");
                 ReturnJsonFromObject(obj);
-
                 instance++;
             }
             return obj;
+        }
+
+
+        // May 22, 2019 status: this kind of works
+        // Example:
+            // List<dynamic> ptList2 = new List<dynamic>();
+            // PlayerTeam pTeam2 = new PlayerTeam();
+            // var objList = _apI.CreateListWithMultipleInstances(allTeamValuesJToken,pTeam2,ptList2,"PlayerTeam");
+            // var firstValue = objList[0] as PlayerTeam;
+            // Console.WriteLine(firstValue.OrgFull);
+        public List<dynamic> CreateListWithMultipleInstances(JToken token, Object obj, List<dynamic> objList, string modelType)
+        {
+            int instance = 1;
+            // List<Object> objList = new List<Object>();
+
+            foreach(var playerObject in token)
+            {
+                string playerObjectToString = playerObject.ToString();
+
+                MemoryStream memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(playerObjectToString));
+
+                DataContractJsonSerializer serializer = new DataContractJsonSerializer(obj.GetType());
+
+                obj = SetTypeToReadObjectAs(obj, memoryStream, serializer, modelType);
+
+                memoryStream.Close();
+
+                // _h.Spotlight($"CREATED MODEL INSTANCE #{instance} for {obj.GetType()}");
+                // Console.WriteLine($"Object type: {obj.GetType()}");
+                ReturnJsonFromObject(obj);
+                objList.Add(obj);
+
+                instance++;
+            }
+
+            var listCount = objList.Count;
+            for(var jsonIndex = 0; jsonIndex <= listCount - 1; jsonIndex++)
+            {
+                // var jsonGrouping = objList[jsonIndex];
+                var jsonGrouping = objList[jsonIndex];
+                Console.WriteLine(jsonGrouping);
+            }
+
+            return objList;
         }
 
 
@@ -259,5 +246,72 @@ namespace BaseballScraper.Infrastructure
             }
             throw new System.Exception("no api type found");
         }
+    }
+
+
+
+    // code generated using https://app.quicktype.io/
+    // the json that was inputted to app.quicktype.io was generated using Postman
+    public class ApiSerializer
+    {
+        public static object FromJson(string json) => JsonConvert.DeserializeObject<object>(json, Converter.Settings);
+    }
+
+
+    // code generated using https://app.quicktype.io/
+    // the json that was inputted to app.quicktype.io was generated using Postman
+    public static class Serialize
+    {
+        public static string ToJson(this object self) => JsonConvert.SerializeObject(self, Converter.Settings);
+    }
+
+
+    // code generated using https://app.quicktype.io/
+    // the json that was inputted to app.quicktype.io was generated using Postman
+    internal static class Converter
+    {
+        public static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
+        {
+            MetadataPropertyHandling = MetadataPropertyHandling.Ignore,
+            DateParseHandling        = DateParseHandling.None,
+            Converters               = {
+                new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal }
+            },
+        };
+    }
+
+
+    // code generated using https://app.quicktype.io/
+    // the json that was inputted to app.quicktype.io was generated using Postman
+    internal class ParseStringConverter : JsonConverter
+    {
+        public override bool CanConvert(Type t) => t == typeof(long) || t == typeof(long?);
+
+        public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
+        {
+            if (reader.TokenType == JsonToken.Null) return null;
+            var value = serializer.Deserialize<string>(reader);
+                if (Int64.TryParse(value, out long l))
+                {
+                    return l;
+                }
+                throw new Exception("Cannot unmarshal type long");
+        }
+
+        public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
+        {
+            if (untypedValue == null)
+            {
+                serializer.Serialize(writer, null);
+                return;
+            }
+            var value = (long)untypedValue;
+            serializer.Serialize(writer, value.ToString());
+            return;
+        }
+
+        // code generated using https://app.quicktype.io/
+        // the json that was inputted to app.quicktype.io was generated using Postman
+        public static readonly ParseStringConverter Singleton = new ParseStringConverter();
     }
 }

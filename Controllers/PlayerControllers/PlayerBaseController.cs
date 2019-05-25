@@ -53,7 +53,7 @@ namespace BaseballScraper.Controllers.Player
     {
         private readonly Helpers _h = new Helpers();
 
-        public GoogleSheetsConnector _gSC = new GoogleSheetsConnector();
+        // public GoogleSheetsConnector _gSC = new GoogleSheetsConnector();
 
 
 
