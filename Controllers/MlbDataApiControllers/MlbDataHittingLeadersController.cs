@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE1006
 namespace BaseballScraper.Controllers.MlbDataApiControllers
 {
 
@@ -28,10 +29,10 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
 
 
 
-    [Route("api/mlb")]
+
+    [Route("api/mlb/[controller]")]
     [ApiController]
-    #pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE1006
-    public class MlbDataHittingLeadersController: Controller
+    public class MlbDataHittingLeadersController: ControllerBase
     {
         private readonly Helpers _h                            = new Helpers();
         private readonly ApiInfrastructure _a                  = new ApiInfrastructure();

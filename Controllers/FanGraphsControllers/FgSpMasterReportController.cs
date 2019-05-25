@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -12,20 +12,22 @@ using BaseballScraper.Models.FanGraphs;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Mvc;
 
+
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE1006
 namespace BaseballScraper.Controllers.FanGraphs
 {
     #region OVERVIEW ------------------------------------------------------------
 
         /// <summary> </summary>
         /// <list> INDEX
-        ///     <item> View Page <see cref="FanGraphsStartingPitcherController.ViewFanGraphsStartingPitcherPage()"/> </item>
-        ///     <item> Set Initial Url to Scrape <see cref="FanGraphsStartingPitcherController.SetInitialUrlToScrape(int, int, int, int)"/> </item>
-        ///     <item> Get Number of Pages to Scrape <see cref="FanGraphsStartingPitcherController.GetNumberOfPagesToScrape(int, int, int, int)"/> </item>
-        ///     <item> Get Urls of Pages to Scrape <see cref="FanGraphsStartingPitcherController.GetUrlsOfPagesToScrape()"/> </item>
-        ///     <item> Get Urls of Pages to Scrape <see cref="FanGraphsStartingPitcherController.GetUrlsOfPagesToScrape(int, int, int)"/> </item>
-        ///     <item> Scrape Pitchers and Create List <see cref="FanGraphsStartingPitcherController.ScrapePitchersAndCreateList(int, int, int)"/> </item>
-        ///     <item> Count the Nodes Children <see cref="FanGraphsStartingPitcherController.CountTheNodesChildren(HtmlNode)"/> </item>
-        ///     <item> Get Table Header Values <see cref="FanGraphsStartingPitcherController.GetTableHeaderValues(string)"/> </item>
+        ///     <item> View Page <see cref="FgSpMasterReportController.ViewFanGraphsStartingPitcherPage()"/> </item>
+        ///     <item> Set Initial Url to Scrape <see cref="FgSpMasterReportController.SetInitialUrlToScrape(int, int, int, int)"/> </item>
+        ///     <item> Get Number of Pages to Scrape <see cref="FgSpMasterReportController.GetNumberOfPagesToScrape(int, int, int, int)"/> </item>
+        ///     <item> Get Urls of Pages to Scrape <see cref="FgSpMasterReportController.GetUrlsOfPagesToScrape()"/> </item>
+        ///     <item> Get Urls of Pages to Scrape <see cref="FgSpMasterReportController.GetUrlsOfPagesToScrape(int, int, int)"/> </item>
+        ///     <item> Scrape Pitchers and Create List <see cref="FgSpMasterReportController.ScrapePitchersAndCreateList(int, int, int)"/> </item>
+        ///     <item> Count the Nodes Children <see cref="FgSpMasterReportController.CountTheNodesChildren(HtmlNode)"/> </item>
+        ///     <item> Get Table Header Values <see cref="FgSpMasterReportController.GetTableHeaderValues(string)"/> </item>
         /// </list>
         ///
         /// <list> RESOURCES
@@ -35,17 +37,26 @@ namespace BaseballScraper.Controllers.FanGraphs
     #endregion OVERVIEW ------------------------------------------------------------
 
 
-    [Route("fangraphs")]
-    #pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE1006
-    public class FanGraphsStartingPitcherController: Controller
+
+    [Route("api/fangraphs/[controller]")]
+    [ApiController]
+    public class FgSpMasterReportController: ControllerBase
     {
         private readonly Helpers _h                              = new Helpers();
+
         private static readonly FanGraphsUriEndPoints _endPoints = new FanGraphsUriEndPoints();
+
+        private static readonly GoogleSheetsConnector _gSC = new GoogleSheetsConnector();
+
         private readonly string pathToGetNumberOfPagesToScrape   = "//*[@id='LeaderBoard1_dg1_ctl00']/thead/tr[1]/td/div/div[5]/strong[2]";
+
         private readonly string pathOfTableBodyToScrape          = "//*[@id='LeaderBoard1_dg1_ctl00']/tbody";
+
         private readonly string pathOfTableHeaderToScrape        = "//*[@id='LeaderBoard1_dg1_ctl00']/thead/tr[2]";
 
-        public FanGraphsStartingPitcherController() {}
+
+
+        public FgSpMasterReportController() {}
 
         [HttpGet]
         [Route("sp")]
@@ -69,6 +80,7 @@ namespace BaseballScraper.Controllers.FanGraphs
             /// <returns> A string url </returns>
             public string SetInitialUrlToScrape(int minInningsPitched, int year, int page, int recordsPerPage)
             {
+                // var    newEndPoint        = _endPoints.StartingPitchersSimpleReportEndPoint(2019);
                 var    newEndPoint        = _endPoints.PitchingLeadersMasterStatsReportEndPoint(minInningsPitched, year, page, recordsPerPage);
                 string uriToBeginScraping = newEndPoint.EndPointUri.ToString();
                 return uriToBeginScraping;
@@ -192,27 +204,40 @@ namespace BaseballScraper.Controllers.FanGraphs
             // Step 4
             /// <summary> Scrape the pitchers table and get all their data </summary>
             /// <remarks> Any XPath can be pulled from Chrome; right-click 'Inspect', view the html for the table, right click on any item and select Copy > tableBodyXpath </remarks>
-            [Route("scrape")]
+            // [Route("scrape")]
             public List<FanGraphsPitcher> ScrapePitchersAndCreateList (int minInningsPitched, int year, int recordsPerPage)
             {
                 List<string> listOfUrlsToLoopThrough = GetUrlsOfPagesToScrape (minInningsPitched, year, recordsPerPage).ToList ();
                 int  numberOfUrlsToScrape            = listOfUrlsToLoopThrough.Count();
-                Console.WriteLine($"THERE IS {numberOfUrlsToScrape} tables to scrape");
+                Console.WriteLine($"Table to Scrape: {numberOfUrlsToScrape}");
 
                 HtmlWeb htmlWeb = new HtmlWeb ();
 
                 List<FanGraphsPitcher> listOfFgPitchers = new List<FanGraphsPitcher>();
+                // List<object> _listOfFgPitchers = new List<object>();
+
+                var listOfLists = new List<IList<object>>();
+
+
 
                 int urlNumber = 1;
 
                 foreach (string thisUrl in listOfUrlsToLoopThrough)
                 {
-                    Console.WriteLine($"THIS IS URL {urlNumber}/{numberOfUrlsToScrape}");
-                    urlNumber++;
+                    Console.WriteLine($"URL {urlNumber} of {numberOfUrlsToScrape}");
 
                     var thisUrlsHtml = htmlWeb.Load (thisUrl);
 
                     GetTableHeaderValues(thisUrl);
+
+                    var headersList = GetTableHeaderValuesList(thisUrl);
+
+                    if(urlNumber == 1)
+                    {
+                        listOfLists.Add(headersList);
+                    }
+
+                    urlNumber++;
 
                     // PATH OF TABLE TO SCRAPE --> "//*[@id='LeaderBoard1_dg1_ctl00']/tbody";
                     HtmlNodeCollection thisTablesBody = thisUrlsHtml.DocumentNode.SelectNodes (pathOfTableBodyToScrape);
@@ -226,6 +251,9 @@ namespace BaseballScraper.Controllers.FanGraphs
                         // NUMBER OF ROWS TO SCRAPE IN THIS TABLE --> you only want player data, so remove the header and footer
                         int numberOfRowsToScrapeInThisTable = numberOfRowsInThisTable - 2;
 
+
+                        // adjust for testing (i.e., decrease rows read)
+                        // for (var row = 0; row <= 1; row++)
                         for (var row = 0; row <= numberOfRowsToScrapeInThisTable - 1; row++)
                         {
                             // THIS PLAYERS TABLE ROW PATH return example --> //*[@id='LeaderBoard1_dg1_ctl00__11']
@@ -243,6 +271,8 @@ namespace BaseballScraper.Controllers.FanGraphs
                                 int numberOfColumnsToScrape = totalNumberOfColumnsInTable - 2;
 
                                 List<string> playerItems = new List<string> ();
+                                // List<string> _playerItems = new List<string>();
+                                List<object> list = new List<object>();
 
                                 // Begin looping through every column in the table
                                 for (var column = 1; column <= numberOfColumnsToScrape; column++)
@@ -270,6 +300,8 @@ namespace BaseballScraper.Controllers.FanGraphs
                                                 // NAME OR TEAM VALUE --> this is where you get the player's actual name and team name
                                                 var nameOrTeamValue = nameOrTeamValueNode.InnerText;
                                                 playerItems.Add (nameOrTeamValue);
+                                                // _playerItems.Add (nameOrTeamValue);
+                                                list.Add(nameOrTeamValue);
                                             }
                                         }
                                         catch (Exception ex)
@@ -278,6 +310,8 @@ namespace BaseballScraper.Controllers.FanGraphs
                                             Console.WriteLine($"Cell is blank: {ex.Message}");
                                             string cellIsBlank = "";
                                             playerItems.Add (cellIsBlank);
+                                            // _playerItems.Add (cellIsBlank);
+                                            list.Add(cellIsBlank);
                                         }
                                     }
                                     else
@@ -288,19 +322,85 @@ namespace BaseballScraper.Controllers.FanGraphs
                                                 // return example --> 3.9', '26.3' etc.
                                             var statValue = statValueNode.InnerText;
                                             playerItems.Add (statValue);
+                                            // _playerItems.Add (statValue);
+                                            list.Add(statValue);
                                         }
                                     }
                                 }
-                                CreateNewFanGraphsPitcher(playerItems);
+                                // CreateNewFanGraphsPitcher(playerItems);
                                 listOfFgPitchers.Add(CreateNewFanGraphsPitcher(playerItems));
+                                // _listOfFgPitchers.Add(_playerItems);
+                                listOfLists.Add(list);
                             }
                         }
                     }
                 }
+
+                _gSC.UpdateGoogleSheetRows(listOfLists,"tester","A1:DB1000","CoreCalculator");
+
+                // var convertedList = _gSC.ConvertListOfAnyTypeToObjectType(listOfFgPitchers);
+                // Console.WriteLine($"convertedList.Count: {convertedList.Count}");
+
+                // IList<IList<object>> dataToIList = new List<IList<object>>
+                // {
+                //     convertedList
+                // };
+
+                // Console.WriteLine($"dataToIList.Count: {dataToIList.Count}");
+
+                // List<object> objectList = new List<object>()
+                // {
+                //     "My Cell Text",
+                //     "my cell text 2",
+                //     "xyz",
+                //     1
+                // };
+                // // Console.WriteLine($"objectList.Count: {objectList.Count}");
+
+                // List<object> numberList = new List<object>()
+                // {
+                //     1,
+                //     34,
+                //     345345345345345,
+                //     1,
+                //     -1,
+                //     900,
+                //     "Hello",
+                //     "Goodbye"
+                // };
+
+
+                // List<IList<object>> valueList = new List<IList<object>>
+                // {
+                //     objectList,
+                //     numberList
+                // };
+
+                // Console.WriteLine($"valueList.Count: {valueList.Count}");
+
+
+                // _gSC.UpdateGoogleSheetRows(valueList, "tester", "A1:AH10","CoreCalculator");
+                // _gSC.UpdateData(valueList, "A1","CoreCalculator","SpreadsheetId");
                 return listOfFgPitchers;
             }
 
         #endregion SCRAPING ------------------------------------------------------------
+
+
+
+        #region EXPORT TO GOOGLE SHEET ------------------------------------------------------------
+
+            public void AddReportToGoogleSheet()
+            {
+
+            }
+
+
+
+
+        #endregion EXPORT TO GOOGLE SHEET ------------------------------------------------------------
+
+
 
 
 
@@ -348,6 +448,48 @@ namespace BaseballScraper.Controllers.FanGraphs
                         }
                     }
                 }
+            }
+
+
+
+            // STATUS: this works
+            /// <summary> Scrapes the headers of the table to get the stat names (e.g., ERA, WHIP, etc.) </summary>
+            /// <param name="thisUrl"> The url of the table you are scraping </param>
+            public List<Object> GetTableHeaderValuesList (string thisUrl)
+            {
+                HtmlWeb htmlWeb = new HtmlWeb ();
+
+                var thisUrlsHtml = htmlWeb.Load (thisUrl);
+
+                List<object> listOfHeaders = new List<object>();
+
+                // THIS TABLES HEADER type --> HtmlAgilityPack.HtmlNodeCollection (COUNT --> 1)
+                // <thead> Xpath --> //*[@id="LeaderBoard1_dg1_ctl00"]/thead/tr[2]";
+                    // Note: The 2 in '/tr[2]' is hard coded into the variable; the first row in the header (i.e., '/tr[1]') is the navigation part of the header; We don't want that row. We want the second row which actually has the header values
+                var thisTablesHeader = thisUrlsHtml.DocumentNode.SelectNodes(pathOfTableHeaderToScrape);
+
+                foreach(HtmlNode thisHeader in thisTablesHeader)
+                {
+                    int numberOfHeaderColumns = thisTablesHeader.First().ChildNodes.Count();
+                    // numberOfHeaderColumns.Intro("number of header columns");
+                    int numberOfHeaderColumnsToScrape = numberOfHeaderColumns - 2;
+
+                    for(var headerColumn = 1; headerColumn <= numberOfHeaderColumnsToScrape; headerColumn++)
+                    {
+                        // HEADER STAT NAME PATH return example --> //*[@id='LeaderBoard1_dg1_ctl00']/thead/tr[2]/th[16]
+                        var headerStatNamePath = $"{pathOfTableHeaderToScrape}/th[{headerColumn}]";
+
+                        HtmlNodeCollection headerStatNameDataCell = thisHeader.SelectNodes(headerStatNamePath);
+                        foreach(var headerStatName in headerStatNameDataCell)
+                        {
+                            // INNER TEXT --> this is the value that you want; the name of the stat (e.g., ERA, WHIP, etc.)
+                            var innerText = headerStatName.InnerText;
+                            // Console.WriteLine($"STAT NAME: {headerStatName.InnerText}");
+                            listOfHeaders.Add(innerText);
+                        }
+                    }
+                }
+                return listOfHeaders;
             }
 
         #endregion HELPERS ------------------------------------------------------------
@@ -425,7 +567,7 @@ namespace BaseballScraper.Controllers.FanGraphs
                     RunsPerNine               = playerItems[count++],
                 };
 
-                Console.WriteLine($"NAME: {newFanGraphsPitcher.FanGraphsName}");
+                Console.WriteLine($"{newFanGraphsPitcher.RecordNumber}: {newFanGraphsPitcher.FanGraphsName}");
 
                 // PrintFanGraphsPitcher(newFanGraphsPitcher);
                 // Extensions.PrintKeysAndValues(newFanGraphsPitcher);

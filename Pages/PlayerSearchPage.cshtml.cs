@@ -21,10 +21,10 @@ namespace BaseballScraper.Pages
         private readonly MlbDataPlayerTeams _pT = new MlbDataPlayerTeams();
 
         // private readonly PlayerBaseController _pBC = new PlayerBaseController();
+
         public SfbbPlayerBase SfbbPlayer { get; set; }
-
-
         public List<SelectListItem> SelectOptions { get; set; }
+        public List<int> PlayerSeasons { get; set; }
 
 
         [BindProperty(SupportsGet = true)]
@@ -46,7 +46,8 @@ namespace BaseballScraper.Pages
             SelectPlayerToSearch();
 
 
-            _pT.GetTeamsForPlayerAllSeasons("493316");
+            // _pT.GetListOfPlayersSeasons("493316");
+            // _pT.GetTeamsForPlayerAllSeasons("493316");
 
             // _sHS.GetStatsForSeason();
 
@@ -75,6 +76,9 @@ namespace BaseballScraper.Pages
             var playerFullName = SfbbPlayer.PLAYERNAME;
             // var playerFullName = playerBasesList[0].PLAYERNAME;
             // Console.WriteLine($"playerFullName: {playerFullName}");
+
+            PlayerSeasons = _pT.GetListOfPlayersSeasons(SfbbPlayer.MLBID);
+            PlayerSeasons.ForEach((season) => Console.WriteLine($"season: {season}"));
         }
 
         private void CreatePlayerListSelectOptions()

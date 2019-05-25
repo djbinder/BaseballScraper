@@ -11,12 +11,14 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 
+
+#pragma warning disable CS0414, CS0219, IDE0051, IDE0059, CS1591, IDE0052
 namespace BaseballScraper.Controllers.MlbDataApiControllers
 {
-    [Route("api/mlb")]
+
+    [Route("api/mlb/[controller]")]
     [ApiController]
-    #pragma warning disable CS0414, CS0219, IDE0051, IDE0059, CS1591, IDE0052
-    public class MlbDataPlayerSearchController: Controller
+    public class MlbDataPlayerSearchController: ControllerBase
     {
         private readonly Helpers _h                            = new Helpers();
         private readonly ApiInfrastructure _a                  = new ApiInfrastructure();
