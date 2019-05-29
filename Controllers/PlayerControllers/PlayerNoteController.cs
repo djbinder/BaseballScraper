@@ -14,7 +14,7 @@ using System.Text.Encodings.Web;
 using Dapper;
 
 
-namespace BaseballScraper.Controllers
+namespace BaseballScraper.Controllers.PlayerControllers
 {
     #pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
     // [Route("playernote")]

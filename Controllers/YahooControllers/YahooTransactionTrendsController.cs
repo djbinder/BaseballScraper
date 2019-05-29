@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using HtmlAgilityPack;
 using Vereyon.Web;
@@ -7,6 +8,7 @@ using BaseballScraper.Infrastructure;
 using BaseballScraper.Models.Yahoo;
 using System.Linq;
 
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Controllers.YahooControllers
 {
 
@@ -30,17 +32,20 @@ namespace BaseballScraper.Controllers.YahooControllers
     #endregion OVERVIEW ------------------------------------------------------------
 
 
-    #pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
-    [Route("yahoo")]
-    public class YahooTransactionTrendsController : Controller
+
+    [Route("api/yahoo/[controller]")]
+    [ApiController]
+    public class YahooTransactionTrendsController : ControllerBase
     {
         private readonly Helpers _h = new Helpers();
         private readonly GoogleSheetsConnector _gSC = new GoogleSheetsConnector();
 
 
-        [HttpGet("practice")]
+        [Route("practice")]
         public void YahooPractice()
         {
+            _h.StartMethod();
+
             ConnectYahooTrendsToGoogleSheets();
 
             List<IList<YahooTransactionTrendsPlayer>> primaryList = new List<IList<YahooTransactionTrendsPlayer>>();
@@ -48,14 +53,23 @@ namespace BaseballScraper.Controllers.YahooControllers
             List<YahooTransactionTrendsPlayer> trendsList = GetTrendsForTodayAllPositions();
 
             primaryList.Add(trendsList);
-
-
             var convertedList = _gSC.ConvertIListOfAnyTypeToObjectType(primaryList);
 
-            AddTrendsToGoogleSheets();
+            // AddTrendsToGoogleSheets();
+
 
             // _gSC.UpdateData(convertedList);
         }
+
+
+        [Route("practice/async")]
+        public async Task YahooPracticeAsync()
+        {
+            _h.StartMethod();
+            await AddTrendsToGoogleSheetsAsync("YAHOO_TRENDS","A1:Z1000","CoreCalculator");
+            _h.CompleteMethod();
+        }
+
 
 
         [HttpGet("trends")]
@@ -287,24 +301,25 @@ namespace BaseballScraper.Controllers.YahooControllers
 
         #region GENERATE GOOGLE SHEETS LISTS ------------------------------------------------------------
 
-            public void AddTrendsToGoogleSheets()
+
+            /// <example>
+            /// AddTrendsToGoogleSheets("YAHOO_TRENDS","A1:Z1000","CoreCalculator")
+            /// </example>
+            public void AddTrendsToGoogleSheets(string tabName, string range, string jsonGroupName)
             {
                 ConnectYahooTrendsToGoogleSheets();
                 List<YahooTransactionTrendsPlayer> allTrendInfo = GetTrendsForTodayAllPositions();
 
-                List<object> playerNames = new List<object>();
-                List<object> playerDrops = new List<object>();
-                List<object> playerAdds = new List<object>();
-                List<object> playerTrades = new List<object>();
-                List<object> playerTransactionsTotals = new List<object>();
+                // instantiate a list foreach column in the transaction trends api
+                // each list is associated with a particular column in the report
+                List<object> playerNames = new List<object>() { "Player Name" };
+                List<object> playerDrops = new List<object>() { "Drops" };
+                List<object> playerAdds = new List<object>() { "Adds" };
+                List<object> playerTrades = new List<object>() { "Trades" };
+                List<object> playerTransactionsTotals = new List<object>() { "Total "};
 
-                playerNames.Add("Player Name");
-                playerDrops.Add("Drops");
-                playerAdds.Add("Adds");
-                playerTrades.Add("Trades");
-                playerTransactionsTotals.Add("Total");
-
-                foreach(var player in allTrendInfo)
+                // add the player's values to each of the column lists
+                foreach(YahooTransactionTrendsPlayer player in allTrendInfo)
                 {
                     playerNames.Add(player.YahooPlayerName);
                     playerDrops.Add(player.YahooPlayerDrops);
@@ -313,6 +328,7 @@ namespace BaseballScraper.Controllers.YahooControllers
                     playerTransactionsTotals.Add(player.YahooTransactionsTotal);
                 }
 
+                // add all columns lists to a list to create a list of lists
                 List<IList<object>> listOfLists = new List<IList<object>>
                 {
                     playerNames,
@@ -322,38 +338,64 @@ namespace BaseballScraper.Controllers.YahooControllers
                     playerTransactionsTotals
                 };
 
-                _gSC.UpdateColumn(playerNames,"test_sheet2","B",2);
-                // _gSC.UpdateData(listOfLists,"test_sheet2");
+                // Write that data in listOfLists to YAHOO_TRENDS tab in range A1: Z1000 in the CoreCalculator group / sheet
+                // _gSC.WriteGoogleSheetColumns(listOfLists, "YAHOO_TRENDS","A1:Z1000","CoreCalculator");
+                _gSC.WriteGoogleSheetColumns(listOfLists, tabName, range, jsonGroupName);
             }
 
 
-            public List<string> CreatePlayerNameList()
+            public Task DoAsyncTest(string item)
             {
-                List<string> playerNames = new List<string>();
-                return playerNames;
+                Task.Delay(1000);
+                Console.WriteLine($"item: {item}");
+                return Task.CompletedTask;
             }
 
-            // public List<IList<object>> CreateListOfLists ()
-            // {
-            //     List<IList<object>> primaryList = new List<IList<object>>();
-            //     IList<List<object>> listOfLists = new List<List<object>>();
+            /// <example>
+            /// await AddTrendsToGoogleSheetsAsync("YAHOO_TRENDS","A1:Z1000","CoreCalculator")
+            /// </example>
+            public async Task AddTrendsToGoogleSheetsAsync(string tabName, string range, string jsonGroupName)
+            {
+                ConnectYahooTrendsToGoogleSheets();
+                List<YahooTransactionTrendsPlayer> allTrendInfo = GetTrendsForTodayAllPositions();
 
-            //     List<object> playerNames = new List<object>();
-            //     List<string> testStrings = new List<string>();
+                // instantiate a list foreach column in the transaction trends api
+                // each list is associated with a particular column in the report
+                List<object> playerNames = new List<object>() { "Player Name" };
+                List<object> playerDrops = new List<object>() { "Drops" };
+                List<object> playerAdds = new List<object>() { "Adds" };
+                List<object> playerTrades = new List<object>() { "Trades" };
+                List<object> playerTransactionsTotals = new List<object>() { "Total "};
 
-            //     var targetList = testStrings.ConvertAll(x => (object)x);
+                // add the player's values to each of the column lists
+                foreach(YahooTransactionTrendsPlayer player in allTrendInfo)
+                {
+                    playerNames.Add(item: player.YahooPlayerName);
+                    playerDrops.Add(item: player.YahooPlayerDrops);
+                    playerAdds.Add(item: player.YahooPlayerAdds);
+                    playerTrades.Add(item: player.YahooPlayerTrades);
+                    playerTransactionsTotals.Add(item: player.YahooTransactionsTotal);
+                }
 
-
-            //     listOfLists.Add(playerNames);
-            //     listOfLists.Add(targetList);
-            //     return listOfLists;
-            // }
+                // add all columns lists to a list to create a list of lists
+                // Write that data in listOfLists to YAHOO_TRENDS tab in range A1: Z1000 in the CoreCalculator group / sheet
+                await _gSC.WriteGoogleSheetColumnsAsync(new List<IList<object>>
+                    {
+                        playerNames,
+                        playerDrops,
+                        playerAdds,
+                        playerTrades,
+                        playerTransactionsTotals
+                    }, tabName, range, jsonGroupName);
+            }
 
 
         #endregion GENERATE GOOGLE SHEETS LISTS ------------------------------------------------------------
 
 
-        #region HELPERS ------------------------------------------------------------
+
+
+        #region PRINTING PRESS ------------------------------------------------------------
 
             public void PrintYahooTrendPlayers(List<YahooTransactionTrendsPlayer> listOfPlayers)
             {
@@ -368,7 +410,7 @@ namespace BaseballScraper.Controllers.YahooControllers
                 }
             }
 
-        #endregion HELPERS ------------------------------------------------------------
+        #endregion PRINTING PRESS ------------------------------------------------------------
 
 
     }
