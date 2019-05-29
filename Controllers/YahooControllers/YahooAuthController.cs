@@ -15,9 +15,9 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ObjectPrinter;
 
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Controllers.YahooControllers
 {
-    #pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
     public class YahooAuthController: Controller
     {
         private readonly Helpers _h = new Helpers();
