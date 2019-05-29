@@ -9,6 +9,11 @@
             <example> https://127.0.0.1:5001/api/airtable/managers </example>
             <returns> ManagerFullName, ManagerFirstName, ManagerListName, TeamIds, etc.</returns>
         </member>
+        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.GetAllSpCswSingleDayPerformances(System.Int32,System.Int32,System.Int32)">
+            <example>
+                GetAllSpCswSingleDayPerformances(2019, 05, 01);
+            </example>
+        </member>
         <member name="T:BaseballScraper.Controllers.CbsControllers.CbsTransactionTrendsController">
             <summary> Retrieve Cbs player trends: Most added, most dropped, most viewed, most traded </summary>
             <list> INDEX
@@ -267,27 +272,27 @@
             <example> https://127.0.0.1:5001/api/mlb/projectedhittingstats/493316 </example>
             <returns> A view of a projectedhittingstats model </returns>
         </member>
-        <member name="T:BaseballScraper.Controllers.Player.PlayerBaseController">
+        <member name="T:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController">
             <summary> Retrieve all records from PlayerBase.xlsx; retrieve individual player records from PlayerBase.xlsx </summary>
             <list> INDEX
-                <item> View all player bases <see cref="M:BaseballScraper.Controllers.Player.PlayerBaseController.ViewPlayerBaseHome" /> </item>
-                <item> Get all players bases <see cref="M:BaseballScraper.Controllers.Player.PlayerBaseController.GetAllPlayerBasesFromExcel" /> </item>
-                <item> Get all players bases by team <see cref="M:BaseballScraper.Controllers.Player.PlayerBaseController.GetAllPlayerBasesForOneMlbTeam(System.String)" /> </item>
-                <item> Get one player's base by mlb id <see cref="M:BaseballScraper.Controllers.Player.PlayerBaseController.GetOnePlayersBaseFromMlbId(System.String)" /> </item>
-                <item> Get one player's base by sfbb id <see cref="M:BaseballScraper.Controllers.Player.PlayerBaseController.GetOnePlayersBaseFromSfbbId(System.String)" /> </item>
-                <item> Get one player's base by baseball hq id <see cref="M:BaseballScraper.Controllers.Player.PlayerBaseController.GetOnePlayersBaseFromBaseballHqId(System.String)" /> </item>
-                <item> Get one player's base by davenport id <see cref="M:BaseballScraper.Controllers.Player.PlayerBaseController.GetOnePlayersBaseFromDavenportId(System.String)" /> </item>
-                <item> Get one player's base by baseball prospectus id <see cref="M:BaseballScraper.Controllers.Player.PlayerBaseController.GetOnePlayersBaseFromBaseballProspectusId(System.String)" /> </item>
-                <item> Get one player's base by baseball reference id <see cref="M:BaseballScraper.Controllers.Player.PlayerBaseController.GetOnePlayersBaseFromBaseballReferenceId(System.String)" /> </item>
-                <item> Get one player's base by cbs id <see cref="M:BaseballScraper.Controllers.Player.PlayerBaseController.GetOnePlayersBaseFromCbsId(System.String)" /> </item>
-                <item> Get one player's base by espn id <see cref="M:BaseballScraper.Controllers.Player.PlayerBaseController.GetOnePlayersBaseFromEspnId(System.String)" /> </item>
-                <item> Get one player's base by fangraphs id <see cref="M:BaseballScraper.Controllers.Player.PlayerBaseController.GetOnePlayersBaseFromFanGraphsId(System.String)" /> </item>
-                <item> Get one player's base by lahman id <see cref="M:BaseballScraper.Controllers.Player.PlayerBaseController.GetOnePlayersBaseFromLahmanId(System.String)" /> </item>
-                <item> Get one player's base by nfbc id <see cref="M:BaseballScraper.Controllers.Player.PlayerBaseController.GetOnePlayersBaseFromNfbcId(System.String)" /> </item>
-                <item> Get one player's base by retro id <see cref="M:BaseballScraper.Controllers.Player.PlayerBaseController.GetOnePlayersBaseFromRetroId(System.String)" /> </item>
-                <item> Get one player's base by yahoo id <see cref="M:BaseballScraper.Controllers.Player.PlayerBaseController.GetOnePlayersBaseFromYahooId(System.String)" /> </item>
-                <item> Get one player's base by ottoneu id <see cref="M:BaseballScraper.Controllers.Player.PlayerBaseController.GetOnePlayersBaseFromOttoneuId(System.String)" /> </item>
-                <item> Get one player's base by rotowire id <see cref="M:BaseballScraper.Controllers.Player.PlayerBaseController.GetOnePlayersBaseFromRotoWireId(System.String)" /> </item>
+                <item> View all player bases <see cref="M:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController.ViewPlayerBaseHome" /> </item>
+                <item> Get all players bases <see cref="M:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController.PlayerBaseFromExcel.GetAllPlayerBasesFromExcel" /> </item>
+                <item> Get all players bases by team <see cref="M:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController.PlayerBaseFromExcel.GetAllPlayerBasesForOneMlbTeam(System.String)" /> </item>
+                <item> Get one player's base by mlb id <see cref="M:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController.PlayerBaseFromExcel.GetOnePlayersBaseFromMlbId(System.String)" /> </item>
+                <item> Get one player's base by sfbb id <see cref="M:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController.PlayerBaseFromExcel.GetOnePlayersBaseFromSfbbId(System.String)" /> </item>
+                <item> Get one player's base by baseball hq id <see cref="M:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController.PlayerBaseFromExcel.GetOnePlayersBaseFromBaseballHqId(System.String)" /> </item>
+                <item> Get one player's base by davenport id <see cref="M:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController.PlayerBaseFromExcel.GetOnePlayersBaseFromDavenportId(System.String)" /> </item>
+                <item> Get one player's base by baseball prospectus id <see cref="M:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController.PlayerBaseFromExcel.GetOnePlayersBaseFromBaseballProspectusId(System.String)" /> </item>
+                <item> Get one player's base by baseball reference id <see cref="M:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController.PlayerBaseFromExcel.GetOnePlayersBaseFromBaseballReferenceId(System.String)" /> </item>
+                <item> Get one player's base by cbs id <see cref="M:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController.PlayerBaseFromExcel.GetOnePlayersBaseFromCbsId(System.String)" /> </item>
+                <item> Get one player's base by espn id <see cref="M:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController.PlayerBaseFromExcel.GetOnePlayersBaseFromEspnId(System.String)" /> </item>
+                <item> Get one player's base by fangraphs id <see cref="M:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController.PlayerBaseFromExcel.GetOnePlayersBaseFromFanGraphsId(System.String)" /> </item>
+                <item> Get one player's base by lahman id <see cref="M:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController.PlayerBaseFromExcel.GetOnePlayersBaseFromLahmanId(System.String)" /> </item>
+                <item> Get one player's base by nfbc id <see cref="M:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController.PlayerBaseFromExcel.GetOnePlayersBaseFromNfbcId(System.String)" /> </item>
+                <item> Get one player's base by retro id <see cref="M:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController.PlayerBaseFromExcel.GetOnePlayersBaseFromRetroId(System.String)" /> </item>
+                <item> Get one player's base by yahoo id <see cref="M:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController.PlayerBaseFromExcel.GetOnePlayersBaseFromYahooId(System.String)" /> </item>
+                <item> Get one player's base by ottoneu id <see cref="M:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController.PlayerBaseFromExcel.GetOnePlayersBaseFromOttoneuId(System.String)" /> </item>
+                <item> Get one player's base by rotowire id <see cref="M:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController.PlayerBaseFromExcel.GetOnePlayersBaseFromRotoWireId(System.String)" /> </item>
             </list>
             <list> RESOURCES
                 <item> https://github.com/mganss/ExcelMapper </item>
@@ -295,15 +300,15 @@
                 <item> http://crunchtimebaseball.com/baseball_map.html </item>
             </list>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Controllers.Player.PlayerBaseController.GetAllPlayerBasesFromExcel" -->
-        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Controllers.Player.PlayerBaseController.GetAllPlayerBasesForOneMlbTeam(System.String)" -->
-        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Controllers.Player.PlayerBaseController.GetOnePlayersBaseFromMlbId(System.String)" -->
-        <member name="M:BaseballScraper.Controllers.Player.PlayerBaseController.GetAllPlayerIdsList(BaseballScraper.Models.Player.PlayerBase)">
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController.PlayerBaseFromExcel.GetAllPlayerBasesFromExcel" -->
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController.PlayerBaseFromExcel.GetAllPlayerBasesForOneMlbTeam(System.String)" -->
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController.PlayerBaseFromExcel.GetOnePlayersBaseFromMlbId(System.String)" -->
+        <member name="M:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController.PlayerBaseGenerator.GetAllPlayerIdsList(BaseballScraper.Models.Player.PlayerBase)">
             <summary> This method created a list of a player's ids from all id types available in the PlayerBase Excel file </summary>
             <param name="playersBase"> An instantiated PlayerBase</param>
             <returns> A list of all of a player's ids </returns>
         </member>
-        <member name="M:BaseballScraper.Controllers.Player.PlayerBaseController.GetAllPlayerIdsDictionary(BaseballScraper.Models.Player.PlayerBase)">
+        <member name="M:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController.PlayerBaseGenerator.GetAllPlayerIdsDictionary(BaseballScraper.Models.Player.PlayerBase)">
             <summary> This method created a dictionary of a player's ids from all id types available in the PlayerBase; The keys are the id type, the values are the actual id number  </summary>
             <param name="playersBase"> An instantiated PlayerBase </param>
             <returns> A dictionary of all of a player's ids with key value pairs of Key: Id type, Value: id number/string </returns>
@@ -516,6 +521,16 @@
             <example> GetTrendsForDateOnePosition("2018", "10", "01", "QB"); </example>
             <returns> A list of YahooTransactionTrendsPlayer --> Name, Drops, Adds, Trades, Total </returns>
         </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTransactionTrendsController.AddTrendsToGoogleSheets(System.String,System.String,System.String)">
+            <example>
+            AddTrendsToGoogleSheets("YAHOO_TRENDS","A1:Z1000","CoreCalculator")
+            </example>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTransactionTrendsController.AddTrendsToGoogleSheetsAsync(System.String,System.String,System.String)">
+            <example>
+            await AddTrendsToGoogleSheetsAsync("YAHOO_TRENDS","A1:Z1000","CoreCalculator")
+            </example>
+        </member>
         <member name="T:BaseballScraper.LahmanControllers.LahmanCsvController">
             <summary> Methods to read and get records from the Lahman database / csv files </summary>
             <remarks> Files will need to be updated after each Mlb season </remarks>
@@ -573,6 +588,13 @@
                     <description> https://toolslick.com/generation/code/class-from-csv </description>
                 </item>
             </list>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.CsvHandler.DownloadCsvFromLink(System.String,System.String)">
+            <example>
+                DownloadCsvFromLink("http://crunchtimebaseball.com/master.csv", "BaseballData/PlayerBase/CrunchtimePlayerBaseCsvAutoDownload.csv")
+            </example>
+            <param name="csvUrl"> this is the full url of where the csv is linked / hosted </param>
+            <param name="targetFileName"> this is the name of the file that you want to write to </param>
         </member>
         <member name="M:BaseballScraper.Infrastructure.CsvHandler.ReadCsvRecords(System.String,System.Type,System.Type)">
             <summary> Reads a csv file, non async </summary>
@@ -767,10 +789,23 @@
             <param name="letter"> A letter that corresponds to an Excel column </param>
             <returns> The column number of an Excel column </returns>
         </member>
-        <member name="M:BaseballScraper.Infrastructure.GoogleSheetsConnector.UpdateGoogleSheetRows(System.Collections.Generic.IList{System.Collections.Generic.IList{System.Object}},System.String,System.String,System.String)">
+        <member name="M:BaseballScraper.Infrastructure.GoogleSheetsConnector.WriteGoogleSheetRows(System.Collections.Generic.IList{System.Collections.Generic.IList{System.Object}},System.String,System.String,System.String)">
             <example>
-                var data = ReadDataFromSheetRange(string documentName, string tabName, string range)
-                UpdateData(data, "A1:Z1000","SfbbPlayerIdMap","1qKnB5z6qVeHD_eSGFJdJsWKh2muJt_-Cn-ZzdjuSbDw")
+                private static readonly GoogleSheetsConnector _gSC = new GoogleSheetsConnector();
+                _gSC.UpdateGoogleSheetRows(listOfLists,"FG_SP_MASTER_IMPORT","A3:DB1000","CoreCalculator");
+            </example>
+            <remarks>
+            View "FgSpMasterReportController" > "ScrapePitchersAndCreateList" for an example of this in practice
+            </remarks>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.GoogleSheetsConnector.WriteGoogleSheetColumns(System.Collections.Generic.IList{System.Collections.Generic.IList{System.Object}},System.String,System.String,System.String)">
+            <example>
+            _gSC.WriteGoogleSheetColumns(listOfLists, "YAHOO_TRENDS","A1:Z1000","CoreCalculator");
+            </example>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.GoogleSheetsConnector.WriteGoogleSheetColumnsAsync(System.Collections.Generic.IList{System.Collections.Generic.IList{System.Object}},System.String,System.String,System.String)">
+            <example>
+                // await _gSC.WriteGoogleSheetColumnsAsync(listOfLists, "YAHOO_TRENDS","A1:Z1000","CoreCalculator");
             </example>
         </member>
         <member name="M:BaseballScraper.Infrastructure.Helpers.PrintJsonFromObject(System.Object)">

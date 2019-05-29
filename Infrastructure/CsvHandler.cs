@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
+using System.Text;
 using System.Threading.Tasks;
+using BaseballScraper.Models.BaseballSavant;
 using BaseballScraper.Models.Lahman;
 using CsvHelper;
 using CsvHelper.Configuration;
@@ -25,13 +28,32 @@ namespace BaseballScraper.Infrastructure
         private readonly Helpers _h = new Helpers();
         // private CsvReader csvReader;
         private IEnumerable<dynamic> records;
+        private TextReader _tR;
 
-        public interface ITypeConverter
-        {
-            string ConvertToString( object value, IWriterRow row, MemberMapData memberMapData );
-            string ConvertFromString( string text, IReaderRow row, MemberMapData memberMapData );
-        }
+        // public interface ITypeConverter
+        // {
+        //     string ConvertToString( object value, IWriterRow row, MemberMapData memberMapData );
+        //     string ConvertFromString( string text, IReaderRow row, MemberMapData memberMapData );
+        // }
 
+
+        #region DOWNLOAD CSV ------------------------------------------------------------
+
+            /// <example>
+            ///     DownloadCsvFromLink("http://crunchtimebaseball.com/master.csv", "BaseballData/PlayerBase/CrunchtimePlayerBaseCsvAutoDownload.csv")
+            /// </example>
+            /// <param name="csvUrl"> this is the full url of where the csv is linked / hosted </param>
+            /// <param name="targetFileName"> this is the name of the file that you want to write to </param>
+            public void DownloadCsvFromLink(string csvUrl, string targetFileName)
+            {
+                WebClient webClient = new WebClient();
+                {
+                    // 1) download csv from csvUrl; 2) take that csv and save it to location defined by 'targetFileName'
+                    webClient.DownloadFile(csvUrl, targetFileName );
+                }
+            }
+
+        #endregion DOWNLOAD CSV ------------------------------------------------------------
 
 
         #region READ CSV ------------------------------------------------------------
@@ -55,7 +77,7 @@ namespace BaseballScraper.Infrastructure
                     int recordsCount = _h.CountRecords(records);
 
                     // Run EnumerateOverRecordsDynamic to loop through records
-                    // _h.EnumerateOverRecordsDynamic(records);
+                    _h.EnumerateOverRecordsDynamic(records);
 
                     return records;
                 }
@@ -89,16 +111,117 @@ namespace BaseballScraper.Infrastructure
 
                     // RECORDS type --> CsvHelper.CsvReader+<GetRecords>d__65
                     records = csvReader.GetRecords(modelType);
+                    Console.WriteLine($"records.GetType: {records.GetType()}");
+
                     foreach(var record in records)
                     {
-                        Console.WriteLine(record);
+                        // Console.WriteLine($"record: {record}");
+                        var spCsw = record as StartingPitcherCsw;
+                        // Console.WriteLine($"player name: {spCsw.PlayerName}");
                     }
 
-                    int recordsCount = _h.CountRecords(records);
+                    // int recordsCount = _h.CountRecords(records);
+                    // Console.WriteLine($"recordsCount: {recordsCount}");
 
-                    // Run EnumerateOverRecordsDynamic to loop through records
+                    // // Run EnumerateOverRecordsDynamic to loop through records
                     _h.EnumerateOverRecordsDynamic(records);
                     _h.EnumerateOverRecordsObject(records);
+                }
+                return records;
+            }
+
+            public async Task<IEnumerable<dynamic>> ReadCsvRecordsAsync2(string csvFilePath, Type modelType, Type modelMapType, List<dynamic> list)
+            {
+                // MODEL TYPE type & MODEL MAP TYPE type --> System.RuntimeType
+                using(TextReader fileReader = File.OpenText(csvFilePath))
+                {
+                    CsvReader csvReader = new CsvReader( fileReader );
+
+                    RegisterMapForClass(csvReader, modelMapType);
+                    csvReader.Configuration.DetectColumnCountChanges = true;
+
+                    await csvReader.ReadAsync();
+                    csvReader.ReadHeader();
+
+                    // RECORDS type --> CsvHelper.CsvReader+<GetRecords>d__65
+                    records = csvReader.GetRecords(modelType);
+                    Console.WriteLine($"records.GetType: {records.GetType()}");
+
+                    foreach(var record in records)
+                    {
+                        // Console.WriteLine($"record: {record}");
+                        list.Add(record);
+                        var spCsw = record as StartingPitcherCsw;
+                        // Console.WriteLine($"player name: {spCsw.PlayerName}");
+                    }
+
+                    // int recordsCount = _h.CountRecords(records);
+                    // Console.WriteLine($"recordsCount: {recordsCount}");
+
+                    // // Run EnumerateOverRecordsDynamic to loop through records
+                    _h.EnumerateOverRecordsDynamic(records);
+                    _h.EnumerateOverRecordsObject(records);
+                }
+                return records;
+            }
+
+
+
+            public async Task<IEnumerable<dynamic>> ReadCsvRecordsAsyncAlt(string csvFilePath, Type modelType, Type modelMapType)
+            {
+                // CsvReader csvReader = new CsvReader(_tR);
+
+                TextReader altReader = File.OpenText(csvFilePath);
+                string line;
+
+                // MODEL TYPE type & MODEL MAP TYPE type --> System.RuntimeType
+                using(TextReader fileReader = File.OpenText(csvFilePath))
+                {
+                    while((line = fileReader.ReadLine()) != null)
+                    {
+                        Console.WriteLine($"line: {line}");
+                        Console.WriteLine($"line.Length: {line.Length}");
+                        // Console.WriteLine($"line.Length: {line.}");
+                        Console.WriteLine();
+
+                        CsvReader csvReader = new CsvReader( fileReader );
+
+                        RegisterMapForClass(csvReader, modelMapType);
+                        csvReader.Configuration.DetectColumnCountChanges = true;
+
+                        await csvReader.ReadAsync();
+                        csvReader.ReadHeader();
+
+                        var headers = csvReader.ReadHeader();
+                        Console.WriteLine($"headers: {headers}");
+
+                        // RECORDS type --> CsvHelper.CsvReader+<GetRecords>d__65
+                        records = csvReader.GetRecords(modelType);
+                        // var recordsEnumerator = records.GetEnumerator();
+                        // while(recordsEnumerator.MoveNext())
+                        // {
+                        //     Console.WriteLine(recordsEnumerator);
+                        // }
+
+                        foreach(var record in records)
+                        {
+                            Console.WriteLine($"record: {record}");
+
+                            var spCsw = record as StartingPitcherCsw;
+                            Console.WriteLine($"player name: {spCsw.PlayerName}");
+                        }
+
+
+                        // int recordsCount = _h.CountRecords(records);
+                        // Console.WriteLine($"recordsCount: {recordsCount}");
+
+                        // Run EnumerateOverRecordsDynamic to loop through records
+                        // _h.EnumerateOverRecordsDynamic(records);
+                        // _h.EnumerateOverRecordsObject(records);
+
+                        // csvReader.Dispose();
+                        // fileReader.Close();
+                    }
                 }
                 return records;
             }
@@ -112,6 +235,9 @@ namespace BaseballScraper.Infrastructure
             public void RegisterMapForClass(CsvReader csvReader, Type modelType)
             {
                 var mapClass = csvReader.Configuration.RegisterClassMap(modelType);
+                Console.WriteLine($"mapClass.ClassType: {mapClass.ClassType}");
+                Console.WriteLine($"mapClass.MemberMaps: {mapClass.MemberMaps}");
+                Console.WriteLine();
             }
 
         #endregion READ CSV ------------------------------------------------------------
@@ -132,8 +258,6 @@ namespace BaseballScraper.Infrastructure
             public JObject CreateRecordJObject(Object record)
             {
                 string  recordString  = record.ToJson();
-
-
                 JObject recordJObject = JObject.Parse(recordString);
                 return recordJObject;
             }
@@ -178,5 +302,13 @@ namespace BaseballScraper.Infrastructure
             }
 
         #endregion HELPERS ------------------------------------------------------------
+
+
+
+
+
+
+
+
     }
 }

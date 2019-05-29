@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BaseballScraper.Controllers.Player;
+using BaseballScraper.Controllers.PlayerControllers;
 using BaseballScraper.Infrastructure;
 using BaseballScraper.Models;
 using BaseballScraper.Models.Player;
@@ -14,7 +14,7 @@ namespace BaseballScraper.Pages
     public class PlayerBasesView : PageModel
     {
         private readonly Helpers _h = new Helpers();
-        private readonly PlayerBaseController _pBC = new PlayerBaseController();
+        // private readonly PlayerBaseController _pBC = new PlayerBaseController();
 
         public PlayerBasesView() {}
 
@@ -23,9 +23,10 @@ namespace BaseballScraper.Pages
         public IActionResult OnGet()
         {
             _h.StartMethod();
-            var listOfBases = _pBC.GetAllPlayerBasesForOneMlbTeam("Chicago Cubs");
+            // // var listOfBases = _pBC.GetAllPlayerBasesForOneMlbTeam("Chicago Cubs");
+            // var listOfBases = PlayerBaseController.PlayerBaseFromExcel.GetAllPlayerBasesForOneMlbTeam("Chicago Cubs");
 
-            ListOfPlayerBases = listOfBases;
+            // ListOfPlayerBases = listOfBases;
 
             return Page();
         }

@@ -37,7 +37,7 @@ namespace BaseballScraper.Controllers.FanGraphs
     #endregion OVERVIEW ------------------------------------------------------------
 
 
-
+    //
     [Route("api/fangraphs/[controller]")]
     [ApiController]
     public class FgSpMasterReportController: ControllerBase
@@ -209,33 +209,31 @@ namespace BaseballScraper.Controllers.FanGraphs
             {
                 List<string> listOfUrlsToLoopThrough = GetUrlsOfPagesToScrape (minInningsPitched, year, recordsPerPage).ToList ();
                 int  numberOfUrlsToScrape            = listOfUrlsToLoopThrough.Count();
-                Console.WriteLine($"Table to Scrape: {numberOfUrlsToScrape}");
+                Console.WriteLine($"# of tables to scrape: {numberOfUrlsToScrape}");
 
                 HtmlWeb htmlWeb = new HtmlWeb ();
 
                 List<FanGraphsPitcher> listOfFgPitchers = new List<FanGraphsPitcher>();
-                // List<object> _listOfFgPitchers = new List<object>();
 
-                var listOfLists = new List<IList<object>>();
-
-
+                // this list will be used to add players and their data to a google sheet
+                List<IList<object>> listOfLists = new List<IList<object>>();
 
                 int urlNumber = 1;
 
+                // the fg tables can only show up to 50 players at a time; so will need to scrape tables on multiple urls
                 foreach (string thisUrl in listOfUrlsToLoopThrough)
                 {
                     Console.WriteLine($"URL {urlNumber} of {numberOfUrlsToScrape}");
 
-                    var thisUrlsHtml = htmlWeb.Load (thisUrl);
+                    HtmlDocument thisUrlsHtml = htmlWeb.Load (thisUrl);
 
+                    // scrape the first row to get the header (i.e., metric names) row
                     GetTableHeaderValues(thisUrl);
 
                     var headersList = GetTableHeaderValuesList(thisUrl);
 
-                    if(urlNumber == 1)
-                    {
-                        listOfLists.Add(headersList);
-                    }
+                    // if this is the first url and table, create a list of the headers; you do not need to scraper the headers or each url since it is the same for each url / table
+                    if(urlNumber == 1) { listOfLists.Add(headersList);}
 
                     urlNumber++;
 
@@ -251,9 +249,8 @@ namespace BaseballScraper.Controllers.FanGraphs
                         // NUMBER OF ROWS TO SCRAPE IN THIS TABLE --> you only want player data, so remove the header and footer
                         int numberOfRowsToScrapeInThisTable = numberOfRowsInThisTable - 2;
 
-
                         // adjust for testing (i.e., decrease rows read)
-                        // for (var row = 0; row <= 1; row++)
+                        // for (var row = 0; row <= 0; row++)
                         for (var row = 0; row <= numberOfRowsToScrapeInThisTable - 1; row++)
                         {
                             // THIS PLAYERS TABLE ROW PATH return example --> //*[@id='LeaderBoard1_dg1_ctl00__11']
@@ -275,7 +272,7 @@ namespace BaseballScraper.Controllers.FanGraphs
                                 List<object> list = new List<object>();
 
                                 // Begin looping through every column in the table
-                                for (var column = 1; column <= numberOfColumnsToScrape; column++)
+                                for (int column = 1; column <= numberOfColumnsToScrape; column++)
                                 {
                                     // THIS STATS TABLE ROW PATH return example --> //*[@id='LeaderBoard1_dg1_ctl00__11']/td[1]
                                     string thisStatsTableRowPath = $"{thisPlayersTableRowPath}/td[{column}]";
@@ -300,7 +297,6 @@ namespace BaseballScraper.Controllers.FanGraphs
                                                 // NAME OR TEAM VALUE --> this is where you get the player's actual name and team name
                                                 var nameOrTeamValue = nameOrTeamValueNode.InnerText;
                                                 playerItems.Add (nameOrTeamValue);
-                                                // _playerItems.Add (nameOrTeamValue);
                                                 list.Add(nameOrTeamValue);
                                             }
                                         }
@@ -310,7 +306,6 @@ namespace BaseballScraper.Controllers.FanGraphs
                                             Console.WriteLine($"Cell is blank: {ex.Message}");
                                             string cellIsBlank = "";
                                             playerItems.Add (cellIsBlank);
-                                            // _playerItems.Add (cellIsBlank);
                                             list.Add(cellIsBlank);
                                         }
                                     }
@@ -322,65 +317,19 @@ namespace BaseballScraper.Controllers.FanGraphs
                                                 // return example --> 3.9', '26.3' etc.
                                             var statValue = statValueNode.InnerText;
                                             playerItems.Add (statValue);
-                                            // _playerItems.Add (statValue);
                                             list.Add(statValue);
                                         }
                                     }
                                 }
-                                // CreateNewFanGraphsPitcher(playerItems);
+                                CreateNewFanGraphsPitcher(playerItems);
                                 listOfFgPitchers.Add(CreateNewFanGraphsPitcher(playerItems));
-                                // _listOfFgPitchers.Add(_playerItems);
                                 listOfLists.Add(list);
                             }
                         }
                     }
                 }
 
-                _gSC.UpdateGoogleSheetRows(listOfLists,"tester","A1:DB1000","CoreCalculator");
-
-                // var convertedList = _gSC.ConvertListOfAnyTypeToObjectType(listOfFgPitchers);
-                // Console.WriteLine($"convertedList.Count: {convertedList.Count}");
-
-                // IList<IList<object>> dataToIList = new List<IList<object>>
-                // {
-                //     convertedList
-                // };
-
-                // Console.WriteLine($"dataToIList.Count: {dataToIList.Count}");
-
-                // List<object> objectList = new List<object>()
-                // {
-                //     "My Cell Text",
-                //     "my cell text 2",
-                //     "xyz",
-                //     1
-                // };
-                // // Console.WriteLine($"objectList.Count: {objectList.Count}");
-
-                // List<object> numberList = new List<object>()
-                // {
-                //     1,
-                //     34,
-                //     345345345345345,
-                //     1,
-                //     -1,
-                //     900,
-                //     "Hello",
-                //     "Goodbye"
-                // };
-
-
-                // List<IList<object>> valueList = new List<IList<object>>
-                // {
-                //     objectList,
-                //     numberList
-                // };
-
-                // Console.WriteLine($"valueList.Count: {valueList.Count}");
-
-
-                // _gSC.UpdateGoogleSheetRows(valueList, "tester", "A1:AH10","CoreCalculator");
-                // _gSC.UpdateData(valueList, "A1","CoreCalculator","SpreadsheetId");
+                _gSC.WriteGoogleSheetRows(listOfLists,"FG_SP_MASTER_IMPORT","A3:DB1000","CoreCalculator");
                 return listOfFgPitchers;
             }
 
@@ -388,17 +337,7 @@ namespace BaseballScraper.Controllers.FanGraphs
 
 
 
-        #region EXPORT TO GOOGLE SHEET ------------------------------------------------------------
 
-            public void AddReportToGoogleSheet()
-            {
-
-            }
-
-
-
-
-        #endregion EXPORT TO GOOGLE SHEET ------------------------------------------------------------
 
 
 
