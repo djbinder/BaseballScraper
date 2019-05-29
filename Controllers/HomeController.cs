@@ -55,36 +55,36 @@ namespace BaseballScraper.Controllers
         [HttpGet("google_sheets")]
         public void ConnectToGoogleSheetsConnector()
         {
-            _h.StartMethod();
-            Console.WriteLine("connecting to google_sheets");
-            _gSC.ConnectToGoogle();
+            // _h.StartMethod();
+            // Console.WriteLine("connecting to google_sheets");
+            // _gSC.ConnectToGoogle();
 
-            // List<IList<object>> data
-            List<IList<object>> objectsListMain = new List<IList<object>>();
+            // // List<IList<object>> data
+            // List<IList<object>> objectsListMain = new List<IList<object>>();
 
-            List<object> objects = new List<object>();
+            // List<object> objects = new List<object>();
 
-            var object1 = "CUBS!!!";
-            objects.Add(object1);
-            objects.Add("CUBS2");
-            objects.Add("CUBS3");
+            // var object1 = "CUBS!!!";
+            // objects.Add(object1);
+            // objects.Add("CUBS2");
+            // objects.Add("CUBS3");
 
-            List<object> objectsList2 = new List<object>
-            {
-                "BREWERS",
-                "cards"
-            };
+            // List<object> objectsList2 = new List<object>
+            // {
+            //     "BREWERS",
+            //     "cards"
+            // };
 
 
 
-            objectsListMain.Add(objects);
-            objectsListMain.Add(objectsList2);
+            // objectsListMain.Add(objects);
+            // objectsListMain.Add(objectsList2);
 
-            Console.WriteLine();
-            Console.WriteLine("HOME > starting UpdateData");
-            Console.WriteLine();
+            // Console.WriteLine();
+            // Console.WriteLine("HOME > starting UpdateData");
+            // Console.WriteLine();
 
-            _gSC.UpdateData(objectsListMain);
+            // _gSC.UpdateData(objectsListMain);
         }
 
 

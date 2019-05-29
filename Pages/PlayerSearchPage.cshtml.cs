@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BaseballScraper.Controllers.MlbDataApiControllers;
-using BaseballScraper.Controllers.Player;
+using BaseballScraper.Controllers.PlayerControllers;
 
 using BaseballScraper.Infrastructure;
 using BaseballScraper.Models.Player;

@@ -13,7 +13,7 @@ namespace BaseballScraper.LahmanControllers
     [ApiController]
     public class LahmanDbController: ControllerBase
     {
-        private readonly Helpers _h     = new Helpers();
+        // private readonly Helpers _h     = new Helpers();
 
 
 
