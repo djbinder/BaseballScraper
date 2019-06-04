@@ -21,6 +21,10 @@ namespace BaseballScraper
     #pragma warning disable CS0414, CS0219, IDE0051, IDE0059, CS1591, IDE0044
     public class Startup
     {
+        // private string _connection = null;
+        // private string _postGresDbConnectionString = null;
+
+        private readonly Helpers _h = new Helpers();
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -147,8 +151,26 @@ namespace BaseballScraper
             {
                 config.ConnectionString = Configuration["DBInfo:ConnectionString"];
                 config.Name             = Configuration["DBInfo:Name"];
+                Console.WriteLine($"config.ConnectionString: {config.ConnectionString}");
             });
+
+
+            // Console.WriteLine($"Cstring: {Configuration["DBInfo:ConnectionString"]}");
+            // Console.WriteLine($"Name: {Configuration["DBInfo:Name"]}");
+
+            // services.Configure<PostGresDbConfiguration>(config =>
+            // {
+            //     config.ConnectionString = Configuration["DBInfo:ConnectionString"];
+            //     config.Name             = Configuration["DBInfo:Name"];
+            //     Console.WriteLine($"config.ConnectionString: {config.ConnectionString}");
+            //     Console.WriteLine($"config.Name: {config.Name}");
+            // });
+
+            // Console.WriteLine($"Cstring: {Configuration["DBInfo:ConnectionString"]}");
+            // Console.WriteLine($"Name: {Configuration["DBInfo:Name"]}");
+
             services.AddDbContext<BaseballScraperContext>(options => options.UseNpgsql (Configuration["DBInfo:ConnectionString"]));
+
 
             // example of how to console config items
             // Console.WriteLine(Configuration["YahooConfiguration:Name"]);
@@ -159,6 +181,7 @@ namespace BaseballScraper
         public void Configure (IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IOptionsMonitor<TwitterConfiguration> twitterConfigMonitor)
         {
             // StartMethod();
+
 
             HttpHelper.Configure(app.ApplicationServices.GetRequiredService<IHttpContextAccessor>());
 
