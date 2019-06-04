@@ -9,11 +9,7 @@
             <example> https://127.0.0.1:5001/api/airtable/managers </example>
             <returns> ManagerFullName, ManagerFirstName, ManagerListName, TeamIds, etc.</returns>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.GetAllSpCswSingleDayPerformances(System.Int32,System.Int32,System.Int32)">
-            <example>
-                GetAllSpCswSingleDayPerformances(2019, 05, 01);
-            </example>
-        </member>
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.ReadSpCswCsvSingleDayAsync(System.Int32,System.Int32,System.Int32)" -->
         <member name="T:BaseballScraper.Controllers.CbsControllers.CbsTransactionTrendsController">
             <summary> Retrieve Cbs player trends: Most added, most dropped, most viewed, most traded </summary>
             <list> INDEX
