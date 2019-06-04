@@ -6,6 +6,9 @@ namespace BaseballScraper.EndPoints
     public class MlbDataApiEndPoints
     {
         private readonly string baseUri = $"http://lookup-service-prod.mlb.com/json/named.";
+
+        private readonly string baseUriStatsApi = $"https://statsapi.mlb.com/api/";
+
         public  string endPointType     = "";
 
         public class MlbDataEndPoint
@@ -234,6 +237,34 @@ namespace BaseballScraper.EndPoints
             {
                 BaseUri  = baseUri,
                 EndPoint = $"{endPointType}.bam?player_id={playerId}"
+            };
+        }
+
+
+
+        public int sportId = 1;
+        public string versionOne = "v1";
+
+
+
+        public MlbDataEndPoint AllGamesForDateEndPoint(int monthNumber, int dayNumber, int year)
+        {
+            return new MlbDataEndPoint
+            {
+                BaseUri  = baseUriStatsApi,
+                EndPoint = $"{versionOne}/schedule?sportId={sportId}&date={monthNumber}%2F{dayNumber}%2F{year}"
+            };
+        }
+
+
+
+        // gameId aka gamePk
+        public MlbDataEndPoint SingleGameEndPoint(string gameId)
+        {
+            return new MlbDataEndPoint
+            {
+                BaseUri  = baseUri,
+                EndPoint = $"{versionOne}/game/{gameId}/feed/live"
             };
         }
 
