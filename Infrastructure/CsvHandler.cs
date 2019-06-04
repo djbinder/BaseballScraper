@@ -130,7 +130,7 @@ namespace BaseballScraper.Infrastructure
                 return records;
             }
 
-            public async Task<IEnumerable<dynamic>> ReadCsvRecordsAsync2(string csvFilePath, Type modelType, Type modelMapType, List<dynamic> list)
+            public async Task<IEnumerable<dynamic>> ReadCsvRecordsAsyncToList(string csvFilePath, Type modelType, Type modelMapType, List<dynamic> list)
             {
                 // MODEL TYPE type & MODEL MAP TYPE type --> System.RuntimeType
                 using(TextReader fileReader = File.OpenText(csvFilePath))
@@ -151,8 +151,6 @@ namespace BaseballScraper.Infrastructure
                     {
                         // Console.WriteLine($"record: {record}");
                         list.Add(record);
-                        var spCsw = record as StartingPitcherCsw;
-                        // Console.WriteLine($"player name: {spCsw.PlayerName}");
                     }
 
                     // int recordsCount = _h.CountRecords(records);
@@ -167,64 +165,7 @@ namespace BaseballScraper.Infrastructure
 
 
 
-            public async Task<IEnumerable<dynamic>> ReadCsvRecordsAsyncAlt(string csvFilePath, Type modelType, Type modelMapType)
-            {
-                // CsvReader csvReader = new CsvReader(_tR);
 
-                TextReader altReader = File.OpenText(csvFilePath);
-                string line;
-
-                // MODEL TYPE type & MODEL MAP TYPE type --> System.RuntimeType
-                using(TextReader fileReader = File.OpenText(csvFilePath))
-                {
-                    while((line = fileReader.ReadLine()) != null)
-                    {
-                        Console.WriteLine($"line: {line}");
-                        Console.WriteLine($"line.Length: {line.Length}");
-                        // Console.WriteLine($"line.Length: {line.}");
-                        Console.WriteLine();
-
-                        CsvReader csvReader = new CsvReader( fileReader );
-
-                        RegisterMapForClass(csvReader, modelMapType);
-                        csvReader.Configuration.DetectColumnCountChanges = true;
-
-                        await csvReader.ReadAsync();
-                        csvReader.ReadHeader();
-
-                        var headers = csvReader.ReadHeader();
-                        Console.WriteLine($"headers: {headers}");
-
-                        // RECORDS type --> CsvHelper.CsvReader+<GetRecords>d__65
-                        records = csvReader.GetRecords(modelType);
-                        // var recordsEnumerator = records.GetEnumerator();
-                        // while(recordsEnumerator.MoveNext())
-                        // {
-                        //     Console.WriteLine(recordsEnumerator);
-                        // }
-
-                        foreach(var record in records)
-                        {
-                            Console.WriteLine($"record: {record}");
-
-                            var spCsw = record as StartingPitcherCsw;
-                            Console.WriteLine($"player name: {spCsw.PlayerName}");
-                        }
-
-
-                        // int recordsCount = _h.CountRecords(records);
-                        // Console.WriteLine($"recordsCount: {recordsCount}");
-
-                        // Run EnumerateOverRecordsDynamic to loop through records
-                        // _h.EnumerateOverRecordsDynamic(records);
-                        // _h.EnumerateOverRecordsObject(records);
-
-                        // csvReader.Dispose();
-                        // fileReader.Close();
-                    }
-                }
-                return records;
-            }
 
 
             // STATUS: this works

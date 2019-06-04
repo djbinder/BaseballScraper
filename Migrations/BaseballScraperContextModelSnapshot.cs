@@ -19,16 +19,95 @@ namespace BaseballScraper.Migrations
                 .HasAnnotation("ProductVersion", "2.1.1-rtm-30846")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
+            modelBuilder.Entity("BaseballScraper.Models.BaseballSavant.StartingPitcherCsw", b =>
+                {
+                    b.Property<int>("StartingPitcherCswId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Abs");
+
+                    b.Property<string>("Ba");
+
+                    b.Property<string>("Babip");
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<string>("CswPitches");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired();
+
+                    b.Property<string>("EffectiveMinVelocity");
+
+                    b.Property<string>("EffectiveSpeed");
+
+                    b.Property<string>("Hits");
+
+                    b.Property<string>("Iso");
+
+                    b.Property<string>("LaunchAngle");
+
+                    b.Property<string>("LaunchSpeed");
+
+                    b.Property<string>("PitchPercent");
+
+                    b.Property<string>("PlayerId");
+
+                    b.Property<string>("PlayerName");
+
+                    b.Property<string>("Pos3IntStartDistance");
+
+                    b.Property<string>("Pos4IntStartDistance");
+
+                    b.Property<string>("Pos5IntStartDistance");
+
+                    b.Property<string>("Pos6IntStartDistance");
+
+                    b.Property<string>("Pos7IntStartDistance");
+
+                    b.Property<string>("Pos8IntStartDistance");
+
+                    b.Property<string>("Pos9IntStartDistance");
+
+                    b.Property<string>("ReleaseExtension");
+
+                    b.Property<string>("Slg");
+
+                    b.Property<string>("SpinRate");
+
+                    b.Property<string>("Swings");
+
+                    b.Property<string>("Takes");
+
+                    b.Property<string>("TotalPitches");
+
+                    b.Property<DateTime>("UpdatedAt");
+
+                    b.Property<string>("Velocity");
+
+                    b.Property<string>("Whiffs");
+
+                    b.Property<string>("Woba");
+
+                    b.Property<string>("Xba");
+
+                    b.Property<string>("Xwoba");
+
+                    b.HasKey("StartingPitcherCswId");
+
+                    b.ToTable("StartingPitcherCsws");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("StartingPitcherCsw");
+                });
+
             modelBuilder.Entity("BaseballScraper.Models.Player.PlayerNote", b =>
                 {
-                    b.Property<int>("idPlayerNotes")
+                    b.Property<int>("PlayerNoteId")
                         .ValueGeneratedOnAdd();
 
                     b.Property<int?>("CalendarYear");
 
                     b.Property<DateTime>("CreatedAt");
-
-                    b.Property<int?>("MlbSeason");
 
                     b.Property<string>("Note");
 
@@ -42,11 +121,13 @@ namespace BaseballScraper.Migrations
 
                     b.Property<string>("PositionType");
 
+                    b.Property<int?>("Season");
+
                     b.Property<string>("SourceSite");
 
                     b.Property<DateTime>("UpdatedAt");
 
-                    b.HasKey("idPlayerNotes");
+                    b.HasKey("PlayerNoteId");
 
                     b.ToTable("PlayerNotes");
                 });
@@ -151,6 +232,30 @@ namespace BaseballScraper.Migrations
                     b.HasKey("YahooTeamRosterAddsRecordId");
 
                     b.ToTable("YahooTeamRosterAdds");
+                });
+
+            modelBuilder.Entity("BaseballScraper.Models.BaseballSavant.StartingPitcherCswDateRange", b =>
+                {
+                    b.HasBaseType("BaseballScraper.Models.BaseballSavant.StartingPitcherCsw");
+
+                    b.Property<DateTime>("EndDate");
+
+                    b.Property<DateTime>("StartDate");
+
+                    b.ToTable("StartingPitcherCswDateRange");
+
+                    b.HasDiscriminator().HasValue("StartingPitcherCswDateRange");
+                });
+
+            modelBuilder.Entity("BaseballScraper.Models.BaseballSavant.StartingPitcherCswSingleDay", b =>
+                {
+                    b.HasBaseType("BaseballScraper.Models.BaseballSavant.StartingPitcherCsw");
+
+                    b.Property<DateTime>("DatePitched");
+
+                    b.ToTable("StartingPitcherCswSingleDay");
+
+                    b.HasDiscriminator().HasValue("StartingPitcherCswSingleDay");
                 });
 
             modelBuilder.Entity("BaseballScraper.Models.Yahoo.YahooManager", b =>

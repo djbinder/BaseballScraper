@@ -2,21 +2,19 @@
 using BaseballScraper.Infrastructure;
 using BaseballScraper.Models;
 using BaseballScraper.Models.Configuration;
-// using BaseballScraper.Models.Player;
+
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using System.Linq;
 using System.Collections.Generic;
-
-using System.Data;
-using System.Text.Encodings.Web;
-using Dapper;
+using BaseballScraper.Models.Player;
 
 
+
+
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Controllers.PlayerControllers
 {
-    #pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
     // [Route("playernote")]
     public class PlayerNoteController: Controller
     {
@@ -62,6 +60,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
         public IActionResult CreateNote(PlayerNote note)
         {
             _h.StartMethod();
+
 
             Console.WriteLine(note);
             Console.WriteLine($"Name: {note.PlayerName}");
