@@ -10,12 +10,14 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using BaseballScraper.Infrastructure;
 
+
+
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Controllers.YahooControllers
 {
-    #pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
-    [Route("api/yahoo")]
+    [Route("api/yahoo/[controller]")]
     [ApiController]
-    public class YahooTeamBaseController : Controller
+    public class YahooTeamBaseController : ControllerBase
     {
         private readonly Helpers _h = new Helpers();
         private readonly TheGameIsTheGameConfiguration _theGameConfig;
@@ -32,8 +34,9 @@ namespace BaseballScraper.Controllers.YahooControllers
         /// <summary> Create instance of yahoo team model; save it to the database</summary>
         /// <example> https://127.0.0.1:5001/api/yahoo/teambase </example>
         /// <returns> new YahooTeamBase </returns>
-        [HttpGet]
-        [Route("teambase")]
+        // [HttpGet]
+        // [Route("teambase")]
+        [HttpGet("teambase")]
         public YahooTeamBase CreateYahooTeamBaseModel ()
         {
             _h.StartMethod();
