@@ -13,10 +13,14 @@ using HtmlAgilityPack;
 using System.Linq;
 using System.Collections.Generic;
 
+
+
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Controllers
 {
-#pragma warning disable CS0414, CS0169, CS0219, IDE0052, CS1591
-    public class HomeController: Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class HomeController: ControllerBase
     {
         private readonly Helpers _h = new Helpers();
         private readonly AirtableConfiguration _airtableConfig;
@@ -29,6 +33,9 @@ namespace BaseballScraper.Controllers
         private readonly HtmlScraper _hS = new HtmlScraper();
 
         private readonly GoogleSheetsConnector _gSC = new GoogleSheetsConnector();
+
+        private readonly JsonHandler _jR = new JsonHandler();
+
 
 
         public HomeController (IOptions<AirtableConfiguration> airtableConfig, IOptions<TwitterConfiguration> twitterConfig)
@@ -46,9 +53,11 @@ namespace BaseballScraper.Controllers
         //     return RedirectToAction("OnGet","Pages/Dashboard.cshtml.cs");
         // }
 
+        [Route("")]
         public void MainTest()
         {
-            Console.WriteLine("test");
+            _h.StartMethod();
+            _jR.ReadJsonFile();
         }
 
 
@@ -117,7 +126,7 @@ namespace BaseballScraper.Controllers
 
         [HttpGet]
         [Route("logging")]
-        public IActionResult Logging()
+        public void Logging()
         {
             // Log.Logger = new LoggerConfiguration()
             // .MinimumLevel.Debug()
@@ -140,7 +149,7 @@ namespace BaseballScraper.Controllers
 
             // NLog.LogManager.Configuration = config;
 
-            return View();
+            // return View();
         }
     }
 

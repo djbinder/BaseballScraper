@@ -7,12 +7,14 @@ using Newtonsoft.Json.Linq;
 using BaseballScraper.EndPoints;
 using BaseballScraper.Infrastructure;
 
+
+
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Controllers.YahooControllers
 {
-    #pragma warning disable CS0414, CS0219
-    [Route("api/yahoo")]
+    [Route("api/yahoo/[controller]")]
     [ApiController]
-    public class YahooTeamStandingController: Controller
+    public class YahooTeamStandingController: ControllerBase
     {
         private readonly Helpers _h = new Helpers();
         private readonly TheGameIsTheGameConfiguration _theGameConfig;
@@ -30,17 +32,20 @@ namespace BaseballScraper.Controllers.YahooControllers
         /// <summary> Return instantiated 'YahooTeamStanding' </summary>
         /// <example> https://127.0.0.1:5001/api/yahoo/teamstanding </example>
         /// <returns> rank, playoff seed, games back, wins, losses, ties, winning percentage </returns>
-        [HttpGet]
-        [Route("teamstanding")]
+        // [HttpGet]
+        // [Route("teamstanding")]
+        [HttpGet("standing")]
         public YahooTeamStanding CreateYahooTeamStandingModel ()
         {
             _h.StartMethod();
 
             // retrieve the league key from user secrets / yahoo league config
             string leagueKey = _theGameConfig.LeagueKey;
+            Console.WriteLine($"leagueKey: {leagueKey}");
 
             // create the uri that will be used to generate the appropriate json; in this case, it's the League Standings endpoint (view YahooApiEndPoints.cs)
             var uriLeagueStandings = endPoints.LeagueStandingsEndPoint(leagueKey).EndPointUri;
+            Console.WriteLine($"uriLeagueStandings: {uriLeagueStandings}");
 
             JObject leagueStandings = _yahooHomeController.GenerateYahooResourceJObject(uriLeagueStandings);
             int     teamsInLeague   = 10;

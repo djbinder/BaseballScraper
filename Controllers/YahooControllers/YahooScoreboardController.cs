@@ -13,12 +13,13 @@ using BaseballScraper.Models.Configuration;
 using System.Threading.Tasks;
 using BaseballScraper.Infrastructure;
 
+
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Controllers.YahooControllers
 {
-    #pragma warning disable CS0414, CS0219, CS0169
-    [Route("api/yahoo")]
+    [Route("api/yahoo/[controller]")]
     [ApiController]
-    public class YahooScoreboardController: Controller
+    public class YahooScoreboardController: ControllerBase
     {
         private readonly Helpers _h                         = new Helpers();
         private static readonly YahooApiEndPoints endPoints = new YahooApiEndPoints();
