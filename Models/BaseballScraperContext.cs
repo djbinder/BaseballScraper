@@ -46,3 +46,9 @@ namespace BaseballScraper.Models
         // dotnet user-secrets set "DBInfo:ConnectionString" "server=localhost;userId=postgres;password=root;port=5432;database=BS_05302019_1;"
 // https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-2.2&tabs=windows
 // https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-2.1&tabs=linux
+
+
+// set all user secrets from appsettings.Development.json:
+    // cat ./Configuration/appsettings.Development.json | dotnet user-secrets set
+// clear all secrets
+    // dotnet user-secrets clear

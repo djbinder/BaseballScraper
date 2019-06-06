@@ -70,6 +70,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
         #region READ BASEBALL SAVANT DATA ------------------------------------------------------------
 
 
+            // STATUS [ June 5, 2019 ]: this works
             // A) SINGLE DAY
             /// <example>
             ///     List<StartingPitcherCsw> spCswList = await GetStartingPitcherCswAsync();
@@ -97,6 +98,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             }
 
 
+            // STATUS [ June 5, 2019 ]: this works
             // B) DATE RANGE
             public async Task<List<StartingPitcherCswDateRange>> ReadSpCswCsvDateRangeAsync(int year, int startMonth, int startDay, int endMonth, int endDay)
             {
@@ -121,6 +123,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             }
 
 
+            // STATUS [ June 5, 2019 ]: this works
             // C) FULL SEASON
             public async Task<List<StartingPitcherCsw>> ReadSpCswCsvFullSeasonAsync(int year)
             {
@@ -154,7 +157,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
 
         #region CSV WRITERS ------------------------------------------------------------
 
-
+            // STATUS [ June 5, 2019 ]: this works
             // A) SINGLE DAY
             public void WriteBaseballSavantSingleDayDataToCsv(int year, int monthNumber, int dayNumber)
             {
@@ -163,6 +166,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
                 DownloadSpCswCvsAndWriteToLocalCsv(endPointUri, $"{targetCsvString}");
             }
 
+            // STATUS [ June 5, 2019 ]: this works
             // B) DATE RANGE
             public void WriteBaseballSavantDateRangeDataToCsv(int year, int startMonth, int startDay, int endMonth, int endDay)
             {
@@ -171,6 +175,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
                 DownloadSpCswCvsAndWriteToLocalCsv(endPointUri, $"{targetCsvString}");
             }
 
+            // STATUS [ June 5, 2019 ]: this works
             // C) FULL SEASON
             public void WriteBaseballSavantFullSeason(int year)
             {
@@ -179,6 +184,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
                 DownloadSpCswCvsAndWriteToLocalCsv(endPointUri, $"{targetCsvString}");
             }
 
+            // STATUS [ June 5, 2019 ]: this works
             public void DownloadSpCswCvsAndWriteToLocalCsv(string endPointUri, string targetCsvString)
             {
                 _csvH.DownloadCsvFromLink(endPointUri, targetCsvString);
@@ -195,6 +201,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
         #region ENDPOINTS ------------------------------------------------------------
 
 
+            // STATUS [ June 5, 2019 ]: this works
             // A) SINGLE DAY
             public string GetAllSpCswSingleDayEndPointUri(int year, int monthNumber, int dayNumber)
             {
@@ -202,6 +209,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
                 return endPoint.EndPointUri;
             }
 
+            // STATUS [ June 5, 2019 ]: this works
             // B) DATE RANGE
             public string GetAllSpCswRangeOfDaysEndPointUri(int year, int startMonth, int startDay, int endMonth, int endDay)
             {
@@ -209,6 +217,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
                 return endPoint.EndPointUri;
             }
 
+            // STATUS [ June 5, 2019 ]: this works
             // C) FULL SEASON
             public string GetAllSpCswFullSeasonEndPointUri(int year)
             {
@@ -225,7 +234,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
 
         #region FILE PATHS ------------------------------------------------------------
 
-
+            // STATUS [ June 5, 2019 ]: this works
             // A) SINGLE DAY
             public string SetCsvFilePathSpCswSingleDay(int year, int monthNumber, int dayNumber)
             {
@@ -233,6 +242,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
                 return filePath;
             }
 
+            // STATUS [ June 5, 2019 ]: this works
             // B) DATE RANGE
             public string SetCsvFilePathSpCswDateRange(int year, int startMonth, int startDay, int endMonth, int endDay)
             {
@@ -240,6 +250,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
                 return filePath;
             }
 
+            // STATUS [ June 5, 2019 ]: this works
             // C) FULL SEASON
             public string SetCsvFilePathSpCswFulLSeason(int year)
             {
@@ -256,7 +267,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
 
         #region DATABASE ACTIONS ------------------------------------------------------------
 
-
+            // STATUS [ June 5, 2019 ]: this works
             // A.1) SINGLE DAY
             public void AddStartingPitcherCswSingleDayToDatabase(StartingPitcherCswSingleDay spCsw)
             {
@@ -264,6 +275,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
                 _context.SaveChanges();
             }
 
+            // STATUS [ June 5, 2019 ]: this works
             // A.2) SINGLE DAY
             public void AddStartingPitcherCswsSingleDayToDatabaseFromList(List<StartingPitcherCswSingleDay> listSpCsw)
             {
@@ -271,7 +283,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
                     AddStartingPitcherCswSingleDayToDatabase(player);
             }
 
-
+            // STATUS [ June 5, 2019 ]: this works
             // B.1) DATE RANGE
             public void AddStartingPitcherCswDateRangeToDatabase(StartingPitcherCswDateRange spCsw)
             {
@@ -279,6 +291,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
                 _context.SaveChanges();
             }
 
+            // STATUS [ June 5, 2019 ]: this works
             // B.2) DATE RANGE
             public void AddStartingPitcherCswsDateRangeToDatabaseFromList(List<StartingPitcherCswDateRange> listSpCsw)
             {
@@ -286,7 +299,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
                     AddStartingPitcherCswDateRangeToDatabase(player);
             }
 
-
+            // STATUS [ June 5, 2019 ]: this works
             // C.1) FULL SEASON
             public void AddStartingPitcherCswToDatabase(StartingPitcherCsw spCsw)
             {
@@ -294,6 +307,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
                 _context.SaveChanges();
             }
 
+            // STATUS [ June 5, 2019 ]: this works
             // C.2) FULL SEASON
             public void AddStartingPitcherCswsToDatabaseFromList(List<StartingPitcherCsw> listSpCsw)
             {
@@ -309,6 +323,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
 
         #region LIST ACTIONS ------------------------------------------------------------
 
+            // STATUS [ June 5, 2019 ]: this works
             // A) SINGLE DAY
             public List<StartingPitcherCswSingleDay> CreateSpCswSingleDayList(List<dynamic> list, int year, int monthNumber, int dayNumber)
             {
@@ -324,7 +339,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
                 return listSpCsw;
             }
 
-
+            // STATUS [ June 5, 2019 ]: this works
             // B) DATE RANGE
             public List<StartingPitcherCswDateRange> CreateSpCswDateRangeList(List<dynamic> list, int year, int startMonth, int startDay, int endMonth, int endDay)
             {
@@ -342,7 +357,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
                 return listSpCsw;
             }
 
-
+            // STATUS [ June 5, 2019 ]: this works
             // C) FULL SEASON
             public List<StartingPitcherCsw> CreateSpCswFullSeasonList(List<dynamic> list, int year)
             {

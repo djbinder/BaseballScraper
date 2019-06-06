@@ -31,6 +31,7 @@ namespace BaseballScraper.Models.Twitter
         public ulong StatusIdString { get; set; }
         public string Text { get; set; }
         public string FullText { get; set; }
+
     }
 }
 
