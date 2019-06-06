@@ -8,7 +8,12 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using BaseballScraper.Infrastructure;
+using System.Diagnostics;
 
+
+
+
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Controllers
 {
 
@@ -23,17 +28,16 @@ namespace BaseballScraper.Controllers
         ///     <item> Execute Twitter string search [Option 1] <see cref="TwitterController.ExecuteTwitterStringSearch()" /> </item>
         ///     <item> Execute Twitter string search [Option 2] <see cref="TwitterController.ExecuteTwitterStringSearch(string)" /> </item>
         ///     <item> View Twitter search results <see cref="TwitterController.ViewTwitterStringSearchResults()" /> </item>
-        ///     <item> Execute Twitter string search [Option 3] <see cref="TwitterController.ExecuteTwitterStringSearch(string, string )" /> </item>
+        // ///     <item> Execute Twitter string search [Option 3] <see cref="TwitterController.ExecuteTwitterStringSearch(string, string )" /> </item>
         /// </list>
+
 
     #endregion OVERVIEW ------------------------------------------------------------
 
 
-
-    #pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
-    [Route("api/twitter")]
+    [Route("api/twitter/[controller]")]
     [ApiController]
-    public class TwitterController: Controller
+    public class TwitterController: ControllerBase
     {
         private readonly Helpers _h = new Helpers();
         private readonly TwitterConfiguration _twitterConfig;
@@ -62,23 +66,37 @@ namespace BaseballScraper.Controllers
         }
 
 
+        [Route("test/async")]
+        public async Task MlbStatsApiTesting()
+        {
+            _h.StartMethod();
+
+            SingleUserAuthorizer authorizedUser = AuthorizeTwitterUser();
+            var twitterConsumerKey = _twitterConfig.ConsumerKey;
+
+
+            // await ExecuteTwitterStringSearch();
+            string searchString = "Rizzo /djbinder/lists/cubs";
+            await ExecuteTwitterStringSearch(searchString);
+            await GetListsForUser("djbinder");
+            // await GetTweetsFromTwitterListAsync("djbinder","baseball","Rizzo");
+        }
+
+
 
         #region OPTION 1 ------------------------------------------------------------
 
-            // STATUS: this works
+            // STATUS [ June 5, 2019 ]: this works
             // OPTION 1: search string defined within the method
             /// <summary> Scrapes twitter to find most recent tweets that include 'searchString' that is defined within the method </summary>
             /// <remarks> In Option 1, there are no parameters passed into the method. To change what you are searching for, modify the variable 'searchString' within the method itself </remarks>
-            /// <example> https://127.0.0.1:5001/api/twitter/playersearch </example>
+            /// <example> ExecuteTwitterStringSearch() </example>
             /// <returns> A list of tweets </returns>
-            [HttpGet]
-            [Route("playersearch")]
             public async Task ExecuteTwitterStringSearch()
             {
                 SingleUserAuthorizer authorizedUser = AuthorizeTwitterUser();
 
                 var twitterConsumerKey = _twitterConfig.ConsumerKey;
-                _h.Intro(twitterConsumerKey, "consumer key");
 
                 TwitterContext twitterCtx = new TwitterContext(authorizedUser);
 
@@ -94,36 +112,19 @@ namespace BaseballScraper.Controllers
                         select search)
                         .SingleOrDefaultAsync();
 
-                if (searchResponse != null && searchResponse.Statuses != null)
+                if (searchResponse.Count != 0 && searchResponse.Statuses.Count != 0)
                 {
-                    searchResponse.Statuses.ForEach(tweet =>
-                            Console.WriteLine(
-                            "User: {0}, Tweet: {1}",
-                            tweet.User.ScreenNameResponse,
-                            tweet.Text)
-                            );
+                    Console.WriteLine($"RESULTS FOR: {searchString}");
+                    // Console.WriteLine(searchResponse.Count);
+                    // Console.WriteLine(searchResponse.Statuses.Count);
+                    PrintUserAndResponse(searchResponse);
+                    var newList = CreateNewStatusListForEach(searchResponse);
+                }
 
-                    int searchResponseCount = searchResponse.Statuses.Count();
-                    _h.Intro(searchResponseCount, "search response count");
-
-                    List<TwitterStatus> statuses = new List<TwitterStatus>();
-
-                    for (var i = 0; i <=searchResponseCount - 1; i++)
-                    {
-                        TwitterStatus newStatus = new TwitterStatus
-                        {
-                            ScreenName     = searchResponse.Statuses[i].ScreenName,
-                            StatusType     = (int)searchResponse.Statuses[i].Type,
-                            UserId         = (int)searchResponse.Statuses[i].UserID,
-                            CreatedAt      = searchResponse.Statuses[i].CreatedAt,
-                            StatusIdString = searchResponse.Statuses[i].StatusID,
-                            Text           = searchResponse.Statuses[i].Text
-
-                        };
-
-                        statuses.Add(newStatus);
-                    }
-                    PrintTwitterResponse(statuses);
+                else
+                {
+                    Console.WriteLine();
+                    Console.WriteLine($"NO SEARCH RESULTS FOR: {searchString}");
                 }
             }
 
@@ -133,19 +134,18 @@ namespace BaseballScraper.Controllers
 
         #region OPTION 2 ------------------------------------------------------------
 
-            // STATUS: this works
+            // STATUS [ June 5, 2019 ]: this works
             // OPTION 2: search string is passed to the method as a parameter (i.e., 'searchString')
             /// <summary> Scrapes twitter to find most recent tweets that include 'searchString' parameter </summary>
             /// <remarks> In Option 2, there is one parameter passed into the method. To change what you are searching for, modify the parameter when calling the method </remarks>
             /// <param name="searchString"> The string that you would like to search twitter for </param>
-            /// <example> TwitterStringSearch("anthony rizzo"); </example>
+            /// <example> ExecuteTwitterStringSearch("anthony rizzo"); </example>
             /// <returns> A list of tweets </returns>
             public async Task ExecuteTwitterStringSearch (String searchString)
             {
                 SingleUserAuthorizer authorizedUser = AuthorizeTwitterUser();
 
                 var twitterConsumerKey = _twitterConfig.ConsumerKey;
-                _h.Intro(twitterConsumerKey, "consumer key");
 
                 TwitterContext twitterCtx = new TwitterContext(authorizedUser);
 
@@ -158,145 +158,415 @@ namespace BaseballScraper.Controllers
                         select search)
                         .SingleOrDefaultAsync();
 
-                if (searchResponse != null && searchResponse.Statuses != null)
+                // if (searchResponse != null && searchResponse.Statuses != null)
+                if (searchResponse.Count != 0 && searchResponse.Statuses.Count != 0)
                 {
-                    searchResponse.Statuses.ForEach(tweet =>
-                            Console.WriteLine(
-                            "User: {0}, Tweet: {1}",
-                            tweet.User.ScreenNameResponse,
-                            tweet.Text)
-                            );
+                    Console.WriteLine($"RESULTS FOR: {searchString}");
+                    // Console.WriteLine(searchResponse.Count);
+                    // Console.WriteLine(searchResponse.Statuses.Count);
+                    PrintUserAndResponse(searchResponse);
+                    var newList = CreateNewStatusListForEach(searchResponse);
+                }
 
-                    int searchResponseCount = searchResponse.Statuses.Count();
-                    _h.Intro(searchResponseCount, "search response count");
-
-                    List<TwitterStatus> statuses = new List<TwitterStatus>();
-
-                    for (var i = 0; i <=searchResponseCount - 1; i++)
-                    {
-                        TwitterStatus newStatus = new TwitterStatus
-                        {
-                            ScreenName     = searchResponse.Statuses[i].ScreenName,
-                            StatusType     = (int)searchResponse.Statuses[i].Type,
-                            UserId         = (int)searchResponse.Statuses[i].UserID,
-                            CreatedAt      = searchResponse.Statuses[i].CreatedAt,
-                            StatusIdString = searchResponse.Statuses[i].StatusID,
-                            Text           = searchResponse.Statuses[i].Text
-
-                        };
-
-                        statuses.Add(newStatus);
-                    }
-                    // PrintTwitterResponse(statuses);
+                else
+                {
+                    Console.WriteLine();
+                    Console.WriteLine($"NO SEARCH RESULTS FOR: {searchString}");
                 }
             }
 
 
-            // OPTION 2B: View for Option 2
-            /// <summary> This allows viewing / testing of Option 2; The method is called and a string is passed as a parameter </summary>
-            /// <returns> A view and a list of tweets </returns>
-            [HttpGet]
-            [Route("")]
-            public async Task<IActionResult> ViewTwitterStringSearchResults()
-            {
-                string searchString = "Anthony Rizzo";
-                await ExecuteTwitterStringSearch(searchString);
-                string currently = $"SEARCHING FOR STRING: {searchString}";
-                return Content(currently);
-            }
+            // // OPTION 2B: View for Option 2
+            // /// <summary> This allows viewing / testing of Option 2; The method is called and a string is passed as a parameter </summary>
+            // /// <returns> A view and a list of tweets </returns>
+            // public async Task<IActionResult> ViewTwitterStringSearchResults()
+            // {
+            //     string searchString = "Anthony Rizzo";
+            //     await ExecuteTwitterStringSearch(searchString);
+            //     string currently = $"SEARCHING FOR STRING: {searchString}";
+            //     return Content(currently);
+            // }
 
         #endregion OPTION 2 ------------------------------------------------------------
 
 
+        // STATUS [ June 5, 2019 ]: this works
+        public async Task GetListsForUser(string userName)
+        {
+            SingleUserAuthorizer authorizedUser = AuthorizeTwitterUser();
 
-        #region OPTION 3 ------------------------------------------------------------
+            var twitterConsumerKey = _twitterConfig.ConsumerKey;
 
-            // TODO: Figure out how to differentiate Option 2 and Option 3 so that 'blankString' is not needed to differentiate the two
-            // OPTION 3: search string is passed as a parameter within the url
-            /// <summary> Scrapes twitter to find most recent tweets that include 'searchString' parameter </summary>
-            /// <remarks> In Option 3, there are two parameters called into method. To change what you are searching for, modify the end of the url </remarks>
-            /// <param name="searchString"> The string that you would like to search twitter for </param>
-            /// <param name="blankString"> This parameter doesn't actually do anything; needed to make this method different than the previous; there is probably a better way to do this </param>
-            /// <example> https://127.0.0.1:5001/api/twitter/playersearch/anthony+rizzo </example>
-            /// <returns> A list of tweets </returns>
-            [HttpGet]
-            [Route("playersearch/{searchString}")]
-            public async Task ExecuteTwitterStringSearch (string searchString, string blankString)
+            TwitterContext twitterCtx = new TwitterContext(authorizedUser);
+
+            var listItems =
+                await
+                    (from list in twitterCtx.List
+                    where list.Type == ListType.List &&
+                            list.ScreenName == userName
+                    select list).ToListAsync();
+
+
+            Console.WriteLine($"# of List: {listItems.Count}");
+            foreach(var item in listItems)
             {
-                // AUTHORIZED USER ---> LinqToTwitter.SingleUserAuthorizer
-                var authorizedUser = AuthorizeTwitterUser();
-
-                var twitterConsumerKey = _twitterConfig.ConsumerKey;
-                _h.Intro(twitterConsumerKey, "consumer key");
-
-                // TWITTER CTX ---> LinqToTwitter.TwitterContext
-                var twitterCtx = new TwitterContext(authorizedUser);
-
-                // SEARCH RESPONSE ---> LinqToTwitter.Search
-                var searchResponse =
-                    await
-                        (from search in twitterCtx.Search
-                        where search.Type == SearchType.Search &&
-                        search.Query == searchString
-                        select search)
-                        .SingleOrDefaultAsync();
-
-                if (searchResponse != null && searchResponse.Statuses != null)
-                {
-                    searchResponse.Statuses.ForEach(tweet =>
-                            Console.WriteLine(
-                            "User: {0}, Tweet: {1}",
-                            tweet.User.ScreenNameResponse,
-                            tweet.Text)
-                            );
-
-                    int searchResponseCount = searchResponse.Statuses.Count();
-                    _h.Intro(searchResponseCount, "search response count");
-
-                    List<TwitterStatus> statuses = new List<TwitterStatus>();
-
-                    for (var i = 0; i <=searchResponseCount - 1; i++)
-                    {
-                        TwitterStatus newStatus = new TwitterStatus
-                        {
-                            ScreenName     = searchResponse.Statuses[i].ScreenName,
-                            StatusType     = (int)searchResponse.Statuses[i].Type,
-                            UserId         = (int)searchResponse.Statuses[i].UserID,
-                            CreatedAt      = searchResponse.Statuses[i].CreatedAt,
-                            StatusIdString = searchResponse.Statuses[i].StatusID,
-                            Text           = searchResponse.Statuses[i].Text
-
-                        };
-                        statuses.Add(newStatus);
-                    }
-                    PrintTwitterResponse(statuses);
-                }
+                Console.WriteLine(item.FullName);
+                Console.WriteLine(item.SlugResponse);
+                Console.WriteLine(item.ListIDResponse);
+                Console.WriteLine(item.Uri);
             }
 
-        #endregion OPTION 3 ------------------------------------------------------------
+        }
+
+
+        // STATUS [ June 5, 2019 ]: this DOES NOT work
+        public async Task GetTweetsFromTwitterListAsync(string ListOwnerUserName, string ListName, string SearchString)
+        {
+            SingleUserAuthorizer authorizedUser = AuthorizeTwitterUser();
+
+            var twitterConsumerKey = _twitterConfig.ConsumerKey;
+
+            TwitterContext twitterCtx = new TwitterContext(authorizedUser);
+            Console.WriteLine(twitterCtx.List);
 
 
 
-        #region HELPERS ------------------------------------------------------------
+            int maxTweetsToGet = 5;
+            int lastStatusCount = 0;
+
+            // last tweet processed on previous query
+            // ulong sinceID = 1136047872758169600;
+            ulong sinceID = 1;
+            // ulong sinceID = 204251866668871681;
+            ulong maxID;
+            // int count = 30;
+            // var statusList = new List<Status>();
+
+            var combinedSearchResults = new List<Status>();
+
+            List<Status> searchResponse =
+                await
+                    (from search in twitterCtx.Search
+                        where search.Type == SearchType.Search &&
+                              search.Query == SearchString &&
+                              search.Count == maxTweetsToGet &&
+                              search.SinceID == sinceID
+                        select search.Statuses)
+                    .SingleOrDefaultAsync();
+
+            combinedSearchResults.AddRange(searchResponse);
+            ulong previousMaxID = ulong.MaxValue;
+
+            do
+            {
+                // one less than the newest id you've just queried
+                maxID = searchResponse.Min(status => status.StatusID) - 1;
+                Console.WriteLine($"sinceID: {sinceID}");
+                Console.WriteLine($"previousMaxID: {previousMaxID}");
+                Console.WriteLine($"maxID: {maxID}");
+
+                // Debug.Assert(maxID < previousMaxID);
+                previousMaxID = maxID;
+
+                searchResponse =
+                    await
+                    (from search in twitterCtx.Search
+                    where search.Type == SearchType.Search &&
+                        search.Query == SearchString &&
+                        search.Count == maxTweetsToGet &&
+                        search.MaxID == maxID &&
+                        search.SinceID == sinceID
+                    select search.Statuses)
+                    .SingleOrDefaultAsync();
+
+                combinedSearchResults.AddRange(searchResponse);
+            }
+
+            while (searchResponse.Any());
+
+            foreach(var y in searchResponse)
+            {
+                Console.WriteLine($"y: {y}");
+                Console.WriteLine($"y.Scopes: {y.Scopes}");
+            }
+
+            Console.WriteLine();
+            foreach(var x in combinedSearchResults)
+            {
+                // Console.WriteLine($"x: {x}");
+                // Console.WriteLine($"x.Scopes: {x.Scopes}");
+
+                Console.WriteLine($"ScreenName: {x.User.ScreenNameResponse}");
+                Console.WriteLine($"Tweet: {x.Text}");
+                Console.WriteLine();
+            }
+
+            // combinedSearchResults.ForEach(tweet =>
+            // Console.WriteLine(
+            //     "\n  User: {0} ({1})\n  Tweet: {2}",
+            //     tweet.User.ScreenNameResponse,
+            //     tweet.User.UserIDResponse,
+            //     tweet.Text));
+
+
+
+
+
+            // only count
+            // List listResponse =
+            //     await
+            //     (from list in twitterCtx.List
+            //      where list.Type == ListType.Statuses &&
+            //            list.OwnerScreenName == ListOwnerUserName &&
+            //            list.Slug == ListName &&
+            //            list.Count == count
+            //      select list)
+            //     .SingleOrDefaultAsync();
+
+            // Console.WriteLine($"listResponse.Count 1: {listResponse.Count}");
+
+            // if (listResponse != null && listResponse.Statuses != null)
+            // {
+            //     List<Status> newStatuses = listResponse.Statuses;
+            //     Console.WriteLine($"newStatuses.Count 1: {newStatuses.Count}");
+
+            //     // first tweet processed on current query
+            //     maxID = newStatuses.Min(status => status.StatusID) - 1;
+            //     Console.WriteLine($"maxID: {maxID}");
+            //     statusList.AddRange(newStatuses);
+
+            //     do
+            //     {
+            //         // now add sinceID and maxID
+            //         listResponse =
+            //             await
+            //             (from list in twitterCtx.List
+            //              where list.Type == ListType.Statuses &&
+            //                    list.OwnerScreenName == ListOwnerUserName &&
+            //                    list.Slug == ListName &&
+            //                    list.SinceID == sinceID &&
+            //                    list.MaxID == maxID &&
+            //                    list.Count == count
+            //              select list)
+            //             .SingleOrDefaultAsync();
+
+
+
+            //         if (listResponse == null)
+            //             break;
+
+            //         Console.WriteLine($"listResponse.Count 2: {listResponse.Count}");
+
+            //         newStatuses = listResponse.Statuses;
+            //         Console.WriteLine($"newStatuses.Count 2: {newStatuses.Count}");
+
+
+            //         // first tweet processed on current query
+            //         maxID = newStatuses.Min(status => status.StatusID) - 1;
+            //         statusList.AddRange(newStatuses);
+
+            //         lastStatusCount = newStatuses.Count;
+            //     }
+
+            //     while (lastStatusCount != 0 && statusList.Count < maxTweetsToGet);
+
+            //     Console.WriteLine($"listResponse.Count 3: {listResponse.Count}");
+            //     Console.WriteLine($"newStatuses.Count 3: {newStatuses.Count}");
+
+            //     Console.WriteLine(listResponse.FullName);
+            //     Console.WriteLine(listResponse.IncludeEntities);
+            //     Console.WriteLine(listResponse.Mode);
+            //     Console.WriteLine(listResponse.Name);
+            //     Console.WriteLine(listResponse.Type);
+
+
+            //     foreach(var resp in listResponse.Statuses)
+            //     {
+            //         Console.WriteLine(resp);
+            //     }
+
+
+
+
+            //     for (int i = 0; i < statusList.Count; i++)
+            //     {
+            //         Status status = statusList[i];
+            //         // PrintTwitterStatus(status,i);
+            //     }
+
+            // }
+        }
+
+
+
+
+        // #region OPTION 3 ------------------------------------------------------------
+
+        //     // TODO: Figure out how to differentiate Option 2 and Option 3 so that 'blankString' is not needed to differentiate the two
+        //     // OPTION 3: search string is passed as a parameter within the url
+        //     /// <summary> Scrapes twitter to find most recent tweets that include 'searchString' parameter </summary>
+        //     /// <remarks> In Option 3, there are two parameters called into method. To change what you are searching for, modify the end of the url </remarks>
+        //     /// <param name="searchString"> The string that you would like to search twitter for </param>
+        //     /// <param name="blankString"> This parameter doesn't actually do anything; needed to make this method different than the previous; there is probably a better way to do this </param>
+        //     /// <example> https://127.0.0.1:5001/api/twitter/playersearch/anthony+rizzo </example>
+        //     /// <returns> A list of tweets </returns>
+        //     // [HttpGet]
+        //     // [Route("playersearch/{searchString}")]
+        //     public async Task ExecuteTwitterStringSearch (string searchString, string blankString)
+        //     {
+        //         // AUTHORIZED USER ---> LinqToTwitter.SingleUserAuthorizer
+        //         var authorizedUser = AuthorizeTwitterUser();
+
+        //         var twitterConsumerKey = _twitterConfig.ConsumerKey;
+
+        //         // TWITTER CTX ---> LinqToTwitter.TwitterContext
+        //         var twitterCtx = new TwitterContext(authorizedUser);
+
+        //         // SEARCH RESPONSE ---> LinqToTwitter.Search
+        //         var searchResponse =
+        //             await
+        //                 (from search in twitterCtx.Search
+        //                 where search.Type == SearchType.Search &&
+        //                 search.Query == searchString
+        //                 select search)
+        //                 .SingleOrDefaultAsync();
+
+        //         if (searchResponse != null && searchResponse.Statuses != null)
+        //         {
+        //             PrintUserAndResponse(searchResponse);
+        //             var newList = CreateNewStatusListForEach(searchResponse);
+        //         }
+        //     }
+
+        // #endregion OPTION 3 ------------------------------------------------------------
+
+
+
+
+
+
+        #region CREATE NEW STATUS ------------------------------------------------------------
+
+            // STATUS [ June 5, 2019 ]: this works
+            public List<TwitterStatus> CreateNewStatusListForEach(LinqToTwitter.Search SearchResponse)
+            {
+                List<TwitterStatus> allStatuses = new List<TwitterStatus>();
+
+                foreach(var item in SearchResponse.Statuses)
+                {
+                    PrintTweetAuthorInfo(item.User);
+
+                    TwitterStatus status = new TwitterStatus
+                    {
+                        ScreenName = item.User.ScreenNameResponse,
+                        CreatedAt = item.CreatedAt,
+                        Text = item.Text,
+                        UserId = (int)item.UserID,
+                        StatusType = (int)item.Type,
+                        StatusIdString = item.StatusID,
+
+                    };
+                    allStatuses.Add(status);
+                    PrintTwitterResponse(allStatuses);
+                }
+                return allStatuses;
+            }
+
+            // STATUS [ June 5, 2019 ]: this works
+            // example: var secondList = CreateNewStatusListFromCount(searchResponse);
+            public List<TwitterStatus> CreateNewStatusListFromCount(LinqToTwitter.Search SearchResponse)
+            {
+                int searchResponseCount = SearchResponse.Statuses.Count();
+                _h.Intro(searchResponseCount, "search response count");
+
+                List<TwitterStatus> statuses = new List<TwitterStatus>();
+
+                for (var i = 0; i <=searchResponseCount - 1; i++)
+                {
+                    TwitterStatus newStatus = new TwitterStatus
+                    {
+                        ScreenName     = SearchResponse.Statuses[i].User.ScreenNameResponse,
+                        StatusType     = (int)SearchResponse.Statuses[i].Type,
+                        UserId         = (int)SearchResponse.Statuses[i].UserID,
+                        CreatedAt      = SearchResponse.Statuses[i].CreatedAt,
+                        StatusIdString = SearchResponse.Statuses[i].StatusID,
+                        Text           = SearchResponse.Statuses[i].Text
+                    };
+                    statuses.Add(newStatus);
+                }
+                PrintTwitterResponse(statuses);
+                return statuses;
+            }
+
+
+        #endregion CREATE NEW STATUS ------------------------------------------------------------
+
+
+
+
+
+        #region PRINTING PRESS ------------------------------------------------------------
 
             private void PrintTwitterResponse(List<TwitterStatus> statuses)
             {
                 int xCount = 1;
-                foreach(var item in statuses)
+                foreach(TwitterStatus item in statuses)
                 {
-                    _h.Spotlight("next status");
-                    _h.Intro(xCount, "status #");
-                    _h.Intro(item.ScreenName, "screen name");
-                    _h.Intro(item.StatusType, "status type");
-                    _h.Intro(item.UserId, "user id");
-                    _h.Intro(item.CreatedAt, "created at");
-                    _h.Intro(item.StatusIdString, "status id string");
-                    _h.Intro(item.Text, "text");
+                    Console.WriteLine();
+                    _h.Spotlight($"# {xCount}");
+                    Console.WriteLine("-------------------------------------------------------");
+                    Console.WriteLine($"SCREEN NAME         | {item.ScreenName}");
+                    Console.WriteLine($"STATUS TYPE         | {item.StatusType}");
+                    Console.WriteLine($"USER ID             | {item.UserId}");
+                    Console.WriteLine($"CREATED @           | {item.CreatedAt}");
+                    Console.WriteLine($"STATUS ID STRING    | {item.StatusIdString}");
+                    Console.WriteLine($"TWEET               | {item.Text}");
+                    Console.WriteLine("-------------------------------------------------------");
+                    Console.WriteLine();
+
                     xCount++;
                 }
             }
 
-        #endregion HELPERS ------------------------------------------------------------
+
+            private void PrintUserAndResponse(LinqToTwitter.Search SearchResponse)
+            {
+                SearchResponse.Statuses.ForEach(tweet =>
+                    Console.WriteLine(
+                        "User: {0}, Tweet: {1}",
+                        tweet.User.ScreenNameResponse, tweet.Text)
+                    );
+            }
+
+            public void PrintTweetAuthorInfo(LinqToTwitter.User user)
+            {
+                Console.WriteLine("-----USER-----");
+                Console.WriteLine($"ScreenNameResponse: {user.ScreenNameResponse}");
+                Console.WriteLine($"BannerSizes: {user.BannerSizes}");
+                Console.WriteLine($"Categories: {user.Categories}");
+                Console.WriteLine($"Email: {user.Email}");
+                Console.WriteLine($"Location: {user.Location}");
+                Console.WriteLine($"Name: {user.Name}");
+                Console.WriteLine($"ScreenName: {user.ScreenName}");
+                Console.WriteLine($"ScreenNameList: {user.ScreenNameList}");
+                Console.WriteLine($"Type: {user.Type}");
+                Console.WriteLine($"UserIDResponse: {user.UserIDResponse}");
+                Console.WriteLine($"UserIdList: {user.UserIdList}");
+            }
+
+
+            private void PrintTwitterStatus(Status Status, int counter)
+            {
+                Console.WriteLine();
+                _h.Spotlight($"# {counter}");
+                Console.WriteLine("-------------------------------------------------------");
+                Console.WriteLine($"--> {Status.User.Name} @ {Status.CreatedAt} [{Status.StatusID}]");
+                Console.WriteLine(Status.Text);
+                Console.WriteLine("-------------------------------------------------------");
+                Console.WriteLine();
+            }
+
+        #endregion PRINTING PRESS ------------------------------------------------------------
 
 
     }

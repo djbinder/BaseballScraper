@@ -31,7 +31,6 @@ namespace BaseballScraper.Infrastructure
         /// <returns></returns>
         public string ReturnJsonFromObject (Object obj)
         {
-            // _h.StartMethod();
             //Create a stream to serialize the object to.
             MemoryStream mS = new MemoryStream();
 
@@ -50,7 +49,6 @@ namespace BaseballScraper.Infrastructure
             // Console.WriteLine($"Streamreader: {sR.ReadToEnd()}");
 
             mS.Close();
-
             return Encoding.UTF8.GetString(json, 0, json.Length);
         }
 
@@ -141,9 +139,6 @@ namespace BaseballScraper.Infrastructure
             // Console.WriteLine(firstValue.OrgFull);
         public List<dynamic> CreateListWithMultipleInstances(JToken token, Object obj, List<dynamic> objList, string modelType)
         {
-            int instance = 1;
-            // List<Object> objList = new List<Object>();
-
             foreach(var playerObject in token)
             {
                 string playerObjectToString = playerObject.ToString();
@@ -157,17 +152,13 @@ namespace BaseballScraper.Infrastructure
                 memoryStream.Close();
 
                 // _h.Spotlight($"CREATED MODEL INSTANCE #{instance} for {obj.GetType()}");
-                // Console.WriteLine($"Object type: {obj.GetType()}");
                 ReturnJsonFromObject(obj);
                 objList.Add(obj);
-
-                instance++;
             }
 
             var listCount = objList.Count;
             for(var jsonIndex = 0; jsonIndex <= listCount - 1; jsonIndex++)
             {
-                // var jsonGrouping = objList[jsonIndex];
                 var jsonGrouping = objList[jsonIndex];
                 Console.WriteLine(jsonGrouping);
             }

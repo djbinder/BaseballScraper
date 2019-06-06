@@ -8,12 +8,13 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using BaseballScraper.Infrastructure;
 
+
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Controllers.YahooControllers
 {
-    #pragma warning disable CS0414, CS0219
-    [Route("api/yahoo")]
+    [Route("api/yahoo/[controller]")]
     [ApiController]
-    public class YahooManagerController: Controller
+    public class YahooManagerController: ControllerBase
     {
         private readonly Helpers _h = new Helpers();
         private readonly TheGameIsTheGameConfiguration _theGameConfig;

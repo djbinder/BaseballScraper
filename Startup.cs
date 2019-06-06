@@ -40,6 +40,9 @@ namespace BaseballScraper
                 .AddJsonFile("secrets.json", optional:false, reloadOnChange:true)
                 .AddEnvironmentVariables();
 
+
+            // set all user secrets from appsettings.Development.json:
+                // cat ./Configuration/appsettings.Development.json | dotnet user-secrets set
             if (env.IsDevelopment())
             {
                 builder.AddUserSecrets<Startup>();
@@ -88,6 +91,14 @@ namespace BaseballScraper
                 config.GetTokenBase    = Configuration["YahooConfiguration:GetTokenBase"];
             });
 
+            Console.WriteLine("STARTUP");
+            Console.WriteLine(Configuration["YahooConfiguration:AppId"]);
+            Console.WriteLine(Configuration["YahooConfiguration:ClientId"]);
+            Console.WriteLine(Configuration["YahooConfiguration:ClientSecret"]);
+
+
+
+
             // TWITTER CONFIGURATION
             services.Configure<TwitterConfiguration>(Configuration.GetSection("TwitterConfiguration"));
             services.AddScoped(cfg => cfg.GetService<IOptionsSnapshot<TwitterConfiguration>>().Value);
@@ -112,9 +123,16 @@ namespace BaseballScraper
             );
 
             services.Configure<TheGameIsTheGameConfiguration>(Configuration);
+
+            // league key format: {game_key}.l.{league_id}
             services.Configure<TheGameIsTheGameConfiguration>(config =>
             {
                 config.LeagueKey = Configuration["TheGameIsTheGame:2018Season:LeagueKey"];
+            });
+            // league key format: {game_key}.l.{league_id}
+            services.Configure<TheGameIsTheGameConfiguration>(config =>
+            {
+                config.LeagueKey = Configuration["TheGameIsTheGame:2019Season:LeagueKey"];
             });
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

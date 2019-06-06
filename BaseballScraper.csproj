@@ -81,12 +81,13 @@
 
 
     <!-- twitter -->
-    <PackageReference Include="TweetinviAPI" Version="3.0.0" />
+    <!-- <PackageReference Include="TweetinviAPI" Version="4.0.1" /> -->
     <PackageReference Include="linqtotwitter" Version="4.2.1" />
 
 
     <!-- Razor Pages -->
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.5" />
+    <!-- <PackageReference Include="TweetinviAPI.WebhooksPlugin" Version="4.0.0" /> -->
     <!-- <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.1.0-preview1-final" /> -->
     <!-- <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.2" /> -->
     <PackageReference Include="Vereyon.Web.HtmlSanitizer" Version="1.4.0" />
