@@ -37,6 +37,9 @@ namespace BaseballScraper.Controllers
         private readonly JsonHandler _jR = new JsonHandler();
 
 
+        public readonly JsonHandler.DotNetStandardJsonHandler _dJh = new JsonHandler.DotNetStandardJsonHandler();
+
+
 
         public HomeController (IOptions<AirtableConfiguration> airtableConfig, IOptions<TwitterConfiguration> twitterConfig)
         {
@@ -57,7 +60,11 @@ namespace BaseballScraper.Controllers
         public void MainTest()
         {
             _h.StartMethod();
-            _jR.ReadJsonFile();
+            // _jR.ReadJsonFile();
+            // _dJh.ReadJsonFile("blank");
+            _jR.JsonReaderTester();
+
+
         }
 
 

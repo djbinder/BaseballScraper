@@ -6,19 +6,39 @@ using Newtonsoft.Json;
 
 namespace BaseballScraper.Models.Configuration
 {
+    [DataContract]
     public class YahooConfiguration
     {
+        [DataMember]
         public string Name { get; set; }
+
+        [DataMember(Name="AppID")]
         public string AppId { get; set; }
+
+        [DataMember]
         public string ClientId { get; set; }
+
+        [DataMember]
         public string ClientSecret { get; set; }
+
+        [DataMember]
         public string Base64Encoding { get; set; }
+
+        [DataMember]
         public string ClientPublic { get; set; }
+
+        [DataMember]
         public string RedirectUri { get; set; }
+
+        [DataMember]
         public string RefreshToken { get; set; }
+
+        [DataMember]
         public string XOAuthYahooGuid { get; set; }
-        public int? ExpiresIn { get; set; }
-        public string TokenType { get; set; }
+
+
+        public int? ExpiresIn { get; set; } = 3600;
+        public string TokenType { get; set; } = "bearer";
         public string RequestUriBase { get; set; }
         public string RequestAuthUri { get; set; }
         public string GetTokenBase { get; set; }
