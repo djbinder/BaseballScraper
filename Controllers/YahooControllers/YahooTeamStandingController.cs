@@ -19,12 +19,12 @@ namespace BaseballScraper.Controllers.YahooControllers
         private readonly Helpers _h = new Helpers();
         private readonly TheGameIsTheGameConfiguration _theGameConfig;
         private static readonly YahooApiEndPoints endPoints = new YahooApiEndPoints();
-        private static YahooHomeController _yahooHomeController;
+        private static YahooApiRequestController _yahooApiRequestController;
 
-        public YahooTeamStandingController(IOptions<TheGameIsTheGameConfiguration> theGameConfig, YahooHomeController yahooHomeController)
+        public YahooTeamStandingController(IOptions<TheGameIsTheGameConfiguration> theGameConfig, YahooApiRequestController yahooApiRequestController)
         {
             _theGameConfig       = theGameConfig.Value;
-            _yahooHomeController = yahooHomeController;
+            _yahooApiRequestController = yahooApiRequestController;
         }
 
 
@@ -47,7 +47,7 @@ namespace BaseballScraper.Controllers.YahooControllers
             var uriLeagueStandings = endPoints.LeagueStandingsEndPoint(leagueKey).EndPointUri;
             Console.WriteLine($"uriLeagueStandings: {uriLeagueStandings}");
 
-            JObject leagueStandings = _yahooHomeController.GenerateYahooResourceJObject(uriLeagueStandings);
+            JObject leagueStandings = _yahooApiRequestController.GenerateYahooResourceJObject(uriLeagueStandings);
             int     teamsInLeague   = 10;
 
             YahooTeamStanding yS = new YahooTeamStanding();
