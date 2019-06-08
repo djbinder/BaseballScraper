@@ -17,12 +17,12 @@ namespace BaseballScraper.Controllers.YahooControllers
         private readonly Helpers _h = new Helpers();
         private readonly TheGameIsTheGameConfiguration _theGameConfig;
         private static readonly YahooApiEndPoints endPoints = new YahooApiEndPoints();
-        private static YahooHomeController _yahooHomeController;
+        private static YahooApiRequestController _yahooApiRequestController;
 
-        public YahooTeamStatsController(IOptions<TheGameIsTheGameConfiguration> theGameConfig, YahooHomeController yahooHomeController)
+        public YahooTeamStatsController(IOptions<TheGameIsTheGameConfiguration> theGameConfig, YahooApiRequestController yahooApiRequestController)
         {
             _theGameConfig       = theGameConfig.Value;
-            _yahooHomeController = yahooHomeController;
+            _yahooApiRequestController = yahooApiRequestController;
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace BaseballScraper.Controllers.YahooControllers
             int teamId      = 1;
             var uriTeamBase = endPoints.TeamSeasonStatsEndPoint(_theGameConfig.LeagueKey, teamId).EndPointUri;
 
-            JObject teamStatsJson = _yahooHomeController.GenerateYahooResourceJObject(uriTeamBase);
+            JObject teamStatsJson = _yahooApiRequestController.GenerateYahooResourceJObject(uriTeamBase);
             // Extensions.PrintJObjectItems(teamStatsJson);
 
             YahooTeamStatsList tS = new YahooTeamStatsList();
@@ -161,7 +161,7 @@ namespace BaseballScraper.Controllers.YahooControllers
             _h.Spotlight("executing create yahoo team stats method option 2");
             var uriTeamBase = endPoints.TeamSeasonStatsEndPoint(_theGameConfig.LeagueKey, teamId).EndPointUri;
 
-            JObject teamStatsJson = _yahooHomeController.GenerateYahooResourceJObject(uriTeamBase);
+            JObject teamStatsJson = _yahooApiRequestController.GenerateYahooResourceJObject(uriTeamBase);
             // Extensions.PrintJObjectItems(teamStatsJson);
 
             YahooTeamStatsList tS = new YahooTeamStatsList();
@@ -293,7 +293,7 @@ namespace BaseballScraper.Controllers.YahooControllers
             _h.Spotlight("executing create yahoo team stats method option 3");
             var uriTeamBase = endPoints.TeamSeasonStatsEndPoint(_theGameConfig.LeagueKey, teamId).EndPointUri;
 
-            JObject teamStatsJson = _yahooHomeController.GenerateYahooResourceJObject(uriTeamBase);
+            JObject teamStatsJson = _yahooApiRequestController.GenerateYahooResourceJObject(uriTeamBase);
             // Extensions.PrintJObjectItems(teamStatsJson);
 
             YahooTeamStatsList tS = new YahooTeamStatsList();

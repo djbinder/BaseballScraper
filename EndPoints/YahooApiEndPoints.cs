@@ -1,17 +1,22 @@
 ﻿using System;
+using BaseballScraper.Controllers.YahooControllers;
+using BaseballScraper.Infrastructure;
 using BaseballScraper.Models.Configuration;
 using BaseballScraper.Models.Yahoo;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json.Linq;
 
+
+#pragma warning disable CS0414, CS0219, CS0169
 namespace BaseballScraper.EndPoints
 {
-    #pragma warning disable CS0414, CS0219, CS0169
     public class YahooApiEndPoints
     {
+        private readonly Helpers _h = new Helpers();
         private readonly string baseUri  = "https://fantasysports.yahooapis.com/fantasy/v2";
         private const string LoginString = ";use_login=1";
         private string EndPointType      = "";
+
 
 
         public class EndPoint
@@ -22,12 +27,13 @@ namespace BaseballScraper.EndPoints
         }
 
 
+
         // https://developer.yahoo.com/fantasysports/guide/game-resource.html
-        #region GAMES end points
+        #region GAMES END POINTS ------------------------------------------------------------
+
             public EndPoint GameBaseEndPoint(string gamekey)
             {
                 EndPointType = "game";
-
                 return new EndPoint
                 {
                     BaseUri      = baseUri,
@@ -38,7 +44,6 @@ namespace BaseballScraper.EndPoints
             public EndPoint GameLeaguesEndPoint(string gamekey, string leaguekey)
             {
                 EndPointType = "game";
-
                 return new EndPoint
                 {
                     BaseUri      = baseUri,
@@ -49,7 +54,6 @@ namespace BaseballScraper.EndPoints
             public EndPoint GamePlayersEndPoint(string gamekey, string playerkey)
             {
                 EndPointType = "game";
-
                 return new EndPoint
                 {
                     BaseUri      = baseUri,
@@ -60,7 +64,6 @@ namespace BaseballScraper.EndPoints
             public EndPoint GameWeeksEndPoint(string gamekey)
             {
                 EndPointType = "game";
-
                 return new EndPoint
                 {
                     BaseUri      = baseUri,
@@ -71,7 +74,6 @@ namespace BaseballScraper.EndPoints
             public EndPoint GameStatCategoriesEndPoint(string gamekey)
             {
                 EndPointType = "game";
-
                 return new EndPoint
                 {
                     BaseUri      = baseUri,
@@ -82,7 +84,6 @@ namespace BaseballScraper.EndPoints
             public EndPoint GamePositionTypesEndPoint(string gamekey)
             {
                 EndPointType = "game";
-
                 return new EndPoint
                 {
                     BaseUri      = baseUri,
@@ -93,18 +94,20 @@ namespace BaseballScraper.EndPoints
             public EndPoint GameRosterPositionsEndPoint(string gamekey)
             {
                 EndPointType = "game";
-
                 return new EndPoint
                 {
                     BaseUri      = baseUri,
                     ResourceType = $"/{EndPointType}/{gamekey}/roster_positions"
                 };
             }
-        #endregion GAMES end points
+        #endregion GAMES END POINTS ------------------------------------------------------------
+
+
+
 
 
         // https://developer.yahoo.com/fantasysports/guide/league-resource.html
-        #region LEAGUE end points
+        #region LEAGUE END POINTS ------------------------------------------------------------
 
             // var uriLeagueBase = endPoints.LeagueBaseEndPoint(leagueKey).EndPointUri;
             public EndPoint LeagueBaseEndPoint(string leagueKey)
@@ -212,145 +215,174 @@ namespace BaseballScraper.EndPoints
                 // before being converted to strings, all return types is Newtonsoft.Json.Linq.JValue
                 switch (itemName)
                 {
-                    #region LeagueTeam
+                    #region ### LeagueTeam
+
                         // string teamKey = endPoints.LeagueTeamItem(leagueStandings, 0, "TeamKey");
-                        case "TeamKey": 
+                        case "TeamKey":
                             return LeagueTeam["team_key"].ToString();
 
-                        case "TeamId": 
+                        case "TeamId":
                             return LeagueTeam["team_id"].ToString();
 
-                        case "TeamName": 
+                        case "TeamName":
                             return LeagueTeam["team_name"].ToString();
 
-                        case "IsOwnedByCurrentLogin": 
+                        case "IsOwnedByCurrentLogin":
                             return LeagueTeam["is_owned_by_current_login"].ToString();
 
-                        case "Url": 
+                        case "Url":
                             return LeagueTeam["url"].ToString();
 
-                        case "WaiverPriority": 
+                        case "WaiverPriority":
                             return LeagueTeam["waiver_priority"].ToString();
 
-                        case "NumberOfMoves": 
+                        case "NumberOfMoves":
                             return LeagueTeam["number_of_moves"].ToString();
 
-                        case "NumberOfTrades": 
+                        case "NumberOfTrades":
                             return LeagueTeam["number_of_trades"].ToString();
 
-                        case "LeagueScoringType": 
+                        case "LeagueScoringType":
                             return LeagueTeam["league_scoring_type"].ToString();
 
-                        case "HasDraftGrade": 
+                        case "HasDraftGrade":
                             return LeagueTeam["has_draft_grade"].ToString();
-                    #endregion LeagueTeam
 
-                    #region RosterAdds
-                        case "RosterCoverageType": 
+                    #endregion ### LeagueTeam
+
+
+                    #region ### RosterAdds ###
+
+                        case "RosterCoverageType":
                             return RosterAdds["coverage_type"].ToString();
 
-                        case "CoverageValue": 
+                        case "CoverageValue":
                             return RosterAdds["coverage_value"].ToString();
 
-                        case "Value": 
+                        case "Value":
                             return RosterAdds["value"].ToString();
-                    #endregion RosterAdds
 
-                    #region TeamStandings
+                    #endregion ### RosterAdds ###
+
+
+                    #region ### TeamStandings ###
+
                         // string teamRank = endPoints.LeagueTeamItem(leagueStandings, 0, "Rank");
-                        case "Rank": 
+                        case "Rank":
                             return TeamStandings["rank"].ToString();
 
-                        case "PlayoffSeed": 
+                        case "PlayoffSeed":
                             return TeamStandings["playoff_seed"].ToString();
 
-                        case "GamesBack": 
+                        case "GamesBack":
                             return TeamStandings["games_back"].ToString();
-                    #endregion TeamStandings
 
-                    #region TeamLogos
-                        case "TeamLogos": 
+                    #endregion ### TeamStandings ###
+
+
+                    #region ### TeamLogos ###
+
+                        case "TeamLogos":
                             return TeamLogos["team_logo"].ToString();
-                    #endregion TeamLogos
+
+                    #endregion ### TeamLogos ###
+
 
                     // 'team_logo' is nested under 'team_logos'
-                    #region TeamLogo
-                        case "TeamLogoSize": 
+                    #region ### TeamLogo ###
+
+                        case "TeamLogoSize":
                             return TeamLogo["size"].ToString();
 
-                        case "TeamLogoUrl": 
+                        case "TeamLogoUrl":
                             return TeamLogo["url"].ToString();
-                    #endregion TeamLogo
+
+                    #endregion ### TeamLogo ###
+
 
                     // 'outcome_totals' is nested under TeamStandings
-                    #region TeamOutcomes
-                        case "Wins": 
+                    #region ### TeamOutcomes ###
+
+                        case "Wins":
                             return TeamOutcomes["wins"].ToString();
 
-                        case "Losses": 
+                        case "Losses":
                             return TeamOutcomes["losses"].ToString();
 
-                        case "Ties": 
+                        case "Ties":
                             return TeamOutcomes["ties"].ToString();
 
-                        case "WinningPercentage": 
+                        case "WinningPercentage":
                             return TeamOutcomes["percentage"].ToString();
-                    #endregion TeamOutcomes
 
-                    #region TeamPoints
-                        case "PointsCoverageType": 
+                    #endregion ### TeamOutcomes ###
+
+
+                    #region ### TeamPoints ###
+
+                        case "PointsCoverageType":
                             return TeamPoints["coverage_type"].ToString();
 
-                        case "Season": 
+                        case "Season":
                             return TeamPoints["season"].ToString();
 
-                        case "Total": 
+                        case "Total":
                             return TeamPoints["total"].ToString();
-                    #endregion TeamPoints
 
-                    #region Manager
-                        case "Manager": 
+                    #endregion ### TeamPoints ###
+
+
+                    #region ### Manager ###
+
+                        case "Manager":
                             return Managers["manager"].ToString();
-                    #endregion Manager
 
-                    #region Manager
-                        case "ManagerId": 
+                    #endregion ### Manager ###
+
+
+                    #region ### Manager ###
+
+                        case "ManagerId":
                             return Manager["manager_id"].ToString();
 
-                        case "Nickname": 
+                        case "Nickname":
                             return Manager["nickname"].ToString();
 
-                        case "Guid": 
+                        case "Guid":
                             return Manager["guid"].ToString();
 
-                        case "IsCommissioner": 
+                        case "IsCommissioner":
                             return Manager["is_commissioner"].ToString();
 
-                        case "IsCurrentLogin": 
+                        case "IsCurrentLogin":
                             return Manager["is_current_login"].ToString();
 
-                        case "Email": 
+                        case "Email":
                             return Manager["email"].ToString();
 
-                        case "ImageUrl": 
+                        case "ImageUrl":
                             return Manager["image_url"].ToString();
-                    #endregion Manager
+
+                    #endregion ### Manager ###
                 }
 
                 string test = "test";
-
                 return test;
             }
 
-        #endregion LEAGUE end points
+        #endregion END POINTS ------------------------------------------------------------
+
+
+
+
 
         //https://developer.yahoo.com/fantasysports/guide/team-resource.html
-        #region TEAM end points
+        #region TEAM END POINTS ------------------------------------------------------------
+
             // var uriTeamBase = endPoints.TeamBaseEndPoint(leagueKey, teamId).EndPointUri;
             public EndPoint TeamBaseEndPoint (string leaguekey, int teamnumber)
             {
                 EndPointType = "team";
-
                 return new EndPoint
                 {
                     BaseUri      = baseUri,
@@ -362,7 +394,6 @@ namespace BaseballScraper.EndPoints
             public EndPoint TeamSeasonStatsEndPoint (string leaguekey, int teamnumber)
             {
                 EndPointType = "team";
-
                 return new EndPoint
                 {
                     BaseUri      = baseUri,
@@ -374,7 +405,6 @@ namespace BaseballScraper.EndPoints
             public EndPoint TeamWeeksStatsEndPoint (string leaguekey, int teamnumber, int weeknumber)
             {
                 EndPointType = "team";
-
                 return new EndPoint
                 {
                     BaseUri      = baseUri,
@@ -386,7 +416,6 @@ namespace BaseballScraper.EndPoints
             public EndPoint TeamStandingsEndPoint (string leaguekey, int teamnumber)
             {
                 EndPointType = "team";
-
                 return new EndPoint
                 {
                     BaseUri      = baseUri,
@@ -398,7 +427,6 @@ namespace BaseballScraper.EndPoints
             public EndPoint TeamRosterEndPoint (string leaguekey, int teamnumber, int weeknumber)
             {
                 EndPointType = "team";
-
                 return new EndPoint
                 {
                     BaseUri      = baseUri,
@@ -410,7 +438,6 @@ namespace BaseballScraper.EndPoints
             public EndPoint TeamDraftResultsEndPoint (string leaguekey, int teamnumber)
             {
                 EndPointType = "team";
-
                 return new EndPoint
                 {
                     BaseUri      = baseUri,
@@ -422,7 +449,6 @@ namespace BaseballScraper.EndPoints
             public EndPoint TeamAllMatchupsEndPoint (string leaguekey, int teamnumber)
             {
                 EndPointType = "team";
-
                 return new EndPoint
                 {
                     BaseUri      = baseUri,
@@ -433,37 +459,44 @@ namespace BaseballScraper.EndPoints
             public EndPoint TeamSelectedMatchupsEndPoint (string leaguekey, int teamnumber, int[] weeknumbers)
             {
                 EndPointType = "team";
-
                 return new EndPoint
                 {
                     BaseUri      = baseUri,
                     ResourceType = $"/{EndPointType}/{leaguekey}.t.{teamnumber}/matchups;weeks={weeknumbers}"
                 };
             }
-        #endregion TEAM end points
+
+        #endregion TEAM END POINTS ------------------------------------------------------------
+
+
+
 
 
         // https://developer.yahoo.com/fantasysports/guide/roster-resource.html
-        #region ROSTER end point
+        #region ROSTER END POINTS ------------------------------------------------------------
+
             public EndPoint RosterPlayersEndPoint (string leaguekey, int teamnumber)
             {
                 EndPointType = "roster";
-
                 return new EndPoint
                 {
                     BaseUri      = baseUri,
                     ResourceType = $"/team/{leaguekey}.t.{teamnumber}/{EndPointType}/players"
                 };
             }
-        #endregion ROSTER end point
+
+        #endregion ROSTER END POINTS ------------------------------------------------------------
+
+
+
 
 
         // https://developer.yahoo.com/fantasysports/guide/player-resource.html
-        #region PLAYER end points
+        #region PLAYER END POINTS ------------------------------------------------------------
+
             public EndPoint PlayerBaseEndPoint (string playerkey)
             {
                 EndPointType = "player";
-
                 return new EndPoint
                 {
                     BaseUri      = baseUri,
@@ -474,7 +507,6 @@ namespace BaseballScraper.EndPoints
             public EndPoint PlayerSeasonStatsEndPoint (string playerkey)
             {
                 EndPointType = "player";
-
                 return new EndPoint
                 {
                     BaseUri      = baseUri,
@@ -485,7 +517,6 @@ namespace BaseballScraper.EndPoints
             public EndPoint PlayerWeeksStatsEndPoint (string playerkey, int weeknumber)
             {
                 EndPointType = "player";
-
                 return new EndPoint
                 {
                     BaseUri      = baseUri,
@@ -505,7 +536,6 @@ namespace BaseballScraper.EndPoints
             public EndPoint PlayerPercentOwnedEndPoint (string playerkey)
             {
                 EndPointType = "player";
-
                 return new EndPoint
                 {
                     BaseUri      = baseUri,
@@ -516,22 +546,25 @@ namespace BaseballScraper.EndPoints
             public EndPoint PlayerDraftAnalysisEndPoint (string playerkey)
             {
                 EndPointType = "player";
-
                 return new EndPoint
                 {
                     BaseUri      = baseUri,
                     ResourceType = $"/{EndPointType}/{playerkey}/draft_analysis"
                 };
             }
-        #endregion PLAYER end points
+
+        #endregion PLAYER END POINTS ------------------------------------------------------------
+
+
+
 
 
         // https://developer.yahoo.com/fantasysports/guide/transaction-resource.html
-        #region TRANSACTION end points
+        #region TRANSACTION END POINTS ------------------------------------------------------------
+
             public EndPoint TransactionBaseEndPoint (string transactionkey)
             {
                 EndPointType = "transaction";
-
                 return new EndPoint
                 {
                     BaseUri      = baseUri,
@@ -542,22 +575,25 @@ namespace BaseballScraper.EndPoints
             public EndPoint TransactionPlayersEndPoint (string transactionkey)
             {
                 EndPointType = "transaction";
-
                 return new EndPoint
                 {
                     BaseUri      = baseUri,
                     ResourceType = $"/{EndPointType}/{transactionkey}/players"
                 };
             }
-        #endregion TRANSACTION end points
+
+        #endregion TRANSACTION END POINTS ------------------------------------------------------------
+
+
+
 
 
         // https://developer.yahoo.com/fantasysports/guide/user-resource.html
-        #region USER end points
+        #region USER END POINTS ------------------------------------------------------------
+
             public EndPoint YahooUserBaseEndPoint ()
             {
                 EndPointType = "users";
-
                 return new EndPoint
                 {
                     BaseUri      = baseUri,
@@ -568,7 +604,6 @@ namespace BaseballScraper.EndPoints
             public EndPoint YahooUsersLeaguesEndPoint (string gamekey)
             {
                 EndPointType = "users";
-
                 return new EndPoint
                 {
                     BaseUri      = baseUri,
@@ -579,13 +614,13 @@ namespace BaseballScraper.EndPoints
             public EndPoint YahooUsersTeamsEndPoint (string gamekey)
             {
                 EndPointType = "users";
-
                 return new EndPoint
                 {
                     BaseUri      = baseUri,
                     ResourceType = $"/{EndPointType};{LoginString}/games;games_keys={gamekey}/teams"
                 };
             }
-        #endregion USER end points
+
+        #endregion USER END POINTS ------------------------------------------------------------
     }
 }

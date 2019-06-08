@@ -19,12 +19,12 @@ namespace BaseballScraper.Controllers.YahooControllers
         private readonly Helpers _h = new Helpers();
         private readonly TheGameIsTheGameConfiguration _theGameConfig;
         private static readonly YahooApiEndPoints endPoints = new YahooApiEndPoints();
-        private static YahooHomeController _yahooHomeController;
+        private static YahooApiRequestController _yahooApiRequestController;
 
-        public YahooTeamPointsController(IOptions<TheGameIsTheGameConfiguration> theGameConfig, YahooHomeController yahooController)
+        public YahooTeamPointsController(IOptions<TheGameIsTheGameConfiguration> theGameConfig, YahooApiRequestController yahooApiRequestController)
         {
             _theGameConfig       = theGameConfig.Value;
-            _yahooHomeController = yahooController;
+            _yahooApiRequestController = yahooApiRequestController;
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace BaseballScraper.Controllers.YahooControllers
 
             var uriTeamBase = endPoints.TeamSeasonStatsEndPoint(_theGameConfig.LeagueKey, teamId).EndPointUri;
 
-            JObject teamStatsJson = _yahooHomeController.GenerateYahooResourceJObject(uriTeamBase);
+            JObject teamStatsJson = _yahooApiRequestController.GenerateYahooResourceJObject(uriTeamBase);
 
             var teamPointsPath = teamStatsJson["fantasy_content"]["team"]["team_points"];
             // var teamPointsPath         = o["fantasy_content"]["team"]["team_points"];
@@ -108,7 +108,7 @@ namespace BaseballScraper.Controllers.YahooControllers
             int teamId      = 1;
             var uriTeamBase = endPoints.TeamSeasonStatsEndPoint(_theGameConfig.LeagueKey, teamId).EndPointUri;
 
-            JObject teamStatsJson = _yahooHomeController.GenerateYahooResourceJObject(uriTeamBase);
+            JObject teamStatsJson = _yahooApiRequestController.GenerateYahooResourceJObject(uriTeamBase);
 
             var newPointsModel = CreateYahooTeamPointsModel(teamId, teamStatsJson);
 
