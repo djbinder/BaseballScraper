@@ -323,55 +323,113 @@
             <example> ExecuteTwitterStringSearch("anthony rizzo"); </example>
             <returns> A list of tweets </returns>
         </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooAuthController.GenerateUserAuthorizationCode">
-            <summary> This triggers the browser to open a new window that asks the user to authorize the usage of their data within the app. When the user approves, they will receive a short authorization code. This code should then be entered in the terminal </summary>
-            <returns> AuthorizationCode which is a string entered in the console </returns>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooApiRequestController.GetYahooMlbGameKeyForThisYear">
+            <summary>
+                The yahoo game id for mlb changes each season
+                This method gets the id for the current year
+                Method is ultimately called in 'GetTheGameIsTheGameLeagueKey' method
+            </summary>
+            <returns>
+                A string that is three numbers
+                e.g., 378 OR 388
+            </returns>
         </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooAuthController.SetSessionAuthorizationCode(System.String)">
-            <summary> Takes the authorization code and sets it within session / This is called within the GenerateUserAuthorizationCode method </summary>
-            <returns> Void </returns>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooApiRequestController.GetTheGameIsTheGameLeagueKeySuffix">
+            <summary>
+                Each yahoo league has a unique id
+                This method gets the id for the league you want data from
+                The league key suffix is in a config file
+                Method is ultimately called in 'GetTheGameIsTheGameLeagueKey' method
+            </summary>
+            <returns>
+                A string of lowercase L + the league id
+                e.g., l.1234 OR l.679
+            </returns>
         </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooAuthController.CreateYahooAccessTokenResponseJObject">
-            <summary> Generate the 'request' for authorization / Then convert it to a JObject </summary>
-            <returns> The HttpWebRequest for authorization converted to a JObject </returns>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooApiRequestController.GetTheGameIsTheGameLeagueKey">
+            <summary>
+                To get league day you need the league key
+                The league key is a combo of the mlb game key and the league suffix
+                Methods calls the two previous methods (STEP 1 and STEP 2)
+            </summary>
+            <returns>
+                A string that is the Y! mlb game key and the league suffix
+                e.g., 378.l.1234 OR 388.l.679
+            </returns>
         </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooAuthController.GetYahooAccessTokenResponse">
-            <summary> Retrieve response from Yahoo. Create a new instance of AccessTokenResponse from yahoo response </summary>
-            <returns> A new AccessTokenResponse --> includes AccessToken, TokenType, ExpiresIn, RefreshToken, XOAuthYahooGuid</returns>
-        </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooAuthController.SetSessionAccessTokenItems(BaseballScraper.Models.Configuration.AccessTokenResponse)">
-            <summary> Take access token response and set the various items in session </summary>
-        </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooHomeController.GenerateWebRequest(System.String)">
-            <summary> Generates the web request using a yahoo api endpoint. This is followed by the method GetResponseFromServer.static It is ultimately called within GenerateYahooResourceJObject Method </summary>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooApiRequestController.GenerateWebRequest(System.String)">
+            <summary>
+                Generates the web request using a yahoo api endpoint.
+                This is followed by the method GetResponseFromServer
+                It is ultimately called within GenerateYahooResourceJObject Method
+            </summary>
             <param name="uri"></param>
             <returns> HttpWebRequest request </returns>
         </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooHomeController.GetResponseFromServer(System.Net.HttpWebRequest)">
-            <summary> Follows GenerateWebRequest method. It receives the response from the request and returns a string of xml.static This is followed by the TranslateServerResponseToXml Method. It is ultimatelly called within GenerateYahooResourceJObject Method</summary>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooApiRequestController.GetResponseFromServer(System.Net.HttpWebRequest)">
+            <summary>
+                Follows GenerateWebRequest method.
+                It receives the response from the request and returns a string of xml.static
+                This is followed by the TranslateServerResponseToXml Method.
+                It is ultimatelly called within GenerateYahooResourceJObject Method
+            </summary>
             <param name="request"></param>
             <returns> serverResponse string; that looks like Xml </returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Controllers.YahooControllers.YahooHomeController.TranslateServerResponseToXml(System.String)" -->
-        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooHomeController.GenerateYahooResourceJObject(System.String)">
-            <summary> generate json for any given yahoo resource (e.g., game, league, player, team, etc.)</summary>
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Controllers.YahooControllers.YahooApiRequestController.TranslateServerResponseToXml(System.String)" -->
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooApiRequestController.GenerateYahooResourceJObject(System.String)">
+            <summary>
+                Generate json for any given yahoo resource (e.g., game, league, player, team, etc.)
+            </summary>
             <param name="uri"> uri will typically be generated from an endpoint within YahooApiEndPoints.cs</param>
             <returns> json / a jobject of the resource type requested</returns>
         </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooHomeController.SaveObjectToDatabase(System.Object)">
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooApiRequestController.SaveObjectToDatabase(System.Object)">
             <summary> take in an instance of a yahoo model and save it to the database</summary>
             <param name="yahoomodel"></param>
         </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooManagerController.CreateYahooManagerModel(System.Int32)">
-            <summary> Instantiate new instance of a yahoo manager </summary>
-            <param name="managerId"> A number 0 - X; Where X is the total number of teams in the league; Basically every manager has their own single number Id; Select the Id of the Manager you would want to view </param>
-            <example> https://127.0.0.1:5001/api/yahoo/manager/1 </example>
-            <returns> A new YahooManager </returns>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooAuthController.GenerateUserAuthorizationCode">
+            <summary>
+                Triggers browser to open window asking user to authorize usage of their data in the app.
+                When the user approves, they will receive a short authorization code.
+                This code should then be entered in the terminal
+            </summary>
+            <returns>
+                AuthorizationCode which is a string entered in the console
+            </returns>
         </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooManagerController.ViewYahooManagerModel">
-            <summary> View the yahoo manager page</summary>
-            <example> https://127.0.0.1:5001/api/yahoo/manager/view </example>
-            <returns> A view with instantiated model </returns>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooAuthController.CreateYahooAccessTokenResponseJObject">
+            <summary>
+                Generate the 'request' for authorization / Then convert it to a JObject
+            </summary>
+            <returns> The HttpWebRequest for authorization converted to a JObject </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooAuthController.GetYahooAccessTokenResponse">
+            <summary>
+                Retrieve response from Yahoo.
+                Create a new instance of AccessTokenResponse from yahoo response
+            </summary>
+            <returns> A new AccessTokenResponse that includes: AccessToken, TokenType, ExpiresIn, RefreshToken, XOAuthYahooGuid</returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooAuthController.SetSessionAuthorizationCode(System.String)">
+            <summary>
+                Takes the authorization code and sets it within session
+                This is called within the GenerateUserAuthorizationCode method
+                This method / step is not required
+            </summary>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooManagerController.CreateYahooManagerModel(System.Int32)">
+            <summary>
+                Instantiate new instance of a yahoo manager
+            </summary>
+            <param name="managerId">
+                A number 0 - X; Where X is the total number of teams in the league;
+                Basically every manager has their own single number Id;
+                Select the Id of the Manager you would want to view </param>
+            <example>
+                https://127.0.0.1:5001/api/yahoo/manager/1
+            </example>
+            <returns> A new YahooManager </returns>
         </member>
         <member name="M:BaseballScraper.Controllers.YahooControllers.YahooScoreboardController.ViewLeagueScoreboardAsync">
             <example> https://127.0.0.1:5001/api/yahoo/scoreboard </example>
@@ -789,17 +847,9 @@
             <param name="dataTable"> The data table that you want to print in console </param>
         </member>
         <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Infrastructure.Helpers.PrintKeyValuePairs(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.Object}})" -->
-        <member name="M:BaseballScraper.Infrastructure.Helpers.GetModelProperties">
-            <summary> Given a model / class, get the properties of that model </summary>
-            <returns> Model properties for a given class (e.g, FanGraphsPitcher) </returns>
-        </member>
-        <member name="M:BaseballScraper.Infrastructure.Helpers.CreateListOfModelProperties">
+        <member name="M:BaseballScraper.Infrastructure.Helpers.IterateForEach(System.Collections.Generic.List{System.Object})">
             <summary> Given a model / class, create a list(string) of the models property names (e.g, Wins) </summary>
             <returns> A list of property names </returns>
-        </member>
-        <member name="M:BaseballScraper.Infrastructure.Helpers.CreateNumberedList(System.String[])">
-            <summary> </summary>
-            <param name="itemsToList"> e.g., string[] planet = { "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune" };</param>
         </member>
         <member name="M:BaseballScraper.Infrastructure.PostmanMethods.PostmanToken(System.String)">
             <summary> A switch that returns a postman token depending upon the end type you are use </summary>

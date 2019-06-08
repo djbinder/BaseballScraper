@@ -24,12 +24,12 @@ namespace BaseballScraper.Controllers.YahooControllers
         private readonly Helpers _h                         = new Helpers();
         private static readonly YahooApiEndPoints endPoints = new YahooApiEndPoints();
         private readonly TheGameIsTheGameConfiguration _theGameConfig;
-        private static YahooHomeController _yahooHomeController;
+        private static YahooApiRequestController _yahooApiRequestController;
 
-        public YahooScoreboardController(IOptions<TheGameIsTheGameConfiguration> theGameConfig, YahooHomeController yahooHomeController)
+        public YahooScoreboardController(IOptions<TheGameIsTheGameConfiguration> theGameConfig, YahooApiRequestController yahooApiRequestController)
         {
             _theGameConfig       = theGameConfig.Value;
-            _yahooHomeController = yahooHomeController;
+            _yahooApiRequestController = yahooApiRequestController;
         }
 
         // TODO: add XML summary comments
@@ -43,7 +43,7 @@ namespace BaseballScraper.Controllers.YahooControllers
 
             var uriLeagueScoreboard = endPoints.LeagueSeasonScoreboardEndPoint(leagueKey).EndPointUri;
 
-            JObject leagueScoreboard = _yahooHomeController.GenerateYahooResourceJObject(uriLeagueScoreboard);
+            JObject leagueScoreboard = _yahooApiRequestController.GenerateYahooResourceJObject(uriLeagueScoreboard);
 
             _h.PrintJObjectItems(leagueScoreboard);
         }

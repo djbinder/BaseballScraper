@@ -22,13 +22,18 @@ namespace BaseballScraper.Controllers.YahooControllers
         private readonly Helpers _h = new Helpers();
         private readonly TheGameIsTheGameConfiguration _theGameConfig;
         private static readonly YahooApiEndPoints endPoints = new YahooApiEndPoints();
-        private static YahooHomeController _yahooHomeController;
+        private static YahooApiRequestController _yahooApiRequestController;
 
-        public YahooTeamBaseController(IOptions<TheGameIsTheGameConfiguration> theGameConfig, YahooHomeController yahooHomeController)
+        private static readonly YahooAuthController _yAuthController = new YahooAuthController();
+
+
+        public YahooTeamBaseController(IOptions<TheGameIsTheGameConfiguration> theGameConfig, YahooApiRequestController yahooApiRequestController)
         {
             _theGameConfig       = theGameConfig.Value;
-            _yahooHomeController = yahooHomeController;
+            _yahooApiRequestController = yahooApiRequestController;
         }
+
+        public YahooTeamBaseController() {}
 
 
         /// <summary> Create instance of yahoo team model; save it to the database</summary>
@@ -39,6 +44,8 @@ namespace BaseballScraper.Controllers.YahooControllers
         [HttpGet("teambase")]
         public YahooTeamBase CreateYahooTeamBaseModel ()
         {
+            _yAuthController.CheckYahooSession();
+
             _h.StartMethod();
 
             YahooTeamBase tB = new YahooTeamBase();
@@ -49,9 +56,10 @@ namespace BaseballScraper.Controllers.YahooControllers
             for(var teamId = 1; teamId <= countOfTeamsInLeague; teamId++)
             {
                 Console.WriteLine($"creating team base for team {teamId}");
+                Console.WriteLine($"leagueKey: {_theGameConfig.LeagueKey}");
                 var uriTeamBase = endPoints.TeamBaseEndPoint(_theGameConfig.LeagueKey, teamId).EndPointUri;
 
-                JObject resourceJson = _yahooHomeController.GenerateYahooResourceJObject(uriTeamBase);
+                JObject resourceJson = _yahooApiRequestController.GenerateYahooResourceJObject(uriTeamBase);
 
                 var teamBasePath             = resourceJson["fantasy_content"]["team"];
                     tB.TeamKey               = teamBasePath["team_key"].ToString();
@@ -185,7 +193,7 @@ namespace BaseballScraper.Controllers.YahooControllers
             int teamId      = 1;
             var uriTeamBase = endPoints.TeamBaseEndPoint(_theGameConfig.LeagueKey, teamId).EndPointUri;
 
-            JObject resourceJson = _yahooHomeController.GenerateYahooResourceJObject(uriTeamBase);
+            JObject resourceJson = _yahooApiRequestController.GenerateYahooResourceJObject(uriTeamBase);
 
             Hashtable teamHashTable = new Hashtable
             { { "Key", resourceJson["fantasy_content"]["team"]["team_key"].ToString() },

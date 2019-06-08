@@ -28,7 +28,7 @@ namespace BaseballScraper.Infrastructure
         private readonly Helpers _h = new Helpers();
         // private CsvReader csvReader;
         private IEnumerable<dynamic> records;
-        private TextReader _tR;
+        // private TextReader _tR;
 
         // public interface ITypeConverter
         // {
@@ -74,7 +74,8 @@ namespace BaseballScraper.Infrastructure
 
                     // Returns an IEnumerable<T> of records.
                     var records      = csvReader.GetRecords(modelType);
-                    int recordsCount = _h.CountRecords(records);
+                    // int recordsCount = _h.CountRecords(records);
+
 
                     // Run EnumerateOverRecordsDynamic to loop through records
                     _h.EnumerateOverRecordsDynamic(records);

@@ -91,10 +91,7 @@ namespace BaseballScraper
                 config.GetTokenBase    = Configuration["YahooConfiguration:GetTokenBase"];
             });
 
-            Console.WriteLine("STARTUP");
-            Console.WriteLine(Configuration["YahooConfiguration:AppId"]);
-            Console.WriteLine(Configuration["YahooConfiguration:ClientId"]);
-            Console.WriteLine(Configuration["YahooConfiguration:ClientSecret"]);
+
 
 
 
@@ -150,6 +147,16 @@ namespace BaseballScraper
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 
+
+            services.AddDistributedMemoryCache();
+            services.AddSession (options =>
+            {
+                options.IdleTimeout = TimeSpan.FromDays(1);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
+
             services.AddMvc ()
                 .SetCompatibilityVersion (CompatibilityVersion.Version_2_1)
                 .AddSessionStateTempDataProvider()
@@ -162,7 +169,9 @@ namespace BaseballScraper
 
             // services.AddMvc().AddControllersAsServices();
             services.AddTransient<BaseballScraper.Controllers.YahooControllers.YahooAuthController>();
-            services.AddSession ();
+
+
+
 
             services.Configure<BaseballScraperContext>(Configuration);
             services.Configure<BaseballScraperContext>(config =>
