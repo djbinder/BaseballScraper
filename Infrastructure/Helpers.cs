@@ -345,7 +345,12 @@ namespace BaseballScraper.Infrastructure
 
                 string json = JsonConvert.SerializeObject(x, Formatting.Indented);
 
-                Console.WriteLine($"{x} --------------------------- {json} --------------------------- {x}");
+                Console.WriteLine();
+                Console.WriteLine("------------------------------------------------------------------");
+                Console.WriteLine("BEGIN DIG");
+                Console.WriteLine("------------------------------------------------------------------");
+                Console.WriteLine(json);
+                Console.WriteLine("------------------------------------------------------------------");
                 Console.WriteLine();
                 Console.ResetColor();
             }
