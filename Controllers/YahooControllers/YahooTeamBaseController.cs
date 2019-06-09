@@ -36,90 +36,107 @@ namespace BaseballScraper.Controllers.YahooControllers
         public YahooTeamBaseController() {}
 
 
-        /// <summary> Create instance of yahoo team model; save it to the database</summary>
-        /// <example> https://127.0.0.1:5001/api/yahoo/teambase </example>
-        /// <returns> new YahooTeamBase </returns>
-        // [HttpGet]
-        // [Route("teambase")]
-        [HttpGet("teambase")]
-        public YahooTeamBase CreateYahooTeamBaseModel ()
+        [Route("test")]
+        public void TestYahooTeamBaseController()
         {
-            _yAuthController.CheckYahooSession();
+            _h.StartMethod();
+            var teamBase = CreateYahooTeamBaseModel(7);
+            // var teamBase = CreateYahooTeamBaseModel(1);
+        }
+
+
+        /// <summary>
+        ///     Create instance of yahoo team model; save it to the database
+        /// </summary>
+        /// <example>
+        ///
+        /// </example>
+        /// <returns> new YahooTeamBase </returns>
+        [HttpGet]
+        public YahooTeamBase CreateYahooTeamBaseModel (int managerId)
+        {
+            // _yAuthController.CheckYahooSession();
 
             _h.StartMethod();
 
             YahooTeamBase tB = new YahooTeamBase();
+            string leagueKey = _yahooApiRequestController.GetTheGameIsTheGameLeagueKey();
+            Console.WriteLine($"MANAGER CONTROLLER > leagueKey: {leagueKey}");
+            var uriTeamBase = endPoints.TeamBaseEndPoint(leagueKey, managerId).EndPointUri;
 
-            int countOfTeamsInLeague = 10;
+            Console.WriteLine($"uriTeamBase: {uriTeamBase}");
 
             // for each team in the league, dig through their team json, find the required items to create the new YahooTeamBase and set those items
-            for(var teamId = 1; teamId <= countOfTeamsInLeague; teamId++)
-            {
-                Console.WriteLine($"creating team base for team {teamId}");
-                Console.WriteLine($"leagueKey: {_theGameConfig.LeagueKey}");
-                var uriTeamBase = endPoints.TeamBaseEndPoint(_theGameConfig.LeagueKey, teamId).EndPointUri;
 
-                JObject resourceJson = _yahooApiRequestController.GenerateYahooResourceJObject(uriTeamBase);
+            JObject resourceJson = _yahooApiRequestController.GenerateYahooResourceJObject(uriTeamBase);
+            _h.Dig(resourceJson);
 
+                // teamBasePath is Level 1
                 var teamBasePath             = resourceJson["fantasy_content"]["team"];
-                    tB.TeamKey               = teamBasePath["team_key"].ToString();
-                    tB.TeamName              = teamBasePath["name"].ToString();
-                    tB.TeamId                = (int?)teamBasePath["team_id"];
-                    tB.IsOwnedByCurrentLogin = (int?)teamBasePath["is_owned_by_current_login"];
-                    tB.Url                   = teamBasePath["url"].ToString();
-                    tB.WaiverPriority        = (int?)teamBasePath["waiver_priority"];
-                    tB.NumberOfMoves         = (int?)teamBasePath["number_of_moves"];
-                    tB.NumberOfTrades        = (int?)teamBasePath["number_of_trades"];
-                    tB.LeagueScoringType     = teamBasePath["league_scoring_type"].ToString();
-                    tB.HasDraftGrade         = teamBasePath["has_draft_grade"].ToString();
+                tB.TeamKey               = teamBasePath["team_key"].ToString();
+                tB.TeamName              = teamBasePath["name"].ToString();
+                tB.TeamId                = (int?)teamBasePath["team_id"];
+                tB.IsOwnedByCurrentLogin = (int?)teamBasePath["is_owned_by_current_login"];
+                tB.Url                   = teamBasePath["url"].ToString();
+                tB.WaiverPriority        = (int?)teamBasePath["waiver_priority"];
+                tB.NumberOfMoves         = (int?)teamBasePath["number_of_moves"];
+                tB.NumberOfTrades        = (int?)teamBasePath["number_of_trades"];
+                tB.LeagueScoringType     = teamBasePath["league_scoring_type"].ToString();
+                tB.HasDraftGrade         = teamBasePath["has_draft_grade"].ToString();
 
-                // team logo
+                // Team Logo is nested under 'teamBasePath'
                 var teamLogosPath    = resourceJson["fantasy_content"]["team"]["team_logos"]["team_logo"];
-                    tB.TeamLogo.Size = teamLogosPath["size"].ToString();
-                    tB.TeamLogo.Url  = teamLogosPath["url"].ToString();
+                tB.TeamLogo.Size = teamLogosPath["size"].ToString();
+                tB.TeamLogo.Url  = teamLogosPath["url"].ToString();
 
-                // roster adds
+                // Roster adds is nested under 'teamBasePath'
                 var teamRosterAddsPath              = resourceJson["fantasy_content"]["team"]["roster_adds"];
-                    tB.TeamRosterAdds.CoverageType  = teamRosterAddsPath["coverage_type"].ToString();
-                    tB.TeamRosterAdds.CoverageValue = teamRosterAddsPath["coverage_value"].ToString();
-                    tB.TeamRosterAdds.Value         = teamRosterAddsPath["value"].ToString();
+                tB.TeamRosterAdds.CoverageType  = teamRosterAddsPath["coverage_type"].ToString();
+                tB.TeamRosterAdds.CoverageValue = teamRosterAddsPath["coverage_value"].ToString();
+                tB.TeamRosterAdds.Value         = teamRosterAddsPath["value"].ToString();
 
+                // Managers is nested under 'teamBasePath'
                 var managerPath = resourceJson["fantasy_content"]["team"]["managers"]["manager"];
+                // Console.WriteLine($"COUnt: {managerPath.Count()}");
+
                     // the type under 'manager' will be different if there are more than 1 managers (i.e., there is a co-commish)
                     var managerPathChildrenType = managerPath.GetType().ToString();
+
                         // if there is one manager, the type is "Newtonsoft.Json.Linq.JObject"
                         string jObjectType = "Newtonsoft.Json.Linq.JObject";
+
                         // if there are co-managers, the type is "Newtonsoft.Json.Linq.JArray"
                         string jArrayType = "Newtonsoft.Json.Linq.JArray";
 
                         // if the manager type is JObject, there is only one manager for the team; so you would go this path to finish creating the new YahooTeamBase
                         if(managerPathChildrenType == jObjectType)
                         {
-                            tB.PrimaryTeamManager.ManagerId = managerPath["manager_id"].ToString();
-                            tB.PrimaryTeamManager.NickName  = managerPath["nickname"].ToString();
-                            tB.PrimaryTeamManager.Guid      = managerPath["guid"].ToString();
-                            try
-                            {
-                                tB.PrimaryTeamManager.IsCommissioner = managerPath["is_commissioner"].ToString();
-                                tB.PrimaryTeamManager.IsCurrentLogin = managerPath["is_current_login"].ToString();
-                            }
-                            catch (Exception ex)
-                            {
-                                Console.WriteLine($"EXCEPTION MESSAGE: {ex.Message} --> because they are not the current login and/or they are not the league commissioner");
-                            }
+                            PopulateTeamBaseWithOneManager(tB, managerPath);
+                            // tB.PrimaryTeamManager.ManagerId = managerPath["manager_id"].ToString();
+                            // tB.PrimaryTeamManager.NickName  = managerPath["nickname"].ToString();
+                            // tB.PrimaryTeamManager.Guid      = managerPath["guid"].ToString();
+                            // try
+                            // {
+                            //     tB.PrimaryTeamManager.IsCommissioner = managerPath["is_commissioner"].ToString();
+                            //     tB.PrimaryTeamManager.IsCurrentLogin = managerPath["is_current_login"].ToString();
+                            // }
+                            // catch (Exception ex)
+                            // {
+                            //     Console.WriteLine($"EXCEPTION MESSAGE: {ex.Message} --> because they are not the current login and/or they are not the league commissioner");
+                            // }
 
-                            // some managers may keep their email address private / hidden; if that's the cause, you'll get an error;
-                            // this checks if there is an email; if there isn't, it sets the email as 'hidden'
-                            try
-                            {
-                                tB.PrimaryTeamManager.Email = managerPath["email"].ToString();
-                            }
-                            catch
-                            {
-                                tB.PrimaryTeamManager.Email = "hidden";
-                            }
+                            // // some managers may keep their email address private / hidden; if that's the cause, you'll get an error;
+                            // // this checks if there is an email; if there isn't, it sets the email as 'hidden'
+                            // try
+                            // {
+                            //     tB.PrimaryTeamManager.Email = managerPath["email"].ToString();
+                            // }
+                            // catch
+                            // {
+                            //     tB.PrimaryTeamManager.Email = "hidden";
+                            // }
 
-                            tB.PrimaryTeamManager.ImageUrl = managerPath["image_url"].ToString();
+                            // tB.PrimaryTeamManager.ImageUrl = managerPath["image_url"].ToString();
                         }
 
                         // if the manager type is JArray, then there are co-managers for the team; so go this path to finish creating the new YahooTeamBase
@@ -128,60 +145,152 @@ namespace BaseballScraper.Controllers.YahooControllers
                              tB.TeamManagersList            = new List<YahooManager>();
                         if(managerPathChildrenType == jArrayType)
                         {
-                            Console.WriteLine($"{tB.TeamName} has multiple managers");
-                            int countOfItemsInJArray = managerPath.Children().Count();
+                            PopulateTeamBaseWithCoManagers(tB, managerPath, teamManagersList);
+                            // Console.WriteLine($"{tB.TeamName} has multiple managers");
+                            // int countOfItemsInJArray = managerPath.Children().Count();
 
-                            for(var i = 0; i <= countOfItemsInJArray - 1; i++)
-                            {
-                                tB.PrimaryTeamManager.ManagerId = managerPath[i]["manager_id"].ToString();
+                            // for(var i = 0; i <= countOfItemsInJArray - 1; i++)
+                            // {
+                            //     tB.PrimaryTeamManager.ManagerId = managerPath[i]["manager_id"].ToString();
 
-                                string nickname = "";
+                            //     string nickname = "";
 
-                                tB.PrimaryTeamManager.NickName = nickname = managerPath[i]["nickname"].ToString();
-                                    Console.WriteLine($"generating managers for {nickname}");
+                            //     tB.PrimaryTeamManager.NickName = nickname = managerPath[i]["nickname"].ToString();
+                            //         Console.WriteLine($"generating managers for {nickname}");
 
-                                tB.PrimaryTeamManager.Guid = managerPath[i]["guid"].ToString();
-                                // tB.PrimaryTeamManager.IsCommissioner = managerPath[i]["is_commissioner"].ToString();
-                                // tB.PrimaryTeamManager.IsCurrentLogin = managerPath[i]["is_current_login"].ToString();
+                            //     tB.PrimaryTeamManager.Guid = managerPath[i]["guid"].ToString();
+                            //     // tB.PrimaryTeamManager.IsCommissioner = managerPath[i]["is_commissioner"].ToString();
+                            //     // tB.PrimaryTeamManager.IsCurrentLogin = managerPath[i]["is_current_login"].ToString();
 
-                                // some managers may keep their email address private / hidden; if that's the case, you'll get an error;
-                                // this checks if there is an email; if there isn't, it sets the email as 'hidden' so you don't get an error
-                                try
-                                {
-                                    tB.PrimaryTeamManager.Email = managerPath[i]["email"].ToString();
-                                }
-                                catch
-                                {
-                                    tB.PrimaryTeamManager.Email = "hidden";
-                                }
+                            //     // some managers may keep their email address private / hidden; if that's the case, you'll get an error;
+                            //     // this checks if there is an email; if there isn't, it sets the email as 'hidden' so you don't get an error
+                            //     try
+                            //     {
+                            //         tB.PrimaryTeamManager.Email = managerPath[i]["email"].ToString();
+                            //     }
+                            //     catch
+                            //     {
+                            //         tB.PrimaryTeamManager.Email = "hidden";
+                            //     }
 
-                                tB.PrimaryTeamManager.ImageUrl = managerPath[i]["image_url"].ToString();
+                            //     tB.PrimaryTeamManager.ImageUrl = managerPath[i]["image_url"].ToString();
 
-                                YahooManager manager = new YahooManager()
-                                {
-                                    ManagerId = managerPath[i]["manager_id"].ToString(),
-                                    NickName  = managerPath[i]["nickname"].ToString(),
-                                    Guid      = managerPath[i]["guid"].ToString(),
-                                    // IsCommissioner = managerPath[i]["is_commissioner"].ToString(),
-                                    // IsCurrentLogin = managerPath[i]["is_current_login"].ToString(),
-                                    Email    = tB.PrimaryTeamManager.Email,
-                                    ImageUrl = managerPath[i]["image_url"].ToString()
-                                };
+                            //     YahooManager manager = new YahooManager()
+                            //     {
+                            //         ManagerId = managerPath[i]["manager_id"].ToString(),
+                            //         NickName  = managerPath[i]["nickname"].ToString(),
+                            //         Guid      = managerPath[i]["guid"].ToString(),
+                            //         // IsCommissioner = managerPath[i]["is_commissioner"].ToString(),
+                            //         // IsCurrentLogin = managerPath[i]["is_current_login"].ToString(),
+                            //         Email    = tB.PrimaryTeamManager.Email,
+                            //         ImageUrl = managerPath[i]["image_url"].ToString()
+                            //     };
 
-                                teamManagersList.Add(manager);
-                                tB.TeamManagersList.Add(manager);
-                            }
+                            //     teamManagersList.Add(manager);
+                            //     tB.TeamManagersList.Add(manager);
+                            // }
 
-                            _h.Dig(teamManagersList);
+                            // _h.Dig(teamManagersList);
                         }
-                _h.Dig(tB);
-            }
+
+
             // SaveObjectToDatabase(tB);
 
             _h.CompleteMethod();
 
             return tB;
         }
+
+
+
+        public YahooTeamBase PopulateTeamBaseWithOneManager([FromQuery] YahooTeamBase tB, [FromQuery] JToken managerPath)
+        {
+            tB.PrimaryTeamManager.ManagerId = managerPath["manager_id"].ToString();
+            tB.PrimaryTeamManager.NickName  = managerPath["nickname"].ToString();
+            tB.PrimaryTeamManager.Guid      = managerPath["guid"].ToString();
+            try
+            {
+                tB.PrimaryTeamManager.IsCommissioner = managerPath["is_commissioner"].ToString();
+                tB.PrimaryTeamManager.IsCurrentLogin = managerPath["is_current_login"].ToString();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"EXCEPTION MESSAGE: {ex.Message} --> because they are not the current login and/or they are not the league commissioner");
+            }
+
+            // some managers may keep their email address private / hidden; if that's the cause, you'll get an error;
+            // this checks if there is an email; if there isn't, it sets the email as 'hidden'
+            try
+            {
+                tB.PrimaryTeamManager.Email = managerPath["email"].ToString();
+            }
+            catch
+            {
+                tB.PrimaryTeamManager.Email = "hidden";
+            }
+
+            tB.PrimaryTeamManager.ImageUrl = managerPath["image_url"].ToString();
+            return tB;
+        }
+
+
+
+
+        public List<YahooManager> PopulateTeamBaseWithCoManagers([FromQuery] YahooTeamBase tB, [FromQuery] JToken managerPath, List<YahooManager> teamManagersList)
+        {
+            Console.WriteLine($"{tB.TeamName} has multiple managers");
+            int countOfItemsInJArray = managerPath.Children().Count();
+
+            for(var i = 0; i <= countOfItemsInJArray - 1; i++)
+            {
+                tB.PrimaryTeamManager.ManagerId = managerPath[i]["manager_id"].ToString();
+
+                string nickname = "";
+
+                tB.PrimaryTeamManager.NickName = nickname = managerPath[i]["nickname"].ToString();
+                    Console.WriteLine($"generating managers for {nickname}");
+
+                tB.PrimaryTeamManager.Guid = managerPath[i]["guid"].ToString();
+                // tB.PrimaryTeamManager.IsCommissioner = managerPath[i]["is_commissioner"].ToString();
+                // tB.PrimaryTeamManager.IsCurrentLogin = managerPath[i]["is_current_login"].ToString();
+
+                // some managers may keep their email address private / hidden; if that's the case, you'll get an error;
+                // this checks if there is an email; if there isn't, it sets the email as 'hidden' so you don't get an error
+                try
+                {
+                    tB.PrimaryTeamManager.Email = managerPath[i]["email"].ToString();
+                }
+                catch
+                {
+                    tB.PrimaryTeamManager.Email = "hidden";
+                }
+
+                tB.PrimaryTeamManager.ImageUrl = managerPath[i]["image_url"].ToString();
+
+                YahooManager manager = new YahooManager()
+                {
+                    ManagerId = managerPath[i]["manager_id"].ToString(),
+                    NickName  = managerPath[i]["nickname"].ToString(),
+                    Guid      = managerPath[i]["guid"].ToString(),
+                    // IsCommissioner = managerPath[i]["is_commissioner"].ToString(),
+                    // IsCurrentLogin = managerPath[i]["is_current_login"].ToString(),
+                    Email    = tB.PrimaryTeamManager.Email,
+                    ImageUrl = managerPath[i]["image_url"].ToString()
+                };
+
+                teamManagersList.Add(manager);
+                tB.TeamManagersList.Add(manager);
+            }
+
+            _h.Dig(teamManagersList);
+            return teamManagersList;
+        }
+
+
+
+
+
+
 
 
         // optional; a different way to set a YahooTeamBase
