@@ -21,10 +21,9 @@ namespace BaseballScraper.Controllers.YahooControllers
         private readonly Helpers _h = new Helpers();
         private static readonly YahooApiEndPoints _endPoints = new YahooApiEndPoints();
         private readonly TheGameIsTheGameConfiguration _theGameConfig;
-        // private static readonly YahooApiEndPoints endPoints = new YahooApiEndPoints();
         private static YahooApiRequestController _yahooApiRequestController;
         private readonly YahooAuthController _yahooAuthController = new YahooAuthController();
-        public string _sessionIdKey = "sessionid";
+
 
         public YahooManagerController(IOptions<TheGameIsTheGameConfiguration> theGameConfig, YahooApiRequestController yahooApiRequestController, YahooAuthController yahooAuthController)
         {
@@ -34,10 +33,13 @@ namespace BaseballScraper.Controllers.YahooControllers
         }
 
 
+        public YahooManagerController(){}
+
+
         [Route("test")]
         public void TestYahooManagerController()
         {
-
+            var listOfManagers = GetListOfAllManagersInLeague(10);
         }
 
 
@@ -53,7 +55,7 @@ namespace BaseballScraper.Controllers.YahooControllers
         // 9 : DBra
         // 10: MC
 
-        #region GET MANAGER DATA ------------------------------------------------------------
+        #region YAHOO MANAGER - PRIMARY METHODS ------------------------------------------------------------
 
 
             // STATUS [ June 8, 2019 ] : this works
@@ -112,7 +114,6 @@ namespace BaseballScraper.Controllers.YahooControllers
             }
 
 
-
             // STATUS [ June 8, 2019 ] : this works
             /// <summary>
             ///     This is the same thing as 'GetYahooManagerModel()' method except managerId is passed in through url
@@ -169,7 +170,7 @@ namespace BaseballScraper.Controllers.YahooControllers
             /// </summary>
             /// <param name="NumberOfTeams">
             ///     The total number of teams in the league
-            ///     Assumes 1 manager per team; if a team is co-managed it just gives you mgr for that eam
+            ///     Assumes 1 manager per team; if a team is co-managed it just gives you one mgr for that team
             /// </param>
             /// <example>
             ///     var listOfManagers = GetListOfAllManagersInLeague(10);
@@ -204,7 +205,7 @@ namespace BaseballScraper.Controllers.YahooControllers
             // }
 
 
-        #endregion GET MANAGER DATA ------------------------------------------------------------
+        #endregion YAHOO MANAGER - PRIMARY METHODS ------------------------------------------------------------
 
 
 

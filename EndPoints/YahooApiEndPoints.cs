@@ -473,9 +473,10 @@ namespace BaseballScraper.EndPoints
 
 
         // https://developer.yahoo.com/fantasysports/guide/roster-resource.html
-        #region ROSTER END POINTS ------------------------------------------------------------
+        // https://fantasysports.yahooapis.com/fantasy/v2/team/253.l.102614.t.10/roster/players
+        #region ROSTER RESOURCE END POINTS ------------------------------------------------------------
 
-            public EndPoint RosterPlayersEndPoint (string leaguekey, int teamnumber)
+            public EndPoint RosterResourceEndPoint(string leaguekey, int teamnumber)
             {
                 EndPointType = "roster";
                 return new EndPoint
@@ -485,7 +486,86 @@ namespace BaseballScraper.EndPoints
                 };
             }
 
+
+            // public EndPoint RosterPlayersEndPoint (string leaguekey, int teamnumber)
+            // {
+            //     EndPointType = "roster";
+            //     return new EndPoint
+            //     {
+            //         BaseUri      = baseUri,
+            //         ResourceType = $"/team/{leaguekey}.t.{teamnumber}/{EndPointType}/players"
+            //     };
+            // }
+
         #endregion ROSTER END POINTS ------------------------------------------------------------
+
+
+
+
+
+        // https://developer.yahoo.com/fantasysports/guide/#players-collection
+        #region PLAYERS COLLECTION END POINTS ------------------------------------------------------------
+
+
+            public EndPoint PlayersCollectionForPlayerName (string leagueKey, string playerName)
+            {
+                EndPointType = "players";
+                return new EndPoint
+                {
+                    BaseUri      = baseUri,
+                    ResourceType = $"/league/{leagueKey}/{EndPointType};search={playerName}"
+                };
+            }
+
+            public EndPoint PlayersCollectionForPlayerNameAndPosition (string leagueKey, string playerName, string position)
+            {
+                EndPointType = "players";
+                return new EndPoint
+                {
+                    BaseUri      = baseUri,
+                    ResourceType = $"/league/{leagueKey}/{EndPointType};search={playerName};position={position}"
+                };
+            }
+
+            public EndPoint PlayersCollectionForPosition (string leagueKey, string position)
+            {
+                EndPointType = "players";
+                return new EndPoint
+                {
+                    BaseUri      = baseUri,
+                    ResourceType = $"/league/{leagueKey}/{EndPointType};position={position}"
+                };
+            }
+
+
+            public EndPoint PlayersCollectionForPositionAndStatus (string leagueKey, string position, string status)
+            {
+                EndPointType = "players";
+                return new EndPoint
+                {
+                    BaseUri      = baseUri,
+                    ResourceType = $"/league/{leagueKey}/{EndPointType};position={position};status={status}"
+                };
+            }
+
+
+            public EndPoint PlayersCollectionForPositionStatusAndCount (string leagueKey, string position, string status, string count)
+            {
+                EndPointType = "players";
+                return new EndPoint
+                {
+                    BaseUri      = baseUri,
+                    ResourceType = $"/league/{leagueKey}/{EndPointType};position={position};status={status};count={count}"
+                };
+            }
+
+
+
+        #endregion PLAYERS COLLECTION END POINTS ------------------------------------------------------------
+
+
+
+
 
 
 
