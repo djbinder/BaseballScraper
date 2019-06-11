@@ -28,6 +28,8 @@ namespace BaseballScraper.Controllers.YahooControllers
         public static readonly string theGameConfigFilePath = "Configuration/theGameIsTheGameConfig.json";
         public static readonly JsonHandler.NewtonsoftJsonHandlers _newtonHandler = new JsonHandler.NewtonsoftJsonHandlers();
 
+        // public static readonly YahooGameResourceConroller _yahooGameResourceController = new YahooGameResourceConroller();
+
 
 
         public YahooApiRequestController(YahooAuthController yahooAuthController, IHttpContextAccessor contextAccessor, BaseballScraperContext context,IOptions<TheGameIsTheGameConfiguration> theGameConfig)
@@ -65,8 +67,8 @@ namespace BaseballScraper.Controllers.YahooControllers
 
 
 
-        // SEE: https://developer.yahoo.com/fantasysports/guide/#description
-        #region GENERATE YAHOO LEAGUE KEY ------------------------------------------------------------
+        // // SEE: https://developer.yahoo.com/fantasysports/guide/#description
+        // #region GENERATE YAHOO LEAGUE KEY ------------------------------------------------------------
 
 
             // STATUS [ June 7, 2019 ] : this works
@@ -135,7 +137,7 @@ namespace BaseballScraper.Controllers.YahooControllers
             }
 
 
-        #endregion GENERATE YAHOO LEAGUE KEY ------------------------------------------------------------
+        // #endregion GENERATE YAHOO LEAGUE KEY ------------------------------------------------------------
 
 
 
