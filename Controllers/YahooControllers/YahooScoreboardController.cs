@@ -26,11 +26,21 @@ namespace BaseballScraper.Controllers.YahooControllers
         private readonly TheGameIsTheGameConfiguration _theGameConfig;
         private static YahooApiRequestController _yahooApiRequestController;
 
+        public static readonly YahooGameResourceConroller _yahooGameResourceController = new YahooGameResourceConroller();
+
         public YahooScoreboardController(IOptions<TheGameIsTheGameConfiguration> theGameConfig, YahooApiRequestController yahooApiRequestController)
         {
             _theGameConfig       = theGameConfig.Value;
             _yahooApiRequestController = yahooApiRequestController;
         }
+
+
+        [Route("test")]
+        public void TestYahooManagerController()
+        {
+            CreateYahooLeagueScoreboard();
+        }
+
 
         // TODO: add XML summary comments
         // Step 1
@@ -39,7 +49,7 @@ namespace BaseballScraper.Controllers.YahooControllers
             _h.StartMethod();
 
             // retrieve the league key from user secrets / yahoo league config
-            string leagueKey = _theGameConfig.LeagueKey;
+            string leagueKey = _yahooApiRequestController.GetTheGameIsTheGameLeagueKey();
 
             var uriLeagueScoreboard = endPoints.LeagueSeasonScoreboardEndPoint(leagueKey).EndPointUri;
 

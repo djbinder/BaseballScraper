@@ -60,15 +60,17 @@ namespace BaseballScraper.Controllers.PlayerControllers
         // public GoogleSheetsConnector _gSC = new GoogleSheetsConnector();
 
 
+        public PlayerBaseController() {}
+
+
 
         [Route("test")]
-        public IActionResult ViewPlayerBaseHome()
+        public void ViewPlayerBaseHome()
         {
-            string content = "player note main content";
             // PlayerBaseFromGoogleSheet.GetAllPlayerBaseObjectsFromGoogleSheet("A5:AP2284");
 
             _pbCsv.DownloadCrunchTimePlayerBaseCsvFromLink();
-            return Content(content);
+            // return Content(content);
         }
 
 
@@ -80,9 +82,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
             private static readonly string sfbbMapDocName = "SfbbPlayerIdMap";
             private static readonly string sfbbMapTabId = "SFBB_PLAYER_ID_MAP";
 
-            public PlayerBaseFromGoogleSheet()
-            {
-            }
+            public PlayerBaseFromGoogleSheet() { }
 
 
             #region GOOGLE SHEETS: ALL PLAYER BASES ------------------------------------------------------------
@@ -167,6 +167,8 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
 
 
+
+
             #region GOOGLE SHEETS: ONE PLAYER BASE ------------------------------------------------------------
 
                 public static void GetOnePlayerBaseColumnFromGoogleSheet(string range)
@@ -186,16 +188,18 @@ namespace BaseballScraper.Controllers.PlayerControllers
         [Route("excel")]
         public class PlayerBaseFromExcel
         {
-            public PlayerBaseFromExcel()
-            {
-
-            }
+            public PlayerBaseFromExcel() { }
 
             #region EXCEL: ALL PLAYER BASES ------------------------------------------------------------
 
+
                 // STATUS: this works
-                /// <summary> Retrieves all records from PlayerBase.xlsx document </summary>
-                /// <returns> IEnumerable<PlayerBase> allPlayerBases </returns>
+                /// <summary>
+                ///     Retrieves all records from PlayerBase.xlsx document
+                /// </summary>
+                /// <returns>
+                ///     IEnumerable<PlayerBase> allPlayerBases
+                /// </returns>
                 public IEnumerable<PlayerBase> GetAllPlayerBasesFromExcel()
                 {
                     // Ganss.Excel.ExcelMapper+<Fetch>d__34`1[BaseballScraper.Models.PlayerBase]
@@ -203,17 +207,25 @@ namespace BaseballScraper.Controllers.PlayerControllers
                     var allPlayerBases = new ExcelMapper("BaseballData/PlayerBase/PlayerBase.xlsx").Fetch<PlayerBase>();
 
                     var countOfAllPlayerBases = allPlayerBases.ToList().Count();
-                        Console.WriteLine($"Current # of Players: {countOfAllPlayerBases}");
+                        // Console.WriteLine($"Current # of Players: {countOfAllPlayerBases}");
 
                     return allPlayerBases;
                 }
 
 
                 // STATUS: this works
-                /// <summary> Retrieves all records from PlayerBase.xlsx document for one team </summary>
-                /// <param name="teamNameFull"> A full mlb team name (e.g., "Boston Red Sox" </param>
-                /// <example> GetAllPlayerBasesForOneMlbTeam("Chicago Cubs"); </example>
-                /// <returns> IEnumerable<PlayerBase> allPlayerBases </returns>
+                /// <summary>
+                ///     Retrieves all records from PlayerBase.xlsx document for one team
+                /// </summary>
+                /// <param name="teamNameFull">
+                ///     A full mlb team name (e.g., "Boston Red Sox"
+                /// </param>
+                /// <example>
+                ///    var players = GetAllPlayerBasesForOneMlbTeam("Chicago Cubs");
+                /// </example>
+                /// <returns>
+                ///     IEnumerable<PlayerBase> allPlayerBases
+                /// </returns>
                 public IEnumerable<PlayerBase> GetAllPlayerBasesForOneMlbTeam(string teamNameFull)
                 {
                     var allPlayerBases = GetAllPlayerBasesFromExcel();
@@ -231,7 +243,10 @@ namespace BaseballScraper.Controllers.PlayerControllers
                     return playerBasesForOneMlbTeam;
                 }
 
+
             #endregion EXCEL: ALL PLAYER BASES ------------------------------------------------------------
+
+
 
 
 
@@ -239,47 +254,13 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
                 // STATUS: these all work
                 // TODO: there has got to be a way where you only need one method vs. separating into each like below
-                /// <summary> Each of methods in this section returns a player (from IEnumerable<PlayerBase>). The only difference is the type of Id you are passing in (e.g. MlbId, FanGraphsPlayerId, EspnPlayerId etc.) </summary>
+                /// <summary>
+                ///     Each of methods in this section returns a player (from IEnumerable<PlayerBase>)
+                ///     The only difference is the type of Id you are passing in (e.g. MlbId, FanGraphsPlayerId, EspnPlayerId etc.)
+                /// </summary>
                 /// <returns>
-                /// IEnumerable<PlayerBase> playerbase (i.e. a PlayerBase for one player)
+                ///     IEnumerable<PlayerBase> playerbase (i.e. a PlayerBase for one player)
                 /// </returns>
-
-                // NOTE: see XML comments at beginning of region
-                public IEnumerable<PlayerBase> GetOnePlayersBaseFromMlbId(string playersMlbId)
-                {
-                    var allPlayerBases = GetAllPlayerBasesFromExcel();
-
-                    // IEnumerable<PlayerBase> onePlayersBase
-                    var onePlayersBase = from playerBases in allPlayerBases
-                        where playerBases.MlbId == playersMlbId
-                        select playerBases;
-
-                    // ITEM type --> BaseballScraper.Models.PlayerBase
-                    foreach(var item in onePlayersBase)
-                    {
-                        Console.WriteLine(item.CbsName);
-                    }
-                    return onePlayersBase;
-                }
-
-
-                // NOTE: see XML comments at beginning of region
-                public IEnumerable<PlayerBase> GetOnePlayersBaseFromSfbbId(string playersSfbbPlayerId)
-                {
-                    var allPlayerBases = GetAllPlayerBasesFromExcel();
-
-                    var onePlayersBase =
-                        from playerBases in allPlayerBases
-                        where playerBases.SfbbPlayerId == playersSfbbPlayerId
-                        select playerBases;
-
-                    // ITEM type --> BaseballScraper.Models.PlayerBase
-                    foreach(var item in onePlayersBase)
-                    {
-                        Console.WriteLine(item.CbsName);
-                    }
-                    return onePlayersBase;
-                }
 
 
                 // NOTE: see XML comments at beginning of region
@@ -290,25 +271,6 @@ namespace BaseballScraper.Controllers.PlayerControllers
                     var onePlayersBase =
                         from playerBases in allPlayerBases
                         where playerBases.BaseballHqPlayerId == playersBaseballHqPlayerId
-                        select playerBases;
-
-                    // ITEM type --> BaseballScraper.Models.PlayerBase
-                    foreach(var item in onePlayersBase)
-                    {
-                        Console.WriteLine(item.CbsName);
-                    }
-                    return onePlayersBase;
-                }
-
-
-                // NOTE: see XML comments at beginning of region
-                public IEnumerable<PlayerBase> GetOnePlayersBaseFromDavenportId(string playersDavenportPlayerId)
-                {
-                    var allPlayerBases = GetAllPlayerBasesFromExcel();
-
-                    var onePlayersBase =
-                        from playerBases in allPlayerBases
-                        where playerBases.DavenportId == playersDavenportPlayerId
                         select playerBases;
 
                     // ITEM type --> BaseballScraper.Models.PlayerBase
@@ -378,6 +340,25 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
 
                 // NOTE: see XML comments at beginning of region
+                public IEnumerable<PlayerBase> GetOnePlayersBaseFromDavenportId(string playersDavenportPlayerId)
+                {
+                    var allPlayerBases = GetAllPlayerBasesFromExcel();
+
+                    var onePlayersBase =
+                        from playerBases in allPlayerBases
+                        where playerBases.DavenportId == playersDavenportPlayerId
+                        select playerBases;
+
+                    // ITEM type --> BaseballScraper.Models.PlayerBase
+                    foreach(var item in onePlayersBase)
+                    {
+                        Console.WriteLine(item.CbsName);
+                    }
+                    return onePlayersBase;
+                }
+
+
+                // NOTE: see XML comments at beginning of region
                 public IEnumerable<PlayerBase> GetOnePlayersBaseFromEspnId(string playersEspnPlayerId)
                 {
                     var allPlayerBases = GetAllPlayerBasesFromExcel();
@@ -435,6 +416,25 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
 
                 // NOTE: see XML comments at beginning of region
+                public IEnumerable<PlayerBase> GetOnePlayersBaseFromMlbId(string playersMlbId)
+                {
+                    var allPlayerBases = GetAllPlayerBasesFromExcel();
+
+                    // IEnumerable<PlayerBase> onePlayersBase
+                    var onePlayersBase = from playerBases in allPlayerBases
+                        where playerBases.MlbId == playersMlbId
+                        select playerBases;
+
+                    // ITEM type --> BaseballScraper.Models.PlayerBase
+                    foreach(var item in onePlayersBase)
+                    {
+                        Console.WriteLine(item.CbsName);
+                    }
+                    return onePlayersBase;
+                }
+
+
+                // NOTE: see XML comments at beginning of region
                 public IEnumerable<PlayerBase> GetOnePlayersBaseFromNfbcId(string playersNfbcPlayerId)
                 {
                     var allPlayerBases = GetAllPlayerBasesFromExcel();
@@ -442,6 +442,26 @@ namespace BaseballScraper.Controllers.PlayerControllers
                     var onePlayersBase =
                         from playerBases in allPlayerBases
                         where playerBases.NfbcPlayerId == playersNfbcPlayerId
+                        select playerBases;
+
+                    // ITEM type --> BaseballScraper.Models.PlayerBase
+                    foreach(var item in onePlayersBase)
+                    {
+                        Console.WriteLine(item.CbsName);
+                    }
+                    return onePlayersBase;
+                }
+
+
+
+                // NOTE: see XML comments at beginning of region
+                public IEnumerable<PlayerBase> GetOnePlayersBaseFromOttoneuId(string playersOttoneuPlayerId)
+                {
+                    var allPlayerBases = GetAllPlayerBasesFromExcel();
+
+                    var onePlayersBase =
+                        from playerBases in allPlayerBases
+                        where playerBases.OttoneuPlayerId == playersOttoneuPlayerId
                         select playerBases;
 
                     // ITEM type --> BaseballScraper.Models.PlayerBase
@@ -473,6 +493,44 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
 
                 // NOTE: see XML comments at beginning of region
+                public IEnumerable<PlayerBase> GetOnePlayersBaseFromRotoWireId(string playersRotoWirePlayerId)
+                {
+                    var allPlayerBases = GetAllPlayerBasesFromExcel();
+
+                    var onePlayersBase =
+                        from playerBases in allPlayerBases
+                        where playerBases.RotoWirePlayerId == playersRotoWirePlayerId
+                        select playerBases;
+
+                    // ITEM type --> BaseballScraper.Models.PlayerBase
+                    foreach(var item in onePlayersBase)
+                    {
+                        Console.WriteLine(item.CbsName);
+                    }
+                    return onePlayersBase;
+                }
+
+
+                // NOTE: see XML comments at beginning of region
+                public IEnumerable<PlayerBase> GetOnePlayersBaseFromSfbbId(string playersSfbbPlayerId)
+                {
+                    var allPlayerBases = GetAllPlayerBasesFromExcel();
+
+                    var onePlayersBase =
+                        from playerBases in allPlayerBases
+                        where playerBases.SfbbPlayerId == playersSfbbPlayerId
+                        select playerBases;
+
+                    // ITEM type --> BaseballScraper.Models.PlayerBase
+                    foreach(var item in onePlayersBase)
+                    {
+                        Console.WriteLine(item.CbsName);
+                    }
+                    return onePlayersBase;
+                }
+
+
+                // NOTE: see XML comments at beginning of region
                 public IEnumerable<PlayerBase> GetOnePlayersBaseFromYahooId(string playersYahooPlayerId)
                 {
                     var allPlayerBases = GetAllPlayerBasesFromExcel();
@@ -490,43 +548,6 @@ namespace BaseballScraper.Controllers.PlayerControllers
                     return onePlayersBase;
                 }
 
-
-                // NOTE: see XML comments at beginning of region
-                public IEnumerable<PlayerBase> GetOnePlayersBaseFromOttoneuId(string playersOttoneuPlayerId)
-                {
-                    var allPlayerBases = GetAllPlayerBasesFromExcel();
-
-                    var onePlayersBase =
-                        from playerBases in allPlayerBases
-                        where playerBases.OttoneuPlayerId == playersOttoneuPlayerId
-                        select playerBases;
-
-                    // ITEM type --> BaseballScraper.Models.PlayerBase
-                    foreach(var item in onePlayersBase)
-                    {
-                        Console.WriteLine(item.CbsName);
-                    }
-                    return onePlayersBase;
-                }
-
-
-                // NOTE: see XML comments at beginning of region
-                public IEnumerable<PlayerBase> GetOnePlayersBaseFromRotoWireId(string playersRotoWirePlayerId)
-                {
-                    var allPlayerBases = GetAllPlayerBasesFromExcel();
-
-                    var onePlayersBase =
-                        from playerBases in allPlayerBases
-                        where playerBases.RotoWirePlayerId == playersRotoWirePlayerId
-                        select playerBases;
-
-                    // ITEM type --> BaseballScraper.Models.PlayerBase
-                    foreach(var item in onePlayersBase)
-                    {
-                        Console.WriteLine(item.CbsName);
-                    }
-                    return onePlayersBase;
-                }
 
 
                 // NOTE: for testing purposes only; tests all of the other methods in this section
@@ -583,6 +604,35 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
 
             #endregion EXCEL: PLAYER QUERY BY ANY PLAYER ID TYPE ------------------------------------------------------------
+
+
+
+
+
+            #region EXCEL: PLAYER QUERY BY PLAYER NAME ------------------------------------------------------------
+
+
+                // NOTE: see XML comments at beginning of region
+                public IEnumerable<PlayerBase> GetOnePlayersBaseFromYahooName(string playersYahooName)
+                {
+                    var allPlayerBases = GetAllPlayerBasesFromExcel();
+
+                    var onePlayersBase =
+                        from playerBases in allPlayerBases
+                        where playerBases.YahooName == playersYahooName
+                        select playerBases;
+
+                    // ITEM type --> BaseballScraper.Models.PlayerBase
+                    // foreach(var item in onePlayersBase)
+                    // {
+                    //     Console.WriteLine(item.YahooPlayerId);
+                    //     Console.WriteLine(item.YahooName);
+                    // }
+                    return onePlayersBase;
+                }
+
+
+            #endregion EXCEL: PLAYER QUERY BY PLAYER NAME ------------------------------------------------------------
         }
 
 
@@ -607,96 +657,99 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
 
 
-        public class PlayerBaseGenerator
-        {
 
-            #region ALL: GENERATE PLAYER BASE(S) ------------------------------------------------------------
 
-                // STATUS: this works
-                /// <summary> This method created a list of a player's ids from all id types available in the PlayerBase Excel file </summary>
-                /// <param name="playersBase"> An instantiated PlayerBase</param>
-                /// <returns> A list of all of a player's ids </returns>
-                public List<string> GetAllPlayerIdsList(PlayerBase playersBase)
-                {
-                    List<string> listOfPlayersIds = new List<string>
+
+        #region ALL: GENERATE PLAYER BASE(S) ------------------------------------------------------------
+
+
+            public class PlayerBaseGenerator
+            {
+                    // STATUS: this works
+                    /// <summary> This method created a list of a player's ids from all id types available in the PlayerBase Excel file </summary>
+                    /// <param name="playersBase"> An instantiated PlayerBase</param>
+                    /// <returns> A list of all of a player's ids </returns>
+                    public List<string> GetAllPlayerIdsList(PlayerBase playersBase)
                     {
-                        playersBase.MlbId,
-                        playersBase.SfbbPlayerId,
-                        playersBase.BaseballHqPlayerId,
-                        playersBase.DavenportId,
-                        playersBase.BaseballProspectusPlayerId,
-                        playersBase.BaseballReferencePlayerId,
-                        playersBase.CbsPlayerId,
-                        playersBase.EspnPlayerId,
-                        playersBase.FanGraphsPlayerId,
-                        playersBase.LahmanPlayerId,
-                        playersBase.NfbcPlayerId,
-                        playersBase.RetroPlayerId,
-                        playersBase.YahooPlayerId,
-                        playersBase.OttoneuPlayerId,
-                        playersBase.RotoWirePlayerId
-                    };
-
-                    foreach (var id in listOfPlayersIds)
-                        Console.WriteLine(id);
-
-                    listOfPlayersIds.ForEach((id) => Console.WriteLine($"id: {id}"));
-
-                    return listOfPlayersIds;
-                }
-
-
-                // STATUS: this works
-                /// <summary> This method created a dictionary of a player's ids from all id types available in the PlayerBase; The keys are the id type, the values are the actual id number  </summary>
-                /// <param name="playersBase"> An instantiated PlayerBase </param>
-                /// <returns> A dictionary of all of a player's ids with key value pairs of Key: Id type, Value: id number/string </returns>
-                public Dictionary<string, string> GetAllPlayerIdsDictionary(PlayerBase playersBase)
-                {
-                    Dictionary<string, string> dictionaryOfPlayersIds = new Dictionary<string, string>
-                    {
-                        { "MlbId", playersBase.MlbId },
-                        { "SfbbPlayerId", playersBase.SfbbPlayerId },
-                        { "BaseballHqPlayerId", playersBase.BaseballHqPlayerId },
-                        { "DavenportId", playersBase.DavenportId },
-                        { "BaseballProspectusPlayerId", playersBase.BaseballProspectusPlayerId },
-                        { "BaseballReferencePlayerId", playersBase.BaseballReferencePlayerId },
-                        { "CbsPlayerId", playersBase.CbsPlayerId },
-                        { "EspnPlayerId", playersBase.EspnPlayerId },
-                        { "FanGraphsPlayerId", playersBase.FanGraphsPlayerId },
-                        { "LahmanPlayerId", playersBase.LahmanPlayerId },
-                        { "NfbcPlayerId", playersBase.NfbcPlayerId },
-                        { "RetroPlayerId", playersBase.RetroPlayerId },
-                        { "YahooPlayerId", playersBase.YahooPlayerId },
-                        { "OttoneuPlayerId", playersBase.OttoneuPlayerId },
-                        { "RotoWirePlayerId", playersBase.RotoWirePlayerId }
-                    };
-
-                    foreach (var kvp in dictionaryOfPlayersIds)
+                        List<string> listOfPlayersIds = new List<string>
                         {
-                            Console.WriteLine($"{kvp.Key} -->  {kvp.Value}");
-                        }
+                            playersBase.MlbId,
+                            playersBase.SfbbPlayerId,
+                            playersBase.BaseballHqPlayerId,
+                            playersBase.DavenportId,
+                            playersBase.BaseballProspectusPlayerId,
+                            playersBase.BaseballReferencePlayerId,
+                            playersBase.CbsPlayerId,
+                            playersBase.EspnPlayerId,
+                            playersBase.FanGraphsPlayerId,
+                            playersBase.LahmanPlayerId,
+                            playersBase.NfbcPlayerId,
+                            playersBase.RetroPlayerId,
+                            playersBase.YahooPlayerId,
+                            playersBase.OttoneuPlayerId,
+                            playersBase.RotoWirePlayerId
+                        };
 
+                        foreach (var id in listOfPlayersIds)
+                            Console.WriteLine(id);
 
-                    return dictionaryOfPlayersIds;
-                }
+                        listOfPlayersIds.ForEach((id) => Console.WriteLine($"id: {id}"));
 
-
-                // NOTE: not sure either of these are actually needed; but good practice regardless
-                public void GetPlayerBaseProperties()
-                {
-                    PropertyInfo[] propertyInfos = typeof(PlayerBase).GetProperties();
-
-                    Array.Sort(propertyInfos,
-                        delegate(PropertyInfo propertyInfo1, PropertyInfo propertyInfo2)
-                        { return propertyInfo1.Name.CompareTo(propertyInfo2.Name); });
-
-                    foreach(PropertyInfo propertyInfo in propertyInfos)
-                    {
-                        Console.WriteLine(propertyInfo.Name);
+                        return listOfPlayersIds;
                     }
-                }
 
-        }
+
+                    // STATUS: this works
+                    /// <summary> This method created a dictionary of a player's ids from all id types available in the PlayerBase; The keys are the id type, the values are the actual id number  </summary>
+                    /// <param name="playersBase"> An instantiated PlayerBase </param>
+                    /// <returns> A dictionary of all of a player's ids with key value pairs of Key: Id type, Value: id number/string </returns>
+                    public Dictionary<string, string> GetAllPlayerIdsDictionary(PlayerBase playersBase)
+                    {
+                        Dictionary<string, string> dictionaryOfPlayersIds = new Dictionary<string, string>
+                        {
+                            { "MlbId", playersBase.MlbId },
+                            { "SfbbPlayerId", playersBase.SfbbPlayerId },
+                            { "BaseballHqPlayerId", playersBase.BaseballHqPlayerId },
+                            { "DavenportId", playersBase.DavenportId },
+                            { "BaseballProspectusPlayerId", playersBase.BaseballProspectusPlayerId },
+                            { "BaseballReferencePlayerId", playersBase.BaseballReferencePlayerId },
+                            { "CbsPlayerId", playersBase.CbsPlayerId },
+                            { "EspnPlayerId", playersBase.EspnPlayerId },
+                            { "FanGraphsPlayerId", playersBase.FanGraphsPlayerId },
+                            { "LahmanPlayerId", playersBase.LahmanPlayerId },
+                            { "NfbcPlayerId", playersBase.NfbcPlayerId },
+                            { "RetroPlayerId", playersBase.RetroPlayerId },
+                            { "YahooPlayerId", playersBase.YahooPlayerId },
+                            { "OttoneuPlayerId", playersBase.OttoneuPlayerId },
+                            { "RotoWirePlayerId", playersBase.RotoWirePlayerId }
+                        };
+
+                        foreach (var kvp in dictionaryOfPlayersIds)
+                            {
+                                Console.WriteLine($"{kvp.Key} -->  {kvp.Value}");
+                            }
+
+
+                        return dictionaryOfPlayersIds;
+                    }
+
+
+                    // NOTE: not sure either of these are actually needed; but good practice regardless
+                    public void GetPlayerBaseProperties()
+                    {
+                        PropertyInfo[] propertyInfos = typeof(PlayerBase).GetProperties();
+
+                        Array.Sort(propertyInfos,
+                            delegate(PropertyInfo propertyInfo1, PropertyInfo propertyInfo2)
+                            { return propertyInfo1.Name.CompareTo(propertyInfo2.Name); });
+
+                        foreach(PropertyInfo propertyInfo in propertyInfos)
+                        {
+                            Console.WriteLine(propertyInfo.Name);
+                        }
+                    }
+
+            }
 
 
         #endregion ALL: GENERATE PLAYER BASE(S) ------------------------------------------------------------

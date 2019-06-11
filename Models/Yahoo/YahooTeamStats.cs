@@ -42,12 +42,14 @@ namespace BaseballScraper.Models.Yahoo
 
     // }
 
-    public class YahooTeamStats
+    public class YahooTeamStats : BaseEntity
     {
         public string Season { get; set; }
 
-        [XmlElement (ElementName = "coverage_type")]
+
+        // [XmlElement (ElementName = "coverage_type")]
         public string StatCoverageType { get; set; }
+
 
         [XmlElement (ElementName = "week")]
         public string WeekNumber { get; set; }
@@ -55,6 +57,15 @@ namespace BaseballScraper.Models.Yahoo
 
     public class YahooTeamStatsList
     {
+        public YahooTeamStats YahooTeamStats { get; set; }
+        public string TeamKey { get; set; }
+        public string TeamId { get; set; }
+        public string TeamName { get; set; }
+
+        public string ManagerId { get; set; }
+        public string ManagerNickName { get; set; }
+        public string ManagerGuid { get; set; }
+
         public string HitsDividedByAtBatsId { get; set; } = "60";
         public string HitsDividedByAtBatsTotal { get; set; }
 

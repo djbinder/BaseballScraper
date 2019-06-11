@@ -59,12 +59,6 @@ namespace BaseballScraper.Controllers.YahooControllers
             ExchangeRefreshTokenForNewAccessTokenJObject();
         }
 
-        // [Route("test2")]
-        // public void ViewYahooAuthHomePage2()
-        // {
-        //     _h.StartMethod();
-        //     ExchangeRefreshTokenForNewAccessToken();
-        // }
 
 
 
@@ -162,7 +156,6 @@ namespace BaseballScraper.Controllers.YahooControllers
             private JObject CreateYahooAccessTokenResponseJObject()
             {
                 // _h.StartMethod();
-
                 // consumerKey and consumerSecret are unique to each yahoo app; Here, they are called from Secrets/ Config File
                 var consumerKey    = _yahooConfig.ClientId;
                 var consumerSecret = _yahooConfig.ClientSecret;
@@ -339,6 +332,7 @@ namespace BaseballScraper.Controllers.YahooControllers
                 Uri address = new Uri("https://api.login.yahoo.com/oauth2/get_token");
 
                 HttpWebRequest request = WebRequest.Create(address) as HttpWebRequest;
+                // _h.Dig(request);
 
                 request = ExchangeRefreshTokenRequestAppender(request, consumerKey, consumerSecret);
 
