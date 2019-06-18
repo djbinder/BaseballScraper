@@ -11,11 +11,11 @@ using BaseballScraper.Models;
 using BaseballScraper.Models.Yahoo;
 using Newtonsoft.Json;
 
-namespace BaseballScraper.Models.Yahoo
+namespace BaseballScraper.Models.Yahoo.Resources.YahooTeamResource
 {
     // meta: /fantasy/v2/team/{team_key}/metadata
     [XmlRoot(ElementName = "team")]
-    public class YahooTeamBase
+    public class YahooTeamResource
     {
         [Key]
         public int YahooTeamBaseRecordId { get; set; }
@@ -65,7 +65,7 @@ namespace BaseballScraper.Models.Yahoo
         [XmlElement (ElementName = "manager")]
         public YahooManager PrimaryTeamManager { get; set; }
 
-        public YahooTeamBase()
+        public YahooTeamResource()
         {
             TeamLogo           = new YahooTeamLogo();
             TeamRosterAdds     = new YahooTeamRosterAdds();

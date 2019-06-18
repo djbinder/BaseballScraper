@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using BaseballScraper.Models;
 using BaseballScraper.Infrastructure;
+using System.Diagnostics;
+using static BaseballScraper.Infrastructure.Helpers;
 
 namespace BaseballScraper
 {
@@ -92,10 +94,6 @@ namespace BaseballScraper
             });
 
 
-
-
-
-
             // TWITTER CONFIGURATION
             services.Configure<TwitterConfiguration>(Configuration.GetSection("TwitterConfiguration"));
             services.AddScoped(cfg => cfg.GetService<IOptionsSnapshot<TwitterConfiguration>>().Value);
@@ -146,8 +144,6 @@ namespace BaseballScraper
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-
-
             services.AddDistributedMemoryCache();
             services.AddSession (options =>
             {
@@ -155,7 +151,6 @@ namespace BaseballScraper
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
-
 
             services.AddMvc ()
                 .SetCompatibilityVersion (CompatibilityVersion.Version_2_1)
@@ -167,37 +162,20 @@ namespace BaseballScraper
                     options.Conventions.AddPageRoute("/Dashboard","");
                 });
 
-            // services.AddMvc().AddControllersAsServices();
             services.AddTransient<BaseballScraper.Controllers.YahooControllers.YahooAuthController>();
-
-
-
 
             services.Configure<BaseballScraperContext>(Configuration);
             services.Configure<BaseballScraperContext>(config =>
             {
                 config.ConnectionString = Configuration["DBInfo:ConnectionString"];
                 config.Name             = Configuration["DBInfo:Name"];
-                Console.WriteLine($"config.ConnectionString: {config.ConnectionString}");
             });
-
-
-            // Console.WriteLine($"Cstring: {Configuration["DBInfo:ConnectionString"]}");
-            // Console.WriteLine($"Name: {Configuration["DBInfo:Name"]}");
-
-            // services.Configure<PostGresDbConfiguration>(config =>
-            // {
-            //     config.ConnectionString = Configuration["DBInfo:ConnectionString"];
-            //     config.Name             = Configuration["DBInfo:Name"];
-            //     Console.WriteLine($"config.ConnectionString: {config.ConnectionString}");
-            //     Console.WriteLine($"config.Name: {config.Name}");
-            // });
-
-            // Console.WriteLine($"Cstring: {Configuration["DBInfo:ConnectionString"]}");
-            // Console.WriteLine($"Name: {Configuration["DBInfo:Name"]}");
 
             services.AddDbContext<BaseballScraperContext>(options => options.UseNpgsql (Configuration["DBInfo:ConnectionString"]));
 
+            // Connects to Diagnoser Option 2 in 'Configure' section below
+            // https://andrewlock.net/understanding-your-middleware-pipeline-with-the-middleware-analysis-package/
+            services.AddMiddlewareAnalysis();
 
             // example of how to console config items
             // Console.WriteLine(Configuration["YahooConfiguration:Name"]);
@@ -205,9 +183,23 @@ namespace BaseballScraper
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure (IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IOptionsMonitor<TwitterConfiguration> twitterConfigMonitor)
+        public void Configure (IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IOptionsMonitor<TwitterConfiguration> twitterConfigMonitor, DiagnosticListener diagnosticListener, DiagnosticListener fullDiagnosticListener)
         {
-            // StartMethod();
+            // DIAGNOSER: Option 1
+            // these connect to diagnostic helpers
+            // https://andrewlock.net/logging-using-diagnosticsource-in-asp-net-core/
+            // Listen for middleware events and log them to the console.
+            var listener = new MiddlewareDiagnoserListener();
+                diagnosticListener.SubscribeWithAdapter(listener);
+                // uncomment this to log middleware info for each request
+                // app.UseMiddleware<MiddlewareDiagnoser>();
+
+            // DIAGNOSER: Option 2
+            // these connect to diagnostic helpers
+            // https://andrewlock.net/understanding-your-middleware-pipeline-with-the-middleware-analysis-package/
+            var fullListener = new FullDiagnosticListener();
+                // uncomment this to log middleware info for each request
+                // fullDiagnosticListener.SubscribeWithAdapter(fullListener);
 
 
             HttpHelper.Configure(app.ApplicationServices.GetRequiredService<IHttpContextAccessor>());
@@ -241,6 +233,7 @@ namespace BaseballScraper
             app.UseCookiePolicy ();
             app.UseAuthentication();
             app.UseMvc();
+            // app.UseMvcWithDefaultRoute();
             // app.UseMvc(routes =>
             // {
             //     routes.MapRoute(

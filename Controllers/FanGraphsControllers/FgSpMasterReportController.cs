@@ -72,13 +72,29 @@ namespace BaseballScraper.Controllers.FanGraphs
 
             // STATUS: this works
             // Step 1:
-            /// <summary> This defines the first url to scrape; At times, you may need to loop through multiple urls and the url defined here is the first url in the loop </summary>
-            /// <param name="minInningsPitched"> The minimum number of innings pitched a pitcher needs to be included in the results of the scrape </param>
-            /// <param name="year"> The Mlb season year </param>
-            /// <param name="page"> The page to being scraping; this typically will be one. But if you want to start on page 2 (for example), just set 'page' to 2 </param>
-            /// <param name="recordsPerPage"> The number of rows in the table; Standard options include 30, 50 , 100; This will ultimately influence the total number of urls and their tables to scrape </param>
-            /// <returns> A string url </returns>
-            public string SetInitialUrlToScrape(int minInningsPitched, int year, int page, int recordsPerPage)
+            /// <summary>
+            ///     This defines the first url to scrape
+            ///     At times, you may need to loop through multiple urls and the url defined here is the first url in the loop
+            /// </summary>
+            /// <param name="minInningsPitched">
+            ///     The minimum number of innings pitched a pitcher needs to be included in the results of the scrape
+            /// </param>
+            /// <param name="year">
+            ///     The Mlb season year
+            /// </param>
+            /// <param name="page">
+            ///     The page to being scraping; this typically will be one
+            ///     But if you want to start on page 2 (for example), just set 'page' to 2
+            /// </param>
+            /// <param name="recordsPerPage">
+            ///     The number of rows in the table
+            ///     Standard options include 30, 50 , 100
+            ///     This will ultimately influence the total number of urls and their tables to scrape
+            /// </param>
+            /// <returns>
+            ///     A string url
+            /// </returns>
+            private string SetInitialUrlToScrape(int minInningsPitched, int year, int page, int recordsPerPage)
             {
                 // var    newEndPoint        = _endPoints.StartingPitchersSimpleReportEndPoint(2019);
                 var    newEndPoint        = _endPoints.PitchingLeadersMasterStatsReportEndPoint(minInningsPitched, year, page, recordsPerPage);
@@ -89,14 +105,32 @@ namespace BaseballScraper.Controllers.FanGraphs
 
             // STATUS: this works
             // Step 2:
-            /// <summary> This counts the number of urls that will be scraped; It examines a specific html element on the fangraphs html page that shows the number of pages </summary>
-            /// <example> '70 items in 3 page' --> the '3' is what this method is looking for </example>
-            /// <param name="minInningsPitched"> The minimum number of innings pitched a pitcher needs to be included in the results of the scrape </param>
-            /// <param name="year"> The Mlb season year </param>
-            /// <param name="page"> The page to being scraping; this typically will be one. But if you want to start on page 2 (for example), just set 'page' to 2 </param>
-            /// <param name="recordsPerPage"> The number of rows in the table; Standard options include 30, 50 , 100; This will ultimately influence the total number of urls and their tables to scrape </param>
-            /// <returns> A number of the number of pages to scrape as part of the loop </returns>
-            public int GetNumberOfPagesToScrape(int minInningsPitched, int year, int page, int recordsPerPage)
+            /// <summary>
+            /// This counts the number of urls that will be scraped
+            /// It examines a specific html element on the fangraphs html page that shows the number of pages
+            /// </summary>
+            /// <example>
+            ///     '70 items in 3 page' --> the '3' is what this method is looking for
+            /// </example>
+            /// <param name="minInningsPitched">
+            ///     The minimum number of innings pitched a pitcher needs to be included in the results of the scrape
+            /// </param>
+            /// <param name="year">
+            ///     The Mlb season year
+            /// </param>
+            /// <param name="page">
+            ///     The page to being scraping
+            ///     This typically will be one
+            ///     But if you want to start on page 2 (for example), just set 'page' to 2
+            /// </param>
+            /// <param name="recordsPerPage">
+            ///     The number of rows in the table; Standard options include 30, 50 , 100
+            ///     This will ultimately influence the total number of urls and their tables to scrape
+            /// </param>
+            /// <returns>
+            ///     A number of the number of pages to scrape as part of the loop
+            /// </returns>
+            private int GetNumberOfPagesToScrape(int minInningsPitched, int year, int page, int recordsPerPage)
             {
                 string uriToBeginScraping = SetInitialUrlToScrape(minInningsPitched, year, page, recordsPerPage);
 
@@ -121,13 +155,16 @@ namespace BaseballScraper.Controllers.FanGraphs
 
             // STATUS: this works
             // Step 3 [1 of 2 Options]
-            /// <summary> OPTION 1: variables defined within the method (i.e minInningsPitched, year, page, recordsPerPage ). Retrieves all urls of pages that will be scraped and adds them to a list  </summary>
-            /// <example> '70 items in 3 page' --> the '3' is what this method is looking for </example>
-            // / <param name="minInningsPitched"> The minimum number of innings pitched a pitcher needs to be included in the results of the scrape </param>
-            // / <param name="year"> The Mlb season year </param>
-            // / <param name="page"> The page to being scraping; this typically will be one. But if you want to start on page 2 (for example), just set 'page' to 2 </param>
-            // / <param name="recordsPerPage"> The number of rows in the table; Standard options include 30, 50 , 100; This will ultimately influence the total number of urls and their tables to scrape </param>
-            /// <returns> A list of strings representing urls to be scraped </returns>
+            /// <summary>
+            ///     OPTION 1: variables defined within the method (i.e minInningsPitched, year, page, recordsPerPage )
+            ///     Retrieves all urls of pages that will be scraped and adds them to a list
+            /// </summary>
+            /// <example>
+            ///     '70 items in 3 page' --> the '3' is what this method is looking for
+            /// </example>
+            /// <returns>
+            ///     A list of strings representing urls to be scraped
+            /// </returns>
             private List<string> GetUrlsOfPagesToScrape()
             {
                 List<string> urlsOfPagesToScrape = new List<string> ();
@@ -161,13 +198,33 @@ namespace BaseballScraper.Controllers.FanGraphs
 
             // STATUS: this works
             // Step 3 [2 of 2 Options]
-            /// <summary> OPTION 2: parameters are passed into the  method (i.e minInningsPitched, year, page, recordsPerPage ). Retrieves all urls of pages that will be scraped and adds them to a list  </summary>
-            /// <example> '70 items in 3 page' --> the '3' is what this method is looking for </example>
-            /// <param name="minInningsPitched"> The minimum number of innings pitched a pitcher needs to be included in the results of the scrape </param>
-            /// <param name="year"> The Mlb season year </param>
-            /// <param name="page"> The page to being scraping; this typically will be one. But if you want to start on page 2 (for example), just set 'page' to 2 </param>
-            /// <param name="recordsPerPage"> The number of rows in the table; Standard options include 30, 50 , 100; This will ultimately influence the total number of urls and their tables to scrape </param>
-            /// <returns> A list of strings representing urls to be scraped </returns>
+            /// <summary>
+            ///     OPTION 2: parameters are passed into the  method (i.e minInningsPitched, year, page, recordsPerPage ).
+            ///     Retrieves all urls of pages that will be scraped and adds them to a list
+            /// </summary>
+            /// <example>
+            ///     var list = GetUrlsOfPagesToScrape(20, 2019, 50);
+            ///     '70 items in 3 page' --> the '3' is what this method is looking for
+            /// </example>
+            /// <param name="minInningsPitched">
+            ///     The minimum number of innings pitched a pitcher needs to be included in the results of the scrape
+            /// </param>
+            /// <param name="year">
+            ///     The Mlb season year
+            /// </param>
+            /// <param name="page">
+            ///     The page to being scraping
+            ///     This typically will be one
+            ///     But if you want to start on page 2 (for example), just set 'page' to 2
+            /// </param>
+            /// <param name="recordsPerPage">
+            ///     The number of rows in the table
+            ///     Standard options include 30, 50 , 100
+            ///     This will ultimately influence the total number of urls and their tables to scrape
+            /// </param>
+            /// <returns>
+            ///     A list of strings representing urls to be scraped
+            /// </returns>
             private List<string> GetUrlsOfPagesToScrape(int minInningsPitched, int year, int recordsPerPage)
             {
                 List<string> urlsOfPagesToScrape = new List<string> ();
@@ -202,9 +259,13 @@ namespace BaseballScraper.Controllers.FanGraphs
 
             // STATUS: this works
             // Step 4
-            /// <summary> Scrape the pitchers table and get all their data </summary>
-            /// <remarks> Any XPath can be pulled from Chrome; right-click 'Inspect', view the html for the table, right click on any item and select Copy > tableBodyXpath </remarks>
-            // [Route("scrape")]
+            /// <summary>
+            ///     Scrape the pitchers table and get all their data
+            /// </summary>
+            /// <remarks>
+            ///     Any XPath can be pulled from Chrome:
+            ///      - Right-click 'Inspect', view the html for the table, right click on any item and select Copy > tableBodyXpath
+            /// </remarks>
             public List<FanGraphsPitcher> ScrapePitchersAndCreateList (int minInningsPitched, int year, int recordsPerPage)
             {
                 List<string> listOfUrlsToLoopThrough = GetUrlsOfPagesToScrape (minInningsPitched, year, recordsPerPage).ToList ();
@@ -232,7 +293,8 @@ namespace BaseballScraper.Controllers.FanGraphs
 
                     var headersList = GetTableHeaderValuesList(thisUrl);
 
-                    // if this is the first url and table, create a list of the headers; you do not need to scraper the headers or each url since it is the same for each url / table
+                    // if this is the first url and table, create a list of the headers
+                    // you do not need to scraper the headers or each url since it is the same for each url / table
                     if(urlNumber == 1) { listOfLists.Add(headersList);}
 
                     urlNumber++;
@@ -280,8 +342,10 @@ namespace BaseballScraper.Controllers.FanGraphs
                                     // COUNT --> 1
                                     HtmlNodeCollection playersNodeCollection = playerItem.SelectNodes (thisStatsTableRowPath);
 
-                                    // If the column is player name or team name, go this way; Column 2 is the player's team and Column 3 is the player's team
-                                    // Player name and team name are hyperlinks; because of this the html structure is slightly different than other data cells so a unique approach is needed
+                                    // If the column is player name or team name, go this way
+                                    // Column 2 is the player's name and Column 3 is the player's team
+                                    // Player name and team name are hyperlinks
+                                    // Because of this the html structure is slightly different than other data cells so a unique approach is needed
                                     if (column == 2 || column == 3)
                                     {
                                         try
@@ -329,7 +393,7 @@ namespace BaseballScraper.Controllers.FanGraphs
                     }
                 }
 
-                _gSC.WriteGoogleSheetRows(listOfLists,"FG_SP_MASTER_IMPORT","A3:DB1000","CoreCalculator");
+                // _gSC.WriteGoogleSheetRows(listOfLists,"FG_SP_MASTER_IMPORT","A3:DB1000","CoreCalculator");
                 return listOfFgPitchers;
             }
 
@@ -354,8 +418,12 @@ namespace BaseballScraper.Controllers.FanGraphs
 
 
             // STATUS: this works
-            /// <summary> Scrapes the headers of the table to get the stat names (e.g., ERA, WHIP, etc.) </summary>
-            /// <param name="thisUrl"> The url of the table you are scraping </param>
+            /// <summary>
+            ///     Scrapes the headers of the table to get the stat names (e.g., ERA, WHIP, etc.)
+            /// </summary>
+            /// <param name="thisUrl">
+            ///     The url of the table you are scraping
+            /// </param>
             public void GetTableHeaderValues (string thisUrl)
             {
                 HtmlWeb htmlWeb = new HtmlWeb ();

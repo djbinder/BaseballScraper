@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 using BaseballScraper.Infrastructure;
 using Newtonsoft.Json;
 
-namespace BaseballScraper.Models.Yahoo.YahooPlayerResource
+namespace BaseballScraper.Models.Yahoo.Resources.YahooPlayerResource
 {
     // https://developer.yahoo.com/fantasysports/guide/#player-resource
 

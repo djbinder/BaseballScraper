@@ -68,7 +68,7 @@ namespace BaseballScraper.Controllers.YahooControllers
 
 
         // // SEE: https://developer.yahoo.com/fantasysports/guide/#description
-        // #region GENERATE YAHOO LEAGUE KEY ------------------------------------------------------------
+        #region GENERATE YAHOO LEAGUE KEY ------------------------------------------------------------
 
 
             // STATUS [ June 7, 2019 ] : this works
@@ -137,7 +137,7 @@ namespace BaseballScraper.Controllers.YahooControllers
             }
 
 
-        // #endregion GENERATE YAHOO LEAGUE KEY ------------------------------------------------------------
+        #endregion GENERATE YAHOO LEAGUE KEY ------------------------------------------------------------
 
 
 

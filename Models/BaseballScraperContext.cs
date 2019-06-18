@@ -2,6 +2,7 @@
 using BaseballScraper.Models.BaseballSavant;
 using BaseballScraper.Models.Player;
 using BaseballScraper.Models.Yahoo;
+using BaseballScraper.Models.Yahoo.Resources.YahooTeamResource;
 using Microsoft.EntityFrameworkCore;
 
 namespace BaseballScraper.Models
@@ -16,7 +17,8 @@ namespace BaseballScraper.Models
         public string SqlConnectionString { get; set; }
 
 
-        public DbSet<YahooTeamBase> YahooTeamBase { get; set; }
+        public DbSet<YahooTeamResource> YahooTeamResource { get; set; }
+
         public DbSet<PlayerNote> PlayerNotes { get; set; }
 
         public DbSet<StartingPitcherCsw> StartingPitcherCsws { get; set; }

@@ -379,8 +379,8 @@ namespace BaseballScraper.EndPoints
         //https://developer.yahoo.com/fantasysports/guide/team-resource.html
         #region TEAM END POINTS ------------------------------------------------------------
 
-            // var uriTeamBase = endPoints.TeamBaseEndPoint(leagueKey, teamId).EndPointUri;
-            public EndPoint TeamBaseEndPoint (string leaguekey, int teamnumber)
+            // var uriTeamBase = endPoints.TeamResourceEndPoint(leagueKey, teamId).EndPointUri;
+            public EndPoint TeamResourceEndPoint (string leaguekey, int teamnumber)
             {
                 EndPointType = "team";
                 return new EndPoint
@@ -476,15 +476,27 @@ namespace BaseballScraper.EndPoints
         // https://fantasysports.yahooapis.com/fantasy/v2/team/253.l.102614.t.10/roster/players
         #region ROSTER RESOURCE END POINTS ------------------------------------------------------------
 
-            public EndPoint RosterResourceEndPoint(string leaguekey, int teamnumber)
+            public EndPoint RosterResourcePlayersEndPoint(string leaguekey, int teamNumber)
             {
                 EndPointType = "roster";
                 return new EndPoint
                 {
                     BaseUri      = baseUri,
-                    ResourceType = $"/team/{leaguekey}.t.{teamnumber}/{EndPointType}/players"
+                    ResourceType = $"/team/{leaguekey}.t.{teamNumber}/{EndPointType}/players"
                 };
             }
+
+            public EndPoint RosterResourceEndPoint(string leaguekey, int teamNumber)
+            {
+                EndPointType = "roster";
+                return new EndPoint
+                {
+                    BaseUri      = baseUri,
+                    ResourceType = $"/team/{leaguekey}.t.{teamNumber}/{EndPointType}"
+                };
+            }
+
+
 
 
             // public EndPoint RosterPlayersEndPoint (string leaguekey, int teamnumber)
@@ -506,6 +518,42 @@ namespace BaseballScraper.EndPoints
         // https://developer.yahoo.com/fantasysports/guide/#players-collection
         #region PLAYERS COLLECTION END POINTS ------------------------------------------------------------
 
+            // FILTER OPTIONS:
+                // position
+                    // Valid player positions (e.g., "3B", "SP")
+                // status
+                    // A (all available players)
+                    // FA (free agents only)
+                    // W (waivers only)
+                    // T (all taken players)
+                    // K (keepers only)
+                // search
+                    // player name
+                // sort
+                    // {stat_id}
+                    // NAME (last, first)
+                    // OR (overall rank)
+                    // AR (actual rank)
+                    // PTS (fantasy points)
+                // sort_type
+                    // season
+                    // date (baseball, basketball, and hockey only)
+                    // week (football only)
+                    // lastweek (baseball, basketball, and hockey only)
+                    // lastmonth
+                // sort_season
+                    // year
+                // sort_date (baseball only)
+                    // YYYY-MM-DD
+                // sort_week (football only)
+                    // week number
+                // start
+                    // any integer 0 or greater
+                // count
+                    // // any integer greater than 0
+
+
+
 
             public EndPoint PlayersCollectionForPlayerName (string leagueKey, string playerName)
             {
@@ -517,6 +565,7 @@ namespace BaseballScraper.EndPoints
                 };
             }
 
+
             public EndPoint PlayersCollectionForPlayerNameAndPosition (string leagueKey, string playerName, string position)
             {
                 EndPointType = "players";
@@ -527,6 +576,7 @@ namespace BaseballScraper.EndPoints
                 };
             }
 
+
             public EndPoint PlayersCollectionForPosition (string leagueKey, string position)
             {
                 EndPointType = "players";
@@ -534,6 +584,71 @@ namespace BaseballScraper.EndPoints
                 {
                     BaseUri      = baseUri,
                     ResourceType = $"/league/{leagueKey}/{EndPointType};position={position}"
+                };
+            }
+
+
+            public EndPoint PlayersCollectionForPositionWithSort (string leagueKey, string position, string sortType)
+            {
+                EndPointType = "players";
+                return new EndPoint
+                {
+                    BaseUri      = baseUri,
+                    ResourceType = $"/league/{leagueKey}/{EndPointType};position={position};sort={sortType}"
+                };
+            }
+
+
+            public EndPoint PlayersCollectionForPositionAndStatusWithSort (string leagueKey, string position, string status, string sortType)
+            {
+                EndPointType = "players";
+                return new EndPoint
+                {
+                    BaseUri      = baseUri,
+                    ResourceType = $"/league/{leagueKey}/{EndPointType};position={position};sort={sortType};status={status}"
+                };
+            }
+
+
+            public EndPoint PlayersCollectionForPositionAndStatusWithSortForLastWeek (string leagueKey, string position, string status)
+            {
+                EndPointType = "players";
+                string sortType = "AR";
+                string sortTypeType = "lastweek";
+
+                return new EndPoint
+                {
+                    BaseUri      = baseUri,
+                    ResourceType = $"/league/{leagueKey}/{EndPointType};position={position};status={status};sort={sortType};sort_type={sortTypeType}"
+                };
+            }
+
+
+            public EndPoint PlayersCollectionForPositionAndStatusWithSortForLastMonth (string leagueKey, string position, string status)
+            {
+                EndPointType = "players";
+                string sortType = "AR";
+                string sortTypeType = "lastmonth";
+
+                return new EndPoint
+                {
+                    BaseUri      = baseUri,
+                    ResourceType = $"/league/{leagueKey}/{EndPointType};position={position};status={status};sort={sortType};sort_type={sortTypeType}"
+                };
+            }
+
+
+            public EndPoint PlayersCollectionForPositionAndStatusWithSortForToday (string leagueKey, string position, string status)
+            {
+                EndPointType = "players";
+                string sortType = "AR";
+                string sortTypeType = "date";
+                string todaysDateString = DateTime.Now.ToString("YYYY-MM-DD");
+
+                return new EndPoint
+                {
+                    BaseUri      = baseUri,
+                    ResourceType = $"/league/{leagueKey}/{EndPointType};position={position};status={status};sort={sortType};sort_type={sortTypeType};sort_date={todaysDateString}"
                 };
             }
 
