@@ -2,11 +2,13 @@
 using BaseballScraper.Models.Configuration;
 using BaseballScraper.EndPoints;
 using BaseballScraper.Models.Yahoo;
+using BaseballScraper.Models.Yahoo.Resources;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using BaseballScraper.Infrastructure;
 using System.Collections.Generic;
+using BaseballScraper.Controllers.YahooControllers.Resources;
 
 #pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Controllers.YahooControllers

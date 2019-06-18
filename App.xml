@@ -117,41 +117,113 @@
              </list>
         </member>
         <member name="M:BaseballScraper.Controllers.FanGraphs.FgSpMasterReportController.SetInitialUrlToScrape(System.Int32,System.Int32,System.Int32,System.Int32)">
-            <summary> This defines the first url to scrape; At times, you may need to loop through multiple urls and the url defined here is the first url in the loop </summary>
-            <param name="minInningsPitched"> The minimum number of innings pitched a pitcher needs to be included in the results of the scrape </param>
-            <param name="year"> The Mlb season year </param>
-            <param name="page"> The page to being scraping; this typically will be one. But if you want to start on page 2 (for example), just set 'page' to 2 </param>
-            <param name="recordsPerPage"> The number of rows in the table; Standard options include 30, 50 , 100; This will ultimately influence the total number of urls and their tables to scrape </param>
-            <returns> A string url </returns>
+            <summary>
+                This defines the first url to scrape
+                At times, you may need to loop through multiple urls and the url defined here is the first url in the loop
+            </summary>
+            <param name="minInningsPitched">
+                The minimum number of innings pitched a pitcher needs to be included in the results of the scrape
+            </param>
+            <param name="year">
+                The Mlb season year
+            </param>
+            <param name="page">
+                The page to being scraping; this typically will be one
+                But if you want to start on page 2 (for example), just set 'page' to 2
+            </param>
+            <param name="recordsPerPage">
+                The number of rows in the table
+                Standard options include 30, 50 , 100
+                This will ultimately influence the total number of urls and their tables to scrape
+            </param>
+            <returns>
+                A string url
+            </returns>
         </member>
         <member name="M:BaseballScraper.Controllers.FanGraphs.FgSpMasterReportController.GetNumberOfPagesToScrape(System.Int32,System.Int32,System.Int32,System.Int32)">
-            <summary> This counts the number of urls that will be scraped; It examines a specific html element on the fangraphs html page that shows the number of pages </summary>
-            <example> '70 items in 3 page' --> the '3' is what this method is looking for </example>
-            <param name="minInningsPitched"> The minimum number of innings pitched a pitcher needs to be included in the results of the scrape </param>
-            <param name="year"> The Mlb season year </param>
-            <param name="page"> The page to being scraping; this typically will be one. But if you want to start on page 2 (for example), just set 'page' to 2 </param>
-            <param name="recordsPerPage"> The number of rows in the table; Standard options include 30, 50 , 100; This will ultimately influence the total number of urls and their tables to scrape </param>
-            <returns> A number of the number of pages to scrape as part of the loop </returns>
+            <summary>
+            This counts the number of urls that will be scraped
+            It examines a specific html element on the fangraphs html page that shows the number of pages
+            </summary>
+            <example>
+                '70 items in 3 page' --> the '3' is what this method is looking for
+            </example>
+            <param name="minInningsPitched">
+                The minimum number of innings pitched a pitcher needs to be included in the results of the scrape
+            </param>
+            <param name="year">
+                The Mlb season year
+            </param>
+            <param name="page">
+                The page to being scraping
+                This typically will be one
+                But if you want to start on page 2 (for example), just set 'page' to 2
+            </param>
+            <param name="recordsPerPage">
+                The number of rows in the table; Standard options include 30, 50 , 100
+                This will ultimately influence the total number of urls and their tables to scrape
+            </param>
+            <returns>
+                A number of the number of pages to scrape as part of the loop
+            </returns>
         </member>
         <member name="M:BaseballScraper.Controllers.FanGraphs.FgSpMasterReportController.GetUrlsOfPagesToScrape">
-            <returns> A list of strings representing urls to be scraped </returns>
+            <summary>
+                OPTION 1: variables defined within the method (i.e minInningsPitched, year, page, recordsPerPage )
+                Retrieves all urls of pages that will be scraped and adds them to a list
+            </summary>
+            <example>
+                '70 items in 3 page' --> the '3' is what this method is looking for
+            </example>
+            <returns>
+                A list of strings representing urls to be scraped
+            </returns>
         </member>
         <member name="M:BaseballScraper.Controllers.FanGraphs.FgSpMasterReportController.GetUrlsOfPagesToScrape(System.Int32,System.Int32,System.Int32)">
-            <summary> OPTION 2: parameters are passed into the  method (i.e minInningsPitched, year, page, recordsPerPage ). Retrieves all urls of pages that will be scraped and adds them to a list  </summary>
-            <example> '70 items in 3 page' --> the '3' is what this method is looking for </example>
-            <param name="minInningsPitched"> The minimum number of innings pitched a pitcher needs to be included in the results of the scrape </param>
-            <param name="year"> The Mlb season year </param>
-            <param name="page"> The page to being scraping; this typically will be one. But if you want to start on page 2 (for example), just set 'page' to 2 </param>
-            <param name="recordsPerPage"> The number of rows in the table; Standard options include 30, 50 , 100; This will ultimately influence the total number of urls and their tables to scrape </param>
-            <returns> A list of strings representing urls to be scraped </returns>
+            <summary>
+                OPTION 2: parameters are passed into the  method (i.e minInningsPitched, year, page, recordsPerPage ).
+                Retrieves all urls of pages that will be scraped and adds them to a list
+            </summary>
+            <example>
+                var list = GetUrlsOfPagesToScrape(20, 2019, 50);
+                '70 items in 3 page' --> the '3' is what this method is looking for
+            </example>
+            <param name="minInningsPitched">
+                The minimum number of innings pitched a pitcher needs to be included in the results of the scrape
+            </param>
+            <param name="year">
+                The Mlb season year
+            </param>
+            <param name="page">
+                The page to being scraping
+                This typically will be one
+                But if you want to start on page 2 (for example), just set 'page' to 2
+            </param>
+            <param name="recordsPerPage">
+                The number of rows in the table
+                Standard options include 30, 50 , 100
+                This will ultimately influence the total number of urls and their tables to scrape
+            </param>
+            <returns>
+                A list of strings representing urls to be scraped
+            </returns>
         </member>
         <member name="M:BaseballScraper.Controllers.FanGraphs.FgSpMasterReportController.ScrapePitchersAndCreateList(System.Int32,System.Int32,System.Int32)">
-            <summary> Scrape the pitchers table and get all their data </summary>
-            <remarks> Any XPath can be pulled from Chrome; right-click 'Inspect', view the html for the table, right click on any item and select Copy > tableBodyXpath </remarks>
+            <summary>
+                Scrape the pitchers table and get all their data
+            </summary>
+            <remarks>
+                Any XPath can be pulled from Chrome:
+                 - Right-click 'Inspect', view the html for the table, right click on any item and select Copy > tableBodyXpath
+            </remarks>
         </member>
         <member name="M:BaseballScraper.Controllers.FanGraphs.FgSpMasterReportController.GetTableHeaderValues(System.String)">
-            <summary> Scrapes the headers of the table to get the stat names (e.g., ERA, WHIP, etc.) </summary>
-            <param name="thisUrl"> The url of the table you are scraping </param>
+            <summary>
+                Scrapes the headers of the table to get the stat names (e.g., ERA, WHIP, etc.)
+            </summary>
+            <param name="thisUrl">
+                The url of the table you are scraping
+            </param>
         </member>
         <member name="M:BaseballScraper.Controllers.FanGraphs.FgSpMasterReportController.GetTableHeaderValuesList(System.String)">
             <summary> Scrapes the headers of the table to get the stat names (e.g., ERA, WHIP, etc.) </summary>
@@ -311,17 +383,462 @@
         </member>
         <!-- Badly formed XML comment ignored for member "T:BaseballScraper.Controllers.TwitterController" -->
         <member name="M:BaseballScraper.Controllers.TwitterController.ExecuteTwitterStringSearch">
-            <summary> Scrapes twitter to find most recent tweets that include 'searchString' that is defined within the method </summary>
-            <remarks> In Option 1, there are no parameters passed into the method. To change what you are searching for, modify the variable 'searchString' within the method itself </remarks>
-            <example> ExecuteTwitterStringSearch() </example>
-            <returns> A list of tweets </returns>
+            <summary>
+                Scrapes twitter to find most recent tweets that include 'searchString' that is defined within the method
+            </summary>
+            <remarks>
+                In Option 1, there are no parameters passed into the method.
+                To change what you are searching for, modify the variable 'searchString' within the method itself
+            </remarks>
+            <example>
+                ExecuteTwitterStringSearch()
+            </example>
+            <returns>
+                A list of tweets
+            </returns>
         </member>
         <member name="M:BaseballScraper.Controllers.TwitterController.ExecuteTwitterStringSearch(System.String)">
-            <summary> Scrapes twitter to find most recent tweets that include 'searchString' parameter </summary>
-            <remarks> In Option 2, there is one parameter passed into the method. To change what you are searching for, modify the parameter when calling the method </remarks>
-            <param name="searchString"> The string that you would like to search twitter for </param>
-            <example> ExecuteTwitterStringSearch("anthony rizzo"); </example>
-            <returns> A list of tweets </returns>
+            <summary>
+                Scrapes twitter to find most recent tweets that include 'searchString' parameter
+            </summary>
+            <remarks>
+                In Option 2, there is one parameter passed into the method.
+                To change what you are searching for, modify the parameter when calling the method
+            </remarks>
+            <param name="searchString">
+                The string that you would like to search twitter for
+            </param>
+            <example>
+                ExecuteTwitterStringSearch("anthony rizzo");
+            </example>
+            <returns>
+                A list of tweets
+            </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.Collections.YahooPlayersCollectionController.FilterByPlayerNameThenCreateInstance(System.String)">
+            <summary>
+                Query yahoo players collection with various filters
+                Each below is one (e.g., filter by player name) or a combo of filters (e.g., filter by player name, and position, and status)
+                See 'filter options' #region to view options for each of the filter types (e.g., status, )
+            </summary>
+            <example>
+               var collection = FilterByPlayerNameThenCreateInstance("smith"); OR
+               var player = FilterByPlayerNameThenCreateInstance("bryant");
+            </example>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.Collections.YahooPlayersCollectionController.FilterByPlayerNameAndPositionThenCreateInstance(System.String,System.String)">
+            <example>
+               var collection = FilterByPlayerNameAndPositionThenCreateInstance("smith","SP");
+            </example>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.Collections.YahooPlayersCollectionController.FilterByPositionThenCreateInstance(System.String)">
+            <example>
+               var collection = FilterByPositionThenCreateInstance("3B");
+            </example>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.Collections.YahooPlayersCollectionController.FilterByPositionWithSortThenCreateInstance(System.String,System.String)">
+            <example>
+               var collection = FilterByPositionWithSortThenCreateInstance("3B","OR");
+            </example>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.Collections.YahooPlayersCollectionController.FilterByPositionAndStatusWithSortThenCreateInstance(System.String,System.String,System.String)">
+            <example>
+                var collection = FilterByPositionAndStatusWithSortThenCreateInstance("3B","FA","OR");
+            </example>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.Collections.YahooPlayersCollectionController.FilterByPositionAndStatusWithSortForLastWeekThenCreateInstance(System.String,System.String)">
+            <example>
+                var collection = FilterByPositionAndStatusWithSortForLastWeekThenCreateInstance("3B","FA");
+            </example>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.Collections.YahooPlayersCollectionController.FilterByPositionAndStatusWithSortForLastMonthThenCreateInstance(System.String,System.String)">
+            <example>
+               var collection = FilterByPositionAndStatusWithSortForLastMonthThenCreateInstance("3B","FA");
+            </example>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.Collections.YahooPlayersCollectionController.FilterByPositionAndStatusWithSortForTodayThenCreateInstance(System.String,System.String)">
+            <example>
+               var collection = FilterByPositionAndStatusWithSortForTodayThenCreateInstance("3B","FA");
+            </example>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.Collections.YahooPlayersCollectionController.FilterByPositionAndStatusThenCreateInstance(System.String,System.String)">
+            <example>
+                var collection = FilterByPositionAndStatusThenCreateInstance("3B","FA");
+            </example>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.Collections.YahooPlayersCollectionController.FilterByPositionStatusAndCountThenCreateInstance(System.String,System.String,System.String)">
+            <example>
+               var collection = FilterByPositionStatusAndCountThenCreateInstance("3B","FA","10");
+            </example>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.Collections.YahooPlayersCollectionController.CreatePlayerListFromPlayersCollection(BaseballScraper.Models.Yahoo.Collections.YahooPlayersCollection.YahooPlayersCollection)">
+            <example>
+               var collection = FilterByPositionWithSortThenCreateInstance("3B","OR");
+               var listOfPlayers = CreatePlayerListFromPlayersCollection(collection);
+            </example>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.Collections.YahooPlayersCollectionController.CreatePlayerListFromPlayers(BaseballScraper.Models.Yahoo.Collections.YahooPlayersCollection.Players)">
+            <example>
+                var collection = FilterByPositionWithSortThenCreateInstance("3B","OR");
+                var collectionPlayers = collection.Players;
+                var listPlayer = CreatePlayerListFromPlayers(collectionPlayers);
+            </example>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.Collections.YahooPlayersCollectionController.CreatePlayersCollectionInstance(System.String)">
+            <summary>
+                Used by the various methods about to generate the actual players collection based on the filters of those methods
+            </summary>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.Resources.YahooPlayerResourceController.CreateYahooPlayerResourceInstances(System.String)">
+            <summary>
+                Instantiate new instance of yahoo player resource
+            </summary>
+            <param name="yahooPlayerId">
+                The Mlb players yahoo player id
+                Typically four or five numbers but fed to method as a string
+                    E.g., "8967" instead of 8967
+            </param>
+            <remarks>
+                If you do not know the yahoo id, try the 'GetYahooPlayersIdFromPlayerName()' method to get it
+            </remarks>
+            <example>
+                var yahooPlayerResourceModel = CreateYahooPlayerResourceInstances("8967");
+            </example>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Controllers.YahooControllers.Resources.YahooPlayerResourceController.CreateListOfYahooPlayerResourceInstances(System.Collections.Generic.List{System.String})" -->
+        <member name="M:BaseballScraper.Controllers.YahooControllers.Resources.YahooPlayerResourceController.GetYahooPlayersIdFromPlayerName(System.String)">
+            <summary>
+                Retrieves yahoo player id from player's yahoo name
+                This is helpful with primary methods if you do not know the player's yahoo id
+            </summary>
+            <example>
+                var playerId = GetYahooPlayersIdFromPlayerName("Anthony Rizzo");
+            </example>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.Resources.YahooRosterResourceController.AddPlayersForOneRosterToGoogleSheetAsync(System.Int32,System.String,System.String)">
+            <summary>
+                Add all players for one roster to a google sheet
+            </summary>
+            <param name="teamNumber">
+                A number 0 - X; Where X is the total number of teams in the league;
+                Basically every manager has their own single number Id;
+                Select the Id of the Manager you would want to view
+            </param>
+            <param name="tabName">
+                The name of the tab that you want to write the data to
+            </param>
+            <param name="gSheetsDocumentName">
+                This is from the 'gSheetNames.json' file in config data
+                It's the Value for Key = "DocumentName"
+            </param>
+            <example>
+                await AddPlayersForOneRosterToGoogleSheetAsync(1, "roster_import_test", "SheetsTestDoc")
+            </example>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.Resources.YahooRosterResourceController.AddPlayersForAllLeagueRostersToGoogleSheetAsync(System.Int32,System.String,System.String)">
+            <summary>
+                This is the same as the 'AddPlayersForOneRosterToGoogleSheetAsync()' method but for all teams
+            </summary>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.Resources.YahooRosterResourceController.CreateYahooRosterResourceInstance(System.Int32)">
+            <summary>
+                Instantiate new instance of yahoo roster resource
+            </summary>
+            <param name="teamNumber">
+                A number 0 - X; Where X is the total number of teams in the league;
+                Basically every manager has their own single number Id;
+                Select the Id of the Manager you would want to view
+            </param>
+            <example>
+                var yahooRosterResourceInstance = CreateYahooRosterResourceInstance(1);
+            </example>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.Resources.YahooRosterResourceController.CreateRosterResourceJObject(System.Int32)">
+            <summary>
+                Same as 'CreateYahooRosterResourceInstance()' but stops short of converting object to token then instance
+            </summary>
+            <param name="teamNumber">
+                A number 0 - X; Where X is the total number of teams in the league;
+                Basically every manager has their own single number Id;
+                Select the Id of the Manager you would want to view
+            </param>
+            <example>
+                var rosterResource = CreateRosterResourceJObject(6);
+            </example>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.Resources.YahooRosterResourceController.CreateYahooRosterResourceJToken(System.Int32)">
+            <summary>
+                Same as 'CreateYahooRosterResourceInstance()' but stops short of converting object to instance
+            </summary>
+            <param name="teamNumber">
+                A number 0 - X; Where X is the total number of teams in the league;
+                Basically every manager has their own single number Id;
+                Select the Id of the Manager you would want to view
+            </param>
+            <example>
+                var rosterResource = CreateYahooRosterResourceJToken(6);
+            </example>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.Resources.YahooRosterResourceController.CreateListOfYahooRostersForAllTeams(System.Int32)">
+            <summary>
+                Create list of YahooRosterResource instances for all leagues in team
+            </summary>
+            <param name="teamNumber">
+                A number 0 - X; Where X is the total number of teams in the league;
+                Basically every manager has their own single number Id;
+                Select the Id of the Manager you would want to view
+            </param>
+            <example>
+                var roster = CreateListOfYahooRostersForAllTeams(10);
+            </example>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.Resources.YahooRosterResourceController.CreateListOfPlayersOnRoster(System.Int32)">
+            <summary>
+                Create list of Players on one manager's roster
+            </summary>
+            <example>
+                var rosterResourceToken = CreateRosterResourceJToken(6);
+                var listOfPlayers = CreateListOfPlayersOnRoster(rosterResourceToken);
+            </example>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.Resources.YahooRosterResourceController.CreateListOfPlayersAllRosters(System.Int32)">
+            <summary>
+                Creates list of Players for all managers in league
+            </summary>
+            <example>
+                var roster  = CreateListOfPlayersAllRosters(10);
+            </example>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Controllers.YahooControllers.Resources.YahooRosterResourceController.GetMangersForRoster(System.Int32)" -->
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Controllers.YahooControllers.Resources.YahooRosterResourceController.CreateListOfManagersForAllRosters(System.Int32)" -->
+        <member name="M:BaseballScraper.Controllers.YahooControllers.Resources.YahooRosterResourceController.AddAllPlayerModelPropertiesAsHeadersInGoogleSheet(System.Collections.Generic.List{System.Collections.Generic.IList{System.Object}})">
+            <summary>
+                Create a list of headers of all available data in Yahoo Roster Resource json
+                This differs from next method as that method is a refined version of the headers you want
+            </summary>
+            <example>
+                AddAllPlayerModelPropertiesAsHeadersInGoogleSheet(listOfLists);
+            </example>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.Resources.YahooRosterResourceController.AddMostRelevantRosterPropertiesAsHeadersInGoogleSheet(System.Collections.Generic.List{System.Collections.Generic.IList{System.Object}})">
+            <summary>
+                Create a list of selected headers
+                This differs from the previous method as previous method gets you all headers
+            </summary>
+            <example>
+                AddMostRelevantRosterPropertiesAsHeadersInGoogleSheet(listOfLists);
+            </example>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.Resources.YahooTeamResourceController.CreateYahooTeamResourceInstance(System.Int32)">
+            <summary>
+                Create instance of yahoo team model; save it to the database
+            </summary>
+            <param name="managerId">
+                A number 0 - X; Where X is the total number of teams in the league;
+                Basically every manager has their own single number Id;
+                Select the Id of the Manager you would want to view
+            </param>
+            <example>
+                var teamBase = CreateYahooTeamResourceInstance(7);
+            </example>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.Resources.YahooTeamResourceController.CreateYahooTeamResourceInstanceFromUrl(System.Int32)">
+            <summary>
+                This is the same thing as 'CreateYahooTeamBaseModel()' method except mgr id passed in in url
+                See 'CreateYahooTeamBaseModel()' method for comments for code within method
+            </summary>
+            <param name="managerId">
+                A number 0 - X; Where X is the total number of teams in the league;
+                Basically every manager has their own single number Id;
+                Append team member to end of controller url
+            </param>
+            <example>
+               https://127.0.0.1:5001/api/yahoo/yahooteamresource/1
+            </example>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.Resources.YahooTeamResourceController.CreateListOfAllTeamBasesForLeague(System.Int32)">
+            <summary>
+                Create a list of team bases for all teams in league
+                Relies on the 'CreateYahooTeamBaseModel()' method to instantiate each Yahoo TeamBase
+            </summary>
+            <param name="NumberOfTeams">
+                The total number of teams in the league
+                Assumes 1 manager per team; if a team is co-managed it just gives you one mgr for that team
+            </param>
+            <example>
+                var listOfTeamBases = CreateListOfAllTeamBasesForLeague(10);
+            </example>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.Resources.YahooTeamResourceController.CreateYahooTeamResourceHashTable(System.Int32)">
+            <summary>
+                Create hashtable of YahooTeamBase items for a given team=
+            </summary>
+            <param name="managerId">
+                A number 0 - X; Where X is the total number of teams in the league;
+                Basically every manager has their own single number Id;
+                Select the Id of the Manager you would want to view
+            </param>
+            <example>
+              var teamBase = CreateYahooTeamResourceHashTable(1);
+            </example>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.Resources.YahooTeamResourceController.PopulateInitialTeamResourceInstanceProperties(BaseballScraper.Models.Yahoo.Resources.YahooTeamResource.YahooTeamResource,Newtonsoft.Json.Linq.JObject)">
+            <summary>
+                Set initial properties that all Team Bases have in common
+                Other properties are set in either of
+                1) 'PopulateTeamBaseWithOneManager()' or
+                2) 'PopulateTeamBaseWithCoManagers()' methods
+                This is ultimately called in the 'CreateYahooTeamBaseModel()' method
+            <remarks>
+                Note that the code below is formated / indented to give an idea how the json looks
+            </remarks>
+            </summary>
+            <example>
+                PopulateInitialTeamBaseProperties(tB, resourceJson);
+            </example>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.Resources.YahooTeamResourceController.PopulateTeamResourceInstanceWithOneManager(BaseballScraper.Models.Yahoo.Resources.YahooTeamResource.YahooTeamResource,Newtonsoft.Json.Linq.JToken)">
+            <summary>
+                If the team only has one manager, populate remaining properties with this code
+                If there are two managers, populate properties with 'PopulateTeamBaseWithCoManagers()'
+                This is ultimately called in the 'CreateYahooTeamBaseModel()' method
+            </summary>
+            <example>
+                PopulateTeamResourceInstanceWithOneManager(tB, managerPath);
+            </example>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Controllers.YahooControllers.Resources.YahooTeamResourceController.PopulateTeamBaseWithCoManagers(BaseballScraper.Models.Yahoo.Resources.YahooTeamResource.YahooTeamResource,Newtonsoft.Json.Linq.JToken,System.Collections.Generic.List{BaseballScraper.Models.Yahoo.YahooManager})" -->
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooManagerController.CreateYahooManagerModel(System.Int32)">
+            <summary>
+                Instantiate new instance of a yahoo manager
+                The manager data in the requested json is found nested under league standings
+            </summary>
+            <param name="managerId">
+                A number 0 - X; Where X is the total number of teams in the league;
+                Basically every manager has their own single number Id;
+                Select the Id of the Manager you would want to view
+            </param>
+            <example>
+                var yahooManager = CreateYahooManagerModel(1);
+            </example>
+            <returns>
+                A new YahooManager
+            </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooManagerController.CreateYahooManagerModelFromUrl(System.Int32)">
+            <summary>
+                This is the same thing as 'GetYahooManagerModel()' method except managerId is passed in through url
+            </summary>
+            <example>
+                https://127.0.0.1:5001/api/yahoo/yahoomanager/1
+            </example>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooManagerController.GetListOfAllManagersInLeague(System.Int32)">
+            <summary>
+                Create a list of all yahoo managers in the league
+                The manager data in the requested json is found nested under league standings
+                Relies on the 'CreateYahooManagerModel()' method to instantiate each Yahoo Managers
+            </summary>
+            <param name="NumberOfTeams">
+                The total number of teams in the league
+                Assumes 1 manager per team; if a team is co-managed it just gives you one mgr for that team
+            </param>
+            <example>
+                var listOfManagers = GetListOfAllManagersInLeague(10);
+            </example>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooScoreboardController.ViewLeagueScoreboardAsync">
+            <example> https://127.0.0.1:5001/api/yahoo/scoreboard </example>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTeamPointsController.CreateYahooTeamPointsModel">
+            <summary> Create new instance of YahooTeamPoints model </summary>
+            <example> https://127.0.0.1:5001/api/yahoo/teampoints/season </example>
+            <returns> Instance of YahooTeamPoints model; includes CoverageType, WeekOrYear, and Total points </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTeamPointsController.CreateYahooTeamPointsModel(System.Int32,Newtonsoft.Json.Linq.JObject)">
+            <summary> Create new instance of YahooTeamPoints model </summary>
+            <param name="teamId"> A number between 0 and the total number of teams in the league with each number in between representing one of the teams (i.e., each team has its own unique team id number) </param>
+            <param name="o"> An object that contains the json needed to instantiate new instance of YahooTeamPoints model</param>
+            <returns> Instance of YahooTeamPoints model; includes CoverageType, WeekOrYear, and Total points  </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTeamPointsController.ViewTeamPoints">
+            <summary> This allows viewing / testing of Option 2; The method is called and a team id and a JObject are passed parameters </summary>
+            <example> https://127.0.0.1:5001/api/yahoo/teampoints </example>
+            <returns> A view of points for a selected team </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTeamStandingController.CreateYahooTeamStandingModel">
+            <summary> Return instantiated 'YahooTeamStanding' </summary>
+            <example> https://127.0.0.1:5001/api/yahoo/teamstanding </example>
+            <returns> rank, playoff seed, games back, wins, losses, ties, winning percentage </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTeamStatsController.CreateYahooTeamStatsModel">
+            <summary>
+                Create new instance of YahooTeamStats Model
+                Show full season stats for one team
+            </summary>
+            <remarks>
+                This is the least helpful option of the method
+                Within Option 1, the 'teamId' is defined within the method itself
+                To change the team Id you're searching for, change the 'teamId' variable;
+                Includes: H/AB, R, HR, RBI, SB, BB, IP, W, SV, H, ERA, WHIP
+                Relies on 'PopulateTeamStatsProperties()' to populate model properties
+            </remarks>
+            <example>
+                https://127.0.0.1:5001/api/yahoo/teamstats
+            </example>
+            <returns>
+                New YahooTeamStatsModel
+            </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTeamStatsController.CreateYahooTeamStatsModel(System.Int32)">
+            <summary>
+                Create new instance of YahooTeamStats Model
+                Show full season stats for one team
+            </summary>
+            <remarks>
+                Within Option 2, 'teamId' is passed in method
+                This option must be called by another method
+                To change the team you want to view the stats for, change the id number you are passing when calling the method
+                Includes: H/AB, R, HR, RBI, SB, BB, IP, W, SV, H, ERA, WHIP
+                Relies on 'PopulateTeamStatsProperties()' to populate model properties
+            </remarks>
+            <param name="teamId">
+                A number between 0 and the total number of teams in the league (i.e., each team has its own unique team id number)
+            </param>
+            <example>
+                var tsModel = CreateYahooTeamStatsModel(1)
+            </example>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTeamStatsController.CreateYahooTeamStatsModelFromUrl(System.Int32)">
+            <summary>
+                Create new instance of YahooTeamStats Model
+                Show full season stats for one team
+            </summary>
+            <remarks>
+                Within Option 3, there are two parameters.
+                To change the team you are searching for, change the team id within the url itself
+                Includes: H/AB, R, HR, RBI, SB, BB, IP, W, SV, H, ERA, WHIP
+                Relies on 'PopulateTeamStatsProperties()' to populate model properties
+            </remarks>
+            <param name="teamId">
+                 A number between 0 and the total number of teams in the league (i.e., each team has its own unique team id number)
+            </param>
+            <example>
+                https://127.0.0.1:5001/api/yahoo/yahooteamstats/2
+            </example>
+        </member>
+        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTeamStatsController.CreateListOfAllYahooTeamStatsListsForLeague(System.Int32)">
+            <summary>
+                Create a list of team total stats for all teams in league for the season
+                Relies on the 'CreateYahooTeamStatsModel()' method to instantiate each Yahoo Team Stats List
+            </summary>
+            <param name="NumberOfTeams">
+                The total number of teams in the league
+                Assumes 1 manager per team; if a team is co-managed it just gives you one mgr for that team
+            </param>
+            <example>
+                var listOfTeamStats = CreateListOfAllYahooTeamStatsListsForLeague(10);
+            </example>
         </member>
         <member name="M:BaseballScraper.Controllers.YahooControllers.YahooApiRequestController.GetYahooMlbGameKeyForThisYear">
             <summary>
@@ -495,256 +1012,6 @@
                 This is called within the GenerateUserAuthorizationCode method
                 This method / step is not required
             </summary>
-        </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooManagerController.CreateYahooManagerModel(System.Int32)">
-            <summary>
-                Instantiate new instance of a yahoo manager
-                The manager data in the requested json is found nested under league standings
-            </summary>
-            <param name="managerId">
-                A number 0 - X; Where X is the total number of teams in the league;
-                Basically every manager has their own single number Id;
-                Select the Id of the Manager you would want to view
-            </param>
-            <example>
-                var yahooManager = CreateYahooManagerModel(1);
-            </example>
-            <returns>
-                A new YahooManager
-            </returns>
-        </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooManagerController.CreateYahooManagerModelFromUrl(System.Int32)">
-            <summary>
-                This is the same thing as 'GetYahooManagerModel()' method except managerId is passed in through url
-            </summary>
-            <example>
-                https://127.0.0.1:5001/api/yahoo/yahoomanager/1
-            </example>
-        </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooManagerController.GetListOfAllManagersInLeague(System.Int32)">
-            <summary>
-                Create a list of all yahoo managers in the league
-                The manager data in the requested json is found nested under league standings
-                Relies on the 'CreateYahooManagerModel()' method to instantiate each Yahoo Managers
-            </summary>
-            <param name="NumberOfTeams">
-                The total number of teams in the league
-                Assumes 1 manager per team; if a team is co-managed it just gives you one mgr for that team
-            </param>
-            <example>
-                var listOfManagers = GetListOfAllManagersInLeague(10);
-            </example>
-        </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooPlayerResourceController.CreateYahooPlayerResourceInstances(System.String)">
-            <summary>
-                Instantiate new instance of yahoo player resource
-            </summary>
-            <param name="yahooPlayerId">
-                The Mlb players yahoo player id
-                Typically four or five numbers but fed to method as a string
-                    E.g., "8967" instead of 8967
-            </param>
-            <remarks>
-                If you do not know the yahoo id, try the 'GetYahooPlayersIdFromPlayerName()' method to get it
-            </remarks>
-            <example>
-                var yahooPlayerResourceModel = CreateYahooPlayerResourceInstances("8967");
-            </example>
-        </member>
-        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Controllers.YahooControllers.YahooPlayerResourceController.CreateListOfYahooPlayerResourceInstances(System.Collections.Generic.List{System.String})" -->
-        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooPlayerResourceController.GetYahooPlayersIdFromPlayerName(System.String)">
-            <summary>
-                Retrieves yahoo player id from player's yahoo name
-                This is helpful with primary methods if you do not know the player's yahoo id
-            </summary>
-            <example>
-                var playerId = GetYahooPlayersIdFromPlayerName("Anthony Rizzo");
-            </example>
-        </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooRosterResourceController.CreateYahooRosterResourceInstance(System.Int32)">
-            <summary>
-                Instantiate new instance of yahoo roster resource
-            </summary>
-            <param name="TeamNumber">
-                A number 0 - X; Where X is the total number of teams in the league;
-                Basically every manager has their own single number Id;
-                Select the Id of the Manager you would want to view
-            </param>
-            <example>
-                var yahooRosterResourceInstance = CreateYahooRosterResourceInstance(1);
-            </example>
-        </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooScoreboardController.ViewLeagueScoreboardAsync">
-            <example> https://127.0.0.1:5001/api/yahoo/scoreboard </example>
-        </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTeamBaseController.CreateYahooTeamBaseModel(System.Int32)">
-            <summary>
-                Create instance of yahoo team model; save it to the database
-            </summary>
-            <param name="managerId">
-                A number 0 - X; Where X is the total number of teams in the league;
-                Basically every manager has their own single number Id;
-                Select the Id of the Manager you would want to view
-            </param>
-            <example>
-                var teamBase = CreateYahooTeamBaseModel(7);
-            </example>
-        </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTeamBaseController.CreateYahooTeamBaseModelFromUrl(System.Int32)">
-            <summary>
-                This is the same thing as 'CreateYahooTeamBaseModel()' method except mgr id passed in in url
-                See 'CreateYahooTeamBaseModel()' method for comments for code within method
-            </summary>
-            <param name="managerId">
-                A number 0 - X; Where X is the total number of teams in the league;
-                Basically every manager has their own single number Id;
-                Append team member to end of controller url
-            </param>
-            <example>
-               https://127.0.0.1:5001/api/yahoo/yahooteambase/1
-            </example>
-        </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTeamBaseController.CreateListOfAllTeamBasesForLeague(System.Int32)">
-            <summary>
-                Create a list of team bases for all teams in league
-                Relies on the 'CreateYahooTeamBaseModel()' method to instantiate each Yahoo TeamBase
-            </summary>
-            <param name="NumberOfTeams">
-                The total number of teams in the league
-                Assumes 1 manager per team; if a team is co-managed it just gives you one mgr for that team
-            </param>
-            <example>
-                var listOfTeamBases = CreateListOfAllTeamBasesForLeague(10);
-            </example>
-        </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTeamBaseController.CreateYahooTeamBaseHashTable(System.Int32)">
-            <summary>
-                Create hashtable of YahooTeamBase items for a given team=
-            </summary>
-            <param name="managerId">
-                A number 0 - X; Where X is the total number of teams in the league;
-                Basically every manager has their own single number Id;
-                Select the Id of the Manager you would want to view
-            </param>
-            <example>
-              var teamBase = CreateYahooTeamBaseHashTable(1);
-            </example>
-        </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTeamBaseController.PopulateInitialTeamBaseProperties(BaseballScraper.Models.Yahoo.YahooTeamBase,Newtonsoft.Json.Linq.JObject)">
-            <summary>
-                Set initial properties that all Team Bases have in common
-                Other properties are set in either of
-                1) 'PopulateTeamBaseWithOneManager()' or
-                2) 'PopulateTeamBaseWithCoManagers()' methods
-                This is ultimately called in the 'CreateYahooTeamBaseModel()' method
-            <remarks>
-                Note that the code below is formated / indented to give an idea how the json looks
-            </remarks>
-            </summary>
-            <example>
-                PopulateInitialTeamBaseProperties(tB, resourceJson);
-            </example>
-        </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTeamBaseController.PopulateTeamBaseWithOneManager(BaseballScraper.Models.Yahoo.YahooTeamBase,Newtonsoft.Json.Linq.JToken)">
-            <summary>
-                If the team only has one manager, populate remaining properties with this code
-                If there are two managers, populate properties with 'PopulateTeamBaseWithCoManagers()'
-                This is ultimately called in the 'CreateYahooTeamBaseModel()' method
-            </summary>
-            <example>
-                PopulateTeamBaseWithOneManager(tB, managerPath);
-            </example>
-        </member>
-        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Controllers.YahooControllers.YahooTeamBaseController.PopulateTeamBaseWithCoManagers(BaseballScraper.Models.Yahoo.YahooTeamBase,Newtonsoft.Json.Linq.JToken,System.Collections.Generic.List{BaseballScraper.Models.Yahoo.YahooManager})" -->
-        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTeamPointsController.CreateYahooTeamPointsModel">
-            <summary> Create new instance of YahooTeamPoints model </summary>
-            <example> https://127.0.0.1:5001/api/yahoo/teampoints/season </example>
-            <returns> Instance of YahooTeamPoints model; includes CoverageType, WeekOrYear, and Total points </returns>
-        </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTeamPointsController.CreateYahooTeamPointsModel(System.Int32,Newtonsoft.Json.Linq.JObject)">
-            <summary> Create new instance of YahooTeamPoints model </summary>
-            <param name="teamId"> A number between 0 and the total number of teams in the league with each number in between representing one of the teams (i.e., each team has its own unique team id number) </param>
-            <param name="o"> An object that contains the json needed to instantiate new instance of YahooTeamPoints model</param>
-            <returns> Instance of YahooTeamPoints model; includes CoverageType, WeekOrYear, and Total points  </returns>
-        </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTeamPointsController.ViewTeamPoints">
-            <summary> This allows viewing / testing of Option 2; The method is called and a team id and a JObject are passed parameters </summary>
-            <example> https://127.0.0.1:5001/api/yahoo/teampoints </example>
-            <returns> A view of points for a selected team </returns>
-        </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTeamStandingController.CreateYahooTeamStandingModel">
-            <summary> Return instantiated 'YahooTeamStanding' </summary>
-            <example> https://127.0.0.1:5001/api/yahoo/teamstanding </example>
-            <returns> rank, playoff seed, games back, wins, losses, ties, winning percentage </returns>
-        </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTeamStatsController.CreateYahooTeamStatsModel">
-            <summary>
-                Create new instance of YahooTeamStats Model
-                Show full season stats for one team
-            </summary>
-            <remarks>
-                This is the least helpful option of the method
-                Within Option 1, the 'teamId' is defined within the method itself
-                To change the team Id you're searching for, change the 'teamId' variable;
-                Includes: H/AB, R, HR, RBI, SB, BB, IP, W, SV, H, ERA, WHIP
-                Relies on 'PopulateTeamStatsProperties()' to populate model properties
-            </remarks>
-            <example>
-                https://127.0.0.1:5001/api/yahoo/teamstats
-            </example>
-            <returns>
-                New YahooTeamStatsModel
-            </returns>
-        </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTeamStatsController.CreateYahooTeamStatsModel(System.Int32)">
-            <summary>
-                Create new instance of YahooTeamStats Model
-                Show full season stats for one team
-            </summary>
-            <remarks>
-                Within Option 2, 'teamId' is passed in method
-                This option must be called by another method
-                To change the team you want to view the stats for, change the id number you are passing when calling the method
-                Includes: H/AB, R, HR, RBI, SB, BB, IP, W, SV, H, ERA, WHIP
-                Relies on 'PopulateTeamStatsProperties()' to populate model properties
-            </remarks>
-            <param name="teamId">
-                A number between 0 and the total number of teams in the league (i.e., each team has its own unique team id number)
-            </param>
-            <example>
-                var tsModel = CreateYahooTeamStatsModel(1)
-            </example>
-        </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTeamStatsController.CreateYahooTeamStatsModelFromUrl(System.Int32)">
-            <summary>
-                Create new instance of YahooTeamStats Model
-                Show full season stats for one team
-            </summary>
-            <remarks>
-                Within Option 3, there are two parameters.
-                To change the team you are searching for, change the team id within the url itself
-                Includes: H/AB, R, HR, RBI, SB, BB, IP, W, SV, H, ERA, WHIP
-                Relies on 'PopulateTeamStatsProperties()' to populate model properties
-            </remarks>
-            <param name="teamId">
-                 A number between 0 and the total number of teams in the league (i.e., each team has its own unique team id number)
-            </param>
-            <example>
-                https://127.0.0.1:5001/api/yahoo/yahooteamstats/2
-            </example>
-        </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTeamStatsController.CreateListOfAllYahooTeamStatsListsForLeague(System.Int32)">
-            <summary>
-                Create a list of team total stats for all teams in league for the season
-                Relies on the 'CreateYahooTeamStatsModel()' method to instantiate each Yahoo Team Stats List
-            </summary>
-            <param name="NumberOfTeams">
-                The total number of teams in the league
-                Assumes 1 manager per team; if a team is co-managed it just gives you one mgr for that team
-            </param>
-            <example>
-                var listOfTeamStats = CreateListOfAllYahooTeamStatsListsForLeague(10);
-            </example>
         </member>
         <member name="T:BaseballScraper.Controllers.YahooControllers.YahooTransactionTrendsController">
             <summary> Scrapes Yahoo transaction trend data </summary>
@@ -1082,31 +1349,51 @@
                 _gSC.UpdateGoogleSheetRows(listOfLists,"FG_SP_MASTER_IMPORT","A3:DB1000","CoreCalculator");
             </example>
             <remarks>
-            View "FgSpMasterReportController" > "ScrapePitchersAndCreateList" for an example of this in practice
+                View "FgSpMasterReportController" > "ScrapePitchersAndCreateList" for an example of this in practice
             </remarks>
         </member>
         <member name="M:BaseballScraper.Infrastructure.GoogleSheetsConnector.WriteGoogleSheetColumns(System.Collections.Generic.IList{System.Collections.Generic.IList{System.Object}},System.String,System.String,System.String)">
             <example>
-            _gSC.WriteGoogleSheetColumns(listOfLists, "YAHOO_TRENDS","A1:Z1000","CoreCalculator");
+                _gSC.WriteGoogleSheetColumns(listOfLists, "YAHOO_TRENDS","A1:Z1000","CoreCalculator");
             </example>
         </member>
         <member name="M:BaseballScraper.Infrastructure.GoogleSheetsConnector.WriteGoogleSheetColumnsAsync(System.Collections.Generic.IList{System.Collections.Generic.IList{System.Object}},System.String,System.String,System.String)">
             <example>
-                // await _gSC.WriteGoogleSheetColumnsAsync(listOfLists, "YAHOO_TRENDS","A1:Z1000","CoreCalculator");
+                await _gSC.WriteGoogleSheetColumnsAsync(listOfLists, "YAHOO_TRENDS","A1:Z1000","CoreCalculator");
             </example>
         </member>
         <member name="M:BaseballScraper.Infrastructure.Helpers.PrintJsonFromObject(System.Object)">
-            <summary> Serialize a given object to a JSON stream (i.e., take a given object and convert it to JSON ) and print to console </summary>
-            <param name="obj"> An object; typically a JObject (not certain how it deals with objects besides JObjects) </param>
+            <summary>
+                Serialize a given object to a JSON stream (i.e., take a given object and convert it to JSON ) and print to console
+            </summary>
+            <param name="obj">
+                An object; typically a JObject
+                Not certain how it deals with objects besides JObjects)
+            </param>
         </member>
         <member name="M:BaseballScraper.Infrastructure.Helpers.PrintDataTable(System.Data.DataTable)">
-            <summary> Print a data table in console </summary>
-            <param name="dataTable"> The data table that you want to print in console </param>
+            <summary>
+                Print a data table in console
+            </summary>
+            <param name="dataTable">
+                The data table that you want to print in console
+            </param>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Infrastructure.Helpers.PrintKeyValuePairs(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.Object}})" -->
+        <member name="M:BaseballScraper.Infrastructure.Helpers.PrintKeyValuePairs(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.Object}})">
+            <summary>
+                Print the keys and values from a given IEnumerable
+            </summary>
+            <param name="keyValuePairs">
+                An IEnumerable containing variable keys and values
+            </param>
+        </member>
         <member name="M:BaseballScraper.Infrastructure.Helpers.IterateForEach(System.Collections.Generic.List{System.Object})">
             <summary> Given a model / class, create a list(string) of the models property names (e.g, Wins) </summary>
             <returns> A list of property names </returns>
+        </member>
+        <member name="T:BaseballScraper.Infrastructure.Helpers.MiddlewareDiagnoser">
+            <summary> </summary>
+            <param name="itemsToList"> e.g., string[] planet = { "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune" };</param>
         </member>
         <member name="M:BaseballScraper.Infrastructure.PostmanMethods.PostmanToken(System.String)">
             <summary> A switch that returns a postman token depending upon the end type you are use </summary>
