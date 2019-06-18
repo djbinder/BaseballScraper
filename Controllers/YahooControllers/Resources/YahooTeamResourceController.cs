@@ -1,10 +1,11 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using BaseballScraper.Models.Configuration;
 using BaseballScraper.EndPoints;
 using BaseballScraper.Models.Yahoo;
+using BaseballScraper.Models.Yahoo.Resources.YahooTeamResource;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
@@ -13,11 +14,11 @@ using BaseballScraper.Infrastructure;
 
 
 #pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
-namespace BaseballScraper.Controllers.YahooControllers
+namespace BaseballScraper.Controllers.YahooControllers.Resources
 {
     [Route("api/yahoo/[controller]")]
     [ApiController]
-    public class YahooTeamBaseController : ControllerBase
+    public class YahooTeamResourceController : ControllerBase
     {
         private readonly Helpers _h = new Helpers();
         private readonly TheGameIsTheGameConfiguration _theGameConfig;
@@ -26,13 +27,37 @@ namespace BaseballScraper.Controllers.YahooControllers
         public static readonly YahooGameResourceConroller _yahooGameResourceController = new YahooGameResourceConroller();
 
 
-        public YahooTeamBaseController(IOptions<TheGameIsTheGameConfiguration> theGameConfig, YahooApiRequestController yahooApiRequestController)
+        public YahooTeamResourceController(IOptions<TheGameIsTheGameConfiguration> theGameConfig, YahooApiRequestController yahooApiRequestController)
         {
             _theGameConfig       = theGameConfig.Value;
             _yahooApiRequestController = yahooApiRequestController;
         }
 
-        public YahooTeamBaseController() {}
+        public YahooTeamResourceController() {}
+
+
+        // Yahoo Doc Link: https://developer.yahoo.com/fantasysports/guide/#team-resource
+        // Team resource description (from Yahoo):
+        //      * Team APIs allow you to retrieve team info within our fantasy games
+        //      * The team is the basic unit for keeping track of a roster of players
+        //      * Can be managed by either one or two managers (the second manager being called a co-manager)
+        //      * With the Team APIs, you can obtain team-related information
+        //      * Examples: team name, managers, logos, stats and points, and rosters for particular weeks
+        //      * Teams only exist in the context of a particular League
+        //      * You can request a Team Resource as the base of your URI by using the global ````
+        //      * A user can only retrieve data about a team if:
+        //          * That team is part of a private league of which the user is a member
+        //          * If it’s in a public league
+        // URIs
+        //      * https://fantasysports.yahooapis.com/fantasy/v2/team/
+        //      * https://fantasysports.yahooapis.com/fantasy/v2/team//
+        //      * https://fantasysports.yahooapis.com/fantasy/v2/team/;out=,{sub_resource_2}
+
+
+
+
+
+
 
 
         [Route("test")]
@@ -57,22 +82,22 @@ namespace BaseballScraper.Controllers.YahooControllers
             ///     Select the Id of the Manager you would want to view
             /// </param>
             /// <example>
-            ///     var teamBase = CreateYahooTeamBaseModel(7);
+            ///     var teamBase = CreateYahooTeamResourceInstance(7);
             /// </example>
-            public YahooTeamBase CreateYahooTeamBaseModel (int managerId)
+            public YahooTeamResource CreateYahooTeamResourceInstance (int managerId)
             {
                 // _h.StartMethod();
-                YahooTeamBase tB = new YahooTeamBase();
+                YahooTeamResource tB = new YahooTeamResource();
 
                 string leagueKey = _yahooApiRequestController.GetTheGameIsTheGameLeagueKey();
-                var uriTeamBase = endPoints.TeamBaseEndPoint(leagueKey, managerId).EndPointUri;
+                var uriTeamBase = endPoints.TeamResourceEndPoint(leagueKey, managerId).EndPointUri;
                 // Console.WriteLine($"MANAGER CONTROLLER > leagueKey: {leagueKey}");
-                // Console.WriteLine($"uriTeamBase: {uriTeamBase}");
+                Console.WriteLine($"uriTeamBase: {uriTeamBase}");
 
                 // for each team in the league, dig through their team json, find the required items to create the new YahooTeamBase and set those items
                 JObject resourceJson = _yahooApiRequestController.GenerateYahooResourceJObject(uriTeamBase);
 
-                PopulateInitialTeamBaseProperties(tB, resourceJson);
+                PopulateInitialTeamResourceInstanceProperties(tB, resourceJson);
 
                 // Managers is nested under 'teamBasePath'
                 var managerPath = resourceJson["fantasy_content"]["team"]["managers"]["manager"];
@@ -85,7 +110,7 @@ namespace BaseballScraper.Controllers.YahooControllers
                 string jArrayType = "Newtonsoft.Json.Linq.JArray";
 
                 // One manager path
-                if(managerPathChildrenType == jObjectType) { PopulateTeamBaseWithOneManager(tB, managerPath); }
+                if(managerPathChildrenType == jObjectType) { PopulateTeamResourceInstanceWithOneManager(tB, managerPath); }
 
                 // Co-manager path
                 List<YahooManager> teamManagersList = new List<YahooManager>();
@@ -111,19 +136,19 @@ namespace BaseballScraper.Controllers.YahooControllers
             ///     Append team member to end of controller url
             /// </param>
             /// <example>
-            ///    https://127.0.0.1:5001/api/yahoo/yahooteambase/1
+            ///    https://127.0.0.1:5001/api/yahoo/yahooteamresource/1
             /// </example>
             [HttpGet("{managerId}")]
-            public YahooTeamBase CreateYahooTeamBaseModelFromUrl (int managerId)
+            public YahooTeamResource CreateYahooTeamResourceInstanceFromUrl (int managerId)
             {
-                YahooTeamBase tB = new YahooTeamBase();
+                YahooTeamResource tB = new YahooTeamResource();
 
                 string leagueKey = _yahooApiRequestController.GetTheGameIsTheGameLeagueKey();
-                var uriTeamBase = endPoints.TeamBaseEndPoint(leagueKey, managerId).EndPointUri;
+                var uriTeamBase = endPoints.TeamResourceEndPoint(leagueKey, managerId).EndPointUri;
 
                 JObject resourceJson = _yahooApiRequestController.GenerateYahooResourceJObject(uriTeamBase);
 
-                PopulateInitialTeamBaseProperties(tB, resourceJson);
+                PopulateInitialTeamResourceInstanceProperties(tB, resourceJson);
 
                 var managerPath = resourceJson["fantasy_content"]["team"]["managers"]["manager"];
 
@@ -131,7 +156,7 @@ namespace BaseballScraper.Controllers.YahooControllers
                 string jObjectType = "Newtonsoft.Json.Linq.JObject";
                 string jArrayType = "Newtonsoft.Json.Linq.JArray";
 
-                if(managerPathChildrenType == jObjectType) { PopulateTeamBaseWithOneManager(tB, managerPath); }
+                if(managerPathChildrenType == jObjectType) { PopulateTeamResourceInstanceWithOneManager(tB, managerPath); }
 
                 List<YahooManager> teamManagersList = new List<YahooManager>();
                 tB.TeamManagersList            = new List<YahooManager>();
@@ -154,15 +179,15 @@ namespace BaseballScraper.Controllers.YahooControllers
             /// <example>
             ///     var listOfTeamBases = CreateListOfAllTeamBasesForLeague(10);
             /// </example>
-            public List<YahooTeamBase> CreateListOfAllTeamBasesForLeague(int NumberOfTeams)
+            public List<YahooTeamResource> CreateListOfAllTeamBasesForLeague(int NumberOfTeams)
             {
                 _h.StartMethod();
-                List<YahooTeamBase> yTeamBaseList = new List<YahooTeamBase>();
+                List<YahooTeamResource> yTeamBaseList = new List<YahooTeamResource>();
 
                 for(var counter = 1; counter <= NumberOfTeams - 1; counter++)
                 {
                     Console.WriteLine($"Counter: {counter}");
-                    YahooTeamBase yTb = CreateYahooTeamBaseModel(counter);
+                    YahooTeamResource yTb = CreateYahooTeamResourceInstance(counter);
                     yTeamBaseList.Add(yTb);
                 }
                 _h.Dig(yTeamBaseList);
@@ -181,13 +206,13 @@ namespace BaseballScraper.Controllers.YahooControllers
             ///     Select the Id of the Manager you would want to view
             /// </param>
             /// <example>
-            ///   var teamBase = CreateYahooTeamBaseHashTable(1);
+            ///   var teamBase = CreateYahooTeamResourceHashTable(1);
             /// </example>
-            public Hashtable CreateYahooTeamBaseHashTable (int managerId)
+            public Hashtable CreateYahooTeamResourceHashTable (int managerId)
             {
                 // _h.StartMethod();
                 string leagueKey = _yahooApiRequestController.GetTheGameIsTheGameLeagueKey();
-                var uriTeamBase = endPoints.TeamBaseEndPoint(leagueKey, managerId).EndPointUri;
+                var uriTeamBase = endPoints.TeamResourceEndPoint(leagueKey, managerId).EndPointUri;
 
                 JObject resourceJson = _yahooApiRequestController.GenerateYahooResourceJObject(uriTeamBase);
 
@@ -244,7 +269,7 @@ namespace BaseballScraper.Controllers.YahooControllers
             /// <example>
             ///     PopulateInitialTeamBaseProperties(tB, resourceJson);
             /// </example>
-            private YahooTeamBase PopulateInitialTeamBaseProperties([FromQuery] YahooTeamBase tB, JObject resourceJson)
+            private YahooTeamResource PopulateInitialTeamResourceInstanceProperties([FromQuery] YahooTeamResource tB, JObject resourceJson)
             {
                 var teamBasePath             = resourceJson["fantasy_content"]["team"];
                     tB.TeamKey               = teamBasePath["team_key"].ToString();
@@ -282,9 +307,9 @@ namespace BaseballScraper.Controllers.YahooControllers
             ///     This is ultimately called in the 'CreateYahooTeamBaseModel()' method
             /// </summary>
             /// <example>
-            ///     PopulateTeamBaseWithOneManager(tB, managerPath);
+            ///     PopulateTeamResourceInstanceWithOneManager(tB, managerPath);
             /// </example>
-            private YahooTeamBase PopulateTeamBaseWithOneManager([FromQuery] YahooTeamBase tB, [FromQuery] JToken managerPath)
+            private YahooTeamResource PopulateTeamResourceInstanceWithOneManager([FromQuery] YahooTeamResource tB, [FromQuery] JToken managerPath)
             {
                 tB.PrimaryTeamManager.ManagerId = managerPath["manager_id"].ToString();
                 tB.PrimaryTeamManager.NickName  = managerPath["nickname"].ToString();
@@ -327,7 +352,7 @@ namespace BaseballScraper.Controllers.YahooControllers
             /// <returns>
             ///     A List<YahooManager> with manager details for each of the co-managers
             /// </returns>
-            private List<YahooManager> PopulateTeamBaseWithCoManagers([FromQuery] YahooTeamBase tB, [FromQuery] JToken managerPath, List<YahooManager> teamManagersList)
+            private List<YahooManager> PopulateTeamBaseWithCoManagers([FromQuery] YahooTeamResource tB, [FromQuery] JToken managerPath, List<YahooManager> teamManagersList)
             {
                 Console.WriteLine($"{tB.TeamName} has multiple managers");
                 int countOfItemsInJArray = managerPath.Children().Count();
@@ -419,3 +444,4 @@ namespace BaseballScraper.Controllers.YahooControllers
 
     }
 }
+
