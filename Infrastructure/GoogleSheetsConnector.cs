@@ -9,7 +9,7 @@ using Google.Apis.Sheets.v4.Data;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Infrastructure
 {
     // https://medium.com/@williamchislett/writing-to-google-sheets-api-using-net-and-a-services-account-91ee7e4a291
@@ -17,9 +17,6 @@ namespace BaseballScraper.Infrastructure
     {
         private readonly Helpers _h = new Helpers();
 
-        // Change this if you're accessing Drive or Docs
-        // _scopes: System.String[]
-        // _scopes[i]: https://www.googleapis.com/auth/spreadsheets
         private readonly string[] _scopes = { SheetsService.Scope.Spreadsheets };
 
         private readonly string _applicationName = "Baseball Scraper";
@@ -31,7 +28,7 @@ namespace BaseballScraper.Infrastructure
 
         public SheetsService ConnectToGoogle()
         {
-            _h.StartMethod();
+            // _h.StartMethod();
             GoogleCredential credential;
 
             // Put your credentials json file in the root of the solution and make sure copy to output dir property is set to always copy
@@ -64,11 +61,13 @@ namespace BaseballScraper.Infrastructure
         ///     _gSC.UpdateGoogleSheetRows(listOfLists,"FG_SP_MASTER_IMPORT","A3:DB1000","CoreCalculator");
         /// </example>
         /// <remarks>
-            /// View "FgSpMasterReportController" > "ScrapePitchersAndCreateList" for an example of this in practice
+        ///     View "FgSpMasterReportController" > "ScrapePitchersAndCreateList" for an example of this in practice
         /// </remarks>
         public string WriteGoogleSheetRows(IList<IList<object>> data, String sheetName, String range, String jsonGroupName)
         {
-            _h.StartMethod();
+            // _h.StartMethod();
+
+            // Console.WriteLine(jsonGroupName);
 
             ConnectToGoogle();
 
@@ -116,7 +115,7 @@ namespace BaseballScraper.Infrastructure
             var spreadsheetId = SelectGoogleSheetToRead(jsonGroupName,"SpreadsheetId");
 
             // helper function to print everything to console
-            PrintUpdateRangeDetails(sheetName, range, jsonGroupName, spreadsheetId);
+            // PrintUpdateRangeDetails(sheetName, range, jsonGroupName, spreadsheetId);
 
             // request: "Sets values in one or more ranges of a spreadsheet. The caller must specify the spreadsheet ID, a valueInputOption, and one or more ValueRanges."
                 // Type: Google.Apis.Sheets.v4.SpreadsheetsResource+ValuesResource+BatchUpdateRequest
@@ -128,7 +127,7 @@ namespace BaseballScraper.Infrastructure
             BatchUpdateValuesResponse response = request.Execute();
 
             // helper function to console log all the response details
-            LogSpreadsheetUpdateDetails(response);
+            // LogSpreadsheetUpdateDetails(response);
 
             // string serializedObject = JsonConvert.SerializeObject(response);
             return JsonConvert.SerializeObject(response);
@@ -137,7 +136,7 @@ namespace BaseballScraper.Infrastructure
 
         public async System.Threading.Tasks.Task<string> WriteGoogleSheetRowsAsync(IList<IList<object>> data, String sheetName, String range, String jsonGroupName)
         {
-            _h.StartMethod();
+            // _h.StartMethod();
 
             ConnectToGoogle();
 
@@ -185,7 +184,7 @@ namespace BaseballScraper.Infrastructure
             var spreadsheetId = SelectGoogleSheetToRead(jsonGroupName,"SpreadsheetId");
 
             // helper function to print everything to console
-            PrintUpdateRangeDetails(sheetName, range, jsonGroupName, spreadsheetId);
+            // PrintUpdateRangeDetails(sheetName, range, jsonGroupName, spreadsheetId);
 
             // request: "Sets values in one or more ranges of a spreadsheet. The caller must specify the spreadsheet ID, a valueInputOption, and one or more ValueRanges."
                 // Type: Google.Apis.Sheets.v4.SpreadsheetsResource+ValuesResource+BatchUpdateRequest
@@ -197,7 +196,7 @@ namespace BaseballScraper.Infrastructure
             // BatchUpdateValuesResponse response = request.Execute();
 
             // helper function to console log all the response details
-            LogSpreadsheetUpdateDetails(response);
+            // LogSpreadsheetUpdateDetails(response);
 
             // string serializedObject = JsonConvert.SerializeObject(response);
             return JsonConvert.SerializeObject(response);
@@ -206,11 +205,11 @@ namespace BaseballScraper.Infrastructure
 
 
         /// <example>
-            /// _gSC.WriteGoogleSheetColumns(listOfLists, "YAHOO_TRENDS","A1:Z1000","CoreCalculator");
+        ///     _gSC.WriteGoogleSheetColumns(listOfLists, "YAHOO_TRENDS","A1:Z1000","CoreCalculator");
         /// </example>
         public string WriteGoogleSheetColumns(IList<IList<object>> data, String sheetName, String range, String jsonGroupName)
         {
-            _h.StartMethod();
+            // _h.StartMethod();
 
             ConnectToGoogle();
 
@@ -270,7 +269,7 @@ namespace BaseballScraper.Infrastructure
             BatchUpdateValuesResponse response = request.Execute();
 
             // helper function to console log all the response details
-            LogSpreadsheetUpdateDetails(response);
+            // LogSpreadsheetUpdateDetails(response);
 
             // string serializedObject = JsonConvert.SerializeObject(response);
             return JsonConvert.SerializeObject(response);
@@ -278,11 +277,11 @@ namespace BaseballScraper.Infrastructure
 
 
         /// <example>
-        ///     // await _gSC.WriteGoogleSheetColumnsAsync(listOfLists, "YAHOO_TRENDS","A1:Z1000","CoreCalculator");
+        ///     await _gSC.WriteGoogleSheetColumnsAsync(listOfLists, "YAHOO_TRENDS","A1:Z1000","CoreCalculator");
         /// </example>
         public async System.Threading.Tasks.Task<string> WriteGoogleSheetColumnsAsync(IList<IList<object>> data, String sheetName, String range, String jsonGroupName)
         {
-            _h.StartMethod();
+            // _h.StartMethod();
 
             ConnectToGoogle();
 
@@ -330,7 +329,7 @@ namespace BaseballScraper.Infrastructure
             var spreadsheetId = SelectGoogleSheetToRead(jsonGroupName,"SpreadsheetId");
 
             // helper function to print everything to console
-            PrintUpdateRangeDetails(sheetName, range, jsonGroupName, spreadsheetId);
+            // PrintUpdateRangeDetails(sheetName, range, jsonGroupName, spreadsheetId);
 
             // request: "Sets values in one or more ranges of a spreadsheet. The caller must specify the spreadsheet ID, a valueInputOption, and one or more ValueRanges."
                 // Type: Google.Apis.Sheets.v4.SpreadsheetsResource+ValuesResource+BatchUpdateRequest
@@ -342,71 +341,12 @@ namespace BaseballScraper.Infrastructure
             // BatchUpdateValuesResponse response = request.Execute();
 
             // helper function to console log all the response details
-            LogSpreadsheetUpdateDetails(response);
+            // LogSpreadsheetUpdateDetails(response);
 
             // string serializedObject = JsonConvert.SerializeObject(response);
             return JsonConvert.SerializeObject(response);
         }
 
-
-
-
-
-
-
-
-
-
-        // public string UpdateColumn(List<object> list, String sheetName, String column, int startingRow)
-        // {
-        //     ConnectToGoogle();
-        //     String range = $"{sheetName}!{column}{startingRow}:{column}";
-        //     // Console.WriteLine($"range is: {range}");
-        //     string valueInputOption = "USER_ENTERED";
-
-        //     // The new values to apply to the spreadsheet.
-        //     List<ValueRange> updateData = new List<ValueRange>();
-
-        //     List<IList<object>> data = new List<IList<object>>
-        //     {
-        //         list
-        //     };
-
-        //     // dataValueRange: Google.Apis.Sheets.v4.Data.ValueRange
-        //     // dataValueRange.Range: test_sheet!A2
-        //     // dataValueRange.Values: System.Collections.Generic.List`1[System.Collections.Generic.IList`1[System.Object]]
-        //     ValueRange dataValueRange = new ValueRange
-        //     {
-        //         MajorDimension = "COLUMNS",
-        //         Range = range,
-        //         Values = data
-        //     };
-
-        //     updateData.Add(dataValueRange);
-
-        //     // requestBody: Google.Apis.Sheets.v4.Data.BatchUpdateValuesRequest
-        //     // requestBody.ValueInputOption: USER_ENTERED
-        //     // requestBody.Data: System.Collections.Generic.List`1[Google.Apis.Sheets.v4.Data.ValueRange]
-        //     BatchUpdateValuesRequest requestBody = new BatchUpdateValuesRequest
-        //     {
-        //         ValueInputOption = valueInputOption,
-        //         Data = updateData
-        //     };
-
-        //     // var _spreadsheetId = SelectGoogleSheetToRead("SheetsTestDoc","SpreadsheetId");
-        //     var _spreadsheetId = SelectGoogleSheetToRead("CoreCalculator","SpreadsheetId");
-
-        //     // request: Google.Apis.Sheets.v4.SpreadsheetsResource+ValuesResource+BatchUpdateRequest
-        //     var request = _sheetsService.Spreadsheets.Values.BatchUpdate(requestBody, _spreadsheetId);
-
-        //     // response: Google.Apis.Sheets.v4.Data.BatchUpdateValuesResponse
-        //     // To do this async --> Data.BatchUpdateValuesResponse response = await request.ExecuteAsync();
-        //     BatchUpdateValuesResponse response = request.Execute();
-        //     LogSpreadsheetUpdateDetails(response);
-
-        //     // string serializedObject = JsonConvert.SerializeObject(response);
-        //     return JsonConvert.SerializeObject(response);
-        // }
 
 
         // Example:
@@ -442,6 +382,7 @@ namespace BaseballScraper.Infrastructure
 
             if (allRows != null && allRows.Count > 0)
             {
+                // Console.WriteLine(allRows.Count);
                 // int maxColumnsWithData = 0;
                 // foreach(var x in allRows)
                 // {
@@ -458,7 +399,7 @@ namespace BaseballScraper.Infrastructure
                     // Console.WriteLine($"ROW: {rowCounter}");
                     if(row.Count == 0)
                     {
-                        Console.WriteLine($"No data found in row {rowCounter}.");
+                        // Console.WriteLine($"No data found in row {rowCounter}.");
                     }
 
                     else
@@ -483,7 +424,7 @@ namespace BaseballScraper.Infrastructure
         // Example:
             // var documentName = "SfbbPlayerIdMap";
             // var spreadSheetId = SelectGoogleSheetToRead(documentName, "SpreadsheetId");
-        public string SelectGoogleSheetToRead(string jsonGroupName, string jsonItemName)
+        private string SelectGoogleSheetToRead(string jsonGroupName, string jsonItemName)
         {
             // _h.StartMethod();
             ConnectToGoogle();
@@ -508,12 +449,6 @@ namespace BaseballScraper.Infrastructure
                     // Console.WriteLine($"json: {json}");
 
                         JToken jsonGroup = json[jsonGroupName];
-                        // Console.WriteLine($"jsonGroup: {jsonGroup}");
-
-                        var tabSpreadsheetId = jsonGroup["Tabs"]["FG_SP_MASTER_IMPORT"]["SpreadsheetId"];
-
-
-                        Console.WriteLine($"tabSpreadsheetId: {tabSpreadsheetId}");
 
                         JToken jTokenValue = jsonGroup[jsonItemName];
                         string returnValue = jTokenValue.ToString();
@@ -524,7 +459,7 @@ namespace BaseballScraper.Infrastructure
             }
         }
 
-        public List<object> CreateListOfSheetHeaders(string[] headerStrings)
+        private List<object> CreateListOfSheetHeaders(string[] headerStrings)
         {
             List<object> headers = new List<object>();
 

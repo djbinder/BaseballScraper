@@ -5,13 +5,14 @@ using BaseballScraper.EndPoints;
 using BaseballScraper.Infrastructure;
 using BaseballScraper.Models.Player;
 using BaseballScraper.Models.Yahoo;
-using BaseballScraper.Models.Yahoo.YahooPlayerResource;
+using BaseballScraper.Models.Yahoo.Resources.YahooPlayerResource;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
+
 #pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
-namespace BaseballScraper.Controllers.YahooControllers
+namespace BaseballScraper.Controllers.YahooControllers.Resources
 {
     [Route("api/yahoo/[controller]")]
     [ApiController]

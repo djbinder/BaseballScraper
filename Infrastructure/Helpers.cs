@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Text.RegularExpressions;
-using BaseballScraper.Models;
-using MarkdownLog;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DiagnosticAdapter;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -18,7 +17,7 @@ using Newtonsoft.Json.Linq;
 #pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Infrastructure
 {
-       public class Helpers
+    public class Helpers
     {
         private static string currentTime     = DateTime.Now.ToShortTimeString();
 
@@ -27,7 +26,9 @@ namespace BaseballScraper.Infrastructure
         public string Complete { get; set; } = "COMPLETE";
 
 
+
         #region LOGGERS ------------------------------------------------------------
+
 
             public void Intro(Object obj, String str)
             {
@@ -44,6 +45,7 @@ namespace BaseballScraper.Infrastructure
                 Console.ResetColor();
                 Console.WriteLine();
             }
+
 
             public void GuardRails(string logMessage, int numberOfRails)
             {
@@ -62,11 +64,13 @@ namespace BaseballScraper.Infrastructure
                 }
             }
 
+
             public void TypeAndIntro(Object o, string x)
             {
                 Intro(o, x);
                 Console.WriteLine($"Type for {x} --> {o.GetType()}");
             }
+
 
             public void PrintKeysAndValues(Object obj)
             {
@@ -76,6 +80,7 @@ namespace BaseballScraper.Infrastructure
                     Console.WriteLine($"{property.Name} --> {propertyValue}");
                 }
             }
+
 
             public void PrintJObjectItems(JObject JObjectToPrint)
             {
@@ -90,11 +95,16 @@ namespace BaseballScraper.Infrastructure
                 }
             }
 
-            /// <summary> Serialize a given object to a JSON stream (i.e., take a given object and convert it to JSON ) and print to console </summary>
-            /// <param name="obj"> An object; typically a JObject (not certain how it deals with objects besides JObjects) </param>
+
+            /// <summary>
+            ///     Serialize a given object to a JSON stream (i.e., take a given object and convert it to JSON ) and print to console
+            /// </summary>
+            /// <param name="obj">
+            ///     An object; typically a JObject
+            ///     Not certain how it deals with objects besides JObjects)
+            /// </param>
             public void PrintJsonFromObject (Object obj)
             {
-                // _c.StartMethod();
                 //Create a stream to serialize the object to.
                 MemoryStream mS = new MemoryStream();
 
@@ -117,6 +127,7 @@ namespace BaseballScraper.Infrastructure
                 Console.WriteLine(Encoding.UTF8.GetString(json, 0, json.Length));
             }
 
+
             public void PrintTypes (Type type)
             {
                 Console.WriteLine("IsArray: {0}", type.IsArray);
@@ -126,9 +137,14 @@ namespace BaseballScraper.Infrastructure
                 Console.WriteLine();
             }
 
+
             // STATUS: this works
-            /// <summary> Print a data table in console </summary>
-            /// <param name="dataTable"> The data table that you want to print in console </param>
+            /// <summary>
+            ///     Print a data table in console
+            /// </summary>
+            /// <param name="dataTable">
+            ///     The data table that you want to print in console
+            /// </param>
             private void PrintDataTable (DataTable dataTable)
             {
                 foreach (DataColumn col in dataTable.Columns)
@@ -155,11 +171,15 @@ namespace BaseballScraper.Infrastructure
                 Console.WriteLine ();
             }
 
+
             // STATUS: this works
             // PRINT | ALL | VARIABLE KEYS AND VALUES
-            /// <summary> Print the keys and values from a given IEnumerable </summary>
-            /// <examples> PrintKeyValuePairs(pythonKeyValuePairs); </example>
-            /// <param name="keyValuePairs"> An IEnumerable containing variable keys and values</param>
+            /// <summary>
+            ///     Print the keys and values from a given IEnumerable
+            /// </summary>
+            /// <param name="keyValuePairs">
+            ///     An IEnumerable containing variable keys and values
+            /// </param>
             public void PrintKeyValuePairs(IEnumerable<KeyValuePair<string, dynamic>> keyValuePairs)
             {
                 int kvpNumber = 1;
@@ -172,6 +192,7 @@ namespace BaseballScraper.Infrastructure
                 }
             }
 
+
             public void PrintKeyValuePairs(JObject obj)
             {
                 // KEY VALUE PAIR --> KeyValuePair<string, JToken> recordObject
@@ -183,7 +204,9 @@ namespace BaseballScraper.Infrastructure
                 }
             }
 
+
         #endregion LOGGERS ------------------------------------------------------------
+
 
 
 
@@ -228,6 +251,7 @@ namespace BaseballScraper.Infrastructure
 
         #region ITERATORS ------------------------------------------------------------
 
+
             public void IterateForEach(List<dynamic> list)
             {
                 foreach(var listItem in list)
@@ -235,6 +259,7 @@ namespace BaseballScraper.Infrastructure
                     Console.WriteLine(listItem);
                 }
             }
+
 
             public void IterateForEach(IEnumerable<dynamic> list)
             {
@@ -244,12 +269,15 @@ namespace BaseballScraper.Infrastructure
                 }
             }
 
+
         #endregion ITERATORS ------------------------------------------------------------
 
 
 
 
+
         #region MARKERS ------------------------------------------------------------
+
 
             public void Spotlight (String message)
             {
@@ -257,11 +285,9 @@ namespace BaseballScraper.Infrastructure
 
                 StackFrame frame      = new StackFrame(1, true);
                 var        lineNumber = frame.GetFileLineNumber();
-                // var lineNumber = GetCurrentLineNumber();
 
                 using (var writer = new System.IO.StringWriter())
                 {
-                    // change text color
                     Console.ForegroundColor = ConsoleColor.Magenta;
                     Console.WriteLine($"{fullMessage} @ Line#: {lineNumber}");
                     Console.Write(writer.ToString());
@@ -269,19 +295,20 @@ namespace BaseballScraper.Infrastructure
                 }
             }
 
+
             public void Highlight (String message)
             {
                 string fullMessage = JsonConvert.SerializeObject(message, Formatting.Indented).ToUpper();
 
                 using (var writer = new System.IO.StringWriter())
                 {
-                    // change text color
                     Console.ForegroundColor = ConsoleColor.Magenta;
                     Console.WriteLine($"{fullMessage}");
                     Console.Write(writer.ToString());
                     Console.ResetColor();
                 }
             }
+
 
             // https://msdn.microsoft.com/en-us/library/system.io.path.getfilename(v=vs.110).aspx
             public void StartMethod()
@@ -307,6 +334,8 @@ namespace BaseballScraper.Infrastructure
                 Console.ResetColor();
                 Console.WriteLine();
             }
+
+
             // https://msdn.microsoft.com/en-us/library/system.io.path.getfilename(v=vs.110).aspx
             public void CompleteMethod()
             {
@@ -315,7 +344,6 @@ namespace BaseballScraper.Infrastructure
 
                 StackTrace stackTrace = new StackTrace();
 
-                // var methodName = GetMethodName();
                 var methodName = stackTrace.GetFrame(1).GetMethod().Name;
 
                 StackFrame frame    = new StackFrame(1, true);
@@ -332,21 +360,23 @@ namespace BaseballScraper.Infrastructure
                 Console.WriteLine();
             }
 
+
         #endregion MARKERS ------------------------------------------------------------
+
 
 
 
 
         #region PROBES ------------------------------------------------------------
 
+
             public void Dig<T>(T x)
             {
                 Console.ForegroundColor = ConsoleColor.DarkCyan;
-
                 string json = JsonConvert.SerializeObject(x, Formatting.Indented);
 
                 Console.WriteLine();
-                Console.WriteLine("------------------------------------------------------------------");
+                Console.WriteLine($"\n------------------------------------------------------------------");
                 Console.WriteLine("BEGIN DIG");
                 Console.WriteLine("------------------------------------------------------------------");
                 Console.WriteLine(json);
@@ -355,12 +385,18 @@ namespace BaseballScraper.Infrastructure
                 Console.ResetColor();
             }
 
+
             public void DigObj(Object obj)
             {
                 string json = JsonConvert.SerializeObject(obj, Formatting.Indented);
+                Console.WriteLine($"\n------------------------------------------------------------------");
+                Console.WriteLine("BEGIN DIG");
+                Console.WriteLine("------------------------------------------------------------------");
                 Console.WriteLine($"{obj} --------------------------- {json} --------------------------- {obj}");
+                Console.WriteLine($"------------------------------------------------------------------\n");
                 Console.WriteLine();
             }
+
 
             public void DigDeep<T>(T x)
             {
@@ -375,12 +411,15 @@ namespace BaseballScraper.Infrastructure
                 Console.ResetColor();
             }
 
+
         #endregion PROBES ------------------------------------------------------------
 
 
 
 
+
         #region CONVERTERS ------------------------------------------------------------
+
 
             public string ConvertJTokenToString(JToken valueJToken)
             {
@@ -388,17 +427,20 @@ namespace BaseballScraper.Infrastructure
                 return valueString;
             }
 
+
             public int ConvertStringToInt(string valueString)
             {
                 int valueInt = Int32.Parse(valueString);
                 return valueInt;
             }
 
+
             // HttpContext.Session.SetObjectAsJson("TheList", NewList);
             public void SetObjectAsJson (ISession session, string key, object value)
             {
                 session.SetString (key, JsonConvert.SerializeObject (value));
             }
+
 
             //List<object> Retrieve = HttpContext.Session.GetObjectFromJson<List<object>>("TheList");
             public T GetObjectFromJson<T> (ISession session, string key)
@@ -407,12 +449,15 @@ namespace BaseballScraper.Infrastructure
                 return value == null ? default (T) : JsonConvert.DeserializeObject<T> (value);
             }
 
+
         #endregion CONVERTERS ------------------------------------------------------------
 
 
 
 
+
         #region ENUMERATORS ------------------------------------------------------------
+
 
             // STATUS: this works
             // example:
@@ -429,14 +474,15 @@ namespace BaseballScraper.Infrastructure
                 }
             }
 
+
             public void EnumerateOverRecordsObject(IEnumerable<object> records)
             {
                 foreach(var record in records)
                 {
-                    // Console.WriteLine(record);
                     Dig(record);
                 }
             }
+
 
             public void EnumerateOverRecords(IEnumerable<object> records)
             {
@@ -448,12 +494,15 @@ namespace BaseballScraper.Infrastructure
                 }
             }
 
+
         #endregion ENUMERATORS ------------------------------------------------------------
 
 
 
 
+
         #region UTILS ------------------------------------------------------------
+
 
             // https://msdn.microsoft.com/en-us/library/system.consolekeyinfo(v=vs.110).aspx
             public void ConsoleKey ()
@@ -464,6 +513,7 @@ namespace BaseballScraper.Infrastructure
                 Console.WriteLine("Character Entered: " + key.KeyChar);
                 Console.WriteLine("Special Keys: " + key.Modifiers);
             }
+
 
             /// <summary> </summary>
             /// <param name="itemsToList"> e.g., string[] planet = { "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune" };</param>
@@ -487,7 +537,94 @@ namespace BaseballScraper.Infrastructure
             //     return count;
             // }
 
+
         #endregion UTILS ------------------------------------------------------------
+
+
+
+
+
+        #region DIAGNOSTICS ------------------------------------------------------------
+
+
+            // DIAGNOSER: Option 1
+            // https://andrewlock.net/logging-using-diagnosticsource-in-asp-net-core/
+            public class MiddlewareDiagnoser
+            {
+                private readonly RequestDelegate _next;
+                private readonly DiagnosticSource _diagnostics;
+
+                public MiddlewareDiagnoser(RequestDelegate next, DiagnosticSource diagnosticSource)
+                {
+                    _next = next;
+                    _diagnostics = diagnosticSource;
+                }
+
+                public async Task Invoke(HttpContext context)
+                {
+                    Console.WriteLine("Diagnostics > Invoke");
+                    if (_diagnostics.IsEnabled("DiagnosticListenerExample.MiddlewareStarting"))
+                    {
+                        _diagnostics.Write("DiagnosticListenerExample.MiddlewareStarting",
+                            new
+                            {
+                                httpContext = context
+                            });
+                    }
+
+                    await _next.Invoke(context);
+                }
+            }
+
+            // DIAGNOSER: Option 1
+            // https://andrewlock.net/logging-using-diagnosticsource-in-asp-net-core/
+            public class MiddlewareDiagnoserListener
+            {
+                [DiagnosticName("DiagnosticListenerExample.MiddlewareStarting")]
+                public virtual void OnMiddlewareStarting(HttpContext httpContext)
+                {
+                    Console.WriteLine($"\n----------------------------------------------------------\nPATH >{httpContext.Request.Path}");
+                    Console.WriteLine("----------------------------------------------------------\n");
+                    Console.WriteLine($"Method: \n{httpContext.Request.Method}\n");
+                    Console.WriteLine($"Query: \n{httpContext.Request.Query}\n");
+                    Console.WriteLine($"Content Type \n{httpContext.Request.ContentType}");
+                    Console.WriteLine("----------------------------------------------------------\n");
+                }
+            }
+
+
+            // DIAGNOSER: Option 2
+            // https://andrewlock.net/understanding-your-middleware-pipeline-with-the-middleware-analysis-package/
+            public class FullDiagnosticListener
+            {
+                [DiagnosticName("Microsoft.AspNetCore.MiddlewareAnalysis.MiddlewareStarting")]
+                public virtual void OnMiddlewareStarting(HttpContext httpContext, string name)
+                {
+                    Console.WriteLine("MIDDLEWARE STARTING");
+                    Console.WriteLine($"{name}; {httpContext.Request.Path}\n");
+                }
+
+                [DiagnosticName("Microsoft.AspNetCore.MiddlewareAnalysis.MiddlewareException")]
+                public virtual void OnMiddlewareException(Exception exception, string name)
+                {
+                    Console.WriteLine("MIDDLEWARE EXCEPTION");
+                    Console.WriteLine($"{name}; {exception.Message}\n");
+                }
+
+                [DiagnosticName("Microsoft.AspNetCore.MiddlewareAnalysis.MiddlewareFinished")]
+                public virtual void OnMiddlewareFinished(HttpContext httpContext, string name)
+                {
+                    Console.WriteLine("MIDDLEWARE FINISHED");
+                    Console.WriteLine($"{name}; {httpContext.Response.StatusCode}\n");
+                }
+            }
+
+
+        #endregion DIAGNOSTICS ------------------------------------------------------------
+
+
+
+
 
     }
 
@@ -505,26 +642,35 @@ namespace BaseballScraper.Infrastructure
         public JsonFieldsCollector (JToken token)
         {
             fields = new Dictionary<string, JValue> ();
+            Console.WriteLine("--------------------------------------------------------");
             CollectFields (token);
         }
 
-        private void CollectFields (JToken jToken)
+        private void CollectFields(JToken jToken)
         {
             switch (jToken.Type)
             {
                 case JTokenType.Object:
-                    foreach (var child in jToken.Children<JProperty> ())
-                        CollectFields (child);
+                    foreach (var child in jToken.Children<JProperty>())
+                    {
+                        Console.WriteLine($"child1: {child}");
+                        CollectFields(child);
+                    }
                     break;
+
                 case JTokenType.Array:
-                    foreach (var child in jToken.Children ())
-                        CollectFields (child);
+                    foreach (var child in jToken.Children())
+                    {
+                        Console.WriteLine($"child2: {child}");
+                        CollectFields(child);
+                    }
                     break;
+
                 case JTokenType.Property:
-                    CollectFields (((JProperty) jToken).Value);
+                    CollectFields(((JProperty) jToken).Value);
                     break;
                 default:
-                    fields.Add (jToken.Path, (JValue) jToken);
+                    fields.Add(jToken.Path, (JValue)jToken);
                     break;
             }
         }
