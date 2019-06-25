@@ -75,7 +75,7 @@ namespace BaseballScraper.Controllers.YahooControllers
             private bool CheckIfUserHasExistingRefreshToken()
             {
                 var refreshTokenCheck = _yahooConfig.RefreshToken;
-                // Console.WriteLine($"refreshTokenCheck: {refreshTokenCheck}");
+                Console.WriteLine($"refreshTokenCheck: {refreshTokenCheck}");
 
                 bool userHasRefreshToken;
 
