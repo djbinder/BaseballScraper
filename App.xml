@@ -382,38 +382,262 @@
             <returns> A dictionary of all of a player's ids with key value pairs of Key: Id type, Value: id number/string </returns>
         </member>
         <!-- Badly formed XML comment ignored for member "T:BaseballScraper.Controllers.TwitterController" -->
-        <member name="M:BaseballScraper.Controllers.TwitterController.ExecuteTwitterStringSearch">
-            <summary>
-                Scrapes twitter to find most recent tweets that include 'searchString' that is defined within the method
-            </summary>
-            <remarks>
-                In Option 1, there are no parameters passed into the method.
-                To change what you are searching for, modify the variable 'searchString' within the method itself
-            </remarks>
-            <example>
-                ExecuteTwitterStringSearch()
-            </example>
-            <returns>
-                A list of tweets
-            </returns>
-        </member>
         <member name="M:BaseballScraper.Controllers.TwitterController.ExecuteTwitterStringSearch(System.String)">
+             <summary>
+                 Scrapes twitter to find most recent tweets that include 'searchString' parameter
+             </summary>
+             <param name="searchString">
+                 The string that you would like to search twitter for
+             </param>
+             <example>
+            
+             </example>
+        </member>
+        <member name="M:BaseballScraper.Controllers.TwitterControllers.TwitterTweetinviController.GetIUserFromScreenName(System.String)">
             <summary>
-                Scrapes twitter to find most recent tweets that include 'searchString' parameter
+                Get a Twitter IUser from screen name / Twitter handle / user name
             </summary>
             <remarks>
-                In Option 2, there is one parameter passed into the method.
-                To change what you are searching for, modify the parameter when calling the method
+                Uses tweetinvi to get the user
             </remarks>
-            <param name="searchString">
-                The string that you would like to search twitter for
+            <param name="screenName">
+                The screen name / Twitter handle / user name that you want
             </param>
             <example>
-                ExecuteTwitterStringSearch("anthony rizzo");
+                var user = GetIUserFromScreenName("Buster_ESPN");
             </example>
             <returns>
-                A list of tweets
+                Tweetinvi.Models.IUser user
             </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.TwitterControllers.TwitterTweetinviController.GetUserDTO(System.String)">
+            <summary>
+                Get a IUserDTO from screen name / Twitter handle / user name
+            </summary>
+            <remarks>
+                Uses tweetinvi to get the user
+                https://github.com/linvi/tweetinvi/wiki/Custom-Queries
+            </remarks>
+            <param name="screenName">
+                The screen name / Twitter handle / user name that you want
+            </param>
+            <example>
+                var iUserDto = GetUserDTO("mr_baseball");
+            </example>
+            <returns>
+                Tweetinvi.Models.DTO.IUserDTO
+            </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.TwitterControllers.TwitterTweetinviController.GetIUserFromUserDTO(Tweetinvi.Models.DTO.IUserDTO)">
+            <summary>
+                Get a IUser from screen name / Twitter handle / user name
+            </summary>
+            <remarks>
+                Uses tweetinvi to get the user
+                https://github.com/linvi/tweetinvi/wiki/Custom-Queries
+            </remarks>
+            <param name="IUserDTO">
+                IUserDTO instance of model defined by tweetinvi
+            </param>
+            <example>
+                var iUserDto = GetUserDTO("mr_baseball");
+                var iUser = GetIUserFromUserDTO(iUserDto);
+            </example>
+            <returns>
+                Tweetinvi.Models.IUser
+            </returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Controllers.TwitterControllers.TwitterTweetinviController.GetUserIdsForFollowersOfUser(System.String)" -->
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Controllers.TwitterControllers.TwitterTweetinviController.GetTweetsFromMyTimeline" -->
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Controllers.TwitterControllers.TwitterTweetinviController.GetTweetsFromUsersTimeline(System.String)" -->
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Controllers.TwitterControllers.TwitterTweetinviController.SearchTwitterNoFilters(System.String)" -->
+        <member name="M:BaseballScraper.Controllers.TwitterControllers.TwitterTweetinviController.GetTweetFromTweetId(System.Int64)">
+            <summary>
+                Gets one tweet by providing tweetId (e.g., 1142590848724557824)
+            </summary>
+            <remarks>
+                Uses tweetinvi to execute the search
+                See: https://github.com/linvi/tweetinvi/wiki/Tweets
+            </remarks>
+            <param name="tweetId">
+                The tweed Id of the tweet you want in long form
+            </param>
+            <example>
+                var tweetIdLong = 1142590848724557824;
+                var tweets = GetTweetFromTweetId(tweetIdLong);
+            </example>
+            <returns>
+                Tweetinvi.Models.ITweet
+            </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.TwitterControllers.TwitterTweetinviController.GetTweetFromTweetId(System.String)">
+            <summary>
+                Gets one tweet by providing tweetId (e.g., "1142590848724557824")
+            </summary>
+            <remarks>
+                Uses tweetinvi to execute the search
+                See: https://github.com/linvi/tweetinvi/wiki/Tweets
+            </remarks>
+            <param name="tweetIdString">
+                The tweed Id of the tweet you want in string form
+            </param>
+            <example>
+                var tweetIdString = "1142590848724557824";
+                var tweets = GetTweetFromTweetId(tweetIdString);
+            </example>
+            <returns>
+                Tweetinvi.Models.ITweet
+            </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.TwitterControllers.TwitterTweetinviController.CreateSearchStringToSearchListFor(System.String,System.String,System.String,System.Int32)">
+            <summary>
+                Create search string to execute twitter list search based on searchString
+            </summary>
+            <remarks>
+                Used within 'GetJObjectOfTweetsFromListFiltered' method
+                See for encoding help: https://en.wikipedia.org/wiki/Percent-encoding
+                See: https://developer.twitter.com/en/docs/tweets/search/api-reference/get-search-tweets
+            </remarks>
+            <param name="screenName">
+                The screen name / Twitter handle / user name that you want
+            </param>
+            <param name="listName">
+                The name of the list as defined by the user (e.g., 'Baseball')
+            </param>
+            <param name="searchString">
+                The term or terms that you want to search for
+            </param>
+            <param name="numberOfResultsToReturn">
+                The number of tweets you want returned
+            </param>
+            <example>
+                string fullSearchString = CreateSearchStringToSearchListFor("mr_baseball", "baseball", "mookie", 100);
+            </example>
+            <returns>
+                string
+            </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.TwitterControllers.TwitterTweetinviController.GetJObjectOfTweetsFromListFiltered(System.String,System.String,System.String,System.Int32)">
+            <summary>
+                Gets JObject with all tweet info(i.e., text from tweet) from Twitter list based on searchString
+            </summary>
+            <remarks>
+                Uses tweetinvi to execute the search
+                Uses 'CreateSearchStringToSearchListFor' to generate search string within method
+                Used within 'GetJTokenOfAllTweetTextInJObject' method
+                See: https://github.com/linvi/tweetinvi/wiki/Custom-Queries
+            </remarks>
+            <param name="screenName">
+                The screen name / Twitter handle / user name that you want
+            </param>
+            <param name="listName">
+                The name of the list as defined by the user (e.g., 'Baseball')
+            </param>
+            <param name="searchString">
+                The term or terms that you want to search for
+            </param>
+            <param name="numberOfResultsToReturn">
+                The number of tweets you want returned
+            </param>
+            <example>
+                JObject jsonObject = GetJObjectOfTweetsFromListFiltered("mr_baseball", "baseball", "mookie", 100);
+            </example>
+            <returns>
+                JObject
+            </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.TwitterControllers.TwitterTweetinviController.GetJTokenOfAllTweetTextInJObject(System.String,System.String,System.String,System.Int32)">
+            <summary>
+                Gets JToken with all tweet info(i.e., text from tweet) from Twitter list based on searchString
+            </summary>
+            <remarks>
+                Uses tweetinvi to execute the search
+                Uses 'GetJObjectOfTweetsFromListFiltered' to generate JObject within method
+                Used within 'GetListOfAllTweetsFullTextInJToken' and 'GetListOfITweetsInJToken' methods
+                See: https://github.com/linvi/tweetinvi/wiki/Custom-Queries
+            </remarks>
+            <param name="screenName">
+                The screen name / Twitter handle / user name that you want
+            </param>
+            <param name="listName">
+                The name of the list as defined by the user (e.g., 'Baseball')
+            </param>
+            <param name="searchString">
+                The term or terms that you want to search for
+            </param>
+            <param name="numberOfResultsToReturn">
+                The number of tweets you want returned
+            </param>
+            <example>
+                JToken allStatusesJToken = GetJTokenOfAllTweetTextInJObject("mr_baseball", "baseball", "mookie", 100);
+            </example>
+            <returns>
+                JToken
+            </returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Controllers.TwitterControllers.TwitterTweetinviController.GetListOfAllTweetsFullTextInJToken(System.String,System.String,System.String,System.Int32)" -->
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Controllers.TwitterControllers.TwitterTweetinviController.GetListOfITweetsInJToken(System.String,System.String,System.String,System.Int32)" -->
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Controllers.TwitterControllers.TwitterTweetinviController.GetAllTweetsFromTwitterList(System.String,System.String)" -->
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Controllers.TwitterControllers.TwitterTweetinviController.GetTweetsFromTwitterListAfterSinceId(System.String,System.String,System.Boolean)" -->
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Controllers.TwitterControllers.TwitterTweetinviController.GetAllMembersOfTwitterList(System.String,System.String)" -->
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Controllers.TwitterControllers.TwitterTweetinviController.GetAllUserIdsForMembersOfTwitterList(System.String,System.String)" -->
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Controllers.TwitterControllers.TwitterTweetinviController.AddUserIdsToList(System.Collections.Generic.IEnumerable{Tweetinvi.Models.IUser},System.Collections.Generic.List{System.Int64})" -->
+        <member name="M:BaseballScraper.Controllers.TwitterControllers.TwitterTweetinviController.WriteSinceIdToTxtFile(System.Int64)">
+            <summary>
+                Writes a given value / long (i.e., sinceId) to text file within Configuration folder
+                It also write date and time the value / long is added
+            </summary>
+            <remarks>
+                This connects to 'twitterSinceId.txt' file
+                See: https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/file-system/how-to-write-to-a-text-file
+                From Twitter:
+                    * Returns tweets w/ Ids > (that is, more recent than) the specified ID.
+                    * There are limits to # of Tweets which can be accessed through the API.
+                    * If the limit of Tweets is hit, since_id will use oldest ID available.
+                See: https://developer.twitter.com/en/docs/tweets/search/api-reference/get-search-tweets
+            </remarks>
+            <param name="sinceId">
+                Last id of all tweets previously searched
+                Future searches should stop once they hit the sinceId since you've already searched those
+            </param>
+            <example>
+                WriteSinceIdToTxtFile(999999999999111111);
+            </example>
+        </member>
+        <member name="M:BaseballScraper.Controllers.TwitterControllers.TwitterTweetinviController.ReadCurrentSinceIdFromTxtFile">
+            <summary>
+                Reads most recent since tweet id from text file within Configuration folder
+            </summary>
+            <remarks>
+                This connects to 'twitterSinceId.txt' file
+                See: https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/file-system/how-to-read-a-text-file-one-line-at-a-time
+            </remarks>
+            <example>
+                var currentSinceId = ReadCurrentSinceIdFromTxtFile()
+            </example>
+        </member>
+        <member name="M:BaseballScraper.Controllers.TwitterControllers.TwitterTweetinviController.RunPreCheck">
+            <summary>
+                From tweetinvi:
+                "Tweetinvi events are global events that can be used to gain more control and debug over what Tweetinvi does for you."
+            </summary>
+            <remarks>
+                From tweetinvi:
+                    * Checks which requests will be performed through Tweetinvi
+                More importantly it allows developers to modify or cancel a WebRequest"
+                See: https://github.com/linvi/tweetinvi/wiki/Tweetinvi-Events
+            </remarks>
+        </member>
+        <member name="M:BaseballScraper.Controllers.TwitterControllers.TwitterTweetinviController.RunPostCheck">
+            <summary>
+                From tweetinvi:
+                "Tweetinvi events are global events that can be used to gain more control and debug over what Tweetinvi does for you."
+            </summary>
+            <remarks>
+                From tweetinvi:
+                    * Checks if a query was successful and what it returned
+                See: https://github.com/linvi/tweetinvi/wiki/Tweetinvi-Events
+            </remarks>
         </member>
         <member name="M:BaseballScraper.Controllers.YahooControllers.Collections.YahooPlayersCollectionController.FilterByPlayerNameThenCreateInstance(System.String)">
             <summary>

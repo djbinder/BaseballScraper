@@ -44,6 +44,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.DiagnosticAdapter" Version="2.1.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="2.1.1" />
+    <PackageReference Include="MongoDB.Driver" Version="2.8.1" />
 
 
     <!-- Database -->
@@ -85,14 +86,14 @@
 
 
     <!-- twitter -->
-    <!-- <PackageReference Include="TweetinviAPI" Version="4.0.1" /> -->
+    <PackageReference Include="TweetinviAPI" Version="4.0.1" />
     <PackageReference Include="linqtotwitter" Version="4.2.1" />
 
 
     <!-- Razor Pages -->
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.5" />
     <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="4.5.1" />
-    <!-- <PackageReference Include="TweetinviAPI.WebhooksPlugin" Version="4.0.0" /> -->
+    <PackageReference Include="TweetinviAPI.WebhooksPlugin" Version="4.0.0" />
     <PackageReference Include="Vereyon.Web.HtmlSanitizer" Version="1.4.0" />
     <!-- <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.1" /> -->
 
