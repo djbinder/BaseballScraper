@@ -32,6 +32,8 @@ namespace BaseballScraper.Controllers.YahooControllers
     #endregion OVERVIEW ------------------------------------------------------------
 
 
+    // https://theathletic.com/533969/2018/09/19/exploring-the-hidden-fantasy-tools-on-yahoo-espn-and-cbs/
+
 
     [Route("api/yahoo/[controller]")]
     [ApiController]

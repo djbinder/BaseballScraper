@@ -142,13 +142,12 @@ namespace BaseballScraper.Controllers.FanGraphs
                 string numberOfPagesToScrapeString = htmlElement[0].InnerText;
                 int    numberOfPagesToScrapeInt    = Convert.ToInt32(numberOfPagesToScrapeString);
 
-                bool showGuardRails = false;
-                if(showGuardRails == true)
-                {
-                    _h.Spotlight("----- GET NUMBER OF PAGES TO SCRAPE -----");
-                    Console.WriteLine($"NUMBER OF PAGES TO SCRAPE IS: {numberOfPagesToScrapeInt}");
-                    Console.WriteLine();
-                }
+                // bool showGuardRails = false;
+                // if(showGuardRails == true)
+                // {
+                //     _h.Spotlight("----- GET NUMBER OF PAGES TO SCRAPE -----");
+                //     Console.WriteLine($"NUMBER OF PAGES TO SCRAPE IS: {numberOfPagesToScrapeInt}\n");
+                // }
                 return numberOfPagesToScrapeInt;
             }
 
@@ -184,13 +183,12 @@ namespace BaseballScraper.Controllers.FanGraphs
                     string urlToScrapeEndPointUriToString = urlToScrapeEndPointUri.ToString();
                     urlsOfPagesToScrape.Add (urlToScrapeEndPointUri);
 
-                    bool showGuardRails = false;
-                    if(showGuardRails == true)
-                    {
-                        _h.Spotlight("----- GET URLS OF PAGES TO SCRAPE -----");
-                        Console.WriteLine($"URL TO SCRAPE # {i}: {urlToScrapeEndPointUri}");
-                        Console.WriteLine();
-                    }
+                    // bool showGuardRails = false;
+                    // if(showGuardRails == true)
+                    // {
+                    //     _h.Spotlight("----- GET URLS OF PAGES TO SCRAPE -----");
+                    //     Console.WriteLine($"URL TO SCRAPE # {i}: {urlToScrapeEndPointUri}\n");
+                    // }
                 }
                 return urlsOfPagesToScrape;
             }
@@ -240,13 +238,13 @@ namespace BaseballScraper.Controllers.FanGraphs
                     string urlToScrapeEndPointUriToString = urlToScrapeEndPointUri.ToString();
                     urlsOfPagesToScrape.Add (urlToScrapeEndPointUri);
 
-                    bool showGuardRails = false;
-                    if(showGuardRails == true)
-                    {
-                        _h.Spotlight("----- GET URLS OF PAGES TO SCRAPE -----");
-                        Console.WriteLine($"URL TO SCRAPE # {i}: {urlToScrapeEndPointUri}");
-                        Console.WriteLine();
-                    }
+                    // bool showGuardRails = false;
+                    // if(showGuardRails == true)
+                    // {
+                    //     _h.Spotlight("----- GET URLS OF PAGES TO SCRAPE -----");
+                    //     Console.WriteLine($"URL TO SCRAPE # {i}: {urlToScrapeEndPointUri}");
+                    //     Console.WriteLine();
+                    // }
                 }
                 return urlsOfPagesToScrape;
             }
@@ -462,7 +460,7 @@ namespace BaseballScraper.Controllers.FanGraphs
             // STATUS: this works
             /// <summary> Scrapes the headers of the table to get the stat names (e.g., ERA, WHIP, etc.) </summary>
             /// <param name="thisUrl"> The url of the table you are scraping </param>
-            public List<Object> GetTableHeaderValuesList (string thisUrl)
+            public List<object> GetTableHeaderValuesList (string thisUrl)
             {
                 HtmlWeb htmlWeb = new HtmlWeb ();
 
