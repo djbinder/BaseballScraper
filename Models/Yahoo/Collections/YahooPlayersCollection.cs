@@ -253,10 +253,10 @@ namespace BaseballScraper.Models.Yahoo.Collections.YahooPlayersCollection
         [JsonProperty("on_disabled_list", NullValueHandling = NullValueHandling.Ignore)]
         public string OnDisabledList { get; set; }
 
-        public static implicit operator Player(JToken v)
-        {
-            throw new NotImplementedException();
-        }
+        // public static implicit operator Player(JToken v)
+        // {
+        //     throw new NotImplementedException();
+        // }
     }
 
     // public partial class EligiblePositions
@@ -414,8 +414,7 @@ namespace BaseballScraper.Models.Yahoo.Collections.YahooPlayersCollection
         {
             if (reader.TokenType == JsonToken.Null) return null;
             var value = serializer.Deserialize<string>(reader);
-            long l;
-            if (Int64.TryParse(value, out l))
+            if (Int64.TryParse(value, out long l))
             {
                 return l;
             }

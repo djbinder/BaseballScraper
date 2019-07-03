@@ -12,8 +12,6 @@ using Tweetinvi.Models.DTO.QueryDTO;
 using Tweetinvi.Parameters;
 
 
-
-
 #pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Controllers.TwitterControllers
 {
@@ -41,12 +39,6 @@ namespace BaseballScraper.Controllers.TwitterControllers
         {
             TweetinviConfig.CurrentThreadSettings.TweetMode = TweetMode.Extended;
             Auth.SetUserCredentials(_twitterConfig.ConsumerKey, _twitterConfig.ConsumerSecret, _twitterConfig.AccessToken, _twitterConfig.AccessTokenSecret);
-
-            DateTime now = DateTime.Now;
-            // var list = GetListOfITweetsInJToken(screenName, listName, searchString, 31);
-
-            // var list = GetTweetsFromTwitterListAfterSinceId(listName, screenName, false);
-            // var list = GetTweetsFromTwitterListAfterDate(listName, screenName, false, now);
         }
 
 
