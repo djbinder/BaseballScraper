@@ -9,71 +9,53 @@ namespace BaseballScraper.Models.BaseballSavant
     public class StartingPitcherCsw : BaseEntity
     {
         [Key]
-        public int StartingPitcherCswId { get; set; }
-
-
-
-        public string CswPitches { get; set; }
-
-        public string PlayerId { get; set; }
+        public int? StartingPitcherCswId { get; set; }
 
         public string PlayerName { get; set; }
 
-        public string TotalPitches { get; set; }
+        public int? PlayerId { get; set; }
 
-        public string PitchPercent { get; set; }
+        public int? CswPitches { get; set; }
 
-        public string Ba { get; set; }
+        public int? TotalPitches { get; set; }
 
-        public string Iso { get; set; }
+        public decimal? CswPitchPercent { get; set; }
 
-        public string Babip { get; set; }
 
-        public string Slg { get; set; }
+        // sometimes, At-Bats is 'null' in a csv so the private and public strings are needed
+        private readonly string abs;
+        public string Abs => abs ?? "NA";
 
-        public string Woba { get; set; }
 
-        public string Xwoba { get; set; }
+        public int? SpinRate { get; set; }
 
-        public string Xba { get; set; }
+        public decimal? Velocity { get; set; }
 
-        public string Hits { get; set; }
+        public decimal? EffectiveSpeed { get; set; }
 
-        public string Abs { get; set; }
+        public int? Whiffs { get; set; }
 
-        public string LaunchSpeed { get; set; }
+        public int? Swings { get; set; }
 
-        public string LaunchAngle { get; set; }
+        public int? Takes { get; set; }
 
-        public string SpinRate { get; set; }
+        public decimal? EffectiveMinVelocity { get; set; }
 
-        public string Velocity { get; set; }
+        public decimal? ReleaseExtension { get; set; }
 
-        public string EffectiveSpeed { get; set; }
+        public int? Pos3IntStartDistance { get; set; }
 
-        public string Whiffs { get; set; }
+        public int? Pos4IntStartDistance { get; set; }
 
-        public string Swings { get; set; }
+        public int? Pos5IntStartDistance { get; set; }
 
-        public string Takes { get; set; }
+        public int? Pos6IntStartDistance { get; set; }
 
-        public string EffectiveMinVelocity { get; set; }
+        public int? Pos7IntStartDistance { get; set; }
 
-        public string ReleaseExtension { get; set; }
+        public int? Pos8IntStartDistance { get; set; }
 
-        public string Pos3IntStartDistance { get; set; }
-
-        public string Pos4IntStartDistance { get; set; }
-
-        public string Pos5IntStartDistance { get; set; }
-
-        public string Pos6IntStartDistance { get; set; }
-
-        public string Pos7IntStartDistance { get; set; }
-
-        public string Pos8IntStartDistance { get; set; }
-
-        public string Pos9IntStartDistance { get; set; }
+        public int? Pos9IntStartDistance { get; set; }
 
     }
 
@@ -90,29 +72,9 @@ namespace BaseballScraper.Models.BaseballSavant
 
             Map( sp => sp.TotalPitches).Name("total_pitches");
 
-            Map( sp => sp.PitchPercent).Name("pitch_percent");
-
-            Map( sp => sp.Ba ).Name("ba");
-
-            Map( sp => sp.Iso).Name("iso");
-
-            Map( sp => sp.Babip).Name("babip");
-
-            Map( sp => sp.Slg).Name("slg");
-
-            Map( sp => sp.Woba).Name("woba");
-
-            Map( sp => sp.Xwoba).Name("xwoba");
-
-            Map( sp => sp.Xba).Name("xba");
-
-            Map( sp => sp.Hits).Name("hits");
+            Map( sp => sp.CswPitchPercent).Name("pitch_percent");
 
             Map( sp => sp.Abs).Name("abs");
-
-            Map( sp => sp.LaunchSpeed).Name("launch_speed");
-
-            Map( sp => sp.LaunchAngle).Name("launch_angle");
 
             Map( sp => sp.SpinRate).Name("spin_rate");
 
@@ -144,9 +106,6 @@ namespace BaseballScraper.Models.BaseballSavant
 
             Map( sp => sp.Pos9IntStartDistance).Name("pos9_int_start_distance");
         }
-
-
-
     }
 
 

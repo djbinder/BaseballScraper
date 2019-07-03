@@ -9,7 +9,83 @@
             <example> https://127.0.0.1:5001/api/airtable/managers </example>
             <returns> ManagerFullName, ManagerFirstName, ManagerListName, TeamIds, etc.</returns>
         </member>
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.WriteBaseballSavantSingleDayDataToCsv(System.Int32,System.Int32,System.Int32)" -->
+        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.GetAllSpCswSingleDayEndPointUri(System.Int32,System.Int32,System.Int32)">
+            <summary>
+                Create end point for 'WriteBaseballSavantSingleDayDataToCsv' method to write to
+            </summary>
+        </member>
+        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.SetCsvFilePathSpCswSingleDay(System.Int32,System.Int32,System.Int32)">
+            <summary>
+                Creates a string of the fill path name
+            </summary>
+        </member>
         <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.ReadSpCswCsvSingleDayAsync(System.Int32,System.Int32,System.Int32)" -->
+        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.AddStartingPitcherCswSingleDayToDatabase(BaseballScraper.Models.BaseballSavant.StartingPitcherCswSingleDay)">
+            <summary>
+                Add StartingPitcherCswSingleDay to Database
+            </summary>
+        </member>
+        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.AddStartingPitcherCswsSingleDayToDatabaseFromList(System.Collections.Generic.List{BaseballScraper.Models.BaseballSavant.StartingPitcherCswSingleDay})">
+            <summary>
+                Add StartingPitcherCswSingleDay to Database from list
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.CreateSpCswSingleDayList(System.Collections.Generic.List{System.Object},System.Int32,System.Int32,System.Int32)" -->
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.WriteBaseballSavantDateRangeDataToCsv(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)" -->
+        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.GetAllSpCswRangeOfDaysEndPointUri(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+                Create end point for 'WriteBaseballSavantDateRangeDataToCsv' method to write to
+            </summary>
+        </member>
+        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.SetCsvFilePathSpCswDateRange(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+                Creates a string of the fill path name
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.ReadSpCswCsvDateRangeAsync(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)" -->
+        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.AddStartingPitcherCswDateRangeToDatabase(BaseballScraper.Models.BaseballSavant.StartingPitcherCswDateRange)">
+            <summary>
+                Add StartingPitcherCswDateRange to Database
+            </summary>
+        </member>
+        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.AddStartingPitcherCswsDateRangeToDatabaseFromList(System.Collections.Generic.List{BaseballScraper.Models.BaseballSavant.StartingPitcherCswDateRange})">
+            <summary>
+                Add StartingPitcherCswDateRange to Database from list
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.CreateSpCswDateRangeList(System.Collections.Generic.List{System.Object},System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)" -->
+        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.WriteBaseballSavantFullSeasonData(System.Int32)">
+            <summary>
+                Write SP CSW data from Baseball Savant to CSV File
+                Uses 'GetAllSpCswFullSeasonEndPointUri' end point
+            </summary>
+            <param name="year">
+                The year / season you want to search for
+            </param>
+        </member>
+        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.GetAllSpCswFullSeasonEndPointUri(System.Int32)">
+            <summary>
+                Create end point for 'WriteBaseballSavantFullSeasonData' method to write to
+            </summary>
+        </member>
+        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.SetCsvFilePathSpCswFulLSeason(System.Int32)">
+            <summary>
+                Creates a string of the fill path name
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.ReadSpCswCsvFullSeasonAsync(System.Int32)" -->
+        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.AddStartingPitcherCswToDatabase(BaseballScraper.Models.BaseballSavant.StartingPitcherCsw)">
+            <summary>
+                Add StartingPitcherCsw to Database
+            </summary>
+        </member>
+        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.AddStartingPitcherCswsToDatabaseFromList(System.Collections.Generic.List{BaseballScraper.Models.BaseballSavant.StartingPitcherCsw})">
+            <summary>
+                Add StartingPitcherCsw to Database from list
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.CreateSpCswFullSeasonList(System.Collections.Generic.List{System.Object},System.Int32)" -->
         <member name="T:BaseballScraper.Controllers.CbsControllers.CbsTransactionTrendsController">
             <summary> Retrieve Cbs player trends: Most added, most dropped, most viewed, most traded </summary>
             <list> INDEX
@@ -381,17 +457,44 @@
             <param name="playersBase"> An instantiated PlayerBase </param>
             <returns> A dictionary of all of a player's ids with key value pairs of Key: Id type, Value: id number/string </returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "T:BaseballScraper.Controllers.TwitterController" -->
         <member name="M:BaseballScraper.Controllers.TwitterController.ExecuteTwitterStringSearch(System.String)">
-             <summary>
-                 Scrapes twitter to find most recent tweets that include 'searchString' parameter
-             </summary>
-             <param name="searchString">
-                 The string that you would like to search twitter for
-             </param>
-             <example>
-            
-             </example>
+            <summary>
+                Search all of Twitter to find most recent tweets that include 'searchString' parameter
+                Set to return last 100 relevant tweets which is the max possible
+            </summary>
+            <remarks>
+                Uses LinqToTwitter
+                See: https://github.com/JoeMayo/LinqToTwitter/wiki/Searching-Twitter
+            </remarks>
+            <param name="searchString">
+                The string that you would like to search twitter for
+            </param>
+            <example>
+                string fullName = "Anthony Rizzo";
+                var taskSearch = await ExecuteTwitterStringSearch(fullName);
+            </example>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Controllers.TwitterController.CreateNewStatusListForEach(LinqToTwitter.Search)" -->
+        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Controllers.TwitterController.CreateNewStatusListFromCount(LinqToTwitter.Search)" -->
+        <member name="M:BaseballScraper.Controllers.TwitterController.GetListsForUser(System.String)">
+            <summary>
+                Create LinqToTwitter.List
+            </summary>
+            <remarks>
+                Uses LinqToTwitter
+                See: https://github.com/JoeMayo/LinqToTwitter/wiki/List-Entity
+            </remarks>
+            <param name="userName">
+                The screen name / Twitter handle / user name that you want
+            </param>
+            <example>
+                var taskSearch = await GetListsForUser("mr_baseball");
+            </example>
+        </member>
+        <member name="M:BaseballScraper.Controllers.TwitterController.AddTwitterStatusToMongoDb(BaseballScraper.Models.Twitter.TwitterStatus)">
+            <summary>
+                Add a TwitterStatus to mongoDb
+            </summary>
         </member>
         <member name="M:BaseballScraper.Controllers.TwitterControllers.TwitterTweetinviController.GetIUserFromScreenName(System.String)">
             <summary>
@@ -1371,8 +1474,12 @@
             <example>
                 DownloadCsvFromLink("http://crunchtimebaseball.com/master.csv", "BaseballData/PlayerBase/CrunchtimePlayerBaseCsvAutoDownload.csv")
             </example>
-            <param name="csvUrl"> this is the full url of where the csv is linked / hosted </param>
-            <param name="targetFileName"> this is the name of the file that you want to write to </param>
+            <param name="csvUrl">
+                this is the full url of where the csv is linked / hosted
+            </param>
+            <param name="targetFileName">
+                this is the name of the file that you want to write to
+            </param>
         </member>
         <member name="M:BaseballScraper.Infrastructure.CsvHandler.ReadCsvRecords(System.String,System.Type,System.Type)">
             <summary> Reads a csv file, non async </summary>
@@ -1380,69 +1487,127 @@
             <example> _cH.ReadCsv("BaseballData/Lahman/Teams.csv"); </example>
         </member>
         <member name="M:BaseballScraper.Infrastructure.CsvHandler.ReadCsvRecordsAsync(System.String,System.Type,System.Type)">
-            <summary> Reads a csv file, async </summary>
-            <remarks> This does not enumerate over the records </remarks>
-                <seealso cref="M:BaseballScraper.Infrastructure.Helpers.EnumerateOverRecords(System.Collections.Generic.IEnumerable{System.Object})" />
-                <seealso cref="M:BaseballScraper.Infrastructure.Helpers.EnumerateOverRecordsDynamic(System.Collections.Generic.IEnumerable{System.Object})" />
-                <seealso cref="M:BaseballScraper.Infrastructure.Helpers.EnumerateOverRecordsObject(System.Collections.Generic.IEnumerable{System.Object})" />
-            <param name="csvFilePath"> The location / path of the file that you want to read </param>
-            <param name="modelType"> The Lahman class / model that is in the csv file </param>
-                <example> typeof(LahmanPeople) </example>
-            <param name="modelMapType"> The map of the Lahman class / model that is in the csv file </param>
-                <example> typeof(LahmanPeopleMap) </example>
-            <example> await _cH.ReadCsvRecordsAsync(filePath, typeof(LahmanPeople), typeof(LahmanPeopleMap)); </example>
+            <summary>
+                Reads a csv file, async
+            </summary>
+            <remarks>
+                This does not enumerate over the records
+            </remarks>
+            <param name="csvFilePath">
+                The location / path of the file that you want to read
+            </param>
+            <param name="modelType">
+                The Lahman class / model that is in the csv file
+            </param>
+            <param name="modelMapType">
+                The map of the Lahman class / model that is in the csv file
+            </param>
+            <example>
+                await _cH.ReadCsvRecordsAsync(filePath, typeof(LahmanPeople), typeof(LahmanPeopleMap));
+            </example>
         </member>
         <member name="M:BaseballScraper.Infrastructure.CsvHandler.RegisterMapForClass(CsvHelper.CsvReader,System.Type)">
-            <summary> Register the map for the class within a csv you are trying read </summary>
-            <remarks> This is required any type you want to use a model map </remarks>
-            <param name="csvReader"> A reader reading a csv file </param>
-            <param name="modelType"> The Lahman class / model that is in the csv file </param>
+            <summary>
+                Register the map for the class within a csv you are trying read </summary>
+            <remarks>
+                This is required any type you want to use a model map
+            </remarks>
+            <param name="csvReader">
+                A reader reading a csv file
+            </param>
+            <param name="modelType">
+                The Lahman class / model that is in the csv file
+            </param>
         </member>
-        <member name="M:BaseballScraper.Infrastructure.DataTabler.GetModelProperties">
-            <summary> Given a model / class, get the properties of that model </summary>
-            <returns> Model properties for a given class (e.g, FanGraphsPitcher) </returns>
+        <member name="M:BaseballScraper.Infrastructure.DataTabler.CreateEmptyDataTable(System.String)">
+            <summary>
+                Create a new data table
+            </summary>
+            <returns>
+                A new data table based with no columns or rows
+            </returns>
+            <example>
+                var dataTable = CreateEmptyDataTable("TABLE TITLE");
+            </example>
         </member>
-        <member name="M:BaseballScraper.Infrastructure.DataTabler.CreateListOfModelProperties">
-            <summary> Given a model / class, create a list(string) of the models property names (e.g, Wins) </summary>
-            <returns> A list of property names </returns>
-        </member>
-        <member name="M:BaseballScraper.Infrastructure.DataTabler.CreateDataTable(System.String)">
-            <summary> Create a new data table </summary>
-            <returns> A new data table based on the model of your choosing </returns>
+        <member name="M:BaseballScraper.Infrastructure.DataTabler.CreateDataTableWithCustomHeaders(System.String,System.String[])">
+            <summary>
+                Create a new data table; add columns / headers to table of provided strings
+            </summary>
+            <returns>
+                A new data table with headers of your choosing
+            </returns>
+            <example>
+                string[] tableHeaders = { "Name", "Pitches", "CswPitches", "CSW%" };
+                var dataTable = _dataTabler.CreateDataTableWithCustomHeaders("CSW PITCHERS", tableHeaders);
+            </example>
         </member>
         <member name="M:BaseballScraper.Infrastructure.DataTabler.SetDataTableColumnHeaders(System.Collections.Generic.List{System.String},System.Data.DataTable)">
-            <summary> Given a data table, set the tables headers with the values given in a list </summary>
-            <param name="list"> A list of strings that you want to be the headers </param>
-            <param name="dataTable"> The target data table that you want to set the headers for </param>
+            <summary>
+                Given a data table, set the tables headers with the values given in a list
+            </summary>
+            <param name="list">
+                A list of strings that you want to be the headers
+            </param>
+            <param name="dataTable">
+                The target data table that you want to set the headers for
+            </param>
         </member>
-        <member name="M:BaseballScraper.Infrastructure.DataTabler.SetDataTableColumnHeaders(System.Data.DataColumn[],System.Data.DataTable)">
-            <summary> Given a data table, set the tables headers with a group of given data columns </summary>
-            <param name="dataTableColumns"> A column including the column name / text </param>
-            <param name="dataTable"> The target data table that you want to set the headers for </param>
-        </member>
-        <member name="M:BaseballScraper.Infrastructure.DataTabler.SetDataTablePrimaryKeyColumn(System.Data.DataTable,System.String)">
-            <summary> Set one data table column as the primary key column </summary>
-            <param name="dataTable"> The target data table that you want to set the primary key column for </param>
-            <param name="keyColumnName"> The column that you want to make the primary key column </param>
+        <member name="M:BaseballScraper.Infrastructure.DataTabler.SetDataTableColumnHeaders(System.String[],System.Data.DataTable)">
+            <summary>
+                Set the column headers of a given table
+            </summary>
+            <param name="dataTable">
+                The target data table that you want to insert columns and headers into
+            </param>
+            <param name="tableHeaders">
+                Something like:
+                    * string[] tableHeaders = { "Name", "Pitches", "CswPitches", "CSW%" };
+            </param>
+            <example>
+                var dataTable = CreateEmptyDataTable("TABLE TITLE");
+                string[] tableHeaders = { "Name", "Pitches", "CswPitches", "CSW%" };
+                SetDataTableColumnHeaders(tableHeaders, dataTable);
+            </example>
         </member>
         <member name="M:BaseballScraper.Infrastructure.DataTabler.InsertDataRowIntoTable(System.Data.DataTable,System.String,System.String)">
-            <summary> Insert a row of data within a data table; desired cell value is passed in as a parameter </summary>
-            <param name="dataTable"> The target data table that you want to insert a row into </param>
-            <param name="dataTableColumn"> The target column that you want to insert data into </param>
-            <param name="cellValue"> The value that you want to insert into the cell of the column </param>
+            <summary>
+                Insert a row of data within a data table; desired cell value is passed in as a parameter
+            </summary>
+            <param name="dataTable">
+                The target data table that you want to insert a row into
+            </param>
+            <param name="columnHeader">
+                The header (string) of the column you want to insert data into
+            </param>
+            <param name="cellValue">
+                The value that you want to insert into the cell of the column
+            </param>
         </member>
-        <member name="M:BaseballScraper.Infrastructure.DataTabler.InsertDataRowIntoTable(System.Data.DataTable)">
-            <summary> Insert a row of data within a data table; desired cell values are set within the method </summary>
-            <param name="dataTable"> The target data table that you want to insert a row into </param>
-        </member>
-        <member name="M:BaseballScraper.Infrastructure.DataTabler.InsertDataRowIntoTable(System.Data.DataTable,System.Int32)">
-            <summary> Insert a row of data within a data table; desired row/cell values are set within a group of objects </summary>
-            <param name="dataTable"> The target data table that you want to insert a row into </param>
-            <param name="rowNumber"> ? Not sure this is needed </param>
+        <member name="M:BaseballScraper.Infrastructure.DataTabler.InsertDataRowIntoTable(System.Data.DataTable,System.Object[])">
+            <summary>
+                Insert a row of data within a data table; desired row/cell values are set through an object passed into method
+            </summary>
+            <param name="dataTable">
+                The target data table that you want to insert a row into
+            </param>
+            <param name="rowData">
+                Something like:
+                    * Object[] pitcherData = { pitcher.PlayerName, pitcher.TotalPitches, pitcher.CswPitches, pitcher.CswPitchPercent };
+            </param>
+            <example>
+                var dataTable = CreateEmptyDataTable("TABLE TITLE");
+                string[] tableHeaders = { "Name", "Pitches", "CswPitches", "CSW%" };
+                Object[] pitcherData = { pitcher.PlayerName, pitcher.TotalPitches, pitcher.CswPitches, pitcher.CswPitchPercent };
+                InsertDataRowIntoTable(dataTable, pitcherData);
+            </example>
         </member>
         <member name="M:BaseballScraper.Infrastructure.DataTabler.PrintTable(System.Data.DataTable)">
-            <summary> Print a data table in console </summary>
-            <param name="dataTable"> The data table that you want to print in console </param>
+            <summary>
+                Print a data table in console </summary>
+            <param name="dataTable">
+                The data table that you want to print in console
+            </param>
         </member>
         <member name="T:BaseballScraper.Infrastructure.ExcelHandler">
              <summary> </summary>
@@ -1626,21 +1791,88 @@
             <returns> A string that represents an api Postman token</returns>
         </member>
         <member name="M:BaseballScraper.Infrastructure.PythonConnector.ConnectToPythonFile(System.String)">
-            <summary> Create a connection between .NET and a Python file; This must be run before any of the other methods will work </summary>
-            <remarks> This must be run before any of the other below methods </remarks>
-            <returns> A connection between .NET and Python </returns>
+            <summary>
+                Create a connection between .NET and a Python file; This must be run before any of the other methods will work
+            </summary>
+            <remarks>
+                This must be run before any of the other below methods
+            </remarks>
+            <returns>
+                A connection between .NET and Python
+            </returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Infrastructure.PythonConnector.SetPythonVariableKeyAndValue(Microsoft.Scripting.Hosting.ScriptScope,System.String,System.String)" -->
-        <member name="M:BaseballScraper.Infrastructure.PythonConnector.CreateDictionaryOfPythonKeysAndValuesToSet">
-            <summary> Create a dictionary of keys and values that will be set as Python keys and values </summary>
-            <remarks> Note that keys and values are defined within this function; a dictionary is not passed in as a parameter / argument </remarks>
-            <example> var dictionaryForPython = CreateDictionaryOfPythonKeysAndValuesToSet(); </example>
-            <returns> A dictionary of keys and values where keys are strings and values are objects </returns>
+        <member name="M:BaseballScraper.Infrastructure.PythonConnector.GetPythonVariableValue(Microsoft.Scripting.Hosting.ScriptScope,System.String)">
+            <summary>
+                Retrieve a variable value from a Python scope / file
+            </summary>
+            <remarks>
+                This must be run AFTER establishing connection to a Python file (i.e, run 'ConnectToPythonFile' method before running this method)
+            </remarks>
+            <param name="scope">
+                ScriptScope generated to connect to Python file
+            </param>
+            <param name="variableKey">
+                The key in the actual Python file that you want to retrieve the value for
+            </param>
+            <example>
+                var parameter = GetPythonVariableValue(scope, "parameter"); Where 'parameter' is the variable name in the Python file
+            </example>
+            <returns>
+                A value of a variable from a Python file
+            </returns>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.PythonConnector.GetPythonVariableNames(Microsoft.Scripting.Hosting.ScriptScope)">
+            <summary>
+                Retrieve all variable names from a Python scope / file
+            </summary>
+            <remarks>
+                This must be run AFTER establishing connection to a Python file (i.e, run 'ConnectToPythonFile' method before running this method)
+            </remarks>
+            <param name="scope">
+                ScriptScope generated to connect to Python file
+            </param>
+            <returns>
+                A list of the names of each variable within a Python scope / file
+            </returns>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.PythonConnector.GetPythonKeyValuePairs(Microsoft.Scripting.Hosting.ScriptScope)">
+            <summary>
+                Retrieve variable keys(i.e., names) and values from a Python scope / file
+            </summary>
+            <remarks>
+                This must be run AFTER establishing connection to a Python file (i.e, run 'ConnectToPythonFile' method before running this method)
+            </remarks>
+            <param name="scope">
+                ScriptScope generated to connect to Python file
+            </param>
+            <example>
+                GetPythonKeyValuePairs(scope);
+            </example>
+            <returns>
+                An IEnumerable of keys and values from a Python scope / file
+            </returns>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.PythonConnector.SetPythonVariableKeyAndValue(Microsoft.Scripting.Hosting.ScriptScope,System.String,System.String)">
+            <summary>
+                Set variable key (i.e. name) and value in corresponding Python scope / file
+            </summary>
+            <remarks>
+                This must be run AFTER establishing connection to a Python file (i.e, run 'ConnectToPythonFile' method before running this method)
+            </remarks>
+            <param name="scope">
+                ScriptScope generated to connect to Python file
+            </param>
+            <param name="variableKey">
+                The key in the actual Python file that you want to retrieve the value for
+            </param>
+            <param name="variableValue">
+                The value in the actual Python file that you want to retrieve
+            </param>
+            <example>
+                SetPythonVariableKeyAndValue(scope, "myObjectKey", "my object value");
+            </example>
         </member>
         <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Infrastructure.PythonConnector.SetPythonKeyValueDictionary(Microsoft.Scripting.Hosting.ScriptScope,System.Collections.Generic.Dictionary{System.String,System.Object},System.String)" -->
-        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Infrastructure.PythonConnector.GetPythonVariableValue(Microsoft.Scripting.Hosting.ScriptScope,System.String)" -->
-        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Infrastructure.PythonConnector.GetPythonVariableNames(Microsoft.Scripting.Hosting.ScriptScope)" -->
-        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Infrastructure.PythonConnector.GetPythonKeyValuePairs(Microsoft.Scripting.Hosting.ScriptScope)" -->
         <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Infrastructure.PythonConnector.PrintPythonKeyValuePairs(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.Object}})" -->
         <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Infrastructure.PythonConnector.PrintPythonKeyValuePairs(System.Collections.Generic.Dictionary{System.String,System.Object})" -->
         <member name="T:BaseballScraper.Infrastructure.RdotNetConnector">
