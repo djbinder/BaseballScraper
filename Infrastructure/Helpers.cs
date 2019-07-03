@@ -21,9 +21,9 @@ namespace BaseballScraper.Infrastructure
     {
         private static string currentTime     = DateTime.Now.ToShortTimeString();
 
-        public string Start { get; set; }    = "START";
+        // public string Start { get; set; }    = "START";
 
-        public string Complete { get; set; } = "COMPLETE";
+        // public string Complete { get; set; } = "COMPLETE";
 
 
 
@@ -446,7 +446,7 @@ namespace BaseballScraper.Infrastructure
             public T GetObjectFromJson<T> (ISession session, string key)
             {
                 var value = session.GetString (key);
-                return value == null ? default (T) : JsonConvert.DeserializeObject<T> (value);
+                return value == null ? default(T) : JsonConvert.DeserializeObject<T> (value);
             }
 
 
@@ -679,38 +679,37 @@ namespace BaseballScraper.Infrastructure
     }
 
 
-    public class RunTimeSerializer : JsonConverter
-    {
-        public override bool CanConvert (Type objectType)
-        {
-            return objectType == typeof (TimeSpan);
-        }
+    // public class RunTimeSerializer : JsonConverter
+    // {
+    //     public override bool CanConvert (Type objectType)
+    //     {
+    //         return objectType == typeof (TimeSpan);
+    //     }
 
-        public override object ReadJson (JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            if (reader.TokenType == JsonToken.Null)
-                return null;
+    //     public override object ReadJson (JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+    //     {
+    //         if (reader.TokenType == JsonToken.Null)
+    //             return null;
 
-            JToken jt = JToken.Load (reader);
-            String value = jt.Value<String> ();
+    //         JToken jt = JToken.Load (reader);
+    //         String value = jt.Value<String> ();
 
-            Regex rx = new Regex ("(\\s*)min$");
-            value = rx.Replace (value, (m) => "");
+    //         Regex rx = new Regex ("(\\s*)min$");
+    //         value = rx.Replace (value, (m) => "");
 
-            int timespanMin;
-            if (!Int32.TryParse (value, out timespanMin))
-            {
-                throw new NotSupportedException ();
-            }
+    //         if (!Int32.TryParse(value, out int timespanMin))
+    //         {
+    //             throw new NotSupportedException();
+    //         }
 
-            return new TimeSpan (0, timespanMin, 0);
-        }
+    //         return new TimeSpan (0, timespanMin, 0);
+    //     }
 
-        public override void WriteJson (JsonWriter writer, object value, JsonSerializer serializer)
-        {
-            serializer.Serialize (writer, value);
-        }
-    }
+    //     public override void WriteJson (JsonWriter writer, object value, JsonSerializer serializer)
+    //     {
+    //         serializer.Serialize (writer, value);
+    //     }
+    // }
 }
 
 

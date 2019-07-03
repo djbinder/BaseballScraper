@@ -5,6 +5,8 @@ using Newtonsoft.Json;
 using System.Runtime.Serialization.Json;
 using Newtonsoft.Json.Linq;
 
+
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Infrastructure
 {
     public class JsonHandler

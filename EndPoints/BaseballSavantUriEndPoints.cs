@@ -5,7 +5,7 @@ namespace BaseballScraper.EndPoints
     public class BaseballSavantUriEndPoints
     {
         private readonly string baseUri = "https://baseballsavant.mlb.com/statcast_search";
-        public  string endPointType     = "";
+
 
 
         public class BaseballSavantUriEndPoint
@@ -19,7 +19,6 @@ namespace BaseballScraper.EndPoints
 
         public BaseballSavantUriEndPoint AllSpCswSingleDay(int year, int monthNumber, int dayNumber)
         {
-            Console.WriteLine($"AllSpSingleDayCsw Endpoint");
             return new BaseballSavantUriEndPoint
             {
                 BaseUri  = baseUri,
@@ -30,7 +29,6 @@ namespace BaseballScraper.EndPoints
 
         public BaseballSavantUriEndPoint AllSpCswRangeOfDays(int year, int startMonth, int startDay, int endMonth, int endDay)
         {
-            Console.WriteLine($"AllSpCswRangeOfDays Endpoint");
             return new BaseballSavantUriEndPoint
             {
                 BaseUri  = baseUri,
@@ -38,10 +36,9 @@ namespace BaseballScraper.EndPoints
             };
         }
 
+
         public BaseballSavantUriEndPoint AllSpCswFullSeason(int year)
         {
-            Console.WriteLine($"AllSpCswFullSeason Endpoint");
-
             DateTime seasonStart = new DateTime(year, 3, 1);
             int startMonth = seasonStart.Month;
             int startDay = seasonStart.Day;

@@ -18,10 +18,10 @@ using BaseballScraper.Infrastructure;
 using System.Diagnostics;
 using static BaseballScraper.Infrastructure.Helpers;
 
-
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper
 {
-    #pragma warning disable CS0414, CS0219, IDE0051, IDE0059, CS1591, IDE0044
+
     public class Startup
     {
         // private string _connection = null;
@@ -75,7 +75,7 @@ namespace BaseballScraper
 
 
 
-
+        // export ASPNETCORE_ENVIRONMENT="Development"
         // This method gets called by the runtime
         // Use this method to add services to the container
         public void ConfigureServices (IServiceCollection services)
@@ -250,6 +250,10 @@ namespace BaseballScraper
             // Connects to Diagnoser Option 2 in 'Configure' section below
             // https://andrewlock.net/understanding-your-middleware-pipeline-with-the-middleware-analysis-package/
             services.AddMiddlewareAnalysis();
+
+
+            services.AddSingleton<DataTabler>();
+            services.AddSingleton<PythonConnector>();
 
             // example of how to console config items
             // Console.WriteLine(Configuration["YahooConfiguration:Name"]);
