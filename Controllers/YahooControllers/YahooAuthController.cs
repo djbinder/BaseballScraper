@@ -1,23 +1,20 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using BaseballScraper.EndPoints;
 using BaseballScraper.Infrastructure;
 using BaseballScraper.Models.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ObjectPrinter;
 
 
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006, CS0168
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Controllers.YahooControllers
 {
     [Route("api/yahoo/[controller]")]
@@ -543,7 +540,7 @@ namespace BaseballScraper.Controllers.YahooControllers
                         int? sessionId = HttpContext.Session.GetInt32(_sessionIdKey);
                         // _h.Intro(sessionId, "setting session code as");
                 }
-                catch (Exception ex)
+                catch
                 {
                     // Console.WriteLine("ERROR IN: YahooAuthController.SetSessionAuthorizationCode()");
                     // PrintExceptionMessageInfo(ex);
@@ -561,7 +558,7 @@ namespace BaseballScraper.Controllers.YahooControllers
                     HttpContext.Session.SetString(_refreshTokenKey, newAccessTokenResponse.RefreshToken);
                     HttpContext.Session.SetString(_yahooguidKey, newAccessTokenResponse.XOAuthYahooGuid);
                 }
-                catch (Exception ex)
+                catch
                 {
                     // Console.WriteLine();
                     // Console.WriteLine("ERROR IN: YahooAuthController.SetSessionAccessTokenItems()");

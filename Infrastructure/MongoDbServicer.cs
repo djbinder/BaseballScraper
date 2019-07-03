@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 // https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-mongo-app?view=aspnetcore-2.2&tabs=visual-studio-mac
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Infrastructure
 {
     // connects to 'MongoDbConfiguration' model
@@ -23,9 +24,6 @@ namespace BaseballScraper.Infrastructure
             // 1) TweetsCollectionName 2) ConnectionString 3) DatabaseName
         public MongoDbServicer(IMongoDbConfiguration config)
         {
-            // _h.StartMethod();
-            _h.Dig(config);
-
             // Reads the server instance for performing database operations
             // The constructor of this class is provided the MongoDB connection string
             var client = new MongoClient(config.ConnectionString);
