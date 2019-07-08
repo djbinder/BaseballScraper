@@ -13,7 +13,6 @@ namespace BaseballScraper
             Console.WriteLine();
             Console.WriteLine("***** ---> READY TO ROLL <--- *****");
             Console.WriteLine ($"Version: {Environment.Version}");
-            // Console.WriteLine();
             CreateWebHostBuilder(args).Build().Run();
         }
 

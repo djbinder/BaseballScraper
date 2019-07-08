@@ -10,18 +10,6 @@ using Microsoft.Scripting.Hosting;
 #pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Controllers.BaseballReference
 {
-    // installing Pandas from the command line: python3 -m pip install --upgrade pandas
-    // python -m pip install -U black
-
-
-    // Find python paths:
-        // python -m site --user-base
-        // python -m site --user-base/bin
-
-
-    // STATUS: none of this works
-
-
     [Route("api/baseballreference/[controller]")]
     [ApiController]
     public class BRefLeagueBattingController: ControllerBase
@@ -42,6 +30,19 @@ namespace BaseballScraper.Controllers.BaseballReference
 
 
 
+        // See:
+        //  * python_paths.md in Configuration folder
+        //  * PythonConnector.cs
+        //  * BRefLeagueBattingController.py
+
+        // Status [July 3, 2019]:
+        //  * If all you want are simple variables, then this work
+        //  * It breaks if you need to bring things in like numpy or pandas
+        //  * Check all links / notes listed at top of PythonConnector.cs file
+        //  * IronPython doesn't work with Python3 yet; Python 2.7 will be deprecated in 2020
+        //  * Probably best to wait until IronPython is upgraded to support Python3 before doing any more on this
+
+
         /*
             https://127.0.0.1:5001/api/baseballreference/BRefLeagueBatting/testA
         */
@@ -49,62 +50,8 @@ namespace BaseballScraper.Controllers.BaseballReference
         public void BRefTestingA()
         {
             _h.StartMethod();
-            // var variableNames = GetAllVariableNamesFromBrefPythonFile(_leagueBatting);
-
-            // var variableNames = GetAllVariableNamesFromBrefPythonFile(_leagueBatting);
-
-            // var host = new DlrHost<IronPythonLanguage>(new IronPythonLanguage());
-
-
-            // host.ScriptEngine.SetSearchPaths(paths);
-            // host.DefaultScope.Execute("print 'Hello World'");
-
-
-            // var variable = GetOneVariableFromBrefPythonFile(_leagueBatting, "place_holder");
-
-            // var sScope = CreateScopeForBrefPythonFile(_leagueBatting);
-
-            var standings_current = new List<object>();
-
-            var stringer = PatchParameter();
-
-
-
+            ScriptScope scope = CreateScopeForBrefPythonFile(_leagueBatting);
         }
-
-        public string PatchParameter()
-        {
-            var engine = Python.CreateEngine(); // Extract Python language engine from their grasp
-            var scope = engine.CreateScope(); // Introduce Python namespace (scope)
-
-            var paths = _pythonConnector.GetListOfPythonFilePaths(engine);
-            AddPythonPaths(paths);
-
-            engine.SetSearchPaths(paths);
-
-            // var pandas = engine.ImportModule("pandas");
-
-            var response = "RESPONSE!";
-            var place_holder = "place_holder";
-            var standings_current = "standings_current";
-            var variableA = "";
-
-            var d = new Dictionary<string, object>
-            {
-                // { "response", response},
-                { "place_holder", place_holder},
-                { "variableA", variableA},
-                { "standings_current", standings_current }
-            }; // Add some sample parameters. Notice that there is no need in specifically setting the object type, interpreter will do that part for us in the script properly with high probability
-
-            scope.SetVariable("params", d); // This will be the name of the dictionary in python script, initialized with previously created .NET Dictionary
-            ScriptSource source = engine.CreateScriptSourceFromFile(_leagueBatting); // Load the script
-            // dynamic result = source.Execute(scope);
-            source.Execute(scope);
-            place_holder = scope.GetVariable<string>("place_holder"); // To get the finally set variable 'parameter' from the python script
-            return place_holder;
-        }
-
 
 
 
@@ -112,8 +59,6 @@ namespace BaseballScraper.Controllers.BaseballReference
         // ScriptScope scope = CreateScopeForBrefPythonFile(_leagueBatting);
         public ScriptScope CreateScopeForBrefPythonFile(string fileName)
         {
-
-
             ScriptEngine engine = _pythonConnector.CreatePythonScriptEngine();
 
             ScriptScope scope = _pythonConnector.CreatePythonScriptScope(engine);
@@ -123,58 +68,11 @@ namespace BaseballScraper.Controllers.BaseballReference
 
             engine.SetSearchPaths(paths);
 
-            ScriptScope requests = engine.ImportModule("requests");
-
-            // ScriptScope pandas = engine.ImportModule("pandas");
-
-            // var moduleFileNames = engine.GetModuleFilenames();
-            // foreach(var name in moduleFileNames)
-            // {
-            //     Console.WriteLine($"name: {name}");
-            // }
-
             ScriptSource source = _pythonConnector.CreatePythonScriptSource(engine, fileName);
-            Console.WriteLine("I");
-
-
 
             var compiled = source.Compile();
-            Console.WriteLine("J");
-            Console.WriteLine($"compiled: {compiled}");
-            // _h.Dig(compiled);
-            // var result = compiled.Execute(scope);
-
-            // Console.WriteLine($"result: {result}");
-
-            Console.WriteLine($"source.GetCode(): {source.GetCode()}\n");
-            // Console.WriteLine($"source.GetCodeLine: {source.GetCodeLine(125)}");
-
-            var standings_current = source.GetCodeLine(131);
-            Console.WriteLine($"standings_current: \n {standings_current}\n");
 
             var connectionToPython = source.Execute(scope);
-            // source.Execute(scope);
-            // Console.WriteLine($"connectionToPython: {connectionToPython.GetType()}");
-
-            var outputStream = new MemoryStream();
-            var outputStreamWriter = new StreamWriter(outputStream);
-            engine.Runtime.IO.SetOutput(outputStream, outputStreamWriter);
-            // _h.Dig(outputStreamWriter);
-
-            var outStream = engine.Runtime.IO.OutputStream;
-            Console.WriteLine($"outStream: {outStream}");
-
-            var streamReader = new StreamReader(outStream);
-            string line = String.Empty;
-            while((line = streamReader.ReadLine()) != null)
-            {
-                Console.WriteLine($"line: {line}");
-            }
-
-            Console.WriteLine("K");
-
-
-
 
             return scope;
         }

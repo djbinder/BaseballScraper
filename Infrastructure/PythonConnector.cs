@@ -30,6 +30,19 @@ namespace BaseballScraper.Infrastructure
         public PythonConnector(){}
 
 
+        // See:
+        //  * python_paths.md in Configuration folder
+        //  * BRefLeagueBattingController.cs
+        //  * BRefLeagueBattingController.py
+
+        // Status [July 3, 2019]:
+        //  * If all you want are simple variables, then this work
+        //  * It breaks if you need to bring things in like numpy or pandas
+        //  * Check all links / notes listed at top of this file
+        //  * IronPython doesn't work with Python3 yet; Python 2.7 will be deprecated in 2020
+        //  * Probably best to wait until IronPython is upgraded to support Python3 before doing any more on this
+
+
         #region CONNECT TO PYTHON ------------------------------------------------------------
 
 
@@ -55,13 +68,9 @@ namespace BaseballScraper.Infrastructure
 
                 // Microsoft.Scripting.Hosting.ScriptSource
                 ScriptSource source = engine.CreateScriptSourceFromFile(fileName);
-                // ScriptSource source = engine.CreateScriptSourceFromFile("HelloWorld.py");
 
                 // any other functions must be called after this
                 object connectionToPython = source.Execute(scope);
-
-                // for testing purposes
-                // GetPythonVariableValue(scope, "x2");
 
                 return scope;
             }
@@ -82,7 +91,7 @@ namespace BaseballScraper.Infrastructure
 
                 // object connectionToPython = source.Execute(scope);
                 object connectionToPython = CreatePythonConnectionObject(pathOfPythonFileToConnectTo, scope);
-                // Console.WriteLine($"connectionToPython.GetType_1: {connectionToPython.GetType()}");
+
                 return connectionToPython;
             }
 
@@ -112,7 +121,7 @@ namespace BaseballScraper.Infrastructure
             // Hosting API counterpart for Microsoft.Scripting.Hosting.ScriptScope.Scope .
             public ScriptScope CreatePythonScriptScope(ScriptEngine engine)
             {
-                // // Microsoft.Scripting.Hosting.ScriptScope
+                // Microsoft.Scripting.Hosting.ScriptScope
                 ScriptScope scope = engine.CreateScope();
                 return scope;
             }
