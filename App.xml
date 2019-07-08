@@ -175,24 +175,24 @@
             <summary> Gets the top 25 most dropped players from ESPN </summary>
             <returns> A list of EspnTransactionTrendPlayer </returns>
         </member>
-        <member name="T:BaseballScraper.Controllers.FanGraphs.FgSpMasterReportController">
+        <member name="T:BaseballScraper.Controllers.FanGraphsControllers.FgSpMasterReportController">
              <summary> </summary>
              <list> INDEX
-                 <item> View Page <see cref="M:BaseballScraper.Controllers.FanGraphs.FgSpMasterReportController.ViewFanGraphsStartingPitcherPage"/> </item>
-                 <item> Set Initial Url to Scrape <see cref="M:BaseballScraper.Controllers.FanGraphs.FgSpMasterReportController.SetInitialUrlToScrape(System.Int32,System.Int32,System.Int32,System.Int32)"/> </item>
-                 <item> Get Number of Pages to Scrape <see cref="M:BaseballScraper.Controllers.FanGraphs.FgSpMasterReportController.GetNumberOfPagesToScrape(System.Int32,System.Int32,System.Int32,System.Int32)"/> </item>
-                 <item> Get Urls of Pages to Scrape <see cref="M:BaseballScraper.Controllers.FanGraphs.FgSpMasterReportController.GetUrlsOfPagesToScrape"/> </item>
-                 <item> Get Urls of Pages to Scrape <see cref="M:BaseballScraper.Controllers.FanGraphs.FgSpMasterReportController.GetUrlsOfPagesToScrape(System.Int32,System.Int32,System.Int32)"/> </item>
-                 <item> Scrape Pitchers and Create List <see cref="M:BaseballScraper.Controllers.FanGraphs.FgSpMasterReportController.ScrapePitchersAndCreateList(System.Int32,System.Int32,System.Int32)"/> </item>
-                 <item> Count the Nodes Children <see cref="M:BaseballScraper.Controllers.FanGraphs.FgSpMasterReportController.CountTheNodesChildren(HtmlAgilityPack.HtmlNode)"/> </item>
-                 <item> Get Table Header Values <see cref="M:BaseballScraper.Controllers.FanGraphs.FgSpMasterReportController.GetTableHeaderValues(System.String)"/> </item>
+                 <item> View Page <see cref="M:BaseballScraper.Controllers.FanGraphsControllers.FgSpMasterReportController.ViewFanGraphsStartingPitcherPage"/> </item>
+                 <item> Set Initial Url to Scrape <see cref="M:BaseballScraper.Controllers.FanGraphsControllers.FgSpMasterReportController.SetInitialUrlToScrape(System.Int32,System.Int32,System.Int32,System.Int32)"/> </item>
+                 <item> Get Number of Pages to Scrape <see cref="M:BaseballScraper.Controllers.FanGraphsControllers.FgSpMasterReportController.GetNumberOfPagesToScrape(System.Int32,System.Int32,System.Int32,System.Int32)"/> </item>
+                 <item> Get Urls of Pages to Scrape <see cref="M:BaseballScraper.Controllers.FanGraphsControllers.FgSpMasterReportController.GetUrlsOfPagesToScrape"/> </item>
+                 <item> Get Urls of Pages to Scrape <see cref="M:BaseballScraper.Controllers.FanGraphsControllers.FgSpMasterReportController.GetUrlsOfPagesToScrape(System.Int32,System.Int32,System.Int32)"/> </item>
+                 <item> Scrape Pitchers and Create List <see cref="M:BaseballScraper.Controllers.FanGraphsControllers.FgSpMasterReportController.ScrapePitchersAndCreateList(System.Int32,System.Int32,System.Int32)"/> </item>
+                 <item> Count the Nodes Children <see cref="M:BaseballScraper.Controllers.FanGraphsControllers.FgSpMasterReportController.CountTheNodesChildren(HtmlAgilityPack.HtmlNode)"/> </item>
+                 <item> Get Table Header Values <see cref="M:BaseballScraper.Controllers.FanGraphsControllers.FgSpMasterReportController.GetTableHeaderValues(System.String)"/> </item>
              </list>
             
              <list> RESOURCES
                  <item> FanGraphs custom report this scraper targets: https://bit.ly/2N2somI </item>
              </list>
         </member>
-        <member name="M:BaseballScraper.Controllers.FanGraphs.FgSpMasterReportController.SetInitialUrlToScrape(System.Int32,System.Int32,System.Int32,System.Int32)">
+        <member name="M:BaseballScraper.Controllers.FanGraphsControllers.FgSpMasterReportController.SetInitialUrlToScrape(System.Int32,System.Int32,System.Int32,System.Int32)">
             <summary>
                 This defines the first url to scrape
                 At times, you may need to loop through multiple urls and the url defined here is the first url in the loop
@@ -216,7 +216,7 @@
                 A string url
             </returns>
         </member>
-        <member name="M:BaseballScraper.Controllers.FanGraphs.FgSpMasterReportController.GetNumberOfPagesToScrape(System.Int32,System.Int32,System.Int32,System.Int32)">
+        <member name="M:BaseballScraper.Controllers.FanGraphsControllers.FgSpMasterReportController.GetNumberOfPagesToScrape(System.Int32,System.Int32,System.Int32,System.Int32)">
             <summary>
             This counts the number of urls that will be scraped
             It examines a specific html element on the fangraphs html page that shows the number of pages
@@ -243,7 +243,7 @@
                 A number of the number of pages to scrape as part of the loop
             </returns>
         </member>
-        <member name="M:BaseballScraper.Controllers.FanGraphs.FgSpMasterReportController.GetUrlsOfPagesToScrape">
+        <member name="M:BaseballScraper.Controllers.FanGraphsControllers.FgSpMasterReportController.GetUrlsOfPagesToScrape">
             <summary>
                 OPTION 1: variables defined within the method (i.e minInningsPitched, year, page, recordsPerPage )
                 Retrieves all urls of pages that will be scraped and adds them to a list
@@ -255,7 +255,7 @@
                 A list of strings representing urls to be scraped
             </returns>
         </member>
-        <member name="M:BaseballScraper.Controllers.FanGraphs.FgSpMasterReportController.GetUrlsOfPagesToScrape(System.Int32,System.Int32,System.Int32)">
+        <member name="M:BaseballScraper.Controllers.FanGraphsControllers.FgSpMasterReportController.GetUrlsOfPagesToScrape(System.Int32,System.Int32,System.Int32)">
             <summary>
                 OPTION 2: parameters are passed into the  method (i.e minInningsPitched, year, page, recordsPerPage ).
                 Retrieves all urls of pages that will be scraped and adds them to a list
@@ -284,7 +284,7 @@
                 A list of strings representing urls to be scraped
             </returns>
         </member>
-        <member name="M:BaseballScraper.Controllers.FanGraphs.FgSpMasterReportController.ScrapePitchersAndCreateList(System.Int32,System.Int32,System.Int32)">
+        <member name="M:BaseballScraper.Controllers.FanGraphsControllers.FgSpMasterReportController.ScrapePitchersAndCreateList(System.Int32,System.Int32,System.Int32)">
             <summary>
                 Scrape the pitchers table and get all their data
             </summary>
@@ -293,7 +293,7 @@
                  - Right-click 'Inspect', view the html for the table, right click on any item and select Copy > tableBodyXpath
             </remarks>
         </member>
-        <member name="M:BaseballScraper.Controllers.FanGraphs.FgSpMasterReportController.GetTableHeaderValues(System.String)">
+        <member name="M:BaseballScraper.Controllers.FanGraphsControllers.FgSpMasterReportController.GetTableHeaderValues(System.String)">
             <summary>
                 Scrapes the headers of the table to get the stat names (e.g., ERA, WHIP, etc.)
             </summary>
@@ -301,11 +301,11 @@
                 The url of the table you are scraping
             </param>
         </member>
-        <member name="M:BaseballScraper.Controllers.FanGraphs.FgSpMasterReportController.GetTableHeaderValuesList(System.String)">
+        <member name="M:BaseballScraper.Controllers.FanGraphsControllers.FgSpMasterReportController.GetTableHeaderValuesList(System.String)">
             <summary> Scrapes the headers of the table to get the stat names (e.g., ERA, WHIP, etc.) </summary>
             <param name="thisUrl"> The url of the table you are scraping </param>
         </member>
-        <member name="M:BaseballScraper.Controllers.FanGraphs.FgSpMasterReportController.CreateNewFanGraphsPitcher(System.Collections.Generic.List{System.String})">
+        <member name="M:BaseballScraper.Controllers.FanGraphsControllers.FgSpMasterReportController.CreateNewFanGraphsPitcher(System.Collections.Generic.List{System.String})">
             <summary> Instantiates a new instance of class FanGraphsPitcher </summary>
             <param name="playerItems"> A list of values for each of the stats / properties of the FanGraphsPitcher class </param>
             <returns> New instance of FanGraphsPitcher class </returns>
@@ -1785,7 +1785,9 @@
             <param name="itemsToList"> e.g., string[] planet = { "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune" };</param>
         </member>
         <member name="M:BaseballScraper.Infrastructure.PostmanMethods.PostmanToken(System.String)">
-            <summary> A switch that returns a postman token depending upon the end type you are use </summary>
+            <summary>
+                A switch that returns a postman token depending upon the end type you are use
+            </summary>
             <remarks> Each of the return values were generated by Postman </remarks>
             <param name="apiType"> The api method / endpoinot you are querying </param>
             <returns> A string that represents an api Postman token</returns>
