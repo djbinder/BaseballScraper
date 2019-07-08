@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Text;
-using BaseballScraper.Models.Configuration;
 using BaseballScraper.EndPoints;
+using BaseballScraper.Infrastructure;
+using BaseballScraper.Models;
+using BaseballScraper.Models.Configuration;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -11,11 +15,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using BaseballScraper.Models;
-using BaseballScraper.Infrastructure;
-using System.Diagnostics;
+
 using static BaseballScraper.Infrastructure.Helpers;
 
 #pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
@@ -254,6 +255,9 @@ namespace BaseballScraper
 
             services.AddSingleton<DataTabler>();
             services.AddSingleton<PythonConnector>();
+            services.AddSingleton<Helpers>();
+            services.AddSingleton<GoogleSheetsConnector>();
+            services.AddSingleton<FanGraphsUriEndPoints>();
 
             // example of how to console config items
             // Console.WriteLine(Configuration["YahooConfiguration:Name"]);

@@ -1,5 +1,3 @@
-//REFERENCE:
-    // https://gist.githubusercontent.com/deanebarker/2b4520f290ece96be40436bc5c8915c5/raw/0cf6005f41ac27c46c9ce1f9bdbf8b5faeb62f8d/AirtableGetObjects.cs
 
 using System;
 using BaseballScraper.Infrastructure;
@@ -9,6 +7,8 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 
+//REFERENCE:
+    // https://gist.githubusercontent.com/deanebarker/2b4520f290ece96be40436bc5c8915c5/raw/0cf6005f41ac27c46c9ce1f9bdbf8b5faeb62f8d/AirtableGetObjects.cs
 
 
 namespace BaseballScraper.Controllers

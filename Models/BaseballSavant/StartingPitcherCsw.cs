@@ -4,6 +4,7 @@ using CsvHelper.Configuration;
 // using CsvHelper.Configuration;
 // using Ganss.Excel;
 
+#pragma warning disable CS0649
 namespace BaseballScraper.Models.BaseballSavant
 {
     public class StartingPitcherCsw : BaseEntity
