@@ -7,11 +7,8 @@
 
 using System;
 using System.Collections.Generic;
-
-using System.Globalization;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using BaseballScraper.Infrastructure;
 
 
@@ -25,14 +22,218 @@ namespace BaseballScraper.Models.MlbDataApi
         public string GroundedIntoDoublePlays { get; set; }
 
         [DataMember(Name="sac")]
-        public int? Sacrifices { get; set; }
+        public string Sacrifices { get; set; }
+
 
         [DataMember(Name="np")]
-        public int? Np { get; set; }
+        public string Np { get; set; }
 
 
-        [JsonProperty("sport_hitting_tm")]
-        public SportHittingTm SportHittingTm { get; set; }
+        [DataMember(Name="sport_code")]
+        public string SportCode { get; set; }
+
+
+        [DataMember(Name="hgnd")]
+        public string Hgnd { get; set; }
+
+
+        [DataMember(Name="tb")]
+        public string TotalBases { get; set; }
+
+
+        [DataMember(Name="gidp_opp")]
+        public string GiDpOpp { get; set; }
+
+
+        [DataMember(Name="sport_id")]
+        public string SportId { get; set; }
+
+
+        [DataMember(Name="bb")]
+        public string Walks { get; set; }
+
+
+        [DataMember(Name="avg")]
+        public string BattingAverage { get; set; }
+
+
+        [DataMember(Name="slg")]
+        public string SluggingPercentage { get; set; }
+
+
+        [DataMember(Name="team_full")]
+        public string TeamFullName { get; set; }
+
+
+        [DataMember(Name="ops")]
+        public string OPS { get; set; }
+
+
+        [DataMember(Name="hbp")]
+        public string HitByPitch { get; set; }
+
+
+        [DataMember(Name="league_full")]
+        public string LeagueFullName { get; set; }
+
+
+        [DataMember(Name="team_abbrev")]
+        public string TeamAbbreviatedName { get; set; }
+
+
+        [DataMember(Name="so")]
+        public string Strikeouts { get; set; }
+
+
+        [DataMember(Name="hfly")]
+        public string Hfly { get; set; }
+
+
+        [DataMember(Name="wo")]
+        public string WO { get; set; }
+
+
+        [DataMember(Name="league_id")]
+        public string LeagueId { get; set; }
+
+
+        [DataMember(Name="sf")]
+        public string SacFlies { get; set; }
+
+
+        [DataMember(Name="team_seq")]
+        public string TeamSeq { get; set; }
+
+
+        [DataMember(Name="league")]
+        public string League { get; set; }
+
+
+        [DataMember(Name="hpop")]
+        public string Hpop { get; set; }
+
+
+        [DataMember(Name="cs")]
+        public string CaughtStealing { get; set; }
+
+
+        [DataMember(Name="season")]
+        public string Season { get; set; }
+
+
+        [DataMember(Name="sb")]
+        public string StolenBases { get; set; }
+
+
+        [DataMember(Name="go_ao")]
+        public string GroundoutsToFlyOuts { get; set; }
+
+
+        [DataMember(Name="ppa")]
+        public string PitchesPerPlateAppearance { get; set; }
+
+
+        [DataMember(Name="player_id")]
+        public string PlayerId { get; set; }
+
+
+        [DataMember(Name="ibb")]
+        public string IntentionalWalks { get; set; }
+
+
+        [DataMember(Name="team_id")]
+        public string TeamId { get; set; }
+
+
+        [DataMember(Name="roe")]
+        public string Roe { get; set; }
+
+
+        [DataMember(Name="go")]
+        public string Groundouts { get; set; }
+
+
+        [DataMember(Name="hr")]
+        public string HomeRuns { get; set; }
+
+
+        [DataMember(Name="rbi")]
+        public string RBIs { get; set; }
+
+
+        [DataMember(Name="babip")]
+        public string BABIP { get; set; }
+
+
+        [DataMember(Name="lob")]
+        public string LeftOnBase { get; set; }
+
+
+        [DataMember(Name="end_date")]
+        public string EndDate { get; set; }
+
+
+        [DataMember(Name="xbh")]
+        public string ExtraBaseHits { get; set; }
+
+
+        [DataMember(Name="league_short")]
+        public string LeagueNameShort { get; set; }
+
+
+        [DataMember(Name="g")]
+        public string Games { get; set; }
+
+
+        [DataMember(Name="d")]
+        public string D { get; set; }
+
+
+        [DataMember(Name="sport")]
+        public string Sport { get; set; }
+
+
+        [DataMember(Name="team_short")]
+        public string TeamNameShort { get; set; }
+
+
+        [DataMember(Name="tpa")]
+        public string PlateAppearances { get; set; }
+
+
+        [DataMember(Name="h")]
+        public string Hits { get; set; }
+
+
+        [DataMember(Name="obp")]
+        public string OBP { get; set; }
+
+
+        [DataMember(Name="hldr")]
+        public string Hldr { get; set; }
+
+
+        [DataMember(Name="t")]
+        public string T { get; set; }
+
+
+        [DataMember(Name="ao")]
+        public string Flyouts { get; set; }
+
+
+        [DataMember(Name="r")]
+        public string Runs { get; set; }
+
+
+        [DataMember(Name="ab")]
+        public string AtBats { get; set; }
+
+
+
+
+
+        // [JsonProperty("sport_hitting_tm")]
+        // public SportHittingTm SportHittingTm { get; set; }
     }
 
     // public partial class HitterSeasonStats
@@ -40,27 +241,27 @@ namespace BaseballScraper.Models.MlbDataApi
 
     // }
 
-    public partial class SportHittingTm
-    {
-        [JsonProperty("copyRight")]
-        public string CopyRight { get; set; }
+    // public partial class SportHittingTm
+    // {
+    //     [JsonProperty("copyRight")]
+    //     public string CopyRight { get; set; }
 
-        [JsonProperty("queryResults")]
-        public HitterSeasonQueryResults QueryResults { get; set; }
-    }
+    //     [JsonProperty("queryResults")]
+    //     public HitterSeasonQueryResults QueryResults { get; set; }
+    // }
 
-    public partial class HitterSeasonQueryResults
-    {
-        [JsonProperty("created")]
-        public DateTimeOffset Created { get; set; }
+    // public partial class HitterSeasonQueryResults
+    // {
+    //     [JsonProperty("created")]
+    //     public DateTimeOffset Created { get; set; }
 
-        [JsonProperty("totalSize")]
-        [JsonConverter(typeof(ParseStringConverter))]
-        public long TotalSize { get; set; }
+    //     [JsonProperty("totalSize")]
+    //     [JsonConverter(typeof(ParseStringConverter))]
+    //     public long TotalSize { get; set; }
 
-        [JsonProperty("row")]
-        public Dictionary<string, string> Row { get; set; }
-    }
+    //     [JsonProperty("row")]
+    //     public Dictionary<string, string> Row { get; set; }
+    // }
 
 
 

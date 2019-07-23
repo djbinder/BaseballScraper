@@ -2,12 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
-using BaseballScraper.Models.BaseballSavant;
-using BaseballScraper.Models.Lahman;
 using CsvHelper;
-using CsvHelper.Configuration;
 using Newtonsoft.Json.Linq;
 
 
@@ -15,40 +11,51 @@ using Newtonsoft.Json.Linq;
 namespace BaseballScraper.Infrastructure
 {
     /// <summary> </summary>
-    /// <list> RESOURCES
-    ///     <item> Csv Helper
-    ///         <description> https://joshclose.github.io/CsvHelper/reading/#getting-all-records </description>
-    ///     </item>
-    ///     <item> Generate Class From CSV
-    ///         <description> https://toolslick.com/generation/code/class-from-csv </description>
-    ///     </item>
-    /// </list>
+    /// <remarks>
+    ///     See: https://joshclose.github.io/CsvHelper/reading/#getting-all-records
+    ///     See: https://toolslick.com/generation/code/class-from-csv
+    /// </remarks>
+
     public class CsvHandler
     {
-        private readonly Helpers _h = new Helpers();
+        private readonly Helpers _helpers;
 
         private IEnumerable<dynamic> records;
+
+
+        public CsvHandler(Helpers helpers)
+        {
+            _helpers = helpers;
+        }
+
+        public CsvHandler()
+        {
+
+        }
 
 
 
 
         #region DOWNLOAD CSV ------------------------------------------------------------
 
+            /// <summary>
+            ///     Download remote CSV and save it to local location
+            /// </summary>
+            /// <param name="csvUrl">
+            ///     The full url of where the csv is linked / hosted
+            ///     Download CSV from this url
+            /// </param>
+            /// <param name="targetFileName">
+            ///     The name of the file that you want to write to
+            ///     Save CSV to location defined by 'targetFileName'
+            /// </param>
             /// <example>
             ///     DownloadCsvFromLink("http://crunchtimebaseball.com/master.csv", "BaseballData/PlayerBase/CrunchtimePlayerBaseCsvAutoDownload.csv")
             /// </example>
-            /// <param name="csvUrl">
-            ///     this is the full url of where the csv is linked / hosted
-            /// </param>
-            /// <param name="targetFileName">
-            ///     this is the name of the file that you want to write to
-            /// </param>
             public void DownloadCsvFromLink(string csvUrl, string targetFileName)
             {
-                // _h.StartMethod();
                 WebClient webClient = new WebClient();
                 {
-                    // 1) download csv from csvUrl; 2) take that csv and save it to location defined by 'targetFileName'
                     webClient.DownloadFile(csvUrl, targetFileName );
                 }
             }
@@ -67,7 +74,6 @@ namespace BaseballScraper.Infrastructure
             /// <example> _cH.ReadCsv("BaseballData/Lahman/Teams.csv"); </example>
             public IEnumerable<dynamic> ReadCsvRecords(string csvFilePath, Type modelType, Type modelMapType)
             {
-                // _h.StartMethod();
                 using(TextReader fileReader = File.OpenText(csvFilePath))
                 {
                     var csvReader = new CsvReader( fileReader );
@@ -109,7 +115,6 @@ namespace BaseballScraper.Infrastructure
             /// </example>
             public async Task<IEnumerable<dynamic>> ReadCsvRecordsAsync(string csvFilePath, Type modelType, Type modelMapType)
             {
-                // _h.StartMethod();
                 // MODEL TYPE type & MODEL MAP TYPE type --> System.RuntimeType
                 using(TextReader fileReader = File.OpenText(csvFilePath))
                 {
@@ -144,7 +149,6 @@ namespace BaseballScraper.Infrastructure
 
             public async Task<IEnumerable<dynamic>> ReadCsvRecordsAsyncToList(string csvFilePath, Type modelType, Type modelMapType, List<dynamic> list)
             {
-                // _h.StartMethod();
                 // MODEL TYPE type & MODEL MAP TYPE type --> System.RuntimeType
                 using(TextReader fileReader = File.OpenText(csvFilePath))
                 {
@@ -179,7 +183,8 @@ namespace BaseballScraper.Infrastructure
 
             // STATUS: this works
             /// <summary>
-            ///     Register the map for the class within a csv you are trying read </summary>
+            ///     Register the map for the class within a csv you are trying read
+            /// </summary>
             /// <remarks>
             ///     This is required any type you want to use a model map
             /// </remarks>
@@ -191,7 +196,6 @@ namespace BaseballScraper.Infrastructure
             /// </param>
             public void RegisterMapForClass(CsvReader csvReader, Type modelType)
             {
-                // _h.StartMethod();
                 // Console.WriteLine($"CSV HANDLER > RegisterMapForClass > modelType: {modelType}");
                 var mapClass = csvReader.Configuration.RegisterClassMap(modelType);
                 // Console.WriteLine($"mapClass.ClassType: {mapClass.ClassType} \tmapClass.MemberMaps: {mapClass.MemberMaps}\n");
@@ -254,7 +258,7 @@ namespace BaseballScraper.Infrastructure
             public int GetFieldPosition(CsvReader csvReader, int indexNumber)
             {
                 var field = csvReader.GetField<int>(indexNumber);
-                _h.Intro(field, "field int");
+                _helpers.Intro(field, "field int");
                 return field;
             }
 

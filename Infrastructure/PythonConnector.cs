@@ -277,7 +277,7 @@ namespace BaseballScraper.Infrastructure
             // STATUS: this works
             // SET | MANY | VARIABLE KEYS AND VALUES
             /// <summary>
-            ///     Given a dictionary of keys and values, set K&Vs as Python variable K&Vs
+            ///     Given a dictionary of keys and values, set Keys and Values as Python variable Keys and Values
             /// </summary>
             /// <remarks>
             ///     This must be run AFTER establishing connection to a Python file (i.e, run 'ConnectToPythonFile' method before running this method)
@@ -287,12 +287,16 @@ namespace BaseballScraper.Infrastructure
             ///     ScriptScope generated to connect to Python file
             /// </param>
             /// <param name="keysAndValuesDictionary">
-            ///     A dictionary of keys and values where keys are strings and values are objects </param>
+            ///     A dictionary of keys and values where keys are strings and values are objects
+            /// </param>
             /// <param name="dictionaryName">
+            ///     The name of the dictionary
             /// </param>
             /// <example>
-            ///     var newDictionary = new Dictionary<string, object>
-            ///     newDictionary.Add{ "itemId", 37}
+            /// <code>
+            /// var newDictionary = new Dictionary<string,object>();
+            /// newDictionary.Add{ "itemId", 37};
+            /// </code>
             /// </example>
             public void SetPythonKeyValueDictionary(ScriptScope scope, Dictionary<string, object> keysAndValuesDictionary, string dictionaryName)
             {
@@ -338,7 +342,7 @@ namespace BaseballScraper.Infrastructure
             // STATUS: this works
             // PRINT | ALL | VARIABLE KEYS AND VALUES
             /// <summary> Print the keys and values from a given IEnumerable </summary>
-            /// <examples> PrintPythonKeyValuePairs(pythonKeyValuePairs); </example>
+            /// <example> PrintPythonKeyValuePairs(pythonKeyValuePairs); </example>
             /// <param name="pythonKeyValuePairs"> An IEnumerable containing variable keys and values</param>
             public void PrintPythonKeyValuePairs(IEnumerable<KeyValuePair<string, dynamic>> pythonKeyValuePairs)
             {
@@ -355,7 +359,7 @@ namespace BaseballScraper.Infrastructure
             // STATUS: ?????
             // PRINT | ALL | VARIABLE KEYS AND VALUES
             /// <summary> Print the keys and values from a given Dictionary </summary>
-            /// <examples> PrintPythonKeyValuePairs(pythonKeyValuePairs); </example>
+            /// <example> PrintPythonKeyValuePairs(pythonKeyValuePairs); </example>
             /// <param name="pythonKeyValuePairs"> A Dictionary containing variable keys and values</param>
             ///
             public void PrintPythonKeyValuePairs(Dictionary<string, object> pythonKeyValuePairs)

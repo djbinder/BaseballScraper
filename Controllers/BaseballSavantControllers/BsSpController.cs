@@ -19,62 +19,67 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
     [ApiController]
     public class BsSpController: ControllerBase
     {
-        private static readonly Helpers _h = new Helpers();
+        private readonly Helpers                    _helpers;
+        private readonly DataTabler                 _dataTabler;
+        private readonly BaseballScraperContext     _context;
+        private readonly BaseballSavantPitcherEndPoints _baseballSavantEndPoints;
+        private readonly CsvHandler                 _csvHandler;
 
-        // injected in Startups.cs as 'services.AddSingleton<DataTabler>();'
-        private readonly DataTabler _dataTabler;
 
-        private readonly BaseballScraperContext _context;
+        private static string _targetWriteFolder        = "BaseballData/02_Target_Write/BaseballSavant_Target_Write/";
 
-
-        private static readonly BaseballSavantUriEndPoints _bsEndPoints = new BaseballSavantUriEndPoints();
-
-        private readonly CsvHandler _csvH = new CsvHandler();
-
-        private static string _targetWriteFolder = "BaseballData/02_Target_Write/BaseballSavant_Target_Write/";
-
-        private static string _allSpCswSingleDayCvs = "Bs_AllSpSingleDayCsw";
+        private static string _allSpCswSingleDayCvs     = "Bs_AllSpSingleDayCsw";
 
         private static string _allSpCswSingleDayCvsPath = $"{_targetWriteFolder}{_allSpCswSingleDayCvs}";
 
-        private static string _allSpCswDateRangeCvs = "Bs_SpCswDateRange";
+        private static string _allSpCswDateRangeCvs     = "Bs_SpCswDateRange";
 
         private static string _allSpCswDateRangeCvsPath = $"{_targetWriteFolder}{_allSpCswDateRangeCvs}";
 
-        private Type _spCswTypeSingleDay = new StartingPitcherCswSingleDay().GetType();
-        private Type _spCswModelMapTypeSingleDay = new StartingPitcherCswClassMap().GetType();
+
         private List<dynamic> _dynamicList = new List<dynamic>();
+
+
+        private Type _spCswTypeSingleDay                              = new StartingPitcherCswSingleDay().GetType();
+        private Type _spCswModelMapTypeSingleDay                      = new StartingPitcherCswClassMap().GetType();
         private List<StartingPitcherCswSingleDay> _listSpCswSingleDay = new List<StartingPitcherCswSingleDay>();
 
 
-        private Type _spCswTypeDateRange = new StartingPitcherCswDateRange().GetType();
-        private Type _spCswModelMapTypeDateRange = new StartingPitcherCswClassMap().GetType();
+        private Type _spCswTypeDateRange                              = new StartingPitcherCswDateRange().GetType();
+        private Type _spCswModelMapTypeDateRange                      = new StartingPitcherCswClassMap().GetType();
         private List<StartingPitcherCswDateRange> _listSpCswDateRange = new List<StartingPitcherCswDateRange>();
 
 
-        private Type _spCswType = new StartingPitcherCsw().GetType();
-        private Type _spCswModelMapType = new StartingPitcherCswClassMap().GetType();
+        private Type _spCswType                     = new StartingPitcherCsw().GetType();
+        private Type _spCswModelMapType             = new StartingPitcherCswClassMap().GetType();
         private List<StartingPitcherCsw> _listSpCsw = new List<StartingPitcherCsw>();
 
 
 
 
-        public BsSpController(BaseballScraperContext context, DataTabler dataTabler)
+        public BsSpController(Helpers helpers, BaseballScraperContext context, DataTabler dataTabler, BaseballSavantPitcherEndPoints baseballSavantEndPoints, CsvHandler csvHandler)
         {
+            _helpers = helpers;
             _context = context;
             _dataTabler = dataTabler;
+            _baseballSavantEndPoints = baseballSavantEndPoints;
+            _csvHandler = csvHandler;
         }
 
 
-        // https://127.0.0.1:5001/api/baseballsavant/BsSp/test
+        /*
+            https://127.0.0.1:5001/api/baseballsavant/BsSp/test
+        */
         [Route("test")]
         public void BaseballSavantTesting()
         {
-            _h.StartMethod();
+            _helpers.StartMethod();
         }
 
 
-        // https://127.0.0.1:5001/api/baseballsavant/BsSp/test/async
+        /*
+            https://127.0.0.1:5001/api/baseballsavant/BsSp/test/async
+        */
         [Route("test/async")]
         public async Task BaseballSavantTestingAsync()
         {
@@ -85,33 +90,33 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
 
 
 
-            public async Task WriteBaseballSavantDataForYesterdayToCsv()
+        public async Task WriteBaseballSavantDataForYesterdayToCsv()
+        {
+            // get date information for yesterday
+            DateTime yesterday = DateTime.Today.AddDays(-1);
+            WriteBaseballSavantSingleDayDataToCsv(yesterday.Year, yesterday.Month, yesterday.Day);
+            var spCswList = await ReadSpCswCsvSingleDayAsync(yesterday.Month, yesterday.Day, yesterday.Year);
+            PrintStartingPitcherCswSingleDay(spCswList);
+        }
+
+
+        public void PrintStartingPitcherCswSingleDay(List<StartingPitcherCswSingleDay> spCswList)
+        {
+            var sortedlist = from element in spCswList
+                    orderby element.CswPitchPercent descending
+                    select element;
+
+            string[] tableHeaders = { "Name", "Pitches", "CswPitches", "CSW%" };
+            var dataTable = _dataTabler.CreateDataTableWithCustomHeaders("CSW PITCHERS", tableHeaders);
+
+            foreach(var pitcher in sortedlist)
             {
-                // get date information for yesterday
-                DateTime yesterday = DateTime.Today.AddDays(-1);
-                WriteBaseballSavantSingleDayDataToCsv(yesterday.Year, yesterday.Month, yesterday.Day);
-                var spCswList = await ReadSpCswCsvSingleDayAsync(yesterday.Month, yesterday.Day, yesterday.Year);
-                PrintStartingPitcherCswSingleDay(spCswList);
+                Object[] pitcherData = { pitcher.PlayerName, pitcher.TotalPitches, pitcher.CswPitches, pitcher.CswPitchPercent };
+                _dataTabler.InsertDataRowIntoTable(dataTable, pitcherData);
             }
 
-
-            public void PrintStartingPitcherCswSingleDay(List<StartingPitcherCswSingleDay> spCswList)
-            {
-                var sortedlist = from element in spCswList
-                        orderby element.CswPitchPercent descending
-                        select element;
-
-                string[] tableHeaders = { "Name", "Pitches", "CswPitches", "CSW%" };
-                var dataTable = _dataTabler.CreateDataTableWithCustomHeaders("CSW PITCHERS", tableHeaders);
-
-                foreach(var pitcher in sortedlist)
-                {
-                    Object[] pitcherData = { pitcher.PlayerName, pitcher.TotalPitches, pitcher.CswPitches, pitcher.CswPitchPercent };
-                    _dataTabler.InsertDataRowIntoTable(dataTable, pitcherData);
-                }
-
-                _dataTabler.PrintTable(dataTable);
-            }
+            _dataTabler.PrintTable(dataTable);
+        }
 
 
 
@@ -128,8 +133,14 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             /// <remarks>
             ///     If the file already exists, it will not create a new file
             /// </remarks>
-            /// <param names="monthNumber", "dayNumber", "year">
-            ///     ints that represent the month number, day number, and year you want to get data for and write to a CSV
+            /// <param name="year">
+            ///     ints that represents the year you want to get data for and write to a CSV
+            /// </param>
+            /// <param name="monthNumber">
+            ///     ints that represents the month number you want to get data for and write to a CSV
+            /// </param>
+            /// <param name="dayNumber">
+            ///     ints that represents the day number you want to get data for and write to a CSV
             /// </param>
             public void WriteBaseballSavantSingleDayDataToCsv(int year, int monthNumber, int dayNumber)
             {
@@ -159,7 +170,8 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             /// </summary>
             public string GetAllSpCswSingleDayEndPointUri(int year, int monthNumber, int dayNumber)
             {
-                BaseballSavantUriEndPoint endPoint = _bsEndPoints.AllSpCswSingleDay(year,monthNumber,dayNumber);
+                BaseballSavantUriEndPoint endPoint = _baseballSavantEndPoints.AllSpCswSingleDay(year,monthNumber,dayNumber);
+
                 return endPoint.EndPointUri;
             }
 
@@ -189,14 +201,20 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             ///     'csvFilePath' will be something like:
             ///         BaseballData/02_Target_Write/BaseballSavant_Target_Write/Bs_AllSpSingleDayCsw5_29_2019.csv
             /// </remarks>
-            /// <param names="monthNumber", "dayNumber", "year">
-            ///     ints that represent the month number, day number, and year you want to search for
+            /// <param name="monthNumber">
+            ///     ints that represents the month number you want to get data for and write to a CSV
+            /// </param>
+            /// <param name="dayNumber">
+            ///     ints that represents the day number you want to get data for and write to a CSV
+            /// </param>
+            /// <param name="year">
+            ///     ints that represents the year you want to get data for and write to a CSV
             /// </param>
             /// <example>
             ///     var spCswList = await ReadSpCswCsvSingleDayAsync(5,29,2019);
             /// </example>
             /// <returns>
-            ///     List<StartingPitcherCswSingleDay>
+            ///     A list of StartingPitcherCswSingleDay
             /// </returns>
             public async Task<List<StartingPitcherCswSingleDay>> ReadSpCswCsvSingleDayAsync(int monthNumber, int dayNumber, int year)
             {
@@ -205,7 +223,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
                 var csvFilePath = SetCsvFilePathSpCswSingleDay(year, monthNumber, dayNumber);
                 // Console.WriteLine($"csvFilePath: {csvFilePath}");
 
-                await _csvH.ReadCsvRecordsAsyncToList(csvFilePath, _spCswTypeSingleDay, _spCswModelMapTypeSingleDay, _dynamicList);
+                await _csvHandler.ReadCsvRecordsAsyncToList(csvFilePath, _spCswTypeSingleDay, _spCswModelMapTypeSingleDay, _dynamicList);
 
                 _listSpCswSingleDay = CreateSpCswSingleDayList(_dynamicList, year, monthNumber, dayNumber);
 
@@ -241,7 +259,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             // STATUS [ June 5, 2019 ]: this works
             // LIST HELPER METHOD - SINGLE DAY
             /// <summary>
-            ///     Create List<StartingPitcherCswSingleDay>
+            ///     Create list of StartingPitcherCswSingleDay
             /// </summary>
             public List<StartingPitcherCswSingleDay> CreateSpCswSingleDayList(List<dynamic> list, int year, int monthNumber, int dayNumber)
             {
@@ -274,8 +292,20 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             ///     Write SP CSW data from Baseball Savant to CSV File
             ///     Uses 'GetAllSpCswRangeOfDaysEndPointUri' end point
             /// </summary>
-            /// <param names="year", "startMonth", "startDay", "endMonth", "endDay">
-            ///     ints that represent the date range you want to search
+            /// <param name="year">
+            ///     ints that represents the year you want to get data for and write to a CSV
+            /// </param>
+            /// <param name="startMonth">
+            ///     ints that represents the start month number you want to get data for and write to a CSV
+            /// </param>
+            /// <param name="startDay">
+            ///     ints that represents the start day number you want to get data for and write to a CSV
+            /// </param>
+            /// <param name="endMonth">
+            ///     ints that represents the end month number you want to get data for and write to a CSV
+            /// </param>
+            /// <param name="endDay">
+            ///     ints that represents the end day number you want to get data for and write to a CSV
             /// </param>
             public void WriteBaseballSavantDateRangeDataToCsv(int year, int startMonth, int startDay, int endMonth, int endDay)
             {
@@ -292,7 +322,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             /// </summary>
             public string GetAllSpCswRangeOfDaysEndPointUri(int year, int startMonth, int startDay, int endMonth, int endDay)
             {
-                BaseballSavantUriEndPoint endPoint = _bsEndPoints.AllSpCswRangeOfDays(year, startMonth, startDay, endMonth, endDay);
+                BaseballSavantUriEndPoint endPoint = _baseballSavantEndPoints.AllSpCswRangeOfDays(year, startMonth, startDay, endMonth, endDay);
                 return endPoint.EndPointUri;
             }
 
@@ -322,14 +352,26 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             ///     'csvFilePath' will be something like:
             ///         BaseballData/02_Target_Write/BaseballSavant_Target_Write/Bs_SpCswDateRange5_1_2019_to_5_15_2019.csv
             /// </remarks>
-            /// <param names="year", "startMonth", "startDay", "endMonth", "endDay">
-            ///     ints that represent the date range you want to search
+            /// <param name="year">
+            ///     ints that represents the year you want to get data for and write to a CSV
+            /// </param>
+            /// <param name="startMonth">
+            ///     ints that represents the start month number you want to get data for and write to a CSV
+            /// </param>
+            /// <param name="startDay">
+            ///     ints that represents the start day number you want to get data for and write to a CSV
+            /// </param>
+            /// <param name="endMonth">
+            ///     ints that represents the end month number you want to get data for and write to a CSV
+            /// </param>
+            /// <param name="endDay">
+            ///     ints that represents the end day number you want to get data for and write to a CSV
             /// </param>
             /// <example>
             ///     var spCswList = await ReadSpCswCsvDateRangeAsync(2019, 5, 1, 5, 15);
             /// </example>
             /// <returns>
-            ///     List<StartingPitcherCswDateRange>
+            ///     A list of StartingPitcherCswDateRange
             /// </returns>
             public async Task<List<StartingPitcherCswDateRange>> ReadSpCswCsvDateRangeAsync(int year, int startMonth, int startDay, int endMonth, int endDay)
             {
@@ -337,7 +379,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
                 var csvFilePath = SetCsvFilePathSpCswDateRange(year, startMonth, startDay, endMonth, endDay);
                 // Console.WriteLine($"csvFilePath: {csvFilePath}");
 
-                await _csvH.ReadCsvRecordsAsyncToList(csvFilePath, _spCswTypeDateRange, _spCswModelMapTypeDateRange, _dynamicList);
+                await _csvHandler.ReadCsvRecordsAsyncToList(csvFilePath, _spCswTypeDateRange, _spCswModelMapTypeDateRange, _dynamicList);
 
                 _listSpCswDateRange = CreateSpCswDateRangeList(_dynamicList, year, startMonth, startDay, endMonth, endDay);
 
@@ -374,7 +416,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             // STATUS [ June 5, 2019 ]: this works
             // LIST HELPER METHOD - DATE RANGE
             /// <summary>
-            ///     Create List<StartingPitcherCswDateRange>>
+            ///     Create list of StartingPitcherCswDateRange
             /// </summary>
             public List<StartingPitcherCswDateRange> CreateSpCswDateRangeList(List<dynamic> list, int year, int startMonth, int startDay, int endMonth, int endDay)
             {
@@ -426,7 +468,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             /// </summary>
             public string GetAllSpCswFullSeasonEndPointUri(int year)
             {
-                BaseballSavantUriEndPoint endPoint = _bsEndPoints.AllSpCswFullSeason(year);
+                BaseballSavantUriEndPoint endPoint = _baseballSavantEndPoints.AllSpCswFullSeason(year);
                 return endPoint.EndPointUri;
             }
 
@@ -463,14 +505,14 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             ///     var spCswList = await ReadSpCswCsvFullSeasonAsync(2019)
             /// </example>
             /// <returns>
-            ///     List<StartingPitcherCsw>
+            ///     A list of StartingPitcherCsw
             /// </returns>
             public async Task<List<StartingPitcherCsw>> ReadSpCswCsvFullSeasonAsync(int year)
             {
                 // file name example: Bs_SpCswDateRange_FULL_SEASON_2019.csv
                 var csvFilePath = SetCsvFilePathSpCswFulLSeason(year);
 
-                await _csvH.ReadCsvRecordsAsyncToList(csvFilePath, _spCswType, _spCswModelMapType, _dynamicList);
+                await _csvHandler.ReadCsvRecordsAsyncToList(csvFilePath, _spCswType, _spCswModelMapType, _dynamicList);
 
                 _listSpCsw = CreateSpCswFullSeasonList(_dynamicList, year);
 
@@ -507,7 +549,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             // STATUS [ June 5, 2019 ]: this works
             // LIST HELPER METHOD - FULL SEASON
             /// <summary>
-            ///     Create List<StartingPitcherCsw>
+            ///     Create list of StartingPitcherCsw
             /// </summary>
             public List<StartingPitcherCsw> CreateSpCswFullSeasonList(List<dynamic> list, int year)
             {
@@ -532,7 +574,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             // STATUS [ June 5, 2019 ]: this works
             public void DownloadSpCswCvsAndWriteToLocalCsv(string endPointUri, string targetCsvString)
             {
-                _csvH.DownloadCsvFromLink(endPointUri, targetCsvString);
+                _csvHandler.DownloadCsvFromLink(endPointUri, targetCsvString);
             }
 
         #endregion GENERAL HELPERS ------------------------------------------------------------

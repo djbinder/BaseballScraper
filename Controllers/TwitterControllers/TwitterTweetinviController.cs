@@ -159,7 +159,7 @@ namespace BaseballScraper.Controllers.TwitterControllers
             ///     var userIds = GetUserIdsForFollowersOfUser("Buster_ESPN");
             /// </example>
             /// <returns>
-            ///     IEnumerable<long>
+            ///     IEnumerable of user ids for Twitter users
             /// </returns>
             public IEnumerable<long> GetUserIdsForFollowersOfUser(string screenName)
             {
@@ -201,7 +201,7 @@ namespace BaseballScraper.Controllers.TwitterControllers
             ///     var tweets = GetTweetsFromMyTimeline();
             /// </example>
             /// <returns>
-            ///     IEnumerable<Tweetinvi.Models.ITweet>
+            ///     IEnumerable of Tweetinvi.Models.ITweets
             /// </returns>
             public IEnumerable<ITweet> GetTweetsFromMyTimeline()
             {
@@ -228,7 +228,7 @@ namespace BaseballScraper.Controllers.TwitterControllers
             ///     var tweets = GetTweetsFromUsersTimeline("Buster_ESPN");
             /// </example>
             /// <returns>
-            ///     IEnumerable<Tweetinvi.Models.ITweet>
+            ///     IEnumerable of Tweetinvi.Models.ITweets
             /// </returns>
             public IEnumerable<ITweet> GetTweetsFromUsersTimeline(string screenName)
             {
@@ -255,7 +255,7 @@ namespace BaseballScraper.Controllers.TwitterControllers
             ///     var twitterSearch = SearchTwitterNoFilters(searchString);
             /// </example>
             /// <returns>
-            ///     IEnumerable<Tweetinvi.Models.ITweet>
+            ///     IEnumerable of Tweetinvi.Models.ITweets
             /// </returns>
             public IEnumerable<ITweet> SearchTwitterNoFilters(string searchString)
             {
@@ -497,7 +497,7 @@ namespace BaseballScraper.Controllers.TwitterControllers
             ///     var list = GetListOfAllTweetsFullTextInJToken("mr_baseball", "baseball", "mookie", 100);
             /// </example>
             /// <returns>
-            ///     List<string>
+            ///     List of tweets
             /// </returns>
             public List<string> GetListOfAllTweetsFullTextInJToken(string screenName, string listName, string searchString, int numberOfResultsToReturn)
             {
@@ -544,7 +544,7 @@ namespace BaseballScraper.Controllers.TwitterControllers
             ///     var list = GetListOfITweetsInJToken("mr_baseball", "baseball", "mookie", 100);
             /// </example>
             /// <returns>
-            ///     List<Tweetinvi.Models.ITweet>
+            ///     List of Tweetinvi.Models.ITweets
             /// </returns>
             public List<ITweet> GetListOfITweetsInJToken(string screenName, string listName, string searchString, int numberOfResultsToReturn)
             {
@@ -586,7 +586,7 @@ namespace BaseballScraper.Controllers.TwitterControllers
             ///     var tweets = GetAllTweetsFromTwitterList("baseball", "mr_baseball");
             /// </example>
             /// <returns>
-            ///     IEnumerable<Tweetinvi.Models.ITweet>
+            ///     IEnumerable of Tweetinvi.Models.ITweets
             /// </returns>
             public IEnumerable<ITweet> GetAllTweetsFromTwitterList(string listName, string screenName)
             {
@@ -620,7 +620,7 @@ namespace BaseballScraper.Controllers.TwitterControllers
             ///     var tweets = GetTweetsFromTwitterListAfterSinceId("baseball", "mr_baseball", false);
             /// </example>
             /// <returns>
-            ///     IEnumerable<Tweetinvi.Models.ITweet>
+            ///     IEnumerable of Tweetinvi.Models.ITweets
             /// </returns>
             public IEnumerable<ITweet> GetTweetsFromTwitterListAfterSinceId(string listName, string screenName, bool includeRetweets)
             {
@@ -699,7 +699,7 @@ namespace BaseballScraper.Controllers.TwitterControllers
             ///     var members = GetAllMembersOfTwitterList("baseball","mr_baseball");
             /// </example>
             /// <returns>
-            ///     IEnumerable<IUser>
+            ///     IEnumerable of IUsers
             /// </returns>
             public IEnumerable<IUser> GetAllMembersOfTwitterList(string listName, string screenName)
             {
@@ -743,7 +743,7 @@ namespace BaseballScraper.Controllers.TwitterControllers
             ///     var listOfLongs = GetAllUserIdsForMembersOfTwitterList("baseball","mr_baseball");
             /// </example>
             /// <returns>
-            ///     List<long>
+            ///     List of twitter user ids of users within Twitter List
             /// </returns>
             public List<long> GetAllUserIdsForMembersOfTwitterList(string listName, string screenName)
             {
@@ -759,7 +759,7 @@ namespace BaseballScraper.Controllers.TwitterControllers
             // STATUS [ June 24, 2019 ]: this works
             /// <summary>
             ///     Support method for 'GetAllUserIdsForMembersOfTwitterList' method
-            ///     Gets all user ids from given IUsers and adds them to List<long>
+            ///     Gets all user ids from given IUsers and adds them to List
             /// </summary>
             public void AddUserIdsToList(IEnumerable<IUser> members, [FromQuery]List<long> userIds)
             {

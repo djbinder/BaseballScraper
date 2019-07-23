@@ -15,7 +15,7 @@ namespace BaseballScraper.Controllers.BaseballReference
     public class BRefLeagueBattingController: ControllerBase
     {
 
-        private readonly Helpers _h           = new Helpers();
+        private readonly Helpers _helpers;
 
         private readonly PythonConnector _pythonConnector;
 
@@ -23,8 +23,9 @@ namespace BaseballScraper.Controllers.BaseballReference
         private readonly string _leagueBatting = "Controllers/BaseballReferenceControllers/BRefLeagueBattingController.py";
 
 
-        public BRefLeagueBattingController (PythonConnector pythonConnector)
+        public BRefLeagueBattingController (Helpers helpers, PythonConnector pythonConnector)
         {
+            _helpers = helpers;
             _pythonConnector = pythonConnector;
         }
 
@@ -49,7 +50,7 @@ namespace BaseballScraper.Controllers.BaseballReference
         [Route("testA")]
         public void BRefTestingA()
         {
-            _h.StartMethod();
+            _helpers.StartMethod();
             ScriptScope scope = CreateScopeForBrefPythonFile(_leagueBatting);
         }
 

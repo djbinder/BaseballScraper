@@ -1,15 +1,13 @@
-﻿using System;
-using System.IO;
-using System.Runtime.Serialization.Json;
-using System.Text;
-using BaseballScraper.Controllers.MlbDataApiControllers;
-using BaseballScraper.EndPoints;
+﻿using BaseballScraper.EndPoints;
 using BaseballScraper.Models.MlbDataApi;
 using BaseballScraper.Infrastructure;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using RestSharp;
+using static BaseballScraper.Infrastructure.PostmanMethods;
+using C = System.Console;
+using System.Linq;
+using System.Collections.Generic;
 
 
 #pragma warning disable CS0414, CS0219, IDE0051, IDE0059, CS1591, IDE0052
@@ -20,45 +18,76 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
     [ApiController]
     public class MlbDataPlayerSearchController: ControllerBase
     {
-        private readonly Helpers _h                            = new Helpers();
-        private readonly ApiInfrastructure _a                  = new ApiInfrastructure();
-        private static readonly MlbDataApiEndPoints _endPoints = new MlbDataApiEndPoints();
-        private static readonly PostmanMethods _postman        = new PostmanMethods();
+        private readonly Helpers             _helpers;
+        private readonly ApiInfrastructure   _apiInfrastructure;
+        private readonly MlbDataApiEndPoints _endPoints;
+        private readonly PostmanMethods      _postman;
 
 
-        // https://appac.github.io/mlb-data-api-docs/#player-data-player-search-get
-        /// <summary> View instantiated PlayerSearch object  </summary>
-        /// <returns> Instantiated PlayerSearch </returns>
-        [Route("playersearch/{playerLastName}")]
-        public IActionResult ViewPlayerSearchModel(string playerLastName)
+        public MlbDataPlayerSearchController(Helpers helpers, ApiInfrastructure apiInfrastructure, MlbDataApiEndPoints endPoints, PostmanMethods postman)
         {
-            Console.WriteLine($"SEARCHING FOR PLAYER: {playerLastName}");
-
-            IRestResponse response = GetPlayerSearchModelPostmanResponse(playerLastName);
-
-            JObject playerJObject = _a.CreateModelJObject(response);
-
-            JToken playerJToken = _a.CreateModelJToken(playerJObject, "PlayerSearch");
-
-            PlayerSearch newPlayerSearchInstance = new PlayerSearch();
-
-            _a.CreateInstanceOfModel(playerJToken, newPlayerSearchInstance, "PlayerSearch");
-
-            return Content($"{playerJToken}");
+            _helpers           = helpers;
+            _apiInfrastructure = apiInfrastructure;
+            _endPoints         = endPoints;
+            _postman           = postman;
         }
 
-        public IRestResponse GetPlayerSearchModelPostmanResponse(string name)
+        public MlbDataPlayerSearchController(){}
+
+
+        /*
+            https://127.0.0.1:5001/api/mlb/mlbdataplayersearch/test
+        */
+        [HttpGet("test")]
+        public void TestController()
         {
-            // type ---> BaseballScraper.EndPoints.MlbDataApiEndPoints+MlbDataEndPoint
-            var newEndPoint = _endPoints.PlayerSearchEndPoint(name);
+            _helpers.StartMethod();
+            ViewPlayerSearchModel("Baez");
+        }
 
-            // PostmanRequest has Client(i.e., RestSharp.RestClient) and Request (i.e., RestSharp.RestRequest)
-            var postmanRequest = _postman.CreatePostmanRequest(newEndPoint, "PlayerSearch");
 
-            // PostmanResponse Class only has Response
-            var postmanResponse = _postman.GetPostmanResponse(postmanRequest);
+        // STATUS [ July 15, 2019 ] : this works
+        /// <summary>
+        ///     View instantiated PlayerSearch object
+        /// </summary>
+        /// <remarks>
+        ///     See: https://appac.github.io/mlb-data-api-docs/#player-data-player-search-get
+        /// </remarks>
+        /// <returns>
+        ///     Instantiated PlayerSearch
+        /// </returns>
+        public List<PlayerSearch> ViewPlayerSearchModel(string playerLastName)
+        {
+            IRestResponse response  = GetPlayerSearchModelPostmanResponse(playerLastName);
+            JObject playerJObject   = _apiInfrastructure.CreateModelJObject(response);
+            JToken playerJToken     = _apiInfrastructure.CreateModelJToken(playerJObject, "PlayerSearch");
+            int jTokenChildrenCount = playerJToken.Count<object>();
 
-            IRestResponse response = postmanResponse.Response;
+            List<PlayerSearch> listOfPlayers     = new List<PlayerSearch>();
+            PlayerSearch newPlayerSearchInstance = new PlayerSearch();
+
+            for(var counter = 0; counter < jTokenChildrenCount; counter++)
+            {
+                PlayerSearch playerSearchInstance =
+                    _apiInfrastructure.CreateInstanceOfModel
+                    (
+                        playerJToken[counter],
+                        newPlayerSearchInstance,
+                        "PlayerSearch"
+                    ) as PlayerSearch;
+
+                listOfPlayers.Add(playerSearchInstance);
+            }
+            return listOfPlayers;
+        }
+
+        // STATUS [ July 15, 2019 ] : this works
+        public IRestResponse GetPlayerSearchModelPostmanResponse(string playerLastName)
+        {
+            var newEndPoint                 = _endPoints.PlayerSearchEndPoint(playerLastName);
+            PostmanRequest postmanRequest   = _postman.CreatePostmanRequest(newEndPoint, "PlayerSearch");
+            PostmanResponse postmanResponse = _postman.GetPostmanResponse(postmanRequest);
+            IRestResponse response          = postmanResponse.Response;
 
             return response;
         }
@@ -70,3 +99,39 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
         }
     }
 }
+
+
+
+// EXAMPLE OF RETURNED JSON:
+
+// {
+//   "position": "1B",
+//   "birth_country": "USA",
+//   "weight": 240,
+//   "birth_state": "FL",
+//   "name_display_first_last": "Anthony Rizzo",
+//   "college": "",
+//   "height_inches": 3,
+//   "name_display_roster": "Rizzo",
+//   "sport_code": "mlb",
+//   "bats": "L",
+//   "name_first": "Anthony",
+//   "team_code": "chn",
+//   "birth_city": "Fort Lauderdale",
+//   "height_feet": "6",
+//   "pro_debut_date": "2011-06-09T00:00:00",
+//   "team_full": "Chicago Cubs",
+//   "team_abbrev": "CHC",
+//   "birth_date": "1989-08-08T00:00:00",
+//   "throws": "L",
+//   "league": "NL",
+//   "name_display_last_first": "Rizzo, Anthony",
+//   "position_id": 3,
+//   "high_school": "Marjory Stoneman Douglas, Parkland, FL",
+//   "name_use": "Anthony",
+//   "player_id": 519203,
+//   "name_last": "Rizzo",
+//   "team_id": 112,
+//   "service_years": "",
+//   "active_sw": "Y"
+// }

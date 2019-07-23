@@ -1,0 +1,207 @@
+@page "/dashboard"
+@model BaseballScraper.Pages.DashboardPage
+
+@{
+ViewData["Title"] = "Dashboard";
+}
+
+<hr style="border: 1px solid slateblue">
+<h3><b>@ViewData["Title"]</b></h3>
+<hr style="border: 1px solid slateblue">
+<br>
+
+
+
+<h4>Yahoo Resources</h4>
+<table class="table ">
+    <tr>
+        <th>Type </th>
+        <th>Link </th>
+        <th>Path</th>
+        <th>Status</th>
+        <th>Notes </th>
+    </tr>
+    <tr>
+        <td> Y! Game Resource </td>
+        <td><a href="https://127.0.0.1:5001/api/yahoo/yahoogameresource/test">Link</a></td>
+        <td> /api/yahoo/yahoogameresource/test </td>
+        <td> June 18, 2019: N/A </td>
+        <td> --- </td>
+    </tr>
+    <tr>
+        <td> Y! League Resource </td>
+        <td><a href="https://127.0.0.1:5001/api/yahoo/yahooleagueresource/test">Link</a></td>
+        <td> /api/yahoo/yahooleagueresource/test </td>
+        <td> June 18, 2019: N/A </td>
+        <td> --- </td>
+    </tr>
+    <tr>
+        <td> Y! Player Resource </td>
+        <td><a href="https://127.0.0.1:5001/api/yahoo/yahooplayerresource/test">Link</a></td>
+        <td> /api/yahoo/yahooplayerresource/test </td>
+        <td> June 18, 2019: WORKS </td>
+        <td> --- </td>
+    </tr>
+    <tr>
+        <td> Y! Roster Resource </td>
+        <td><a href="https://127.0.0.1:5001/api/yahoo/yahoorosterresource/test">Link</a></td>
+        <td> /api/yahoo/yahoorosterresource/test </td>
+        <td> June 18, 2019: WORKS </td>
+        <td> --- </td>
+    </tr>
+    <tr>
+        <td> Y! Team Resource </td>
+        <td><a href="https://127.0.0.1:5001/api/yahoo/yahooteamresource/test ">Link</a></td>
+        <td> /api/yahoo/yahooteamresource/test </td>
+        <td> June 18, 2019: WORKS </td>
+        <td> --- </td>
+    </tr>
+    <tr>
+        <td> Y! Transaction Resource </td>
+        <td>N/A</td>
+        <td> N/A </td>
+        <td>June 18, 2019: N/A</td>
+        <td> --- </td>
+    </tr>
+    <tr>
+        <td> Y! User Resource </td>
+        <td>N/A</td>
+        <td> N/A </td>
+        <td>June 18, 2019: N/A</td>
+        <td> --- </td>
+    </tr>
+</table>
+
+<br>
+
+<h4>Yahoo Collections</h4>
+<table class="table ">
+    <tr>
+        <th>Type </th>
+        <th>Link </th>
+        <th>Path</th>
+        <th>Status</th>
+        <th>Notes </th>
+    </tr>
+    <tr>
+        <td> Y! Games Collection </td>
+        <td>N/A</td>
+        <td> N/A </td>
+        <td>June 18, 2019: N/A</td>
+        <td> --- </td>
+    </tr>
+    <tr>
+        <td> Y! Leagues Collection </td>
+        <td>N/A</td>
+        <td> N/A </td>
+        <td>June 18, 2019: N/A</td>
+        <td> --- </td>
+    </tr>
+    <tr>
+        <td> Y! Players Collection </td>
+        <td><a href="https://127.0.0.1:5001/api/yahoo/yahooplayerscollection/test">Link</a></td>
+        <td> /api/yahoo/yahooplayerscollection/test </td>
+        <td> June 18, 2019: WORKS </td>
+        <td> --- </td>
+    </tr>
+    <tr>
+        <td> Y! Teams Collection </td>
+        <td>N/A</td>
+        <td> N/A </td>
+        <td>June 18, 2019: N/A</td>
+        <td> --- </td>
+    </tr>
+    <tr>
+        <td> Y! Transactions Collection </td>
+        <td>N/A</td>
+        <td> N/A </td>
+        <td>June 18, 2019: N/A</td>
+        <td> --- </td>
+    </tr>
+    <tr>
+        <td> Y! Users Collection </td>
+        <td>N/A</td>
+        <td> N/A </td>
+        <td>June 18, 2019: N/A</td>
+        <td> --- </td>
+    </tr>
+</table>
+
+
+<br>
+<hr>
+
+
+<h4>Transaction Trends</h4>
+<table class=" table ">
+    <tr>
+        <th>Type </th>
+        <th>Link </th>
+        <th>Path </th>
+        <th>Status </th>
+        <th>Notes </th>
+    </tr>
+    <tr>
+        <td>Transaction Trends </td>
+        <td><a href="https://127.0.0.1:5001/transaction_trends ">Link </a></td>
+        <td> /transaction_trends </td>
+        <td> July 15, 2019: Yahoo and CBS work; ESPN does not</td>
+        <td> --- </td>
+    </tr>
+</table>
+
+
+
+<br>
+<hr>
+<h4>Page Routes</h4>
+<table class=" table ">
+    <tr>
+        <th>Page </th>
+        <th>Link </th>
+        <th>Path </th>
+        <th>Status </th>
+        <th>Notes </th>
+    </tr>
+    <tr>
+        <td>Dashboard </td>
+        <td><a href="https://127.0.0.1:5001/dashboard">Link </a></td>
+        <td> /dashboard </td>
+        <td> July 15, 2019: Works </td>
+        <td> --- </td>
+    </tr>
+    <tr>
+        <td>Transaction Trends </td>
+        <td><a href="https://127.0.0.1:5001/transaction_trends">Link </a></td>
+        <td> /transaction_trends </td>
+        <td> July 15, 2019: Works </td>
+        <td> --- </td>
+    </tr>
+    <tr>
+        <td>Player Bases </td>
+        <td><a href="https://127.0.0.1:5001/player_bases">Link </a></td>
+        <td> /player_bases </td>
+        <td> July 15, 2019: DOES NOT WORK </td>
+        <td> --- </td>
+    </tr>
+    <tr>
+        <td>Player Note Form </td>
+        <td><a href="https://127.0.0.1:5001/player_note_form">Link </a></td>
+        <td> /player_note_form </td>
+        <td> July 15, 2019: Works </td>
+        <td> --- </td>
+    </tr>
+    <tr>
+        <td>Player Search </td>
+        <td><a href="https://127.0.0.1:5001/player_search">Link </a></td>
+        <td> /player_search </td>
+        <td> July 15, 2019: Works </td>
+        <td> --- </td>
+    </tr>
+</table>
+
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js " integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin=" anonymous "></script>
+<script src="site.js "></script>

@@ -14,9 +14,17 @@ namespace BaseballScraper.Infrastructure
     // Configuration is set up in mongoDbConfiguration.json
     public class MongoDbServicer
     {
-        private readonly Helpers _h = new Helpers();
+        private readonly Helpers _helpers;
 
         private readonly IMongoCollection<TwitterStatus> _twitterStatus;
+
+
+        public MongoDbServicer(Helpers helpers)
+        {
+            _helpers = helpers;
+        }
+
+        public MongoDbServicer() {}
 
 
         // IMongoDbConfiguration instance is retrieved from DI via constructor injection
