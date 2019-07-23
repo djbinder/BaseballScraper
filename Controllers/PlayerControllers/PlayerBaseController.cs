@@ -20,24 +20,24 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
     /// <summary> Retrieve all records from PlayerBase.xlsx; retrieve individual player records from PlayerBase.xlsx </summary>
     /// <list> INDEX
-    ///     <item> View all player bases <see cref="PlayerBaseController.ViewPlayerBaseHome" /> </item>
-    ///     <item> Get all players bases <see cref="PlayerBaseController.PlayerBaseFromExcel.GetAllPlayerBasesFromExcel" /> </item>
-    ///     <item> Get all players bases by team <see cref="PlayerBaseController.PlayerBaseFromExcel.GetAllPlayerBasesForOneMlbTeam(string)" /> </item>
-    ///     <item> Get one player's base by mlb id <see cref="PlayerBaseController.PlayerBaseFromExcel.GetOnePlayersBaseFromMlbId(string)" /> </item>
-    ///     <item> Get one player's base by sfbb id <see cref="PlayerBaseController.PlayerBaseFromExcel.GetOnePlayersBaseFromSfbbId(string)" /> </item>
-    ///     <item> Get one player's base by baseball hq id <see cref="PlayerBaseController.PlayerBaseFromExcel.GetOnePlayersBaseFromBaseballHqId(string)" /> </item>
-    ///     <item> Get one player's base by davenport id <see cref="PlayerBaseController.PlayerBaseFromExcel.GetOnePlayersBaseFromDavenportId(string)" /> </item>
-    ///     <item> Get one player's base by baseball prospectus id <see cref="PlayerBaseController.PlayerBaseFromExcel.GetOnePlayersBaseFromBaseballProspectusId(string)" /> </item>
-    ///     <item> Get one player's base by baseball reference id <see cref="PlayerBaseController.PlayerBaseFromExcel.GetOnePlayersBaseFromBaseballReferenceId(string)" /> </item>
-    ///     <item> Get one player's base by cbs id <see cref="PlayerBaseController.PlayerBaseFromExcel.GetOnePlayersBaseFromCbsId(string)" /> </item>
-    ///     <item> Get one player's base by espn id <see cref="PlayerBaseController.PlayerBaseFromExcel.GetOnePlayersBaseFromEspnId(string)" /> </item>
-    ///     <item> Get one player's base by fangraphs id <see cref="PlayerBaseController.PlayerBaseFromExcel.GetOnePlayersBaseFromFanGraphsId(string)" /> </item>
-    ///     <item> Get one player's base by lahman id <see cref="PlayerBaseController.PlayerBaseFromExcel.GetOnePlayersBaseFromLahmanId(string)" /> </item>
-    ///     <item> Get one player's base by nfbc id <see cref="PlayerBaseController.PlayerBaseFromExcel.GetOnePlayersBaseFromNfbcId(string)" /> </item>
-    ///     <item> Get one player's base by retro id <see cref="PlayerBaseController.PlayerBaseFromExcel.GetOnePlayersBaseFromRetroId(string)" /> </item>
-    ///     <item> Get one player's base by yahoo id <see cref="PlayerBaseController.PlayerBaseFromExcel.GetOnePlayersBaseFromYahooId(string)" /> </item>
-    ///     <item> Get one player's base by ottoneu id <see cref="PlayerBaseController.PlayerBaseFromExcel.GetOnePlayersBaseFromOttoneuId(string)" /> </item>
-    ///     <item> Get one player's base by rotowire id <see cref="PlayerBaseController.PlayerBaseFromExcel.GetOnePlayersBaseFromRotoWireId(string)" /> </item>
+    ///     <item> View all player bases                           <seecref="ViewPlayerBaseHome" />                                                    </item>
+    ///     <item> Get all players bases                           <seecref="PlayerBaseFromExcel.GetAllPlayerBasesFromExcel" />                        </item>
+    ///     <item> Get all players bases by team                   <seecref="PlayerBaseFromExcel.GetAllPlayerBasesForOneMlbTeam(string)" />            </item>
+    ///     <item> Get one player's base by mlb id                 <seecref="PlayerBaseFromExcel.GetOnePlayersBaseFromMlbId(string)" />                </item>
+    ///     <item> Get one player's base by sfbb id                <seecref="PlayerBaseFromExcel.GetOnePlayersBaseFromSfbbId(string)" />               </item>
+    ///     <item> Get one player's base by baseball hq id         <seecref="PlayerBaseFromExcel.GetOnePlayersBaseFromBaseballHqId(string)" />         </item>
+    ///     <item> Get one player's base by davenport id           <seecref="PlayerBaseFromExcel.GetOnePlayersBaseFromDavenportId(string)" />          </item>
+    ///     <item> Get one player's base by baseball prospectus id <seecref="PlayerBaseFromExcel.GetOnePlayersBaseFromBaseballProspectusId(string)" /> </item>
+    ///     <item> Get one player's base by baseball reference id  <seecref="PlayerBaseFromExcel.GetOnePlayersBaseFromBaseballReferenceId(string)" />  </item>
+    ///     <item> Get one player's base by cbs id                 <seecref="PlayerBaseFromExcel.GetOnePlayersBaseFromCbsId(string)" />                </item>
+    ///     <item> Get one player's base by espn id                <seecref="PlayerBaseFromExcel.GetOnePlayersBaseFromEspnId(string)" />               </item>
+    ///     <item> Get one player's base by fangraphs id           <seecref="PlayerBaseFromExcel.GetOnePlayersBaseFromFanGraphsId(string)" />          </item>
+    ///     <item> Get one player's base by lahman id              <seecref="PlayerBaseFromExcel.GetOnePlayersBaseFromLahmanId(string)" />             </item>
+    ///     <item> Get one player's base by nfbc id                <seecref="PlayerBaseFromExcel.GetOnePlayersBaseFromNfbcId(string)" />               </item>
+    ///     <item> Get one player's base by retro id               <seecref="PlayerBaseFromExcel.GetOnePlayersBaseFromRetroId(string)" />              </item>
+    ///     <item> Get one player's base by yahoo id               <seecref="PlayerBaseFromExcel.GetOnePlayersBaseFromYahooId(string)" />              </item>
+    ///     <item> Get one player's base by ottoneu id             <seecref="PlayerBaseFromExcel.GetOnePlayersBaseFromOttoneuId(string)" />            </item>
+    ///     <item> Get one player's base by rotowire id            <seecref="PlayerBaseFromExcel.GetOnePlayersBaseFromRotoWireId(string)" />           </item>
     /// </list>
     /// <list> RESOURCES
     ///     <item> https://github.com/mganss/ExcelMapper </item>
@@ -53,11 +53,18 @@ namespace BaseballScraper.Controllers.PlayerControllers
     [ApiController]
     public class PlayerBaseController: ControllerBase
     {
-        private static readonly Helpers _h = new Helpers();
+        private readonly Helpers _h = new Helpers();
         private readonly CsvHandler _cSV = new CsvHandler();
         private readonly PlayerBaseFromCsv _pbCsv = new PlayerBaseFromCsv();
+        public GoogleSheetsConnector _gSC = new GoogleSheetsConnector();
 
-        // public GoogleSheetsConnector _gSC = new GoogleSheetsConnector();
+        public PlayerBaseController(Helpers h, CsvHandler cSV, PlayerBaseFromCsv pbCsv, GoogleSheetsConnector gSC)
+        {
+            _h = h;
+            _cSV = cSV;
+            _pbCsv = pbCsv;
+            _gSC = gSC;
+        }
 
 
         public PlayerBaseController() {}
@@ -68,20 +75,19 @@ namespace BaseballScraper.Controllers.PlayerControllers
         public void ViewPlayerBaseHome()
         {
             // PlayerBaseFromGoogleSheet.GetAllPlayerBaseObjectsFromGoogleSheet("A5:AP2284");
-
             _pbCsv.DownloadCrunchTimePlayerBaseCsvFromLink();
-            // return Content(content);
         }
 
 
         [Route("google_sheet")]
-        public class PlayerBaseFromGoogleSheet
+        public class PlayerBaseFromGoogleSheet : PlayerBaseController
         {
             // private static readonly Helpers _h = new Helpers();
-            private static readonly GoogleSheetsConnector _gSC = new GoogleSheetsConnector();
+            // private static readonly GoogleSheetsConnector _gSC = new GoogleSheetsConnector();
             private static readonly string sfbbMapDocName = "SfbbPlayerIdMap";
             private static readonly string sfbbMapTabId = "SFBB_PLAYER_ID_MAP";
 
+            // public PlayerBaseFromGoogleSheet(GoogleSheetsConnector) { }
             public PlayerBaseFromGoogleSheet() { }
 
 
@@ -89,7 +95,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
 
                 // PlayerBaseFromGoogleSheet.GetAllPlayerBaseObjectsFromGoogleSheet("A5:AP2284");
-                public static IList<IList<Object>> GetAllPlayerBaseObjectsFromGoogleSheet(string range)
+                public IList<IList<object>> GetAllPlayerBaseObjectsFromGoogleSheet(string range)
                 {
                     var allPlayerBases = _gSC.ReadDataFromSheetRange(sfbbMapDocName,sfbbMapTabId,range);
 
@@ -100,11 +106,11 @@ namespace BaseballScraper.Controllers.PlayerControllers
                 }
 
 
-                public static IEnumerable<SfbbPlayerBase> GetAllPlayerBasesFromGoogleSheet(string range)
+                public IEnumerable<SfbbPlayerBase> GetAllPlayerBasesFromGoogleSheet(string range)
                 {
                     // _h.StartMethod();
                     IList<IList<object>> allPlayerBaseObjects = _gSC.ReadDataFromSheetRange(sfbbMapDocName,sfbbMapTabId,range);
-                        // Console.WriteLine($"Current # of Players: {countOfAllPlayerBases}");
+                        // Console.WriteLine($"Current # of Players: {allPlayerBaseObjects.Count}");
 
                     List<SfbbPlayerBase> allPlayerBases = new List<SfbbPlayerBase>();
 
@@ -171,7 +177,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
             #region GOOGLE SHEETS: ONE PLAYER BASE ------------------------------------------------------------
 
-                public static void GetOnePlayerBaseColumnFromGoogleSheet(string range)
+                public void GetOnePlayerBaseColumnFromGoogleSheet(string range)
                 {
                     _h.StartMethod();
                     var allPlayerBaseObjects = _gSC.ReadDataFromSheetRange(sfbbMapDocName,sfbbMapTabId,range);
@@ -186,7 +192,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
 
         [Route("excel")]
-        public class PlayerBaseFromExcel
+        public class PlayerBaseFromExcel : PlayerBaseController
         {
             public PlayerBaseFromExcel() { }
 
@@ -198,7 +204,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
                 ///     Retrieves all records from PlayerBase.xlsx document
                 /// </summary>
                 /// <returns>
-                ///     IEnumerable<PlayerBase> allPlayerBases
+                ///     IEnumerable of PlayerBases
                 /// </returns>
                 public IEnumerable<PlayerBase> GetAllPlayerBasesFromExcel()
                 {
@@ -224,7 +230,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
                 ///    var players = GetAllPlayerBasesForOneMlbTeam("Chicago Cubs");
                 /// </example>
                 /// <returns>
-                ///     IEnumerable<PlayerBase> allPlayerBases
+                ///     IEnumerable of PlayerBases
                 /// </returns>
                 public IEnumerable<PlayerBase> GetAllPlayerBasesForOneMlbTeam(string teamNameFull)
                 {
@@ -255,11 +261,11 @@ namespace BaseballScraper.Controllers.PlayerControllers
                 // STATUS: these all work
                 // TODO: there has got to be a way where you only need one method vs. separating into each like below
                 /// <summary>
-                ///     Each of methods in this section returns a player (from IEnumerable<PlayerBase>)
+                ///     Each of methods in this section returns a player (from IEnumerable PlayerBases)
                 ///     The only difference is the type of Id you are passing in (e.g. MlbId, FanGraphsPlayerId, EspnPlayerId etc.)
                 /// </summary>
                 /// <returns>
-                ///     IEnumerable<PlayerBase> playerbase (i.e. a PlayerBase for one player)
+                ///     IEnumerable of PlayerBases (i.e. a PlayerBase for one player)
                 /// </returns>
 
 

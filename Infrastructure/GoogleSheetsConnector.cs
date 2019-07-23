@@ -2,12 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using BaseballScraper.Models.Configuration;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using Google.Apis.Sheets.v4;
 using Google.Apis.Sheets.v4.Data;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using C = System.Console;
 
 #pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Infrastructure
@@ -15,15 +18,89 @@ namespace BaseballScraper.Infrastructure
     // https://medium.com/@williamchislett/writing-to-google-sheets-api-using-net-and-a-services-account-91ee7e4a291
     public class GoogleSheetsConnector
     {
-        private readonly Helpers _h = new Helpers();
-
+        private readonly Helpers _h;
         private readonly string[] _scopes = { SheetsService.Scope.Spreadsheets };
-
         private readonly string _applicationName = "Baseball Scraper";
-
         private SheetsService _sheetsService;
-
         private readonly string _googleSheetsUrlBase = "https://docs.google.com/spreadsheets/d/";
+        private GoogleSheetConfiguration _googleSheetConfiguration;
+        private readonly GoogleSheetConfiguration _crunchTimePlayerIdMapConfiguration;
+        private readonly GoogleSheetConfiguration _sfbbPlayerIdMapConfiguration;
+        private string sfbbPlayerIdMap = "SfbbPlayerIdMap";
+        private string crunchtimePlayerIdMap = "CrunchtimePlayerIdMap";
+
+
+
+        public GoogleSheetsConnector(Helpers h, GoogleSheetConfiguration googleSheetConfiguration, IOptionsSnapshot<GoogleSheetConfiguration> options)
+        {
+            _h = h;
+            _googleSheetConfiguration = googleSheetConfiguration;
+            _crunchTimePlayerIdMapConfiguration = options.Get(crunchtimePlayerIdMap);
+            _sfbbPlayerIdMapConfiguration = options.Get(sfbbPlayerIdMap);
+        }
+
+        public GoogleSheetsConnector() {}
+
+
+
+        // STATUS [ July 12, 2019 ] : this works
+        /// <summary>
+        ///     Gets all configuration information from SffbPlayerIdMap from gSheetNames.json configuration file
+        /// </summary>
+        /// <remarks>
+        ///     See: gSheetNames.json, GoogleSheetsConnector.cs, GoogleSheetConfiguration.cs
+        ///     Inserted into Dependency Injection in Startup.cs
+        /// </remarks>
+        /// <example>
+        ///     [1] public class GenericController
+        ///     [2] private readonly GoogleSheetConfiguration _sfbbPlayerIdMapConfiguration;
+        ///     [3] public GenericController(IOptionsSnapshot < GoogleSheetConfiguration > options)
+        ///     {
+        ///         _sfbbPlayerIdMapConfiguration = options.Get("SfbbPlayerIdMap");
+        ///     }
+        ///     [4] var sfbbDocumentName = _sfbbPlayerIdMapConfiguration.DocumentName;
+        /// </example>
+        public GoogleSheetConfiguration GetSfbbPlayerIdMapConfiguration()
+        {
+            _googleSheetConfiguration.DocumentName  = _sfbbPlayerIdMapConfiguration.DocumentName;
+            _googleSheetConfiguration.GId           = _sfbbPlayerIdMapConfiguration.GId;
+            _googleSheetConfiguration.Link          = _sfbbPlayerIdMapConfiguration.Link;
+            _googleSheetConfiguration.Range         = _sfbbPlayerIdMapConfiguration.Range;
+            _googleSheetConfiguration.SpreadsheetId = _sfbbPlayerIdMapConfiguration.SpreadsheetId;
+            _googleSheetConfiguration.TabName       = _sfbbPlayerIdMapConfiguration.TabName;
+            _googleSheetConfiguration.WorkbookName  = _sfbbPlayerIdMapConfiguration.WorkbookName;
+            return _googleSheetConfiguration;
+        }
+
+
+        // STATUS [ July 12, 2019 ] : this works
+        /// <summary>
+        ///     Gets all configuration information from CrunchtimePlayerIdMap from gSheetNames.json configuration file
+        /// </summary>
+        /// <remarks>
+        ///     See: gSheetNames.json, GoogleSheetsConnector.cs, GoogleSheetConfiguration.cs
+        ///     Inserted into Dependency Injection in Startup.cs
+        /// </remarks>
+        /// <example>
+        ///     [1] public class GenericController
+        ///     [2] private readonly GoogleSheetConfiguration _crunchTimePlayerIdMapConfiguration;
+        ///     [3] public GenericController(IOptionsSnapshot < GoogleSheetConfiguration > options)
+        ///     {
+        ///         _crunchTimePlayerIdMapConfiguration = options.Get("CrunchtimePlayerIdMap");
+        ///     }
+        ///     [4] var crunchtimeDocumentName = _crunchTimePlayerIdMapConfiguration.DocumentName;
+        /// </example>
+        public GoogleSheetConfiguration GetCrunchTimePlayerIdMapConfiguration()
+        {
+            _googleSheetConfiguration.DocumentName  = _crunchTimePlayerIdMapConfiguration.DocumentName;
+            _googleSheetConfiguration.GId           = _crunchTimePlayerIdMapConfiguration.GId;
+            _googleSheetConfiguration.Link          = _crunchTimePlayerIdMapConfiguration.Link;
+            _googleSheetConfiguration.Range         = _crunchTimePlayerIdMapConfiguration.Range;
+            _googleSheetConfiguration.SpreadsheetId = _crunchTimePlayerIdMapConfiguration.SpreadsheetId;
+            _googleSheetConfiguration.TabName       = _crunchTimePlayerIdMapConfiguration.TabName;
+            _googleSheetConfiguration.WorkbookName  = _crunchTimePlayerIdMapConfiguration.WorkbookName;
+            return _googleSheetConfiguration;
+        }
 
 
         public SheetsService ConnectToGoogle()
@@ -63,7 +140,7 @@ namespace BaseballScraper.Infrastructure
         /// <remarks>
         ///     View "FgSpMasterReportController" > "ScrapePitchersAndCreateList" for an example of this in practice
         /// </remarks>
-        public string WriteGoogleSheetRows(IList<IList<object>> data, String sheetName, String range, String jsonGroupName)
+        public string WriteGoogleSheetRows(IList<IList<object>> data, string sheetName, string range, string jsonGroupName)
         {
             // _h.StartMethod();
 
@@ -134,7 +211,7 @@ namespace BaseballScraper.Infrastructure
         }
 
 
-        public async System.Threading.Tasks.Task<string> WriteGoogleSheetRowsAsync(IList<IList<object>> data, String sheetName, String range, String jsonGroupName)
+        public async System.Threading.Tasks.Task<string> WriteGoogleSheetRowsAsync(IList<IList<object>> data, string sheetName, string range, string jsonGroupName)
         {
             // _h.StartMethod();
 
@@ -207,7 +284,7 @@ namespace BaseballScraper.Infrastructure
         /// <example>
         ///     _gSC.WriteGoogleSheetColumns(listOfLists, "YAHOO_TRENDS","A1:Z1000","CoreCalculator");
         /// </example>
-        public string WriteGoogleSheetColumns(IList<IList<object>> data, String sheetName, String range, String jsonGroupName)
+        public string WriteGoogleSheetColumns(IList<IList<object>> data, string sheetName, string range, string jsonGroupName)
         {
             // _h.StartMethod();
 
@@ -279,7 +356,7 @@ namespace BaseballScraper.Infrastructure
         /// <example>
         ///     await _gSC.WriteGoogleSheetColumnsAsync(listOfLists, "YAHOO_TRENDS","A1:Z1000","CoreCalculator");
         /// </example>
-        public async System.Threading.Tasks.Task<string> WriteGoogleSheetColumnsAsync(IList<IList<object>> data, String sheetName, String range, String jsonGroupName)
+        public async System.Threading.Tasks.Task<string> WriteGoogleSheetColumnsAsync(IList<IList<object>> data, string sheetName, string range, string jsonGroupName)
         {
             // _h.StartMethod();
 
@@ -352,7 +429,7 @@ namespace BaseballScraper.Infrastructure
         // Example:
             // string sfbbMapDocName = "SfbbPlayerIdMap";
             // _gSC.ReadDataFromSheetRange(sfbbMapDocName,"SFBB_PLAYER_ID_MAP","A1:A2284");
-        public IList<IList<Object>> ReadDataFromSheetRange(string documentName, string tabName, string range)
+        public IList<IList<object>> ReadDataFromSheetRange(string documentName, string tabName, string range)
         {
             // _h.StartMethod();
 
@@ -377,7 +454,7 @@ namespace BaseballScraper.Infrastructure
             // allRows: this is equivalent to all rows with data (i.e., IList of rows); Each row is also a list itself made up of the actual data within the cells of the row
             // allRows.Count = the number of rows with data
             // e.g., allRows[0].Count is the number of cells in the first row with data in the cells
-            IList<IList<Object>> allRows = response.Values;
+            IList<IList<object>> allRows = response.Values;
             // int numberOfRows = allRows.Count;
 
             if (allRows != null && allRows.Count > 0)
@@ -415,7 +492,7 @@ namespace BaseballScraper.Infrastructure
             }
             else
             {
-                Console.WriteLine("No data found.");
+                C.WriteLine("No data found.");
             }
             return allRows;
         }
@@ -428,7 +505,7 @@ namespace BaseballScraper.Infrastructure
         {
             // _h.StartMethod();
             ConnectToGoogle();
-            // Console.WriteLine($"jSonGroupName: {jsonGroupName}");
+            // Console.WriteLine($"jSonGroupName: {jsonGroupName}\t jSonItemName: {jsonItemName}");
             // Console.WriteLine($"jSonItemName: {jsonItemName}");
 
             // stream.Name --> the absolute file path of the json file that the stream is reading
@@ -449,6 +526,7 @@ namespace BaseballScraper.Infrastructure
                     // Console.WriteLine($"json: {json}");
 
                         JToken jsonGroup = json[jsonGroupName];
+                        // _h.Dig(jsonGroup);
 
                         JToken jTokenValue = jsonGroup[jsonItemName];
                         string returnValue = jTokenValue.ToString();
@@ -463,12 +541,12 @@ namespace BaseballScraper.Infrastructure
         {
             List<object> headers = new List<object>();
 
-            Console.WriteLine($"HeaderStrings Length: {headerStrings.Length}");
-            Console.WriteLine($"headerStrings: {headerStrings}");
+            C.WriteLine($"HeaderStrings Length: {headerStrings.Length}");
+            C.WriteLine($"headerStrings: {headerStrings}");
 
             for(var i = 0; i < headerStrings.Length; i++)
             {
-                Console.WriteLine(headerStrings[i]);
+                C.WriteLine(headerStrings[i]);
                 headers.Add(headerStrings);
             }
             return headers;
@@ -501,32 +579,32 @@ namespace BaseballScraper.Infrastructure
 
             public void LogSpreadsheetUpdateDetails(BatchUpdateValuesResponse response)
             {
-                Console.WriteLine();
+                C.WriteLine();
                 _h.Spotlight("UPDATE OUTCOMES");
-                Console.WriteLine("-------------------------------------------------------");
-                Console.WriteLine($"SPREADSHEET ID:         | {response.SpreadsheetId}");
-                Console.WriteLine($"# of SHEETS updated:    | {response.TotalUpdatedSheets}");
-                Console.WriteLine($"# of COLUMNS updated:   | {response.TotalUpdatedColumns}");
-                Console.WriteLine($"# of ROWS updated:      | {response.TotalUpdatedRows}");
-                Console.WriteLine($"# of CELLS updated:     | {response.TotalUpdatedCells}");
-                Console.WriteLine($"response.ETag:          | {response.ETag}");
-                Console.WriteLine("-------------------------------------------------------");
-                Console.WriteLine();
+                C.WriteLine("-------------------------------------------------------");
+                C.WriteLine($"SPREADSHEET ID:         | {response.SpreadsheetId}");
+                C.WriteLine($"# of SHEETS updated:    | {response.TotalUpdatedSheets}");
+                C.WriteLine($"# of COLUMNS updated:   | {response.TotalUpdatedColumns}");
+                C.WriteLine($"# of ROWS updated:      | {response.TotalUpdatedRows}");
+                C.WriteLine($"# of CELLS updated:     | {response.TotalUpdatedCells}");
+                C.WriteLine($"response.ETag:          | {response.ETag}");
+                C.WriteLine("-------------------------------------------------------");
+                C.WriteLine();
             }
 
 
-            public void PrintUpdateRangeDetails(String sheetName, String range, String jsonGroupName, String spreadsheetId)
+            public void PrintUpdateRangeDetails(string sheetName, string range, string jsonGroupName, string spreadsheetId)
             {
-                Console.WriteLine();
+                C.WriteLine();
                 _h.Spotlight("UPDATE TARGET");
-                Console.WriteLine($"{_googleSheetsUrlBase}{spreadsheetId}/{sheetName}{range}");
-                Console.WriteLine("-------------------------------------------------------");
-                Console.WriteLine($"JSON GROUP NAME:    | {jsonGroupName}");
-                Console.WriteLine($"SPREADSHEET ID:     | {spreadsheetId}");
-                Console.WriteLine($"SHEET NAME:         | {sheetName}");
-                Console.WriteLine($"RANGE:              | {range}");
-                Console.WriteLine("-------------------------------------------------------");
-                Console.WriteLine();
+                C.WriteLine($"{_googleSheetsUrlBase}{spreadsheetId}/{sheetName}{range}");
+                C.WriteLine("-------------------------------------------------------");
+                C.WriteLine($"JSON GROUP NAME:    | {jsonGroupName}");
+                C.WriteLine($"SPREADSHEET ID:     | {spreadsheetId}");
+                C.WriteLine($"SHEET NAME:         | {sheetName}");
+                C.WriteLine($"RANGE:              | {range}");
+                C.WriteLine("-------------------------------------------------------");
+                C.WriteLine();
             }
 
 
@@ -535,9 +613,9 @@ namespace BaseballScraper.Infrastructure
                 // Count = 1;
                 IList<ValueRange> requestBodyData = requestBody.Data;
 
-                Console.WriteLine();
+                C.WriteLine();
                 _h.Spotlight("DATA TO BE ADDED");
-                Console.WriteLine("-------------------------------------------------------");
+                C.WriteLine("-------------------------------------------------------");
 
                 foreach(ValueRange vR in requestBodyData)
                 {
@@ -549,52 +627,46 @@ namespace BaseballScraper.Infrastructure
                     // list: System.Collections.Generic.List`1[System.Object]
                     foreach(IList<object> list in listOfLists)
                     {
-                        Console.WriteLine($"LIST: {listCount}");
+                        C.WriteLine($"LIST: {listCount}");
 
                         int dataCounter = 1;
                         foreach(object data in list)
                         {
-                            Console.WriteLine($"{dataCounter}. {data}");
+                            C.WriteLine($"{dataCounter}. {data}");
                             dataCounter++;
                         }
-
-                        Console.WriteLine();
+                        C.WriteLine();
                         listCount++;
                     }
                 }
-                Console.WriteLine("-------------------------------------------------------");
-                Console.WriteLine();
+                C.WriteLine($"-------------------------------------------------------\n");
             }
 
 
             public void PrintGoogleCredentialDetails(GoogleCredential credential)
             {
-                Console.WriteLine();
+                C.WriteLine();
                 _h.Spotlight("GOOGLE CREDENTIAL INFO");
-                Console.WriteLine("-------------------------------------------------------");
+                C.WriteLine("-------------------------------------------------------");
 
                 // a bunch of information about the credential object
                 JObject credentialJObject = JObject.Parse(credential.ToJson());
-                Console.WriteLine($"credentialJObject: {credentialJObject}");
+                C.WriteLine($"credentialJObject: {credentialJObject}");
 
-                Console.WriteLine("-------------------------------------------------------");
-                Console.WriteLine();
+                C.WriteLine($"-------------------------------------------------------\n");
             }
 
 
             public void PrintGoogleSheetServiceInitializerDetails(SheetsService sheetsService)
             {
-                Console.WriteLine();
-                _h.Spotlight("SHEET SERVICE INITIALIZER INFO");
-                Console.WriteLine("-------------------------------------------------------");
+                _h.Spotlight($"\nSHEET SERVICE INITIALIZER INFO");
+                C.WriteLine("-------------------------------------------------------");
 
                 // a bunch of information about the initializer object
                 JObject initializerJObject = JObject.Parse(sheetsService.HttpClientInitializer.ToJson());
 
-                Console.WriteLine($"initializerJObject: {initializerJObject}");
-
-                Console.WriteLine("-------------------------------------------------------");
-                Console.WriteLine();
+                C.WriteLine($"initializerJObject: {initializerJObject}");
+                C.WriteLine($"-------------------------------------------------------\n");
             }
 
 

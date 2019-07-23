@@ -1,5 +1,3 @@
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
-
 using System;
 using System.IO;
 using System.Net;
@@ -14,18 +12,25 @@ namespace BaseballScraper.Controllers.BaseballProspectusControllers
     [ApiController]
     public class BpSpController : ControllerBase
     {
-        private static readonly Helpers _h = new Helpers();
+        private readonly Helpers _helpers;
 
-        private readonly CsvHandler _csvH = new CsvHandler();
+        private readonly CsvHandler _csvHandler;
 
         private readonly string _bpSpDraLeaderboardLink = "https://legacy.baseballprospectus.com/sortable/extras/dra_runs.php";
+
+
+        public BpSpController(Helpers helpers, CsvHandler csvHandler)
+        {
+            _helpers = helpers;
+            _csvHandler = csvHandler;
+        }
 
 
 
         [Route("test")]
         public void BpSpTesting()
         {
-            _h.StartMethod();
+            _helpers.StartMethod();
             GetBpSpDraLeaderboard();
         }
 

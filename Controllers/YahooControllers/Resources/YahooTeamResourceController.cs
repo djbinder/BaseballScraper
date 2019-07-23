@@ -262,10 +262,10 @@ namespace BaseballScraper.Controllers.YahooControllers.Resources
             ///     1) 'PopulateTeamBaseWithOneManager()' or
             ///     2) 'PopulateTeamBaseWithCoManagers()' methods
             ///     This is ultimately called in the 'CreateYahooTeamBaseModel()' method
+            /// </summary>
             /// <remarks>
             ///     Note that the code below is formated / indented to give an idea how the json looks
             /// </remarks>
-            /// </summary>
             /// <example>
             ///     PopulateInitialTeamBaseProperties(tB, resourceJson);
             /// </example>
@@ -350,7 +350,7 @@ namespace BaseballScraper.Controllers.YahooControllers.Resources
             ///     PopulateTeamBaseWithCoManagers(tB, managerPath, teamManagersList);
             /// </example>
             /// <returns>
-            ///     A List<YahooManager> with manager details for each of the co-managers
+            ///     A List of YahooManagers with manager details for each of the co-managers
             /// </returns>
             private List<YahooManager> PopulateTeamBaseWithCoManagers([FromQuery] YahooTeamResource tB, [FromQuery] JToken managerPath, List<YahooManager> teamManagersList)
             {

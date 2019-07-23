@@ -1,13 +1,17 @@
-﻿using System;
-using System.Threading.Tasks;
-using BaseballScraper.EndPoints;
-using BaseballScraper.Infrastructure;
+﻿using BaseballScraper.EndPoints;
 using RestSharp;
 
 namespace BaseballScraper.Infrastructure
 {
     public class PostmanMethods
     {
+        /* GENERIC EXAMPLE
+            [1] var endPoint = $"https://api.airtable.com/v0/{spRankingTableConfig.AuthenticationString}/{spRankingTableConfig.TableName}?api_key={spRankingTableConfig.ApiKey}";
+            [2]var client = new RestClient(endPoint);
+            [3]var request = new RestRequest(Method.GET);
+            [4]request.AddHeader("Postman-Token", _airtableConfig.PostmanToken);
+            [5]request.AddHeader("cache-control", "no-cache");
+        */
 
         #region POSTMAN REQUEST ------------------------------------------------------------
 
@@ -30,15 +34,25 @@ namespace BaseballScraper.Infrastructure
                 };
 
                 AddRequestHeader(postmanRequest, tokenType);
-                // string postmanToken = PostmanToken(tokenType);
-                // postmanRequest.Request.AddHeader("Postman-Token", postmanToken);
-                // postmanRequest.Request.AddHeader("Cache-Control", "no-cache");
-
                 return postmanRequest;
             }
 
             // request from string endPointUri
-            public PostmanRequest CreatePostmanRequest (string endPointUri, string tokenType)
+            public PostmanRequest CreatePostmanRequest(string endPointUri, string postmanToken)
+            {
+                PostmanRequest postmanRequest = new PostmanRequest()
+                {
+                    Client  = new RestClient(endPointUri),
+                    Request = new RestRequest(Method.GET),
+                };
+
+                postmanRequest.Request.AddHeader("Postman-Token", postmanToken);
+                postmanRequest.Request.AddHeader("Cache-Control", "no-cache");
+                return postmanRequest;
+            }
+
+
+            public PostmanRequest CreatePostmanRequestFromSwitch (string endPointUri, string tokenTypeForSwitch)
             {
                 PostmanRequest postmanRequest = new PostmanRequest()
                 {
@@ -46,11 +60,7 @@ namespace BaseballScraper.Infrastructure
                     Request = new RestRequest(Method.GET)
                 };
 
-                AddRequestHeader(postmanRequest, tokenType);
-                // string postmanToken = PostmanToken(tokenType);
-                // postmanRequest.Request.AddHeader("Postman-Token", postmanToken);
-                // postmanRequest.Request.AddHeader("Cache-Control", "no-cache");
-
+                AddRequestHeader(postmanRequest, tokenTypeForSwitch);
                 return postmanRequest;
             }
 
@@ -96,9 +106,7 @@ namespace BaseballScraper.Infrastructure
                 };
 
                 AddRequestHeader(postmanRequest, tokenType);
-                // string postmanToken = PostmanToken(tokenType);
-                // postmanRequest.Request.AddHeader("Postman-Token", postmanToken);
-                // postmanRequest.Request.AddHeader("Cache-Control", "no-cache");
+
 
                 return new PostmanResponse
                 {
@@ -169,6 +177,8 @@ namespace BaseballScraper.Infrastructure
 
                     case "MlbStatsApiEndPoints_AllGamesDate":
                         return "fdc3f291-2428-450a-9eb7-3f45c0f01467";
+
+
                 }
                 throw new System.Exception("no api type found");
             }

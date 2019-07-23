@@ -4,7 +4,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using BaseballScraper.Models;
 using BaseballScraper.Models.FanGraphs;
 using ExcelDataReader;
 using Export.XLS;
@@ -12,39 +11,41 @@ using Npoi.Mapper;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 
+
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE1006
 namespace BaseballScraper.Infrastructure
 {
     /// <summary> </summary>
     /// <list> INDEX
-        /// RegisterProviderToStart <see cref="ExcelHandler.RegisterProviderToStart()" />
-        /// SetThreadCurrentCulture <see cref="ExcelHandler.SetThreadCurrentCulture()" />
-        /// CreateNewExcelWorkbook <see cref="ExcelHandler.CreateNewExcelWorkbook(string)" />
-        /// CreateNewExcelWorkbook <see cref="ExcelHandler.CreateNewExcelWorkbook()" />
-        /// CreateNewExcelWorkbook <see cref="ExcelHandler.CreateNewExcelWorkbook(string, string)" />
-        /// ManageWorkbookNames <see cref="ExcelHandler.ManageWorkbookNames(string)" />
-        /// AddSheetToExistingExcelWorkbook <see cref="ExcelHandler.AddSheetToExistingExcelWorkbook(string, string)" />
-        /// GetAllWorkbookSheets <see cref="ExcelHandler.GetAllWorkbookSheets(string)" />
-        /// AddRecordToSheet <see cref="ExcelHandler.AddRecordToSheet(string, string)" />
-        /// GetAllRecordsInSheet <see cref="ExcelHandler.GetAllRecordsInSheet(string, string)" />
-        /// AddRecordsToList <see cref="ExcelHandler.AddRecordsToList{T}(IList{T}, T)" />
-        /// PrintRecord <see cref="ExcelHandler.PrintRecord{T}(RowInfo{T})" />
-        /// SetColumnWidth <see cref="ExcelHandler.SetColumnWidth(ExcelDocument, string, int)" />
-        /// SetColumnWidth <see cref="ExcelHandler.SetColumnWidth(ExcelDocument, int, int)" />
-        /// SetCellValue <see cref="ExcelHandler.SetCellValue(ExcelDocument, int, string, object)" />
-        /// SetCellValue <see cref="ExcelHandler.SetCellValue(ExcelDocument, int, int, object)" />
-        /// SetFont <see cref="ExcelHandler.SetFont(ExcelDocument, int, string, string, int)" />
-        /// SetFont <see cref="ExcelHandler.SetFont(ExcelDocument, int, int, string, int)" />
-        /// FormatDate <see cref="ExcelHandler.FormatDate(ExcelDocument, int, int)" />
-        /// ColumnHeaderLetterToNumber <see cref="ExcelHandler.ColumnHeaderLetterToNumber(string)" />
+    ///     RegisterProviderToStart <see cref         ="RegisterProviderToStart()" />
+    ///     SetThreadCurrentCulture <see cref         ="SetThreadCurrentCulture()" />
+    ///     CreateNewExcelWorkbook <see cref          ="CreateNewExcelWorkbook(string)" />
+    ///     CreateNewExcelWorkbook <see cref          ="CreateNewExcelWorkbook()" />
+    ///     CreateNewExcelWorkbook <see cref          ="CreateNewExcelWorkbook(string, string)" />
+    ///     ManageWorkbookNames <see cref             ="ManageWorkbookNames(string)" />
+    ///     AddSheetToExistingExcelWorkbook <see cref ="AddSheetToExistingExcelWorkbook(string, string)" />
+    ///     GetAllWorkbookSheets <see cref            ="GetAllWorkbookSheets(string)" />
+    ///     AddRecordToSheet <see cref                ="AddRecordToSheet(string, string)" />
+    ///     GetAllRecordsInSheet <see cref            ="GetAllRecordsInSheet(string, string)" />
+    ///     AddRecordsToList <see cref                ="AddRecordsToList{T}(IList{T}, T)" />
+    ///     PrintRecord <see cref                     ="PrintRecord{T}(RowInfo{T})" />
+    ///     SetColumnWidth <see cref                  ="SetColumnWidth(ExcelDocument, string, int)" />
+    ///     SetColumnWidth <see cref                  ="SetColumnWidth(ExcelDocument, int, int)" />
+    ///     SetCellValue <see cref                    ="SetCellValue(ExcelDocument, int, string, object)" />
+    ///     SetCellValue <see cref                    ="SetCellValue(ExcelDocument, int, int, object)" />
+    ///     SetFont <see cref                         ="SetFont(ExcelDocument, int, string, string, int)" />
+    ///     SetFont <see cref                         ="SetFont(ExcelDocument, int, int, string, int)" />
+    ///     FormatDate <see cref                      ="FormatDate(ExcelDocument, int, int)" />
+    ///     ColumnHeaderLetterToNumber <see cref      ="ColumnHeaderLetterToNumber(string)" />
     /// </list>
     ///
     /// <list> RESOURCES
-        /// <item> https://github.com/perevoznyk/excel-export/blob/master/README.md </item>
-        /// <item> https://github.com/dotnetcore/NPOI/blob/master/samples/Npoi.Samples.CreateNewSpreadsheet/Program.cs </item>
+    /// <item> https://github.com/perevoznyk/excel-export/blob/master/README.md </item>
+    /// <item> https://github.com/dotnetcore/NPOI/blob/master/samples/Npoi.Samples.CreateNewSpreadsheet/Program.cs </item>
     /// </list>
 
 
-    #pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE1006
+
     public class ExcelHandler
     {
         private readonly Helpers _h = new Helpers();
@@ -78,26 +79,32 @@ namespace BaseballScraper.Infrastructure
         #region EXCEL WORKBOOK / DOCUMENT ------------------------------------------------------------
 
             // STATUS: this works
-            /// <summary> This creates and saves a new Excel (XLS) file </summary>
-            /// <remarks> File Type: XLSX </remarks>
-            /// <param name="fileName"> What you want the file to be named </param>
-            /// <example> _eM.CreateNewExcelWorkbook("BaseballScraper"); </example>
+            /// <summary>
+            ///     This creates and saves a new Excel (XLS) file
+            /// </summary>
+            /// <remarks>
+            ///     File Type: XLSX
+            /// </remarks>
+            /// <param name="fileName">
+            ///     What you want the file to be named
+            /// </param>
+            /// <example>
+            ///     _excelHandler.CreateNewExcelWorkbook("BaseballScraper");
+            /// </example>
             public void CreateNewExcelWorkbook(string fileName)
             {
                 RegisterProviderToStart();
                 SetThreadCurrentCulture();
 
-            ExcelDocument document = new ExcelDocument
-            {
+                ExcelDocument document = new ExcelDocument
+                {
+                    // document.UserName = "dan";
+                    CodePage = CultureInfo.CurrentCulture.TextInfo.ANSICodePage
+                };
 
-                // document.UserName = "dan";
-                CodePage = CultureInfo.CurrentCulture.TextInfo.ANSICodePage
-            };
-
-            string thisFilesName = $"{fileName}.xls";
+                string thisFilesName = $"{fileName}.xls";
 
                 FileStream stream = new FileStream(fileName, FileMode.Create);
-
                 document.Save(stream);
                 stream.Close();
             }
@@ -290,7 +297,7 @@ namespace BaseballScraper.Infrastructure
 
             // STATUS: this works
             /// <summary> Retrieve all records of a given class / model from an existing tab / sheet within an existing workbook </summary>
-            /// <remarks> Class / model type is defined within the method
+            /// <remarks> Class / model type is defined within the method </remarks>
             /// <param name="fileName"> The name of the file you are targeting </param>
             /// <param name="sheetName"> The name of the tab / sheet you are targeting </param>
             public void GetAllRecordsInSheet(string fileName, string sheetName)

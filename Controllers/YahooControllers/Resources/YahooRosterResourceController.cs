@@ -36,7 +36,7 @@ namespace BaseballScraper.Controllers.YahooControllers.Resources
         public YahooRosterResourceController(){}
 
 
-
+        #region DOCUMENT DETAILS [ CLICK TO EXPAND ]
         // Yahoo Doc Link: https://developer.yahoo.com/fantasysports/guide/#roster-resource
         // Roster resource description (from Yahoo):
         //      * Players on a team are organized into rosters corresponding to:
@@ -58,13 +58,12 @@ namespace BaseballScraper.Controllers.YahooControllers.Resources
         //      * Example:
         //          * // https://fantasysports.yahooapis.com/fantasy/v2/team/253.l.102614.t.10/roster/players
 
-
         // MODEL REFERENCE:
         //  * Models/Yahoo/Resources/YahooRosterResource.cs
 
         // JSON EXAMPLE:
         //      see very bottom of document for an example of Yahoo Roster Resource json
-
+        #endregion DOCUMENT DETAILS
 
 
 
@@ -707,8 +706,9 @@ namespace BaseballScraper.Controllers.YahooControllers.Resources
             /// </summary>
             /// <remarks>
             ///     This might break if there are co-managers; haven't tested that yet though
+            /// </remarks>
             /// <example>
-            ///     var managers  = GetManagersForRoster(8);
+            ///     var managers = GetManagersForRoster(8);
             /// </example>
             public Manager GetMangersForRoster(int teamNumber)
             {
@@ -730,6 +730,7 @@ namespace BaseballScraper.Controllers.YahooControllers.Resources
             /// </summary>
             /// <remarks>
             ///     This might break if there are co-managers; haven't tested that yet though
+            /// </remarks>
             /// <example>
             ///     var managersList = CreateListOfManagersForAllRosters(10);
             /// </example>
@@ -753,7 +754,7 @@ namespace BaseballScraper.Controllers.YahooControllers.Resources
 
 
 
-        #region YAHOO ROSTER RESOURCE - SUPPORT METHODS METHODS | CONNECT TO GOOGLE SHEETS ------------------------------------------------------------
+        #region YAHOO ROSTER RESOURCE - SUPPORT METHODS | CONNECT TO GOOGLE SHEETS ------------------------------------------------------------
 
 
             // YAHOO ROSTER RESOURCE | GOOGLE SHEETS HEADERS
@@ -815,7 +816,7 @@ namespace BaseballScraper.Controllers.YahooControllers.Resources
             }
 
 
-        #endregion YAHOO ROSTER RESOURCE - SUPPORT METHODS METHODS | CONNECT TO GOOGLE SHEETS ------------------------------------------------------------
+        #endregion YAHOO ROSTER RESOURCE - SUPPORT METHODS | CONNECT TO GOOGLE SHEETS ------------------------------------------------------------
 
 
 

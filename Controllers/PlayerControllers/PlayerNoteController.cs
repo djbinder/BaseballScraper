@@ -2,7 +2,6 @@
 using BaseballScraper.Infrastructure;
 using BaseballScraper.Models;
 using BaseballScraper.Models.Configuration;
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.Linq;
@@ -10,29 +9,43 @@ using System.Collections.Generic;
 using BaseballScraper.Models.Player;
 
 
-
-
 #pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Controllers.PlayerControllers
 {
-    // [Route("playernote")]
+    [Route("playernote")]
     public class PlayerNoteController: Controller
     {
-        private readonly Helpers _h = new Helpers();
+        private readonly Helpers _helpers;
         private readonly BaseballScraperContext _context;
         private readonly AirtableConfiguration _airtableConfig;
 
-        public PlayerNoteController(BaseballScraperContext context, IOptions<AirtableConfiguration> airtableConfig)
+        public PlayerNoteController(Helpers helpers, BaseballScraperContext context, IOptions<AirtableConfiguration> airtableConfig)
         {
+            _helpers = helpers;
             _airtableConfig = airtableConfig.Value;
             _context        = context;
         }
+
+
+        /*
+            https://127.0.0.1:5001/playernote/test
+        */
+        [HttpGet("test")]
+        public void TestController()
+        {
+            _helpers.StartMethod();
+        }
+
+
+
 
         [HttpGet]
         [Route("main")]
         public IActionResult PlayerNoteMain()
         {
+            _helpers.StartMethod();
             string content = "player note main content";
+            _helpers.CompleteMethod();
             return Content(content);
         }
 
@@ -40,8 +53,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
         [HttpGet("Create")]
         public IActionResult Create()
         {
-            _h.StartMethod();
-            _h.CompleteMethod();
+            _helpers.StartMethod();
             return View("playernote");
         }
 
@@ -50,6 +62,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
         [Route("list")]
         public void GetPlayerList()
         {
+            _helpers.StartMethod();
             List<PlayerNote> notesList = _context.PlayerNotes.ToList();
             var  notesCount            = notesList.Count();
             Console.WriteLine($"Notes Count: {notesCount}");
@@ -59,9 +72,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
         [Route("CreateNote")]
         public IActionResult CreateNote(PlayerNote note)
         {
-            _h.StartMethod();
-
-
+            _helpers.StartMethod();
             Console.WriteLine(note);
             Console.WriteLine($"Name: {note.PlayerName}");
             Console.WriteLine($"Position: {note.Position}");
@@ -84,8 +95,36 @@ namespace BaseballScraper.Controllers.PlayerControllers
             _context.Add(newPlayerNote);
             _context.SaveChanges();
 
-            _h.CompleteMethod();
+            _helpers.CompleteMethod();
+            return RedirectToAction("PlayerNoteMain");
+        }
 
+
+
+        [HttpPost]
+        [Route("CreateNote")]
+        public IActionResult CreateNote()
+        {
+            _helpers.StartMethod();
+            PlayerNote newPlayerNote = new PlayerNote
+            {
+                PlayerName   = "Pj",
+                Position     = "SS",
+                PositionType = "H",
+                Note         = "a note for Pj",
+                NoteTone     = "positive",
+                SourceSite   = "google",
+                NoteWriter   = "eno sarris",
+                CalendarYear = 2018,
+                Season    = 2018,
+            };
+
+            _context.Add(newPlayerNote);
+            _context.SaveChanges();
+
+            _helpers.Dig(newPlayerNote);
+
+            _helpers.CompleteMethod();
             return RedirectToAction("PlayerNoteMain");
         }
     }

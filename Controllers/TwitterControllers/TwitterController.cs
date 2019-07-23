@@ -125,7 +125,7 @@ namespace BaseballScraper.Controllers
             // STATUS [ June 25, 2019 ]: this works
             // OPTION 1: Create List<TwitterStatus> FOR EACH
             /// <summary>
-            ///     Create a List of <BaseballScraper.TwitterStatus> given LinqToTwitter Search
+            ///     Create a List of TwitterStatus given LinqToTwitter Search FOR EACH
             /// </summary>
             /// <remarks>
             ///     Uses LinqToTwitter
@@ -135,7 +135,7 @@ namespace BaseballScraper.Controllers
             ///     Search from LinqToTwitter
             /// </param>
             /// <example>
-            ///     List<TwitterStatus> twitterStatus = CreateNewStatusListForEach(searchResponse);
+            ///     var twitterStatus = CreateNewStatusListForEach(searchResponse);
             /// </example>
             public List<TwitterStatus> CreateNewStatusListForEach(LinqToTwitter.Search searchResponse)
             {
@@ -162,7 +162,7 @@ namespace BaseballScraper.Controllers
             // STATUS [ June 25, 2019 ]: this works
             // OPTION 2: Create List<TwitterStatus> FROM COUNT
             /// <summary>
-            ///     Create a List of <BaseballScraper.TwitterStatus> given LinqToTwitter Search
+            ///     Create a List of TwitterStatus given LinqToTwitter Search FROM COUNT
             /// </summary>
             /// <remarks>
             ///     Uses LinqToTwitter
@@ -172,7 +172,7 @@ namespace BaseballScraper.Controllers
             ///     Search from LinqToTwitter
             /// </param>
             /// <example>
-            ///     List<TwitterStatus> twitterStatus = CreateNewStatusListFromCount(searchResponse);
+            ///     var twitterStatus = CreateNewStatusListFromCount(searchResponse);
             /// </example>
             public List<TwitterStatus> CreateNewStatusListFromCount(LinqToTwitter.Search SearchResponse)
             {
