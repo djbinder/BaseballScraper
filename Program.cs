@@ -3,15 +3,14 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 
+#pragma warning disable CS0414, CS0219, IDE0051, IDE0059, CS1591, IDE0044
 namespace BaseballScraper
 {
-#pragma warning disable CS0414, CS0219, IDE0051, IDE0059, CS1591, IDE0044
     public class Program
     {
         public static void Main (string[] args)
         {
-            Console.WriteLine();
-            Console.WriteLine("***** ---> READY TO ROLL <--- *****");
+            Console.WriteLine($"\n***** ---> READY TO ROLL <--- *****");
             Console.WriteLine ($"Version: {Environment.Version}");
             CreateWebHostBuilder(args).Build().Run();
         }
@@ -25,4 +24,3 @@ namespace BaseballScraper
                 );
     }
 }
-

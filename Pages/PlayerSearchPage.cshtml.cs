@@ -1,90 +1,80 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using BaseballScraper.Controllers.AGGREGATORS;
 using BaseballScraper.Controllers.MlbDataApiControllers;
-using BaseballScraper.Controllers.PlayerControllers;
-
 using BaseballScraper.Infrastructure;
 using BaseballScraper.Models.Player;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using static BaseballScraper.Controllers.PlayerControllers.PlayerBaseController;
+using C = System.Console;
 
+#pragma warning disable CS0414, CS0219, CS1591, IDE0052
 namespace BaseballScraper.Pages
 {
-    #pragma warning disable CS0414, CS0219, CS1591, IDE0052
     public class PlayerSearchPage : PageModel
     {
-        private readonly Helpers _h = new Helpers();
-        private readonly MlbDataSeasonHittingStats _sHS = new MlbDataSeasonHittingStats();
-        private readonly MlbDataPlayerTeams _pT = new MlbDataPlayerTeams();
+        private readonly Helpers                      _helpers;
+        private readonly MlbDataPlayerTeamsController _pT;
+        private readonly PlayerBaseFromGoogleSheet    _playerBaseFromGoogleSheet;
+        private readonly LaunchCoreSpSitesController  _launchCoreSpSitesController;
+        private readonly MlbDataSeasonHittingStatsController _mlbDataSeasonHittingStatsController;
 
-        // private readonly PlayerBaseController _pBC = new PlayerBaseController();
 
-        public SfbbPlayerBase SfbbPlayer { get; set; }
+        public SfbbPlayerBase SfbbPlayer          { get; set; }
         public List<SelectListItem> SelectOptions { get; set; }
-        public List<int> PlayerSeasons { get; set; }
+        public List<int> PlayerSeasons            { get; set; }
+
 
 
         [BindProperty(SupportsGet = true)]
         public string PlayerName { get; set; }
 
 
+        // these all connect to fields in the .cshtml
+        [TempData] public string Games { get; set; }
+        [TempData] public string PlateAppearances { get; set; }
+        [TempData] public string AtBats { get; set; }
+        [TempData] public string Hits { get; set; }
+        [TempData] public string Runs { get; set; }
+        [TempData] public string HomeRuns { get; set; }
+        [TempData] public string RBIs { get; set; }
+        [TempData] public string SBs { get; set; }
+        [TempData] public string Walks { get; set; }
+        [TempData] public string AVG { get; set; }
 
-        public PlayerSearchPage()
+
+
+        public PlayerSearchPage(Helpers helpers, MlbDataPlayerTeamsController pT, PlayerBaseFromGoogleSheet playerBaseFromGoogleSheet, LaunchCoreSpSitesController  launchCoreSpSitesController, MlbDataSeasonHittingStatsController mlbDataSeasonHittingStatsController)
         {
+            _helpers                             = helpers;
+            _pT                                  = pT;
+            _playerBaseFromGoogleSheet           = playerBaseFromGoogleSheet;
+            _launchCoreSpSitesController         = launchCoreSpSitesController;
+            _mlbDataSeasonHittingStatsController = mlbDataSeasonHittingStatsController;
         }
 
-        // note: url structure is defined on the corresponding .cshtml page next to the "@page" tag in the first row
+
+
+        /*
+            https://127.0.0.1:5001/player_search
+            note: url structure is defined on the corresponding .cshtml page next to the "@page" tag in the first row
+        */
         public IActionResult OnGet()
         {
-            Console.WriteLine();
-
+            C.WriteLine();
             CreatePlayerListSelectOptions();
-
             SelectPlayerToSearch();
-
-
-            // _pT.GetListOfPlayersSeasons("493316");
-            // _pT.GetTeamsForPlayerAllSeasons("493316");
-
-            // _sHS.GetStatsForSeason();
-
-
             return Page();
         }
 
-        private void SelectPlayerToSearch()
-        {
-            IEnumerable<Models.Player.SfbbPlayerBase> playerBases = PlayerBaseController.PlayerBaseFromGoogleSheet.GetAllPlayerBasesFromGoogleSheet("A5:AQ2289");
-            // Console.WriteLine($"playerBases count {playerBases.Count()}");
-            // Console.WriteLine($"playerBases count {playerBases.LongCount()}");
 
-            if (!string.IsNullOrEmpty(PlayerName))
-            {
-                // Console.WriteLine($"PlayerName: {PlayerName}");
-                playerBases = playerBases.Where(player => player.PLAYERNAME == PlayerName);
-            }
-
-            var playerBasesList = playerBases.ToList();
-
-            SfbbPlayer = playerBasesList[0];
-
-            // Console.WriteLine($"playerBasesList.Count: {playerBasesList.Count}");
-
-            var playerFullName = SfbbPlayer.PLAYERNAME;
-            // var playerFullName = playerBasesList[0].PLAYERNAME;
-            // Console.WriteLine($"playerFullName: {playerFullName}");
-
-            PlayerSeasons = _pT.GetListOfPlayersSeasons(SfbbPlayer.MLBID);
-            PlayerSeasons.ForEach((season) => Console.WriteLine($"season: {season}"));
-        }
-
+        // Create list of a player names to be used as dropdown options in .cshtml page
         private void CreatePlayerListSelectOptions()
         {
-            List<IList<object>> allPlayerBasesFromGoogleSheets = PlayerBaseController.PlayerBaseFromGoogleSheet.GetAllPlayerBaseObjectsFromGoogleSheet("B5:B2286").ToList();
-            // Console.WriteLine($"google sheets count: {allPlayerBasesFromGoogleSheets.Count}");
+            List<IList<object>> allPlayerBasesFromGoogleSheets = _playerBaseFromGoogleSheet.GetAllPlayerBaseObjectsFromGoogleSheet("B7:B2333").ToList();
 
             SelectOptions = allPlayerBasesFromGoogleSheets.Select(player =>
                 new SelectListItem
@@ -94,5 +84,64 @@ namespace BaseballScraper.Pages
                 })
                 .OrderBy(y => y.Text).ToList();
         }
+
+
+        private void SelectPlayerToSearch()
+        {
+            IEnumerable<SfbbPlayerBase> playerBases = _playerBaseFromGoogleSheet.GetAllPlayerBasesFromGoogleSheet("A7:AQ2333");
+
+            if (!string.IsNullOrEmpty(PlayerName))
+            {
+                playerBases = playerBases.Where(player => player.PLAYERNAME == PlayerName);
+            }
+
+            string mlbId = "519203";
+            var onePlayersBase =
+                from bases in playerBases
+                where bases.MLBID == mlbId
+                select bases;
+
+            SfbbPlayer         = onePlayersBase.First();
+            string firstName   = SfbbPlayer.FIRSTNAME;
+            string lastName    = SfbbPlayer.LASTNAME;
+            string mlbPlayerId = SfbbPlayer.MLBID;
+            C.WriteLine($"firstName: {firstName}\t lastName: {lastName}\t mlbPlayerId: {mlbPlayerId}");
+
+            var hitter = _mlbDataSeasonHittingStatsController.CreateHitterSeasonStatsInstance("2019", mlbPlayerId);
+
+            Games            = hitter.Games;
+            PlateAppearances = hitter.PlateAppearances;
+            AtBats           = hitter.AtBats;
+            Hits             = hitter.Hits;
+            Runs             = hitter.Runs;
+            HomeRuns         = hitter.HomeRuns;
+            RBIs             = hitter.RBIs;
+            SBs              = hitter.StolenBases;
+            Walks            = hitter.Walks;
+            AVG              = hitter.BattingAverage;
+
+            _launchCoreSpSitesController.LaunchAllPagesInChromeForPlayer(firstName, lastName);
+        }
+
+
+
+
+        private void PrintSeasons()
+        {
+            PlayerSeasons.ForEach((season) => C.WriteLine($"season: {season}"));
+        }
+
+        private void PrintPlayerInfo(string playerFullName)
+        {
+            C.WriteLine($"SEARCHING FOR: {playerFullName}");
+        }
     }
 }
+
+
+// <h5>Active Seasons</h5>
+// <ul>@foreach(var year in Model.PlayerSeasons)
+//     {
+//         <li>@year</li>
+//     }
+// </ul>

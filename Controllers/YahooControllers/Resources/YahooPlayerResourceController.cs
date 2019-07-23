@@ -112,7 +112,7 @@ namespace BaseballScraper.Controllers.YahooControllers.Resources
             /// <example>
             ///     string rizzoId = "8868";
             ///     string goldschmidtId = "8967";
-            ///     List<string> playerIds = new List<string>
+            ///     var playerIds = new List string
             ///     {
             ///         rizzoId,
             ///         goldschmidtId

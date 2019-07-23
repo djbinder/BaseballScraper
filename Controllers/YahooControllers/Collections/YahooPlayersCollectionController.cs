@@ -34,7 +34,7 @@ namespace BaseballScraper.Controllers.YahooControllers.Collections
 
 
 
-
+        #region DOCUMENT DETAILS [ CLICK TO EXPAND ]
         // Yahoo Doc Link: https://developer.yahoo.com/fantasysports/guide/#players-collection
         // Players collection description (from Yahoo):
         //      * Enables you to get information from a collection of players simultaneously
@@ -68,17 +68,15 @@ namespace BaseballScraper.Controllers.YahooControllers.Collections
         //      * count
         //          * /players;count=5
 
-
         // MODEL REFERENCE:
         //  * YahooPlayersCollection.cs
-
 
         // END POINTS REFERENCE:
         //  * PLAYERS COLLECTION END POINTS
 
         // JSON EXAMPLE:
         //      see very bottom of document for an example of Yahoo Players Collection json
-
+        #endregion DOCUMENT DETAILS
 
 
         // https://127.0.0.1:5001/api/yahoo/yahooplayerscollection/test
@@ -95,7 +93,7 @@ namespace BaseballScraper.Controllers.YahooControllers.Collections
 
         #region YAHOO PLAYERS COLLECTION - PRIMARY METHODS - FILTER AND CREATE INSTANCE ------------------------------------------------------------
 
-            #region filter options - CLICK TO VIEW ALL OPTIONS
+            #region FILTER OPTIONS [ CLICK TO EXPAND ]
                 // FILTER OPTIONS:
                     // A) position
                         // Valid player positions (e.g., "3B", "SP")
@@ -143,7 +141,7 @@ namespace BaseballScraper.Controllers.YahooControllers.Collections
                         // any integer 0 or greater
                     // J) count
                         // any integer greater than 0
-            #endregion filter options
+            #endregion FILTER OPTIONS
 
 
             /* OVERALL SUMMARY OF SECTION */
