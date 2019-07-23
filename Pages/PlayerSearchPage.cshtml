@@ -43,15 +43,41 @@
 
 <br>
 
-<h5>Active Seasons</h5>
-<ul>@foreach(var year in Model.PlayerSeasons)
-    {
-        <li>@year</li>
-    }
-</ul>
 
+<h5>Fantasy Stats</h5>
+<table class="table">
+    <thead>
+        <tr>
+            <th>G   </th>
+            <th>PA  </th>
+            <th>AB  </th>
+            <th>H   </th>
+            <th>R   </th>
+            <th>HR  </th>
+            <th>RBI </th>
+            <th>SB  </th>
+            <th>BB  </th>
+            <th>AVG </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@Model.Games            </td>
+            <td>@Model.PlateAppearances </td>
+            <td>@Model.AtBats           </td>
+            <td>@Model.Hits             </td>
+            <td>@Model.Runs             </td>
+            <td>@Model.HomeRuns         </td>
+            <td>@Model.RBIs             </td>
+            <td>@Model.SBs              </td>
+            <td>@Model.Walks            </td>
+            <td>@Model.AVG              </td>
+        </tr>
+    </tbody>
+</table>
 
-
+<br>
+<br>
 <hr>
 <h5>Player Identifiers</h5>
 <table class="table">
@@ -68,7 +94,6 @@
     }
 
     @{
-
         <tbody>
             <tr>
                 <td>@counter</td>

@@ -17,9 +17,15 @@ namespace BaseballScraper.Infrastructure
     /// </list>
     ///
     /// <list> PROCESS TO START: three steps needed to get csharp and R to work together; enter these in terminal in succession before attempting to run any of the below
-    ///     <item> (1) export LD_LIBRARY_PATH=/Library/Frameworks/R.framework/Libraries/:$LD_LIBRARY_PATH </item>
-    ///     <item> (2) export PATH=/Library/Frameworks/R.framework/Libraries/:$PATH </item>
-    ///     <item> (3) export R_HOME=/Library/Frameworks/R.framework/Resources </item>
+    ///     <item>
+    ///         (1) export LD_LIBRARY_PATH=/Library/Frameworks/R.framework/Libraries/:$LD_LIBRARY_PATH
+    ///     </item>
+    ///     <item>
+    ///         (2) export PATH=/Library/Frameworks/R.framework/Libraries/:$PATH
+    ///     </item>
+    ///     <item>
+    ///         (3) export R_HOME=/Library/Frameworks/R.framework/Resources
+    ///     </item>
     /// </list>
     ///
     /// <list> REQUIRED R PACKAGES
@@ -37,12 +43,23 @@ namespace BaseballScraper.Infrastructure
     {
         private readonly Helpers _h = new Helpers();
 
+        public RdotNetConnector(Helpers h)
+        {
+            _h = h;
+        }
+
+        public RdotNetConnector(){}
+
 
         #region  R SETUP ------------------------------------------------------------
 
             // STATUS: this works
-            /// <summary> Creates a new engine that drives other R functions </summary>
-            /// <returns> A new R Engine </returns>
+            /// <summary>
+            ///     Creates a new engine that drives other R functions
+            /// </summary>
+            /// <returns>
+            ///     A new R Engine
+            /// </returns>
             public REngine CreateNewREngine()
             {
                 REngine.SetEnvironmentVariables ();
@@ -94,25 +111,26 @@ namespace BaseballScraper.Infrastructure
             }
 
 
+            // moved to LahmanPlayerInfoController
             // STATUS: this works
             /// <summary> Get Mlb player's Player Id, First Name, Last Name</summary>
             /// <reference> http://lahman.r-forge.r-project.org/doc/ </reference>
-            public void GetLahmanPlayerInfo(string lastName)
-            {
-                // for testing
-                // string mookieBettsId = "bettsmo01";
+            // public void GetLahmanPlayerInfo(string lastName)
+            // {
+            //     // for testing
+            //     // string mookieBettsId = "bettsmo01";
 
-                REngine engine = CreateNewREngine();
-                engine.Evaluate("library(Lahman)");
+            //     REngine engine = CreateNewREngine();
+            //     engine.Evaluate("library(Lahman)");
 
-                CharacterVector lastNameVector = CreateCharVect(engine, lastName);
-                engine.SetSymbol("lastNameVector", lastNameVector);
+            //     CharacterVector lastNameVector = CreateCharVect(engine, lastName);
+            //     engine.SetSymbol("lastNameVector", lastNameVector);
 
-                // CharacterVector playerIdVector = CreateCharVect(engine, mookieBettsId);
-                // engine.SetSymbol("playerIdVector", playerIdVector);
+            //     // CharacterVector playerIdVector = CreateCharVect(engine, mookieBettsId);
+            //     // engine.SetSymbol("playerIdVector", playerIdVector);
 
-                engine.Evaluate("playerInfo(lastNameVector)");
-            }
+            //     engine.Evaluate("playerInfo(lastNameVector)");
+            // }
 
 
             public void GetLahmanTeamInfo(string lastName)
@@ -169,14 +187,28 @@ namespace BaseballScraper.Infrastructure
         #region  BASEBALL SAVANT ------------------------------------------------------------
 
             // STATUS: this works
-            /// <summary> Get statcast data for individual games between a start and end date </summary>
-            /// <example> _r.ScrapeBaseballSavantStatcast("2016-04-06", "2016-04-15", 592789); </example>
-            /// <param name="startDate"> First date of the range you are looking for (e.g, "2016-04-06") </param>
-            /// <param name="endDate"> Last date of the range you are looking for (e.g, "2016-06-21") </param>
-            /// <param name="playerId"> The player's MLBAMID you are looking for </param>
+            /// <summary>
+            ///     Get statcast data for individual games between a start and end date
+            /// </summary>
+            /// <remarks>
+            ///     See: https://billpetti.github.io/baseballr/data-acquisition-functions/
+            /// </remarks>
+            /// <example>
+            ///     _r.ScrapeBaseballSavantStatcast("2016-04-06", "2016-04-15", 592789);
+            /// </example>
+            /// <param name="startDate">
+            ///     First date of the range you are looking for (e.g, "2016-04-06")
+            /// </param>
+            /// <param name="endDate">
+            ///     Last date of the range you are looking for (e.g, "2016-06-21")
+            /// </param>
+            /// <param name="playerId">
+            ///     The player's MLBAMID you are looking for
             ///     <see cref="RdotNetConnector.SearchForPlayer(string)"/> to get a player's playerId
-            /// <returns> pitch_type, game_date, release_speed, release_pos_x, release_pos_z, player_name, and many more </returns>
-            /// <reference> https://billpetti.github.io/baseballr/data-acquisition-functions/ </reference>
+            /// </param>
+            /// <returns>
+            ///     pitch_type, game_date, release_speed, release_pos_x, release_pos_z, player_name, and many more
+            /// </returns>
             public void ScrapeBaseballSavantStatcast(string startDate, string endDate, int playerId)
             {
                 // for testing purposes
@@ -208,11 +240,20 @@ namespace BaseballScraper.Infrastructure
         #region  FANGRAPHS HITTER LEADERBOARD ------------------------------------------------------------
 
             // STATUS: this works
-            /// <summary> OPTION 1A --> Retrieve FanGraphs hitter leader board for:  SINGLE SEASON | ALL MLB | QUALIFIED or UNQUALIFIED </summary>
-            /// <example> _r.GetFanGraphsHitterLeaderboard(2017, "y"); </example>
-            /// <param name="year"> The year of the season you want to get the leaders for </param>
-            /// <param name="qual"> Whether to include only batters that were qualified. Defaults to 'y'. Alternatively, you can pass a minimum number of plate appearances to restrict the data to. </param>
-            /// <reference> https://billpetti.github.io/baseballr/data-acquisition-functions/ </reference>
+            /// <summary>
+            ///     OPTION 1A --> Retrieve FanGraphs hitter leader board for:  SINGLE SEASON | ALL MLB | QUALIFIED or UNQUALIFIED
+            /// </summary>
+            /// <remarks>
+            ///     See: https://billpetti.github.io/baseballr/data-acquisition-functions/
+            /// </remarks>
+            /// <example> _r.GetFanGraphsHitterLeaderboard(2017, "y");
+            /// </example>
+            /// <param name="year">
+            ///     The year of the season you want to get the leaders for
+            /// </param>
+            /// <param name="qual">
+            ///     Whether to include only batters that were qualified. Defaults to 'y'. Alternatively, you can pass a minimum number of plate appearances to restrict the data to.
+            /// </param>
             public void GetFanGraphsHitterLeaderboard(int year, string qual)
             {
                 REngine engine = CreateNewREngine();
@@ -229,11 +270,21 @@ namespace BaseballScraper.Infrastructure
 
 
             // STATUS: this works
-            /// <summary> OPTION 1B --> Retrieve FanGraphs hitter leader board for:  SINGLE SEASON | ALL MLB | players with PLATE APPEARANCES greater than defined # </summary>
-            /// <example> _r.GetFanGraphsHitterLeaderboard(2018, 200); </example>
-            /// <param name="year"> The year of the season you want to get the leaders for </param>
-            /// <param name="minPlateAppearances"> Number of plate appearances a hitter needs to show up in the results. </param>
-            /// <reference> https://billpetti.github.io/baseballr/data-acquisition-functions/ </reference>
+            /// <summary>
+            ///     OPTION 1B --> Retrieve FanGraphs hitter leader board for:  SINGLE SEASON | ALL MLB | players with PLATE APPEARANCES greater than defined #
+            /// </summary>
+            /// <remarks>
+            ///     See: https://billpetti.github.io/baseballr/data-acquisition-functions/
+            /// </remarks>
+            /// <example>
+            ///     _r.GetFanGraphsHitterLeaderboard(2018, 200);
+            /// </example>
+            /// <param name="year">
+            ///     The year of the season you want to get the leaders for
+            /// </param>
+            /// <param name="minPlateAppearances">
+            ///     Number of plate appearances a hitter needs to show up in the results.
+            /// </param>
             public void GetFanGraphsHitterLeaderboard(int year, int minPlateAppearances)
             {
                 REngine engine = CreateNewREngine();
@@ -250,12 +301,24 @@ namespace BaseballScraper.Infrastructure
 
 
             // STATUS: this works
-            /// <summary> OPTION 2 --> Retrieve FanGraphs hitter leader board for:  SINGLE SEASON | ALL or AL or NL | QUALIFIED or UNQUALIFIED </summary>
-            /// <example> _r.GetFanGraphsHitterLeaderboard(2017, "nl", "y"); </example>
-            /// <param name="year"> The year of the season you want to get the leaders for </param>
-            /// <param name="league">  You can get records for all of MLB ('all'), the National League ('nl'), or the American League ('al') </param>
-            /// <param name="qual"> Whether to include only batters that were qualified. Defaults to 'y'. Alternatively, you can pass a minimum number of plate appearances to restrict the data to. </param>
-            /// <reference> https://billpetti.github.io/baseballr/data-acquisition-functions/ </reference>
+            /// <summary>
+            ///     OPTION 2 --> Retrieve FanGraphs hitter leader board for:  SINGLE SEASON | ALL or AL or NL | QUALIFIED or UNQUALIFIED
+            /// </summary>
+            /// <remarks>
+            ///     See: https://billpetti.github.io/baseballr/data-acquisition-functions/
+            /// </remarks>
+            /// <example>
+            ///     _r.GetFanGraphsHitterLeaderboard(2017, "nl", "y");
+            /// </example>
+            /// <param name="year">
+            ///     The year of the season you want to get the leaders for
+            /// </param>
+            /// <param name="league">
+            ///     You can get records for all of MLB ('all'), the National League ('nl'), or the American League ('al')
+            /// </param>
+            /// <param name="qual">
+            ///     Whether to include only batters that were qualified. Defaults to 'y'. Alternatively, you can pass a minimum number of plate appearances to restrict the data to.
+            /// </param>
             public void GetFanGraphsHitterLeaderboard(int year, string league, string qual)
             {
                 REngine engine = CreateNewREngine();
@@ -273,14 +336,30 @@ namespace BaseballScraper.Infrastructure
 
 
             // STATUS: this works
-            /// <summary> OPTION 3A --> Retrieve FanGraphs hitter leader board for:  RANGE OF SEASON | ALL or AL or NL | QUALIFIED or UNQUALIFIED | display in AGGREGATE or by SEASON </summary>
-            /// </example> _r.GetFanGraphsHitterLeaderboard(2014, 2017, "nl", "y", "season"); </example>
-            /// <param name="startYear"> The first year / season you want to get the leaders for </param>
-            /// <param name="endYear"> The last year / season you want to get the leaders for </param>
-            /// <param name="league">  You can get records for all of MLB ('all'), the National League ('nl'), or the American League ('al') </param>
-            /// <param name="qual"> Whether to include only batters that were qualified. Defaults to 'y'. Alternatively, you can pass a minimum number of plate appearances to restrict the data to. </param>
-            /// <param name="statDisplayType"> Whether to split the data by batter and individual season, or to simply aggregate by batter across the seasons selected. Defaults to aggregating (ind = 0). To split by season, use ind = 1 </param>
-            /// <reference> https://billpetti.github.io/baseballr/data-acquisition-functions/ </reference>
+            /// <summary>
+            /// OPTION 3A --> Retrieve FanGraphs hitter leader board for:  RANGE OF SEASON | ALL or AL or NL | QUALIFIED or UNQUALIFIED | display in AGGREGATE or by SEASON
+            /// </summary>
+            /// <example>
+            ///     _r.GetFanGraphsHitterLeaderboard(2014, 2017, "nl", "y", "season");
+            /// </example>
+            /// <remarks>
+            ///     See: https://billpetti.github.io/baseballr/data-acquisition-functions/
+            /// </remarks>
+            /// <param name="startYear">
+            ///     The first year / season you want to get the leaders for
+            /// </param>
+            /// <param name="endYear">
+            ///     The last year / season you want to get the leaders for
+            /// </param>
+            /// <param name="league">
+            ///     You can get records for all of MLB ('all'), the National League ('nl'), or the American League ('al')
+            /// </param>
+            /// <param name="qual">
+            ///     Whether to include only batters that were qualified. Defaults to 'y'. Alternatively, you can pass a minimum number of plate appearances to restrict the data to.
+            /// </param>
+            /// <param name="statDisplayType">
+            ///     Whether to split the data by batter and individual season, or to simply aggregate by batter across the seasons selected. Defaults to aggregating (ind = 0). To split by season, use ind = 1
+            /// </param>
             public void GetFanGraphsHitterLeaderboard(int startYear, int endYear, string league, string qual, string statDisplayType)
             {
                 REngine engine = CreateNewREngine();
@@ -315,13 +394,15 @@ namespace BaseballScraper.Infrastructure
 
             // STATUS: this works
             /// <summary> OPTION 3B --> Retrieve FanGraphs hitter leader board for:  RANGE OF SEASON | ALL or AL or NL | players with PLATE APPEARANCES greater than defined # | display in AGGREGATE or by SEASON </summary>
-            /// </example> _r.GetFanGraphsHitterLeaderboard(2014, 2017, "all", 200, "aggregate"); </example>
+            /// <example> _r.GetFanGraphsHitterLeaderboard(2014, 2017, "all", 200, "aggregate"); </example>
+            /// <remarks>
+            ///     See: https://billpetti.github.io/baseballr/data-acquisition-functions/
+            /// </remarks>
             /// <param name="startYear"> The first year / season you want to get the leaders for </param>
             /// <param name="endYear"> The last year / season you want to get the leaders for </param>
             /// <param name="league">  You can get records for all of MLB ('all'), the National League ('nl'), or the American League ('al') </param>
             /// <param name="minPlateAppearances"> Whether to include only batters that were qualified. Defaults to 'y'. Alternatively, you can pass a minimum number of plate appearances to restrict the data to. </param>
             /// <param name="statDisplayType"> Whether to split the data by batter and individual season, or to simply aggregate by batter across the seasons selected. Defaults to aggregating (ind = 0). To split by season, use ind = 1 </param>
-            /// <reference> https://billpetti.github.io/baseballr/data-acquisition-functions/ </reference>
             public void GetFanGraphsHitterLeaderboard(int startYear, int endYear, string league, int minPlateAppearances, string statDisplayType)
             {
                 REngine engine = CreateNewREngine();
@@ -361,7 +442,9 @@ namespace BaseballScraper.Infrastructure
 
             // STATUS: this works
             /// <summary> Retrieves components and constants FanGraphs uses for calculating metrics such as wOBA and FIP</summary>
-            /// <reference> https://www.fangraphs.com/guts.aspx?type=cn </reference>
+            /// <remarks>
+            ///     See: https://billpetti.github.io/baseballr/data-acquisition-functions/
+            /// </remarks>
             public void GetFanGraphsGuts()
             {
                 REngine engine = CreateNewREngine();
@@ -372,7 +455,9 @@ namespace BaseballScraper.Infrastructure
 
             // STATUS: this works
             /// <summary> Retrieves park factors for mlb stadiums for a given year </summary>
-            /// <reference> https://www.fangraphs.com/guts.aspx?type=pf&teamid=0&season=2017 </reference>
+            /// <remarks>
+            ///     See: https://billpetti.github.io/baseballr/data-acquisition-functions/
+            /// </remarks>
             public void GetFanGraphsParkFactors(int year)
             {
                 REngine engine = CreateNewREngine();
@@ -385,10 +470,14 @@ namespace BaseballScraper.Infrastructure
             }
 
 
+            // See: <see cref="https://www.fangraphs.com/guts.aspx?type=pfh&teamid=0&season=2017" />
             // STATUS: this works
-            /// <summary> Retrieves park factors for mlb stadiums for a given year and splits it between righties and lefties </summary>
-            /// <remarks> Only available for years 2002 and later </remarks>
-            /// <reference> https://www.fangraphs.com/guts.aspx?type=pfh&teamid=0&season=2017 </reference>
+            /// <summary>
+            ///     Retrieves park factors for mlb stadiums for a given year and splits it between righties and lefties
+            /// </summary>
+            /// <remarks>
+            ///     Only available for years 2002 and later
+            /// </remarks>
             public void GetFanGraphsParkFactorsByBatterHandedness(int year)
             {
                 REngine engine = CreateNewREngine();
@@ -408,10 +497,12 @@ namespace BaseballScraper.Infrastructure
 
             // STATUS: this works
             /// <summary> Search the Chadwich Bureau Register for a mlb player based on their last name </summary>
+            /// <remarks>
+            ///     See: https://billpetti.github.io/baseballr/data-acquisition-functions/
+            /// </remarks>
             /// <example> _r.SearchForPlayer("Seager"); </example>
             /// <param name="lastName"> Mlb player's last name </param>
-            /// <returns> first_name, last_name, given_name, name_suffix, nick_name, birth_year, mlb_played_first, mlbam_id, retrosheet_id, retrosheet_id, bbref_id, fangraphs_id
-            /// <reference> https://billpetti.github.io/baseballr/data-acquisition-functions/ </reference>
+            /// <returns> first_name, last_name, given_name, name_suffix, nick_name, birth_year, mlb_played_first, mlbam_id, retrosheet_id, retrosheet_id, bbref_id, fangraphs_id </returns>
             public void SearchForPlayer(string lastName)
             {
                 REngine engine = CreateNewREngine();
@@ -426,14 +517,16 @@ namespace BaseballScraper.Infrastructure
 
             // STATUS: this works
             /// <summary> Get mlb standings on a specific date for a particular league (AL or NL) and division </summary>
-            /// <remarks> Differs from 'GetMlbStandingsFromDateForward' in that the 'from' parameter is FALSE </remarks>
+            /// <remarks>
+            ///     Differs from 'GetMlbStandingsFromDateForward' in that the 'from' parameter is FALSE
+            ///     See: https://billpetti.github.io/baseballr/data-acquisition-functions/
+            /// </remarks>
             /// <param name="mlbLeagueAndDivision"> A combination of league and division (e.g, "AL Central") </param>
             ///     <example> If you want league/division do something like "AL Central" </example>
             ///     <example> If you want overall league standings do "AL Overall" </example>
             /// <param name="standingsDate"> The date that you want to view standings for (e.g, "2015-08-01")</param>
             /// <example> _r.GetMlbStandingsOnDate("NL East", "2015-08-01"); </example>
             /// <returns> tm, W, L, W-L%, GB, RS, RA, pythW-L% </returns>
-            /// <reference> https://billpetti.github.io/baseballr/data-acquisition-functions/ </reference>
             public void GetMlbStandingsOnDate(string mlbLeagueAndDivision, string standingsDate)
             {
                 _h.StartMethod();
@@ -463,7 +556,7 @@ namespace BaseballScraper.Infrastructure
             /// <param name="standingsDate"> The date that you want to view standings forward from (e.g, "2015-08-01")</param>
             /// <example> _r.GetMlbStandingsFromDateForward("NL East", "2015-08-01"); </example>
             /// <returns> tm, W, L, W-L%, GB, RS, RA, pythW-L% </returns>
-            /// <reference> https://billpetti.github.io/baseballr/data-acquisition-functions/ </reference>
+            /// <remarks> https://billpetti.github.io/baseballr/data-acquisition-functions/ </remarks>
             public void GetMlbStandingsFromDateForward(string mlbLeagueAndDivision, string standingsDate)
             {
                 Console.WriteLine($"League/Division: {mlbLeagueAndDivision}");
@@ -488,7 +581,7 @@ namespace BaseballScraper.Infrastructure
             /// <param name="startDate"> First date of the range you are looking for (e.g, "2016-04-06") </param>
             /// <param name="endDate"> Last date of the range you are looking for (e.g, "2016-06-21") </param>
             /// <param name="pitcherOrBatter"> Position type. Two options: 'pitcher' OR 'batter' </param>
-            /// <reference> https://billpetti.github.io/baseballr/data-acquisition-functions/ </reference>
+            /// <remarks> https://billpetti.github.io/baseballr/data-acquisition-functions/ </remarks>
             public void GetPlayerEdgePercentage(string startDate, string endDate, string pitcherOrBatter)
             {
                 REngine engine = CreateNewREngine();
@@ -514,7 +607,7 @@ namespace BaseballScraper.Infrastructure
 
             // STATUS: this works
             /// <summary> Get a single pitcher's winning percentage </summary>
-            /// <reference> Calculating Baseball Data with R </reference>
+            /// <remarks> Calculating Baseball Data with R </remarks>
             public void CalculatePitcherWinningPercentage()
             {
                 REngine engine = CreateNewREngine();

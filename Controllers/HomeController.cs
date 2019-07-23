@@ -13,8 +13,6 @@ using HtmlAgilityPack;
 using System.Linq;
 using System.Collections.Generic;
 
-
-
 #pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Controllers
 {
@@ -22,144 +20,45 @@ namespace BaseballScraper.Controllers
     [ApiController]
     public class HomeController: ControllerBase
     {
-        private readonly Helpers _h = new Helpers();
+        private readonly Helpers               _helpers;
+        private readonly RdotNetConnector      _r;
         private readonly AirtableConfiguration _airtableConfig;
-        private readonly TwitterConfiguration _twitterConfiguration;
-        private readonly ExcelHandler _eM     = new ExcelHandler();
-        private readonly PythonConnector _pC = new PythonConnector();
-        private readonly RdotNetConnector _r = new RdotNetConnector();
-        private readonly DataTabler _dT      = new DataTabler();
-        private readonly CsvHandler _cH      = new CsvHandler();
-        private readonly HtmlScraper _hS = new HtmlScraper();
-
-        private readonly GoogleSheetsConnector _gSC = new GoogleSheetsConnector();
-
-        private readonly JsonHandler _jR = new JsonHandler();
+        private readonly TwitterConfiguration  _twitterConfiguration;
+        private readonly GoogleSheetsConnector _gSC;
+        private readonly EmailHelper           _emailHelper;
+        private readonly ExcelHandler          _excelHander;
+        private readonly PythonConnector       _pythonConnector;
+        private readonly DataTabler            _dataTabler;
+        private readonly CsvHandler            _csvHandler;
 
 
-        public readonly JsonHandler.DotNetStandardJsonHandler _dJh = new JsonHandler.DotNetStandardJsonHandler();
-
-
-
-        public HomeController (IOptions<AirtableConfiguration> airtableConfig, IOptions<TwitterConfiguration> twitterConfig)
+        public HomeController (Helpers helpers, RdotNetConnector r, IOptions<AirtableConfiguration> airtableConfig, IOptions<TwitterConfiguration> twitterConfig, GoogleSheetsConnector gSC, EmailHelper emailHelper, ExcelHandler excelHandler, PythonConnector pythonConnector, DataTabler dataTabler, CsvHandler csvHandler)
         {
+            _helpers              = helpers;
+            _r                    = r;
             _airtableConfig       = airtableConfig.Value;
             _twitterConfiguration = twitterConfig.Value;
+            _gSC                  = gSC;
+            _emailHelper          = emailHelper;
+            _excelHander          = excelHandler;
+            _pythonConnector      = pythonConnector;
+            _dataTabler           = dataTabler;
+            _csvHandler           = csvHandler;
         }
 
 
-        // [HttpGet]
-        // [Route("")]
-        // public IActionResult Index()
-        // {
-        //     Console.WriteLine("INDEX");
-        //     return RedirectToAction("OnGet","Pages/Dashboard.cshtml.cs");
-        // }
+        public HomeController(){}
+
+
 
         [Route("")]
         public void MainTest()
         {
-            _h.StartMethod();
-            // _jR.ReadJsonFile();
-            // _dJh.ReadJsonFile("blank");
-            _jR.JsonReaderTester();
-
-
-        }
-
-
-        [HttpGet("google_sheets")]
-        public void ConnectToGoogleSheetsConnector()
-        {
-            // _h.StartMethod();
-            // Console.WriteLine("connecting to google_sheets");
-            // _gSC.ConnectToGoogle();
-
-            // // List<IList<object>> data
-            // List<IList<object>> objectsListMain = new List<IList<object>>();
-
-            // List<object> objects = new List<object>();
-
-            // var object1 = "CUBS!!!";
-            // objects.Add(object1);
-            // objects.Add("CUBS2");
-            // objects.Add("CUBS3");
-
-            // List<object> objectsList2 = new List<object>
-            // {
-            //     "BREWERS",
-            //     "cards"
-            // };
-
-
-
-            // objectsListMain.Add(objects);
-            // objectsListMain.Add(objectsList2);
-
-            // Console.WriteLine();
-            // Console.WriteLine("HOME > starting UpdateData");
-            // Console.WriteLine();
-
-            // _gSC.UpdateData(objectsListMain);
+            _helpers.StartMethod();
         }
 
 
 
 
-
-
-
-        [HttpGet]
-        [Route("datatable")]
-        public void DoDataTableThings()
-        {
-
-        }
-
-        [HttpGet]
-        [Route("mapper")]
-        public void ConnectToMapperHome()
-        {
-
-        }
-
-        [HttpGet]
-        [Route("r/pitchers")]
-        public void CreatePitcherWinsVector()
-        {
-            _r.GetLahmanPlayerInfo("betts");
-            // _r.GetLahmanTeamInfo("CH");
-        }
-
-        [HttpGet]
-        [Route("logging")]
-        public void Logging()
-        {
-            // Log.Logger = new LoggerConfiguration()
-            // .MinimumLevel.Debug()
-            // .WriteTo.Console()
-            // .WriteTo.File("Logs//BaseballScraperLog.txt", rollingInterval: RollingInterval.Day)
-            // .CreateLogger();
-
-            // // Log.Information("Hello, world!");
-            // Log.Information("The time is {Now}", DateTime.Now);
-
-            // Log.CloseAndFlush();
-
-            // var config = new NLog.Config.LoggingConfiguration();
-
-            // var logfile    = new NLog.Targets.FileTarget("logfile") { FileName = "file.txt" };
-            // var logconsole = new NLog.Targets.ConsoleTarget("logconsole");
-
-            // config.AddRule(LogLevel.Info, LogLevel.Fatal, logconsole);
-            // config.AddRule(LogLevel.Debug, LogLevel.Fatal, logfile);
-
-            // NLog.LogManager.Configuration = config;
-
-            // return View();
-        }
     }
-
-
-
 }

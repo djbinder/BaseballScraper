@@ -31,10 +31,16 @@
   <ItemGroup>
 
     <!-- Google API and Google Sheets -->
+    <PackageReference Include="Airtable" Version="1.0.2" />
+    <PackageReference Include="AutoMapper" Version="8.1.1" />
+    <PackageReference Include="AutoMapper.Collection" Version="5.0.0" />
+    <PackageReference Include="AutoMapper.Collection.EntityFrameworkCore" Version="0.2.0" />
+    <PackageReference Include="CData.GoogleSheets" Version="19.0.7045" />
     <PackageReference Include="Echovoice.JSON" Version="2.0.15151.1" />
     <PackageReference Include="Google.Apis" Version="1.39.0" />
     <PackageReference Include="Google.Apis.Auth" Version="1.39.0" />
     <PackageReference Include="Google.Apis.Sheets.v4" Version="1.39.0.1579" />
+    <PackageReference Include="GraphQL" Version="2.4.0" />
 
 
     <!-- Python -->
@@ -60,7 +66,7 @@
     <!-- Logging -->
     <PackageReference Include="ObjectPrinter" Version="2.0.35" />
     <PackageReference Include="ObjectDumper" Version="1.*" />
-    <PackageReference Include="ConsoleTables" Version="2.2.0" />
+    <PackageReference Include="ConsoleTables" Version="2.3.0" />
     <PackageReference Include="log4net" Version="2.0.8" />
     <PackageReference Include="MarkdownLog" Version="0.9.3" />
     <PackageReference Include="PuppeteerSharp" Version="1.17.2" />

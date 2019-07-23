@@ -6,11 +6,8 @@
 
 using System;
 using System.Collections.Generic;
-
-using System.Globalization;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using BaseballScraper.Infrastructure;
 
 namespace BaseballScraper.Models.MlbDataApi

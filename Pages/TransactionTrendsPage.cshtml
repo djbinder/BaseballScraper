@@ -1,0 +1,61 @@
+@page "/transaction_trends"
+@model BaseballScraper.Pages.TransactionTrendsPage
+
+@{
+ViewData["Title"] = "Transaction Trends";
+}
+
+<hr style="border: 1px solid slateblue">
+<h3><b>@ViewData["Title"]</b></h3>
+<hr style="border: 1px solid slateblue">
+<br>
+
+
+
+<h4>Cbs Trends</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Player Name</th>
+            <th>Own% - Last Wk</th>
+            <th>Own% - This Wk</th>
+            <th>Own% - Change w/w</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model.CbsPlayers)
+        {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.CbsRosterTrendPlayerName)</td>
+            <td>@Html.DisplayFor(modelItem => item.CbsRankPreviousWeek)</td>
+            <td>@Html.DisplayFor(modelItem => item.CbsRankCurrentWeek)</td>
+            <td>@Html.DisplayFor(modelItem => item.CbsDifferenceBetweenCurrentWeekAndPreviousWeek)</td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+<br>
+
+<h4>Yahoo Trends</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Player Name</th>
+            <th>Adds</th>
+            <th>Drops</th>
+            <th>Trades</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model.YahooPlayers)
+        {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.YahooPlayerName)</td>
+            <td>@Html.DisplayFor(modelItem => item.YahooPlayerAdds)</td>
+            <td>@Html.DisplayFor(modelItem => item.YahooPlayerDrops)</td>
+            <td>@Html.DisplayFor(modelItem => item.YahooPlayerTrades)</td>
+        </tr>
+        }
+    </tbody>
+</table>

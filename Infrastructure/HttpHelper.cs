@@ -4,12 +4,12 @@ namespace BaseballScraper.Infrastructure
 {
     public static class HttpHelper
     {
-        private static IHttpContextAccessor _accessor;
+        private static IHttpContextAccessor _httpContextAccessor;
         public static void Configure(IHttpContextAccessor httpContextAccessor)
         {
-            _accessor = httpContextAccessor;
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        public static HttpContext HttpContext => _accessor.HttpContext;
+        public static HttpContext HttpContext => _httpContextAccessor.HttpContext;
     }
 }

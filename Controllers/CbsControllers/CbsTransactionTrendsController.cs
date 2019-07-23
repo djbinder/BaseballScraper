@@ -5,6 +5,8 @@ using HtmlAgilityPack;
 using BaseballScraper.Infrastructure;
 using BaseballScraper.Models.Cbs;
 
+
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE1006
 namespace BaseballScraper.Controllers.CbsControllers
 {
 
@@ -12,13 +14,13 @@ namespace BaseballScraper.Controllers.CbsControllers
 
         /// <summary> Retrieve Cbs player trends: Most added, most dropped, most viewed, most traded </summary>
         /// <list> INDEX
-        ///     <item> Get Most Added / Dropped All <see cref="CbsTransactionTrendsController.GetListOfCbsMostAddedOrDropped(string)" /> </item>
-        ///     <item> Get Most Added / Dropped By Position <see cref="CbsTransactionTrendsController.GetListOfCbsMostAddedOrDroppedByPosition(string, string)"/></item>
-        ///     <item> Print Most Added / Dropped <see cref="CbsTransactionTrendsController.PrintCbsAddedOrDroppedListOfPlayers(List{CbsMostAddedOrDroppedPlayer})" /> </item>
-        ///     <item> Get Most Viewed All <see cref="CbsTransactionTrendsController.GetListOfCbsMostViewedPlayers(string)" /></item>
+        ///     <item> Get Most Added / Dropped All <see cref="GetListOfCbsMostAddedOrDropped(string)" /> </item>
+        ///     <item> Get Most Added / Dropped By Position <see cref="GetListOfCbsMostAddedOrDroppedByPosition(string, string)"/></item>
+        ///     <item> Print Most Added / Dropped <see cref="PrintCbsAddedOrDroppedListOfPlayers(List{CbsMostAddedOrDroppedPlayer})" /> </item>
+        ///     <item> Get Most Viewed All <see cref="GetListOfCbsMostViewedPlayers(string)" /></item>
         ///     <item> Get Most Viewed <see cref="CbsTransactionTrendsController.GetListOfCbsMostViewedPlayersByPosition(string, string)"/></item>
-        ///     <item> Get Most Traded All <see cref="CbsTransactionTrendsController.GetListOfCbsMostTradedPlayers(string)" /> </item>
-        ///     <item> Get Most Traded By Position <see cref="CbsTransactionTrendsController.GetListOfCbsMostTradedPlayersByPosition(string, string)"/> </item>
+        ///     <item> Get Most Traded All <see cref="GetListOfCbsMostTradedPlayers(string)" /> </item>
+        ///     <item> Get Most Traded By Position <see cref="GetListOfCbsMostTradedPlayersByPosition(string, string)"/> </item>
         /// </list>
         /// <list> RESOURCES
         ///     <item> Most Added: https://www.cbssports.com/fantasy/baseball/trends/added/all </item>
@@ -31,11 +33,11 @@ namespace BaseballScraper.Controllers.CbsControllers
 
     // https://theathletic.com/533969/2018/09/19/exploring-the-hidden-fantasy-tools-on-yahoo-espn-and-cbs/
 
-    [Route("cbs")]
+    [Route("api/cbs/[controller]")]
     #pragma warning disable CS0219, IDE0051
-    public class CbsTransactionTrendsController : Controller
+    public class CbsTransactionTrendsController : ControllerBase
     {
-        private readonly Helpers _h = new Helpers();
+        private readonly Helpers _helpers;
 
         #region URL QUERY STRINGS ------------------------------------------------------------
 
@@ -54,13 +56,23 @@ namespace BaseballScraper.Controllers.CbsControllers
         #endregion URL QUERY STRINGS ------------------------------------------------------------
 
 
-        [HttpGet]
-        [Route("trends")]
-        #pragma warning disable CS0414, CS0219, CS1591
+
+        public CbsTransactionTrendsController(Helpers helpers)
+        {
+            _helpers = helpers;
+        }
+
+
+        /*
+            https://127.0.0.1:5001/api/cbs/cbstransactiontrends/test
+        */
+
+        [HttpGet("test")]
         public void CbsMostAdded()
         {
-            _h.StartMethod();
+            _helpers.StartMethod();
         }
+
 
 
         #region MOST ADDED OR DROPPED ------------------------------------------------------------
@@ -77,7 +89,7 @@ namespace BaseballScraper.Controllers.CbsControllers
             /// <returns> A list of most added or dropped players</returns>
             public List<CbsMostAddedOrDroppedPlayer> GetListOfCbsMostAddedOrDropped(string urlToScrape)
             {
-                _h.StartMethod();
+                _helpers.StartMethod();
 
                 HtmlWeb htmlWeb = new HtmlWeb();
 
@@ -167,7 +179,7 @@ namespace BaseballScraper.Controllers.CbsControllers
 
             public List<CbsMostAddedOrDroppedPlayer> GetListOfCbsMostAddedOrDroppedByPosition(string urlToScrapePrefix, string position)
             {
-                _h.StartMethod();
+                _helpers.StartMethod();
                 HtmlWeb htmlWeb = new HtmlWeb();
 
                 var urlToScrape = $"{urlToScrapePrefix}/{position}";
@@ -238,7 +250,7 @@ namespace BaseballScraper.Controllers.CbsControllers
             /// <returns> A list of most viewed players </returns>
             public List<CbsMostViewedPlayer> GetListOfCbsMostViewedPlayers(string urlToScrape)
             {
-                _h.StartMethod();
+                _helpers.StartMethod();
                 HtmlWeb htmlWeb = new HtmlWeb();
 
                 // THIS URLS HTML --> HtmlAgilityPack.HtmlDocument
@@ -287,7 +299,7 @@ namespace BaseballScraper.Controllers.CbsControllers
             /// <returns> A list of most viewed players for one position </returns>
             public List<CbsMostViewedPlayer> GetListOfCbsMostViewedPlayersByPosition(string urlToScrapePrefix, string position)
             {
-                _h.StartMethod();
+                _helpers.StartMethod();
                 HtmlWeb htmlWeb = new HtmlWeb();
 
                 var urlToScrape = $"{urlToScrapePrefix}/{position}";
@@ -343,7 +355,7 @@ namespace BaseballScraper.Controllers.CbsControllers
             /// <returns> A list of most traded players </returns>
             public List<CbsMostTradedPlayer> GetListOfCbsMostTradedPlayers(string urlToScrape)
             {
-                _h.StartMethod();
+                _helpers.StartMethod();
                 HtmlWeb htmlWeb = new HtmlWeb();
 
                 // THIS URLS HTML --> HtmlAgilityPack.HtmlDocument
@@ -388,7 +400,7 @@ namespace BaseballScraper.Controllers.CbsControllers
             /// <returns> A list of most traded players for one position </returns>
             public List<CbsMostTradedPlayer> GetListOfCbsMostTradedPlayersByPosition(string urlToScrapePrefix, string position)
             {
-                _h.StartMethod();
+                _helpers.StartMethod();
                 HtmlWeb htmlWeb = new HtmlWeb();
 
                 var urlToScrape = $"{urlToScrapePrefix}/{position}";
