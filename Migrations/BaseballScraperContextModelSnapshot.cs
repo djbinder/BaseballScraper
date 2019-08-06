@@ -16,88 +16,166 @@ namespace BaseballScraper.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasAnnotation("ProductVersion", "2.1.1-rtm-30846")
+                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("BaseballScraper.Models.BaseballSavant.StartingPitcherCsw", b =>
                 {
-                    b.Property<int>("StartingPitcherCswId")
+                    b.Property<int?>("StartingPitcherCswId")
                         .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Abs");
-
-                    b.Property<string>("Ba");
-
-                    b.Property<string>("Babip");
 
                     b.Property<DateTime>("CreatedAt");
 
-                    b.Property<string>("CswPitches");
+                    b.Property<decimal?>("CswPitchPercent");
+
+                    b.Property<int?>("CswPitches");
 
                     b.Property<string>("Discriminator")
                         .IsRequired();
 
-                    b.Property<string>("EffectiveMinVelocity");
+                    b.Property<decimal?>("EffectiveMinVelocity");
 
-                    b.Property<string>("EffectiveSpeed");
+                    b.Property<decimal?>("EffectiveSpeed");
 
-                    b.Property<string>("Hits");
-
-                    b.Property<string>("Iso");
-
-                    b.Property<string>("LaunchAngle");
-
-                    b.Property<string>("LaunchSpeed");
-
-                    b.Property<string>("PitchPercent");
-
-                    b.Property<string>("PlayerId");
+                    b.Property<int?>("PlayerId");
 
                     b.Property<string>("PlayerName");
 
-                    b.Property<string>("Pos3IntStartDistance");
+                    b.Property<int?>("Pos3IntStartDistance");
 
-                    b.Property<string>("Pos4IntStartDistance");
+                    b.Property<int?>("Pos4IntStartDistance");
 
-                    b.Property<string>("Pos5IntStartDistance");
+                    b.Property<int?>("Pos5IntStartDistance");
 
-                    b.Property<string>("Pos6IntStartDistance");
+                    b.Property<int?>("Pos6IntStartDistance");
 
-                    b.Property<string>("Pos7IntStartDistance");
+                    b.Property<int?>("Pos7IntStartDistance");
 
-                    b.Property<string>("Pos8IntStartDistance");
+                    b.Property<int?>("Pos8IntStartDistance");
 
-                    b.Property<string>("Pos9IntStartDistance");
+                    b.Property<int?>("Pos9IntStartDistance");
 
-                    b.Property<string>("ReleaseExtension");
+                    b.Property<decimal?>("ReleaseExtension");
 
-                    b.Property<string>("Slg");
+                    b.Property<int?>("SpinRate");
 
-                    b.Property<string>("SpinRate");
+                    b.Property<int?>("Swings");
 
-                    b.Property<string>("Swings");
+                    b.Property<int?>("Takes");
 
-                    b.Property<string>("Takes");
-
-                    b.Property<string>("TotalPitches");
+                    b.Property<int?>("TotalPitches");
 
                     b.Property<DateTime>("UpdatedAt");
 
-                    b.Property<string>("Velocity");
+                    b.Property<decimal?>("Velocity");
 
-                    b.Property<string>("Whiffs");
-
-                    b.Property<string>("Woba");
-
-                    b.Property<string>("Xba");
-
-                    b.Property<string>("Xwoba");
+                    b.Property<int?>("Whiffs");
 
                     b.HasKey("StartingPitcherCswId");
 
                     b.ToTable("StartingPitcherCsws");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("StartingPitcherCsw");
+                });
+
+            modelBuilder.Entity("BaseballScraper.Models.FanGraphs.FanGraphsPitcherForWpdiReport", b =>
+                {
+                    b.Property<string>("RecordId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<double>("Apercentage");
+
+                    b.Property<double>("Bpercentage");
+
+                    b.Property<double>("Cpercentage");
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<double>("Dpercentage");
+
+                    b.Property<double>("Epercentage");
+
+                    b.Property<int>("FanGraphsId");
+
+                    b.Property<double>("Fpercentage");
+
+                    b.Property<int>("GamesStarted");
+
+                    b.Property<decimal>("InningsPitched");
+
+                    b.Property<double>("Mpdi");
+
+                    b.Property<double>("OContactPercentage");
+
+                    b.Property<double>("OContactPercentagePfx");
+
+                    b.Property<string>("OContactPercentageString");
+
+                    b.Property<string>("OContactPercentageStringPfx");
+
+                    b.Property<double>("OSwingPercentage");
+
+                    b.Property<double>("OSwingPercentagePfx");
+
+                    b.Property<string>("OSwingPercentageString");
+
+                    b.Property<string>("OSwingPercentageStringPfx");
+
+                    b.Property<double>("OutcomeApercentage");
+
+                    b.Property<double>("OutcomeApercentage_mPDI");
+
+                    b.Property<double>("OutcomeBpercentage");
+
+                    b.Property<double>("OutcomeBpercentage_mPDI");
+
+                    b.Property<double>("OutcomeCpercentage");
+
+                    b.Property<double>("OutcomeDpercentage");
+
+                    b.Property<double>("OutcomeEpercentage");
+
+                    b.Property<double>("OutcomeFpercentage");
+
+                    b.Property<double>("OutcomeFpercentage_mPDI");
+
+                    b.Property<string>("PitcherName");
+
+                    b.Property<int>("Season");
+
+                    b.Property<string>("Team");
+
+                    b.Property<DateTime>("UpdatedAt");
+
+                    b.Property<double>("Wpdi");
+
+                    b.Property<double>("ZContactPercentage");
+
+                    b.Property<double>("ZContactPercentagePfx");
+
+                    b.Property<string>("ZContactPercentageString");
+
+                    b.Property<string>("ZContactPercentageStringPfx");
+
+                    b.Property<double>("ZSwingPercentage");
+
+                    b.Property<double>("ZSwingPercentagePfx");
+
+                    b.Property<string>("ZSwingPercentageString");
+
+                    b.Property<string>("ZSwingPercentageStringPfx");
+
+                    b.Property<double>("ZonePercentage");
+
+                    b.Property<double>("ZonePercentagePfx");
+
+                    b.Property<string>("ZonePercentageString");
+
+                    b.Property<string>("ZonePercentageStringPfx");
+
+                    b.HasKey("RecordId");
+
+                    b.ToTable("FanGraphsPitcherForWpdiReport");
                 });
 
             modelBuilder.Entity("BaseballScraper.Models.Player.PlayerNote", b =>
@@ -132,35 +210,7 @@ namespace BaseballScraper.Migrations
                     b.ToTable("PlayerNotes");
                 });
 
-            modelBuilder.Entity("BaseballScraper.Models.Yahoo.YahooManager", b =>
-                {
-                    b.Property<int>("YahooManagerRecordId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Email");
-
-                    b.Property<string>("Guid");
-
-                    b.Property<string>("ImageUrl");
-
-                    b.Property<string>("IsCommissioner");
-
-                    b.Property<string>("IsCurrentLogin");
-
-                    b.Property<string>("ManagerId");
-
-                    b.Property<string>("NickName");
-
-                    b.Property<int?>("YahooTeamBaseRecordId");
-
-                    b.HasKey("YahooManagerRecordId");
-
-                    b.HasIndex("YahooTeamBaseRecordId");
-
-                    b.ToTable("YahooManager");
-                });
-
-            modelBuilder.Entity("BaseballScraper.Models.Yahoo.YahooTeamBase", b =>
+            modelBuilder.Entity("BaseballScraper.Models.Yahoo.Resources.YahooTeamResource.YahooTeamResource", b =>
                 {
                     b.Property<int>("YahooTeamBaseRecordId")
                         .ValueGeneratedOnAdd();
@@ -199,7 +249,35 @@ namespace BaseballScraper.Migrations
 
                     b.HasIndex("TeamRosterAddsYahooTeamRosterAddsRecordId");
 
-                    b.ToTable("YahooTeamBase");
+                    b.ToTable("YahooTeamResource");
+                });
+
+            modelBuilder.Entity("BaseballScraper.Models.Yahoo.YahooManager", b =>
+                {
+                    b.Property<int>("YahooManagerRecordId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Email");
+
+                    b.Property<string>("Guid");
+
+                    b.Property<string>("ImageUrl");
+
+                    b.Property<string>("IsCommissioner");
+
+                    b.Property<string>("IsCurrentLogin");
+
+                    b.Property<string>("ManagerId");
+
+                    b.Property<string>("NickName");
+
+                    b.Property<int?>("YahooTeamResourceYahooTeamBaseRecordId");
+
+                    b.HasKey("YahooManagerRecordId");
+
+                    b.HasIndex("YahooTeamResourceYahooTeamBaseRecordId");
+
+                    b.ToTable("YahooManager");
                 });
 
             modelBuilder.Entity("BaseballScraper.Models.Yahoo.YahooTeamLogo", b =>
@@ -242,8 +320,6 @@ namespace BaseballScraper.Migrations
 
                     b.Property<DateTime>("StartDate");
 
-                    b.ToTable("StartingPitcherCswDateRange");
-
                     b.HasDiscriminator().HasValue("StartingPitcherCswDateRange");
                 });
 
@@ -253,19 +329,10 @@ namespace BaseballScraper.Migrations
 
                     b.Property<DateTime>("DatePitched");
 
-                    b.ToTable("StartingPitcherCswSingleDay");
-
                     b.HasDiscriminator().HasValue("StartingPitcherCswSingleDay");
                 });
 
-            modelBuilder.Entity("BaseballScraper.Models.Yahoo.YahooManager", b =>
-                {
-                    b.HasOne("BaseballScraper.Models.Yahoo.YahooTeamBase")
-                        .WithMany("TeamManagersList")
-                        .HasForeignKey("YahooTeamBaseRecordId");
-                });
-
-            modelBuilder.Entity("BaseballScraper.Models.Yahoo.YahooTeamBase", b =>
+            modelBuilder.Entity("BaseballScraper.Models.Yahoo.Resources.YahooTeamResource.YahooTeamResource", b =>
                 {
                     b.HasOne("BaseballScraper.Models.Yahoo.YahooManager", "PrimaryTeamManager")
                         .WithMany()
@@ -278,6 +345,13 @@ namespace BaseballScraper.Migrations
                     b.HasOne("BaseballScraper.Models.Yahoo.YahooTeamRosterAdds", "TeamRosterAdds")
                         .WithMany()
                         .HasForeignKey("TeamRosterAddsYahooTeamRosterAddsRecordId");
+                });
+
+            modelBuilder.Entity("BaseballScraper.Models.Yahoo.YahooManager", b =>
+                {
+                    b.HasOne("BaseballScraper.Models.Yahoo.Resources.YahooTeamResource.YahooTeamResource")
+                        .WithMany("TeamManagersList")
+                        .HasForeignKey("YahooTeamResourceYahooTeamBaseRecordId");
                 });
 #pragma warning restore 612, 618
         }

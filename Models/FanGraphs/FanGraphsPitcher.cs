@@ -1,6 +1,12 @@
 #pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
+using CsvHelper.Configuration;
+using BaseballScraper.Infrastructure;
+using System.ComponentModel.DataAnnotations;
+using System;
+
 namespace BaseballScraper.Models.FanGraphs
 {
+
     public class FanGraphsPitcher : BaseEntity
     {
         public string RecordNumber { get; set; }
@@ -61,5 +67,188 @@ namespace BaseballScraper.Models.FanGraphs
         public string Siera { get; set; }
         public string RunsPerNine { get; set; }
 
+    }
+
+
+    // See: https://www.fangraphs.com/leaders.aspx?pos=all&stats=sta&lg=all&qual=150&type=c,8,13,210,204,205,208,207,111,105,106,109,108&season=2018&month=0&season1=2018&ind=0&team=0&rost=0&age=0&filter=&players=0&startdate=2018-01-01&enddate=2018-12-31
+    // See: https://bit.ly/33abnet
+    // See: https://bit.ly/2YPh1TU
+    public class FanGraphsPitcherForWpdiReport : BaseEntity
+    {
+        private readonly CsvHandler _csvHandler = new CsvHandler();
+
+        private string _recordId;
+
+        [Key]
+        public string RecordId
+        {
+            get => $"{FanGraphsId}-{Season}";
+            set => _recordId = value;
+        }
+
+        public int FanGraphsId            { get; set; }
+        public int Season                 { get; set; }
+        public string PitcherName         { get; set; }
+        public string Team                { get; set; }
+        public int GamesStarted           { get; set; }
+        public decimal InningsPitched     { get; set; }
+        public double Wpdi                { get; set; }
+        public double Mpdi                { get; set; }
+
+
+        public double Apercentage { get; set; }
+        public double Bpercentage { get; set; }
+        public double Cpercentage { get; set; }
+        public double Dpercentage { get; set; }
+        public double Epercentage { get; set; }
+        public double Fpercentage { get; set; }
+
+
+        public double OutcomeApercentage { get; set; }
+        public double OutcomeBpercentage { get; set; }
+        public double OutcomeCpercentage { get; set; }
+        public double OutcomeDpercentage { get; set; }
+        public double OutcomeEpercentage { get; set; }
+        public double OutcomeFpercentage { get; set; }
+
+
+
+        // for mPDI, C, D, and E, are 0 for all pitchers so do not need them
+        public double OutcomeApercentage_mPDI { get; set; }
+        public double OutcomeBpercentage_mPDI { get; set; }
+        public double OutcomeFpercentage_mPDI { get; set; }
+
+
+        public string ZonePercentageString { get; set; }
+        public double ZonePercentage
+        {
+            get
+            {
+                return _csvHandler.ConvertCellWithPercentageSymbolToDouble(ZonePercentageString)/10;
+            }
+
+            set { }
+        }
+
+        public string OSwingPercentageString   { get; set; }
+        public double OSwingPercentage
+        {
+            get
+            {
+                return _csvHandler.ConvertCellWithPercentageSymbolToDouble(OSwingPercentageString)/10;
+            }
+            set{}
+        }
+
+
+        public string ZSwingPercentageString   { get; set; }
+        public double ZSwingPercentage
+        {
+            get
+            {
+                return _csvHandler.ConvertCellWithPercentageSymbolToDouble(ZSwingPercentageString)/10;
+            }
+            set{}
+        }
+
+        public string ZContactPercentageString { get; set; }
+        public double ZContactPercentage
+        {
+            get
+            {
+                return _csvHandler.ConvertCellWithPercentageSymbolToDouble(ZContactPercentageString)/10;
+            }
+            set{}
+        }
+
+
+        public string OContactPercentageString { get; set; }
+        public double OContactPercentage
+        {
+            get
+            {
+                return _csvHandler.ConvertCellWithPercentageSymbolToDouble(OContactPercentageString)/10;
+            }
+            set{}
+        }
+
+
+        public string ZonePercentageStringPfx { get; set; }
+        public double ZonePercentagePfx
+        {
+            get
+            {
+                return _csvHandler.ConvertCellWithPercentageSymbolToDouble(ZonePercentageStringPfx)/10;
+            }
+            set {}
+        }
+
+        public string OSwingPercentageStringPfx   { get; set; }
+        public double OSwingPercentagePfx
+        {
+            get
+            {
+                return _csvHandler.ConvertCellWithPercentageSymbolToDouble(OSwingPercentageStringPfx)/10;
+            }
+            set {}
+        }
+
+
+        public string ZSwingPercentageStringPfx   {get; set; }
+        public double ZSwingPercentagePfx
+        {
+            get
+            {
+                return _csvHandler.ConvertCellWithPercentageSymbolToDouble(ZSwingPercentageStringPfx)/10;
+            }
+            set{}
+        }
+
+        public string ZContactPercentageStringPfx {get; set; }
+        public double ZContactPercentagePfx
+        {
+            get
+            {
+                return _csvHandler.ConvertCellWithPercentageSymbolToDouble(ZContactPercentageStringPfx)/10;
+            }
+            set {}
+        }
+
+
+        public string OContactPercentageStringPfx { get; set; }
+
+
+
+        public double OContactPercentagePfx
+        {
+            get
+            {
+                return _csvHandler.ConvertCellWithPercentageSymbolToDouble(OContactPercentageStringPfx)/10;
+            }
+            set {}
+        }
+    }
+
+
+    public sealed class WpdiReportClassMap: ClassMap<FanGraphsPitcherForWpdiReport>
+    {
+        public WpdiReportClassMap()
+        {
+            Map( m => m.PitcherName                 ).Name("Name");
+            Map( m => m.Team                        ).Name("Team");
+            Map( m => m.GamesStarted                ).Name("GS");
+            Map( m => m.InningsPitched              ).Name("IP");
+            Map( m => m.FanGraphsId                 ).Name("playerid");
+            Map( m => m.ZonePercentageString        ).Name("Zone%");
+            Map( m => m.OSwingPercentageString      ).Name("O-Swing%");
+            Map( m => m.ZSwingPercentageString      ).Name("Z-Swing%");
+            Map( m => m.ZContactPercentageString    ).Name("Z-Contact%");
+            Map( m => m.OContactPercentageString    ).Name("O-Contact%");
+            Map( m => m.ZonePercentageStringPfx     ).Name("Zone% (pfx)");
+            Map( m => m.OSwingPercentageStringPfx   ).Name("O-Swing% (pfx)");
+            Map( m => m.ZSwingPercentageStringPfx   ).Name("Z-Swing% (pfx)");
+            Map( m => m.ZContactPercentageStringPfx ).Name("Z-Contact% (pfx)");
+            Map( m => m.OContactPercentageStringPfx ).Name("O-Contact% (pfx)");
+        }
     }
 }

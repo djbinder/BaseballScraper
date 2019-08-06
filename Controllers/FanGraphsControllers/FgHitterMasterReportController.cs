@@ -19,8 +19,6 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
         private readonly Helpers _h;
         private readonly GoogleSheetsConnector _gSC;
         private readonly FanGraphsUriEndPoints _fgEndPoints;
-        // private readonly static DateTime? _dateTimeNow = DateTime.Now;
-        // readonly int _currentYear = _dateTimeNow.Value.Year;
 
 
         public FgHitterMasterReportController(Helpers h, GoogleSheetsConnector gSC, FanGraphsUriEndPoints fgEndPoints)

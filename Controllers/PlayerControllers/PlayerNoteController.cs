@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using BaseballScraper.Models.Player;
 
 
+
 #pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Controllers.PlayerControllers
 {
@@ -37,48 +38,40 @@ namespace BaseballScraper.Controllers.PlayerControllers
         }
 
 
-
-
-        [HttpGet]
-        [Route("main")]
-        public IActionResult PlayerNoteMain()
+        // STATUS [ July 23, 2019 ]: this works but still lots to do
+        [HttpPost("create_note")]
+        public IActionResult CreateNote(PlayerNote playerNote)
         {
-            _helpers.StartMethod();
-            string content = "player note main content";
-            _helpers.CompleteMethod();
-            return Content(content);
+            PrintPlayerNoteDetails(playerNote);
+
+            _context.Add(playerNote);
+            _context.SaveChanges();
+
+            return Ok(playerNote);
         }
 
 
-        [HttpGet("Create")]
-        public IActionResult Create()
+        [HttpGet("player_note_form")]
+        public IActionResult ViewPlayerNoteForm()
         {
-            _helpers.StartMethod();
-            return View("playernote");
+            Console.WriteLine("PlayerNoteForm");
+            return View("PlayerNoteForm");
         }
 
 
-        [HttpGet]
-        [Route("list")]
-        public void GetPlayerList()
-        {
-            _helpers.StartMethod();
-            List<PlayerNote> notesList = _context.PlayerNotes.ToList();
-            var  notesCount            = notesList.Count();
-            Console.WriteLine($"Notes Count: {notesCount}");
-        }
+        // [HttpGet]
+        // [Route("list")]
+        // public void GetPlayerList()
+        // {
+        //     _helpers.StartMethod();
+        //     List<PlayerNote> notesList = _context.PlayerNotes.ToList();
+        //     var  notesCount            = notesList.Count();
+        //     Console.WriteLine($"Notes Count: {notesCount}");
+        // }
 
-        [HttpPost]
-        [Route("CreateNote")]
-        public IActionResult CreateNote(PlayerNote note)
-        {
-            _helpers.StartMethod();
-            Console.WriteLine(note);
-            Console.WriteLine($"Name: {note.PlayerName}");
-            Console.WriteLine($"Position: {note.Position}");
-            Console.WriteLine($"Position Type: {note.PositionType}");
-            Console.WriteLine($"Note: {note.Note}");
 
+        public PlayerNote CreateDummyNote()
+        {
             PlayerNote newPlayerNote = new PlayerNote
             {
                 PlayerName   = "Pj",
@@ -89,43 +82,19 @@ namespace BaseballScraper.Controllers.PlayerControllers
                 SourceSite   = "google",
                 NoteWriter   = "eno sarris",
                 CalendarYear = 2018,
-                Season    = 2018,
+                Season       = 2018,
             };
-
-            _context.Add(newPlayerNote);
-            _context.SaveChanges();
-
-            _helpers.CompleteMethod();
-            return RedirectToAction("PlayerNoteMain");
+            return newPlayerNote;
         }
 
 
 
-        [HttpPost]
-        [Route("CreateNote")]
-        public IActionResult CreateNote()
+        public void PrintPlayerNoteDetails(PlayerNote playerNote)
         {
-            _helpers.StartMethod();
-            PlayerNote newPlayerNote = new PlayerNote
-            {
-                PlayerName   = "Pj",
-                Position     = "SS",
-                PositionType = "H",
-                Note         = "a note for Pj",
-                NoteTone     = "positive",
-                SourceSite   = "google",
-                NoteWriter   = "eno sarris",
-                CalendarYear = 2018,
-                Season    = 2018,
-            };
-
-            _context.Add(newPlayerNote);
-            _context.SaveChanges();
-
-            _helpers.Dig(newPlayerNote);
-
-            _helpers.CompleteMethod();
-            return RedirectToAction("PlayerNoteMain");
+            Console.WriteLine($"\nNAME: {playerNote.PlayerName}\t POS: {playerNote.Position}\t TYPE: {playerNote.PositionType}");
+            Console.WriteLine($"SOURCE: {playerNote.SourceSite}\t WRITER: {playerNote.NoteWriter}\t TONE: {playerNote.NoteTone}\t NOTE YEAR: {playerNote.CalendarYear}\t SEASON: {playerNote.Season}\n");
+            Console.WriteLine("NOTE TEXT: ");
+            Console.WriteLine($"{playerNote.Note}\n");
         }
     }
 }
