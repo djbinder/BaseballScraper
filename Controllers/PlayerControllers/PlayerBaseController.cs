@@ -49,7 +49,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
 
 
-    [Route("api/playerbase/[controller]")]
+    [Route("api/player/[controller]")]
     [ApiController]
     public class PlayerBaseController: ControllerBase
     {
@@ -713,21 +713,21 @@ namespace BaseballScraper.Controllers.PlayerControllers
                     {
                         Dictionary<string, string> dictionaryOfPlayersIds = new Dictionary<string, string>
                         {
-                            { "MlbId", playersBase.MlbId },
-                            { "SfbbPlayerId", playersBase.SfbbPlayerId },
-                            { "BaseballHqPlayerId", playersBase.BaseballHqPlayerId },
-                            { "DavenportId", playersBase.DavenportId },
-                            { "BaseballProspectusPlayerId", playersBase.BaseballProspectusPlayerId },
-                            { "BaseballReferencePlayerId", playersBase.BaseballReferencePlayerId },
-                            { "CbsPlayerId", playersBase.CbsPlayerId },
-                            { "EspnPlayerId", playersBase.EspnPlayerId },
-                            { "FanGraphsPlayerId", playersBase.FanGraphsPlayerId },
-                            { "LahmanPlayerId", playersBase.LahmanPlayerId },
-                            { "NfbcPlayerId", playersBase.NfbcPlayerId },
-                            { "RetroPlayerId", playersBase.RetroPlayerId },
-                            { "YahooPlayerId", playersBase.YahooPlayerId },
-                            { "OttoneuPlayerId", playersBase.OttoneuPlayerId },
-                            { "RotoWirePlayerId", playersBase.RotoWirePlayerId }
+                            { "MlbId"                      , playersBase.MlbId                      },
+                            { "SfbbPlayerId"               , playersBase.SfbbPlayerId               },
+                            { "BaseballHqPlayerId"         , playersBase.BaseballHqPlayerId         },
+                            { "DavenportId"                , playersBase.DavenportId                },
+                            { "BaseballProspectusPlayerId" , playersBase.BaseballProspectusPlayerId },
+                            { "BaseballReferencePlayerId"  , playersBase.BaseballReferencePlayerId  },
+                            { "CbsPlayerId"                , playersBase.CbsPlayerId                },
+                            { "EspnPlayerId"               , playersBase.EspnPlayerId               },
+                            { "FanGraphsPlayerId"          , playersBase.FanGraphsPlayerId          },
+                            { "LahmanPlayerId"             , playersBase.LahmanPlayerId             },
+                            { "NfbcPlayerId"               , playersBase.NfbcPlayerId               },
+                            { "RetroPlayerId"              , playersBase.RetroPlayerId              },
+                            { "YahooPlayerId"              , playersBase.YahooPlayerId              },
+                            { "OttoneuPlayerId"            , playersBase.OttoneuPlayerId            },
+                            { "RotoWirePlayerId"           , playersBase.RotoWirePlayerId           }
                         };
 
                         foreach (var kvp in dictionaryOfPlayersIds)

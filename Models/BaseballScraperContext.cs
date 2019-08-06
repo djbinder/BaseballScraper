@@ -1,5 +1,6 @@
 // using BaseballScraper.Models.Player;
 using BaseballScraper.Models.BaseballSavant;
+using BaseballScraper.Models.FanGraphs;
 using BaseballScraper.Models.Player;
 using BaseballScraper.Models.Yahoo;
 using BaseballScraper.Models.Yahoo.Resources.YahooTeamResource;
@@ -17,6 +18,7 @@ namespace BaseballScraper.Models
         public string SqlConnectionString { get; set; }
 
 
+
         public DbSet<YahooTeamResource> YahooTeamResource { get; set; }
 
         public DbSet<PlayerNote> PlayerNotes { get; set; }
@@ -24,16 +26,26 @@ namespace BaseballScraper.Models
         public DbSet<StartingPitcherCsw> StartingPitcherCsws { get; set; }
         public DbSet<StartingPitcherCswSingleDay> StartingPitcherCswsSingleDays { get; set; }
         public DbSet<StartingPitcherCswDateRange> StartingPitcherCswsDateRanges { get; set; }
+
+
+        public DbSet<FanGraphsPitcherForWpdiReport> FanGraphsPitcherForWpdiReport { get; set; }
     }
 }
 
 
 // Database Migrations
-// 1) update appsettings.json first
-// 2) delete old Migrations folder
-// 3) dotnet ef migrations add YourMigrationName
+// 1) update appsettings.Development.json first
+//      i.e., change this "database=BS_08_05_2019_1" to today's date
+// 2) Clear secrets; set new secrets (for DB info in appsettings files)
+//      * dotnet user-secrets clear
+        /*
+            cat ./Configuration/appsettings.Development.json | dotnet user-secrets set
+            cat ./Configuration/airtableConfiguration.json | dotnet user-secrets set
+        */
+// 3) delete old Migrations folder
+// 4) dotnet ef migrations add YourMigrationName
         // dotnet ef migrations add mig05302019_1
-// 4) dotnet ef database update
+// 5) dotnet ef database update
 
 // help if issues with 42P07 (relation already exists) errors
 // https://weblog.west-wind.com/posts/2016/jan/13/resetting-entity-framework-migrations-to-a-clean-slate
@@ -50,7 +62,9 @@ namespace BaseballScraper.Models
 // https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-2.1&tabs=linux
 
 
-// set all user secrets from appsettings.Development.json:
+// set all user secrets from appsettings.Development.json and other config files:
     // cat ./Configuration/appsettings.Development.json | dotnet user-secrets set
+    // cat ./Configuration/airtableConfiguration.json | dotnet user-secrets set
+    // etc.
 // clear all secrets
     // dotnet user-secrets clear

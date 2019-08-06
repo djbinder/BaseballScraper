@@ -1,47 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using BaseballScraper.EndPoints;
 using BaseballScraper.Infrastructure;
 using BaseballScraper.Models.FanGraphs;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 
 
 #pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE1006
 namespace BaseballScraper.Controllers.FanGraphsControllers
 {
-    #region OVERVIEW ------------------------------------------------------------
-
-    /// <summary> </summary>
-    /// <list> INDEX
-    ///     <item> View Page <see cref="FgSpMasterReportController.ViewFanGraphsStartingPitcherPage()"/> </item>
-    ///     <item> Set Initial Url to Scrape <see cref="FgSpMasterReportController.SetInitialUrlToScrape(int, int, int, int)"/> </item>
-    ///     <item> Get Number of Pages to Scrape <see cref="FgSpMasterReportController.GetNumberOfPagesToScrape(int, int, int, int)"/> </item>
-    ///     <item> Get Urls of Pages to Scrape <see cref="FgSpMasterReportController.GetUrlsOfPagesToScrape()"/> </item>
-    ///     <item> Get Urls of Pages to Scrape <see cref="FgSpMasterReportController.GetUrlsOfPagesToScrape(int, int, int)"/> </item>
-    ///     <item> Scrape Pitchers and Create List <see cref="FgSpMasterReportController.ScrapePitchersAndCreateList(int, int, int)"/> </item>
-    ///     <item> Count the Nodes Children <see cref="FgSpMasterReportController.CountTheNodesChildren(HtmlNode)"/> </item>
-    ///     <item> Get Table Header Values <see cref="FgSpMasterReportController.GetTableHeaderValues(string)"/> </item>
-    /// </list>
-    ///
-    /// <list> RESOURCES
-    ///     <item> FanGraphs custom report this scraper targets: https://bit.ly/2N2somI </item>
-    /// </list>
-
-    #endregion OVERVIEW ------------------------------------------------------------
-
-
-    //
     [Route("api/fangraphs/[controller]")]
     [ApiController]
     public class FgSpMasterReportController : ControllerBase
     {
         private readonly Helpers _h = new Helpers();
 
-        private static readonly FanGraphsUriEndPoints _endPoints = new FanGraphsUriEndPoints();
+        private readonly FanGraphsUriEndPoints _endPoints;
 
         private static readonly GoogleSheetsConnector _gSC = new GoogleSheetsConnector();
+
+        private readonly CsvHandler _csvHandler;
 
         private readonly string pathToGetNumberOfPagesToScrape = "//*[@id='LeaderBoard1_dg1_ctl00']/thead/tr[1]/td/div/div[5]/strong[2]";
 
@@ -51,15 +34,41 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
 
 
 
-        public FgSpMasterReportController() {}
+        public FgSpMasterReportController(CsvHandler csvHandler, FanGraphsUriEndPoints endPoints)
+        {
+            _csvHandler = csvHandler;
+            _endPoints  = endPoints;
+        }
 
+
+
+        /*
+            https://127.0.0.1:5001/api/fangraphs/FgSpMasterReport/sp
+        */
         [HttpGet]
         [Route("sp")]
         public void ViewFanGraphsStartingPitcherPage()
         {
             _h.StartMethod();
-            ScrapePitchersAndCreateList(20, 2019, 50);
         }
+
+
+        /*
+            https://127.0.0.1:5001/api/fangraphs/FgSpMasterReport/async
+        */
+        // [HttpGet("async")]
+        // public async Task TestController()
+        // {
+        //     _h.StartMethod();
+
+        // }
+
+
+
+
+
+
+
 
 
 
@@ -100,158 +109,130 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
             /// </returns>
             private string SetInitialUrlToScrape(int minInningsPitched, int year, int page, int recordsPerPage)
             {
-                // var    newEndPoint        = _endPoints.StartingPitchersSimpleReportEndPoint(2019);
                 var newEndPoint = _endPoints.PitchingLeadersMasterStatsReportEndPoint(minInningsPitched, year, page, recordsPerPage);
                 string uriToBeginScraping = newEndPoint.EndPointUri.ToString();
                 return uriToBeginScraping;
             }
 
 
-        // STATUS: this works
-        // Step 2:
-        /// <summary>
-        /// This counts the number of urls that will be scraped
-        /// It examines a specific html element on the fangraphs html page that shows the number of pages
-        /// </summary>
-        /// <example>
-        ///     '70 items in 3 page' --> the '3' is what this method is looking for
-        /// </example>
-        /// <param name="minInningsPitched">
-        ///     The minimum number of innings pitched a pitcher needs to be included in the results of the scrape
-        /// </param>
-        /// <param name="year">
-        ///     The Mlb season year
-        /// </param>
-        /// <param name="page">
-        ///     The page to being scraping
-        ///     This typically will be one
-        ///     But if you want to start on page 2 (for example), just set 'page' to 2
-        /// </param>
-        /// <param name="recordsPerPage">
-        ///     The number of rows in the table; Standard options include 30, 50 , 100
-        ///     This will ultimately influence the total number of urls and their tables to scrape
-        /// </param>
-        /// <returns>
-        ///     A number of the number of pages to scrape as part of the loop
-        /// </returns>
-        private int GetNumberOfPagesToScrape(int minInningsPitched, int year, int page, int recordsPerPage)
-        {
-            string uriToBeginScraping = SetInitialUrlToScrape(minInningsPitched, year, page, recordsPerPage);
+            // STATUS: this works
+            // Step 2:
+            /// <summary>
+            /// This counts the number of urls that will be scraped
+            /// It examines a specific html element on the fangraphs html page that shows the number of pages
+            /// </summary>
+            /// <example>
+            ///     '70 items in 3 page' --> the '3' is what this method is looking for
+            /// </example>
+            /// <param name="minInningsPitched">
+            ///     The minimum number of innings pitched a pitcher needs to be included in the results of the scrape
+            /// </param>
+            /// <param name="year">
+            ///     The Mlb season year
+            /// </param>
+            /// <param name="page">
+            ///     The page to being scraping
+            ///     This typically will be one
+            ///     But if you want to start on page 2 (for example), just set 'page' to 2
+            /// </param>
+            /// <param name="recordsPerPage">
+            ///     The number of rows in the table; Standard options include 30, 50 , 100
+            ///     This will ultimately influence the total number of urls and their tables to scrape
+            /// </param>
+            /// <returns>
+            ///     A number of the number of pages to scrape as part of the loop
+            /// </returns>
+            private int GetNumberOfPagesToScrape(int minInningsPitched, int year, int page, int recordsPerPage)
+            {
+                string uriToBeginScraping          = SetInitialUrlToScrape(minInningsPitched, year, page, recordsPerPage);
+                HtmlWeb htmlWeb                    = new HtmlWeb();
+                var urisHtml                       = htmlWeb.Load(uriToBeginScraping);
+                var htmlElement                    = urisHtml.DocumentNode.SelectNodes(pathToGetNumberOfPagesToScrape);
+                string numberOfPagesToScrapeString = htmlElement[0].InnerText;
+                int numberOfPagesToScrapeInt       = Convert.ToInt32(numberOfPagesToScrapeString);
+                return numberOfPagesToScrapeInt;
+            }
 
-            HtmlWeb htmlWeb = new HtmlWeb();
-            var urisHtml = htmlWeb.Load(uriToBeginScraping);
 
-            var htmlElement = urisHtml.DocumentNode.SelectNodes(pathToGetNumberOfPagesToScrape);
-
-            string numberOfPagesToScrapeString = htmlElement[0].InnerText;
-            int numberOfPagesToScrapeInt = Convert.ToInt32(numberOfPagesToScrapeString);
-
-            // bool showGuardRails = false;
-            // if(showGuardRails == true)
+            // // STATUS: this works
+            // // Step 3 [1 of 2 Options]
+            // /// <summary>
+            // ///     OPTION 1: variables defined within the method (i.e minInningsPitched, year, page, recordsPerPage )
+            // ///     Retrieves all urls of pages that will be scraped and adds them to a list
+            // /// </summary>
+            // /// <example>
+            // ///     '70 items in 3 page' --> the '3' is what this method is looking for
+            // /// </example>
+            // /// <returns>
+            // ///     A list of strings representing urls to be scraped
+            // /// </returns>
+            // private List<string> GetUrlsOfPagesToScrape()
             // {
-            //     _h.Spotlight("----- GET NUMBER OF PAGES TO SCRAPE -----");
-            //     Console.WriteLine($"NUMBER OF PAGES TO SCRAPE IS: {numberOfPagesToScrapeInt}\n");
+            //     List<string> urlsOfPagesToScrape = new List<string>();
+
+            //     int minInningsPitched = 20;
+            //     int year = 2019;
+            //     int recordsPerPage = 50;
+
+            //     int numberOfPagesToScrape = GetNumberOfPagesToScrape(minInningsPitched, year, 1, recordsPerPage);
+
+            //     for (var i = 1; i <= numberOfPagesToScrape; i++)
+            //     {
+            //         var urlToScrape = _endPoints.PitchingLeadersMasterStatsReportEndPoint(minInningsPitched, year, i, recordsPerPage);
+
+            //         var urlToScrapeEndPointUri = urlToScrape.EndPointUri;
+
+            //         string urlToScrapeEndPointUriToString = urlToScrapeEndPointUri.ToString();
+            //         urlsOfPagesToScrape.Add(urlToScrapeEndPointUri);
+            //     }
+            //     return urlsOfPagesToScrape;
             // }
-            return numberOfPagesToScrapeInt;
-        }
 
 
-        // STATUS: this works
-        // Step 3 [1 of 2 Options]
-        /// <summary>
-        ///     OPTION 1: variables defined within the method (i.e minInningsPitched, year, page, recordsPerPage )
-        ///     Retrieves all urls of pages that will be scraped and adds them to a list
-        /// </summary>
-        /// <example>
-        ///     '70 items in 3 page' --> the '3' is what this method is looking for
-        /// </example>
-        /// <returns>
-        ///     A list of strings representing urls to be scraped
-        /// </returns>
-        private List<string> GetUrlsOfPagesToScrape()
-        {
-            List<string> urlsOfPagesToScrape = new List<string>();
-
-            int minInningsPitched = 20;
-            int year = 2019;
-            int recordsPerPage = 50;
-
-            int numberOfPagesToScrape = GetNumberOfPagesToScrape(minInningsPitched, year, 1, recordsPerPage);
-
-            for (var i = 1; i <= numberOfPagesToScrape; i++)
+            // STATUS: this works
+            // Step 3 [2 of 2 Options]
+            /// <summary>
+            ///     OPTION 2: parameters are passed into the  method (i.e minInningsPitched, year, page, recordsPerPage ).
+            ///     Retrieves all urls of pages that will be scraped and adds them to a list
+            /// </summary>
+            /// <example>
+            ///     var list = GetUrlsOfPagesToScrape(20, 2019, 50);
+            ///     '70 items in 3 page' --> the '3' is what this method is looking for
+            /// </example>
+            /// <param name="minInningsPitched">
+            ///     The minimum number of innings pitched a pitcher needs to be included in the results of the scrape
+            /// </param>
+            /// <param name="year">
+            ///     The Mlb season year
+            /// </param>
+            /// <param name="page">
+            ///     The page to being scraping
+            ///     This typically will be one
+            ///     But if you want to start on page 2 (for example), just set 'page' to 2
+            /// </param>
+            /// <param name="recordsPerPage">
+            ///     The number of rows in the table
+            ///     Standard options include 30, 50 , 100
+            ///     This will ultimately influence the total number of urls and their tables to scrape
+            /// </param>
+            /// <returns>
+            ///     A list of strings representing urls to be scraped
+            /// </returns>
+            private List<string> GetUrlsOfPagesToScrape(int minInningsPitched, int year, int recordsPerPage)
             {
-                var urlToScrape = _endPoints.PitchingLeadersMasterStatsReportEndPoint(minInningsPitched, year, i, recordsPerPage);
+                List<string> urlsOfPagesToScrape = new List<string>();
 
-                var urlToScrapeEndPointUri = urlToScrape.EndPointUri;
+                int numberOfPagesToScrape = GetNumberOfPagesToScrape(minInningsPitched, year, 1, recordsPerPage);
 
-                string urlToScrapeEndPointUriToString = urlToScrapeEndPointUri.ToString();
-                urlsOfPagesToScrape.Add(urlToScrapeEndPointUri);
-
-                // bool showGuardRails = false;
-                // if(showGuardRails == true)
-                // {
-                //     _h.Spotlight("----- GET URLS OF PAGES TO SCRAPE -----");
-                //     Console.WriteLine($"URL TO SCRAPE # {i}: {urlToScrapeEndPointUri}\n");
-                // }
+                for (var i = 1; i <= numberOfPagesToScrape; i++)
+                {
+                    var urlToScrape                       = _endPoints.PitchingLeadersMasterStatsReportEndPoint(minInningsPitched, year, i, recordsPerPage);
+                    var urlToScrapeEndPointUri            = urlToScrape.EndPointUri;
+                    string urlToScrapeEndPointUriToString = urlToScrapeEndPointUri.ToString();
+                    urlsOfPagesToScrape.Add(urlToScrapeEndPointUri);
+                }
+                return urlsOfPagesToScrape;
             }
-            return urlsOfPagesToScrape;
-        }
-
-
-        // STATUS: this works
-        // Step 3 [2 of 2 Options]
-        /// <summary>
-        ///     OPTION 2: parameters are passed into the  method (i.e minInningsPitched, year, page, recordsPerPage ).
-        ///     Retrieves all urls of pages that will be scraped and adds them to a list
-        /// </summary>
-        /// <example>
-        ///     var list = GetUrlsOfPagesToScrape(20, 2019, 50);
-        ///     '70 items in 3 page' --> the '3' is what this method is looking for
-        /// </example>
-        /// <param name="minInningsPitched">
-        ///     The minimum number of innings pitched a pitcher needs to be included in the results of the scrape
-        /// </param>
-        /// <param name="year">
-        ///     The Mlb season year
-        /// </param>
-        /// <param name="page">
-        ///     The page to being scraping
-        ///     This typically will be one
-        ///     But if you want to start on page 2 (for example), just set 'page' to 2
-        /// </param>
-        /// <param name="recordsPerPage">
-        ///     The number of rows in the table
-        ///     Standard options include 30, 50 , 100
-        ///     This will ultimately influence the total number of urls and their tables to scrape
-        /// </param>
-        /// <returns>
-        ///     A list of strings representing urls to be scraped
-        /// </returns>
-        private List<string> GetUrlsOfPagesToScrape(int minInningsPitched, int year, int recordsPerPage)
-        {
-            List<string> urlsOfPagesToScrape = new List<string>();
-
-            int numberOfPagesToScrape = GetNumberOfPagesToScrape(minInningsPitched, year, 1, recordsPerPage);
-
-            for (var i = 1; i <= numberOfPagesToScrape; i++)
-            {
-                var urlToScrape = _endPoints.PitchingLeadersMasterStatsReportEndPoint(minInningsPitched, year, i, recordsPerPage);
-
-                var urlToScrapeEndPointUri = urlToScrape.EndPointUri;
-
-                string urlToScrapeEndPointUriToString = urlToScrapeEndPointUri.ToString();
-                urlsOfPagesToScrape.Add(urlToScrapeEndPointUri);
-
-                // bool showGuardRails = false;
-                // if(showGuardRails == true)
-                // {
-                //     _h.Spotlight("----- GET URLS OF PAGES TO SCRAPE -----");
-                //     Console.WriteLine($"URL TO SCRAPE # {i}: {urlToScrapeEndPointUri}");
-                //     Console.WriteLine();
-                // }
-            }
-            return urlsOfPagesToScrape;
-        }
 
         #endregion SETUP PRIOR TO SCRAPING ------------------------------------------------------------
 
@@ -321,7 +302,7 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
                         // HTML --> <tr id='LeaderBoard1_dg1_ctl00__0'
                         string thisPlayersTableRowPath = $"//*[@id='LeaderBoard1_dg1_ctl00__{row}']";
 
-                        // COUNT --> 1; i.e., each player has one row/record)
+                        // COUNT --> 1; i.e., each player has one row/record
                         HtmlNodeCollection thisPlayersTableRowNodeCollection = thisTable.SelectNodes(thisPlayersTableRowPath);
 
                         foreach (HtmlNode playerItem in thisPlayersTableRowNodeCollection)
@@ -332,7 +313,6 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
                             int numberOfColumnsToScrape = totalNumberOfColumnsInTable - 2;
 
                             List<string> playerItems = new List<string>();
-                            // List<string> _playerItems = new List<string>();
                             List<object> list = new List<object>();
 
                             // Begin looping through every column in the table
@@ -384,16 +364,11 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
                                         var statValue = statValueNode.InnerText;
                                         playerItems.Add(statValue);
                                         list.Add(statValue);
-                                    }
-                                }
-                            }
+                            }}}
                             CreateNewFanGraphsPitcher(playerItems);
                             listOfFgPitchers.Add(CreateNewFanGraphsPitcher(playerItems));
                             listOfLists.Add(list);
-                        }
-                    }
-                }
-            }
+            }}}}
 
             // _gSC.WriteGoogleSheetRows(listOfLists,"FG_SP_MASTER_IMPORT","A3:DB1000","CoreCalculator");
             return listOfFgPitchers;
@@ -409,95 +384,94 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
 
         #region HELPERS ------------------------------------------------------------
 
-        // STATUS: this works
-        public int CountTheNodesChildren(HtmlNode node)
-        {
-            int countOfChildren = node.ChildNodes.Count();
-            return countOfChildren;
-        }
-
-
-        // STATUS: this works
-        /// <summary>
-        ///     Scrapes the headers of the table to get the stat names (e.g., ERA, WHIP, etc.)
-        /// </summary>
-        /// <param name="thisUrl">
-        ///     The url of the table you are scraping
-        /// </param>
-        public void GetTableHeaderValues(string thisUrl)
-        {
-            HtmlWeb htmlWeb = new HtmlWeb();
-
-            var thisUrlsHtml = htmlWeb.Load(thisUrl);
-
-            // THIS TABLES HEADER type --> HtmlAgilityPack.HtmlNodeCollection (COUNT --> 1)
-            // <thead> Xpath --> //*[@id="LeaderBoard1_dg1_ctl00"]/thead/tr[2]";
-            // Note: The 2 in '/tr[2]' is hard coded into the variable; the first row in the header (i.e., '/tr[1]') is the navigation part of the header; We don't want that row. We want the second row which actually has the header values
-            var thisTablesHeader = thisUrlsHtml.DocumentNode.SelectNodes(pathOfTableHeaderToScrape);
-
-            foreach (HtmlNode thisHeader in thisTablesHeader)
+            // STATUS: this works
+            public int CountTheNodesChildren(HtmlNode node)
             {
-                int numberOfHeaderColumns = thisTablesHeader.First().ChildNodes.Count();
-                // numberOfHeaderColumns.Intro("number of header columns");
-                int numberOfHeaderColumnsToScrape = numberOfHeaderColumns - 2;
+                int countOfChildren = node.ChildNodes.Count();
+                return countOfChildren;
+            }
 
-                for (var headerColumn = 1; headerColumn <= numberOfHeaderColumnsToScrape; headerColumn++)
+
+            // STATUS: this works
+            /// <summary>
+            ///     Scrapes the headers of the table to get the stat names (e.g., ERA, WHIP, etc.)
+            /// </summary>
+            /// <param name="thisUrl">
+            ///     The url of the table you are scraping
+            /// </param>
+            public void GetTableHeaderValues(string thisUrl)
+            {
+                HtmlWeb htmlWeb = new HtmlWeb();
+
+                var thisUrlsHtml = htmlWeb.Load(thisUrl);
+
+                // THIS TABLES HEADER type --> HtmlAgilityPack.HtmlNodeCollection (COUNT --> 1)
+                // <thead> Xpath --> //*[@id="LeaderBoard1_dg1_ctl00"]/thead/tr[2]";
+                // Note: The 2 in '/tr[2]' is hard coded into the variable; the first row in the header (i.e., '/tr[1]') is the navigation part of the header; We don't want that row. We want the second row which actually has the header values
+                var thisTablesHeader = thisUrlsHtml.DocumentNode.SelectNodes(pathOfTableHeaderToScrape);
+
+                foreach (HtmlNode thisHeader in thisTablesHeader)
                 {
-                    // HEADER STAT NAME PATH return example --> //*[@id='LeaderBoard1_dg1_ctl00']/thead/tr[2]/th[16]
-                    var headerStatNamePath = $"{pathOfTableHeaderToScrape}/th[{headerColumn}]";
+                    int numberOfHeaderColumns = thisTablesHeader.First().ChildNodes.Count();
+                    int numberOfHeaderColumnsToScrape = numberOfHeaderColumns - 2;
 
-                    HtmlNodeCollection headerStatNameDataCell = thisHeader.SelectNodes(headerStatNamePath);
-                    foreach (var headerStatName in headerStatNameDataCell)
+                    for (var headerColumn = 1; headerColumn <= numberOfHeaderColumnsToScrape; headerColumn++)
                     {
-                        // INNER TEXT --> this is the value that you want; the name of the stat (e.g., ERA, WHIP, etc.)
-                        var innerText = headerStatName.InnerText;
-                        // Console.WriteLine($"STAT NAME: {headerStatName.InnerText}");
+                        // HEADER STAT NAME PATH return example --> //*[@id='LeaderBoard1_dg1_ctl00']/thead/tr[2]/th[16]
+                        var headerStatNamePath = $"{pathOfTableHeaderToScrape}/th[{headerColumn}]";
+
+                        HtmlNodeCollection headerStatNameDataCell = thisHeader.SelectNodes(headerStatNamePath);
+                        foreach (var headerStatName in headerStatNameDataCell)
+                        {
+                            // INNER TEXT --> this is the value that you want; the name of the stat (e.g., ERA, WHIP, etc.)
+                            var innerText = headerStatName.InnerText;
+                            // Console.WriteLine($"STAT NAME: {headerStatName.InnerText}");
+                        }
                     }
                 }
             }
-        }
 
 
 
-        // STATUS: this works
-        /// <summary> Scrapes the headers of the table to get the stat names (e.g., ERA, WHIP, etc.) </summary>
-        /// <param name="thisUrl"> The url of the table you are scraping </param>
-        public List<object> GetTableHeaderValuesList(string thisUrl)
-        {
-            HtmlWeb htmlWeb = new HtmlWeb();
-
-            var thisUrlsHtml = htmlWeb.Load(thisUrl);
-
-            List<object> listOfHeaders = new List<object>();
-
-            // THIS TABLES HEADER type --> HtmlAgilityPack.HtmlNodeCollection (COUNT --> 1)
-            // <thead> Xpath --> //*[@id="LeaderBoard1_dg1_ctl00"]/thead/tr[2]";
-            // Note: The 2 in '/tr[2]' is hard coded into the variable; the first row in the header (i.e., '/tr[1]') is the navigation part of the header; We don't want that row. We want the second row which actually has the header values
-            var thisTablesHeader = thisUrlsHtml.DocumentNode.SelectNodes(pathOfTableHeaderToScrape);
-
-            foreach (HtmlNode thisHeader in thisTablesHeader)
+            // STATUS: this works
+            /// <summary> Scrapes the headers of the table to get the stat names (e.g., ERA, WHIP, etc.) </summary>
+            /// <param name="thisUrl"> The url of the table you are scraping </param>
+            public List<object> GetTableHeaderValuesList(string thisUrl)
             {
-                int numberOfHeaderColumns = thisTablesHeader.First().ChildNodes.Count();
-                // numberOfHeaderColumns.Intro("number of header columns");
-                int numberOfHeaderColumnsToScrape = numberOfHeaderColumns - 2;
+                HtmlWeb htmlWeb = new HtmlWeb();
 
-                for (var headerColumn = 1; headerColumn <= numberOfHeaderColumnsToScrape; headerColumn++)
+                var thisUrlsHtml = htmlWeb.Load(thisUrl);
+
+                List<object> listOfHeaders = new List<object>();
+
+                // THIS TABLES HEADER type --> HtmlAgilityPack.HtmlNodeCollection (COUNT --> 1)
+                // <thead> Xpath --> //*[@id="LeaderBoard1_dg1_ctl00"]/thead/tr[2]";
+                // Note: The 2 in '/tr[2]' is hard coded into the variable; the first row in the header (i.e., '/tr[1]') is the navigation part of the header; We don't want that row.
+                // We want the second row which actually has the header values
+                var thisTablesHeader = thisUrlsHtml.DocumentNode.SelectNodes(pathOfTableHeaderToScrape);
+
+                foreach (HtmlNode thisHeader in thisTablesHeader)
                 {
-                    // HEADER STAT NAME PATH return example --> //*[@id='LeaderBoard1_dg1_ctl00']/thead/tr[2]/th[16]
-                    var headerStatNamePath = $"{pathOfTableHeaderToScrape}/th[{headerColumn}]";
+                    int numberOfHeaderColumns = thisTablesHeader.First().ChildNodes.Count();
+                    int numberOfHeaderColumnsToScrape = numberOfHeaderColumns - 2;
 
-                    HtmlNodeCollection headerStatNameDataCell = thisHeader.SelectNodes(headerStatNamePath);
-                    foreach (var headerStatName in headerStatNameDataCell)
+                    for (var headerColumn = 1; headerColumn <= numberOfHeaderColumnsToScrape; headerColumn++)
                     {
-                        // INNER TEXT --> this is the value that you want; the name of the stat (e.g., ERA, WHIP, etc.)
-                        var innerText = headerStatName.InnerText;
-                        // Console.WriteLine($"STAT NAME: {headerStatName.InnerText}");
-                        listOfHeaders.Add(innerText);
+                        // HEADER STAT NAME PATH return example --> //*[@id='LeaderBoard1_dg1_ctl00']/thead/tr[2]/th[16]
+                        var headerStatNamePath = $"{pathOfTableHeaderToScrape}/th[{headerColumn}]";
+
+                        HtmlNodeCollection headerStatNameDataCell = thisHeader.SelectNodes(headerStatNamePath);
+                        foreach (var headerStatName in headerStatNameDataCell)
+                        {
+                            // INNER TEXT --> this is the value that you want; the name of the stat (e.g., ERA, WHIP, etc.)
+                            var innerText = headerStatName.InnerText;
+                            // Console.WriteLine($"STAT NAME: {headerStatName.InnerText}");
+                            listOfHeaders.Add(innerText);
+                        }
                     }
                 }
+                return listOfHeaders;
             }
-            return listOfHeaders;
-        }
 
         #endregion HELPERS ------------------------------------------------------------
 
@@ -515,63 +489,63 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
 
             FanGraphsPitcher newFanGraphsPitcher = new FanGraphsPitcher
             {
-                RecordNumber = playerItems[0],
-                FanGraphsName = playerItems[count++],
-                FanGraphsTeam = playerItems[count++],
-                FanGraphsAge = playerItems[count++],
-                GamesStarted = playerItems[count++],
-                InningsPitched = playerItems[count++],
-                TotalBattersFaced = playerItems[count++],
-                Wins = playerItems[count++],
-                Saves = playerItems[count++],
-                Strikeouts = playerItems[count++],
-                Holds = playerItems[count++],
-                EarnedRunAverage = playerItems[count++],
-                Whip = playerItems[count++],
-                StrikeoutPercentage = playerItems[count++],
-                WalkPercentage = playerItems[count++],
-                StrikeoutsMinusWalks = playerItems[count++],
-                StrikeoutsPerNine = playerItems[count++],
-                WalksPerNine = playerItems[count++],
-                StrikeoutsDividedByWalks = playerItems[count++],
-                Balls = playerItems[count++],
-                Strikes = playerItems[count++],
-                Pitches = playerItems[count++],
-                HomeRunsPerNine = playerItems[count++],
-                GroundBallPercentage = playerItems[count++],
-                LineDrivePercentage = playerItems[count++],
-                FlyBallPercentage = playerItems[count++],
-                InfieldFlyBallPercentage = playerItems[count++],
-                OSwingPercentage = playerItems[count++],
-                OSwingPercentagePitchFx = playerItems[count++],
-                OSwingPercentagePitchInfo = playerItems[count++],
-                ZContactPercentage = playerItems[count++],
-                ZContactPercentagePitchFx = playerItems[count++],
+                RecordNumber                = playerItems[0],
+                FanGraphsName               = playerItems[count++],
+                FanGraphsTeam               = playerItems[count++],
+                FanGraphsAge                = playerItems[count++],
+                GamesStarted                = playerItems[count++],
+                InningsPitched              = playerItems[count++],
+                TotalBattersFaced           = playerItems[count++],
+                Wins                        = playerItems[count++],
+                Saves                       = playerItems[count++],
+                Strikeouts                  = playerItems[count++],
+                Holds                       = playerItems[count++],
+                EarnedRunAverage            = playerItems[count++],
+                Whip                        = playerItems[count++],
+                StrikeoutPercentage         = playerItems[count++],
+                WalkPercentage              = playerItems[count++],
+                StrikeoutsMinusWalks        = playerItems[count++],
+                StrikeoutsPerNine           = playerItems[count++],
+                WalksPerNine                = playerItems[count++],
+                StrikeoutsDividedByWalks    = playerItems[count++],
+                Balls                       = playerItems[count++],
+                Strikes                     = playerItems[count++],
+                Pitches                     = playerItems[count++],
+                HomeRunsPerNine             = playerItems[count++],
+                GroundBallPercentage        = playerItems[count++],
+                LineDrivePercentage         = playerItems[count++],
+                FlyBallPercentage           = playerItems[count++],
+                InfieldFlyBallPercentage    = playerItems[count++],
+                OSwingPercentage            = playerItems[count++],
+                OSwingPercentagePitchFx     = playerItems[count++],
+                OSwingPercentagePitchInfo   = playerItems[count++],
+                ZContactPercentage          = playerItems[count++],
+                ZContactPercentagePitchFx   = playerItems[count++],
                 ZContactPercentagePitchInfo = playerItems[count++],
-                ContactPercentage = playerItems[count++],
-                ContactPercentagePitchFx = playerItems[count++],
-                ContactPercentagePitchInfo = playerItems[count++],
-                ZonePercentage = playerItems[count++],
-                ZonePercentagePitchFx = playerItems[count++],
-                ZonePercentagePitchInfo = playerItems[count++],
-                FStrikePercentage = playerItems[count++],
-                SwingingStrikePercentage = playerItems[count++],
-                PullPercentage = playerItems[count++],
-                SoftPercentage = playerItems[count++],
-                sHardPercentage = playerItems[count++],
-                Babip = playerItems[count++],
-                LeftOnBasePercentage = playerItems[count++],
-                HomeRunsDividedByFlyBalls = playerItems[count++],
-                FastballVelocityPitchFx = playerItems[count++],
-                EarnedRunAverageRepeat = playerItems[count++],
-                EarnedRunAverageMinus = playerItems[count++],
-                Fip = playerItems[count++],
-                FipMinus = playerItems[count++],
-                EarnedRunAverageMinusFip = playerItems[count++],
-                XFip = playerItems[count++],
-                XFipMinus = playerItems[count++],
-                Siera = playerItems[count++],
-                RunsPerNine = playerItems[count++],
+                ContactPercentage           = playerItems[count++],
+                ContactPercentagePitchFx    = playerItems[count++],
+                ContactPercentagePitchInfo  = playerItems[count++],
+                ZonePercentage              = playerItems[count++],
+                ZonePercentagePitchFx       = playerItems[count++],
+                ZonePercentagePitchInfo     = playerItems[count++],
+                FStrikePercentage           = playerItems[count++],
+                SwingingStrikePercentage    = playerItems[count++],
+                PullPercentage              = playerItems[count++],
+                SoftPercentage              = playerItems[count++],
+                sHardPercentage             = playerItems[count++],
+                Babip                       = playerItems[count++],
+                LeftOnBasePercentage        = playerItems[count++],
+                HomeRunsDividedByFlyBalls   = playerItems[count++],
+                FastballVelocityPitchFx     = playerItems[count++],
+                EarnedRunAverageRepeat      = playerItems[count++],
+                EarnedRunAverageMinus       = playerItems[count++],
+                Fip                         = playerItems[count++],
+                FipMinus                    = playerItems[count++],
+                EarnedRunAverageMinusFip    = playerItems[count++],
+                XFip                        = playerItems[count++],
+                XFipMinus                   = playerItems[count++],
+                Siera                       = playerItems[count++],
+                RunsPerNine                 = playerItems[count++],
             };
 
             Console.WriteLine($"{newFanGraphsPitcher.RecordNumber}: {newFanGraphsPitcher.FanGraphsName}");
@@ -583,6 +557,24 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
         }
 
         #endregion TESTING HELP ------------------------------------------------------------
+
+
+
+
+        #region PRINTING PRESS ------------------------------------------------------------
+
+            public void PrintPitcherWpdiData(FanGraphsPitcherForWpdiReport pitcher)
+            {
+                Console.WriteLine($"\n{pitcher.PitcherName}\t {pitcher.Team}\t {pitcher.FanGraphsId}");
+                Console.WriteLine($"GAMES: {pitcher.GamesStarted}\t IP: {pitcher.InningsPitched}");
+                Console.WriteLine($"ZONE%: {pitcher.ZonePercentage}");
+                Console.WriteLine($"O-SWING%: {pitcher.OSwingPercentage}\t Z-SWING%: {pitcher.ZSwingPercentage}");
+                Console.WriteLine($"O-CONTACT%: {pitcher.OContactPercentage}\t Z-CONTACT%: {pitcher.ZContactPercentage}\n");
+            }
+
+
+
+        #endregion PRINTING PRESS ------------------------------------------------------------
 
 
     }

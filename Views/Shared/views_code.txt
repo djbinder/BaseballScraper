@@ -1,0 +1,394 @@
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+PLAYER SEARCH
+------------------------------------------------------------------------
+
+@{
+    ViewData["Title"] = "Player Search";
+}
+
+<hr style="border: 1px solid slateblue">
+<h3><b>@ViewData["Title"]</b></h3>
+<hr style="border: 1px solid slateblue">
+
+
+<h4>Enter Player Name</h4>
+<form>
+    <input type="text" list="players" asp-for="PlayerName"/>
+    <datalist id="players">
+        @foreach(var item in Model.SelectOptions)
+        {
+            <option>@Html.DisplayFor(modelItem => item.Value)</option>
+        }
+    </datalist>
+    <input type="submit" value="Search" />
+</form>
+
+<hr style="border: .5px solid slateblue">
+
+<br>
+
+<div>
+	<dl class = "row">
+		<dt class   = "col-sm-2">@Html.DisplayFor(model => model.SfbbPlayer.PLAYERNAME)</dt>
+		<dd class   = "col-sm-10"></dd>
+	</dl>
+	<dl class = "row">
+		<dd class   = "col-sm-2">Team</dd>
+		<dt class   = "col-sm-10">@Html.DisplayFor(model => model.SfbbPlayer.TEAM)</dt>
+	</dl>
+	<dl class = "row">
+		<dd class   = "col-sm-2">Positions</dd>
+		<dt class   = "col-sm-10">@Html.DisplayFor(model => model.SfbbPlayer.ALLPOS)</dt>
+	</dl>
+</div>
+
+<br>
+
+
+<h5>Fantasy Stats</h5>
+<table class="table">
+    <thead>
+        <tr>
+            <th>G   </th>
+            <th>PA  </th>
+            <th>AB  </th>
+            <th>H   </th>
+            <th>R   </th>
+            <th>HR  </th>
+            <th>RBI </th>
+            <th>SB  </th>
+            <th>BB  </th>
+            <th>AVG </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@Model.Games            </td>
+            <td>@Model.PlateAppearances </td>
+            <td>@Model.AtBats           </td>
+            <td>@Model.Hits             </td>
+            <td>@Model.Runs             </td>
+            <td>@Model.HomeRuns         </td>
+            <td>@Model.RBIs             </td>
+            <td>@Model.SBs              </td>
+            <td>@Model.Walks            </td>
+            <td>@Model.AVG              </td>
+        </tr>
+    </tbody>
+</table>
+
+<br>
+<br>
+<hr>
+<h5>Player Identifiers</h5>
+<table class="table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Identifier</th>
+            <th>Value</th>
+        </tr>
+    </thead>
+
+    @{
+        int counter = 1;
+    }
+
+    @{
+        <tbody>
+            <tr>
+                <td>@counter</td>
+                <td>
+                    <b>@Html.DisplayNameFor(model => model.SfbbPlayer.IDPLAYER)</b>
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.SfbbPlayer.IDPLAYER)
+                </td>
+            </tr>
+
+            <tr>
+                <td>@(++counter)</td>
+                <td>
+                    <b>@Html.DisplayNameFor(model => model.SfbbPlayer.PLAYERNAME)</b>
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.SfbbPlayer.PLAYERNAME)
+                </td>
+            </tr>
+
+            <tr>
+                <td>@(++counter)</td>
+                <td>
+                    <b>@Html.DisplayNameFor(model => model.SfbbPlayer.BIRTHDATE)</b>
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.SfbbPlayer.BIRTHDATE)
+                </td>
+            </tr>
+
+            <tr>
+                <td>@(++counter)</td>
+                <td>
+                    <b>@Html.DisplayNameFor(model => model.SfbbPlayer.YAHOONAME)</b>
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.SfbbPlayer.YAHOONAME)
+                </td>
+            </tr>
+
+
+            <tr>
+                <td>@(++counter)</td>
+                <td>
+                    <b>@Html.DisplayNameFor(model => model.SfbbPlayer.YAHOOID)</b>
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.SfbbPlayer.YAHOOID)
+                </td>
+            </tr>
+
+            <tr>
+                <td>@(++counter)</td>
+                <td>
+                    <b>@Html.DisplayNameFor(model => model.SfbbPlayer.IDFANGRAPHS)</b>
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.SfbbPlayer.IDFANGRAPHS)
+                </td>
+            </tr>
+
+            <tr>
+                <td>@(++counter)</td>
+                <td>
+                    <b>@Html.DisplayNameFor(model => model.SfbbPlayer.ROTOWIREID)</b>
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.SfbbPlayer.ROTOWIREID)
+                </td>
+            </tr>
+
+            <tr>
+                <td>@(++counter)</td>
+                <td>
+                    <b>@Html.DisplayNameFor(model => model.SfbbPlayer.MLBID)</b>
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.SfbbPlayer.MLBID)
+                </td>
+            </tr>
+
+            <tr>
+                <td>@(++counter)</td>
+                <td>
+                    <b>@Html.DisplayNameFor(model => model.SfbbPlayer.CBSID)</b>
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.SfbbPlayer.CBSID)
+                </td>
+            </tr>
+
+            <tr>
+                <td>@(++counter)</td>
+                <td>
+                    <b>@Html.DisplayNameFor(model => model.SfbbPlayer.BPID)</b>
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.SfbbPlayer.BPID)
+                </td>
+            </tr>
+
+            <tr>
+                <td>@(++counter)</td>
+                <td>
+                    <b>@Html.DisplayNameFor(model => model.SfbbPlayer.RETROID)</b>
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.SfbbPlayer.RETROID)
+                </td>
+            </tr>
+
+            <tr>
+                <td>@(++counter)</td>
+                <td>
+                    <b>@Html.DisplayNameFor(model => model.SfbbPlayer.BREFID)</b>
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.SfbbPlayer.BREFID)
+                </td>
+            </tr>
+
+            <tr>
+                <td>@(++counter)</td>
+                <td>
+                    <b>@Html.DisplayNameFor(model => model.SfbbPlayer.NFBCID)</b>
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.SfbbPlayer.NFBCID)
+                </td>
+            </tr>
+
+            <tr>
+                <td>@(++counter)</td>
+                <td>
+                    <b>@Html.DisplayNameFor(model => model.SfbbPlayer.ESPNID)</b>
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.SfbbPlayer.ESPNID)
+                </td>
+            </tr>
+
+            <tr>
+                <td>@(++counter)</td>
+                <td>
+                    <b>@Html.DisplayNameFor(model => model.SfbbPlayer.DAVENPORTID)</b>
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.SfbbPlayer.DAVENPORTID)
+                </td>
+            </tr>
+
+            <tr>
+                <td>@(++counter)</td>
+                <td>
+                    <b>@Html.DisplayNameFor(model => model.SfbbPlayer.FANDUELID)</b>
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.SfbbPlayer.FANDUELID)
+                </td>
+            </tr>
+
+            <tr>
+                <td>@(++counter)</td>
+                <td>
+                    <b>@Html.DisplayNameFor(model => model.SfbbPlayer.HQID)</b>
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.SfbbPlayer.HQID)
+                </td>
+            </tr>
+        </tbody>
+    }
+</table>
+
+
+
+
+
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+PLAYER BASES
+------------------------------------------------------------------------
+
+@{
+ViewData["Title"] = "Player Bases";
+}
+
+<hr style="border: 1px solid slateblue">
+<h3><b>@ViewData["Title"]</b></h3>
+<hr style="border: 1px solid slateblue">
+<br>
+
+<table class="table">
+<thead>
+    <tr>
+        <th>Player Name</th>
+        <th>Position</th>
+    </tr>
+</thead>
+<tbody>
+    @foreach(var item in Model.ListOfPlayerBases)
+    {
+    <tr>
+        <td>@Html.DisplayFor(modelItem => item.MlbName)</td>
+        <td data-value="@Html.DisplayFor(modelItem => item.MlbPosition)">@Html.DisplayFor(modelItem =>
+            item.MlbPosition)</td>
+    </tr>
+    }
+</tbody>
+
+
+
+
+
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+TRANSACTION TRENDS
+------------------------------------------------------------------------
+
+
+@{
+    ViewData["Title"] = "Transaction Trends";
+}
+
+<hr style="border: 1px solid slateblue">
+<h3><b>@ViewData["Title"]</b></h3>
+<hr style="border: 1px solid slateblue">
+<br>
+
+
+<h4>Cbs Trends</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Player Name</th>
+            <th>Own% - Last Wk</th>
+            <th>Own% - This Wk</th>
+            <th>Own% - Change w/w</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model.CbsPlayers)
+        {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.CbsRosterTrendPlayerName)</td>
+            <td>@Html.DisplayFor(modelItem => item.CbsRankPreviousWeek)</td>
+            <td>@Html.DisplayFor(modelItem => item.CbsRankCurrentWeek)</td>
+            <td>@Html.DisplayFor(modelItem => item.CbsDifferenceBetweenCurrentWeekAndPreviousWeek)</td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+<br>
+
+<h4>Yahoo Trends</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Player Name</th>
+            <th>Adds</th>
+            <th>Drops</th>
+            <th>Trades</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model.YahooPlayers)
+        {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.YahooPlayerName)</td>
+            <td>@Html.DisplayFor(modelItem => item.YahooPlayerAdds)</td>
+            <td>@Html.DisplayFor(modelItem => item.YahooPlayerDrops)</td>
+            <td>@Html.DisplayFor(modelItem => item.YahooPlayerTrades)</td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+
+
+
+
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+PLAYER NOTE FORM
+------------------------------------------------------------------------
+
+JULY 22, 2019: this was at the bottom of the form's html
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

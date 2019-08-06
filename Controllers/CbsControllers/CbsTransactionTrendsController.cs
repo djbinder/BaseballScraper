@@ -6,35 +6,13 @@ using BaseballScraper.Infrastructure;
 using BaseballScraper.Models.Cbs;
 
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE1006
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE1006
 namespace BaseballScraper.Controllers.CbsControllers
 {
-
-    #region OVERVIEW ------------------------------------------------------------
-
-        /// <summary> Retrieve Cbs player trends: Most added, most dropped, most viewed, most traded </summary>
-        /// <list> INDEX
-        ///     <item> Get Most Added / Dropped All <see cref="GetListOfCbsMostAddedOrDropped(string)" /> </item>
-        ///     <item> Get Most Added / Dropped By Position <see cref="GetListOfCbsMostAddedOrDroppedByPosition(string, string)"/></item>
-        ///     <item> Print Most Added / Dropped <see cref="PrintCbsAddedOrDroppedListOfPlayers(List{CbsMostAddedOrDroppedPlayer})" /> </item>
-        ///     <item> Get Most Viewed All <see cref="GetListOfCbsMostViewedPlayers(string)" /></item>
-        ///     <item> Get Most Viewed <see cref="CbsTransactionTrendsController.GetListOfCbsMostViewedPlayersByPosition(string, string)"/></item>
-        ///     <item> Get Most Traded All <see cref="GetListOfCbsMostTradedPlayers(string)" /> </item>
-        ///     <item> Get Most Traded By Position <see cref="GetListOfCbsMostTradedPlayersByPosition(string, string)"/> </item>
-        /// </list>
-        /// <list> RESOURCES
-        ///     <item> Most Added: https://www.cbssports.com/fantasy/baseball/trends/added/all </item>
-        ///     <item> Most Dropped: https://www.cbssports.com/fantasy/baseball/trends/dropped/all </item>
-        ///     <item> Most Viewed: https://www.cbssports.com/fantasy/baseball/trends/viewed/all </item>
-        ///     <item> Most Traded https://www.cbssports.com/fantasy/baseball/trends/traded/all </item>
-        /// </list>
-
-    #endregion OVERVIEW ------------------------------------------------------------
-
     // https://theathletic.com/533969/2018/09/19/exploring-the-hidden-fantasy-tools-on-yahoo-espn-and-cbs/
 
     [Route("api/cbs/[controller]")]
-    #pragma warning disable CS0219, IDE0051
+    [ApiController]
     public class CbsTransactionTrendsController : ControllerBase
     {
         private readonly Helpers _helpers;
@@ -53,6 +31,8 @@ namespace BaseballScraper.Controllers.CbsControllers
             private const string urlForMostAddedAllFootball = "https://www.cbssports.com/fantasy/football/trends/added/all";
             private const string urlForMostDroppedAllFootball = "https://www.cbssports.com/fantasy/football/trends/dropped/all";
 
+            private const string cbsUrlForMostAddedAllBaseball = "https://www.cbssports.com/fantasy/baseball/trends/added/all";
+
         #endregion URL QUERY STRINGS ------------------------------------------------------------
 
 
@@ -62,15 +42,18 @@ namespace BaseballScraper.Controllers.CbsControllers
             _helpers = helpers;
         }
 
+        public CbsTransactionTrendsController() {}
+
 
         /*
             https://127.0.0.1:5001/api/cbs/cbstransactiontrends/test
         */
-
         [HttpGet("test")]
         public void CbsMostAdded()
         {
-            _helpers.StartMethod();
+            // _helpers.StartMethod();
+            var trendList = GetListOfCbsMostAddedOrDropped(cbsUrlForMostAddedAllBaseball);
+            Console.WriteLine($"trendsList.Count: {trendList.Count}");
         }
 
 
@@ -159,7 +142,7 @@ namespace BaseballScraper.Controllers.CbsControllers
                         tBodyRowCount++;
                     }
                 }
-                // PrintCbsAddedOrDroppedListOfPlayers(players);
+                PrintCbsAddedOrDroppedListOfPlayers(players);
                 return players;
             }
 
