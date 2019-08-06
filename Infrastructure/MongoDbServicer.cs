@@ -19,9 +19,10 @@ namespace BaseballScraper.Infrastructure
         private readonly IMongoCollection<TwitterStatus> _twitterStatus;
 
 
-        public MongoDbServicer(Helpers helpers)
+        public MongoDbServicer(Helpers helpers, IMongoCollection<TwitterStatus> twitterStatus)
         {
             _helpers = helpers;
+            _twitterStatus = twitterStatus;
         }
 
         public MongoDbServicer() {}

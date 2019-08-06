@@ -272,24 +272,6 @@
                 Create list of StartingPitcherCsw
             </summary>
         </member>
-        <member name="T:BaseballScraper.Controllers.CbsControllers.CbsTransactionTrendsController">
-            <summary> Retrieve Cbs player trends: Most added, most dropped, most viewed, most traded </summary>
-            <list> INDEX
-                <item> Get Most Added / Dropped All <see cref="M:BaseballScraper.Controllers.CbsControllers.CbsTransactionTrendsController.GetListOfCbsMostAddedOrDropped(System.String)" /> </item>
-                <item> Get Most Added / Dropped By Position <see cref="M:BaseballScraper.Controllers.CbsControllers.CbsTransactionTrendsController.GetListOfCbsMostAddedOrDroppedByPosition(System.String,System.String)"/></item>
-                <item> Print Most Added / Dropped <see cref="M:BaseballScraper.Controllers.CbsControllers.CbsTransactionTrendsController.PrintCbsAddedOrDroppedListOfPlayers(System.Collections.Generic.List{BaseballScraper.Models.Cbs.CbsMostAddedOrDroppedPlayer})" /> </item>
-                <item> Get Most Viewed All <see cref="M:BaseballScraper.Controllers.CbsControllers.CbsTransactionTrendsController.GetListOfCbsMostViewedPlayers(System.String)" /></item>
-                <item> Get Most Viewed <see cref="M:BaseballScraper.Controllers.CbsControllers.CbsTransactionTrendsController.GetListOfCbsMostViewedPlayersByPosition(System.String,System.String)"/></item>
-                <item> Get Most Traded All <see cref="M:BaseballScraper.Controllers.CbsControllers.CbsTransactionTrendsController.GetListOfCbsMostTradedPlayers(System.String)" /> </item>
-                <item> Get Most Traded By Position <see cref="M:BaseballScraper.Controllers.CbsControllers.CbsTransactionTrendsController.GetListOfCbsMostTradedPlayersByPosition(System.String,System.String)"/> </item>
-            </list>
-            <list> RESOURCES
-                <item> Most Added: https://www.cbssports.com/fantasy/baseball/trends/added/all </item>
-                <item> Most Dropped: https://www.cbssports.com/fantasy/baseball/trends/dropped/all </item>
-                <item> Most Viewed: https://www.cbssports.com/fantasy/baseball/trends/viewed/all </item>
-                <item> Most Traded https://www.cbssports.com/fantasy/baseball/trends/traded/all </item>
-            </list>
-        </member>
         <member name="M:BaseballScraper.Controllers.CbsControllers.CbsTransactionTrendsController.GetListOfCbsMostAddedOrDropped(System.String)">
             <summary> Returns a list of the most added or dropped players according to Cbs trends; Does not filter by position </summary>
             <remarks>
@@ -440,23 +422,6 @@
                 int numberOfPagesToScrape = await GetNumberOfPagesToScape(page);
             </example>
         </member>
-        <member name="T:BaseballScraper.Controllers.FanGraphsControllers.FgSpMasterReportController">
-             <summary> </summary>
-             <list> INDEX
-                 <item> View Page <see cref="M:BaseballScraper.Controllers.FanGraphsControllers.FgSpMasterReportController.ViewFanGraphsStartingPitcherPage"/> </item>
-                 <item> Set Initial Url to Scrape <see cref="M:BaseballScraper.Controllers.FanGraphsControllers.FgSpMasterReportController.SetInitialUrlToScrape(System.Int32,System.Int32,System.Int32,System.Int32)"/> </item>
-                 <item> Get Number of Pages to Scrape <see cref="M:BaseballScraper.Controllers.FanGraphsControllers.FgSpMasterReportController.GetNumberOfPagesToScrape(System.Int32,System.Int32,System.Int32,System.Int32)"/> </item>
-                 <item> Get Urls of Pages to Scrape <see cref="M:BaseballScraper.Controllers.FanGraphsControllers.FgSpMasterReportController.GetUrlsOfPagesToScrape"/> </item>
-                 <item> Get Urls of Pages to Scrape <see cref="M:BaseballScraper.Controllers.FanGraphsControllers.FgSpMasterReportController.GetUrlsOfPagesToScrape(System.Int32,System.Int32,System.Int32)"/> </item>
-                 <item> Scrape Pitchers and Create List <see cref="M:BaseballScraper.Controllers.FanGraphsControllers.FgSpMasterReportController.ScrapePitchersAndCreateList(System.Int32,System.Int32,System.Int32)"/> </item>
-                 <item> Count the Nodes Children <see cref="M:BaseballScraper.Controllers.FanGraphsControllers.FgSpMasterReportController.CountTheNodesChildren(HtmlAgilityPack.HtmlNode)"/> </item>
-                 <item> Get Table Header Values <see cref="M:BaseballScraper.Controllers.FanGraphsControllers.FgSpMasterReportController.GetTableHeaderValues(System.String)"/> </item>
-             </list>
-            
-             <list> RESOURCES
-                 <item> FanGraphs custom report this scraper targets: https://bit.ly/2N2somI </item>
-             </list>
-        </member>
         <member name="M:BaseballScraper.Controllers.FanGraphsControllers.FgSpMasterReportController.SetInitialUrlToScrape(System.Int32,System.Int32,System.Int32,System.Int32)">
             <summary>
                 This defines the first url to scrape
@@ -506,18 +471,6 @@
             </param>
             <returns>
                 A number of the number of pages to scrape as part of the loop
-            </returns>
-        </member>
-        <member name="M:BaseballScraper.Controllers.FanGraphsControllers.FgSpMasterReportController.GetUrlsOfPagesToScrape">
-            <summary>
-                OPTION 1: variables defined within the method (i.e minInningsPitched, year, page, recordsPerPage )
-                Retrieves all urls of pages that will be scraped and adds them to a list
-            </summary>
-            <example>
-                '70 items in 3 page' --> the '3' is what this method is looking for
-            </example>
-            <returns>
-                A list of strings representing urls to be scraped
             </returns>
         </member>
         <member name="M:BaseballScraper.Controllers.FanGraphsControllers.FgSpMasterReportController.GetUrlsOfPagesToScrape(System.Int32,System.Int32,System.Int32)">
@@ -1959,22 +1912,6 @@
                 This method / step is not required
             </summary>
         </member>
-        <member name="T:BaseballScraper.Controllers.YahooControllers.YahooTransactionTrendsController">
-            <summary> Scrapes Yahoo transaction trend data </summary>
-            <list> INDEX
-                <item> Set search date <a cref="M:BaseballScraper.Controllers.YahooControllers.YahooTransactionTrendsController.SetSearchDate(System.String,System.String,System.String)" /> </item>
-                <item> Set search date as today <a cref="M:BaseballScraper.Controllers.YahooControllers.YahooTransactionTrendsController.SetSearchDateAsToday" /> </item>
-                <item> Generate list <a cref="M:BaseballScraper.Controllers.YahooControllers.YahooTransactionTrendsController.GenerateList(HtmlAgilityPack.HtmlDocument)" /> </item>
-                <item> Get trends for today, all positions <a cref="M:BaseballScraper.Controllers.YahooControllers.YahooTransactionTrendsController.GetTrendsForTodayAllPositions" /> </item>
-                <item> Get trends for today, one position <a cref="M:BaseballScraper.Controllers.YahooControllers.YahooTransactionTrendsController.GetTrendsForTodayOnePosition(System.String)" /> </item>
-                <item> Get trends for specific date, all positions <a cref="M:BaseballScraper.Controllers.YahooControllers.YahooTransactionTrendsController.GetTrendsForDateAllPositions(System.String,System.String,System.String)" /> </item>
-                <item> Get trends for specific date, one position <a cref="M:BaseballScraper.Controllers.YahooControllers.YahooTransactionTrendsController.GetTrendsForDateOnePosition(System.String,System.String,System.String,System.String)" /> </item>
-            </list>
-            <list> RESOURCES
-                <item> https://baseball.fantasysports.yahoo.com/f1/buzzindex </item>
-                <item> https://baseball.fantasysports.yahoo.com/b1/buzzindex </item>
-            </list>
-        </member>
         <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTransactionTrendsController.SetSearchDate(System.String,System.String,System.String)">
             <summary> Sets a query url for a specific date </summary>
             <param name="fourDigitYear"> string year e.g. "2018" </param>
@@ -2307,6 +2244,12 @@
                 See: https://toolslick.com/generation/code/class-from-csv
             </remarks>
         </member>
+        <member name="M:BaseballScraper.Infrastructure.CsvHandler.MoveCsvFileToFolder(System.String,System.String,System.String,System.Int32,System.Int32,System.Int32)">
+            <summary>
+                Move a file from one folder to another on local machine
+                Rename file when it is moved
+            </summary>
+        </member>
         <member name="M:BaseballScraper.Infrastructure.CsvHandler.DownloadCsvFromLink(System.String,System.String)">
             <summary>
                 Download remote CSV and save it to local location
@@ -2324,7 +2267,9 @@
             </example>
         </member>
         <member name="M:BaseballScraper.Infrastructure.CsvHandler.ReadCsvRecords(System.String,System.Type,System.Type)">
-            <summary> Reads a csv file, non async </summary>
+            <summary>
+                Reads a csv file, non async
+            </summary>
             <param name="csvFilePath"> The location / path of the file that you want to read </param>
             <example> _cH.ReadCsv("BaseballData/Lahman/Teams.csv"); </example>
         </member>
@@ -2359,8 +2304,21 @@
                 A reader reading a csv file
             </param>
             <param name="modelType">
-                The Lahman class / model that is in the csv file
+                The class / model that is in the csv file
             </param>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.CsvHandler.ConvertCellWithPercentageSymbolToDecimal(Newtonsoft.Json.Linq.JToken)">
+            <summary>
+                Some cells have % symbol in them; this removes it and just gives the number back
+                e.g., 13.1% becomes 13.1
+                Helper method for: 'CreateFanGraphsHitterInstance(JToken allValuesInRow)' method
+            </summary>
+            <remarks>
+                See: https://stackoverflow.com/questions/2171615/how-to-convert-percentage-string-to-double
+            </remarks>
+            <example>
+                int numberOfPagesToScrape = await GetNumberOfPagesToScape(page);
+            </example>
         </member>
         <member name="M:BaseballScraper.Infrastructure.DataTabler.CreateEmptyDataTable(System.String)">
             <summary>
@@ -2999,6 +2957,154 @@
         <member name="M:BaseballScraper.Infrastructure.RdotNetConnector.CalculatePitcherWinningPercentage">
             <summary> Get a single pitcher's winning percentage </summary>
             <remarks> Calculating Baseball Data with R </remarks>
+        </member>
+        <member name="T:Models.Model_EP">
+            <summary>
+            Generated algorithm for performing inference.
+            </summary>
+            <remarks>
+            If you wish to use this class directly, you must perform the following steps:
+            1) Create an instance of the class.
+            2) Set the value of any externally-set fields e.g. data, priors.
+            3) Call the Execute(numberOfIterations) method.
+            4) Use the XXXMarginal() methods to retrieve posterior marginals for different variables.
+            
+            Generated by Infer.NET 0.3.1810.501 at 4:41 PM on Wednesday, July 24, 2019.
+            </remarks>
+        </member>
+        <member name="F:Models.Model_EP.Changed_numberOfIterations_vint__0_vint__1_isDone">
+            <summary>True if Changed_numberOfIterations_vint__0_vint__1 has executed. Set this to false to force re-execution of Changed_numberOfIterations_vint__0_vint__1</summary>
+        </member>
+        <member name="F:Models.Model_EP.Changed_numberOfIterationsDecreased_Init_vint__0_vint__1_isDone">
+            <summary>True if Changed_numberOfIterationsDecreased_Init_vint__0_vint__1 has executed. Set this to false to force re-execution of Changed_numberOfIterationsDecreased_Init_vint__0_vint__1</summary>
+        </member>
+        <member name="F:Models.Model_EP.Changed_numberOfIterationsDecreased_Init_vint__0_vint__1_isInitialised">
+            <summary>True if Changed_numberOfIterationsDecreased_Init_vint__0_vint__1 has performed initialisation. Set this to false to force re-execution of Changed_numberOfIterationsDecreased_Init_vint__0_vint__1</summary>
+        </member>
+        <member name="F:Models.Model_EP.Changed_vint__0_isDone">
+            <summary>True if Changed_vint__0 has executed. Set this to false to force re-execution of Changed_vint__0</summary>
+        </member>
+        <member name="F:Models.Model_EP.Changed_vint__1_isDone">
+            <summary>True if Changed_vint__1 has executed. Set this to false to force re-execution of Changed_vint__1</summary>
+        </member>
+        <member name="F:Models.Model_EP.Constant_isDone">
+            <summary>True if Constant has executed. Set this to false to force re-execution of Constant</summary>
+        </member>
+        <member name="F:Models.Model_EP.numberOfIterationsDone">
+            <summary>Field backing the NumberOfIterationsDone property</summary>
+        </member>
+        <member name="F:Models.Model_EP.vdouble__0_marginal_F">
+            <summary>Message to marginal of 'vdouble__0'</summary>
+        </member>
+        <member name="F:Models.Model_EP.vdouble__0_uses_B">
+            <summary>Messages from use of 'vdouble__0'</summary>
+        </member>
+        <member name="F:Models.Model_EP.Vint__0">
+            <summary>Field backing the vint__0 property</summary>
+        </member>
+        <member name="F:Models.Model_EP.Vint__1">
+            <summary>Field backing the vint__1 property</summary>
+        </member>
+        <member name="P:Models.Model_EP.NumberOfIterationsDone">
+            <summary>The number of iterations done from the initial state</summary>
+        </member>
+        <member name="P:Models.Model_EP.vint__0">
+            <summary>The externally-specified value of 'vint__0'</summary>
+        </member>
+        <member name="P:Models.Model_EP.vint__1">
+            <summary>The externally-specified value of 'vint__1'</summary>
+        </member>
+        <member name="M:Models.Model_EP.Changed_numberOfIterations_vint__0_vint__1(System.Int32)">
+            <summary>Computations that depend on the observed value of numberOfIterations and vint__0 and vint__1</summary>
+            <param name="numberOfIterations">The number of times to iterate each loop</param>
+        </member>
+        <member name="M:Models.Model_EP.Changed_numberOfIterationsDecreased_Init_vint__0_vint__1(System.Boolean)">
+            <summary>Computations that depend on the observed value of numberOfIterationsDecreased and must reset on changes to vint__0 and vint__1</summary>
+            <param name="initialise">If true, reset messages that initialise loops</param>
+        </member>
+        <member name="M:Models.Model_EP.Changed_vint__0">
+            <summary>Computations that depend on the observed value of vint__0</summary>
+        </member>
+        <member name="M:Models.Model_EP.Changed_vint__1">
+            <summary>Computations that depend on the observed value of vint__1</summary>
+        </member>
+        <member name="M:Models.Model_EP.Constant">
+            <summary>Computations that do not depend on observed values</summary>
+        </member>
+        <member name="M:Models.Model_EP.Execute(System.Int32,System.Boolean)">
+            <summary>Update all marginals, by iterating message passing the given number of times</summary>
+            <param name="numberOfIterations">The number of times to iterate each loop</param>
+            <param name="initialise">If true, messages that initialise loops are reset when observed values change</param>
+        </member>
+        <member name="M:Models.Model_EP.Execute(System.Int32)">
+            <summary>Update all marginals, by iterating message-passing the given number of times</summary>
+            <param name="numberOfIterations">The total number of iterations that should be executed for the current set of observed values.  If this is more than the number already done, only the extra iterations are done.  If this is less than the number already done, message-passing is restarted from the beginning.  Changing the observed values resets the iteration count to 0.</param>
+        </member>
+        <member name="M:Models.Model_EP.GetObservedValue(System.String)">
+            <summary>Get the observed value of the specified variable.</summary>
+            <param name="variableName">Variable name</param>
+        </member>
+        <member name="M:Models.Model_EP.Marginal(System.String)">
+            <summary>Get the marginal distribution (computed up to this point) of a variable</summary>
+            <param name="variableName">Name of the variable in the generated code</param>
+            <returns>The marginal distribution computed up to this point</returns>
+            <remarks>Execute, Update, or Reset must be called first to set the value of the marginal.</remarks>
+        </member>
+        <member name="M:Models.Model_EP.Marginal``1(System.String)">
+            <summary>Get the marginal distribution (computed up to this point) of a variable, converted to type T</summary>
+            <typeparam name="T">The distribution type.</typeparam>
+            <param name="variableName">Name of the variable in the generated code</param>
+            <returns>The marginal distribution computed up to this point</returns>
+            <remarks>Execute, Update, or Reset must be called first to set the value of the marginal.</remarks>
+        </member>
+        <member name="M:Models.Model_EP.Marginal(System.String,System.String)">
+            <summary>Get the query-specific marginal distribution of a variable.</summary>
+            <param name="variableName">Name of the variable in the generated code</param>
+            <param name="query">QueryType name. For example, GibbsSampling answers 'Marginal', 'Samples', and 'Conditionals' queries</param>
+            <remarks>Execute, Update, or Reset must be called first to set the value of the marginal.</remarks>
+        </member>
+        <member name="M:Models.Model_EP.Marginal``1(System.String,System.String)">
+            <summary>Get the query-specific marginal distribution of a variable, converted to type T</summary>
+            <typeparam name="T">The distribution type.</typeparam>
+            <param name="variableName">Name of the variable in the generated code</param>
+            <param name="query">QueryType name. For example, GibbsSampling answers 'Marginal', 'Samples', and 'Conditionals' queries</param>
+            <remarks>Execute, Update, or Reset must be called first to set the value of the marginal.</remarks>
+        </member>
+        <member name="M:Models.Model_EP.Reset">
+            <summary>Reset all messages to their initial values.  Sets NumberOfIterationsDone to 0.</summary>
+        </member>
+        <member name="M:Models.Model_EP.SetObservedValue(System.String,System.Object)">
+            <summary>Set the observed value of the specified variable.</summary>
+            <param name="variableName">Variable name</param>
+            <param name="value">Observed value</param>
+        </member>
+        <member name="M:Models.Model_EP.Update(System.Int32)">
+            <summary>Update all marginals, by iterating message-passing an additional number of times</summary>
+            <param name="additionalIterations">The number of iterations that should be executed, starting from the current message state.  Messages are not reset, even if observed values have changed.</param>
+        </member>
+        <member name="M:Models.Model_EP.Vdouble__0Marginal">
+            <summary>
+            Returns the marginal distribution for 'vdouble__0' given by the current state of the
+            message passing algorithm.
+            </summary>
+            <returns>The marginal distribution</returns>
+        </member>
+        <member name="M:Models.Model_EP.Vint__0Marginal">
+            <summary>
+            Returns the marginal distribution for 'vint__0' given by the current state of the
+            message passing algorithm.
+            </summary>
+            <returns>The marginal distribution</returns>
+        </member>
+        <member name="M:Models.Model_EP.Vint__1Marginal">
+            <summary>
+            Returns the marginal distribution for 'vint__1' given by the current state of the
+            message passing algorithm.
+            </summary>
+            <returns>The marginal distribution</returns>
+        </member>
+        <member name="E:Models.Model_EP.ProgressChanged">
+            <summary>Event that is fired when the progress of inference changes, typically at the end of one iteration of the inference algorithm.</summary>
         </member>
     </members>
 </doc>

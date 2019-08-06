@@ -21,6 +21,8 @@ namespace BaseballScraper
                 .UseStartup<Startup>()
                 .ConfigureLogging(logging =>
                     logging.SetMinimumLevel(LogLevel.Warning)
+                            .AddConsole()
+                            .AddDebug()
                 );
     }
 }

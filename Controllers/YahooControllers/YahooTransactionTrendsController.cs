@@ -12,54 +12,40 @@ using System.Linq;
 namespace BaseballScraper.Controllers.YahooControllers
 {
 
-    #region OVERVIEW ------------------------------------------------------------
-
-        /// <summary> Scrapes Yahoo transaction trend data </summary>
-        /// <list> INDEX
-        ///     <item> Set search date <a cref="YahooTransactionTrendsController.SetSearchDate(string, string, string)" /> </item>
-        ///     <item> Set search date as today <a cref="YahooTransactionTrendsController.SetSearchDateAsToday()" /> </item>
-        ///     <item> Generate list <a cref="YahooTransactionTrendsController.GenerateList(HtmlDocument)" /> </item>
-        ///     <item> Get trends for today, all positions <a cref="YahooTransactionTrendsController.GetTrendsForTodayAllPositions" /> </item>
-        ///     <item> Get trends for today, one position <a cref="YahooTransactionTrendsController.GetTrendsForTodayOnePosition(string)" /> </item>
-        ///     <item> Get trends for specific date, all positions <a cref="YahooTransactionTrendsController.GetTrendsForDateAllPositions(string, string, string)" /> </item>
-        ///     <item> Get trends for specific date, one position <a cref="YahooTransactionTrendsController.GetTrendsForDateOnePosition(string, string, string, string)" /> </item>
-        /// </list>
-        /// <list> RESOURCES
-        ///     <item> https://baseball.fantasysports.yahoo.com/f1/buzzindex </item>
-        ///     <item> https://baseball.fantasysports.yahoo.com/b1/buzzindex </item>
-        /// </list>
-
-    #endregion OVERVIEW ------------------------------------------------------------
-
-
     // https://theathletic.com/533969/2018/09/19/exploring-the-hidden-fantasy-tools-on-yahoo-espn-and-cbs/
+    // https://baseball.fantasysports.yahoo.com/f1/buzzindex
+    // https://baseball.fantasysports.yahoo.com/b1/buzzindex
 
 
     [Route("api/yahoo/[controller]")]
     [ApiController]
     public class YahooTransactionTrendsController : ControllerBase
     {
-        private readonly Helpers _h = new Helpers();
-        private readonly GoogleSheetsConnector _gSC = new GoogleSheetsConnector();
+        private readonly Helpers _helpers;
+        private readonly GoogleSheetsConnector _googleSheetsConnector;
+
+        public YahooTransactionTrendsController(Helpers helpers, GoogleSheetsConnector googleSheetsConnector)
+        {
+            _helpers = helpers;
+            _googleSheetsConnector = googleSheetsConnector;
+        }
+
+        public YahooTransactionTrendsController(){}
 
 
         [Route("practice")]
         public void YahooPractice()
         {
-            _h.StartMethod();
-
+            _helpers.StartMethod();
             ConnectYahooTrendsToGoogleSheets();
 
             List<IList<YahooTransactionTrendsPlayer>> primaryList = new List<IList<YahooTransactionTrendsPlayer>>();
-
             List<YahooTransactionTrendsPlayer> trendsList = GetTrendsForTodayAllPositions();
 
             primaryList.Add(trendsList);
-            var convertedList = _gSC.ConvertIListOfAnyTypeToObjectType(primaryList);
+            var convertedList = _googleSheetsConnector.ConvertIListOfAnyTypeToObjectType(primaryList);
 
             // AddTrendsToGoogleSheets();
-
-
             // _gSC.UpdateData(convertedList);
         }
 
@@ -67,9 +53,9 @@ namespace BaseballScraper.Controllers.YahooControllers
         [Route("practice/async")]
         public async Task YahooPracticeAsync()
         {
-            _h.StartMethod();
+            _helpers.StartMethod();
             await AddTrendsToGoogleSheetsAsync("YAHOO_TRENDS","A1:Z1000","CoreCalculator");
-            _h.CompleteMethod();
+            _helpers.CompleteMethod();
         }
 
 
@@ -77,13 +63,13 @@ namespace BaseballScraper.Controllers.YahooControllers
         [HttpGet("trends")]
         public void ViewYahooTransactionTrends()
         {
-            _h.StartMethod();
+            _helpers.StartMethod();
         }
 
 
         public void ConnectYahooTrendsToGoogleSheets()
         {
-            _gSC.ConnectToGoogle();
+            _googleSheetsConnector.ConnectToGoogle();
         }
 
 
@@ -236,7 +222,7 @@ namespace BaseballScraper.Controllers.YahooControllers
             /// <returns> A list of YahooTransactionTrendsPlayer --> Name, Drops, Adds, Trades, Total </returns>
             public List<YahooTransactionTrendsPlayer> GetTrendsForTodayOnePosition(string positionShort)
             {
-                _h.StartMethod();
+                _helpers.StartMethod();
                 HtmlWeb htmlWeb = new HtmlWeb();
 
                 var urlToScrape = $"{SetSearchDateAsToday()}&pos={positionShort}";
@@ -260,7 +246,7 @@ namespace BaseballScraper.Controllers.YahooControllers
             /// <returns> A list of YahooTransactionTrendsPlayer --> Name, Drops, Adds, Trades, Total </returns>
             public List<YahooTransactionTrendsPlayer> GetTrendsForDateAllPositions(string fourDigitYear, string twoDigitMonth, string twoDigitDay)
             {
-                _h.StartMethod();
+                _helpers.StartMethod();
                 HtmlWeb htmlWeb = new HtmlWeb();
 
                 var urlToScrape = SetSearchDate(fourDigitYear, twoDigitMonth, twoDigitDay);
@@ -284,7 +270,7 @@ namespace BaseballScraper.Controllers.YahooControllers
             /// <returns> A list of YahooTransactionTrendsPlayer --> Name, Drops, Adds, Trades, Total </returns>
             public List<YahooTransactionTrendsPlayer> GetTrendsForDateOnePosition(string fourDigitYear, string twoDigitMonth, string twoDigitDay, string positionShort)
             {
-                _h.StartMethod();
+                _helpers.StartMethod();
                 HtmlWeb htmlWeb = new HtmlWeb();
 
                 var urlToScrape = $"{SetSearchDate(fourDigitYear, twoDigitMonth, twoDigitDay)}&pos={positionShort}";
@@ -342,7 +328,7 @@ namespace BaseballScraper.Controllers.YahooControllers
 
                 // Write that data in listOfLists to YAHOO_TRENDS tab in range A1: Z1000 in the CoreCalculator group / sheet
                 // _gSC.WriteGoogleSheetColumns(listOfLists, "YAHOO_TRENDS","A1:Z1000","CoreCalculator");
-                _gSC.WriteGoogleSheetColumns(listOfLists, tabName, range, jsonGroupName);
+                _googleSheetsConnector.WriteGoogleSheetColumns(listOfLists, tabName, range, jsonGroupName);
             }
 
 
@@ -381,7 +367,7 @@ namespace BaseballScraper.Controllers.YahooControllers
 
                 // add all columns lists to a list to create a list of lists
                 // Write that data in listOfLists to YAHOO_TRENDS tab in range A1: Z1000 in the CoreCalculator group / sheet
-                await _gSC.WriteGoogleSheetColumnsAsync(new List<IList<object>>
+                await _googleSheetsConnector.WriteGoogleSheetColumnsAsync(new List<IList<object>>
                     {
                         playerNames,
                         playerDrops,
