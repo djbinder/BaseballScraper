@@ -20,7 +20,7 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
         private readonly MlbDataApiEndPoints _endPoints;
         private readonly PostmanMethods      _postman;
 
-        private readonly string _testPlayerId = "592789";
+        // private readonly string _testPlayerId = "592789";
 
         private static readonly HitterSeasonStats _hSS = new HitterSeasonStats();
 

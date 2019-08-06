@@ -1,0 +1,19 @@
+@model BaseballScraper.Models.ViewModels.PlayerSearchViewModel
+
+@{
+    ViewData["Title"] = "Player Search";
+}
+
+<hr style="border: 1px solid slateblue">
+<h3><b>@ViewData["Title"]</b></h3>
+<hr style="border: 1px solid slateblue">
+
+<form asp-controller="PlayerSearch" asp-action="SearchForPlayer" method="GET">
+<div class="form-group">
+        @Html.LabelFor(x => x.PlayerName)
+        @Html.DropDownListFor(x => x.PlayerName, Model.PlayersEnumerable,"SELECT PLAYER", new { @class = "form-control", @id="PlayerName"})
+</div>
+<input type="submit" value="Search" />
+</form>
+
+

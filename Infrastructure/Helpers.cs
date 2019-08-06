@@ -19,7 +19,10 @@ namespace BaseballScraper.Infrastructure
 {
     public class Helpers
     {
+        public Helpers() {}
+
         private static string currentTime     = DateTime.Now.ToShortTimeString();
+
 
 
 
