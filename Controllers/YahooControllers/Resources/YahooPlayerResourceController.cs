@@ -18,19 +18,23 @@ namespace BaseballScraper.Controllers.YahooControllers.Resources
     [ApiController]
     public class YahooPlayerResourceController: ControllerBase
     {
-        private readonly Helpers _h = new Helpers();
-        private static readonly YahooApiEndPoints _endPoints = new YahooApiEndPoints();
+        private readonly Helpers _helpers;
+        private readonly YahooApiEndPoints _endPoints;
         private static YahooApiRequestController _yahooApiRequestController;
         private readonly YahooAuthController _yahooAuthController = new YahooAuthController();
         private readonly PlayerBaseController _playerBaseController;
         private readonly PlayerBaseController.PlayerBaseFromExcel _playerBaseFromExcel = new PlayerBaseController.PlayerBaseFromExcel();
 
 
-        public YahooPlayerResourceController(YahooApiRequestController yahooApiRequestController, YahooAuthController yahooAuthController, PlayerBaseController playerBaseController)
+
+
+        public YahooPlayerResourceController(Helpers helpers, YahooApiRequestController yahooApiRequestController, YahooAuthController yahooAuthController, PlayerBaseController playerBaseController, YahooApiEndPoints endPoints)
         {
+            _helpers = helpers;
             _yahooApiRequestController = yahooApiRequestController;
             _yahooAuthController = yahooAuthController;
             _playerBaseController = playerBaseController;
+            _endPoints = endPoints;
         }
 
         public YahooPlayerResourceController(){}
@@ -58,7 +62,7 @@ namespace BaseballScraper.Controllers.YahooControllers.Resources
         [Route("test")]
         public void TestYahooPlayerResourceController()
         {
-            _h.StartMethod();
+            _helpers.StartMethod();
         }
 
 
@@ -99,7 +103,7 @@ namespace BaseballScraper.Controllers.YahooControllers.Resources
                 string playerResourceString = playerResource.ToString();
 
                 YahooPlayerResource yPlayerResource = JsonConvert.DeserializeObject<YahooPlayerResource>(playerResourceString);
-                _h.Dig(yPlayerResource);
+                _helpers.Dig(yPlayerResource);
 
                 return yPlayerResource;
             }

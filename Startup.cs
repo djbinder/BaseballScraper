@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Text;
 using BaseballScraper.Controllers;
+using BaseballScraper.Controllers.BaseballHQControllers;
 using BaseballScraper.Controllers.CbsControllers;
 using BaseballScraper.Controllers.EspnControllers;
 using BaseballScraper.Controllers.MlbDataApiControllers;
@@ -107,15 +108,18 @@ namespace BaseballScraper
             #endregion .NET CORE CONFIGURATION
 
 
-
             /* CONFIGURE INDIVIDUAL SERVICES */
             ConfigureAirtableServices(services);
+            ConfigureBaseballHqCredentials(services);
             ConfigureGoogleSheetsServices(services);
             ConfigureMongoDbServices(services);
             ConfigureSqlDbServices(services);
             ConfigureTwitterServices(services);
             ConfigureYahooServices(services);
 
+            // Singletons:
+            // * A singleton is one instance per application
+            // * No matter how many times we refresh the page, it’s never going to create a new instance
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<ApiInfrastructure>();
             services.AddSingleton<BaseballSavantUriEndPoints>();
@@ -128,13 +132,17 @@ namespace BaseballScraper
             services.AddSingleton<Helpers>();
             services.AddSingleton<MlbDataApiEndPoints>();
             services.AddSingleton<MlbDataSeasonHittingStatsController>();
-            services.AddSingleton<PlayerBaseController>();
-            services.AddSingleton<PlayerBaseFromGoogleSheet>();
             services.AddSingleton<PostmanMethods>();
             services.AddSingleton<PythonConnector>();
             services.AddSingleton<RdotNetConnector>();
             services.AddSingleton<YahooApiEndPoints>();
 
+            services.AddTransient<PlayerBaseFromGoogleSheet>();
+
+            // test
+            // Scoped:
+            // * A new instance will be created essentially per page load
+            services.AddScoped<PlayerBaseController>();
             services.AddScoped<CbsTransactionTrendsController>();
             services.AddScoped<EspnTransactionTrendsController>();
             services.AddScoped<YahooTransactionTrendsController>();
@@ -304,7 +312,37 @@ namespace BaseballScraper
                 services.AddSingleton<MongoDbServicer>();
             }
 
+
         #endregion CONFIGURE MONGO DB ------------------------------------------------------------
+
+
+
+        #region CREDENTIALS  ------------------------------------------------------------
+
+            public void ConfigureBaseballHqCredentials(IServiceCollection services)
+            {
+                services.Configure<BaseballHqCredentials>(
+                    config =>
+                    {
+                        config.UserName  = Configuration.GetSection("BaseballHqCredentials:UserName").Value;
+                        config.Password  = Configuration.GetSection("BaseballHqCredentials:Password").Value;
+                        config.LoginLink = Configuration.GetSection("BaseballHqCredentials:LoginLink").Value;
+                    });
+
+                    services.AddSingleton<IBaseballHqCredentials>(hq => hq.GetRequiredService<IOptions<BaseballHqCredentials>>().Value);
+
+                services.AddScoped<BaseballHqUtilitiesController>();
+            }
+
+        #endregion CREDENTIALS  ------------------------------------------------------------
+
+
+
+
+
+
+
+
 
 
 
@@ -385,6 +423,9 @@ namespace BaseballScraper
                 });
 
                 services.AddTransient<Controllers.YahooControllers.YahooAuthController>();
+
+
+
 
             }
 

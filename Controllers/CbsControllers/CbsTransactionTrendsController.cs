@@ -10,7 +10,6 @@ using BaseballScraper.Models.Cbs;
 namespace BaseballScraper.Controllers.CbsControllers
 {
     // https://theathletic.com/533969/2018/09/19/exploring-the-hidden-fantasy-tools-on-yahoo-espn-and-cbs/
-
     [Route("api/cbs/[controller]")]
     [ApiController]
     public class CbsTransactionTrendsController : ControllerBase
@@ -34,6 +33,7 @@ namespace BaseballScraper.Controllers.CbsControllers
             private const string cbsUrlForMostAddedAllBaseball = "https://www.cbssports.com/fantasy/baseball/trends/added/all";
 
         #endregion URL QUERY STRINGS ------------------------------------------------------------
+        
 
 
 
