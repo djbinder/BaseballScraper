@@ -1,4 +1,5 @@
 // using BaseballScraper.Models.Player;
+using BaseballScraper.Models.BaseballHq;
 using BaseballScraper.Models.BaseballSavant;
 using BaseballScraper.Models.FanGraphs;
 using BaseballScraper.Models.Player;
@@ -19,16 +20,17 @@ namespace BaseballScraper.Models
 
 
 
-        public DbSet<YahooTeamResource> YahooTeamResource { get; set; }
-
-        public DbSet<PlayerNote> PlayerNotes { get; set; }
-
-        public DbSet<StartingPitcherCsw> StartingPitcherCsws { get; set; }
-        public DbSet<StartingPitcherCswSingleDay> StartingPitcherCswsSingleDays { get; set; }
-        public DbSet<StartingPitcherCswDateRange> StartingPitcherCswsDateRanges { get; set; }
-
-
+        public DbSet<YahooTeamResource> YahooTeamResource                         { get; set; }
+        public DbSet<SfbbPlayerBase> SfbbPlayerBases                              { get; set; }
+        public DbSet<PlayerNote> PlayerNotes                                      { get; set; }
+        public DbSet<StartingPitcherCsw> StartingPitcherCsws                      { get; set; }
+        public DbSet<StartingPitcherCswSingleDay> StartingPitcherCswsSingleDays   { get; set; }
+        public DbSet<StartingPitcherCswDateRange> StartingPitcherCswsDateRanges   { get; set; }
         public DbSet<FanGraphsPitcherForWpdiReport> FanGraphsPitcherForWpdiReport { get; set; }
+
+        public DbSet<HqHitterRestOfSeasonProjection> BaseballHqReportHitterROS { get; set; }
+
+        public DbSet<HqHitterYearToDate> BaseballHqHitterYTD { get; set; }
     }
 }
 
@@ -44,8 +46,12 @@ namespace BaseballScraper.Models
         */
 // 3) delete old Migrations folder
 // 4) dotnet ef migrations add YourMigrationName
-        // dotnet ef migrations add mig05302019_1
+        // dotnet ef migrations add mig05302019_1 OR mig08_06_2019_1
 // 5) dotnet ef database update
+
+// To add a table to an already migrated database, just do steps 4 and 5 (after you've added the DbSet to this file)
+
+
 
 // help if issues with 42P07 (relation already exists) errors
 // https://weblog.west-wind.com/posts/2016/jan/13/resetting-entity-framework-migrations-to-a-clean-slate

@@ -84,7 +84,7 @@
     <PackageReference Include="ExcelDataReader" Version="3.4.1" />
     <PackageReference Include="ExcelDataReader.DataSet" Version="3.4.1" />
     <PackageReference Include="ExcelMapper" Version="4.0.20" />
-    <PackageReference Include="CsvHelper" Version="7.1.1" />
+    <PackageReference Include="CsvHelper" Version="12.1.2" />
 
 
     <!-- APIs - General -->
