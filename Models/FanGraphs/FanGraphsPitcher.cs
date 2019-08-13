@@ -77,13 +77,15 @@ namespace BaseballScraper.Models.FanGraphs
     {
         private readonly CsvHandler _csvHandler = new CsvHandler();
 
-        private string _recordId;
-
         [Key]
-        public string RecordId
+        public int RecordId { get; set; }
+
+        private string _playerYearConcat;
+
+        public string PlayerYearConcat
         {
             get => $"{FanGraphsId}-{Season}";
-            set => _recordId = value;
+            set => _playerYearConcat = value;
         }
 
         public int FanGraphsId            { get; set; }
@@ -120,6 +122,7 @@ namespace BaseballScraper.Models.FanGraphs
 
 
         public string ZonePercentageString { get; set; }
+        private double _zonePercentage;
         public double ZonePercentage
         {
             get
@@ -127,105 +130,142 @@ namespace BaseballScraper.Models.FanGraphs
                 return _csvHandler.ConvertCellWithPercentageSymbolToDouble(ZonePercentageString)/10;
             }
 
-            set { }
+            set
+            {
+                _zonePercentage = value;
+            }
         }
 
+
         public string OSwingPercentageString   { get; set; }
+        private double _oSwingPercentage;
         public double OSwingPercentage
         {
             get
             {
                 return _csvHandler.ConvertCellWithPercentageSymbolToDouble(OSwingPercentageString)/10;
             }
-            set{}
+            set
+            {
+                _oSwingPercentage = value;
+            }
         }
 
 
         public string ZSwingPercentageString   { get; set; }
+        private double _zSwingPercentage;
         public double ZSwingPercentage
         {
             get
             {
                 return _csvHandler.ConvertCellWithPercentageSymbolToDouble(ZSwingPercentageString)/10;
             }
-            set{}
+            set
+            {
+                _zSwingPercentage = value;
+            }
         }
 
         public string ZContactPercentageString { get; set; }
+        private double _zContactPercentage;
         public double ZContactPercentage
         {
             get
             {
                 return _csvHandler.ConvertCellWithPercentageSymbolToDouble(ZContactPercentageString)/10;
             }
-            set{}
+            set
+            {
+                _zContactPercentage = value;
+            }
         }
 
 
         public string OContactPercentageString { get; set; }
+        private double _oContactPercentage;
         public double OContactPercentage
         {
             get
             {
                 return _csvHandler.ConvertCellWithPercentageSymbolToDouble(OContactPercentageString)/10;
             }
-            set{}
+            set
+            {
+                _oContactPercentage = value;
+            }
         }
 
 
         public string ZonePercentageStringPfx { get; set; }
+        private double _zonePercentagePfx;
         public double ZonePercentagePfx
         {
             get
             {
                 return _csvHandler.ConvertCellWithPercentageSymbolToDouble(ZonePercentageStringPfx)/10;
             }
-            set {}
+            set
+            {
+                _zonePercentagePfx = value;
+            }
         }
 
         public string OSwingPercentageStringPfx   { get; set; }
+        private double _oSwingPercentagePfx;
         public double OSwingPercentagePfx
         {
             get
             {
                 return _csvHandler.ConvertCellWithPercentageSymbolToDouble(OSwingPercentageStringPfx)/10;
             }
-            set {}
+            set
+            {
+                _oSwingPercentagePfx = value;
+            }
         }
 
 
         public string ZSwingPercentageStringPfx   {get; set; }
+        private double _zSwingPercentagePfx;
         public double ZSwingPercentagePfx
         {
             get
             {
                 return _csvHandler.ConvertCellWithPercentageSymbolToDouble(ZSwingPercentageStringPfx)/10;
             }
-            set{}
+            set
+            {
+                _zSwingPercentagePfx = value;
+            }
         }
 
         public string ZContactPercentageStringPfx {get; set; }
+        private double _zContactPercentagePfx;
         public double ZContactPercentagePfx
         {
             get
             {
                 return _csvHandler.ConvertCellWithPercentageSymbolToDouble(ZContactPercentageStringPfx)/10;
             }
-            set {}
+            set
+            {
+                _zContactPercentagePfx = value;
+            }
         }
 
 
         public string OContactPercentageStringPfx { get; set; }
-
-
-
+        private double _oContactPercentagePfx;
         public double OContactPercentagePfx
         {
             get
             {
                 return _csvHandler.ConvertCellWithPercentageSymbolToDouble(OContactPercentageStringPfx)/10;
             }
-            set {}
+            set
+            {
+                _oContactPercentagePfx = value;
+            }
         }
     }
 

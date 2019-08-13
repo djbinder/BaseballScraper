@@ -4,8 +4,18 @@ namespace BaseballScraper.Models
 {
     public abstract class BaseEntity
     {
-        public DateTime CreatedAt {get;set;}
-        public DateTime UpdatedAt {get;set;}
+        private DateTime _dateTime;
+        public DateTime CreatedAt
+        {
+            get => DateTime.Now;
+            set => _dateTime = value;
+        }
+
+        public DateTime UpdatedAt
+        {
+            get => DateTime.Now;
+            set => _dateTime = value;
+        }
 
 
         public BaseEntity ()

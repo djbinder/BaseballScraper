@@ -28,6 +28,7 @@ namespace BaseballScraper.Infrastructure
         public MongoDbServicer() {}
 
 
+
         // IMongoDbConfiguration instance is retrieved from DI via constructor injection
         // This allows access to mongoDbConfiguration.json MongoDb configuration values
             // 1) TweetsCollectionName 2) ConnectionString 3) DatabaseName

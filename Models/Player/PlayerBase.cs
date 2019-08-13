@@ -3,6 +3,7 @@
 // For Ganss.Excel (i.e., [Column(names)] ) --> https://github.com/mganss/ExcelMapper
 
 using System;
+using System.ComponentModel.DataAnnotations;
 using CsvHelper.Configuration;
 using Ganss.Excel;
 
@@ -160,6 +161,7 @@ namespace BaseballScraper.Models.Player
     // this references SfbbPlayerIdMap in BaseballScraper/Configuration/gSheetNames.json
     public class SfbbPlayerBase
     {
+        [Key]
         [Column("IDPLAYER")]
         public string IDPLAYER  { get; set; }
 
