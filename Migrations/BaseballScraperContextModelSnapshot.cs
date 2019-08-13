@@ -19,6 +19,268 @@ namespace BaseballScraper.Migrations
                 .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
+            modelBuilder.Entity("BaseballScraper.Models.BaseballHq.HqHitterRestOfSeasonProjection", b =>
+                {
+                    b.Property<int>("HqPlayerId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Age");
+
+                    b.Property<int>("AtBatsROS");
+
+                    b.Property<int>("BA_ROS");
+
+                    b.Property<string>("Bats");
+
+                    b.Property<int>("BattingAverageROS");
+
+                    b.Property<int>("BbPercentageROS");
+
+                    b.Property<int>("BpvROS");
+
+                    b.Property<int>("CaughtStealingROS");
+
+                    b.Property<int>("ContactPercentageROS");
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<int>("DisabledListROS");
+
+                    b.Property<int>("DoublesROS");
+
+                    b.Property<double>("EyeROS");
+
+                    b.Property<int>("FifteenDollarValueROS");
+
+                    b.Property<string>("FirstName");
+
+                    b.Property<int>("FlyballPercentageROS");
+
+                    b.Property<int>("GroundBallPercentageROS");
+
+                    b.Property<int>("HitPercentageROS");
+
+                    b.Property<int>("HitsROS");
+
+                    b.Property<int>("HomeRunsROS");
+
+                    b.Property<string>("LastName");
+
+                    b.Property<int>("LineDrivePercentageROS");
+
+                    b.Property<int>("MM");
+
+                    b.Property<int>("MlbId");
+
+                    b.Property<string>("MmCode");
+
+                    b.Property<int>("OnBasePercentageROS");
+
+                    b.Property<int>("OnBasePlusSluggingROS");
+
+                    b.Property<string>("Position");
+
+                    b.Property<int>("PxROS");
+
+                    b.Property<double>("RarROS");
+
+                    b.Property<int>("RbiROS");
+
+                    b.Property<double>("RcgROS");
+
+                    b.Property<int>("RspdROS");
+
+                    b.Property<int>("RunsROS");
+
+                    b.Property<int>("SluggingPercentageROS");
+
+                    b.Property<int>("SpeedROS");
+
+                    b.Property<int>("StolenBasesROS");
+
+                    b.Property<int>("StrikeoutsROS");
+
+                    b.Property<string>("Team");
+
+                    b.Property<int>("TriplesROS");
+
+                    b.Property<int>("TwelveDollarValueROS");
+
+                    b.Property<DateTime>("UpdatedAt");
+
+                    b.Property<int>("WalksROS");
+
+                    b.Property<int>("XbaROS");
+
+                    b.HasKey("HqPlayerId");
+
+                    b.ToTable("BaseballHqReportHitterROS");
+                });
+
+            modelBuilder.Entity("BaseballScraper.Models.BaseballHq.HqHitterYearToDate", b =>
+                {
+                    b.Property<int>("HqPlayerId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Age");
+
+                    b.Property<int>("AtBatsYTD");
+
+                    b.Property<string>("Bats");
+
+                    b.Property<int>("BattingAverageVsLeftHandersYTD");
+
+                    b.Property<int>("BattingAverageVsRightHandersYTD");
+
+                    b.Property<int>("BattingAverageYTD");
+
+                    b.Property<int>("BbPercentageYTD");
+
+                    b.Property<int>("BpvLast31");
+
+                    b.Property<int>("BpvLast7");
+
+                    b.Property<int>("BpvYTD");
+
+                    b.Property<int>("CatcherAppearancesYTD");
+
+                    b.Property<int>("CaughtStealingYTD");
+
+                    b.Property<int>("ContactPercentageYTD");
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<int>("DesignatedHitterAppearancesYTD");
+
+                    b.Property<int>("DoublesYTD");
+
+                    b.Property<int>("ExpectedPxLast31");
+
+                    b.Property<int>("ExpectedPxLast7");
+
+                    b.Property<int>("ExpectedPxYTD");
+
+                    b.Property<double>("EyeYTD");
+
+                    b.Property<int>("FirstBaseAppearancesYTD");
+
+                    b.Property<string>("FirstName");
+
+                    b.Property<int>("FlyballOutsYTD");
+
+                    b.Property<int>("FlyballPercentageYTD");
+
+                    b.Property<int>("FlyballsYTD");
+
+                    b.Property<int>("GroundBallPercentageYTD");
+
+                    b.Property<int>("GroundballOutsYTD");
+
+                    b.Property<int>("GroundballsYTD");
+
+                    b.Property<int>("HctxLast31");
+
+                    b.Property<int>("HctxLast7");
+
+                    b.Property<int>("HctxYTD");
+
+                    b.Property<int>("HitPercentageYTD");
+
+                    b.Property<int>("HitsYTD");
+
+                    b.Property<int>("HomeRunsYTD");
+
+                    b.Property<string>("LastName");
+
+                    b.Property<int>("LineDriveOutsYTD");
+
+                    b.Property<int>("LineDrivePercentageYTD");
+
+                    b.Property<int>("LineDrivesYTD");
+
+                    b.Property<int>("MlbId");
+
+                    b.Property<int>("OnBasePercentageVsLeftHanders");
+
+                    b.Property<int>("OnBasePercentageVsRightHanders");
+
+                    b.Property<int>("OnBasePercentageYTD");
+
+                    b.Property<int>("OnBasePlusSluggingYTD");
+
+                    b.Property<int>("OpsVsLeftHandersYTD");
+
+                    b.Property<int>("OpsVsRightHandersYTD");
+
+                    b.Property<int>("OutfielderAppearancesYTD");
+
+                    b.Property<int>("PlateAppearancesVsLeftHandersYTD");
+
+                    b.Property<int>("PlateAppearancesVsRightHandersYTD");
+
+                    b.Property<string>("Position");
+
+                    b.Property<int>("PxLast31");
+
+                    b.Property<int>("PxLast7");
+
+                    b.Property<int>("PxYTD");
+
+                    b.Property<double>("RarLast31");
+
+                    b.Property<double>("RarLast7");
+
+                    b.Property<double>("RarYTD");
+
+                    b.Property<int>("RbiYTD");
+
+                    b.Property<double>("RcgLast31");
+
+                    b.Property<double>("RcgLast7");
+
+                    b.Property<double>("RcgYTD");
+
+                    b.Property<int>("RspdYTD");
+
+                    b.Property<int>("RunsYTD");
+
+                    b.Property<int>("SecondBaseAppearancesYTD");
+
+                    b.Property<int>("ShortstopAppearancesYTD");
+
+                    b.Property<int>("SluggingPercentageVsLeftHanders");
+
+                    b.Property<int>("SluggingPercentageVsRightHanders");
+
+                    b.Property<int>("SluggingPercentageYTD");
+
+                    b.Property<int>("SpeedYTD");
+
+                    b.Property<int>("StolenBasesYTD");
+
+                    b.Property<int>("StrikeoutsYTD");
+
+                    b.Property<string>("Team");
+
+                    b.Property<int>("ThirdBaseAppearancesYTD");
+
+                    b.Property<int>("TriplesYTD");
+
+                    b.Property<DateTime>("UpdatedAt");
+
+                    b.Property<int>("WalksYTD");
+
+                    b.Property<int>("XbaLast31");
+
+                    b.Property<int>("XbaLast7");
+
+                    b.Property<int>("XbaYTD");
+
+                    b.HasKey("HqPlayerId");
+
+                    b.ToTable("BaseballHqHitterYTD");
+                });
+
             modelBuilder.Entity("BaseballScraper.Models.BaseballSavant.StartingPitcherCsw", b =>
                 {
                     b.Property<int?>("StartingPitcherCswId")
@@ -80,7 +342,7 @@ namespace BaseballScraper.Migrations
 
             modelBuilder.Entity("BaseballScraper.Models.FanGraphs.FanGraphsPitcherForWpdiReport", b =>
                 {
-                    b.Property<string>("RecordId")
+                    b.Property<int>("RecordId")
                         .ValueGeneratedOnAdd();
 
                     b.Property<double>("Apercentage");
@@ -140,6 +402,8 @@ namespace BaseballScraper.Migrations
                     b.Property<double>("OutcomeFpercentage_mPDI");
 
                     b.Property<string>("PitcherName");
+
+                    b.Property<string>("PlayerYearConcat");
 
                     b.Property<int>("Season");
 
@@ -208,6 +472,98 @@ namespace BaseballScraper.Migrations
                     b.HasKey("PlayerNoteId");
 
                     b.ToTable("PlayerNotes");
+                });
+
+            modelBuilder.Entity("BaseballScraper.Models.Player.SfbbPlayerBase", b =>
+                {
+                    b.Property<string>("IDPLAYER")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ALLPOS");
+
+                    b.Property<string>("BATS");
+
+                    b.Property<string>("BIRTHDATE");
+
+                    b.Property<string>("BPID");
+
+                    b.Property<string>("BREFID");
+
+                    b.Property<string>("CBSID");
+
+                    b.Property<string>("CBSNAME");
+
+                    b.Property<string>("DAVENPORTID");
+
+                    b.Property<string>("DRAFTKINGSNAME");
+
+                    b.Property<string>("ESPNID");
+
+                    b.Property<string>("ESPNNAME");
+
+                    b.Property<string>("FANDUELID");
+
+                    b.Property<string>("FANDUELNAME");
+
+                    b.Property<string>("FANGRAPHSNAME");
+
+                    b.Property<string>("FANPROSNAME");
+
+                    b.Property<string>("FANTRAXID");
+
+                    b.Property<string>("FANTRAXNAME");
+
+                    b.Property<string>("FIRSTNAME");
+
+                    b.Property<string>("HQID");
+
+                    b.Property<string>("IDFANGRAPHS");
+
+                    b.Property<string>("KFFLNAME");
+
+                    b.Property<string>("LASTCOMMAFIRST");
+
+                    b.Property<string>("LASTNAME");
+
+                    b.Property<string>("LG");
+
+                    b.Property<string>("MLBID");
+
+                    b.Property<string>("MLBNAME");
+
+                    b.Property<string>("MSTRBLLNAME");
+
+                    b.Property<string>("NFBCID");
+
+                    b.Property<string>("NFBCLASTFIRST");
+
+                    b.Property<string>("NFBCNAME");
+
+                    b.Property<string>("OTTONEUID");
+
+                    b.Property<string>("PLAYERNAME");
+
+                    b.Property<string>("POS");
+
+                    b.Property<string>("RAZZBALLNAME");
+
+                    b.Property<string>("RETROID");
+
+                    b.Property<string>("ROTOWIREID");
+
+                    b.Property<string>("ROTOWIRENAME");
+
+                    b.Property<string>("TEAM");
+
+                    b.Property<string>("THROWS");
+
+                    b.Property<string>("YAHOOID");
+
+                    b.Property<string>("YAHOONAME");
+
+                    b.HasKey("IDPLAYER");
+
+                    b.ToTable("SfbbPlayerBases");
                 });
 
             modelBuilder.Entity("BaseballScraper.Models.Yahoo.Resources.YahooTeamResource.YahooTeamResource", b =>

@@ -702,7 +702,6 @@
             <example> https://127.0.0.1:5001/api/mlb/projectedhittingstats/493316 </example>
             <returns> A view of a projectedhittingstats model </returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "T:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController" -->
         <member name="M:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController.PlayerBaseFromExcel.GetAllPlayerBasesFromExcel">
             <summary>
                 Retrieves all records from PlayerBase.xlsx document
