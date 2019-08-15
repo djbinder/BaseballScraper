@@ -281,6 +281,54 @@ namespace BaseballScraper.Migrations
                     b.ToTable("BaseballHqHitterYTD");
                 });
 
+            modelBuilder.Entity("BaseballScraper.Models.BaseballSavant.ExitVelocityAndBarrelsHitter", b =>
+                {
+                    b.Property<int>("PlayerId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<double>("AngleSweetSpotPercent");
+
+                    b.Property<int>("Attempts");
+
+                    b.Property<int>("AverageDistance");
+
+                    b.Property<double>("AverageExitVelocity");
+
+                    b.Property<double>("AverageExitVelocityFlyBallsAndLineDrives");
+
+                    b.Property<double>("AverageExitVelocityGroundballs");
+
+                    b.Property<double>("AverageHitAngle");
+
+                    b.Property<int?>("AverageHomeRunDistance");
+
+                    b.Property<int>("BallsHitHigherThan95mph");
+
+                    b.Property<double>("BarrelsPerBattedBallEvent");
+
+                    b.Property<double>("BarrelsPerPlateAppearance");
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<string>("FirstName");
+
+                    b.Property<string>("LastName");
+
+                    b.Property<int>("MaxDistance");
+
+                    b.Property<double>("MaxExitVelocity");
+
+                    b.Property<int>("NumberOfBarrels");
+
+                    b.Property<double>("PercentageBallsHitHigherThan95mph");
+
+                    b.Property<DateTime>("UpdatedAt");
+
+                    b.HasKey("PlayerId");
+
+                    b.ToTable("ExitVelocityAndBarrelsHitter");
+                });
+
             modelBuilder.Entity("BaseballScraper.Models.BaseballSavant.StartingPitcherCsw", b =>
                 {
                     b.Property<int?>("StartingPitcherCswId")

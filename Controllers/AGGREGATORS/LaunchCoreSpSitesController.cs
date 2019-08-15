@@ -21,6 +21,7 @@ namespace BaseballScraper.Controllers.AGGREGATORS
 {
     [Route("api/aggregators/[controller]")]
     [ApiController]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class LaunchCoreSpSitesController : ControllerBase
     {
         private readonly Helpers                   _helpers;

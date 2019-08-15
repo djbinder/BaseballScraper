@@ -16,29 +16,6 @@ using NPOI.XSSF.UserModel;
 namespace BaseballScraper.Infrastructure
 {
     /// <summary> </summary>
-    /// <list> INDEX
-    ///     RegisterProviderToStart <see cref         ="RegisterProviderToStart()" />
-    ///     SetThreadCurrentCulture <see cref         ="SetThreadCurrentCulture()" />
-    ///     CreateNewExcelWorkbook <see cref          ="CreateNewExcelWorkbook(string)" />
-    ///     CreateNewExcelWorkbook <see cref          ="CreateNewExcelWorkbook()" />
-    ///     CreateNewExcelWorkbook <see cref          ="CreateNewExcelWorkbook(string, string)" />
-    ///     ManageWorkbookNames <see cref             ="ManageWorkbookNames(string)" />
-    ///     AddSheetToExistingExcelWorkbook <see cref ="AddSheetToExistingExcelWorkbook(string, string)" />
-    ///     GetAllWorkbookSheets <see cref            ="GetAllWorkbookSheets(string)" />
-    ///     AddRecordToSheet <see cref                ="AddRecordToSheet(string, string)" />
-    ///     GetAllRecordsInSheet <see cref            ="GetAllRecordsInSheet(string, string)" />
-    ///     AddRecordsToList <see cref                ="AddRecordsToList{T}(IList{T}, T)" />
-    ///     PrintRecord <see cref                     ="PrintRecord{T}(RowInfo{T})" />
-    ///     SetColumnWidth <see cref                  ="SetColumnWidth(ExcelDocument, string, int)" />
-    ///     SetColumnWidth <see cref                  ="SetColumnWidth(ExcelDocument, int, int)" />
-    ///     SetCellValue <see cref                    ="SetCellValue(ExcelDocument, int, string, object)" />
-    ///     SetCellValue <see cref                    ="SetCellValue(ExcelDocument, int, int, object)" />
-    ///     SetFont <see cref                         ="SetFont(ExcelDocument, int, string, string, int)" />
-    ///     SetFont <see cref                         ="SetFont(ExcelDocument, int, int, string, int)" />
-    ///     FormatDate <see cref                      ="FormatDate(ExcelDocument, int, int)" />
-    ///     ColumnHeaderLetterToNumber <see cref      ="ColumnHeaderLetterToNumber(string)" />
-    /// </list>
-    ///
     /// <list> RESOURCES
     /// <item> https://github.com/perevoznyk/excel-export/blob/master/README.md </item>
     /// <item> https://github.com/dotnetcore/NPOI/blob/master/samples/Npoi.Samples.CreateNewSpreadsheet/Program.cs </item>

@@ -13,24 +13,21 @@ namespace BaseballScraper.Models
     {
         public BaseballScraperContext(DbContextOptions<BaseballScraperContext> options): base(options) { }
 
-        public string Name { get; set; }
-        public string ConnectionString { get; set; }
-        public string SqlName { get; set; }
+        public string Name                { get; set; }
+        public string ConnectionString    { get; set; }
+        public string SqlName             { get; set; }
         public string SqlConnectionString { get; set; }
 
-
-
-        public DbSet<YahooTeamResource> YahooTeamResource                         { get; set; }
-        public DbSet<SfbbPlayerBase> SfbbPlayerBases                              { get; set; }
-        public DbSet<PlayerNote> PlayerNotes                                      { get; set; }
-        public DbSet<StartingPitcherCsw> StartingPitcherCsws                      { get; set; }
-        public DbSet<StartingPitcherCswSingleDay> StartingPitcherCswsSingleDays   { get; set; }
-        public DbSet<StartingPitcherCswDateRange> StartingPitcherCswsDateRanges   { get; set; }
-        public DbSet<FanGraphsPitcherForWpdiReport> FanGraphsPitcherForWpdiReport { get; set; }
-
-        public DbSet<HqHitterRestOfSeasonProjection> BaseballHqReportHitterROS { get; set; }
-
-        public DbSet<HqHitterYearToDate> BaseballHqHitterYTD { get; set; }
+        public DbSet<YahooTeamResource              > YahooTeamResource             { get; set; }
+        public DbSet<SfbbPlayerBase                 > SfbbPlayerBases               { get; set; }
+        public DbSet<PlayerNote                     > PlayerNotes                   { get; set; }
+        public DbSet<StartingPitcherCsw             > StartingPitcherCsws           { get; set; }
+        public DbSet<StartingPitcherCswSingleDay    > StartingPitcherCswsSingleDays { get; set; }
+        public DbSet<StartingPitcherCswDateRange    > StartingPitcherCswsDateRanges { get; set; }
+        public DbSet<FanGraphsPitcherForWpdiReport  > FanGraphsPitcherForWpdiReport { get; set; }
+        public DbSet<HqHitterRestOfSeasonProjection > BaseballHqReportHitterROS     { get; set; }
+        public DbSet<HqHitterYearToDate             > BaseballHqHitterYTD           { get; set; }
+        public DbSet<ExitVelocityAndBarrelsHitter> ExitVelocityAndBarrelsHitter { get; set; }
     }
 }
 

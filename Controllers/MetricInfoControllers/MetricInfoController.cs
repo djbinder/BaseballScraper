@@ -7,6 +7,7 @@ namespace BaseballScraper.Controllers.MetricInfoControllers
 {
     [Route("api/metrics/[controller]")]
     [ApiController]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class MetricInfoController : ControllerBase
     {
 
