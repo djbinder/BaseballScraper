@@ -6,28 +6,13 @@ using BaseballScraper.Models.Espn;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Mvc;
 
+#pragma warning disable CS0219, CS0414, CS1998, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Controllers.EspnControllers
 {
 
-
-    //STATUS --> THIS IS VERY BROKEN!!!!
-
-    #region OVERVIEW ------------------------------------------------------------
-
-    /// <summary> Gets lists of ESPN most added or dropped players (top 25) </summary>
-    /// <list> INDEX
-    ///     <item> Get most added players <a cref="EspnTransactionTrendsController.GetListOfMostAddedPlayers" /> </item>
-    ///     <item> Get most dropped players <a cref="EspnTransactionTrendsController.GetListOfMostDroppedPlayers" /> </item>
-    /// </list>
-    /// <list> RESOURCES
-    ///     <item> http://games.espn.com/flb/addeddropped </item>
-    /// </list>
-
-    #endregion OVERVIEW ------------------------------------------------------------
-
-    #pragma warning disable CS0414, CS0219, IDE0051, IDE0059, CS1591
-
-    [Route("espn")]
+    [Route("api/espn/[controller]")]
+    [ApiController]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class EspnTransactionTrendsController : Controller
     {
         private readonly Helpers _h = new Helpers();

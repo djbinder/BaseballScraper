@@ -74,12 +74,15 @@ namespace BaseballScraper.Controllers
 
 
 
-
+        /// <summary>
+        /// The home controller
+        /// </summary>
         [HttpGet]
         [Route("")]
         public IActionResult Index()
         {
-            return View();
+            Console.WriteLine("INDEX!");
+            return View("Dashboard");
 
         }
 

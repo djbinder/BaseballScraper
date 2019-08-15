@@ -7,12 +7,14 @@ using Ganss.Excel;
 namespace BaseballScraper.Models.BaseballHq
 {
 
-    public partial class BaseballHqHitter
+    public partial class BaseballHqHitter : BaseEntity
     {
 
     }
 
-
+    // There are two different CSV reports run / downloaded from Baseball Hq
+    // * 1) Year to Date    2) Rest of Season Projection
+    // * These are the fields / columns they both have in common
     public partial class BaseballHqReportHitterBase : BaseEntity
     {
         [Key]
@@ -39,14 +41,12 @@ namespace BaseballScraper.Models.BaseballHq
 
         [Column("Tm")]
         public string Team { get; set; }
-
-
     }
 
 
-    /* -------------------------------------------- */
-    /* --------------- YEAR TO DATE --------------- */
-    /* -------------------------------------------- */
+    /* --------------------------------------------------------- */
+    /* YEAR TO DATE                                              */
+    /* --------------------------------------------------------- */
     public partial class HqHitterYearToDate : BaseballHqReportHitterBase
     {
 
@@ -70,7 +70,6 @@ namespace BaseballScraper.Models.BaseballHq
 
         [Column("DH")]
         public int DesignatedHitterAppearancesYTD { get; set; }
-
 
         [Column("AB")]
         public int AtBatsYTD { get; set; }
@@ -213,7 +212,6 @@ namespace BaseballScraper.Models.BaseballHq
         [Column("OPSvsLH")]
         public int OpsVsLeftHandersYTD { get; set; }
 
-
         [Column("PX")]
         public int PxLast31 { get; set; }
 
@@ -235,7 +233,6 @@ namespace BaseballScraper.Models.BaseballHq
         [Column("BPV")]
         public int BpvLast31 { get; set; }
 
-
         [Column("PX")]
         public int PxLast7 { get; set; }
 
@@ -256,13 +253,12 @@ namespace BaseballScraper.Models.BaseballHq
 
         [Column("BPV")]
         public int BpvLast7 { get; set; }
-
     }
 
 
-    /* -------------------------------------------- */
-    /* --------------- YEAR TO DATE --------------- */
-    /* -------------------------------------------- */
+    /* --------------------------------------------------------- */
+    /* YEAR TO DATE                                              */
+    /* --------------------------------------------------------- */
     public sealed class HqHitterYearToDateClassMap : ClassMap<HqHitterYearToDate>
     {
         public HqHitterYearToDateClassMap()
@@ -347,9 +343,8 @@ namespace BaseballScraper.Models.BaseballHq
     }
 
 
-
     /* --------------------------------------------------------- */
-    /* --------------- REST OF SEASON PROJECTION --------------- */
+    /* REST OF SEASON PROJECTION                                 */
     /* --------------------------------------------------------- */
     public partial class HqHitterRestOfSeasonProjection : BaseballHqReportHitterBase
     {
@@ -458,12 +453,10 @@ namespace BaseballScraper.Models.BaseballHq
 
         [Column("BPV")]
         public int BpvROS { get; set; }
-
     }
 
-
     /* --------------------------------------------------------- */
-    /* --------------- REST OF SEASON PROJECTION --------------- */
+    /* REST OF SEASON PROJECTION                                 */
     /* --------------------------------------------------------- */
     public sealed class HqHitterRestOfSeasonProjectionClassMap : ClassMap<HqHitterRestOfSeasonProjection>
     {
@@ -514,36 +507,3 @@ namespace BaseballScraper.Models.BaseballHq
         }
     }
 }
-
-
-
-
-        // [Column("PlayerID")]
-        // public int HqPlayerId { get; set; }
-
-        // [Column("MLBAM ID")]
-        // public int MlbId { get; set; }
-
-        // [Column("Lastname")]
-        // public string LastName { get; set; }
-
-        // [Column("Firstname")]
-        // public string FirstName { get; set; }
-
-        // [Column("Age")]
-        // public int Age { get; set; }
-
-        // [Column("B")]
-        // public string Bats { get; set; }
-
-        // [Column("Pos")]
-        // public string Position { get; set; }
-
-        // [Column("Tm")]
-        // public string Team { get; set; }
-
-        // [Column("MM Code")]
-        // public string MmCode { get; set; }
-
-        // [Column("MM")]
-        // public int MM { get; set; }

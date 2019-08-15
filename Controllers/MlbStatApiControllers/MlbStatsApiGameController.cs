@@ -12,6 +12,7 @@ namespace BaseballScraper.Controllers.MlbStatsApiControllers
 {
     [Route("api/mlbstatsapi/[controller]")]
     [ApiController]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class MlbStatsApiGameController: ControllerBase
     {
         private static readonly Helpers _h = new Helpers();
