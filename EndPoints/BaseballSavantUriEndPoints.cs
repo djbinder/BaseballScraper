@@ -5,6 +5,7 @@ namespace BaseballScraper.EndPoints
     public class BaseballSavantUriEndPoints
     {
         private static readonly string baseUri = "https://baseballsavant.mlb.com/statcast_search";
+        private static readonly string baseUriLeaderBoard = "https://baseballsavant.mlb.com/statcast_leaderboard?";
 
 
         public class BaseballSavantUriEndPoint
@@ -78,6 +79,28 @@ namespace BaseballScraper.EndPoints
                 {
                     BaseUri = baseUri,
                     EndPoint = $"/csv?all=true&hfPT=&hfAB=&hfBBT=&hfPR=&hfZ=&stadium=&hfBBL=&hfNewZones=&hfGT=R%7C&hfC=&hfSea={yearString}%7C&hfSit=&player_type=batter&hfOuts=&opponent=&pitcher_throws=&batter_stands=&hfSA=&game_date_gt=&game_date_lt=&hfInfield=&team=&position=&hfOutfield=&hfRO=&home_road=&hfFlag=&hfPull=&metric_1=&hfInn=&min_pitches=0&min_results=0&group_by=name&sort_col=xwoba&player_event_sort=h_launch_speed&sort_order=desc&min_pas={minPlateAppearances}&"
+                };
+            }
+
+
+            // See: https://baseballsavant.mlb.com/statcast_leaderboard?year=2019&abs=45&player_type=resp_batter_id
+            public BaseballSavantUriEndPoint HitterExitVelocityAndBarrelsEndPoint(int year, int minAtBats)
+            {
+                return new BaseballSavantUriEndPoint
+                {
+                    BaseUri = baseUriLeaderBoard,
+                    EndPoint = $"year={year}&abs={minAtBats}&player_type=resp_batter_id"
+                };
+            }
+
+            // See: https://baseballsavant.mlb.com/statcast_leaderboard?year=2019&abs=45&player_type=resp_batter_id
+            // * Targets Csv link instead of html link
+            public BaseballSavantUriEndPoint HitterExitVelocityAndBarrelsEndPoint_Csv(int year, int minAtBats)
+            {
+                return new BaseballSavantUriEndPoint
+                {
+                    BaseUri = baseUriLeaderBoard,
+                    EndPoint = $"year={year}&abs={minAtBats}&player_type=resp_batter_id&csv=true"
                 };
             }
         }

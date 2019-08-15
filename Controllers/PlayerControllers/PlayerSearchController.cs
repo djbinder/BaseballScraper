@@ -16,6 +16,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
 {
     [Route("player/[controller]")]
     [ApiController]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class PlayerSearchController : Controller
     {
         private readonly Helpers _helpers;
