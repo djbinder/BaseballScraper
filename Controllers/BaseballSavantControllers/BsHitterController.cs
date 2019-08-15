@@ -1,31 +1,38 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using BaseballScraper.Infrastructure;
+using BaseballScraper.Models;
+using BaseballScraper.Models.BaseballSavant;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using static BaseballScraper.EndPoints.BaseballSavantUriEndPoints;
 using C = System.Console;
+using SIO = System.IO;
+
 
 #pragma warning disable CS1998, CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE1006
 namespace BaseballScraper.Controllers.BaseballSavantControllers
 {
     [Route("api/baseballsavant/[controller]")]
     [ApiController]
+    // [ApiExplorerSettings(IgnoreApi = true)]
     public class BsHitterController : ControllerBase
     {
         private readonly Helpers _helpers;
         private readonly CsvHandler _csvHandler;
         private readonly BaseballSavantHitterEndPoints _hitterEndpoints;
+        private readonly BaseballScraperContext _context;
 
 
-
-        string _dummyCsvUrl = "https://baseballsavant.mlb.com/statcast_search/csv?all=true&hfPT=&hfAB=&hfBBT=&hfPR=&hfZ=&stadium=&hfBBL=&hfNewZones=&hfGT=R%7C&hfC=&hfSea=2019%7C&hfSit=&player_type=batter&hfOuts=&opponent=&pitcher_throws=&batter_stands=&hfSA=&game_date_gt=2019-06-16&game_date_lt=&hfInfield=&team=&position=&hfOutfield=&hfRO=&home_road=&hfFlag=&hfPull=&metric_1=&hfInn=&min_pitches=0&min_results=0&group_by=name&sort_col=xwoba&player_event_sort=h_launch_speed&sort_order=desc&min_pas=50&";
-
-
-        public BsHitterController(Helpers helpers, CsvHandler csvHandler, BaseballSavantHitterEndPoints hitterEndpoints)
+        public BsHitterController(Helpers helpers, CsvHandler csvHandler, BaseballSavantHitterEndPoints hitterEndpoints, BaseballScraperContext context)
         {
             _helpers = helpers;
             _csvHandler = csvHandler;
             _hitterEndpoints = hitterEndpoints;
+            this._context = context;
         }
 
         public BsHitterController() {}
@@ -38,7 +45,8 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
         public void TestController()
         {
             _helpers.StartMethod();
-            DownloadCsvFromBaseballSavant();
+            // DownloadCsvFromBaseballSavant();
+            DownloadExitVelocityAndBarrelsCsv(2019, 100);
         }
 
 
@@ -49,6 +57,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
         public async Task TestControllerAsync()
         {
             _helpers.StartMethod();
+
         }
 
 
@@ -63,9 +72,99 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
                 // BaseballData/02_Target_Write/BaseballSavant_Target_Write
                 var endPoint = _hitterEndpoints.HitterEndPoint(minPlateAppearances: 100).EndPointUri;
                 C.WriteLine(endPoint);
-
-
                 _csvHandler.DownloadCsvFromLink(endPoint,"BaseballData/02_Target_Write/BaseballSavant_Target_Write/Bs_Hitters_xWOBA_07172019.csv");
+            }
+
+
+            private static string _targetWriteDirectory = "BaseballData/02_Target_Write/BaseballSavant_Target_Write/BbSavant_Hitters/";
+            private static string _velocityAndBarrelsStringAppendix = "_exit_velocity_barrels.csv";
+
+            private string _todaysDateString
+            {
+                get
+                {
+                    return _csvHandler.TodaysDateString();
+                }
+            }
+
+
+            public IActionResult DownloadExitVelocityAndBarrelsCsv(int year, int minAtBats)
+            {
+                var csvEndPoint = _hitterEndpoints.HitterExitVelocityAndBarrelsEndPoint_Csv(year, minAtBats).EndPointUri;
+
+                string pathAndFileToWrite = $"{_targetWriteDirectory}{_todaysDateString}{_velocityAndBarrelsStringAppendix}";
+
+                _csvHandler.DownloadCsvFromLink(csvEndPoint, pathAndFileToWrite);
+
+                C.WriteLine(SIO.File.Exists(pathAndFileToWrite) ? "File exists" : "File does not exist");
+                if(SIO.File.Exists(pathAndFileToWrite))
+                {
+                    var hitters = CreateListOfObjectsFromCsvRows(pathAndFileToWrite);
+                }
+
+                else
+                {
+                    Thread.Sleep(5000);
+                    var hitters = CreateListOfObjectsFromCsvRows(pathAndFileToWrite);
+                }
+
+                return Ok();
+            }
+
+
+            public IList<ExitVelocityAndBarrelsHitter> CreateListOfObjectsFromCsvRows(string pathAndFileToWrite)
+            {
+                IList<object> allRowsList = _csvHandler.ReadCsvRecordsToList(pathAndFileToWrite, typeof(ExitVelocityAndBarrelsHitter), typeof(ExitVelocityAndBarrelsHitterClassMap));
+
+                List<ExitVelocityAndBarrelsHitter> hitters = new List<ExitVelocityAndBarrelsHitter>();
+
+                    foreach(var row in allRowsList)
+                    {
+                        var playerRow = row as ExitVelocityAndBarrelsHitter;
+                        hitters.Add(playerRow);
+                        Add(playerRow);
+                        // C.WriteLine(playerRow.FirstName);
+                        // _context.Add(playerRow);
+                        // _context.SaveChanges();
+                    }
+                return hitters;
+            }
+
+
+
+            /* --------------------------------------------------------------- */
+            /* CRUD - CREATE - REST OF SEASON PROJECTION                       */
+            /* --------------------------------------------------------------- */
+
+            public IActionResult Add(ExitVelocityAndBarrelsHitter hitter)
+            {
+                var checkForPlayer = _context.ExitVelocityAndBarrelsHitter.SingleOrDefault(h => h.PlayerId == hitter.PlayerId);
+
+                if(checkForPlayer.PlayerId > 0)
+                {
+                    C.WriteLine("record exists");
+                }
+
+                else
+                {
+                    C.WriteLine("record does NOT exist");
+                    _context.Add(hitter);
+                    _context.SaveChanges();
+                }
+
+                return Ok();
+            }
+
+
+
+
+
+            public void PrintCsvFileDownloadDetails(string csvEndPoint, string pathAndFileToWrite)
+            {
+                C.WriteLine($"\n--------------------------------------------");
+                C.WriteLine($"EndPoint: {csvEndPoint}");
+                C.WriteLine($"File Path: {pathAndFileToWrite}");
+                C.WriteLine($"--------------------------------------------\n");
             }
 
 

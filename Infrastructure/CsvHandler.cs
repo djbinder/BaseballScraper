@@ -40,18 +40,16 @@ namespace BaseballScraper.Infrastructure
         }
 
 
-
         #region AUTOMATED CSV DOWNLOAD ------------------------------------------------------------
-
 
             // STATUS [ July 25, 2019 ] : this works
             // Go to Url, click link where CSV is located, CSV downloads
-            // * Not sure if this works for any website but it works with FanGraphs CSVs
+            // * Not sure if this works for any website I would want but it works with FanGraphs CSVs
+            // * It sleeps at the end to give the file time to save to local downloads folder
             // See: https://www.c-sharpcorner.com/blogs/how-to-get-the-latest-file-from-a-folder-by-using-c-sharp
             // See: https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/file-system/how-to-get-information-about-files-folders-and-drives
             public async Task ClickLinkToDownloadCsvFile(string url, string csvLinkCssSelector)
             {
-                // Console.WriteLine($"\nCSV URL:\n{url}\n");
                 var options = new LaunchOptions { Headless = false };
                 await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultRevision);
 
@@ -67,10 +65,9 @@ namespace BaseballScraper.Infrastructure
 
 
             // STATUS [ July 25, 2019 ] : this works
-            /// <summary>
-            ///     Move a file from one folder to another on local machine
-            ///     Rename file when it is moved
-            /// </summary>
+            // * Find last updated file on folder
+            // * Move a file from one folder to another on local machine
+            // * Rename file when it is moved by appending a date string with year, month, day
             public void MoveCsvFileToFolder(string currentFilePath, string filePathToSaveCsv, string reportType, int month = 0, int year = 0, int day = 0)
             {
                 string fileName      = string.Empty;
@@ -78,7 +75,7 @@ namespace BaseballScraper.Infrastructure
 
                 if (Directory.Exists(currentFilePath))
                 {
-                    var fileInfo = new DirectoryInfo(currentFilePath).GetFiles();
+                    var fileInfo         = new DirectoryInfo(currentFilePath).GetFiles();
                     DateTime lastUpdated = DateTime.MinValue;
 
                     foreach(FileInfo file in fileInfo)
@@ -108,37 +105,7 @@ namespace BaseballScraper.Infrastructure
             }
 
 
-            public string TodaysDateString()
-            {
-                string dateString = string.Empty;
-                DateTime today    = DateTime.Now;
-
-                string month      = today.Month.ToString();
-                string day        = today.Day.ToString();
-                string year       = today.Year.ToString();
-
-                dateString        = $"{month}_{day}_{year}";
-                return dateString;
-            }
-
-            public string TodaysDateStringComplex()
-            {
-                string dateString = string.Empty;
-
-                DateTime today    = DateTime.Now;
-                    string todayString = today.ToString();
-                    string month  = today.Month.ToString();
-                    string day    = today.Day.ToString();
-                    string year   = today.Year.ToString();
-                    string minute = today.Minute.ToString();
-                    string hour   = today.Hour.ToString();
-                    string second = today.Second.ToString();
-
-                dateString        = $"{month}_{day}_{year}_{hour}_{minute}_{second}";
-                return dateString;
-            }
-
-
+            // STATUS [ August 13, 2019 ] : this works
             public string GetPathToLastUpdatedFileInFolder(string folderPath)
             {
                 string fileName = string.Empty;
@@ -163,35 +130,30 @@ namespace BaseballScraper.Infrastructure
                     }
                 }
                 string filePath = Path.Combine(folderPath, fileName);
-                // Console.WriteLine($"\nFILE TO MOVE:\n{filePath}\n");
                 return filePath;
             }
 
 
-
+            // STATUS [ August 13, 2019 ] : this works
             public string FindFileInFolder(string fileName, string folderPath)
             {
                 string filePath = string.Empty;
                 if (Directory.Exists(folderPath))
                 {
                     filePath = Path.Combine(folderPath, fileName);
-                    // Console.WriteLine($"filePath: {filePath}");
                 }
                 return filePath;
             }
 
-
+            // STATUS [ August 13, 2019 ] : this works
             public void MoveFile(string fullSourceFilePath, string fullDestinationFilePath)
             {
-                // File.Copy(fullSourceFilePath, fullDestinationFilePath, true);
                 File.Move(fullSourceFilePath, fullDestinationFilePath);
             }
 
-
+            // STATUS [ August 13, 2019 ] : this works
             public void ReplaceFile(string fullSourceFilePath, string fullDestinationFilePath, string backupFileName)
             {
-                // string backupFileAppendix = "_backup";
-                // string backupFileName = $"HQ_{backupFileAppendix}.csv ";
                 File.Replace(fullSourceFilePath, fullDestinationFilePath, backupFileName);
             }
 
@@ -211,18 +173,18 @@ namespace BaseballScraper.Infrastructure
             ///     The full url of where the csv is linked / hosted
             ///     Download CSV from this url
             /// </param>
-            /// <param name="targetFileName">
+            /// <param name="fullPathWithFileName">
             ///     The name of the file that you want to write to
             ///     Save CSV to location defined by 'targetFileName'
             /// </param>
             /// <example>
             ///     DownloadCsvFromLink("http://crunchtimebaseball.com/master.csv", "BaseballData/PlayerBase/CrunchtimePlayerBaseCsvAutoDownload.csv")
             /// </example>
-            public void DownloadCsvFromLink(string csvUrl, string targetFileName)
+            public void DownloadCsvFromLink(string csvUrl, string fullPathWithFileName)
             {
                 WebClient webClient = new WebClient();
                 {
-                    webClient.DownloadFile(csvUrl, targetFileName );
+                    webClient.DownloadFile(csvUrl, fullPathWithFileName);
                 }
             }
 
@@ -235,21 +197,6 @@ namespace BaseballScraper.Infrastructure
                 string downloadsPath     = downloadsFolderToken.ToString();
                 return downloadsPath;
             }
-
-
-            // Go to the url the crunchtime player base file is located, download the file and save it to the 'BaseballData' folder so it can be read
-            // http://crunchtimebaseball.com/baseball_map.html
-            // http://crunchtimebaseball.com/baseball_map.html/master.csv
-            // https://stackoverflow.com/questions/33649294/c-sharp-downloading-file-with-webclient-and-saving-it
-            // public void DownloadCrunchTimePlayerBaseCsvFromLink()
-            // {
-            //     string crunchTimePlayerBaseCsv = "http://crunchtimebaseball.com/master.csv";
-
-            //     WebClient webClient = new WebClient();
-            //     {
-            //         webClient.DownloadFile(crunchTimePlayerBaseCsv, "BaseballData/02_Target_Write/PlayerBase_Target_Write/CrunchtimePlayerBaseCsvAutoDownload.csv");
-            //     }
-            // }
 
         #endregion DOWNLOAD CSV ------------------------------------------------------------
 
@@ -288,6 +235,10 @@ namespace BaseballScraper.Infrastructure
                     var csvReader = new CsvReader( fileReader );
                     RegisterMapForClass(csvReader, modelMapType);
 
+                    csvReader.Configuration.TrimOptions = TrimOptions.Trim;
+                    csvReader.Configuration.IgnoreBlankLines = true;
+                    csvReader.Configuration.MissingFieldFound = null;
+
                     csvReader.Read();
                     csvReader.ReadHeader();
 
@@ -307,44 +258,45 @@ namespace BaseballScraper.Infrastructure
             }
 
 
+            // STATUS [ August 13, 2019 ] : this works BUT needs to be DRYer
+            // * As of right now, used by Baseball Hq Hitter controller
+            // * When downloaded CSV from HQ, the first row isn't the headers we need; headers are in second row
+            // * This method:
+            // *    1) Makes sure files have .csv appendix (makes it idiot proof for me)
+            // *    2) Creates a new file (i.e., appends "_" to original file name)
+            // *    3) Copies all data except the first row
+            // *    4) Pastes copied data to new file (so now headers are in first row)
+            // *    5) Creates list of the object from csv
+            // *    6) When reading records, ignores last row of data in csv (it's a disclaimer added by bb hq)
             public IList<object> ReadCsvRecordsToList(string csvFolderPath, string csvFileName, Type modelType, Type modelMapType, bool headersAreInFirstRow)
             {
-                _helpers.StartMethod();
-
-                string csvFileFullPath = string.Empty;
-                string newCsvFileName = string.Empty;
-
+                string csvFileFullPath      = string.Empty;
+                string newCsvFileName       = string.Empty;
                 string fileLocationFullPath = $"{csvFolderPath}{csvFileName}";
+
+                /*  STEP 1  */
+                /*  STEP 2  */
                 if(fileLocationFullPath.Contains("csv"))
                 {
-                    // Console.WriteLine("FILE PATH CONTAINS 'CSV' AT APPENDIX ALREADY");
                     csvFileFullPath = $"{csvFolderPath}{csvFileName}";
-                    // Console.WriteLine($"CsvHandler > ReadCsvRecordsToList() A > csvFileFullPath: {csvFileFullPath}");
                     newCsvFileName = $"_{csvFileName}";
                 }
 
-                else
-                {
-                    Console.WriteLine("APPENDING 'CSV' TO FILE NAME");
-                    // csvFileFullPath = $"{csvFolderPath}{csvFileName}.csv";
-                    Console.WriteLine($"CsvHandler > ReadCsvRecordsToList() B > csvFileFullPath: {csvFileFullPath}");
-                    // newCsvFileName = $"_{csvFileName}.csv";
-                }
-
-                // IEnumerable<string>
-                var preProcessedRecords = File.ReadLines(csvFileFullPath).Skip(1);
                 string updatedPath = $"{csvFolderPath}{newCsvFileName}";
-                Console.WriteLine(updatedPath);
 
-                // Console.WriteLine($"CsvHandler > ReadCsvRecordsToList() > newFile: {newCsvFileName}");
+                /*  STEP 3  */
+                IEnumerable<string> preProcessedRecords = File.ReadLines(csvFileFullPath).Skip(1);
 
+                /*  STEP 4  */
                 WriteValuesAcrossRows(updatedPath, preProcessedRecords);
 
+                /*  STEP 5  */
                 using(TextReader fileReader = File.OpenText(updatedPath))
                 {
                     var csvReader = new CsvReader( fileReader );
                     RegisterMapForClass(csvReader, modelMapType);
 
+                    /*  STEP 6  */
                     csvReader.Configuration.ShouldSkipRecord = row =>
                     {
                         return row[0].StartsWith("(");
@@ -353,8 +305,7 @@ namespace BaseballScraper.Infrastructure
                     csvReader.Read();
                     csvReader.ReadHeader();
 
-                    var records      = csvReader.GetRecords(modelType).ToList();
-                    _helpers.CompleteMethod();
+                    var records = csvReader.GetRecords(modelType).ToList();
                     return records;
                 }
             }
@@ -480,13 +431,18 @@ namespace BaseballScraper.Infrastructure
 
         #region WRITE TO CSV ------------------------------------------------------------
 
-
+            // STATUS [ August 13, 2019 ] : this works
+            // * Writes records across rows in a CSV
+            // * Each initial data row is one long string; It's comma-delimited but hasn't been split by "," yet
+            // * So data only fills on column to start
+            // * This splits each row by commas and spreads data across columns
+            // * It's basically what Text-to-Columns is in Excel
             public void WriteValuesAcrossRows(string fullPathOfWriteFile, IEnumerable<string> recordsToWrite)
             {
                 using(var stream = new MemoryStream())
                 using(var writer = new StreamWriter(fullPathOfWriteFile))
                 using(var reader = new StreamReader(stream))
-                using(var csv = new CsvWriter(writer))
+                using(var csv    = new CsvWriter(writer))
                 {
                     var preProcessedRecordsList = recordsToWrite.ToList();
 
@@ -500,10 +456,8 @@ namespace BaseballScraper.Infrastructure
 
                     writer.Flush();
                     stream.Position = 0;
-                    // reader.ReadToEnd().Dump();
                 }
             }
-
 
         #endregion WRITE TO CSV ------------------------------------------------------------
 
@@ -512,23 +466,6 @@ namespace BaseballScraper.Infrastructure
 
 
         #region RECORDS ------------------------------------------------------------
-
-            // // STATUS: this works
-            // public JObject CreateRecordJObject(string recordString)
-            // {
-            //     JObject recordJObject = JObject.Parse(recordString);
-            //     return recordJObject;
-            // }
-
-
-            // // STATUS: this works
-            // public JObject CreateRecordJObject(Object record)
-            // {
-            //     string  recordString  = record.ToJson();
-            //     JObject recordJObject = JObject.Parse(recordString);
-            //     return recordJObject;
-            // }
-
 
             // STATUS: this works
             public void FilterRecordsByKey(JObject obj, string filterCriteria)
@@ -546,6 +483,7 @@ namespace BaseballScraper.Infrastructure
             }
 
         #endregion RECORDS ------------------------------------------------------------
+
 
 
 
@@ -619,9 +557,6 @@ namespace BaseballScraper.Infrastructure
                 }
             }
 
-
-
-
         #endregion CELLS ------------------------------------------------------------
 
 
@@ -629,6 +564,47 @@ namespace BaseballScraper.Infrastructure
 
 
         #region HELPERS ------------------------------------------------------------
+
+
+            // STATUS [ August 13, 2019 ] : this works
+            // * Appends data string that includes month, day, year to another string
+            // * Helps when downloaded files initially have the same generic name
+            // * This basically makes the file unique for the day it was downloaded
+            public string TodaysDateString()
+            {
+                string dateString = string.Empty;
+                DateTime today    = DateTime.Now;
+
+                string month      = today.Month.ToString();
+                string day        = today.Day.ToString();
+                string year       = today.Year.ToString();
+
+                dateString        = $"{month}_{day}_{year}";
+                return dateString;
+            }
+
+
+            // STATUS [ August 13, 2019 ] : this works
+            // * Appends data string that includes month, day, year, minute, hour, second, to another string
+            // * Helps when downloaded files initially have the same generic name
+            // * This basically makes the file unique for the day it was downloaded
+            public string TodaysDateStringComplex()
+            {
+                string dateString = string.Empty;
+
+                DateTime today    = DateTime.Now;
+                    string todayString = today.ToString();
+                    string month       = today.Month.ToString();
+                    string day         = today.Day.ToString();
+                    string year        = today.Year.ToString();
+                    string minute      = today.Minute.ToString();
+                    string hour        = today.Hour.ToString();
+                    string second      = today.Second.ToString();
+
+                dateString        = $"{month}_{day}_{year}_{hour}_{minute}_{second}";
+                return dateString;
+            }
+
 
             // STATUS: this works
             public string GetFieldNameByIndex(CsvReader csvReader, int indexNumber)
@@ -653,7 +629,6 @@ namespace BaseballScraper.Infrastructure
 
 
         #region PRINTING PRESS ------------------------------------------------------------
-
 
             public void PrintPathModelMap(string csvFilePath, Type modelType, Type modelMapType)
             {

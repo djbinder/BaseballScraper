@@ -12,6 +12,7 @@ namespace BaseballScraper.Controllers.BaseballReference
 {
     [Route("api/baseballreference/[controller]")]
     [ApiController]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class BRefLeagueBattingController: ControllerBase
     {
 

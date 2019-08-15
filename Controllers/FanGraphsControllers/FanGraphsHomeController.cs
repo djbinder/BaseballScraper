@@ -7,12 +7,15 @@ using BaseballScraper.EndPoints;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Mvc;
 
+
+#pragma warning disable CS0219, CS0414, CS1998, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Controllers.FanGraphs
 {
     // TODO: need to extract hitter info
-    [Route("fangraphs/hitter")]
-    #pragma warning disable CS0414, CS0219, IDE0051, IDE0059, CS1591, IDE0044, IDE0052
-    public class FanGraphsHomeController: Controller
+    [Route("api/fangraphs/[controller]")]
+    [ApiController]
+    [ApiExplorerSettings(IgnoreApi = true)]
+    public class FanGraphsHomeController: ControllerBase
     {
         private readonly Helpers _h                              = new Helpers();
         private static FanGraphsUriEndPoints _endPoints = new FanGraphsUriEndPoints();

@@ -16,6 +16,7 @@ namespace BaseballScraper.Controllers.YahooControllers.Resources
 {
     [Route("api/yahoo/[controller]")]
     [ApiController]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class YahooPlayerResourceController: ControllerBase
     {
         private readonly Helpers _helpers;
