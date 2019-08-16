@@ -1,4 +1,4 @@
-namespace BaseballScraper.Models.Configuration
+namespace BaseballScraper.Models.ConfigurationModels
 {
     public class TheGameIsTheGameConfiguration
     {

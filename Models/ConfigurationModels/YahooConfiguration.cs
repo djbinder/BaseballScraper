@@ -4,7 +4,7 @@ using System;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 
-namespace BaseballScraper.Models.Configuration
+namespace BaseballScraper.Models.ConfigurationModels
 {
     [DataContract]
     public class YahooConfiguration
