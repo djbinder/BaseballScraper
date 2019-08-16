@@ -281,52 +281,29 @@ namespace BaseballScraper.Migrations
                     b.ToTable("BaseballHqHitterYTD");
                 });
 
-            modelBuilder.Entity("BaseballScraper.Models.BaseballSavant.ExitVelocityAndBarrelsHitter", b =>
+            modelBuilder.Entity("BaseballScraper.Models.BaseballSavant.BaseballSavantHitter", b =>
                 {
                     b.Property<int>("PlayerId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<double>("AngleSweetSpotPercent");
-
-                    b.Property<int>("Attempts");
-
-                    b.Property<int>("AverageDistance");
-
-                    b.Property<double>("AverageExitVelocity");
-
-                    b.Property<double>("AverageExitVelocityFlyBallsAndLineDrives");
-
-                    b.Property<double>("AverageExitVelocityGroundballs");
-
-                    b.Property<double>("AverageHitAngle");
-
-                    b.Property<int?>("AverageHomeRunDistance");
-
-                    b.Property<int>("BallsHitHigherThan95mph");
-
-                    b.Property<double>("BarrelsPerBattedBallEvent");
-
-                    b.Property<double>("BarrelsPerPlateAppearance");
-
                     b.Property<DateTime>("CreatedAt");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired();
 
                     b.Property<string>("FirstName");
 
                     b.Property<string>("LastName");
 
-                    b.Property<int>("MaxDistance");
-
-                    b.Property<double>("MaxExitVelocity");
-
-                    b.Property<int>("NumberOfBarrels");
-
-                    b.Property<double>("PercentageBallsHitHigherThan95mph");
+                    b.Property<int>("MlbIdForeignKey");
 
                     b.Property<DateTime>("UpdatedAt");
 
                     b.HasKey("PlayerId");
 
-                    b.ToTable("ExitVelocityAndBarrelsHitter");
+                    b.ToTable("BaseballSavantHitter");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("BaseballSavantHitter");
                 });
 
             modelBuilder.Entity("BaseballScraper.Models.BaseballSavant.StartingPitcherCsw", b =>
@@ -537,6 +514,8 @@ namespace BaseballScraper.Migrations
 
                     b.Property<string>("BREFID");
 
+                    b.Property<int?>("BaseballSavantHitterForeignKey");
+
                     b.Property<string>("CBSID");
 
                     b.Property<string>("CBSNAME");
@@ -575,7 +554,7 @@ namespace BaseballScraper.Migrations
 
                     b.Property<string>("LG");
 
-                    b.Property<string>("MLBID");
+                    b.Property<int?>("MLBID");
 
                     b.Property<string>("MLBNAME");
 
@@ -610,6 +589,9 @@ namespace BaseballScraper.Migrations
                     b.Property<string>("YAHOONAME");
 
                     b.HasKey("IDPLAYER");
+
+                    b.HasIndex("MLBID")
+                        .IsUnique();
 
                     b.ToTable("SfbbPlayerBases");
                 });
@@ -716,6 +698,74 @@ namespace BaseballScraper.Migrations
                     b.ToTable("YahooTeamRosterAdds");
                 });
 
+            modelBuilder.Entity("BaseballScraper.Models.BaseballSavant.ExitVelocityAndBarrelsHitter", b =>
+                {
+                    b.HasBaseType("BaseballScraper.Models.BaseballSavant.BaseballSavantHitter");
+
+                    b.Property<double>("AngleSweetSpotPercent");
+
+                    b.Property<int>("Attempts");
+
+                    b.Property<int>("AverageDistance");
+
+                    b.Property<double>("AverageExitVelocity");
+
+                    b.Property<double>("AverageExitVelocityFlyBallsAndLineDrives");
+
+                    b.Property<double>("AverageExitVelocityGroundballs");
+
+                    b.Property<double>("AverageHitAngle");
+
+                    b.Property<int?>("AverageHomeRunDistance");
+
+                    b.Property<int>("BallsHitHigherThan95mph");
+
+                    b.Property<double>("BarrelsPerBattedBallEvent");
+
+                    b.Property<double>("BarrelsPerPlateAppearance");
+
+                    b.Property<int>("MaxDistance");
+
+                    b.Property<double>("MaxExitVelocity");
+
+                    b.Property<int>("NumberOfBarrels");
+
+                    b.Property<double>("PercentageBallsHitHigherThan95mph");
+
+                    b.HasDiscriminator().HasValue("ExitVelocityAndBarrelsHitter");
+                });
+
+            modelBuilder.Entity("BaseballScraper.Models.BaseballSavant.XstatsHitter", b =>
+                {
+                    b.HasBaseType("BaseballScraper.Models.BaseballSavant.BaseballSavantHitter");
+
+                    b.Property<int>("BallsInPlay");
+
+                    b.Property<double>("BattingAverage");
+
+                    b.Property<double>("BattingAverageDifference");
+
+                    b.Property<double>("ExpectedBattingAverage");
+
+                    b.Property<double>("ExpectedSluggingPercentage");
+
+                    b.Property<double>("ExpectedWoba");
+
+                    b.Property<int>("PlateAppearances");
+
+                    b.Property<double>("SluggingPercentage");
+
+                    b.Property<double>("SluggingPercentageDifference");
+
+                    b.Property<double>("Woba");
+
+                    b.Property<double>("WobaDifference");
+
+                    b.Property<int>("Year");
+
+                    b.HasDiscriminator().HasValue("XstatsHitter");
+                });
+
             modelBuilder.Entity("BaseballScraper.Models.BaseballSavant.StartingPitcherCswDateRange", b =>
                 {
                     b.HasBaseType("BaseballScraper.Models.BaseballSavant.StartingPitcherCsw");
@@ -734,6 +784,13 @@ namespace BaseballScraper.Migrations
                     b.Property<DateTime>("DatePitched");
 
                     b.HasDiscriminator().HasValue("StartingPitcherCswSingleDay");
+                });
+
+            modelBuilder.Entity("BaseballScraper.Models.Player.SfbbPlayerBase", b =>
+                {
+                    b.HasOne("BaseballScraper.Models.BaseballSavant.BaseballSavantHitter", "BaseballSavantHitter")
+                        .WithOne("SfbbPlayerBase")
+                        .HasForeignKey("BaseballScraper.Models.Player.SfbbPlayerBase", "MLBID");
                 });
 
             modelBuilder.Entity("BaseballScraper.Models.Yahoo.Resources.YahooTeamResource.YahooTeamResource", b =>
