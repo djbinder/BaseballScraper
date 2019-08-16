@@ -17,6 +17,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
 {
     [Route("api/baseballsavant/[controller]")]
     [ApiController]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class BsSpController: ControllerBase
     {
         private readonly Helpers                    _helpers;

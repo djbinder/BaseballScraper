@@ -6,7 +6,6 @@ using System.Runtime.Serialization.Json;
 using System.Text;
 using BaseballScraper.EndPoints;
 using BaseballScraper.Models.MlbDataApi;
-
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
@@ -240,10 +239,10 @@ namespace BaseballScraper.Infrastructure
 
     // code generated using https://app.quicktype.io/
     // the json that was inputted to app.quicktype.io was generated using Postman
-    public class ApiSerializer
-    {
-        public static object FromJson(string json) => JsonConvert.DeserializeObject<object>(json, Converter.Settings);
-    }
+    // public class ApiSerializer
+    // {
+    //     public static object FromJson(string json) => JsonConvert.DeserializeObject<object>(json, Converter.Settings);
+    // }
 
 
     // code generated using https://app.quicktype.io/

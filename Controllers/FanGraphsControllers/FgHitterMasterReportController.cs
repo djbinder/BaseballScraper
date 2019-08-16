@@ -14,6 +14,7 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
 {
     [Route("api/fangraphs/[controller]")]
     [ApiController]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class FgHitterMasterReportController : ControllerBase
     {
         private readonly Helpers _h;

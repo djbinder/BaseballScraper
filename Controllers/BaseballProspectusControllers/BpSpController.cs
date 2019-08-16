@@ -10,6 +10,7 @@ namespace BaseballScraper.Controllers.BaseballProspectusControllers
 {
     [Route("api/baseballprospectus/[controller]")]
     [ApiController]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class BpSpController : ControllerBase
     {
         private readonly Helpers _helpers;

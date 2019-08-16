@@ -9,11 +9,12 @@ using System.Collections.Generic;
 using BaseballScraper.Models.Player;
 
 
-
 #pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Controllers.PlayerControllers
 {
-    [Route("playernote")]
+    [Route("api/player/[controller]")]
+    [ApiController]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class PlayerNoteController: Controller
     {
         private readonly Helpers _helpers;

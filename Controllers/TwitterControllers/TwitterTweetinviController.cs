@@ -17,6 +17,7 @@ namespace BaseballScraper.Controllers.TwitterControllers
 {
     [Route("api/twitter/[controller]")]
     [ApiController]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class TwitterTweetinviController : ControllerBase
     {
         private readonly Helpers _h = new Helpers();

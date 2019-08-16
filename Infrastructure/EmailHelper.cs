@@ -19,11 +19,8 @@ namespace BaseballScraper.Infrastructure
         {
             _helpers = helpers;
             _configuration = configuration;
-
             _gmail1Value = _configuration.GetSection("Gmail1").Value;
             _gmail1PasswordForAppValue = _configuration.GetSection("Gmail1_Password_App_Access").Value;
-            // C.WriteLine($"gmail1Value: {_gmail1Value}");
-            // C.WriteLine($"_gmail1PasswordForAppValue: {_gmail1PasswordForAppValue}");
         }
 
 
@@ -84,9 +81,5 @@ namespace BaseballScraper.Infrastructure
                 }
             }
         }
-
-
-
-
     }
 }
