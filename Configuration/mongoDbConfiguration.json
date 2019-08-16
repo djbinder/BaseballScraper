@@ -1,0 +1,8 @@
+{
+    "MongoDbConfiguration":
+    {
+        "TweetsCollectionName": "Twitter_Baseball_List_Tweets",
+        "ConnectionString": "mongodb://localhost:27017",
+        "DatabaseName": "Baseball_Scraper_MongoDb_06192019-1"
+    }
+}

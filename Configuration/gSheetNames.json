@@ -1,0 +1,74 @@
+{
+
+    "********** PlayerBaseWorkingCopy **********":{},
+
+    "SfbbPlayerIdMap": {
+        "DocumentName": "SfbbPlayerIdMap",
+        "Link": "https://docs.google.com/spreadsheets/d/1-pSXJeP7a-GzYHyV_jHJjyMEV_N5ONPnxgNo_qL6-Wc/edit#gid=1743647772",
+        "SpreadsheetId": "1-pSXJeP7a-GzYHyV_jHJjyMEV_N5ONPnxgNo_qL6-Wc",
+        "Range": "A7:AQ",
+        "TabName": "SFBB_PLAYER_ID_MAP",
+        "GId": "1743647772",
+        "WorkbookName": "PlayerBaseWorkingCopy"
+    },
+    "CrunchtimePlayerIdMap": {
+        "DocumentName": "CrunchtimePlayerIdMap",
+        "Link": "https://docs.google.com/spreadsheets/d/1-pSXJeP7a-GzYHyV_jHJjyMEV_N5ONPnxgNo_qL6-Wc/edit#gid=91349022",
+        "SpreadsheetId": "1-pSXJeP7a-GzYHyV_jHJjyMEV_N5ONPnxgNo_qL6-Wc",
+        "Range": "A:A",
+        "TabName": "CRUNCHTIME_PLAYER_ID_MAP",
+        "GId": "91349022",
+        "WorkbookName": "PlayerBaseWorkingCopy"
+    },
+
+
+
+
+    "********** CORE_CALCULATOR **********":{},
+
+    "SpCustomAnalysisA": {
+        "DocumentName": "SpCustomAnalysisA",
+        "Link": "https://docs.google.com/spreadsheets/d/1S4fc1PCQIi0vkwLI0TQRc-l6Ukas9e0vx4nvbCXbP2Y/edit#gid=0",
+        "SpreadsheetId": "1S4fc1PCQIi0vkwLI0TQRc-l6Ukas9e0vx4nvbCXbP2Y",
+        "Range": "A:A",
+        "TabName": "SP_CUSTOM_ANALYSIS_A",
+        "GId": "0",
+        "WorkbookName": "CORE_CALCULATOR"
+    },
+    "YahooTrends": {
+        "DocumentName": "YahooTrends",
+        "Link": "https://docs.google.com/spreadsheets/d/1S4fc1PCQIi0vkwLI0TQRc-l6Ukas9e0vx4nvbCXbP2Y/edit#gid=1154524588",
+        "SpreadsheetId": "1S4fc1PCQIi0vkwLI0TQRc-l6Ukas9e0vx4nvbCXbP2Y",
+        "Range": "A:A",
+        "TabName": "YAHOO_TRENDS",
+        "GId": "1154524588",
+        "WorkbookName": "CORE_CALCULATOR"
+    },
+    "FgSpMasterImport": {
+        "DocumentName": "FgSpMasterImport",
+        "Link": "https://docs.google.com/spreadsheets/d/1S4fc1PCQIi0vkwLI0TQRc-l6Ukas9e0vx4nvbCXbP2Y/edit#gid=465138690",
+        "SpreadsheetId": "1S4fc1PCQIi0vkwLI0TQRc-l6Ukas9e0vx4nvbCXbP2Y",
+        "Range": "A:A",
+        "TabName": "FG_SP_MASTER_IMPORT",
+        "GId": "465138690",
+        "WorkbookName": "CORE_CALCULATOR"
+    },
+    "wPDI": {
+        "DocumentName": "wPDI",
+        "Link": "https://docs.google.com/spreadsheets/d/1S4fc1PCQIi0vkwLI0TQRc-l6Ukas9e0vx4nvbCXbP2Y/edit#gid=1875493739",
+        "SpreadsheetId": "1S4fc1PCQIi0vkwLI0TQRc-l6Ukas9e0vx4nvbCXbP2Y",
+        "Range": "A:A",
+        "TabName": "wPDI",
+        "GId": "1875493739",
+        "WorkbookName": "CORE_CALCULATOR"
+    },
+    "dummy_data": {
+        "DocumentName": "dummy_data",
+        "Link": "https://docs.google.com/spreadsheets/d/1S4fc1PCQIi0vkwLI0TQRc-l6Ukas9e0vx4nvbCXbP2Y/edit#gid=25376722",
+        "SpreadsheetId": "1S4fc1PCQIi0vkwLI0TQRc-l6Ukas9e0vx4nvbCXbP2Y",
+        "Range": "A:A",
+        "TabName": "dummy_data",
+        "GId": "25376722",
+        "WorkbookName": "CORE_CALCULATOR"
+    }
+}
