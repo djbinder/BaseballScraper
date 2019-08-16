@@ -16,6 +16,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
 {
     [Route("player/[controller]")]
     [ApiController]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class PlayerSearchController : Controller
     {
         private readonly Helpers _helpers;
@@ -141,51 +142,52 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
 
         // public IActionResult SearchForPlayer(PlayerSearchViewModel selectedPlayer)
-        [HttpGet("search/{PlayerName}")]
-        public IActionResult SearchForPlayer(string PlayerName)
-        {
-            _helpers.StartMethod();
-            // var PlayerName = selectedPlayer.PlayerName;
-            C.WriteLine($"selectedPlayer: {PlayerName}");
-            IEnumerable<SfbbPlayerBase> playerBases = _playerBaseFromGoogleSheet.GetAllPlayerBasesFromGoogleSheet("A7:AQ2333");
+        // [HttpGet("search/{PlayerName}")]
+        // public IActionResult SearchForPlayer(string PlayerName, int mlbId)
+        // {
+        //     _helpers.StartMethod();
+        //     // var PlayerName = selectedPlayer.PlayerName;
+        //     C.WriteLine($"selectedPlayer: {PlayerName}");
+        //     IEnumerable<SfbbPlayerBase> playerBases = _playerBaseFromGoogleSheet.GetAllPlayerBasesFromGoogleSheet("A7:AQ2333");
 
-            C.WriteLine(playerBases.Count());
+        //     C.WriteLine(playerBases.Count());
 
-            // if (!string.IsNullOrEmpty(PlayerName))
-            // {
-            //     C.WriteLine("EMPTY");
-            //     playerBases = playerBases.Where(player => player.PLAYERNAME == PlayerName);
-            // }
+        //     // if (!string.IsNullOrEmpty(PlayerName))
+        //     // {
+        //     //     C.WriteLine("EMPTY");
+        //     //     playerBases = playerBases.Where(player => player.PLAYERNAME == PlayerName);
+        //     // }
 
-            // rizzo id = "519203";
-            string mlbId = "519203";
-            var onePlayersBase =
-                from bases in playerBases
-                where bases.MLBID == mlbId
-                select bases;
+        //     // rizzo id = "519203";
+        //     // string mlbId = "519203";
+        //     var onePlayersBase =
+        //         from bases in playerBases
+        //         where bases.MLBID == mlbId
+        //         select bases;
 
-            SfbbPlayer         = onePlayersBase.First();
-            string firstName   = SfbbPlayer.FIRSTNAME;
-            string lastName    = SfbbPlayer.LASTNAME;
-            string mlbPlayerId = SfbbPlayer.MLBID;
-            C.WriteLine($"firstName: {firstName}\t lastName: {lastName}\t mlbPlayerId: {mlbPlayerId}");
+        //     SfbbPlayer         = onePlayersBase.First();
+        //     string firstName   = SfbbPlayer.FIRSTNAME;
+        //     string lastName    = SfbbPlayer.LASTNAME;
+        //     int? mlbPlayerId = SfbbPlayer.MLBID;
+        //     C.WriteLine($"firstName: {firstName}\t lastName: {lastName}\t mlbPlayerId: {mlbPlayerId}");
 
-            var hitter = _mlbDataSeasonHittingStatsController.CreateHitterSeasonStatsInstance("2019", mlbPlayerId);
+        //     var hitter = _mlbDataSeasonHittingStatsController.CreateHitterSeasonStatsInstance("2019", (int)mlbPlayerId);
 
-            Games            = hitter.Games;
-            PlateAppearances = hitter.PlateAppearances;
-            AtBats           = hitter.AtBats;
-            Hits             = hitter.Hits;
-            Runs             = hitter.Runs;
-            HomeRuns         = hitter.HomeRuns;
-            RBIs             = hitter.RBIs;
-            SBs              = hitter.StolenBases;
-            Walks            = hitter.Walks;
-            AVG              = hitter.BattingAverage;
 
-            // _launchCoreSpSitesController.LaunchAllPagesInChromeForPlayer(firstName, lastName);
-            return View("dashboard", "Home");
-        }
+        //     Games            = hitter.Games;
+        //     PlateAppearances = hitter.PlateAppearances;
+        //     AtBats           = hitter.AtBats;
+        //     Hits             = hitter.Hits;
+        //     Runs             = hitter.Runs;
+        //     HomeRuns         = hitter.HomeRuns;
+        //     RBIs             = hitter.RBIs;
+        //     SBs              = hitter.StolenBases;
+        //     Walks            = hitter.Walks;
+        //     AVG              = hitter.BattingAverage;
+
+        //     // _launchCoreSpSitesController.LaunchAllPagesInChromeForPlayer(firstName, lastName);
+        //     return View("dashboard", "Home");
+        // }
 
 
 

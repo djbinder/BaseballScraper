@@ -35,6 +35,7 @@ namespace BaseballScraper.LahmanControllers
 
     [Route("api/lahman/[controller]")]
     [ApiController]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class LahmanCsvController: ControllerBase
     {
         private readonly Helpers _h     = new Helpers();

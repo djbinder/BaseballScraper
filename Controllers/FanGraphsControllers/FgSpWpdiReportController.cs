@@ -20,6 +20,7 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
 {
     [Route("api/fangraphs/[controller]")]
     [ApiController]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class FgSpWpdiReportController : ControllerBase
     {
         private readonly Helpers                      _helpers;
@@ -103,8 +104,9 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
         {
             _helpers.StartMethod();
 
-
-            await RunFgSpWpdiReport(2018, minInningsPitched_:1);
+            await RunFgSpWpdiReport(2019, minInningsPitched_:1);
+            var listFromDatabase = GetMany(season: 2019, minInningsPitched: 100);
+            AddManyToGsheet(listFromDatabase);
             // await RunFgSpWpdiReport(2017, minInningsPitched_:1);
             // await RunFgSpWpdiReport(2016, minInningsPitched_:1);
             // await RunFgSpWpdiReport(2015, minInningsPitched_:1);
@@ -154,11 +156,11 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
                 }
 
                 // Create list of pitchers from CSV
-                var pitcherList = CreateListOfWpdiPitchersFromCsv();
+                var pitcherList = CreateListOfWpdiPitchersFromCsv(season_);
                 foreach(var pitcher in pitcherList)
                 {
                     // STEP 3: add each pitcher to database OR update pitcher in database
-                    await AddOne(pitcher);
+                    await AddOne(pitcher, season_);
                 }
 
                 // Query database
@@ -265,6 +267,10 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
         #region RETRIEVE DATA FROM FANGRAPHS ------------------------------------------------------------
 
 
+            /* --------------------------------------------------------------- */
+            /* CURRENT SEASON / IN-SEASON                                      */
+            /* --------------------------------------------------------------- */
+
             // STATUS [ July 31, 2019 ] : this works
             // STEP 0: Check if there is already a Csv file created for today
             // * Returns 'false' if file doesn't exist; returns 'true' if it does
@@ -292,27 +298,6 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
                 }
                 Console.WriteLine($"Does CSV for today exist: {doesCsvReportExistForToday}");
                 return doesCsvReportExistForToday;
-            }
-
-
-            public bool CheckIfCsvFileForFullSeasonExists(int year)
-            {
-                string targetWriteFolderPath = _endPoints.FanGraphsTargetWriteFolderLocation();
-                var fileInfo = new DirectoryInfo(targetWriteFolderPath).GetFiles();
-
-                string fileName = $"{_wPdiReportPrefix}_{year}.csv";
-
-                bool doesCsvReportForFullSeasonExist = false;
-
-                foreach(FileInfo file in fileInfo)
-                {
-                    if(file.Name == fileName)
-                    {
-                        doesCsvReportForFullSeasonExist = true;
-                    }
-                }
-                Console.WriteLine($"Does CSV for today exist: {doesCsvReportForFullSeasonExist}");
-                return doesCsvReportForFullSeasonExist;
             }
 
 
@@ -373,6 +358,40 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
                 return Ok();
             }
 
+
+            /* --------------------------------------------------------------- */
+            /* FULL / COMPLETED SEASON */
+            /* --------------------------------------------------------------- */
+
+            // Only needs to be run once ever
+            // Uses CSV files from target_write folder to players to database
+            public async Task MoveDataFromAllPreviousSeasonsToDatabase()
+            {
+                await MoveDataFromFanGraphsToDatabaseFullSeason(2018);
+                await MoveDataFromFanGraphsToDatabaseFullSeason(2017);
+                await MoveDataFromFanGraphsToDatabaseFullSeason(2016);
+                await MoveDataFromFanGraphsToDatabaseFullSeason(2015);
+                await MoveDataFromFanGraphsToDatabaseFullSeason(2014);
+                await MoveDataFromFanGraphsToDatabaseFullSeason(2013);
+                await MoveDataFromFanGraphsToDatabaseFullSeason(2012);
+                await MoveDataFromFanGraphsToDatabaseFullSeason(2011);
+                await MoveDataFromFanGraphsToDatabaseFullSeason(2010);
+                await MoveDataFromFanGraphsToDatabaseFullSeason(2009);
+            }
+
+
+            // CSVs should exist for 2009 - 2019
+            // * File name format: 'SpWpdiReport_XXXX.csv' where XXXX is the year
+            public async Task MoveDataFromFanGraphsToDatabaseFullSeason(int year)
+            {
+                var pitcherList = CreateListOfWpdiPitchersFromCsv(year);
+                foreach(var pitcher in pitcherList)
+                {
+                    pitcher.Season = year;
+                    await AddOne(pitcher, year);
+                }
+            }
+
         #endregion RETRIEVE DATA FROM FANGRAPHS ------------------------------------------------------------
 
 
@@ -382,16 +401,19 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
         #region DATABASE ------------------------------------------------------------
 
 
-            /* ---------- ONE PITCHER ---------- */
+            /* --------------------------------------------------------------- */
+            /* ONE PITCHER                                                     */
+            /* --------------------------------------------------------------- */
 
 
             // STATUS [ July 31, 2019 ] : this works
             // STEP 3: add each pitcher to database OR update pitcher in database
             // * Checks if record for pitcher already exists
             [HttpPost("add")]
-            public async Task AddOne(FanGraphsPitcherForWpdiReport pitcher)
+            public async Task AddOne(FanGraphsPitcherForWpdiReport pitcher, int season)
             {
-                FanGraphsPitcherForWpdiReport exists = _context.FanGraphsPitcherForWpdiReport.SingleOrDefault(sp => sp.FanGraphsId == pitcher.FanGraphsId);
+                pitcher.Season = season;
+                FanGraphsPitcherForWpdiReport exists = _context.FanGraphsPitcherForWpdiReport.SingleOrDefault(sp => sp.PlayerYearConcat == pitcher.PlayerYearConcat);
 
                 if(exists != null)
                 {
@@ -412,8 +434,9 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
 
             // STATUS [ August 1, 2019 ] : haven't tested if this works
             [HttpPost("create")]
-            public async Task<IActionResult> CreateOne(FanGraphsPitcherForWpdiReport pitcher)
+            public async Task<IActionResult> CreateOne(FanGraphsPitcherForWpdiReport pitcher, int season)
             {
+                pitcher.Season = season;
                 if(ModelState.IsValid)
                 {
                     await _context.AddAsync(pitcher);
@@ -443,18 +466,20 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
             }
 
 
-            /* ---------- MULTIPLE PITCHERS ---------- */
+
+            /* --------------------------------------------------------------- */
+            /* MULTIPLE PITCHERS                                               */
+            /* --------------------------------------------------------------- */
 
 
             [HttpPost("add")]
-            public async Task AddMany(List<FanGraphsPitcherForWpdiReport> pitchers)
+            public async Task AddMany(List<FanGraphsPitcherForWpdiReport> pitchers, int season)
             {
                 foreach(var pitcher in pitchers)
                 {
-                    await AddOne(pitcher);
+                    await AddOne(pitcher, season);
                 }
             }
-
 
 
             // STATUS [ July 31, 2019 ] : this works
@@ -476,16 +501,8 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
 
             // STATUS [ July 31, 2019 ] : this works
             // Query database for pitchers and their wPDIs
-            public List<FanGraphsPitcherForWpdiReport> GetMany(
-                int season            = 0,
-                int minInningsPitched = 0
-            )
+            public List<FanGraphsPitcherForWpdiReport> GetMany(int season, int minInningsPitched = 0)
             {
-                DateTime today = DateTime.Now;
-                if(season == 0)
-                {
-                    season = today.Year;
-                }
                 var pitchers = _context.FanGraphsPitcherForWpdiReport
                     .OrderByDescending(w => w.Wpdi)
                     .Where(y => y.Season == season && y.InningsPitched > minInningsPitched)
@@ -508,7 +525,7 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
             // STATUS [ July 31, 2019 ] : this works
             // Create list of Wpdi Pitchers from CSV
             // * Uses the last updated CSV
-            public List<FanGraphsPitcherForWpdiReport> CreateListOfWpdiPitchersFromCsv(int season=0)
+            public List<FanGraphsPitcherForWpdiReport> CreateListOfWpdiPitchersFromCsv(int season)
             {
                 // Thread.Sleep(10000);
                 string targetWriteFolderPath = _endPoints.FanGraphsTargetWriteFolderLocation();
@@ -542,7 +559,7 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
             // STATUS [ July 31, 2019 ] : this works
             // Create instance of FanGraphsPitcherForWpdiReport
             // * Conversions of strings to double occurs within the model
-            public FanGraphsPitcherForWpdiReport CreateNewWpdiPitcherInstance(JToken currentPitcher, int season = 0)
+            public FanGraphsPitcherForWpdiReport CreateNewWpdiPitcherInstance(JToken currentPitcher, int season)
             {
                 DateTime today = DateTime.Now;
                 FanGraphsPitcherForWpdiReport pitcher = new FanGraphsPitcherForWpdiReport

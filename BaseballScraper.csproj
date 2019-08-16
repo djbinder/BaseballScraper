@@ -9,7 +9,9 @@
     <!-- https://docs.microsoft.com/en-us/dotnet/framework/configure-apps/how-to-enable-and-disable-automatic-binding-redirection -->
     <!-- <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects> -->
 
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <DocumentationFile>App.xml</DocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
 
     <!-- warning NU1701: Package XYZ may not be fully compatible with your project. -->
     <!-- warning CS1591: Missing XML comment for publicly visible type or member -->
@@ -22,6 +24,11 @@
     <!-- warning MSB3276: Found conflicts between different versions of the same dependent assembly. -->
     <NoWarn>NU1701, CS1591, CS1570, CS1573, CS1587, CS1572, CS1658, CS1584, MSB3276</NoWarn>
   </PropertyGroup>
+
+  <!-- <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+  </PropertyGroup> -->
 
   <ItemGroup>
     <Folder Include="wwwroot\" />
@@ -84,7 +91,7 @@
     <PackageReference Include="ExcelDataReader" Version="3.4.1" />
     <PackageReference Include="ExcelDataReader.DataSet" Version="3.4.1" />
     <PackageReference Include="ExcelMapper" Version="4.0.20" />
-    <PackageReference Include="CsvHelper" Version="7.1.1" />
+    <PackageReference Include="CsvHelper" Version="12.1.2" />
 
 
     <!-- APIs - General -->
@@ -95,6 +102,9 @@
     <!-- scrapers -->
     <PackageReference Include="HtmlAgilityPack" Version="1.8.5" />
     <PackageReference Include="Simplic.Dlr" Version="0.1.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0-rc2" />
+    <PackageReference Include="Tableau.Api" Version="1.0.11" />
+    <PackageReference Include="TableauAPI" Version="1.2.1" />
 
 
     <!-- twitter -->

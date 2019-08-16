@@ -8,6 +8,7 @@ namespace BaseballScraper.Controllers.BaseballMonster
 {
     [Route("api/baseballmonster/[controller]")]
     [ApiController]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class BaseballMonsterDailyController : ControllerBase
     {
         private readonly Helpers _h;

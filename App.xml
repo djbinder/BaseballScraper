@@ -325,16 +325,6 @@
             <example> GetListOfCbsMostTradedPlayersByPosition(urlForMostTradedByPositionPrefix, "1B"); </example>
             <returns> A list of most traded players for one position </returns>
         </member>
-        <member name="T:BaseballScraper.Controllers.EspnControllers.EspnTransactionTrendsController">
-            <summary> Gets lists of ESPN most added or dropped players (top 25) </summary>
-            <list> INDEX
-                <item> Get most added players <a cref="M:BaseballScraper.Controllers.EspnControllers.EspnTransactionTrendsController.GetListOfMostAddedPlayers" /> </item>
-                <item> Get most dropped players <a cref="M:BaseballScraper.Controllers.EspnControllers.EspnTransactionTrendsController.GetListOfMostDroppedPlayers" /> </item>
-            </list>
-            <list> RESOURCES
-                <item> http://games.espn.com/flb/addeddropped </item>
-            </list>
-        </member>
         <member name="M:BaseballScraper.Controllers.EspnControllers.EspnTransactionTrendsController.GetListOfMostAddedPlayers">
             <summary> Gets the top 25 most added players from ESPN </summary>
             <returns> A list of EspnTransactionTrendPlayer </returns>
@@ -528,6 +518,11 @@
             <param name="playerItems"> A list of values for each of the stats / properties of the FanGraphsPitcher class </param>
             <returns> New instance of FanGraphsPitcher class </returns>
         </member>
+        <member name="M:BaseballScraper.Controllers.HomeController.Index">
+            <summary>
+            The home controller
+            </summary>
+        </member>
         <member name="M:BaseballScraper.Controllers.LahmanControllers.LahmanPlayerInfoController.GetPlayerInfoForAllPlayersWithLastName(System.String)">
             <summary>
                 Get list of Mlb player's Player Id, First Name, Last Name
@@ -702,7 +697,6 @@
             <example> https://127.0.0.1:5001/api/mlb/projectedhittingstats/493316 </example>
             <returns> A view of a projectedhittingstats model </returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "T:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController" -->
         <member name="M:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController.PlayerBaseFromExcel.GetAllPlayerBasesFromExcel">
             <summary>
                 Retrieves all records from PlayerBase.xlsx document
@@ -2244,12 +2238,6 @@
                 See: https://toolslick.com/generation/code/class-from-csv
             </remarks>
         </member>
-        <member name="M:BaseballScraper.Infrastructure.CsvHandler.MoveCsvFileToFolder(System.String,System.String,System.String,System.Int32,System.Int32,System.Int32)">
-            <summary>
-                Move a file from one folder to another on local machine
-                Rename file when it is moved
-            </summary>
-        </member>
         <member name="M:BaseballScraper.Infrastructure.CsvHandler.DownloadCsvFromLink(System.String,System.String)">
             <summary>
                 Download remote CSV and save it to local location
@@ -2258,7 +2246,7 @@
                 The full url of where the csv is linked / hosted
                 Download CSV from this url
             </param>
-            <param name="targetFileName">
+            <param name="fullPathWithFileName">
                 The name of the file that you want to write to
                 Save CSV to location defined by 'targetFileName'
             </param>
@@ -2434,34 +2422,11 @@
             </example>
         </member>
         <member name="T:BaseballScraper.Infrastructure.ExcelHandler">
-             <summary> </summary>
-             <list> INDEX
-                 RegisterProviderToStart <see cref         ="M:BaseballScraper.Infrastructure.ExcelHandler.RegisterProviderToStart" />
-                 SetThreadCurrentCulture <see cref         ="M:BaseballScraper.Infrastructure.ExcelHandler.SetThreadCurrentCulture" />
-                 CreateNewExcelWorkbook <see cref          ="M:BaseballScraper.Infrastructure.ExcelHandler.CreateNewExcelWorkbook(System.String)" />
-                 CreateNewExcelWorkbook <see cref          ="M:BaseballScraper.Infrastructure.ExcelHandler.CreateNewExcelWorkbook" />
-                 CreateNewExcelWorkbook <see cref          ="M:BaseballScraper.Infrastructure.ExcelHandler.CreateNewExcelWorkbook(System.String,System.String)" />
-                 ManageWorkbookNames <see cref             ="M:BaseballScraper.Infrastructure.ExcelHandler.ManageWorkbookNames(System.String)" />
-                 AddSheetToExistingExcelWorkbook <see cref ="M:BaseballScraper.Infrastructure.ExcelHandler.AddSheetToExistingExcelWorkbook(System.String,System.String)" />
-                 GetAllWorkbookSheets <see cref            ="M:BaseballScraper.Infrastructure.ExcelHandler.GetAllWorkbookSheets(System.String)" />
-                 AddRecordToSheet <see cref                ="M:BaseballScraper.Infrastructure.ExcelHandler.AddRecordToSheet(System.String,System.String)" />
-                 GetAllRecordsInSheet <see cref            ="M:BaseballScraper.Infrastructure.ExcelHandler.GetAllRecordsInSheet(System.String,System.String)" />
-                 AddRecordsToList <see cref                ="M:BaseballScraper.Infrastructure.ExcelHandler.AddRecordsToList``1(System.Collections.Generic.IList{``0},``0)" />
-                 PrintRecord <see cref                     ="M:BaseballScraper.Infrastructure.ExcelHandler.PrintRecord``1(Npoi.Mapper.RowInfo{``0})" />
-                 SetColumnWidth <see cref                  ="M:BaseballScraper.Infrastructure.ExcelHandler.SetColumnWidth(Export.XLS.ExcelDocument,System.String,System.Int32)" />
-                 SetColumnWidth <see cref                  ="M:BaseballScraper.Infrastructure.ExcelHandler.SetColumnWidth(Export.XLS.ExcelDocument,System.Int32,System.Int32)" />
-                 SetCellValue <see cref                    ="M:BaseballScraper.Infrastructure.ExcelHandler.SetCellValue(Export.XLS.ExcelDocument,System.Int32,System.String,System.Object)" />
-                 SetCellValue <see cref                    ="M:BaseballScraper.Infrastructure.ExcelHandler.SetCellValue(Export.XLS.ExcelDocument,System.Int32,System.Int32,System.Object)" />
-                 SetFont <see cref                         ="M:BaseballScraper.Infrastructure.ExcelHandler.SetFont(Export.XLS.ExcelDocument,System.Int32,System.String,System.String,System.Int32)" />
-                 SetFont <see cref                         ="M:BaseballScraper.Infrastructure.ExcelHandler.SetFont(Export.XLS.ExcelDocument,System.Int32,System.Int32,System.String,System.Int32)" />
-                 FormatDate <see cref                      ="M:BaseballScraper.Infrastructure.ExcelHandler.FormatDate(Export.XLS.ExcelDocument,System.Int32,System.Int32)" />
-                 ColumnHeaderLetterToNumber <see cref      ="M:BaseballScraper.Infrastructure.ExcelHandler.ColumnHeaderLetterToNumber(System.String)" />
-             </list>
-            
-             <list> RESOURCES
-             <item> https://github.com/perevoznyk/excel-export/blob/master/README.md </item>
-             <item> https://github.com/dotnetcore/NPOI/blob/master/samples/Npoi.Samples.CreateNewSpreadsheet/Program.cs </item>
-             </list>
+            <summary> </summary>
+            <list> RESOURCES
+            <item> https://github.com/perevoznyk/excel-export/blob/master/README.md </item>
+            <item> https://github.com/dotnetcore/NPOI/blob/master/samples/Npoi.Samples.CreateNewSpreadsheet/Program.cs </item>
+            </list>
         </member>
         <member name="M:BaseballScraper.Infrastructure.ExcelHandler.RegisterProviderToStart">
             <summary> Needs to be run before most Excel methods </summary>
@@ -2969,7 +2934,7 @@
             3) Call the Execute(numberOfIterations) method.
             4) Use the XXXMarginal() methods to retrieve posterior marginals for different variables.
             
-            Generated by Infer.NET 0.3.1810.501 at 4:41 PM on Wednesday, July 24, 2019.
+            Generated by Infer.NET 0.3.1810.501 at 3:23 PM on Wednesday, August 14, 2019.
             </remarks>
         </member>
         <member name="F:Models.Model_EP.Changed_numberOfIterations_vint__0_vint__1_isDone">
