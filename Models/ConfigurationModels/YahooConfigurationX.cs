@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Text;
 
-namespace BaseballScraper.Models.Configuration
+namespace BaseballScraper.Models.ConfigurationModels
 {
 
     public class YahooConfigurationX
