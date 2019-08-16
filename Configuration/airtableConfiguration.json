@@ -1,0 +1,34 @@
+{
+    "AirtableConfiguration":
+    {
+        "ApiKey": "keyz619cO37NPPJea",
+        "ApiUrlBase": "https://api.airtable.com/v0/",
+
+
+        "********** BaseballData **********":{},
+
+            "SpRankings": {
+                "TableName": "SpRankings",
+                "Base": "BaseballData",
+                "Link": "https://airtable.com/tblbwaf7atN38SYQi/viwNy1sMillLdFiTY?blocks=hide",
+                "AuthenticationString": "appditHGzVfqQhLoL",
+                "PostmanToken": "bd9132c3-6204-4c37-95c6-c8fee92c5b28"
+            },
+
+            "Authors": {
+                "TableName": "Authors",
+                "Base": "BaseballData",
+                "Link": "https://airtable.com/tbl91kfEY8oJ2fGKk/viwRU2wFx61KEyBQY?blocks=hide",
+                "AuthenticationString": "appditHGzVfqQhLoL",
+                "PostmanToken": "NULL"
+            },
+
+            "Websites": {
+                "TableName": "Websites",
+                "Base": "BaseballData",
+                "Link": "https://airtable.com/tblyrCuiLoFJxKX8N?blocks=hide",
+                "AuthenticationString": "appditHGzVfqQhLoL",
+                "PostmanToken": "NULL"
+            }
+    }
+}
