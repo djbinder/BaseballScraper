@@ -23,8 +23,8 @@ namespace BaseballScraper.Controllers.PlayerControllers
         private readonly PlayerBaseFromGoogleSheet _playerBaseFromGoogleSheet;
         private readonly GoogleSheetsConnector     _googleSheetsConnector;
 
-        private readonly string _sfbbMapDocName = "SfbbPlayerIdMap";
-        private readonly string _sfbbMapTabId = "SFBB_PLAYER_ID_MAP";
+        public readonly string _sfbbMapDocName = "SfbbPlayerIdMap";
+        public readonly string _sfbbMapTabId = "SFBB_PLAYER_ID_MAP";
 
         private readonly string _crunchTimePlayerBaseCsv = "http://crunchtimebaseball.com/master.csv";
         private readonly string _crunchTimeCsvTargetWritePath = "BaseballData/02_Target_Write/PlayerBase_Target_Write/";
@@ -74,13 +74,15 @@ namespace BaseballScraper.Controllers.PlayerControllers
             public async Task AddPlayerBasesToDatabase()
             {
                 _helpers.StartMethod();
-                var allPlayerBases = _playerBaseFromGoogleSheet.GetAllPlayerBasesFromGoogleSheet("A7:AQ10000");
-                foreach(var playerBase in allPlayerBases)
+                var allPlayerBases = _playerBaseFromGoogleSheet.GetAllPlayerBasesFromGoogleSheet("A7:AQ2333");
+                Console.WriteLine($"allPlayerBases: {allPlayerBases.Count()}");
+                foreach(SfbbPlayerBase playerBase in allPlayerBases)
                 {
+                    Console.WriteLine(playerBase.PLAYERNAME);
                     await _context.AddAsync(playerBase);
                     await _context.SaveChangesAsync();
                 }
-
+                _helpers.CompleteMethod();
             }
 
         #endregion DATABASE ------------------------------------------------------------
@@ -144,6 +146,8 @@ namespace BaseballScraper.Controllers.PlayerControllers
             }
 
 
+            // _sfbbMapDocName = "SfbbPlayerIdMap"
+            // _sfbbMapTabId = "SFBB_PLAYER_ID_MAP"
             public IEnumerable<SfbbPlayerBase> GetAllPlayerBasesFromGoogleSheet(string range)
             {
                 IList<IList<object>> allPlayerBaseObjects = _googleSheetsConnector.ReadDataFromSheetRange(
@@ -152,12 +156,17 @@ namespace BaseballScraper.Controllers.PlayerControllers
                     range
                 );
 
-                Console.WriteLine($"Current # of Players: {allPlayerBaseObjects.Count}");
+                PrintPlayerBaseObjectDetails(allPlayerBaseObjects, _sfbbMapDocName, _sfbbMapTabId, range);
 
                 List<SfbbPlayerBase> allPlayerBases = new List<SfbbPlayerBase>();
+                int counter = 1;
 
                 foreach(var row in allPlayerBaseObjects)
                 {
+                    // Console.WriteLine(counter);
+                    // Console.WriteLine(row[1].ToString());
+                    // Console.WriteLine(row[10]);
+                    // Console.WriteLine(row[10].GetType());
                     SfbbPlayerBase playerBase = new SfbbPlayerBase
                     {
                         IDPLAYER        = row[0].ToString(),
@@ -170,7 +179,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
                         POS             = row[7].ToString(),
                         IDFANGRAPHS     = row[8].ToString(),
                         FANGRAPHSNAME   = row[9].ToString(),
-                        MLBID           = row[10].ToString(),
+                        // MLBID           = row[10].ToString(),
                         MLBNAME         = row[11].ToString(),
                         CBSID           = row[12].ToString(),
                         CBSNAME         = row[13].ToString(),
@@ -203,7 +212,29 @@ namespace BaseballScraper.Controllers.PlayerControllers
                         ALLPOS          = row[40].ToString(),
                         NFBCLASTFIRST   = row[41].ToString()
                     };
-                    allPlayerBases.Add(playerBase);
+
+                    int blankId;
+
+                    if(row[10].ToString() == "")
+                    {
+                        Console.WriteLine($"mlbIdString is null");
+                        blankId = counter;
+                        playerBase.MLBID = blankId;
+                        Console.WriteLine($"{playerBase.PLAYERNAME}\t{playerBase.BaseballSavantHitterForeignKey}\n");
+                        counter++;
+                    }
+
+                    else
+                    {
+                        var mlbIdString = row[10].ToString();
+                        var mlbIdInt = Int32.Parse(mlbIdString);
+                        playerBase.MLBID = mlbIdInt;
+                        allPlayerBases.Add(playerBase);
+                    }
+
+
+                    // Console.WriteLine($"END: {counter}\n");
+                    // counter++;
                 }
                 return allPlayerBases;
             }
@@ -217,6 +248,18 @@ namespace BaseballScraper.Controllers.PlayerControllers
             {
                 var allPlayerBaseObjects = _googleSheetsConnector.ReadDataFromSheetRange(_sfbbMapDocName, _sfbbMapTabId, range);
                 IEnumerable<SfbbPlayerBase> allPlayerBases = Enumerable.Empty<SfbbPlayerBase>();
+            }
+
+
+            public void PrintPlayerBaseObjectDetails(IList<IList<object>> allPlayerBaseObjects, string docName, string tabName, string range)
+            {
+                Console.WriteLine($"\n---------------------------------------------------");
+                Console.WriteLine($"PlayerBaseController > PlayerBaseFromGoogleSheet > GetAllPlayerBasesFromGoogleSheet");
+                Console.WriteLine($"Current # of Players: {allPlayerBaseObjects.Count}");
+                Console.WriteLine($"DOC:   {docName}");
+                Console.WriteLine($"TAB:   {tabName}");
+                Console.WriteLine($"RANGE: {range}");
+                Console.WriteLine($"---------------------------------------------------\n");
             }
         }
 

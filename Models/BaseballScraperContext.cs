@@ -28,6 +28,20 @@ namespace BaseballScraper.Models
         public DbSet<HqHitterRestOfSeasonProjection > BaseballHqReportHitterROS     { get; set; }
         public DbSet<HqHitterYearToDate             > BaseballHqHitterYTD           { get; set; }
         public DbSet<ExitVelocityAndBarrelsHitter> ExitVelocityAndBarrelsHitter { get; set; }
+        public DbSet<XstatsHitter> XStatsHitter { get; set; }
+
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // modelBuilder.Entity<SfbbPlayerBase>()
+            //     .HasOne(sfbb => sfbb.BaseballSavantHitter)
+            //     .WithOne(bsh => bsh.SfbbPlayerBase)
+            //     .HasForeignKey<BaseballSavantHitter>(bsh => bsh.PlayerId);
+            modelBuilder.Entity<BaseballSavantHitter>()
+                .HasOne(bsh => bsh.SfbbPlayerBase)
+                .WithOne(sfbb => sfbb.BaseballSavantHitter)
+                .HasForeignKey<SfbbPlayerBase>(sfbb => sfbb.MLBID);
+        }
     }
 }
 
