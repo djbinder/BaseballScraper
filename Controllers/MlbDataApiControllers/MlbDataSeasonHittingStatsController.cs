@@ -45,15 +45,15 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
         public void TestController()
         {
             _helpers.StartMethod();
-            var hitter = CreateHitterSeasonStatsInstance("2019", "430911");
+            var hitter = CreateHitterSeasonStatsInstance("2019", 430911);
         }
 
 
         // /json/named.sport_pitching_tm.bam?league_list_id='mlb'&game_type={game_type}&season={season}&player_id={player_id}
         // http://lookup-service-prod.mlb.com/json/named.sport_hitting_tm.bam?league_list_id='mlb'&game_type='R'&season='2017'&player_id='592789'
-        public HitterSeasonStats CreateHitterSeasonStatsInstance (string year, string playerId)
+        public HitterSeasonStats CreateHitterSeasonStatsInstance (string year, int playerId)
         {
-            MlbDataEndPoint newEndPoint     = _endPoints.HitterSeasonEndPoint("R",year,playerId);
+            MlbDataEndPoint newEndPoint     = _endPoints.HitterSeasonEndPoint("R",year, playerId.ToString());
             PostmanRequest postmanRequest   = _postman.CreatePostmanRequest(newEndPoint, "HitterSeasonStats");
             PostmanResponse postmanResponse = _postman.GetPostmanResponse(postmanRequest);
             IRestResponse response          = postmanResponse.Response;

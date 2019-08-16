@@ -6,6 +6,7 @@ namespace BaseballScraper.EndPoints
     {
         private static readonly string baseUri = "https://baseballsavant.mlb.com/statcast_search";
         private static readonly string baseUriLeaderBoard = "https://baseballsavant.mlb.com/statcast_leaderboard?";
+        private static readonly string baseUriExpectedStatistics = "https://baseballsavant.mlb.com/expected_statistics?";
 
 
         public class BaseballSavantUriEndPoint
@@ -83,7 +84,8 @@ namespace BaseballScraper.EndPoints
             }
 
 
-            // See: https://baseballsavant.mlb.com/statcast_leaderboard?year=2019&abs=45&player_type=resp_batter_id
+            // * See: https://baseballsavant.mlb.com/statcast_leaderboard?year=2019&abs=45&player_type=resp_batter_id
+            // * Model is ExitVelocityAndBarrelsHitter
             public BaseballSavantUriEndPoint HitterExitVelocityAndBarrelsEndPoint(int year, int minAtBats)
             {
                 return new BaseballSavantUriEndPoint
@@ -93,8 +95,9 @@ namespace BaseballScraper.EndPoints
                 };
             }
 
-            // See: https://baseballsavant.mlb.com/statcast_leaderboard?year=2019&abs=45&player_type=resp_batter_id
+            // * See: https://baseballsavant.mlb.com/statcast_leaderboard?year=2019&abs=45&player_type=resp_batter_id
             // * Targets Csv link instead of html link
+            // * Model is ExitVelocityAndBarrelsHitter
             public BaseballSavantUriEndPoint HitterExitVelocityAndBarrelsEndPoint_Csv(int year, int minAtBats)
             {
                 return new BaseballSavantUriEndPoint
@@ -102,6 +105,56 @@ namespace BaseballScraper.EndPoints
                     BaseUri = baseUriLeaderBoard,
                     EndPoint = $"year={year}&abs={minAtBats}&player_type=resp_batter_id&csv=true"
                 };
+            }
+
+
+            public BaseballSavantUriEndPoint HitterExpectedStatisticsEndPoint(int year, int minPlateAppearances, BaseballSavantPositionEnum position = BaseballSavantPositionEnum.All)
+            {
+                Console.WriteLine($"position: {position}");
+                return new BaseballSavantUriEndPoint
+                {
+                    BaseUri = baseUriExpectedStatistics,
+                    EndPoint = $"type=batter&year={year}&position={position}&team=&min={minPlateAppearances}"
+                };
+            }
+
+            public BaseballSavantUriEndPoint HitterExpectedStatisticsEndPoint_Csv(int year, int minPlateAppearances, BaseballSavantPositionEnum position = BaseballSavantPositionEnum.All)
+            {
+                string positionString = string.Empty;
+                if(position == BaseballSavantPositionEnum.All)
+                {
+                    positionString = "";
+                }
+
+                else
+                {
+                    positionString = position.ToString();
+                }
+
+                Console.WriteLine($"positionString: {positionString}");
+                return new BaseballSavantUriEndPoint
+                {
+                    BaseUri = baseUriExpectedStatistics,
+                    EndPoint = $"type=batter&year={year}&position={positionString}&team=&min={minPlateAppearances}&csv=true"
+                };
+            }
+
+
+
+
+            public enum BaseballSavantPositionEnum
+            {
+                All,
+                Pitcher          = 1,
+                Catcher          = 2,
+                FirstBase        = 3,
+                SecondBase       = 4,
+                ThirdBase        = 5,
+                Shortstop        = 6,
+                LeftField        = 7,
+                CenterField      = 8,
+                RightField       = 9,
+                DesignatedHitter = 10
             }
         }
 
