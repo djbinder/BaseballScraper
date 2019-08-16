@@ -1,0 +1,60 @@
+/*
+    * this file is used to store the sinceId of the last tweet received from a list
+    * it works with the 'TwitterTweetinviController' methods:
+        1) WriteSinceIdToTxtFile
+        2) ReadCurrentSinceIdFromTxtFile()
+    * each time it runs it stores:
+        1) the new sinceId
+        2) and date / time it was added to this file
+    * From Twitter on 'sinceId"
+        * Returns tweets w/ Ids > (that is, more recent than) the specified ID.
+        * There are limits to # of Tweets which can be accessed through the API.
+        * If the limit of Tweets is hit, since_id will use oldest ID available.
+*/
+
+
+
+
+
+6/21/19 3:03:43 PM
+23423234234234
+
+6/21/19 3:06:44 PM
+23423234234234
+
+6/21/19 3:07:46 PM
+23423234234234
+
+6/21/19 3:09:12 PM
+999999999999111111
+
+6/21/19 3:16:18 PM
+999999999999111111
+
+6/24/19 4:01:10 PM
+1143262577272791042
+
+6/24/19 4:11:18 PM
+1143262577272791042
+
+6/24/19 4:13:36 PM
+1143262577272791042
+
+6/24/19 4:14:52 PM
+1143262577272791042
+
+6/24/19 4:16:39 PM
+1143266459524747264
+
+6/24/19 4:16:54 PM
+1143266544706830336
+
+6/24/19 4:28:07 PM
+1143269340306972678
+
+6/24/19 4:28:19 PM
+1143269448104759296
+
+6/24/19 4:33:20 PM
+1143270661160394758
+
