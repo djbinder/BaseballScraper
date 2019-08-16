@@ -47,7 +47,8 @@
 
 # DIRECTORIES
 .local-chromium/
-/BaseballScraper/Models/Configuration
+/BaseballScraper/Configuration/
+# /BaseballScraper/Models/Configuration
 Logs/
 logs/
 Migrations/
