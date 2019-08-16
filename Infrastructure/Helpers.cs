@@ -28,6 +28,10 @@ namespace BaseballScraper.Infrastructure
 
         #region LOGGERS ------------------------------------------------------------
 
+            // public void PrintSeasons()
+            // {
+            //     PlayerSeasons.ForEach((season) => C.WriteLine($"season: {season}"));
+            // }
 
             public void Intro(object obj, string str)
             {
@@ -428,7 +432,7 @@ namespace BaseballScraper.Infrastructure
             public T GetObjectFromJson<T> (ISession session, string key)
             {
                 var value = session.GetString (key);
-                return value == null ? default(T) : JsonConvert.DeserializeObject<T> (value);
+                return value == null ? default : JsonConvert.DeserializeObject<T> (value);
             }
 
 
