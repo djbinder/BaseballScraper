@@ -1,8 +1,6 @@
 ﻿// https://stackoverflow.com/questions/47294020/reading-appsettings-from-asp-net-core-webapi
 
-using System;
 using System.Runtime.Serialization;
-using Newtonsoft.Json;
 
 namespace BaseballScraper.Models.ConfigurationModels
 {
