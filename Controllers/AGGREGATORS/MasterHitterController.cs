@@ -38,6 +38,7 @@ namespace BaseballScraper.Controllers.AGGREGATORS
 
         }
 
+
         public MasterHitterController() {}
 
 

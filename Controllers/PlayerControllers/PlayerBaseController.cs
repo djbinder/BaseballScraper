@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BaseballScraper.Controllers.PlayerControllers
 {
 
+
     [Route("api/player/[controller]")]
     [ApiController]
     [ApiExplorerSettings(IgnoreApi = true)]
