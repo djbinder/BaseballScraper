@@ -71,6 +71,7 @@ namespace BaseballScraper.Controllers.AGGREGATORS
         {
             _helpers.StartMethod();
 
+
             Stopwatch sw = new Stopwatch();
             sw.Start();
             TimeSpan ts;
@@ -107,9 +108,9 @@ namespace BaseballScraper.Controllers.AGGREGATORS
             Console.WriteLine($"[ 4 ] {ts}");
 
 
+
             return Ok();
         }
-
 
         #region START ------------------------------------------------------------
         #endregion START ------------------------------------------------------------
