@@ -62,7 +62,7 @@ namespace BaseballScraper.Controllers.AGGREGATORS
         public async Task<ActionResult> UpdateDailyHitterDatabases()
         {
             _helpers.StartMethod();
-            await playerBaseController.AddPlayerBasesToDatabase();
+            // await playerBaseController.AddPlayerBasesToDatabase();
             // await _hqHitterController.UpdateBothHqHitterDatabases();
             // baseballSavantHitterController.DownloadAndAdd();
             return Ok();
