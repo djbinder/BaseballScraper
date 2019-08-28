@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace BaseballScraper.Models.Configuration
+namespace BaseballScraper.Models.ConfigurationModels
 {
     [DataContract]
     public class GoogleSheetConfiguration : IGoogleSheetConfiguration
