@@ -1,14 +1,13 @@
-﻿using System;
-using BaseballScraper.Models.Configuration;
+﻿using BaseballScraper.Controllers.YahooControllers.Resources;
 using BaseballScraper.EndPoints;
+using BaseballScraper.Infrastructure;
+using BaseballScraper.Models.ConfigurationModels;
 using BaseballScraper.Models.Yahoo;
-using BaseballScraper.Models.Yahoo.Resources;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
-using BaseballScraper.Infrastructure;
+using System;
 using System.Collections.Generic;
-using BaseballScraper.Controllers.YahooControllers.Resources;
 
 #pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Controllers.YahooControllers
@@ -18,15 +17,16 @@ namespace BaseballScraper.Controllers.YahooControllers
     [ApiExplorerSettings(IgnoreApi = true)]
     public class YahooTeamStatsController: ControllerBase
     {
-        private readonly Helpers _h = new Helpers();
-        private readonly TheGameIsTheGameConfiguration _theGameConfig;
+        private readonly Helpers                                                       _helpers;
+        private readonly TheGameIsTheGameConfiguration                                 _theGameConfig;
         private static readonly YahooApiEndPoints endPoints = new YahooApiEndPoints();
-        private static YahooApiRequestController _yahooApiRequestController;
+        private static YahooApiRequestController                                       _yahooApiRequestController;
 
-        public static readonly YahooGameResourceConroller _yahooGameResourceController = new YahooGameResourceConroller();
+        public static readonly YahooGameResourceConroller                              _yahooGameResourceController = new YahooGameResourceConroller();
 
-        public YahooTeamStatsController(IOptions<TheGameIsTheGameConfiguration> theGameConfig, YahooApiRequestController yahooApiRequestController)
+        public YahooTeamStatsController(Helpers helpers, IOptions<TheGameIsTheGameConfiguration> theGameConfig, YahooApiRequestController yahooApiRequestController)
         {
+            _helpers = helpers;
             _theGameConfig       = theGameConfig.Value;
             _yahooApiRequestController = yahooApiRequestController;
         }
@@ -38,7 +38,7 @@ namespace BaseballScraper.Controllers.YahooControllers
         [Route("test")]
         public void TestYahooTeamStatsController()
         {
-            _h.StartMethod();
+            _helpers.StartMethod();
 
             // var tsOne = CreateYahooTeamStatsModel(1);
         }
@@ -84,7 +84,7 @@ namespace BaseballScraper.Controllers.YahooControllers
 
                 YahooTeamStatsList tS = PopulateTeamStatsProperties(teamStatsJson);
 
-                _h.Dig(tS);
+                _helpers.Dig(tS);
                 return tS;
             }
 
@@ -122,7 +122,7 @@ namespace BaseballScraper.Controllers.YahooControllers
 
                 YahooTeamStatsList tS = PopulateTeamStatsProperties(teamStatsJson);
 
-                _h.Dig(tS);
+                _helpers.Dig(tS);
                 return tS;
             }
 
@@ -156,7 +156,7 @@ namespace BaseballScraper.Controllers.YahooControllers
 
                 YahooTeamStatsList tS = PopulateTeamStatsProperties(teamStatsJson);
 
-                // _h.Dig(tS);
+                // _helpers.Dig(tS);
                 return tS;
             }
 
@@ -182,7 +182,7 @@ namespace BaseballScraper.Controllers.YahooControllers
                     YahooTeamStatsList ySL = CreateYahooTeamStatsModel(counter);
                     yStatsList.Add(ySL);
                 }
-                _h.Dig(yStatsList);
+                _helpers.Dig(yStatsList);
                 return yStatsList;
             }
 

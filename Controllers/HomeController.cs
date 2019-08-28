@@ -1,24 +1,14 @@
-using BaseballScraper.Models.Configuration;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Options;
-using BaseballScraper.Infrastructure;
-using RDotNet;
-using System;
-using BaseballScraper.Models.FanGraphs;
-using CsvHelper;
-using System.IO;
-using System.Threading.Tasks;
-using BaseballScraper.Models.Lahman;
-using HtmlAgilityPack;
-using System.Linq;
-using System.Collections.Generic;
 using BaseballScraper.Controllers.CbsControllers;
 using BaseballScraper.Controllers.EspnControllers;
 using BaseballScraper.Controllers.YahooControllers;
+using BaseballScraper.Infrastructure;
 using BaseballScraper.Models.Cbs;
-using BaseballScraper.Models.Espn;
+using BaseballScraper.Models.ConfigurationModels;
 using BaseballScraper.Models.Yahoo;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using System;
+using System.Collections.Generic;
 
 
 #pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006

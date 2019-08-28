@@ -1,6 +1,6 @@
 using AirtableApiClient;
 using BaseballScraper.Infrastructure;
-using BaseballScraper.Models.Configuration;
+using BaseballScraper.Models.ConfigurationModels;
 using BaseballScraper.Models.Player;
 using C = System.Console;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +14,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using BaseballScraper.Controllers.PlayerControllers;
 
 
 #pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE1006
@@ -26,6 +27,7 @@ namespace BaseballScraper.Controllers.AGGREGATORS
     {
         private readonly Helpers                   _helpers;
         private readonly AirtableManager           _atM;
+        private readonly PlayerBaseController      _playerBaseController;
         private readonly PlayerBaseFromGoogleSheet _playerBaseFromGoogleSheet;
         private readonly AirtableConfiguration     _airtableConfig;
         private readonly PostmanMethods            _postmanMethods;
@@ -40,6 +42,7 @@ namespace BaseballScraper.Controllers.AGGREGATORS
             Helpers helpers,
             AirtableManager atM,
             PlayerBaseFromGoogleSheet playerBaseFromGoogleSheet,
+            PlayerBaseController playerBaseController,
             IOptions<AirtableConfiguration> airtableConfig,
             PostmanMethods postmanMethods,
             GoogleSheetsConnector googleSheetsConnector,
@@ -50,6 +53,7 @@ namespace BaseballScraper.Controllers.AGGREGATORS
             _helpers                            = helpers;
             _atM                                = atM;
             _playerBaseFromGoogleSheet          = playerBaseFromGoogleSheet;
+            _playerBaseController               = playerBaseController;
             _airtableConfig                     = airtableConfig.Value;
             _postmanMethods                     = postmanMethods;
             _googleSheetsConnector              = googleSheetsConnector;
@@ -145,6 +149,7 @@ namespace BaseballScraper.Controllers.AGGREGATORS
 
 
             // STATUS [ July 11, 2019 ] : this works
+            //        [ August 29, 2019 ] : made tweeks and haven't tested
             /// <summary>
             ///     Launch all websites for an individual in Google Chrome
             ///     Sites include:
@@ -169,7 +174,7 @@ namespace BaseballScraper.Controllers.AGGREGATORS
                 lastName = FormatPlayerFirstAndLastName(lastName);   // capitalize first letter if needed
                 string playerName = $"{firstName} {lastName}";
 
-                IEnumerable<SfbbPlayerBase> allPlayerBases = _playerBaseFromGoogleSheet.GetAllPlayerBasesFromGoogleSheet("A7:AQ2284");
+                IEnumerable<SfbbPlayerBase> allPlayerBases = _playerBaseController.GetAllSfbbPlayerBasesFromGoogleSheet("A7:AQ2284");
 
                 IEnumerable<SfbbPlayerBase> onePlayerBase =
                     from playerBases in allPlayerBases

@@ -1,9 +1,5 @@
 ﻿using System;
-using BaseballScraper.Controllers.YahooControllers;
 using BaseballScraper.Infrastructure;
-using BaseballScraper.Models.Configuration;
-using BaseballScraper.Models.Yahoo;
-using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json.Linq;
 
 

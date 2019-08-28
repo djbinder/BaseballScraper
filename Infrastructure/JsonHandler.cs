@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using BaseballScraper.Models.Configuration;
+using BaseballScraper.Models.ConfigurationModels;
 using Newtonsoft.Json;
 using System.Runtime.Serialization.Json;
 

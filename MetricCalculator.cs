@@ -2,6 +2,7 @@
 using BaseballScraper.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 
+#pragma warning disable CS1998, CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE1006
 namespace BaseballScraper
 {
     public class MetricCalculator

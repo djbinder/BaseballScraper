@@ -73,6 +73,8 @@ namespace BaseballScraper.Controllers.YahooControllers.Resources
         public void TestYahooRosterResourceController()
         {
             _h.StartMethod();
+            var yahooRosterResourceInstance = CreateYahooRosterResourceInstance(1);
+            _h.Dig(yahooRosterResourceInstance);
         }
 
 
@@ -122,11 +124,11 @@ namespace BaseballScraper.Controllers.YahooControllers.Resources
                 }
 
                 // get roster instance and team and manager details for roster
-                var rosterInstance = CreateYahooRosterResourceInstance(teamNumber);
-                    var teamKey = rosterInstance.TeamKey;
-                    var teamId = rosterInstance.TeamId;
-                    var teamName = rosterInstance.Name;
-                    var managerId = rosterInstance.Managers.Manager.ManagerId;
+                var rosterInstance  = CreateYahooRosterResourceInstance(teamNumber);
+                    var teamKey     = rosterInstance.TeamKey;
+                    var teamId      = rosterInstance.TeamId;
+                    var teamName    = rosterInstance.Name;
+                    var managerId   = rosterInstance.Managers.Manager.ManagerId;
                     var managerName = rosterInstance.Managers.Manager.Nickname;
 
                 // create list of all players on roster with all available data / columns / json

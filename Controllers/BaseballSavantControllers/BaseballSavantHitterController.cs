@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using BaseballScraper.EndPoints;
 using BaseballScraper.Infrastructure;
 using BaseballScraper.Models;
 using BaseballScraper.Models.BaseballSavant;
+using BaseballScraper.Models.Player;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using static BaseballScraper.EndPoints.BaseballSavantUriEndPoints;
 using C = System.Console;
@@ -21,25 +24,34 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
     // [ApiExplorerSettings(IgnoreApi = true)]
     public class BaseballSavantHitterController : ControllerBase
     {
-        private readonly Helpers _helpers;
-        private readonly CsvHandler _csvHandler;
+        private readonly Helpers                       _helpers;
+        private readonly CsvHandler                    _csvHandler;
         private readonly BaseballSavantHitterEndPoints _hitterEndpoints;
-        private readonly BaseballScraperContext _context;
+        private readonly BaseballScraperContext        _context;
+        private readonly ProjectDirectoryEndPoints     _projectDirectory;
 
 
-        public BaseballSavantHitterController(Helpers helpers, CsvHandler csvHandler, BaseballSavantHitterEndPoints hitterEndpoints, BaseballScraperContext context)
+        public BaseballSavantHitterController(Helpers helpers, CsvHandler csvHandler, BaseballSavantHitterEndPoints hitterEndpoints, BaseballScraperContext context, ProjectDirectoryEndPoints projectDirectory)
         {
-            _helpers = helpers;
-            _csvHandler = csvHandler;
-            _hitterEndpoints = hitterEndpoints;
-            this._context = context;
+            _helpers          = helpers;
+            _csvHandler       = csvHandler;
+            _hitterEndpoints  = hitterEndpoints;
+            this._context     = context;
+            _projectDirectory = projectDirectory;
         }
 
         public BaseballSavantHitterController() {}
 
 
 
-        private static string _targetWriteDirectory = "BaseballData/02_Target_Write/BaseballSavant_Target_Write/BbSavant_Hitters/";
+        // private static string _targetWriteDirectory = "BaseballData/02_Target_Write/BaseballSavant_Target_Write/BbSavant_Hitters/";
+
+
+        // BaseballData/02_WRITE/BASEBALL_SAVANT/HITTERS/
+        private string HitterWriteDirectory
+        {
+            get => _projectDirectory.BaseballSavantHitterWriteRelativePath;
+        }
 
 
         private string _todaysDateString
@@ -58,9 +70,6 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
         public void TestController()
         {
             _helpers.StartMethod();
-            // DownloadCsvFromBaseballSavant();
-            // DownloadExitVelocityAndBarrelsCsv(2019, 100);
-            DownloadExpectedStatsCsv(2019, 100);
         }
 
 
@@ -71,284 +80,465 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
         public async Task TestControllerAsync()
         {
             _helpers.StartMethod();
-
         }
 
 
-            // STATUS [ July 16, 2019 ] : this works but a lot more needs to be done
-            public void DownloadCsvFromBaseballSavant()
+        // STATUS [ August 27, 2019 ] : this works (not sure about route though)
+        [HttpPost("all/{year}/{minAtBats}")]
+        public ActionResult DownloadAndAddAllHitterReports(int year, int minAtBats)
+        {
+            DownloadAndAddXStats(year, minAtBats);
+            DownloadAndAddExitVeloAndBarrels(year, minAtBats);
+            return Ok();
+        }
+
+
+        // TWO PRIMARY REGIONS:
+        // 1) Expected Statistics
+        // 2) Expected Velocity and Barrels
+
+
+        /* PRIMARY REGION 1 */
+        #region EXPECTED STATISTICS ------------------------------------------------------------
+
+            private static string _expectedStatsStringAppendix = "_x_stats.csv";
+
+
+            /* --------------------------------------------------------------- */
+            /* CSV - X-Stats                                                   */
+            /* --------------------------------------------------------------- */
+
+
+            // STATUS [ August 27, 2019 ] : this works
+            // Link: https://127.0.0.1:5001/api/baseballsavant/baseballsavanthitter/xstats/download_and_post
+            [HttpPost("xstats/download_and_post")]
+            public ActionResult DownloadAndAddXStats(int year, int minAtBats)
             {
-                // BaseballData/02_Target_Write/BaseballSavant_Target_Write
-                var endPoint = _hitterEndpoints.HitterEndPoint(minPlateAppearances: 100).EndPointUri;
-                C.WriteLine(endPoint);
-                _csvHandler.DownloadCsvFromLink(endPoint,"BaseballData/02_Target_Write/BaseballSavant_Target_Write/Bs_Hitters_xWOBA_07172019.csv");
+                DownloadExpectedStatsCsv(year, minAtBats);
+                string xStatsReportPath = "BaseballData/02_WRITE/BASEBALL_SAVANT/HITTERS/8_27_2019_x_stats.csv";
+                var xList = CreateListOfXStatsObjectsFromCsvRows(xStatsReportPath).ToList();
+                AddAll(xList);
+                return Ok();
+            }
+
+
+            // STATUS [ August 27, 2019 ] : this works
+            // Link: https://127.0.0.1:5001/api/baseballsavant/baseballsavanthitter/xstats/csv/download
+            [HttpGet("xstats/csv/download")]
+            public IActionResult DownloadExpectedStatsCsv(int year, int minAtBats, BaseballSavantHitterEndPoints.BaseballSavantPositionEnum position = BaseballSavantHitterEndPoints.BaseballSavantPositionEnum.All)
+            {
+                _helpers.StartMethod();
+                var csvEndPoint = _hitterEndpoints.HitterExpectedStatisticsEndPoint_Csv(year, minAtBats, position).EndPointUri;
+
+                // string pathAndFileToWrite = $"{_targetWriteDirectory}{_todaysDateString}{_expectedStatsStringAppendix}";
+                string pathAndFileToWrite = $"{HitterWriteDirectory}{_todaysDateString}{_expectedStatsStringAppendix}";
+
+                PrintCsvFileDownloadDetails(csvEndPoint, pathAndFileToWrite);
+
+                _csvHandler.DownloadCsvFromLink(csvEndPoint, pathAndFileToWrite);
+
+                C.WriteLine(SIO.File.Exists(pathAndFileToWrite) ? "X-Stats File exists" : "X-Stats File does not exist");
+                if(SIO.File.Exists(pathAndFileToWrite))
+                {
+                    IList<XstatsHitter> hitters = CreateListOfXStatsObjectsFromCsvRows(pathAndFileToWrite);
+                }
+
+                else
+                {
+                    Thread.Sleep(5000);
+                    IList<XstatsHitter> hitters = CreateListOfXStatsObjectsFromCsvRows(pathAndFileToWrite);
+                }
+                return Ok();
+            }
+
+
+            // STATUS [ August 27, 2019 ] : this works
+            // Link: https://127.0.0.1:5001/api/baseballsavant/baseballsavanthitter/xstats/csv/list
+            [HttpGet("xstats/csv/list")]
+            public IList<XstatsHitter> CreateListOfXStatsObjectsFromCsvRows(string pathAndFileToWrite)
+            {
+                _helpers.StartMethod();
+                List<object> allRowsList = _csvHandler.ReadCsvRecordsToList(pathAndFileToWrite, typeof(XstatsHitter), typeof(XstatsHitterClassMap)).ToList();
+
+                List<XstatsHitter> hitters = new List<XstatsHitter>();
+
+                foreach(object row in allRowsList)
+                {
+                    XstatsHitter playerRow = row as XstatsHitter;
+                    // C.WriteLine($"{playerRow.FirstName} {playerRow.LastName}");
+
+                    var playerBase = _context.SfbbPlayerBases.SingleOrDefault(s => s.MLBID == playerRow.MLBID);
+
+                    if(playerBase != null)
+                    {
+                        playerRow.IDPLAYER = playerBase.IDPLAYER;
+                    }
+
+                    hitters.Add(playerRow);
+                    // Add(playerRow);
+                    // _context.Add(playerRow);
+                }
+                // _context.SaveChanges();
+                return hitters;
             }
 
 
 
+            /* --------------------------------------------------------------- */
+            /* CRUD - X-Stats                                                  */
+            /* --------------------------------------------------------------- */
 
 
-            #region EXPECTED STATISTICS ------------------------------------------------------------
+            /* ----- CRUD - CREATE - X-Stats ----- */
 
-                private static string _expectedStatsStringAppendix = "_x_stats.csv";
+            // STATUS [ August 27, 2019 ] : this works
+            // Link: https://127.0.0.1:5001/api/baseballsavant/baseballsavanthitter/xstats/add
+            [HttpPost("xstats/add")]
+            public IActionResult Add(XstatsHitter hitter)
+            {
+                _helpers.StartMethod();
+                var hitterCheck = _context.XStatsHitters.SingleOrDefault(h => h.MLBID == hitter.MLBID);
 
-
-                /* --------------------------------------------------------------- */
-                /* CSV - X-Stats                                                   */
-                /* --------------------------------------------------------------- */
-
-
-                [HttpPost("xstats/download_and_post")]
-                public ActionResult DownloadAndAdd()
+                if(hitterCheck == null)
                 {
-                    _helpers.StartMethod();
-                    DownloadExpectedStatsCsv(2019, 100);
-                    _helpers.CompleteMethod();
-                    return Ok();
-                }
-
-
-
-                [HttpGet("xstats/csv/download")]
-                public IActionResult DownloadExpectedStatsCsv(int year, int minAtBats, BaseballSavantHitterEndPoints.BaseballSavantPositionEnum position = BaseballSavantHitterEndPoints.BaseballSavantPositionEnum.All)
-                {
-                    var csvEndPoint = _hitterEndpoints.HitterExpectedStatisticsEndPoint_Csv(year, minAtBats, position).EndPointUri;
-
-                    string pathAndFileToWrite = $"{_targetWriteDirectory}{_todaysDateString}{_expectedStatsStringAppendix}";
-
-                    PrintCsvFileDownloadDetails(csvEndPoint, pathAndFileToWrite);
-
-                    _csvHandler.DownloadCsvFromLink(csvEndPoint, pathAndFileToWrite);
-
-                    C.WriteLine(SIO.File.Exists(pathAndFileToWrite) ? "File exists" : "File does not exist");
-                    if(SIO.File.Exists(pathAndFileToWrite))
-                    {
-                        IList<XstatsHitter> hitters = CreateListOfXStatsObjectsFromCsvRows(pathAndFileToWrite);
-                    }
-
-                    else
-                    {
-                        Thread.Sleep(5000);
-                        IList<XstatsHitter> hitters = CreateListOfXStatsObjectsFromCsvRows(pathAndFileToWrite);
-                    }
-                    return Ok();
-                }
-
-
-                [HttpGet("xstats/csv/list")]
-                public IList<XstatsHitter> CreateListOfXStatsObjectsFromCsvRows(string pathAndFileToWrite)
-                {
-                    List<object> allRowsList = _csvHandler.ReadCsvRecordsToList(pathAndFileToWrite, typeof(XstatsHitter), typeof(XstatsHitterClassMap)).ToList();
-
-                    List<XstatsHitter> hitters = new List<XstatsHitter>();
-
-                    foreach(object row in allRowsList)
-                    {
-                        XstatsHitter playerRow = row as XstatsHitter;
-                        C.WriteLine(playerRow.PlayerId);
-                        hitters.Add(playerRow);
-                        Add(playerRow);
-                    }
-                    return hitters;
-                }
-
-
-
-                /* --------------------------------------------------------------- */
-                /* CRUD - X-Stats                                                  */
-                /* --------------------------------------------------------------- */
-
-
-                /* ----- CRUD - CREATE - EXIT VELO & BARRELS ----- */
-
-                // Link: https://127.0.0.1:5001/api/baseballsavant/baseballsavanthitter/xstats/add
-                [HttpPost("xstats/add")]
-                public IActionResult Add(XstatsHitter hitter)
-                {
-                    // XstatsHitter checkForPlayer = _context.XStatsHitter.SingleOrDefault(h => h.PlayerId == hitter.PlayerId);
                     _context.Add(hitter);
                     _context.SaveChanges();
-
-                    return Ok();
                 }
-
-                // Link: https://127.0.0.1:5001/api/baseballsavant/baseballsavanthitter/xstats/add_many
-                [HttpPost("xstats/add_many")]
-                public IActionResult AddMany(List<XstatsHitter> hitters)
+                else
                 {
-                    hitters.ForEach((hitter) => Add(hitter));
-                    return Ok();
+                    // hitterCheck.PlateAppearances = hitter.PlateAppearances;
+                    // Update(hitterCheck);
                 }
+                return Ok();
+            }
+
+            // STATUS [ August 27, 2019 ] : haven't tested
+            // Link: https://127.0.0.1:5001/api/baseballsavant/baseballsavanthitter/xstats/add_many
+            [HttpPost("xstats/add_many")]
+            public IActionResult AddMany(List<XstatsHitter> hitters)
+            {
+                _helpers.StartMethod();
+                hitters.ForEach((hitter) => Add(hitter));
+                return Ok();
+            }
 
 
-
-            #endregion EXPECTED STATISTICS ------------------------------------------------------------
-
-
-
-
-
-
-
-            #region EXIT VELO & BARRELS HITTER ------------------------------------------------------------
-
-                // See: https://atmlb.com/31IMZzg
-
-
-                private static string _velocityAndBarrelsStringAppendix = "_exit_velocity_barrels.csv";
-
-
-                /* --------------------------------------------------------------- */
-                /* CSV - EXIT VELO & BARRELS                                       */
-                /* --------------------------------------------------------------- */
-
-
-                // DownloadExitVelocityAndBarrelsCsv(2019, 100);
-                [HttpGet("velo_barrel/csv/download")]
-                public IActionResult DownloadExitVelocityAndBarrelsCsv(int year, int minAtBats)
+            // STATUS [ August 27, 2019 ] : should work but haven't tested
+            // Link: https://127.0.0.1:5001/api/baseballsavant/baseballsavanthitter/xstats/add_all
+            [HttpPost("xstats/add_all")]
+            public IActionResult AddAll(List<XstatsHitter> hitters)
+            {
+                _helpers.StartMethod();
+                int counter = 1;
+                foreach(var hitter in hitters)
                 {
-                    var csvEndPoint = _hitterEndpoints.HitterExitVelocityAndBarrelsEndPoint_Csv(year, minAtBats).EndPointUri;
-
-                    string pathAndFileToWrite = $"{_targetWriteDirectory}{_todaysDateString}{_velocityAndBarrelsStringAppendix}";
-
-                    _csvHandler.DownloadCsvFromLink(csvEndPoint, pathAndFileToWrite);
-
-                    C.WriteLine(SIO.File.Exists(pathAndFileToWrite) ? "File exists" : "File does not exist");
-                    if(SIO.File.Exists(pathAndFileToWrite))
+                    var checkDbForHitter = _context.XStatsHitters.SingleOrDefault(x => x.MLBID == hitter.MLBID);
+                    if(checkDbForHitter == null)
                     {
-                        var hitters = CreateListOfObjectsFromCsvRows(pathAndFileToWrite);
-                    }
-
-                    else
-                    {
-                        Thread.Sleep(5000);
-                        var hitters = CreateListOfObjectsFromCsvRows(pathAndFileToWrite);
-                    }
-                    return Ok();
-                }
-
-                [HttpGet("velo_barrel/csv/list")]
-                public IList<ExitVelocityAndBarrelsHitter> CreateListOfObjectsFromCsvRows(string pathAndFileToWrite)
-                {
-                    List<object> allRowsList = _csvHandler.ReadCsvRecordsToList(pathAndFileToWrite, typeof(ExitVelocityAndBarrelsHitter), typeof(ExitVelocityAndBarrelsHitterClassMap)).ToList();
-
-                    List<ExitVelocityAndBarrelsHitter> hitters = new List<ExitVelocityAndBarrelsHitter>();
-
-                    foreach(object row in allRowsList)
-                    {
-                        ExitVelocityAndBarrelsHitter playerRow = row as ExitVelocityAndBarrelsHitter;
-                        hitters.Add(playerRow);
-                    }
-                    return hitters;
-                }
-
-
-                /* --------------------------------------------------------------- */
-                /* CRUD - EXIT VELO & BARRELS                                      */
-                /* --------------------------------------------------------------- */
-
-
-                /* ----- CRUD - CREATE - EXIT VELO & BARRELS ----- */
-
-                // Link: https://127.0.0.1:5001/api/baseballsavant/baseballsavanthitter/velo_barrel/add
-                [HttpPost("velo_barrel/add")]
-                public IActionResult Add(ExitVelocityAndBarrelsHitter hitter)
-                {
-                    ExitVelocityAndBarrelsHitter checkForPlayer = _context.ExitVelocityAndBarrelsHitter.SingleOrDefault(h => h.PlayerId == hitter.PlayerId);
-
-                    if(checkForPlayer.PlayerId > 0)
-                    {
-                        C.WriteLine("record exists");
-                    }
-
-                    else
-                    {
-                        C.WriteLine("record does NOT exist");
                         _context.Add(hitter);
-                        _context.SaveChanges();
                     }
-                    return Ok();
+                    else
+                    {
+                        // Console.WriteLine($"{counter} | X STATS HITTER ALREADY EXISTS");
+                    }
+                    counter++;
+                }
+                _context.SaveChanges();
+                return Ok();
+            }
+
+
+            /* ----- CRUD - UPDATE - X-Stats ----- */
+
+            // STATUS [ August 27, 2019 ] : haven't tested
+            // Link: https://127.0.0.1:5001/api/baseballsavant/baseballsavanthitter/xtats/put
+            [HttpPut("xstats/put")]
+            public ActionResult<XstatsHitter> Update(XstatsHitter hitter)
+            {
+                _context.Update(hitter);
+                _context.SaveChanges();
+                return Ok(hitter);
+            }
+
+
+        #endregion EXPECTED STATISTICS ------------------------------------------------------------
+
+
+
+
+
+        /* PRIMARY REGION 2 */
+        #region EXIT VELO & BARRELS HITTER ------------------------------------------------------------
+
+            // See: https://atmlb.com/31IMZzg
+
+            private static string _velocityAndBarrelsStringAppendix = "_exit_velocity_barrels.csv";
+
+
+            /* --------------------------------------------------------------- */
+            /* CSV - EXIT VELO & BARRELS                                       */
+            /* --------------------------------------------------------------- */
+
+            // STATUS [ August 27, 2019 ] : this works
+            // Link: https://127.0.0.1:5001/api/baseballsavant/baseballsavanthitter/velo_barrel/download_and_post
+            [HttpPost("velo_barrel/download_and_post")]
+            public ActionResult DownloadAndAddExitVeloAndBarrels(int year, int minAtBats)
+            {
+                DownloadExitVelocityAndBarrelsCsv(year, minAtBats);
+                string exitVeloReportPath = "BaseballData/02_WRITE/BASEBALL_SAVANT/HITTERS/8_27_2019_exit_velocity_barrels.csv";
+                List<ExitVelocityAndBarrelsHitter> exitVeloList = CreateListOfExitVelocityAndBarrelsHittersFromCsvRows(exitVeloReportPath).ToList();
+                AddAll(exitVeloList);
+                return Ok();
+            }
+
+
+            // STATUS [ August 27, 2019 ] : this works
+            // DownloadExitVelocityAndBarrelsCsv(2019, 100);
+            // Link: https://127.0.0.1:5001/api/baseballsavant/baseballsavanthitter/velo_barrel/csv/download
+            [HttpGet("velo_barrel/csv/download")]
+            public IActionResult DownloadExitVelocityAndBarrelsCsv(int year, int minAtBats)
+            {
+                _helpers.StartMethod();
+                var csvEndPoint = _hitterEndpoints.HitterExitVelocityAndBarrelsEndPoint_Csv(year, minAtBats).EndPointUri;
+
+                // string pathAndFileToWrite = $"{_targetWriteDirectory}{_todaysDateString}{_velocityAndBarrelsStringAppendix}";
+                string pathAndFileToWrite = $"{HitterWriteDirectory}{_todaysDateString}{_velocityAndBarrelsStringAppendix}";
+
+                _csvHandler.DownloadCsvFromLink(csvEndPoint, pathAndFileToWrite);
+
+                C.WriteLine(SIO.File.Exists(pathAndFileToWrite) ? "Exit Velo & Barrels File exists" : "Exit Velo & Barrels File does not exist");
+                if(SIO.File.Exists(pathAndFileToWrite))
+                {
+                    IList<ExitVelocityAndBarrelsHitter> hitters = CreateListOfExitVelocityAndBarrelsHittersFromCsvRows(pathAndFileToWrite);
                 }
 
-                // Link: https://127.0.0.1:5001/api/baseballsavant/baseballsavanthitter/velo_barrel/add_many
-                [HttpPost("velo_barrel/add_many")]
-                public IActionResult AddMany(List<ExitVelocityAndBarrelsHitter> hitters)
+                else
                 {
-                    hitters.ForEach((hitter) => Add(hitter));
-                    return Ok();
+                    Thread.Sleep(5000);
+                    IList<ExitVelocityAndBarrelsHitter> hitters = CreateListOfExitVelocityAndBarrelsHittersFromCsvRows(pathAndFileToWrite);
                 }
+                return Ok();
+            }
 
 
-                /* ----- CRUD - READ - EXIT VELO & BARRELS ----- */
+            // STATUS [ August 27, 2019 ] : this works
+            // Link: https://127.0.0.1:5001/api/baseballsavant/baseballsavanthitter/velo_barrel/csv/list
+            [HttpGet("velo_barrel/csv/list")]
+            public IList<ExitVelocityAndBarrelsHitter> CreateListOfExitVelocityAndBarrelsHittersFromCsvRows(string pathAndFileToWrite)
+            {
+                _helpers.StartMethod();
+                List<object> allRowsList = _csvHandler.ReadCsvRecordsToList(pathAndFileToWrite, typeof(ExitVelocityAndBarrelsHitter), typeof(ExitVelocityAndBarrelsHitterClassMap)).ToList();
 
-                // Link: https://127.0.0.1:5001/api/baseballsavant/baseballsavanthitter/velo_barrel/get
-                [Produces(typeof(ExitVelocityAndBarrelsHitter))]
-                [HttpGet("velo_barrel/get")]
-                public ExitVelocityAndBarrelsHitter Get(int playerId)
+                List<ExitVelocityAndBarrelsHitter> hitters = new List<ExitVelocityAndBarrelsHitter>();
+
+                foreach(object row in allRowsList)
                 {
-                    ExitVelocityAndBarrelsHitter hitter = _context.ExitVelocityAndBarrelsHitter.SingleOrDefault(h => h.PlayerId == playerId);
-                    return hitter;
+                    ExitVelocityAndBarrelsHitter playerRow = row as ExitVelocityAndBarrelsHitter;
+
+                    SfbbPlayerBase playerBase = _context.SfbbPlayerBases.SingleOrDefault(s => s.MLBID == playerRow.MLBID);
+
+                    if(playerBase != null)
+                    {
+                        playerRow.IDPLAYER = playerBase.IDPLAYER;
+                    }
+                    hitters.Add(playerRow);
                 }
+                return hitters;
+            }
 
-                // Link: https://127.0.0.1:5001/api/baseballsavant/baseballsavanthitter/velo_barrel/get_many
-                [HttpGet("velo_barrel/get_many")]
-                public List<ExitVelocityAndBarrelsHitter> GetMany(int[] playerIds)
+
+            /* --------------------------------------------------------------- */
+            /* CRUD - EXIT VELO & BARRELS                                      */
+            /* --------------------------------------------------------------- */
+
+
+            /* ----- CRUD - CREATE - EXIT VELO & BARRELS ----- */
+
+            // STATUS [ August 27, 2019 ] : not sure if this works
+            // Link: https://127.0.0.1:5001/api/baseballsavant/baseballsavanthitter/velo_barrel/add
+            [HttpPost("velo_barrel/add")]
+            public IActionResult Add(ExitVelocityAndBarrelsHitter hitter)
+            {
+                _helpers.StartMethod();
+                var hitterCheck = _context.ExitVelocityAndBarrelsHitters.SingleOrDefault(h => h.MLBID == hitter.MLBID);
+
+                if(hitterCheck == null)
                 {
-                    var selectedHitters = _context.ExitVelocityAndBarrelsHitter.Where(t => playerIds.Contains(t.PlayerId)).ToList();
-                    return selectedHitters;
-                }
-
-
-                /* ----- CRUD - UPDATE - EXIT VELO & BARRELS ----- */
-
-                // Link: https://127.0.0.1:5001/api/baseballsavant/baseballsavanthitter/velo_barrel/put
-                [HttpPut("velo_barrel/put")]
-                public ActionResult<ExitVelocityAndBarrelsHitter> Update(ExitVelocityAndBarrelsHitter hitter)
-                {
-                    _context.Update(hitter);
+                    C.WriteLine($"EXIT VELO: NEW");
+                    _context.Add(hitter);
                     _context.SaveChanges();
                     return Ok(hitter);
                 }
+                if(hitterCheck.IDPLAYER == null)
+                {
+                    try
+                    {
+                        _context.Entry(hitter).Property("IDPLAYER").IsModified = true;
+                        _context.Update(hitter);
+                        _context.SaveChanges();
+                        return Ok(hitter);
+                    }
+                    catch
+                    {
+                        C.WriteLine("CATCH");
+                    }
+                }
+
+                else
+                {
+                    // _context.SaveChanges();
+                }
+                return Ok();
+            }
+
+            // STATUS [ August 27, 2019 ] : this works
+            // Link: https://127.0.0.1:5001/api/baseballsavant/baseballsavanthitter/velo_barrel/add_many
+            [HttpPost("velo_barrel/add_many")]
+            public IActionResult AddMany(List<ExitVelocityAndBarrelsHitter> hitters)
+            {
+                hitters.ForEach((hitter) => Add(hitter));
+                return Ok();
+            }
+
+            // STATUS [ August 27, 2019 ] : should work but haven't tested
+            [HttpPost("velo_barrel/add_all_async")]
+            public async Task<ActionResult> AddAllAsync(List<ExitVelocityAndBarrelsHitter> hitters)
+            {
+                _helpers.StartMethod();
+                int counter = 1;
+                foreach(var hitter in hitters)
+                {
+                    var checkDbForHitter = _context.ExitVelocityAndBarrelsHitters.SingleOrDefault(x => x.MLBID == hitter.MLBID);
+                    if(checkDbForHitter == null)
+                    {
+                        _context.Add(hitter);
+                    }
+                    else
+                    {
+                        // Console.WriteLine($"{counter} | EXIT VELO AND BARREL HITTER ALREADY EXISTS");
+                    }
+                    counter++;
+                }
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+
+            // STATUS [ August 27, 2019 ] : should work but haven't tested
+            [HttpPost("velo_barrel/add_all")]
+            public ActionResult AddAll(List<ExitVelocityAndBarrelsHitter> hitters)
+            {
+                _helpers.StartMethod();
+                int counter = 1;
+                foreach(var hitter in hitters)
+                {
+                    var checkDbForHitter = _context.ExitVelocityAndBarrelsHitters.SingleOrDefault(x => x.MLBID == hitter.MLBID);
+                    if(checkDbForHitter == null)
+                    {
+                        _context.Add(hitter);
+                    }
+                    else
+                    {
+                        // Console.WriteLine($"{counter} | EXIT VELO AND BARREL HITTER ALREADY EXISTS");
+                    }
+                    counter++;
+                }
+                _context.SaveChanges();
+                return Ok();
+            }
 
 
-                /* ----- CRUD - DELETE - EXIT VELO & BARRELS ----- */
+            /* ----- CRUD - READ - EXIT VELO & BARRELS ----- */
 
-                // Link: https://127.0.0.1:5001/api/baseballsavant/baseballsavanthitter/velo_barrel/delete
-                [HttpDelete("velo_barrel/delete")]
-                public ActionResult Delete(ExitVelocityAndBarrelsHitter hitter)
+            // STATUS [ August 27, 2019 ] : should work but haven't tested
+            // Link: https://127.0.0.1:5001/api/baseballsavant/baseballsavanthitter/velo_barrel/get
+            [Produces(typeof(ExitVelocityAndBarrelsHitter))]
+            [HttpGet("velo_barrel/get")]
+            public ExitVelocityAndBarrelsHitter Get(int playerId)
+            {
+                ExitVelocityAndBarrelsHitter hitter = _context.ExitVelocityAndBarrelsHitters.SingleOrDefault(h => h.MLBID == playerId);
+                return hitter;
+            }
+
+
+            // STATUS [ August 27, 2019 ] : should work but haven't tested
+            // Link: https://127.0.0.1:5001/api/baseballsavant/baseballsavanthitter/velo_barrel/get_many
+            [HttpGet("velo_barrel/get_many")]
+            public List<ExitVelocityAndBarrelsHitter> GetMany(int[] playerIds)
+            {
+                var selectedHitters = _context.ExitVelocityAndBarrelsHitters.Where(t => playerIds.Contains(t.MLBID)).ToList();
+                return selectedHitters;
+            }
+
+
+            /* ----- CRUD - UPDATE - EXIT VELO & BARRELS ----- */
+
+            // STATUS [ August 27, 2019 ] : haven't tested
+            // Link: https://127.0.0.1:5001/api/baseballsavant/baseballsavanthitter/velo_barrel/put
+            [HttpPut("velo_barrel/put")]
+            public ActionResult<ExitVelocityAndBarrelsHitter> Update(ExitVelocityAndBarrelsHitter hitter)
+            {
+                _context.Entry(hitter).Property("IDPLAYER").IsModified = true;
+                // _context.Update(hitter);
+                _context.SaveChanges();
+                return Ok(hitter);
+            }
+
+
+            /* ----- CRUD - DELETE - EXIT VELO & BARRELS ----- */
+
+            // STATUS [ August 27, 2019 ] : this works
+            // Link: https://127.0.0.1:5001/api/baseballsavant/baseballsavanthitter/velo_barrel/delete
+            [HttpDelete("velo_barrel/delete")]
+            public ActionResult Delete(ExitVelocityAndBarrelsHitter hitter)
+            {
+                _helpers.StartMethod();
+                _context.Remove(hitter);
+                _context.SaveChanges();
+                return Ok(hitter);
+            }
+
+
+            // STATUS [ August 27, 2019 ] : this works
+            // Link: https://127.0.0.1:5001/api/baseballsavant/baseballsavanthitter/velo_barrel/delete_many
+            [HttpDelete("velo_barrel/delete_many")]
+            public ActionResult DeleteMany(List<ExitVelocityAndBarrelsHitter> hitters)
+            {
+                hitters.ForEach(hitter => Delete(hitter));
+                return Ok();
+            }
+
+
+            // STATUS [ August 27, 2019 ] : should work but haven't tested
+            // Link: https://127.0.0.1:5001/api/baseballsavant/baseballsavanthitter/velo_barrel/delete_all
+            [HttpDelete("velo_barrel/delete_all")]
+            public ActionResult DeleteAll(List<ExitVelocityAndBarrelsHitter> hitters)
+            {
+                _helpers.StartMethod();
+                foreach(var hitter in hitters)
                 {
                     _context.Remove(hitter);
-                    _context.SaveChanges();
-                    return Ok(hitter);
                 }
+                _context.SaveChangesAsync();
+                return Ok();
+            }
 
 
-                // Link: https://127.0.0.1:5001/api/baseballsavant/baseballsavanthitter/velo_barrel/delete_many
-                [HttpDelete("velo_barrel/delete_many")]
-                public ActionResult DeleteMany(List<ExitVelocityAndBarrelsHitter> hitters)
-                {
-                    hitters.ForEach(hitter => Delete(hitter));
-                    return Ok();
-                }
-
-
-            #endregion EXIT VELO & BARRELS HITTER ------------------------------------------------------------
+        #endregion EXIT VELO & BARRELS HITTER ------------------------------------------------------------
 
 
 
 
 
-            #region PRINTING PRESS ------------------------------------------------------------
+        #region PRINTING PRESS ------------------------------------------------------------
 
+            private void PrintCsvFileDownloadDetails(string csvEndPoint, string pathAndFileToWrite)
+            {
+                C.WriteLine($"\n--------------------------------------------");
+                C.WriteLine($"EndPoint: {csvEndPoint}");
+                C.WriteLine($"File Path: {pathAndFileToWrite}");
+                C.WriteLine($"--------------------------------------------\n");
+            }
 
-                public void PrintCsvFileDownloadDetails(string csvEndPoint, string pathAndFileToWrite)
-                {
-                    C.WriteLine($"\n--------------------------------------------");
-                    C.WriteLine($"EndPoint: {csvEndPoint}");
-                    C.WriteLine($"File Path: {pathAndFileToWrite}");
-                    C.WriteLine($"--------------------------------------------\n");
-                }
-
-            #endregion PRINTING PRESS ------------------------------------------------------------
+        #endregion PRINTING PRESS ------------------------------------------------------------
     }
 }

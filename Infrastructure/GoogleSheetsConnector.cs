@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using BaseballScraper.Models.Configuration;
+using BaseballScraper.Models.ConfigurationModels;
+using C = System.Console;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using Google.Apis.Sheets.v4;
@@ -12,7 +8,11 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using static Google.Apis.Sheets.v4.SpreadsheetsResource.ValuesResource;
-using C = System.Console;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 #pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Infrastructure
@@ -152,6 +152,31 @@ namespace BaseballScraper.Infrastructure
 
             // Data will fill down a column instead of across a row
             private string _columnsMajorDimension = "COLUMNS";
+
+
+            // August 17, 2019: Not yet implemented but should be
+            public enum MajorDimensionEnum
+            {
+                ROWS,
+                COLUMNS,
+            }
+
+            // August 17, 2019: Not yet implemented but should be
+            private string MajorDimensionString(MajorDimensionEnum dimension)
+            {
+                string dimensionType;
+                switch(dimension)
+                {
+                    case MajorDimensionEnum.ROWS:
+                        dimensionType = _rowsMajorDimension;
+                        return dimensionType;
+
+                    case MajorDimensionEnum.COLUMNS:
+                        dimensionType = _columnsMajorDimension;
+                        return dimensionType;
+                }
+                throw new Exception("GoogleSheetsConnector > MajorDimensionString > ERROR: 'Dimension Enum Type not found'");
+            }
 
 
             private string _userEnteredValueInputOption = "USER_ENTERED";

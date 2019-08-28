@@ -11,12 +11,12 @@ namespace BaseballScraper.Controllers.BaseballMonster
     [ApiExplorerSettings(IgnoreApi = true)]
     public class BaseballMonsterDailyController : ControllerBase
     {
-        private readonly Helpers _h;
+        private readonly Helpers helpers;
 
 
-        public BaseballMonsterDailyController(Helpers h)
+        public BaseballMonsterDailyController(Helpers helpers)
         {
-            _h = h;
+            this.helpers = helpers;
         }
 
         public BaseballMonsterDailyController(){}
@@ -29,7 +29,7 @@ namespace BaseballScraper.Controllers.BaseballMonster
         [HttpGet("daily")]
         public void TestBbMonsterDailyController()
         {
-            _h.StartMethod();
+            helpers.StartMethod();
         }
 
 
@@ -39,7 +39,7 @@ namespace BaseballScraper.Controllers.BaseballMonster
         [HttpGet("daily/async")]
         public async Task TestBbMonsterDailyControllerAsync()
         {
-            _h.StartMethod();
+            helpers.StartMethod();
             await DownloadLiveDFSResults();
         }
 
@@ -51,7 +51,7 @@ namespace BaseballScraper.Controllers.BaseballMonster
         // trying to automatically click button on page to download results Excel file
         public async Task DownloadLiveDFSResults()
         {
-            _h.StartMethod();
+            helpers.StartMethod();
             var options = new LaunchOptions { Headless = true };
             await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultRevision);
 
@@ -64,7 +64,7 @@ namespace BaseballScraper.Controllers.BaseballMonster
                 await page.WaitForSelectorAsync(buttonSelector);
                 await page.ClickAsync(buttonSelector);
             }
-            _h.CompleteMethod();
+            helpers.CompleteMethod();
         }
 
     }

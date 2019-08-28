@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using BaseballScraper.Models.Configuration;
+using BaseballScraper.Models.ConfigurationModels;
 using BaseballScraper.EndPoints;
 using BaseballScraper.Models.Yahoo;
 using BaseballScraper.Models.Yahoo.Resources.YahooTeamResource;

@@ -8,6 +8,7 @@ using AutoMapper.EntityFrameworkCore;
 using AutoMapper.EquivalencyExpression;
 using CsvHelper.Configuration;
 
+#pragma warning disable CS1998, CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE1006
 namespace BaseballScraper.Models.Lahman
 {
     public class LahmanMasterTablePlayer

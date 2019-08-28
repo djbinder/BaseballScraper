@@ -1,5 +1,6 @@
 using System;
 
+#pragma warning disable CS1998, CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE1006
 namespace BaseballScraper.Models
 {
     public abstract class BaseEntity

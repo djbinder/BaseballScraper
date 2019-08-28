@@ -1,6 +1,8 @@
 // SEE: https://joshclose.github.io/CsvHelper/examples/configuration/class-maps/mapping-duplicate-names/
 
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using BaseballScraper.Models.Player;
 using CsvHelper.Configuration;
 using Ganss.Excel;
 
@@ -17,30 +19,36 @@ namespace BaseballScraper.Models.BaseballHq
     // * These are the fields / columns they both have in common
     public partial class BaseballHqReportHitterBase : BaseEntity
     {
+        // [ForeignKey("SfbbPlayerBase")]
         [Key]
-        [Column("PlayerID")]
-        public int HqPlayerId { get; set; }
+        public int HQID { get; set; }
 
-        [Column("MLBAM ID")]
+        [Ganss.Excel.Column("MLBAM ID")]
         public int MlbId { get; set; }
 
-        [Column("Lastname")]
+        [Ganss.Excel.Column("Lastname")]
         public string LastName { get; set; }
 
-        [Column("Firstname")]
+        [Ganss.Excel.Column("Firstname")]
         public string FirstName { get; set; }
 
-        [Column("Age")]
+        [Ganss.Excel.Column("Age")]
         public int Age { get; set; }
 
-        [Column("B")]
+        [Ganss.Excel.Column("B")]
         public string Bats { get; set; }
 
-        [Column("Pos")]
+        [Ganss.Excel.Column("Pos")]
         public string Position { get; set; }
 
-        [Column("Tm")]
+        [Ganss.Excel.Column("Tm")]
         public string Team { get; set; }
+
+
+        // public virtual SfbbPlayerBase SfbbPlayerBase { get; set; }
+
+        // [ForeignKey("SfbbPlayerBase")]
+        // public string IDPLAYER { get; set; }
     }
 
 
@@ -49,210 +57,228 @@ namespace BaseballScraper.Models.BaseballHq
     /* --------------------------------------------------------- */
     public partial class HqHitterYearToDate : BaseballHqReportHitterBase
     {
+        public virtual SfbbPlayerBase SfbbPlayerBase { get; set; }
 
-        [Column("C")]
+        [ForeignKey("SfbbPlayerBase")]
+        public string IDPLAYER { get; set; }
+
+
+        [Ganss.Excel.Column("C")]
         public int CatcherAppearancesYTD { get; set; }
 
-        [Column("1B")]
+        [Ganss.Excel.Column("1B")]
         public int FirstBaseAppearancesYTD { get; set; }
 
-        [Column("2B")]
+        [Ganss.Excel.Column("2B")]
         public int SecondBaseAppearancesYTD { get; set; }
 
-        [Column("3B")]
+        [Ganss.Excel.Column("3B")]
         public int ThirdBaseAppearancesYTD { get; set; }
 
-        [Column("SS")]
+        [Ganss.Excel.Column("SS")]
         public int ShortstopAppearancesYTD { get; set; }
 
-        [Column("OF")]
+        [Ganss.Excel.Column("OF")]
         public int OutfielderAppearancesYTD { get; set; }
 
-        [Column("DH")]
+        [Ganss.Excel.Column("DH")]
         public int DesignatedHitterAppearancesYTD { get; set; }
 
-        [Column("AB")]
+        [Ganss.Excel.Column("AB")]
         public int AtBatsYTD { get; set; }
 
-        [Column("R")]
+        [Ganss.Excel.Column("R")]
         public int RunsYTD { get; set; }
 
-        [Column("H")]
+        [Ganss.Excel.Column("H")]
         public int HitsYTD { get; set; }
 
-        [Column("2B")]
+        [Ganss.Excel.Column("2B")]
         public int DoublesYTD { get; set; }
 
-        [Column("3B")]
+        [Ganss.Excel.Column("3B")]
         public int TriplesYTD { get; set; }
 
-        [Column("HR")]
+        [Ganss.Excel.Column("HR")]
         public int HomeRunsYTD { get; set; }
 
-        [Column("RBI")]
+        [Ganss.Excel.Column("RBI")]
         public int RbiYTD { get; set; }
 
-        [Column("BB")]
+        [Ganss.Excel.Column("BB")]
         public int WalksYTD { get; set; }
 
-        [Column("K")]
+        [Ganss.Excel.Column("K")]
         public int StrikeoutsYTD { get; set; }
 
-        [Column("SB")]
+        [Ganss.Excel.Column("SB")]
         public int StolenBasesYTD { get; set; }
 
-        [Column("CS")]
+        [Ganss.Excel.Column("CS")]
         public int CaughtStealingYTD { get; set; }
 
-        [Column("AVG")]
+        [Ganss.Excel.Column("AVG")]
         public int BattingAverageYTD { get; set; }
 
-        [Column("OBP")]
+        [Ganss.Excel.Column("OBP")]
         public int OnBasePercentageYTD { get; set; }
 
-        [Column("SLG")]
+        [Ganss.Excel.Column("SLG")]
         public int SluggingPercentageYTD { get; set; }
 
-        [Column("OPS")]
+        [Ganss.Excel.Column("OPS")]
         public int OnBasePlusSluggingYTD { get; set; }
 
-        [Column("BB%")]
+        [Ganss.Excel.Column("BB%")]
         public int BbPercentageYTD { get; set; }
 
-        [Column("Ct%")]
+        [Ganss.Excel.Column("Ct%")]
         public int ContactPercentageYTD { get; set; }
 
-        [Column("Eye")]
+        [Ganss.Excel.Column("Eye")]
         public double EyeYTD { get; set; }
 
-        [Column("H%")]
+        [Ganss.Excel.Column("H%")]
         public int HitPercentageYTD { get; set; }
 
-        [Column("PX")]
+        [Ganss.Excel.Column("PX")]
         public int PxYTD { get; set; }
 
-        [Column("xPx")]
+        [Ganss.Excel.Column("xPx")]
         public int ExpectedPxYTD { get; set; }
 
-        [Column("hctX")]
+        [Ganss.Excel.Column("hctX")]
         public int HctxYTD { get; set; }
 
-        [Column("SPD")]
+        [Ganss.Excel.Column("SPD")]
         public int SpeedYTD { get; set; }
 
-        [Column("RSPD")]
+        [Ganss.Excel.Column("RSPD")]
         public int RspdYTD { get; set; }
 
-        [Column("G%")]
+        [Ganss.Excel.Column("G%")]
         public int GroundBallPercentageYTD { get; set; }
 
-        [Column("L%")]
+        [Ganss.Excel.Column("L%")]
         public int LineDrivePercentageYTD { get; set; }
 
-        [Column("F%")]
+        [Ganss.Excel.Column("F%")]
         public int FlyballPercentageYTD { get; set; }
 
-        [Column("XBA")]
+        [Ganss.Excel.Column("XBA")]
         public int XbaYTD { get; set; }
 
-        [Column("RCG")]
+        [Ganss.Excel.Column("RCG")]
         public double RcgYTD { get; set; }
 
-        [Column("RAR")]
+        [Ganss.Excel.Column("RAR")]
         public double RarYTD { get; set; }
 
-        [Column("BPV")]
+        [Ganss.Excel.Column("BPV")]
         public int BpvYTD { get; set; }
 
-        [Column("GB")]
+        [Ganss.Excel.Column("GB")]
         public int GroundballsYTD { get; set; }
 
-        [Column("GBO")]
+        [Ganss.Excel.Column("GBO")]
         public int GroundballOutsYTD { get; set; }
 
-        [Column("LD")]
+        [Ganss.Excel.Column("LD")]
         public int LineDrivesYTD { get; set; }
 
-        [Column("LDO")]
+        [Ganss.Excel.Column("LDO")]
         public int LineDriveOutsYTD { get; set; }
 
-        [Column("FB")]
+        [Ganss.Excel.Column("FB")]
         public int FlyballsYTD { get; set; }
 
-        [Column("FBO")]
+        [Ganss.Excel.Column("FBO")]
         public int FlyballOutsYTD { get; set; }
 
-        [Column("PAvsRH")]
+        [Ganss.Excel.Column("PAvsRH")]
         public int PlateAppearancesVsRightHandersYTD { get; set; }
 
-        [Column("PAvsLH")]
+        [Ganss.Excel.Column("PAvsLH")]
         public int PlateAppearancesVsLeftHandersYTD { get; set; }
 
-        [Column("AVGvsRH")]
+        [Ganss.Excel.Column("AVGvsRH")]
         public int BattingAverageVsRightHandersYTD { get; set; }
 
-        [Column("AVGvsLH")]
+        [Ganss.Excel.Column("AVGvsLH")]
         public int BattingAverageVsLeftHandersYTD { get; set; }
 
-        [Column("OBPvsRH")]
+        [Ganss.Excel.Column("OBPvsRH")]
         public int OnBasePercentageVsRightHanders { get; set; }
 
-        [Column("OBPvsLH")]
+        [Ganss.Excel.Column("OBPvsLH")]
         public int OnBasePercentageVsLeftHanders { get; set; }
 
-        [Column("SLGvsRH")]
+        [Ganss.Excel.Column("SLGvsRH")]
         public int SluggingPercentageVsRightHanders { get; set; }
 
-        [Column("SLGvsLH")]
+        [Ganss.Excel.Column("SLGvsLH")]
         public int SluggingPercentageVsLeftHanders { get; set; }
 
-        [Column("OPSvsRH")]
+        [Ganss.Excel.Column("OPSvsRH")]
         public int OpsVsRightHandersYTD { get; set; }
 
-        [Column("OPSvsLH")]
+        [Ganss.Excel.Column("OPSvsLH")]
         public int OpsVsLeftHandersYTD { get; set; }
 
-        [Column("PX")]
+        [Ganss.Excel.Column("PX")]
         public int PxLast31 { get; set; }
 
-        [Column("xPx")]
+        [Ganss.Excel.Column("xPx")]
         public int ExpectedPxLast31 { get; set; }
 
-        [Column("hctX")]
+        [Ganss.Excel.Column("hctX")]
         public int HctxLast31 { get; set; }
 
-        [Column("XBA")]
+        [Ganss.Excel.Column("XBA")]
         public int XbaLast31 { get; set; }
 
-        [Column("RCG")]
+        [Ganss.Excel.Column("RCG")]
         public double RcgLast31 { get; set; }
 
-        [Column("RAR")]
+        [Ganss.Excel.Column("RAR")]
         public double RarLast31 { get; set; }
 
-        [Column("BPV")]
+        [Ganss.Excel.Column("BPV")]
         public int BpvLast31 { get; set; }
 
-        [Column("PX")]
+        [Ganss.Excel.Column("PX")]
         public int PxLast7 { get; set; }
 
-        [Column("xPx")]
+        [Ganss.Excel.Column("xPx")]
         public int ExpectedPxLast7 { get; set; }
 
-        [Column("hctX")]
+        [Ganss.Excel.Column("hctX")]
         public int HctxLast7 { get; set; }
 
-        [Column("XBA")]
+        [Ganss.Excel.Column("XBA")]
         public int XbaLast7 { get; set; }
 
-        [Column("RCG")]
+        [Ganss.Excel.Column("RCG")]
         public double RcgLast7 { get; set; }
 
-        [Column("RAR")]
+        [Ganss.Excel.Column("RAR")]
         public double RarLast7 { get; set; }
 
-        [Column("BPV")]
+        [Ganss.Excel.Column("BPV")]
         public int BpvLast7 { get; set; }
+
+
+        // private int? _hqId;
+
+        // [ForeignKey("SfbbPlayerBase")]
+        // [Key]
+        // public int? HQID_
+        // {
+        //     get => HQID;
+        //     set => _hqId = value;
+        // }
+
+        // public virtual SfbbPlayerBase SfbbPlayerBase { get; set; }
     }
 
 
@@ -263,7 +289,7 @@ namespace BaseballScraper.Models.BaseballHq
     {
         public HqHitterYearToDateClassMap()
         {
-            Map( h => h.HqPlayerId                                ).Name("PlayerID");
+            Map( h => h.HQID                                ).Name("PlayerID");
             Map( h => h.MlbId                                     ).Name("MLBAM ID");
             Map( h => h.LastName                                  ).Name("Lastname");
             Map( h => h.FirstName                                 ).Name("Firstname");
@@ -348,110 +374,115 @@ namespace BaseballScraper.Models.BaseballHq
     /* --------------------------------------------------------- */
     public partial class HqHitterRestOfSeasonProjection : BaseballHqReportHitterBase
     {
+        public virtual SfbbPlayerBase SfbbPlayerBase { get; set; }
 
-        [Column("MM Code")]
+        [ForeignKey("SfbbPlayerBase")]
+        public string IDPLAYER { get; set; }
+
+
+        [Ganss.Excel.Column("MM Code")]
         public string MmCode { get; set; }
 
-        [Column("MM")]
+        [Ganss.Excel.Column("MM")]
         public int MM { get; set; }
 
-        [Column("DL")]
+        [Ganss.Excel.Column("DL")]
         public int DisabledListROS { get; set; }
 
-        [Column("AB")]
+        [Ganss.Excel.Column("AB")]
         public int AtBatsROS { get; set; }
 
-        [Column("R")]
+        [Ganss.Excel.Column("R")]
         public int RunsROS { get; set; }
 
-        [Column("H")]
+        [Ganss.Excel.Column("H")]
         public int HitsROS { get; set; }
 
-        [Column("2B")]
+        [Ganss.Excel.Column("2B")]
         public int DoublesROS { get; set; }
 
-        [Column("3B")]
+        [Ganss.Excel.Column("3B")]
         public int TriplesROS { get; set; }
 
-        [Column("HR")]
+        [Ganss.Excel.Column("HR")]
         public int HomeRunsROS { get; set; }
 
-        [Column("RBI")]
+        [Ganss.Excel.Column("RBI")]
         public int RbiROS { get; set; }
 
-        [Column("BB")]
+        [Ganss.Excel.Column("BB")]
         public int WalksROS { get; set; }
 
-        [Column("K")]
+        [Ganss.Excel.Column("K")]
         public int StrikeoutsROS { get; set; }
 
-        [Column("SB")]
+        [Ganss.Excel.Column("SB")]
         public int StolenBasesROS { get; set; }
 
-        [Column("CS")]
+        [Ganss.Excel.Column("CS")]
         public int CaughtStealingROS { get; set; }
 
-        [Column("AVG")]
+        [Ganss.Excel.Column("AVG")]
         public int BattingAverageROS { get; set; }
 
-        [Column("OBP")]
+        [Ganss.Excel.Column("OBP")]
         public int OnBasePercentageROS { get; set; }
 
-        [Column("SLG")]
+        [Ganss.Excel.Column("SLG")]
         public int SluggingPercentageROS { get; set; }
 
-        [Column("OPS")]
+        [Ganss.Excel.Column("OPS")]
         public int OnBasePlusSluggingROS { get; set; }
 
-        [Column("12$")]
+        [Ganss.Excel.Column("12$")]
         public int TwelveDollarValueROS { get; set; }
 
-        [Column("15$")]
+        [Ganss.Excel.Column("15$")]
         public int FifteenDollarValueROS { get; set; }
 
-        [Column("BB%")]
+        [Ganss.Excel.Column("BB%")]
         public int BbPercentageROS { get; set; }
 
-        [Column("Ct%")]
+        [Ganss.Excel.Column("Ct%")]
         public int ContactPercentageROS { get; set; }
 
-        [Column("Eye")]
+        [Ganss.Excel.Column("Eye")]
         public double EyeROS { get; set; }
 
-        [Column("H%")]
+        [Ganss.Excel.Column("H%")]
         public int HitPercentageROS { get; set; }
 
-        [Column("PX")]
+        [Ganss.Excel.Column("PX")]
         public int PxROS { get; set; }
 
-        [Column("SPD")]
+        [Ganss.Excel.Column("SPD")]
         public int SpeedROS { get; set; }
 
-        [Column("RSPD")]
+        [Ganss.Excel.Column("RSPD")]
         public int RspdROS { get; set; }
 
-        [Column("G%")]
+        [Ganss.Excel.Column("G%")]
         public int GroundBallPercentageROS { get; set; }
 
-        [Column("L%")]
+        [Ganss.Excel.Column("L%")]
         public int LineDrivePercentageROS { get; set; }
 
-        [Column("F%")]
+        [Ganss.Excel.Column("F%")]
         public int FlyballPercentageROS { get; set; }
 
-        [Column("XBA")]
+        [Ganss.Excel.Column("XBA")]
         public int XbaROS { get; set; }
 
-        [Column("BA")]
+        [Ganss.Excel.Column("BA")]
         public int BA_ROS { get; set; }
 
-        [Column("RCG")]
+        [Ganss.Excel.Column("RCG")]
         public double RcgROS { get; set; }
 
-        [Column("RAR")]
+        [Ganss.Excel.Column("RAR")]
         public double RarROS { get; set; }
 
-        [Column("BPV")]
+        [Ganss.Excel.Column("BPV")]
         public int BpvROS { get; set; }
     }
 
@@ -462,7 +493,7 @@ namespace BaseballScraper.Models.BaseballHq
     {
         public HqHitterRestOfSeasonProjectionClassMap()
         {
-            Map( h => h.HqPlayerId              ).Name("PlayerID");
+            Map( h => h.HQID              ).Name("PlayerID");
             Map( h => h.MlbId                   ).Name("MLBAM ID");
             Map( h => h.LastName                ).Name("Lastname");
             Map( h => h.FirstName               ).Name("Firstname");

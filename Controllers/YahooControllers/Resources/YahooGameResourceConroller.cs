@@ -1,6 +1,6 @@
 using System;
 using BaseballScraper.Infrastructure;
-using BaseballScraper.Models.Configuration;
+using BaseballScraper.Models.ConfigurationModels;
 using Microsoft.AspNetCore.Mvc;
 
 

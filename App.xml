@@ -65,6 +65,107 @@
                 Without this, you will get an error / will not find player in sheet
             </summary>
         </member>
+        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHQHitterController.UpdateBothHqHitterDatabases(System.Boolean,System.Boolean)">
+            <summary>
+                * Gets all hitter reports from hq and adds them to database
+                * Updates the two main bases with day from today
+            </summary>
+            <remarks>
+                * SEE: MasterHitterController (as of August 13, 2019)
+            </remarks>
+        </member>
+        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHQHitterController.UpdateDatabaseWithTodaysHitterRestOfSeasonProjectionsData(System.Boolean)">
+            <summary>
+                Gets ROS csv from hq site and adds hitters to database
+            </summary>
+            <remarks>
+                * Should be run each day
+                * 1) Checks if Csv File for todays exists in Hq Target_Write folders
+                * 2) If file doesn't exist, go to Hq website and download report
+                * 3) Check if there are records in the database table
+                * 4) If there are records, delete them (so you can replace them with todays data)
+                * 5) Add records to the HqHitter ROS Projection table
+            </remarks>
+        </member>
+        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHQHitterController.DownloadRestOfSeasonProjections(System.Boolean)">
+            <summary>
+                * Downloads csv from hq
+                * File should be downloaded each day to get the latest and greatest data
+            </summary>
+            <remarks>
+                * STEPS
+                  * 1) Go to baseball hq website and log in
+                  * 2) Navigate to reports page and download report to local downloads folder
+                  * 3) Move report to hq target write folder
+                * PARAMATERS
+                  * _hqRestOfSeasonProjectionReportInitialCsvFileName  = BaseballHQ_M_B_P.csv
+                  * _hitterRestOfSeasonProjectionsCsvFileNameBase      = HqHitterReport_PROJ_
+            </remarks>
+        </member>
+        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHQHitterController.CreateRestOfSeasonProjectionsListFromCsvAndAddToDatabase(System.String)">
+             <summary>
+                 * Outcome is that all records are added to the database
+             </summary>
+             <remarks>
+                 * STEPS
+                 * 1) CreateListOfRestOfSeasonProjectionObjectsFromCsvRows(todaysFileName)
+                 * 2) CreateListOfHqHittersRestOfSeasonProjections(listOfGenericObjects)
+                 * 3) await AddRestOfSeasonProjectionsToDatabase(listHittersYTD);
+             </remarks>
+            
+        </member>
+        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHQHitterController.CreateListOfRestOfSeasonProjectionObjectsFromCsvRows(System.String)">
+            <summary>
+                Creates a list of generic objects (to be turned into ROS hitters) from csv
+            </summary>
+            <param name="csvFileName">
+                * 'csvFileName' is just the file name; no path included
+                * Ex: csvFileName e.g., HqHitterReport_PROJ_8_12_2019.csv
+            </param>
+        </member>
+        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHQHitterController.CreateListOfHqHittersRestOfSeasonProjections(System.Collections.Generic.IList{System.Object})">
+            <summary>
+                Takes a list of generic objects and turns them into HqHitterRestOfSeasonProjection
+            </summary>
+            <param name="playerRecordsList">
+                * A list generated from CreateListOfRestOfSeasonProjectionObjectsFromCsvRows() method
+            </param>
+        </member>
+        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHQHitterController.AddRestOfSeasonProjectionToDatabase(BaseballScraper.Models.BaseballHq.HqHitterRestOfSeasonProjection)">
+            <summary>
+                * Add one HqHitterRestOfSeasonProjection to the database
+            </summary>
+        </member>
+        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHQHitterController.AddRestOfSeasonProjectionsToDatabase(System.Collections.Generic.List{BaseballScraper.Models.BaseballHq.HqHitterRestOfSeasonProjection})">
+            <summary>
+                * Add list of HqHitterRestOfSeasonProjection hitters to the database
+            </summary>
+        </member>
+        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHQHitterController.GetOneRestOfSeasonProjectionRecord(System.Nullable{System.Int32})">
+            <summary>
+                * Read one HqHitterRestOfSeasonProjection hitter from database
+            </summary>
+        </member>
+        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHQHitterController.GetListOfAllRestOfSeasonProjectionRecords">
+            STATUS [ August 13, 2019 ] : this works
+            CRUD -> READ | ALL
+            <summary>
+                * Read all HqHitterRestOfSeasonProjection hitters from database
+            </summary>
+        </member>
+        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHQHitterController.UpdateDatabaseWithTodaysHitterYearToDateData(System.Boolean)">
+            <summary>
+                Gets YTD csv from hq site and adds hitters to database
+            </summary>
+            <remarks>
+                * Should be run each day
+                * 1) Checks if Csv File for todays exists in Hq Target_Write folders
+                * 2) If file doesn't exist, go to Hq website and download report
+                * 3) Check if there are records in the database table
+                * 4) If there are records, delete them (so you can replace them with todays data)
+                * 5) Add records to the HqHitterYearToDate table
+            </remarks>
+        </member>
         <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.WriteBaseballSavantSingleDayDataToCsv(System.Int32,System.Int32,System.Int32)">
             <summary>
                 Write SP CSW data from Baseball Savant to CSV File
@@ -696,6 +797,42 @@
             <summary> View instantiated pecota projections for a selected hitter in a selected season  </summary>
             <example> https://127.0.0.1:5001/api/mlb/projectedhittingstats/493316 </example>
             <returns> A view of a projectedhittingstats model </returns>
+        </member>
+        <member name="M:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController.GetCrunchTimePlayerBaseCsvForToday">
+            <summary>
+            * Downloads CrunchTime CSV and saves to local directory
+            </summary>
+            <remarks>
+            * STEPS:
+            * 1) Downloads CSV From http://crunchtimebaseball.com/master.csv
+            * 2) Saves CSV to local directory
+            *    > Directory Example: BaseballData/02_WRITE_CRUNCH_TIME
+            *    > File Name Example: CrunchTime_Csv_8_26_2019.csv
+            *    > These are set in corresponding EndPoints class
+            </remarks>
+        </member>
+        <member name="M:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController.AddSfbbPlayerBasesToDatabase">
+            <summary>
+                Add list of playerBases
+            </summary>
+        </member>
+        <member name="M:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController.AddSfbbPlayerBaseToDatabase(BaseballScraper.Models.Player.SfbbPlayerBase)">
+            <summary>
+                Add one SfbbPlayer to database
+            </summary>
+            <remarks>
+                * A variety of errors pop up in this process
+                * StringBuilder used to track paths:
+                * > A --> B : Exists; do nothing
+                * > A --> C : Does not exist; Create successful
+                * > A --> D --> E : Does not exist; Some kind of error; Create successful
+                * > A --> D --> F : Does not exist; Some kind of error; Create fails
+                * Connected to a Google Sheet that I do not own (See: https://bit.ly/2MntLLP)
+                * I auto import that data to a sheet I do own
+            </remarks>
+            <param name="playerBase">
+                An SfbbPlayerBase
+            </param>
         </member>
         <member name="M:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController.PlayerBaseFromExcel.GetAllPlayerBasesFromExcel">
             <summary>

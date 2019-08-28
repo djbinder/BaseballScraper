@@ -1,42 +1,65 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using BaseballScraper.Models.Player;
 using CsvHelper.Configuration;
 using Ganss.Excel;
 
-#pragma warning disable CS0649
+#pragma warning disable CS0649, IDE0051, IDE0052
 namespace BaseballScraper.Models.BaseballSavant
 {
-    public class BaseballSavantHitter : BaseEntity
+    public partial class BaseballSavantHitter : BaseEntity
     {
-        [Column("last_name")]
-        public string LastName { get; set; }
+        //         [Key]
+        // public int MLBID                          { get; set; }
+        // public string LastName                       { get; set; }
+        // public string FirstName                      { get; set; }
 
-        [Column("first_name")]
-        public string FirstName { get; set; }
 
-        [Key]
-        [Column("player_id")]
-        public int PlayerId { get; set; }
-
-        public virtual SfbbPlayerBase SfbbPlayerBase { get; set; }
-        public int MlbIdForeignKey { get; set; }
+        // [ForeignKey("SfbbPlayerBase")]
+        // public string IDPLAYER { get; set; }
+        // public virtual SfbbPlayerBase SfbbPlayerBase { get; set; }
     }
 
-    public class XstatsHitter : BaseballSavantHitter
+
+        // private int? _mlbid;
+
+        // [Key]
+        // [ForeignKey("SfbbPlayerBase")]
+        // public int? MLBID_
+        // {
+        //     get => MLBID;
+        //     set => _mlbid = value;
+        // }
+
+
+
+    // public partial class XstatsHitter : BaseballSavantHitter
+    public partial class XstatsHitter : BaseEntity
     {
-        public int Year { get; set; }
-        public int PlateAppearances { get; set; }
-        public int BallsInPlay { get; set; }
-        public double BattingAverage { get; set; }
-        public double ExpectedBattingAverage { get; set; }
-        public double BattingAverageDifference { get; set; }
-        public double SluggingPercentage { get; set; }
-        public double ExpectedSluggingPercentage { get; set; }
+        [Key]
+        public int MLBID                          { get; set; }
+        public string LastName                       { get; set; }
+        public string FirstName                      { get; set; }
+
+
+        [ForeignKey("SfbbPlayerBase")]
+        public string IDPLAYER { get; set; }
+        public virtual SfbbPlayerBase SfbbPlayerBase { get; set; }
+
+
+        public int Year                            { get; set; }
+        public int PlateAppearances                { get; set; }
+        public int BallsInPlay                     { get; set; }
+        public double BattingAverage               { get; set; }
+        public double ExpectedBattingAverage       { get; set; }
+        public double BattingAverageDifference     { get; set; }
+        public double SluggingPercentage           { get; set; }
+        public double ExpectedSluggingPercentage   { get; set; }
         public double SluggingPercentageDifference { get; set; }
-        public double Woba { get; set; }
-        public double ExpectedWoba { get; set; }
-        public double WobaDifference { get; set; }
+        public double Woba                         { get; set; }
+        public double ExpectedWoba                 { get; set; }
+        public double WobaDifference               { get; set; }
     }
 
 
@@ -46,8 +69,7 @@ namespace BaseballScraper.Models.BaseballSavant
         {
             Map(h => h.FirstName).Name("first_name");
             Map(h => h.LastName).Name("last_name");
-            Map(h => h.PlayerId).Name("player_id");
-
+            Map(h => h.MLBID).Name("player_id");
             Map(h => h.Year).Name("year");
             Map(h => h.PlateAppearances).Name("pa");
             Map(h => h.BallsInPlay).Name("bip");
@@ -64,28 +86,33 @@ namespace BaseballScraper.Models.BaseballSavant
     }
 
 
-
-
-
-    public class ExitVelocityAndBarrelsHitter : BaseballSavantHitter
+    // public partial class ExitVelocityAndBarrelsHitter : BaseballSavantHitter
+    public partial class ExitVelocityAndBarrelsHitter : BaseEntity
     {
-        public int Attempts { get; set; }
-        public double AverageHitAngle { get; set; }
-        public double AngleSweetSpotPercent { get; set; }
-        public double MaxExitVelocity { get; set; }
-        public double AverageExitVelocity { get; set; }
+        [Key]
+        public int MLBID                          { get; set; }
+        public string LastName                       { get; set; }
+        public string FirstName                      { get; set; }
+
+
+        [ForeignKey("SfbbPlayerBase")]
+        public string IDPLAYER { get; set; }
+        public virtual SfbbPlayerBase SfbbPlayerBase { get; set; }
+        public int Attempts                                    { get; set; }
+        public double AverageHitAngle                          { get; set; }
+        public double AngleSweetSpotPercent                    { get; set; }
+        public double MaxExitVelocity                          { get; set; }
+        public double AverageExitVelocity                      { get; set; }
         public double AverageExitVelocityFlyBallsAndLineDrives { get; set; }
-        public double AverageExitVelocityGroundballs { get; set; }
-        public int MaxDistance { get; set; }
-        public int AverageDistance { get; set; }
-        public int? AverageHomeRunDistance { get; set; }
-        public int BallsHitHigherThan95mph { get; set; }
-        public double PercentageBallsHitHigherThan95mph { get; set; }
-        public int NumberOfBarrels { get; set; }
-        public double BarrelsPerBattedBallEvent { get; set; }
-        public double BarrelsPerPlateAppearance { get; set; }
-
-
+        public double AverageExitVelocityGroundballs           { get; set; }
+        public int MaxDistance                                 { get; set; }
+        public int AverageDistance                             { get; set; }
+        public int? AverageHomeRunDistance                     { get; set; }
+        public int BallsHitHigherThan95mph                     { get; set; }
+        public double PercentageBallsHitHigherThan95mph        { get; set; }
+        public int NumberOfBarrels                             { get; set; }
+        public double BarrelsPerBattedBallEvent                { get; set; }
+        public double BarrelsPerPlateAppearance                { get; set; }
     }
 
 
@@ -95,7 +122,7 @@ namespace BaseballScraper.Models.BaseballSavant
         {
             Map(h => h.FirstName).Name("first_name");
             Map(h => h.LastName).Name("last_name");
-            Map(h => h.PlayerId).Name("player_id");
+            Map(h => h.MLBID).Name("player_id");
             Map(h => h.Attempts).Name("attempts");
             Map(h => h.AverageHitAngle).Name("avg_hit_angle");
             Map(h => h.AngleSweetSpotPercent).Name("anglesweetspotpercent");
@@ -113,8 +140,4 @@ namespace BaseballScraper.Models.BaseballSavant
             Map(h => h.BarrelsPerPlateAppearance).Name("brl_pa");
         }
     }
-
-
-
-
 }

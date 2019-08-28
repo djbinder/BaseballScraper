@@ -1,13 +1,11 @@
-using System;
-using BaseballScraper.Controllers;
-using BaseballScraper.Models.Configuration;
 using BaseballScraper.EndPoints;
+using BaseballScraper.Infrastructure;
+using BaseballScraper.Models.ConfigurationModels;
 using BaseballScraper.Models.Yahoo;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
-using BaseballScraper.Infrastructure;
-using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 
 

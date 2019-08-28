@@ -1,5 +1,6 @@
 using System;
 
+#pragma warning disable CS1998, CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE1006
 namespace BaseballScraper.EndPoints
 {
     public class BaseballSavantUriEndPoints
@@ -110,7 +111,7 @@ namespace BaseballScraper.EndPoints
 
             public BaseballSavantUriEndPoint HitterExpectedStatisticsEndPoint(int year, int minPlateAppearances, BaseballSavantPositionEnum position = BaseballSavantPositionEnum.All)
             {
-                Console.WriteLine($"position: {position}");
+                // Console.WriteLine($"position: {position}");
                 return new BaseballSavantUriEndPoint
                 {
                     BaseUri = baseUriExpectedStatistics,
@@ -131,7 +132,7 @@ namespace BaseballScraper.EndPoints
                     positionString = position.ToString();
                 }
 
-                Console.WriteLine($"positionString: {positionString}");
+                // Console.WriteLine($"positionString: {positionString}");
                 return new BaseballSavantUriEndPoint
                 {
                     BaseUri = baseUriExpectedStatistics,

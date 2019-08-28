@@ -1,16 +1,16 @@
-﻿using System;
-using System.IO;
-using System.Net;
-using System.Xml;
+﻿using BaseballScraper.EndPoints;
+using BaseballScraper.Infrastructure;
+using BaseballScraper.Models;
+using BaseballScraper.Models.ConfigurationModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using BaseballScraper.Models;
-using BaseballScraper.EndPoints;
-using BaseballScraper.Models.Configuration;
-using BaseballScraper.Infrastructure;
+using System;
+using System.IO;
+using System.Net;
+using System.Xml;
 
 #pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Controllers.YahooControllers
