@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using BaseballScraper.Infrastructure;
-using BaseballScraper.Models.Configuration;
+using BaseballScraper.Models.ConfigurationModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using Tweetinvi;
@@ -41,6 +41,7 @@ namespace BaseballScraper.Controllers.TwitterControllers
             TweetinviConfig.CurrentThreadSettings.TweetMode = TweetMode.Extended;
             Auth.SetUserCredentials(_twitterConfig.ConsumerKey, _twitterConfig.ConsumerSecret, _twitterConfig.AccessToken, _twitterConfig.AccessTokenSecret);
         }
+
 
 
 

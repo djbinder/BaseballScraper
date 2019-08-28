@@ -6,6 +6,14 @@ using BaseballScraper.Models.Player;
 using BaseballScraper.Models.Yahoo;
 using BaseballScraper.Models.Yahoo.Resources.YahooTeamResource;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.EntityFrameworkCore.ValueGeneration;
+using Microsoft.EntityFrameworkCore.Migrations;
+using System.Data;
+
+using System.Linq;
+using System;
 
 namespace BaseballScraper.Models
 {
@@ -18,29 +26,24 @@ namespace BaseballScraper.Models
         public string SqlName             { get; set; }
         public string SqlConnectionString { get; set; }
 
-        public DbSet<YahooTeamResource              > YahooTeamResource             { get; set; }
-        public DbSet<SfbbPlayerBase                 > SfbbPlayerBases               { get; set; }
-        public DbSet<PlayerNote                     > PlayerNotes                   { get; set; }
-        public DbSet<StartingPitcherCsw             > StartingPitcherCsws           { get; set; }
-        public DbSet<StartingPitcherCswSingleDay    > StartingPitcherCswsSingleDays { get; set; }
-        public DbSet<StartingPitcherCswDateRange    > StartingPitcherCswsDateRanges { get; set; }
-        public DbSet<FanGraphsPitcherForWpdiReport  > FanGraphsPitcherForWpdiReport { get; set; }
-        public DbSet<HqHitterRestOfSeasonProjection > BaseballHqReportHitterROS     { get; set; }
-        public DbSet<HqHitterYearToDate             > BaseballHqHitterYTD           { get; set; }
-        public DbSet<ExitVelocityAndBarrelsHitter> ExitVelocityAndBarrelsHitter { get; set; }
-        public DbSet<XstatsHitter> XStatsHitter { get; set; }
+        public DbSet<YahooTeamResource>                 YahooTeamResource               { get; set; }
+        public DbSet<SfbbPlayerBase>                    SfbbPlayerBases                 { get; set; }
+        public DbSet<PlayerNote>                        PlayerNotes                     { get; set; }
+        public DbSet<StartingPitcherCsw>                StartingPitcherCsws             { get; set; }
+        public DbSet<StartingPitcherCswSingleDay>       StartingPitcherCswsSingleDays   { get; set; }
+        public DbSet<StartingPitcherCswDateRange>       StartingPitcherCswsDateRanges   { get; set; }
+        public DbSet<FanGraphsPitcherForWpdiReport>     FanGraphsPitchersForWpdiReport  { get; set; }
+        public DbSet<HqHitterRestOfSeasonProjection>    HqHitterRestOfSeasonProjections { get; set; }
+        public DbSet<HqHitterYearToDate>                HqHitterYearToDates             { get; set; }
+        public DbSet<ExitVelocityAndBarrelsHitter>      ExitVelocityAndBarrelsHitters   { get; set; }
+        public DbSet<XstatsHitter>                      XStatsHitters                   { get; set; }
+        public DbSet<CrunchTimePlayerBase>              CrunchTimePlayerBases           { get; set; }
 
+        // public DbSet<BaseballSavantHitter> BaseballSavantHitter { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // modelBuilder.Entity<SfbbPlayerBase>()
-            //     .HasOne(sfbb => sfbb.BaseballSavantHitter)
-            //     .WithOne(bsh => bsh.SfbbPlayerBase)
-            //     .HasForeignKey<BaseballSavantHitter>(bsh => bsh.PlayerId);
-            modelBuilder.Entity<BaseballSavantHitter>()
-                .HasOne(bsh => bsh.SfbbPlayerBase)
-                .WithOne(sfbb => sfbb.BaseballSavantHitter)
-                .HasForeignKey<SfbbPlayerBase>(sfbb => sfbb.MLBID);
+
         }
     }
 }
@@ -85,3 +88,77 @@ namespace BaseballScraper.Models
     // etc.
 // clear all secrets
     // dotnet user-secrets clear
+
+
+
+
+
+
+
+
+
+
+
+// modelBuilder.Entity<BaseballSavantHitter>(entity =>
+// {
+//     entity.HasOne(s => s.SfbbPlayerBase)
+//         .WithOne(b => b.BaseballSavantHitter)
+//         .HasForeignKey<SfbbPlayerBase>(s => s.MLBID);
+// });
+
+
+// modelBuilder.Entity<SfbbPlayerBase>(entity =>
+// {
+//     entity.HasOne(s => s.BaseballSavantHitter)
+//         .WithOne(b => b.SfbbPlayerBase)
+//         .HasForeignKey<BaseballSavantHitter>(s => s.MLBID);
+
+//     entity.HasOne(q => q.BaseballHqReportHitterBase)
+//         .WithOne(s => s.SfbbPlayerBase)
+//         .HasForeignKey<BaseballHqReportHitterBase>(q => q.HQID_);
+// });
+
+
+// .HasOne<SfbbPlayerBase>();
+// .WithOne(pBase => pBase.MLBID_);
+
+// .HasForeignKey(bsh => bsh.PlayerId)
+// .HasPrincipalKey(x => x.MLBID);
+
+// modelBuilder.Entity<BaseballSavantHitter>()
+//     .HasOne(bsh => bsh.SfbbPlayerBase)
+//     .WithOne(sfbb => sfbb.BaseballSavantHitter)
+//     .HasForeignKey<SfbbPlayerBase>(sfbb => sfbb.MLBID);
+
+// modelBuilder.Entity<SfbbPlayerBase>()
+//     .HasOne(sfbb => sfbb.BaseballSavantHitter)
+//     .HasForeignKey<BaseballSavantHitter>(savant => savant.MLBID)
+//     .HasPrincipalKey(bsh => bsh.PlayerId);
+
+// modelBuilder.Entity<SfbbPlayerBase>().HasKey(t => t.IDPLAYER);
+
+// modelBuilder.Entity<BaseballHqReportHitterBase>()
+//     .HasOne(s => s.SfbbPlayerBase)
+//     .WithOne(b => b.BaseballHqReportHitterBase)
+//     .HasForeignKey<SfbbPlayerBase>(s => s.HQID);
+
+
+// modelBuilder.Entity<SfbbPlayerBase>()
+//     .HasOne(b => b.BaseballHqReportHitterBase)
+//     .WithOne(s => s.SfbbPlayerBase)
+//     .HasForeignKey<BaseballHqReportHitterBase>(b => b.HQID_)
+//     .HasPrincipalKey<SfbbPlayerBase>(s => s.HQID_);
+// Console.WriteLine($"\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n");
+
+// modelBuilder.Entity<BaseballSavantHitter>()
+//     .HasOne(s => s.SfbbPlayerBase)
+//     .WithOne(b => b.BaseballSavantHitter)
+//     .HasForeignKey<SfbbPlayerBase>(s => s.MLBID);
+
+
+
+// modelBuilder.Entity<SfbbPlayerBase>()
+//     .HasOne(b => b.BaseballSavantHitter)
+//     .WithOne(s => s.SfbbPlayerBase)
+//     .HasForeignKey<BaseballSavantHitter>(b => b.MLBID)
+//     .HasPrincipalKey<SfbbPlayerBase>(s => s.MLBID);

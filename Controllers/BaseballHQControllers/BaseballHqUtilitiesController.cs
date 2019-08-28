@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using BaseballScraper.Infrastructure;
-using BaseballScraper.Models.Configuration;
+using BaseballScraper.Models.ConfigurationModels;
 using Microsoft.Extensions.Options;
 using PuppeteerSharp;
 using C = System.Console;

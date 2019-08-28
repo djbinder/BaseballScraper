@@ -1,7 +1,7 @@
 ﻿using System;
 using BaseballScraper.Infrastructure;
 using BaseballScraper.Models;
-using BaseballScraper.Models.Configuration;
+using BaseballScraper.Models.ConfigurationModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.Linq;

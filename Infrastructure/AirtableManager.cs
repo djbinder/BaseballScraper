@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AirtableApiClient;
-using BaseballScraper.Models.Configuration;
+using BaseballScraper.Models.ConfigurationModels;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using C = System.Console;
@@ -35,6 +35,7 @@ namespace BaseballScraper.Infrastructure
         }
 
         public AirtableManager(){}
+
 
 
 

@@ -195,6 +195,40 @@ namespace BaseballScraper.Infrastructure
             }
 
 
+            public void PrintNameSpaceControllerNameMethodName(Type type)
+            {
+                Console.ForegroundColor = ConsoleColor.Blue;
+                StackTrace stackTrace   = new StackTrace();
+                StackFrame frame        = new StackFrame(1, true);
+
+                string methodName;
+
+                try
+                {
+                    methodName = stackTrace.GetFrame(2).GetMethod().Name;
+                }
+
+                catch
+                {
+                    methodName = stackTrace.GetFrame(1).GetMethod().Name;
+                }
+
+                Console.WriteLine($"NAME_SPACE : {type.Namespace}");
+                Console.WriteLine($"CONTROLLER : {type.Name}");
+                Console.WriteLine($"METHOD     : {methodName} @ LINE: {frame.GetFileLineNumber()}");
+
+                Console.ResetColor();
+            }
+
+            public void PrintDictionaryItems(Dictionary<string, object> dict)
+            {
+                foreach(var item in dict)
+                {
+                    Console.WriteLine($"{item.Key} : {item.Value}");
+                }
+            }
+
+
 
         #endregion LOGGERS ------------------------------------------------------------
 
@@ -300,6 +334,26 @@ namespace BaseballScraper.Infrastructure
                 }
             }
 
+            public string GetMethodName()
+            {
+                Console.ForegroundColor = ConsoleColor.Blue;
+                StackTrace stackTrace = new StackTrace();
+
+                var methodName = stackTrace.GetFrame(1).GetMethod().Name;
+
+                StackFrame frame    = new StackFrame(1, true);
+                var        method   = frame.GetMethod();
+                var        fileName = frame.GetFileName();
+
+                Type type = MethodBase.GetCurrentMethod().DeclaringType;
+                var typeString = type.ToString();
+                string fileNameTrimmed = Path.GetFileName(fileName);
+                string methodDetails = $"{typeString} > {fileNameTrimmed}";
+                Console.WriteLine($"frame: {frame}\t method: {method}\t fileName: {fileName}\t fileNameTrimmed: {fileNameTrimmed}");
+                Console.ResetColor();
+                return methodDetails;
+            }
+
 
             // https://msdn.microsoft.com/en-us/library/system.io.path.getfilename(v=vs.110).aspx
             public void StartMethod()
@@ -323,6 +377,8 @@ namespace BaseballScraper.Infrastructure
 
                 Console.ResetColor();
             }
+
+
 
 
             // https://msdn.microsoft.com/en-us/library/system.io.path.getfilename(v=vs.110).aspx

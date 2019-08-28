@@ -1,10 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
-using System.Reflection;
-using System.Text;
-using BaseballScraper.Controllers;
-using BaseballScraper.Controllers.BaseballHQControllers;
+﻿using BaseballScraper.Controllers.BaseballHQControllers;
 using BaseballScraper.Controllers.CbsControllers;
 using BaseballScraper.Controllers.EspnControllers;
 using BaseballScraper.Controllers.MlbDataApiControllers;
@@ -13,7 +7,7 @@ using BaseballScraper.Controllers.YahooControllers;
 using BaseballScraper.EndPoints;
 using BaseballScraper.Infrastructure;
 using BaseballScraper.Models;
-using BaseballScraper.Models.Configuration;
+using BaseballScraper.Models.ConfigurationModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -22,13 +16,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using static BaseballScraper.Controllers.PlayerControllers.PlayerBaseController;
 using static BaseballScraper.EndPoints.BaseballSavantUriEndPoints;
 using static BaseballScraper.Infrastructure.Helpers;
+using System;
+using System.Diagnostics;
+using System.Text;
 
 #pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper
@@ -55,21 +51,38 @@ namespace BaseballScraper
                 .AddJsonFile("Configuration/mongoDbConfiguration.json"               ,optional: false, reloadOnChange: true)
                 .AddJsonFile("Configuration/theGameIsTheGameConfig.json"             ,optional: false, reloadOnChange: true)
                 .AddJsonFile("Configuration/yahooConfig.json"                        ,optional: false, reloadOnChange: true)
+                .AddJsonFile("Configuration/twitterConfiguration.json"               ,optional: false, reloadOnChange: true)
                 .AddEnvironmentVariables();
 
             Configuration = configuration;
 
             // set all user secrets from appsettings.Development.json:
-                // cat ./Configuration/appsettings.Development.json | dotnet user-secrets set
-                // cat ./Configuration/airtableConfiguration.json | dotnet user-secrets set
-                // etc.
+                /*
+                    cat ./Configuration/airtableConfiguration.json | dotnet user-secrets set
+                    cat ./Configuration/appsettings.Development.json | dotnet user-secrets set
+                    cat ./Configuration/appsettings.json | dotnet user-secrets set
+                    cat ./Configuration/googleCredentials.json | dotnet user-secrets set
+                    cat ./Configuration/gSheetNames.json | dotnet user-secrets set
+                    cat ./Configuration/mongoDbConfiguration.json | dotnet user-secrets set
+                    cat ./Configuration/theGameIsTheGameConfig.json | dotnet user-secrets set
+                    cat ./Configuration/yahooConfig.json | dotnet user-secrets set
+                    cat ./Configuration/twitterConfiguration.json | dotnet user-secrets set
+                */
+            // Other secrets commands:
+            // * dotnet user-secrets list
+            // * dotnet user-secrets clear
             if (env.IsDevelopment())
             {
                 builder.AddUserSecrets<Startup>();
-                builder.AddUserSecrets<TwitterConfiguration>();
+
                 builder.AddUserSecrets<AirtableConfiguration>();
-                builder.AddUserSecrets<YahooConfiguration>();
+                builder.AddUserSecrets<BaseballHqCredentials>();
+                builder.AddUserSecrets<GoogleSheetConfiguration>();
+                builder.AddUserSecrets<MongoDbConfiguration>();
+                builder.AddUserSecrets<PostGresDbConfiguration>();
                 builder.AddUserSecrets<TheGameIsTheGameConfiguration>();
+                builder.AddUserSecrets<TwitterConfiguration>();
+                builder.AddUserSecrets<YahooConfiguration>();
             }
             Configuration = builder.Build();
         }
@@ -131,6 +144,7 @@ namespace BaseballScraper
             services.AddSingleton<BaseballSavantUriEndPoints>();
             services.AddSingleton<BaseballSavantHitterEndPoints>();
             services.AddSingleton<BaseballSavantPitcherEndPoints>();
+            services.AddSingleton<ProjectDirectoryEndPoints>();
             services.AddSingleton<CsvHandler>();
             services.AddSingleton<DataTabler>();
             services.AddSingleton<EmailHelper>();
@@ -437,10 +451,14 @@ namespace BaseballScraper
                 config.Base64Encoding  = Configuration["YahooConfiguration:Base64Encoding"];
                 config.ClientPublic    = Configuration["YahooConfiguration:ClientPublic"];
                 config.RedirectUri     = Configuration["YahooConfiguration:RedirectUri"];
+                config.RefreshToken    = Configuration["YahooConfiguration:AccessToken"];
                 config.RefreshToken    = Configuration["YahooConfiguration:RefreshToken"];
                 config.XOAuthYahooGuid = Configuration["YahooConfiguration:XOAuthYahooGuid"];
                 config.ExpiresIn       = int.Parse(Configuration["YahooConfiguration:ExpiresIn"]);
             });
+
+            // Console.WriteLine(Configuration["YahooConfiguration:Name"]);
+            // Console.WriteLine(Configuration["YahooConfiguration:XOAuthYahooGuid"]);
 
             services.Configure<TheGameIsTheGameConfiguration>(config =>
             {

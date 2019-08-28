@@ -35,25 +35,12 @@ namespace BaseballScraper.Models.ConfigurationModels
         public string XOAuthYahooGuid { get; set; }
 
 
+        [DataMember]
         public int? ExpiresIn { get; set; } = 3600;
-        // public string TokenType { get; set; } = "bearer";
-        // public string RequestUriBase { get; set; }
+
         public string RequestAuthUri { get; set; }
-        // public string GetTokenBase { get; set; }
-
-        // public string ResponseType { get; set; }
-        // public string Language { get; set; }
-        // public Guid RequestId { get; set; }
-
     }
 
-    // public class YahooAuthParameters
-    // {
-    //     public string ClientId { get; set; }
-    //     public string RedirectUri { get; set; }
-    //     public string ResponseType { get; set; }
-    //     public string Language { get; set; }
-    // }
 
     public class AccessTokenResponse
     {
@@ -72,44 +59,4 @@ namespace BaseballScraper.Models.ConfigurationModels
         // The GUID of the Yahoo user.
         public string XOAuthYahooGuid { get; set; }
     }
-
-
-    // public class Signature
-    // {
-    //     public string Nonce { get; set; }
-    //     public string TimeStamp { get; set; }
-    //     public string FullSignature { get; set; }
-    // }
-
-
-    // public class GetTokenResponse
-    // {
-    //     public string FormHtml { get; set; }
-
-    //     [DataMember(Name = "TokenSecret")]
-    //     public string TokenSecret { get; set; }
-
-    //     [DataMember(Name = "Duration")]
-    //     public string Duration { get; set; }
-
-    //     [DataMember(Name = "AuthenticationUrl")]
-    //     public string AuthenticationUrl { get; set; }
-    // }
-
-    // public class GetTokenRequest
-    // {
-    //     [JsonProperty("client_id")]
-    //     public string ClientId { get; set; }
-
-    //     [JsonProperty("redirect_uri")]
-    //     public string RedirectUri { get; set; }
-
-    //     [JsonProperty("response_type")]
-    //     public string ResponseType { get; set; }
-
-    //     [JsonProperty("language")]
-    //     public string Language { get; set; }
-
-    //     public Guid RequestId { get; set;  }
-    // }
 }

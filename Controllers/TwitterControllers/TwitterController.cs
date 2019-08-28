@@ -1,13 +1,13 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using LinqToTwitter;
-using BaseballScraper.Models.Configuration;
+﻿using BaseballScraper.Infrastructure;
+using BaseballScraper.Models.ConfigurationModels;
 using BaseballScraper.Models.Twitter;
-using System.Collections.Generic;
+using LinqToTwitter;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using BaseballScraper.Infrastructure;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 
 #pragma warning disable CS0219, CS0414, CS1998, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006

@@ -16,12 +16,6 @@ using PuppeteerSharp;
 #pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Infrastructure
 {
-    /// <summary> </summary>
-    /// <remarks>
-    ///     See: https://joshclose.github.io/CsvHelper/reading/#getting-all-records
-    ///     See: https://toolslick.com/generation/code/class-from-csv
-    /// </remarks>
-
     public class CsvHandler
     {
         private readonly Helpers _helpers;
@@ -38,6 +32,11 @@ namespace BaseballScraper.Infrastructure
         {
 
         }
+
+
+        // List of CSV tools:
+        // * https://toolslick.com/generation/code/class-from-csv
+        // * https://joshclose.github.io/CsvHelper/reading/#getting-all-records
 
 
         #region AUTOMATED CSV DOWNLOAD ------------------------------------------------------------
@@ -155,6 +154,17 @@ namespace BaseballScraper.Infrastructure
             public void ReplaceFile(string fullSourceFilePath, string fullDestinationFilePath, string backupFileName)
             {
                 File.Replace(fullSourceFilePath, fullDestinationFilePath, backupFileName);
+            }
+
+
+            public bool CheckIfFileExists(string filePath)
+            {
+                bool doesFileExist = false;
+                if(System.IO.File.Exists(filePath))
+                {
+                    doesFileExist = true;
+                }
+                return doesFileExist;
             }
 
 
@@ -539,6 +549,7 @@ namespace BaseballScraper.Infrastructure
 
 
             public double? ParseNullableDouble(string val) => double.TryParse(val, out var i) ? (double?) i : null;
+            public int? ParseNullableInt(string val) => int.TryParse(val, out var i) ? (int?) i : null;
 
 
             // STATUS [ August 9, 2019 ] : this works

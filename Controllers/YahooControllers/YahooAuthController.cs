@@ -5,7 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using BaseballScraper.Infrastructure;
-using BaseballScraper.Models.Configuration;
+using BaseballScraper.Models.ConfigurationModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -29,13 +29,13 @@ namespace BaseballScraper.Controllers.YahooControllers
 
         public static readonly string yahooConfigFilePath = "Configuration/yahooConfig.json";
 
-        public string _accessTokenKey = "accesstoken";
-        public string _tokenTypeKey = "tokentype";
-        public string _expiresInKey = "expiresin";
+        public string _accessTokenKey  = "accesstoken";
+        public string _tokenTypeKey    = "tokentype";
+        public string _expiresInKey    = "expiresin";
         public string _refreshTokenKey = "refreshtoken";
-        public string _yahooguidKey = "yahooguid";
-        public string _authCodeKey = "authorizationcode";
-        public string _sessionIdKey = "sessionid";
+        public string _yahooguidKey    = "yahooguid";
+        public string _authCodeKey     = "authorizationcode";
+        public string _sessionIdKey    = "sessionid";
 
 
 
@@ -53,8 +53,10 @@ namespace BaseballScraper.Controllers.YahooControllers
         public void ViewYahooAuthHomePage()
         {
             _h.StartMethod();
-            bool userHasRefreshToken = CheckIfUserHasExistingRefreshToken();
-            ExchangeRefreshTokenForNewAccessTokenJObject();
+            // bool userHasRefreshToken = CheckIfUserHasExistingRefreshToken();
+            PrintYahooConfigInfo();
+            var code = GenerateUserAuthorizationCode();
+            // ExchangeRefreshTokenForNewAccessTokenJObject();
         }
 
 
@@ -135,7 +137,7 @@ namespace BaseballScraper.Controllers.YahooControllers
                 Process.Start("open", requestUrl);
                     _h.Spotlight("Enter Code:");
                     string authorizationCodeFromConsole = Console.ReadLine();
-                    // _h.Intro(authorizationCodeFromConsole, "code entered in console");
+                    _h.Intro(authorizationCodeFromConsole, "code entered in console");
 
                 SetSessionAuthorizationCode(authorizationCodeFromConsole);
                 // _h.CompleteMethod();
@@ -325,7 +327,7 @@ namespace BaseballScraper.Controllers.YahooControllers
                 var redirectUri    = _yahooConfig.RedirectUri;
                 var grantType = "refresh_token";
                 var refreshTokenCheck = _yahooConfig.RefreshToken;
-                // Console.WriteLine(refreshTokenCheck);
+                Console.WriteLine(refreshTokenCheck);
 
                 Uri address = new Uri("https://api.login.yahoo.com/oauth2/get_token");
 
@@ -429,8 +431,8 @@ namespace BaseballScraper.Controllers.YahooControllers
                 request.Method = "POST";
                 request.ContentType = "application/x-www-form-urlencoded";
 
-                byte[] headerByte = System.Text.Encoding.UTF8.GetBytes(consumerKey+":"+consumerSecret);
-                string headerString = System.Convert.ToBase64String(headerByte);
+                byte[] headerByte = Encoding.UTF8.GetBytes(consumerKey+":"+consumerSecret);
+                string headerString = Convert.ToBase64String(headerByte);
                 request.Headers["Authorization"] = "Basic " + headerString;
 
                 return request;
@@ -460,12 +462,14 @@ namespace BaseballScraper.Controllers.YahooControllers
                 JObject responseToJson;
 
                 bool userHasRefreshToken = CheckIfUserHasExistingRefreshToken();
-                // Console.WriteLine($"User has refresh token?: {userHasRefreshToken}");
+                // userHasRefreshToken = false;
+                Console.WriteLine($"User has refresh token?: {userHasRefreshToken}");
 
                 if(userHasRefreshToken == false)
                 {
                     responseToJson = CreateYahooAccessTokenResponseJObject();
                     AccessTokenResponse finalAccessTokenResponse = GenerateYahooAccessTokenResponse(responseToJson);
+                    _h.Dig(finalAccessTokenResponse);
                     return finalAccessTokenResponse;
                 }
 

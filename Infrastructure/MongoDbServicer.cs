@@ -1,4 +1,4 @@
-using BaseballScraper.Models.Configuration;
+using BaseballScraper.Models.ConfigurationModels;
 using BaseballScraper.Models.Twitter;
 using MongoDB.Driver;
 using System;

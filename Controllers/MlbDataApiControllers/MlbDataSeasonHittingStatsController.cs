@@ -8,7 +8,7 @@ using static BaseballScraper.Infrastructure.PostmanMethods;
 using static BaseballScraper.EndPoints.MlbDataApiEndPoints;
 using C = System.Console;
 
-
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Controllers.MlbDataApiControllers
 {
     [Route("api/mlb/[controller]")]

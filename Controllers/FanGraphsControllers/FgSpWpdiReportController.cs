@@ -34,6 +34,7 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
         private readonly BaseballScraperContext       _context;
 
 
+
         public FgSpWpdiReportController(Helpers helpers, FanGraphsUriEndPoints endPoints, GoogleSheetsConnector googleSheetsConnector, CsvHandler csvHandler, BaseballScraperContext context)
         {
             _helpers               = helpers;
@@ -413,7 +414,7 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
             public async Task AddOne(FanGraphsPitcherForWpdiReport pitcher, int season)
             {
                 pitcher.Season = season;
-                FanGraphsPitcherForWpdiReport exists = _context.FanGraphsPitcherForWpdiReport.SingleOrDefault(sp => sp.PlayerYearConcat == pitcher.PlayerYearConcat);
+                FanGraphsPitcherForWpdiReport exists = _context.FanGraphsPitchersForWpdiReport.SingleOrDefault(sp => sp.PlayerYearConcat == pitcher.PlayerYearConcat);
 
                 if(exists != null)
                 {
@@ -450,7 +451,7 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
             [HttpGet("get/{fangraphsid}")]
             public FanGraphsPitcherForWpdiReport GetOne(int fangraphsid)
             {
-                FanGraphsPitcherForWpdiReport pitcher = _context.FanGraphsPitcherForWpdiReport.SingleOrDefault(p => p.FanGraphsId == fangraphsid);
+                FanGraphsPitcherForWpdiReport pitcher = _context.FanGraphsPitchersForWpdiReport.SingleOrDefault(p => p.FanGraphsId == fangraphsid);
                 return pitcher;
             }
 
@@ -459,7 +460,7 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
             [HttpGet("delete/{fangraphsid}")]
             public async Task<IActionResult> DeleteOne(int fangraphsid)
             {
-                FanGraphsPitcherForWpdiReport pitcher = await _context.FanGraphsPitcherForWpdiReport.SingleOrDefaultAsync(p => p.FanGraphsId == fangraphsid);
+                FanGraphsPitcherForWpdiReport pitcher = await _context.FanGraphsPitchersForWpdiReport.SingleOrDefaultAsync(p => p.FanGraphsId == fangraphsid);
                 _context.Remove(pitcher);
                 await _context.SaveChangesAsync();
                 return Ok();
@@ -503,7 +504,7 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
             // Query database for pitchers and their wPDIs
             public List<FanGraphsPitcherForWpdiReport> GetMany(int season, int minInningsPitched = 0)
             {
-                var pitchers = _context.FanGraphsPitcherForWpdiReport
+                var pitchers = _context.FanGraphsPitchersForWpdiReport
                     .OrderByDescending(w => w.Wpdi)
                     .Where(y => y.Season == season && y.InningsPitched > minInningsPitched)
                     .ToList();

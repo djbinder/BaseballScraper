@@ -1,5 +1,5 @@
 using System;
-using BaseballScraper.Models.Configuration;
+using BaseballScraper.Models.ConfigurationModels;
 using BaseballScraper.EndPoints;
 using BaseballScraper.Models.Yahoo;
 using Microsoft.AspNetCore.Mvc;
