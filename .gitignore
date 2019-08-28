@@ -9,6 +9,8 @@
         # http://www.codeblocq.com/2016/01/Untrack-files-already-added-to-git-repository-based-on-gitignore/
         # https://github.community/t5/How-to-use-Git-and-GitHub/How-to-delete-multiples-files-in-Github/td-p/4623
         # https://git-scm.com/
+        # https://github.com/joshnh/Git-Commands
+        # http://www.codeblocq.com/2016/01/Untrack-files-already-added-to-git-repository-based-on-gitignore/
     # COMMANDS
         # Checkout out remote master
             # git checkout master
@@ -48,10 +50,7 @@
 # DIRECTORIES
 .local-chromium/
 /BaseballScraper/Configuration/
-<<<<<<< HEAD
 BaseballScraper/Configuration/
-=======
->>>>>>> 024e2d437383edb1817c721fd83b7f537715cb44
 # /BaseballScraper/Models/Configuration
 Configuration/
 Logs/
