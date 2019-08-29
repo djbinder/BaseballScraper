@@ -189,10 +189,6 @@ namespace BaseballScraper.EndPoints
 
 
 
-
-
-
-
             /* --------------------------------------------------------------- */
             /* BASEBALL SAVANT                                                 */
             /* --------------------------------------------------------------- */
@@ -229,6 +225,41 @@ namespace BaseballScraper.EndPoints
             public string BaseballSavantPitcherWriteRelativePath
             {
                 get => $"{BaseballSavantWriteRelativePath}{BaseballSavantPitcherWriteDirectoryName}";
+            }
+
+
+
+            /* --------------------------------------------------------------- */
+            /* FANGRAPHS                                                       */
+            /* --------------------------------------------------------------- */
+
+            private string FanGraphsWriteDirectoryName
+            {
+                get => "FANGRAPHS/";
+            }
+
+            // BaseballData/02_WRITE/FANGRAPHS/
+            public string FanGraphsWriteRelativePath
+            {
+                get => $"{WRITE_DirectoryRelativePath}{FanGraphsWriteDirectoryName}";
+            }
+
+            // BaseballData/02_WRITE/FANGRAPHS/HITTERS/
+            public string FanGraphsHitterWriteRelativePath
+            {
+                get => $"{FanGraphsWriteRelativePath}{HITTER_DirectoryName}";
+            }
+
+            // BaseballData/02_WRITE/FANGRAPHS/PITCHERS/
+            public string FanGraphsPitcherWriteRelativePath
+            {
+                get => $"{FanGraphsWriteRelativePath}{PITCHER_DirectoryName}";
+            }
+
+            // BaseballData/02_WRITE/FANGRAPHS/_archive/
+            public string FanGraphsArchiveRelativePath
+            {
+                get => $"{FanGraphsWriteRelativePath}{ARCHIVE_DirectoryName}";
             }
 
 

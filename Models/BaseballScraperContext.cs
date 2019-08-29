@@ -26,23 +26,62 @@ namespace BaseballScraper.Models
         public string SqlName             { get; set; }
         public string SqlConnectionString { get; set; }
 
-        public DbSet<YahooTeamResource>                 YahooTeamResource               { get; set; }
+
+        /* PLAYER BASES */
         public DbSet<SfbbPlayerBase>                    SfbbPlayerBases                 { get; set; }
-        public DbSet<PlayerNote>                        PlayerNotes                     { get; set; }
+        public DbSet<CrunchTimePlayerBase>              CrunchTimePlayerBases           { get; set; }
+
+
+        /* BASEBALL HQ */
+        public DbSet<HqHitterRestOfSeasonProjection>    HqHitterRestOfSeasonProjections { get; set; }
+        public DbSet<HqHitterYearToDate>                HqHitterYearToDates             { get; set; }
+
+
+        /* BASEBALL SAVANT */
+        public DbSet<ExitVelocityAndBarrelsHitter>      ExitVelocityAndBarrelsHitters   { get; set; }
+        public DbSet<XstatsHitter>                      XStatsHitters                   { get; set; }
+
+
+        /* YAHOO */
+        public DbSet<YahooTeamResource>                 YahooTeamResource               { get; set; }
+
+
+        /* FANGRAPHS */
         public DbSet<StartingPitcherCsw>                StartingPitcherCsws             { get; set; }
         public DbSet<StartingPitcherCswSingleDay>       StartingPitcherCswsSingleDays   { get; set; }
         public DbSet<StartingPitcherCswDateRange>       StartingPitcherCswsDateRanges   { get; set; }
         public DbSet<FanGraphsPitcherForWpdiReport>     FanGraphsPitchersForWpdiReport  { get; set; }
-        public DbSet<HqHitterRestOfSeasonProjection>    HqHitterRestOfSeasonProjections { get; set; }
-        public DbSet<HqHitterYearToDate>                HqHitterYearToDates             { get; set; }
-        public DbSet<ExitVelocityAndBarrelsHitter>      ExitVelocityAndBarrelsHitters   { get; set; }
-        public DbSet<XstatsHitter>                      XStatsHitters                   { get; set; }
-        public DbSet<CrunchTimePlayerBase>              CrunchTimePlayerBases           { get; set; }
+
+
+        public DbSet<PlayerNote>                        PlayerNotes                     { get; set; }
+
+
 
         // public DbSet<BaseballSavantHitter> BaseballSavantHitter { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            /* PLAYER BASES */
+            modelBuilder.Entity<SfbbPlayerBase>().ToTable("_BASE_Sfbb");
+            modelBuilder.Entity<CrunchTimePlayerBase>().ToTable("_BASE_CrunchTime");
+
+            /* BASEBALL HQ */
+            modelBuilder.Entity<HqHitterRestOfSeasonProjection>().ToTable("HQ_HIT_ROS");
+            modelBuilder.Entity<HqHitterYearToDate>().ToTable("HQ_HIT_YTD");
+
+            /* BASEBALL SAVANT */
+            modelBuilder.Entity<ExitVelocityAndBarrelsHitter>().ToTable("SAVANT_HIT_ExVeloBarrels");
+            modelBuilder.Entity<XstatsHitter>().ToTable("SAVANT_HIT_XStats");
+
+            /* YAHOO */
+            modelBuilder.Entity<YahooTeamResource>().ToTable("Y!_TeamResource");
+            modelBuilder.Entity<YahooTeamLogo>().ToTable("Y!_TeamLogo");
+            modelBuilder.Entity<YahooManager>().ToTable("Y!_Manager");
+            modelBuilder.Entity<YahooTeamRosterAdds>().ToTable("Y!_TmRosterAdds");
+
+            /* FANGRAPHS */
+            modelBuilder.Entity<StartingPitcherCsw>().ToTable("FG_SP_CSW");
+            modelBuilder.Entity<FanGraphsPitcherForWpdiReport>().ToTable("FG_SP_wPDI");
 
         }
     }

@@ -84,9 +84,10 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
 
 
         // STATUS [ August 27, 2019 ] : this works (not sure about route though)
-        [HttpPost("all/{year}/{minAtBats}")]
-        public ActionResult DownloadAndAddAllHitterReports(int year, int minAtBats)
+        [HttpPost("mrc")]
+        public ActionResult MASTER_REPORT_CALLER(int year, int minAtBats)
         {
+            _helpers.OpenMethod(1);
             DownloadAndAddXStats(year, minAtBats);
             DownloadAndAddExitVeloAndBarrels(year, minAtBats);
             return Ok();
@@ -114,6 +115,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             [HttpPost("xstats/download_and_post")]
             public ActionResult DownloadAndAddXStats(int year, int minAtBats)
             {
+                _helpers.OpenMethod(1);
                 DownloadExpectedStatsCsv(year, minAtBats);
                 string xStatsReportPath = "BaseballData/02_WRITE/BASEBALL_SAVANT/HITTERS/8_27_2019_x_stats.csv";
                 var xList = CreateListOfXStatsObjectsFromCsvRows(xStatsReportPath).ToList();
@@ -127,7 +129,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             [HttpGet("xstats/csv/download")]
             public IActionResult DownloadExpectedStatsCsv(int year, int minAtBats, BaseballSavantHitterEndPoints.BaseballSavantPositionEnum position = BaseballSavantHitterEndPoints.BaseballSavantPositionEnum.All)
             {
-                _helpers.StartMethod();
+                _helpers.OpenMethod(1);
                 var csvEndPoint = _hitterEndpoints.HitterExpectedStatisticsEndPoint_Csv(year, minAtBats, position).EndPointUri;
 
                 // string pathAndFileToWrite = $"{_targetWriteDirectory}{_todaysDateString}{_expectedStatsStringAppendix}";
@@ -137,7 +139,6 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
 
                 _csvHandler.DownloadCsvFromLink(csvEndPoint, pathAndFileToWrite);
 
-                C.WriteLine(SIO.File.Exists(pathAndFileToWrite) ? "X-Stats File exists" : "X-Stats File does not exist");
                 if(SIO.File.Exists(pathAndFileToWrite))
                 {
                     IList<XstatsHitter> hitters = CreateListOfXStatsObjectsFromCsvRows(pathAndFileToWrite);
@@ -157,7 +158,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             [HttpGet("xstats/csv/list")]
             public IList<XstatsHitter> CreateListOfXStatsObjectsFromCsvRows(string pathAndFileToWrite)
             {
-                _helpers.StartMethod();
+                _helpers.OpenMethod(1);
                 List<object> allRowsList = _csvHandler.ReadCsvRecordsToList(pathAndFileToWrite, typeof(XstatsHitter), typeof(XstatsHitterClassMap)).ToList();
 
                 List<XstatsHitter> hitters = new List<XstatsHitter>();
@@ -228,7 +229,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             [HttpPost("xstats/add_all")]
             public IActionResult AddAll(List<XstatsHitter> hitters)
             {
-                _helpers.StartMethod();
+                _helpers.OpenMethod(1);
                 int counter = 1;
                 foreach(var hitter in hitters)
                 {
@@ -298,15 +299,14 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             [HttpGet("velo_barrel/csv/download")]
             public IActionResult DownloadExitVelocityAndBarrelsCsv(int year, int minAtBats)
             {
-                _helpers.StartMethod();
+                _helpers.OpenMethod(1);
                 var csvEndPoint = _hitterEndpoints.HitterExitVelocityAndBarrelsEndPoint_Csv(year, minAtBats).EndPointUri;
 
-                // string pathAndFileToWrite = $"{_targetWriteDirectory}{_todaysDateString}{_velocityAndBarrelsStringAppendix}";
                 string pathAndFileToWrite = $"{HitterWriteDirectory}{_todaysDateString}{_velocityAndBarrelsStringAppendix}";
 
                 _csvHandler.DownloadCsvFromLink(csvEndPoint, pathAndFileToWrite);
 
-                C.WriteLine(SIO.File.Exists(pathAndFileToWrite) ? "Exit Velo & Barrels File exists" : "Exit Velo & Barrels File does not exist");
+                PrintCsvFileDownloadDetails(csvEndPoint, pathAndFileToWrite);
                 if(SIO.File.Exists(pathAndFileToWrite))
                 {
                     IList<ExitVelocityAndBarrelsHitter> hitters = CreateListOfExitVelocityAndBarrelsHittersFromCsvRows(pathAndFileToWrite);
@@ -326,7 +326,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             [HttpGet("velo_barrel/csv/list")]
             public IList<ExitVelocityAndBarrelsHitter> CreateListOfExitVelocityAndBarrelsHittersFromCsvRows(string pathAndFileToWrite)
             {
-                _helpers.StartMethod();
+                _helpers.OpenMethod(1);
                 List<object> allRowsList = _csvHandler.ReadCsvRecordsToList(pathAndFileToWrite, typeof(ExitVelocityAndBarrelsHitter), typeof(ExitVelocityAndBarrelsHitterClassMap)).ToList();
 
                 List<ExitVelocityAndBarrelsHitter> hitters = new List<ExitVelocityAndBarrelsHitter>();
@@ -427,7 +427,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             [HttpPost("velo_barrel/add_all")]
             public ActionResult AddAll(List<ExitVelocityAndBarrelsHitter> hitters)
             {
-                _helpers.StartMethod();
+                _helpers.OpenMethod(1);
                 int counter = 1;
                 foreach(var hitter in hitters)
                 {
@@ -533,9 +533,18 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
 
             private void PrintCsvFileDownloadDetails(string csvEndPoint, string pathAndFileToWrite)
             {
+                bool doesFileExistLocally = false;
+                if(SIO.File.Exists(pathAndFileToWrite))
+                {
+                    doesFileExistLocally = true;
+                }
+
+                // C.WriteLine(SIO.File.Exists(pathAndFileToWrite) ? "FILE EXISTS?" : "X-Stats File does not exist");
                 C.WriteLine($"\n--------------------------------------------");
-                C.WriteLine($"EndPoint: {csvEndPoint}");
-                C.WriteLine($"File Path: {pathAndFileToWrite}");
+                _helpers.PrintNameSpaceControllerNameMethodName(typeof(BaseballSavantHitterController));
+                C.WriteLine($"CSV LINK        : {csvEndPoint}");
+                C.WriteLine($"LOCAL FILE PATH : {pathAndFileToWrite}");
+                C.WriteLine($"FILE EXISTS?    : {doesFileExistLocally}");
                 C.WriteLine($"--------------------------------------------\n");
             }
 

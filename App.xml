@@ -513,112 +513,6 @@
                 int numberOfPagesToScrape = await GetNumberOfPagesToScape(page);
             </example>
         </member>
-        <member name="M:BaseballScraper.Controllers.FanGraphsControllers.FgSpMasterReportController.SetInitialUrlToScrape(System.Int32,System.Int32,System.Int32,System.Int32)">
-            <summary>
-                This defines the first url to scrape
-                At times, you may need to loop through multiple urls and the url defined here is the first url in the loop
-            </summary>
-            <param name="minInningsPitched">
-                The minimum number of innings pitched a pitcher needs to be included in the results of the scrape
-            </param>
-            <param name="year">
-                The Mlb season year
-            </param>
-            <param name="page">
-                The page to being scraping; this typically will be one
-                But if you want to start on page 2 (for example), just set 'page' to 2
-            </param>
-            <param name="recordsPerPage">
-                The number of rows in the table
-                Standard options include 30, 50 , 100
-                This will ultimately influence the total number of urls and their tables to scrape
-            </param>
-            <returns>
-                A string url
-            </returns>
-        </member>
-        <member name="M:BaseballScraper.Controllers.FanGraphsControllers.FgSpMasterReportController.GetNumberOfPagesToScrape(System.Int32,System.Int32,System.Int32,System.Int32)">
-            <summary>
-            This counts the number of urls that will be scraped
-            It examines a specific html element on the fangraphs html page that shows the number of pages
-            </summary>
-            <example>
-                '70 items in 3 page' --> the '3' is what this method is looking for
-            </example>
-            <param name="minInningsPitched">
-                The minimum number of innings pitched a pitcher needs to be included in the results of the scrape
-            </param>
-            <param name="year">
-                The Mlb season year
-            </param>
-            <param name="page">
-                The page to being scraping
-                This typically will be one
-                But if you want to start on page 2 (for example), just set 'page' to 2
-            </param>
-            <param name="recordsPerPage">
-                The number of rows in the table; Standard options include 30, 50 , 100
-                This will ultimately influence the total number of urls and their tables to scrape
-            </param>
-            <returns>
-                A number of the number of pages to scrape as part of the loop
-            </returns>
-        </member>
-        <member name="M:BaseballScraper.Controllers.FanGraphsControllers.FgSpMasterReportController.GetUrlsOfPagesToScrape(System.Int32,System.Int32,System.Int32)">
-            <summary>
-                OPTION 2: parameters are passed into the  method (i.e minInningsPitched, year, page, recordsPerPage ).
-                Retrieves all urls of pages that will be scraped and adds them to a list
-            </summary>
-            <example>
-                var list = GetUrlsOfPagesToScrape(20, 2019, 50);
-                '70 items in 3 page' --> the '3' is what this method is looking for
-            </example>
-            <param name="minInningsPitched">
-                The minimum number of innings pitched a pitcher needs to be included in the results of the scrape
-            </param>
-            <param name="year">
-                The Mlb season year
-            </param>
-            <param name="page">
-                The page to being scraping
-                This typically will be one
-                But if you want to start on page 2 (for example), just set 'page' to 2
-            </param>
-            <param name="recordsPerPage">
-                The number of rows in the table
-                Standard options include 30, 50 , 100
-                This will ultimately influence the total number of urls and their tables to scrape
-            </param>
-            <returns>
-                A list of strings representing urls to be scraped
-            </returns>
-        </member>
-        <member name="M:BaseballScraper.Controllers.FanGraphsControllers.FgSpMasterReportController.ScrapePitchersAndCreateList(System.Int32,System.Int32,System.Int32)">
-            <summary>
-                Scrape the pitchers table and get all their data
-            </summary>
-            <remarks>
-                Any XPath can be pulled from Chrome:
-                 - Right-click 'Inspect', view the html for the table, right click on any item and select Copy > tableBodyXpath
-            </remarks>
-        </member>
-        <member name="M:BaseballScraper.Controllers.FanGraphsControllers.FgSpMasterReportController.GetTableHeaderValues(System.String)">
-            <summary>
-                Scrapes the headers of the table to get the stat names (e.g., ERA, WHIP, etc.)
-            </summary>
-            <param name="thisUrl">
-                The url of the table you are scraping
-            </param>
-        </member>
-        <member name="M:BaseballScraper.Controllers.FanGraphsControllers.FgSpMasterReportController.GetTableHeaderValuesList(System.String)">
-            <summary> Scrapes the headers of the table to get the stat names (e.g., ERA, WHIP, etc.) </summary>
-            <param name="thisUrl"> The url of the table you are scraping </param>
-        </member>
-        <member name="M:BaseballScraper.Controllers.FanGraphsControllers.FgSpMasterReportController.CreateNewFanGraphsPitcher(System.Collections.Generic.List{System.String})">
-            <summary> Instantiates a new instance of class FanGraphsPitcher </summary>
-            <param name="playerItems"> A list of values for each of the stats / properties of the FanGraphsPitcher class </param>
-            <returns> New instance of FanGraphsPitcher class </returns>
-        </member>
         <member name="M:BaseballScraper.Controllers.HomeController.Index">
             <summary>
             The home controller
@@ -2367,13 +2261,6 @@
         <member name="M:BaseballScraper.Infrastructure.ApiInfrastructure.CreateModelJToken(Newtonsoft.Json.Linq.JObject,System.String)">
             <summary> Returns a JToken that lists keys/values for player items in PlayerSearch api </summary>
             <returns> A JToken</returns>
-        </member>
-        <member name="T:BaseballScraper.Infrastructure.CsvHandler">
-            <summary> </summary>
-            <remarks>
-                See: https://joshclose.github.io/CsvHelper/reading/#getting-all-records
-                See: https://toolslick.com/generation/code/class-from-csv
-            </remarks>
         </member>
         <member name="M:BaseballScraper.Infrastructure.CsvHandler.DownloadCsvFromLink(System.String,System.String)">
             <summary>

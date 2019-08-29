@@ -63,54 +63,66 @@ namespace BaseballScraper.Controllers.AGGREGATORS
         }
 
 
-        /*
-            https://127.0.0.1:5001/master_hitter/database_update
-        */
-        [HttpGet("database_update")]
-        public async Task<ActionResult> UpdateDailyHitterDatabases()
-        {
-            _helpers.StartMethod();
+        // August 28 : Moved to MasterReportController
+        // /*
+        //     https://127.0.0.1:5001/master_hitter/database_update
+        // */
+        // [HttpGet("database_update")]
+        // public async Task<ActionResult> UpdateDailyHitterDatabases()
+        // {
+        //     _helpers.StartMethod();
+
+// <<<<<<< br1_08_28_2019-4
+//         //     Stopwatch sw = new Stopwatch();
+//         //     sw.Start();
+//         //     TimeSpan ts;
+// =======
+
+//             Stopwatch sw = new Stopwatch();
+//             sw.Start();
+//             TimeSpan ts;
+// >>>>>>> master
 
 
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-            TimeSpan ts;
+        //     /* ADD ALL SFBB PLAYER BASES */
+        //     var allPlayerBases = playerBaseController.GetAllSfbbPlayerBasesFromGoogleSheet("A7:AQ2333");
+        //     var toList = new List<SfbbPlayerBase>();
+        //     foreach(var p in allPlayerBases)
+        //     {
+        //         toList.Add(p);
+        //     }
+        //     playerBaseController.AddAllSfbbPlayerBasesToDatabase(toList);
+        //     ts = sw.Elapsed;
+        //     Console.WriteLine($"[ 1 ] {ts}");
 
 
-            /* ADD ALL SFBB PLAYER BASES */
-            var allPlayerBases = playerBaseController.GetAllSfbbPlayerBasesFromGoogleSheet("A7:AQ2333");
-            var toList = new List<SfbbPlayerBase>();
-            foreach(var p in allPlayerBases)
-            {
-                toList.Add(p);
-            }
-            playerBaseController.AddAllSfbbPlayerBasesToDatabase(toList);
-            ts = sw.Elapsed;
-            Console.WriteLine($"[ 1 ] {ts}");
+        //     /* ADD ALL CRUNCH TIME PLAYER BASES */
+        //     List<CrunchTimePlayerBase> crunchTimePlayerBases = playerBaseController.CreateListOfCrunchTimePlayerBasesForToday();
+        //     await playerBaseController.AddAllCrunchTimePlayerBasesToDatabase(crunchTimePlayerBases);
+        //     ts = sw.Elapsed;
+        //     Console.WriteLine($"[ 2 ] {ts}");
 
 
-            /* ADD ALL CRUNCH TIME PLAYER BASES */
-            List<CrunchTimePlayerBase> crunchTimePlayerBases = playerBaseController.CreateListOfCrunchTimePlayerBasesForToday();
-            await playerBaseController.AddAllCrunchTimePlayerBasesToDatabase(crunchTimePlayerBases);
-            ts = sw.Elapsed;
-            Console.WriteLine($"[ 2 ] {ts}");
+        //     /* ADD X-STATS & EXIT VELO REPORTS */
+        //     baseballSavantHitterController.DownloadAndAddAllHitterReports(2019, 100);
+        //     ts = sw.Elapsed;
+        //     Console.WriteLine($"[ 3 ] {ts}");
 
 
-            /* ADD X-STATS & EXIT VELO REPORTS */
-            baseballSavantHitterController.DownloadAndAddAllHitterReports(2019, 100);
-            ts = sw.Elapsed;
-            Console.WriteLine($"[ 3 ] {ts}");
+        //     /* ADD YTD & ROS PROJECTION HITTER REPORTS */
+        //     await _hqHitterController.UpdateBothHqHitterDatabases(false, false);
+        //     ts = sw.Elapsed;
+        //     Console.WriteLine($"[ 4 ] {ts}");
 
 
-            /* ADD YTD & ROS PROJECTION HITTER REPORTS */
-            await _hqHitterController.UpdateBothHqHitterDatabases(false, false);
-            ts = sw.Elapsed;
-            Console.WriteLine($"[ 4 ] {ts}");
+// <<<<<<< br1_08_28_2019-4
+//         //     return Ok();
+//         // }
+// =======
 
-
-
-            return Ok();
-        }
+//             return Ok();
+//         }
+// >>>>>>> master
 
         #region START ------------------------------------------------------------
         #endregion START ------------------------------------------------------------

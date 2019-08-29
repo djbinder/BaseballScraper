@@ -1,0 +1,16 @@
+@{
+    ViewData["Title"] = "Report Runner";
+}
+
+<br>
+<br>
+<hr style="border: 1px solid slateblue">
+<h3><b>@ViewData["Title"]</b></h3>
+<hr style="border: 1px solid slateblue">
+<br>
+
+<form asp-controller="MasterReport" asp-action="UpdateFullSeasonReports">
+    <p>
+        <input type="submit" value="RUN FULL SEASON REPORTS"/>
+    </p>
+</form>

@@ -379,6 +379,23 @@ namespace BaseballScraper.Infrastructure
             }
 
 
+            // If non-async method, set frameNumber to 1
+            // If async method, set frameNumber to 3
+            public void OpenMethod(int frameNumber)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+
+                StackTrace stackTrace  = new StackTrace();
+                string methodName      = stackTrace.GetFrame(frameNumber).GetMethod().Name;
+                StackFrame frame       = new StackFrame(1, true);
+                string fileName        = frame.GetFileName();
+                int lineNumber         = frame.GetFileLineNumber();
+                string fileNameTrimmed = Path.GetFileName(fileName);
+
+                Console.WriteLine($"OPEN  [ Line {lineNumber} @ {currentTime} ] {fileNameTrimmed} > {methodName} [{frameNumber}]");
+                Console.ResetColor();
+            }
+
 
 
             // https://msdn.microsoft.com/en-us/library/system.io.path.getfilename(v=vs.110).aspx
@@ -399,6 +416,21 @@ namespace BaseballScraper.Infrastructure
 
                 Console.WriteLine($"\n**********|\t{fileNameTrimmed} ---> COMPLETED {methodName}  [Line: {lineNumber} @ {currentTime}]\t|**********\n");
 
+                Console.ResetColor();
+            }
+
+            public void CloseMethod(int frameNumber)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+
+                StackTrace stackTrace  = new StackTrace();
+                string methodName      = stackTrace.GetFrame(frameNumber).GetMethod().Name;
+                StackFrame frame       = new StackFrame(1, true);
+                string fileName        = frame.GetFileName();
+                int lineNumber         = frame.GetFileLineNumber();
+                string fileNameTrimmed = Path.GetFileName(fileName);
+
+                Console.WriteLine($"CLOSE [ Line {lineNumber} @ {currentTime} ] {fileNameTrimmed} > {methodName} [{frameNumber}]");
                 Console.ResetColor();
             }
 
