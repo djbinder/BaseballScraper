@@ -1,11 +1,10 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Text;
 
 namespace BaseballScraper.Models.ConfigurationModels
-{
 
+{
     public class YahooConfigurationX
     {
 

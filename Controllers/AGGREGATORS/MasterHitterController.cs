@@ -72,9 +72,16 @@ namespace BaseballScraper.Controllers.AGGREGATORS
         // {
         //     _helpers.StartMethod();
 
-        //     Stopwatch sw = new Stopwatch();
-        //     sw.Start();
-        //     TimeSpan ts;
+// <<<<<<< br1_08_28_2019-4
+//         //     Stopwatch sw = new Stopwatch();
+//         //     sw.Start();
+//         //     TimeSpan ts;
+// =======
+
+//             Stopwatch sw = new Stopwatch();
+//             sw.Start();
+//             TimeSpan ts;
+// >>>>>>> master
 
 
         //     /* ADD ALL SFBB PLAYER BASES */
@@ -108,9 +115,14 @@ namespace BaseballScraper.Controllers.AGGREGATORS
         //     Console.WriteLine($"[ 4 ] {ts}");
 
 
-        //     return Ok();
-        // }
+// <<<<<<< br1_08_28_2019-4
+//         //     return Ok();
+//         // }
+// =======
 
+//             return Ok();
+//         }
+// >>>>>>> master
 
         #region START ------------------------------------------------------------
         #endregion START ------------------------------------------------------------
