@@ -75,6 +75,29 @@ namespace BaseballScraper.Controllers.PlayerControllers
         // * SFBB Player Id Map : http://bit.ly/2UdNAGy
 
 
+        // range is something like: "A7:AQ2333"
+        [HttpPost("mrc")]
+        public async Task<IActionResult> MASTER_REPORT_CALLER(string range)
+        {
+            _helpers.OpenMethod(3);
+            IEnumerable<SfbbPlayerBase> allPlayerBases = GetAllSfbbPlayerBasesFromGoogleSheet(range);
+            List<SfbbPlayerBase> allPlayerBasesList    = new List<SfbbPlayerBase>();
+
+            foreach(SfbbPlayerBase sfbbPlayerBase in allPlayerBases)
+            {
+                allPlayerBasesList.Add(sfbbPlayerBase);
+            }
+
+            AddAllSfbbPlayerBasesToDatabase(allPlayerBasesList);
+
+            List<CrunchTimePlayerBase> crunchTimePlayerBases = CreateListOfCrunchTimePlayerBasesForToday();
+            await AddAllCrunchTimePlayerBasesToDatabase(crunchTimePlayerBases);
+
+            return Ok();
+        }
+
+
+
 
         #region CRUNCHTIME ------------------------------------------------------------
 
@@ -114,28 +137,27 @@ namespace BaseballScraper.Controllers.PlayerControllers
             /// </remarks>
             public void GetCrunchTimePlayerBaseCsvForToday()
             {
+                _helpers.OpenMethod(1);
                 string todayString       = _csvHandler.TodaysDateString();
                 string locationToWriteTo = $"{CrunchTimeWriteFolder}{CrunchTimeReportFileBaseName}_{todayString}.csv";
                 bool doesFileExist       = _csvHandler.CheckIfFileExists(locationToWriteTo);
 
-                Console.WriteLine($"locationToWriteTo: {locationToWriteTo}");
-                Console.WriteLine($"doesFileExist : {doesFileExist}");
-
-                if(doesFileExist == true)
-                { // Console.WriteLine("FILE ALREADY EXISTS");
-                }
-                else
+                if(doesFileExist != true)
                 {
-                    Console.WriteLine("FILE DOES NOT EXIST - DOWNLOADING TODAY'S REPORT");
                     _csvHandler.DownloadCsvFromLink(CrunchTimeCsvSourceUrl, locationToWriteTo);
                 }
                 PrintCrunchTimeCsvDownloadInfo(todayString);
+                _helpers.CloseMethod(1);
             }
 
 
             // public void ReadCrunchTimePlayerBaseCsv(string fullFilePathAndName)
             public List<CrunchTimePlayerBase> CreateListOfCrunchTimePlayerBasesForToday()
             {
+                _helpers.OpenMethod(1);
+
+                GetCrunchTimePlayerBaseCsvForToday();
+
                 string todayString         = _csvHandler.TodaysDateString();
                 string fullFilePathAndName = $"{CrunchTimeWriteFolder}{CrunchTimeReportFileBaseName}_{todayString}.csv";
 
@@ -155,6 +177,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
                 // Console.WriteLine($"listOfObjects: {listOfObjects.Count}");
                 // Console.WriteLine($"crunchTimePlayerBases: {crunchTimePlayerBases.Count}");
+                _helpers.CloseMethod(1);
                 return crunchTimePlayerBases;
             }
 
@@ -171,7 +194,8 @@ namespace BaseballScraper.Controllers.PlayerControllers
             [HttpPost("crunch_time_player_base/all")]
             public async Task<ActionResult> AddAllCrunchTimePlayerBasesToDatabase(List<CrunchTimePlayerBase> crunchTimePlayerBases)
             {
-                int counter = 1;
+                int playersAddedCounter = 0;
+                int playersExistCounter = 0;
                 foreach(var playerBase in crunchTimePlayerBases)
                 {
                     var checkDbForPlayerBase = _context.CrunchTimePlayerBases.SingleOrDefault(ct => ct.MlbId == playerBase.MlbId);
@@ -179,13 +203,14 @@ namespace BaseballScraper.Controllers.PlayerControllers
                     if(checkDbForPlayerBase == null)
                     {
                         await _context.AddAsync(playerBase);
+                        playersAddedCounter++;
                     }
 
                     else
                     {
-                        Console.WriteLine($"{counter} | CRUNCH TIME PLAYER BASE ALREADY EXISTS");
+                        // Console.WriteLine($"{counter} | CRUNCH TIME PLAYER BASE ALREADY EXISTS");
+                        playersExistCounter++;
                     }
-                    counter++;
                 }
                 await _context.SaveChangesAsync();
                 return Ok();
@@ -232,9 +257,10 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
         #region SFBB DATABASE ------------------------------------------------------------
 
+
             public IEnumerable<SfbbPlayerBase> GetAllSfbbPlayerBasesFromGoogleSheet(string range)
             {
-                _helpers.StartMethod();
+                _helpers.OpenMethod(1);
                 IList<IList<object>> allPlayerBaseObjects = _googleSheetsConnector.ReadDataFromSheetRange(
                     _sfbbMapDocName,
                     _sfbbMapTabId,
@@ -326,6 +352,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
                     allPlayerBases.Add(playerBase);
                     // Console.WriteLine($"NEW: {playerBase.PLAYERNAME}\t MLB ID: {playerBase.MLBID}\t HQ ID: {playerBase.HQID}");
                 }
+                _helpers.CloseMethod(1);
                 return allPlayerBases;
             }
 
@@ -460,7 +487,8 @@ namespace BaseballScraper.Controllers.PlayerControllers
             [HttpPost("sfbb_player_base/add_all")]
             public IActionResult AddAllSfbbPlayerBasesToDatabase(List<SfbbPlayerBase> allPlayerBases)
             {
-                _helpers.StartMethod();
+                _helpers.OpenMethod(1);
+
                 int counter = 1;
                 foreach(SfbbPlayerBase playerBase in allPlayerBases)
                 {
@@ -493,6 +521,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
                 // Console.WriteLine($"PRESS ANY KEY TO CONTINUE");
                 // Console.ReadLine();
                 _context.SaveChanges();
+                _helpers.CloseMethod(1);
                 return Ok();
             }
 

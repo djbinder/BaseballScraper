@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -13,6 +13,7 @@ using BaseballScraper.Models.FanGraphs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
+using C = System.Console;
 
 
 #pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE1006
@@ -21,7 +22,7 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
     [Route("api/fangraphs/[controller]")]
     [ApiController]
     [ApiExplorerSettings(IgnoreApi = true)]
-    public class FgSpWpdiReportController : ControllerBase
+    public class FanGraphsSpController : ControllerBase
     {
         private readonly Helpers                      _helpers;
 
@@ -32,18 +33,28 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
         private readonly CsvHandler                   _csvHandler;
 
         private readonly BaseballScraperContext       _context;
+        private readonly ProjectDirectoryEndPoints     _projectDirectory;
 
 
 
-        public FgSpWpdiReportController(Helpers helpers, FanGraphsUriEndPoints endPoints, GoogleSheetsConnector googleSheetsConnector, CsvHandler csvHandler, BaseballScraperContext context)
+        public FanGraphsSpController(Helpers helpers, FanGraphsUriEndPoints endPoints, GoogleSheetsConnector googleSheetsConnector, CsvHandler csvHandler, BaseballScraperContext context, ProjectDirectoryEndPoints projectDirectory)
         {
             _helpers               = helpers;
             _endPoints             = endPoints;
             _googleSheetsConnector = googleSheetsConnector;
             _csvHandler            = csvHandler;
             _context               = context;
+            _projectDirectory      = projectDirectory;
         }
 
+        public FanGraphsSpController(){}
+
+
+        // BaseballData/02_WRITE/FANGRAPHS/PITCHERS/
+        private string PitcherWriteDirectory
+        {
+            get => _projectDirectory.FanGraphsPitcherWriteRelativePath;
+        }
 
 
         // Defined by FanGraphs
@@ -135,12 +146,23 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
         //      2) Add data to google sheet if wanted / appropriate
 
 
+        [HttpPost("mrc")]
+        public async Task<IActionResult> MASTER_REPORT_CALLER()
+        {
+            _helpers.OpenMethod(3);
+            await RunFgSpWpdiReport(2019, minInningsPitched_:1);
+            return Ok();
+        }
+
+
+
 
         #region FgSpWpdiReport PRIMARY METHOD ------------------------------------------------------------
 
 
-            public async Task RunFgSpWpdiReport(int season_, int minInningsPitched_=0)
+            public async Task RunFgSpWpdiReport(int season_, int minInningsPitched_=1)
             {
+                _helpers.OpenMethod(3);
                 // STEP 0: Check if there is already a Csv file created for today
                 bool doesCsvReportExistForToday = CheckIfCsvFileForTodayExists();
 
@@ -157,21 +179,33 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
                 }
 
                 // Create list of pitchers from CSV
-                var pitcherList = CreateListOfWpdiPitchersFromCsv(season_);
-                foreach(var pitcher in pitcherList)
-                {
-                    // STEP 3: add each pitcher to database OR update pitcher in database
-                    await AddOne(pitcher, season_);
-                }
+                List<FanGraphsPitcherForWpdiReport> pitcherList = CreateListOfWpdiPitchersFromCsv(season_);
+                // STEP 3: add each pitcher to database OR update pitcher in database
+                AddAll(pitcherList, season_);
+                // foreach(var pitcher in pitcherList)
+                // {
+                //     await AddOne(pitcher, season_);
+                // }
 
                 // Query database
-                var listFromDatabase = GetMany(season:season_, minInningsPitched:minInningsPitched_);
+                List<FanGraphsPitcherForWpdiReport> listFromDatabase = GetMany(season:season_, minInningsPitched:minInningsPitched_);
 
-                foreach(var pitcher in listFromDatabase)
+                foreach(FanGraphsPitcherForWpdiReport pitcher in listFromDatabase)
                 {
                     double mPDI = CalculateSpMpdi(pitcher.ZonePercentage, pitcher.OSwingPercentage, pitcher.OContactPercentage, pitcher.ZSwingPercentage);
-                    Console.WriteLine($"{pitcher.PitcherName}\t{mPDI}");
+                    // Console.WriteLine($"{pitcher.PitcherName}\t{mPDI}");
                 }
+
+                PrintWpdiReportPrimaryMethodInfo(doesCsvReportExistForToday, season_, minInningsPitched_);
+            }
+
+            private void PrintWpdiReportPrimaryMethodInfo(bool doesCsvReportExistForToday, int season, int minInningsPitched)
+            {
+                C.WriteLine($"\n--------------------------------------------");
+                _helpers.PrintNameSpaceControllerNameMethodName(typeof(FanGraphsSpController));
+                C.WriteLine($"REPORT DETAILS          : SEASON > {season}  MIN IP > {minInningsPitched}");
+                C.WriteLine($"TODAY'S REPORT EXISTS?  : {doesCsvReportExistForToday}");
+                C.WriteLine($"--------------------------------------------\n");
             }
 
         #endregion FgSpWpdiReport PRIMARY METHOD ------------------------------------------------------------
@@ -278,7 +312,10 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
             // * If the file already exists, you do not need to run the report again
             public bool CheckIfCsvFileForTodayExists()
             {
-                string targetWriteFolderPath = _endPoints.FanGraphsTargetWriteFolderLocation();
+                _helpers.OpenMethod(1);
+                // string targetWriteFolderPath = _endPoints.FanGraphsTargetWriteFolderLocation();
+                string targetWriteFolderPath = PitcherWriteDirectory;
+                // Console.WriteLine($"targetWriteFolderPath: {targetWriteFolderPath}");
                 var fileInfo = new DirectoryInfo(targetWriteFolderPath).GetFiles();
 
                 DateTime today = DateTime.Now;
@@ -287,6 +324,7 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
                 int day        = today.Day;
 
                 string fileName = $"{_wPdiReportPrefix}_{month}_{day}_{year}.csv";
+                // Console.WriteLine($"fileName: {fileName}");
 
                 bool doesCsvReportExistForToday = false;
 
@@ -318,6 +356,7 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
                 int endDay_            = 0
             )
             {
+                _helpers.OpenMethod(3);
                 var fgUrl = _endPoints.StartingPitcherWpdiEndPoint(
                     minInningsPitched : minInningsPitched_,
                     year              : year_,
@@ -345,17 +384,19 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
                 int reportDay   = 0
             )
             {
-                var downloadsFolder   = _endPoints.LocalDownloadsFolderLocation();
-                var targetWriteFolder = _endPoints.FanGraphsTargetWriteFolderLocation();
+                _helpers.OpenMethod(1);
+                string downloadsFolder   = _endPoints.LocalDownloadsFolderLocation();
+                // string targetWriteFolder = PitcherWriteDirectory;
 
                 _csvHandler.MoveCsvFileToFolder(
                     downloadsFolder,
-                    targetWriteFolder,
+                    PitcherWriteDirectory,
                     fileNamePrefix,
                     month:reportMonth,
                     year:reportYear,
                     day:reportDay
                 );
+                PrintCsvMoveInfo(downloadsFolder, PitcherWriteDirectory, fileNamePrefix, reportMonth, reportDay, reportYear);
                 return Ok();
             }
 
@@ -368,29 +409,39 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
             // Uses CSV files from target_write folder to players to database
             public async Task MoveDataFromAllPreviousSeasonsToDatabase()
             {
-                await MoveDataFromFanGraphsToDatabaseFullSeason(2018);
-                await MoveDataFromFanGraphsToDatabaseFullSeason(2017);
-                await MoveDataFromFanGraphsToDatabaseFullSeason(2016);
-                await MoveDataFromFanGraphsToDatabaseFullSeason(2015);
-                await MoveDataFromFanGraphsToDatabaseFullSeason(2014);
-                await MoveDataFromFanGraphsToDatabaseFullSeason(2013);
-                await MoveDataFromFanGraphsToDatabaseFullSeason(2012);
-                await MoveDataFromFanGraphsToDatabaseFullSeason(2011);
-                await MoveDataFromFanGraphsToDatabaseFullSeason(2010);
-                await MoveDataFromFanGraphsToDatabaseFullSeason(2009);
+                await MoveDataFromFanGraphsToDatabaseFullSeasonAsync(2018);
+                await MoveDataFromFanGraphsToDatabaseFullSeasonAsync(2017);
+                await MoveDataFromFanGraphsToDatabaseFullSeasonAsync(2016);
+                await MoveDataFromFanGraphsToDatabaseFullSeasonAsync(2015);
+                await MoveDataFromFanGraphsToDatabaseFullSeasonAsync(2014);
+                await MoveDataFromFanGraphsToDatabaseFullSeasonAsync(2013);
+                await MoveDataFromFanGraphsToDatabaseFullSeasonAsync(2012);
+                await MoveDataFromFanGraphsToDatabaseFullSeasonAsync(2011);
+                await MoveDataFromFanGraphsToDatabaseFullSeasonAsync(2010);
+                await MoveDataFromFanGraphsToDatabaseFullSeasonAsync(2009);
             }
 
 
             // CSVs should exist for 2009 - 2019
             // * File name format: 'SpWpdiReport_XXXX.csv' where XXXX is the year
-            public async Task MoveDataFromFanGraphsToDatabaseFullSeason(int year)
+            public async Task MoveDataFromFanGraphsToDatabaseFullSeasonAsync(int year)
             {
-                var pitcherList = CreateListOfWpdiPitchersFromCsv(year);
+                List<FanGraphsPitcherForWpdiReport> pitcherList = CreateListOfWpdiPitchersFromCsv(year);
+                AddAll(pitcherList, year);
                 foreach(var pitcher in pitcherList)
                 {
                     pitcher.Season = year;
                     await AddOne(pitcher, year);
                 }
+            }
+
+            // CSVs should exist for 2009 - 2019
+            // * File name format: 'SpWpdiReport_XXXX.csv' where XXXX is the year
+            public IActionResult MoveDataFromFanGraphsToDatabaseFullSeason(int year)
+            {
+                List<FanGraphsPitcherForWpdiReport> pitcherList = CreateListOfWpdiPitchersFromCsv(year);
+                AddAll(pitcherList, year);
+                return Ok();
             }
 
         #endregion RETRIEVE DATA FROM FANGRAPHS ------------------------------------------------------------
@@ -413,6 +464,7 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
             [HttpPost("add")]
             public async Task AddOne(FanGraphsPitcherForWpdiReport pitcher, int season)
             {
+                _helpers.OpenMethod(3);
                 pitcher.Season = season;
                 FanGraphsPitcherForWpdiReport exists = _context.FanGraphsPitchersForWpdiReport.SingleOrDefault(sp => sp.PlayerYearConcat == pitcher.PlayerYearConcat);
 
@@ -431,6 +483,9 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
                     await _context.SaveChangesAsync();
                 }
             }
+
+
+
 
 
             // STATUS [ August 1, 2019 ] : haven't tested if this works
@@ -483,6 +538,25 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
             }
 
 
+            [HttpPost("add_all")]
+            public IActionResult AddAll(List<FanGraphsPitcherForWpdiReport> pitchers, int season)
+            {
+                _helpers.OpenMethod(1);
+                foreach(var pitcher in pitchers)
+                {
+                    pitcher.Season = season;
+                    FanGraphsPitcherForWpdiReport checkDbForPitcher = _context.FanGraphsPitchersForWpdiReport.SingleOrDefault(sp => sp.PlayerYearConcat == pitcher.PlayerYearConcat);
+
+                    if(checkDbForPitcher == null)
+                    {
+                        _context.Add(pitcher);
+                    } else { }
+                }
+                _context.SaveChanges();
+                return Ok();
+            }
+
+
             // STATUS [ July 31, 2019 ] : this works
             // Delete pitchers in database from list
             // Example:
@@ -504,6 +578,7 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
             // Query database for pitchers and their wPDIs
             public List<FanGraphsPitcherForWpdiReport> GetMany(int season, int minInningsPitched = 0)
             {
+                _helpers.OpenMethod(1);
                 var pitchers = _context.FanGraphsPitchersForWpdiReport
                     .OrderByDescending(w => w.Wpdi)
                     .Where(y => y.Season == season && y.InningsPitched > minInningsPitched)
@@ -528,9 +603,11 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
             // * Uses the last updated CSV
             public List<FanGraphsPitcherForWpdiReport> CreateListOfWpdiPitchersFromCsv(int season)
             {
+                _helpers.OpenMethod(1);
                 // Thread.Sleep(10000);
-                string targetWriteFolderPath = _endPoints.FanGraphsTargetWriteFolderLocation();
-                string fileToRead            = _csvHandler.GetPathToLastUpdatedFileInFolder(targetWriteFolderPath);
+                // string targetWriteFolderPath = _endPoints.FanGraphsTargetWriteFolderLocation();
+                // string fileToRead            = _csvHandler.GetPathToLastUpdatedFileInFolder(targetWriteFolderPath);
+                string fileToRead            = _csvHandler.GetPathToLastUpdatedFileInFolder(PitcherWriteDirectory);
 
                 JObject records = _csvHandler.ReadCsvRecordsToJObject(
                     fileToRead,
@@ -836,6 +913,18 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
                 Console.WriteLine($"finalD: {finalD}");
                 Console.WriteLine($"finalE: {finalE}");
                 Console.WriteLine($"finalF: {finalF}\n");
+            }
+
+
+            public void PrintCsvMoveInfo(string movingFromDirectory, string movingToDirectory, string fileNamePrefix, int reportMonth, int reportDay, int reportYear)
+            {
+                Console.WriteLine($"\n--------------------------------------------");
+                _helpers.PrintNameSpaceControllerNameMethodName(typeof(FanGraphsSpController));
+                Console.WriteLine($"MOVING FROM : {movingFromDirectory}");
+                Console.WriteLine($"MOVING TO   : {movingToDirectory}");
+                Console.WriteLine($"PREFIX      : {fileNamePrefix}");
+                Console.WriteLine($"REPORT DATE : {reportMonth}.{reportDay}.{reportYear}");
+                Console.WriteLine($"--------------------------------------------\n");
             }
 
         #endregion PRINTING PRESS ------------------------------------------------------------

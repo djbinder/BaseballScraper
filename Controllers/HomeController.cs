@@ -71,7 +71,7 @@ namespace BaseballScraper.Controllers
         [Route("")]
         public IActionResult Index()
         {
-            Console.WriteLine("INDEX!");
+            // Console.WriteLine("INDEX!");
             return View("Dashboard");
 
         }

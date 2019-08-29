@@ -49,6 +49,7 @@ namespace BaseballScraper.Infrastructure
             // See: https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/file-system/how-to-get-information-about-files-folders-and-drives
             public async Task ClickLinkToDownloadCsvFile(string url, string csvLinkCssSelector)
             {
+                _helpers.OpenMethod(3);
                 var options = new LaunchOptions { Headless = false };
                 await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultRevision);
 

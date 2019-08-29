@@ -326,7 +326,8 @@ namespace BaseballScraper.Infrastructure
             */
             public IList<IList<object>> ReadDataFromSheetRange(string documentName, string sheetName, string range)
             {
-                _helpers.StartMethod();
+                _helpers.OpenMethod(1);
+
                 _spreadSheetId = SelectGoogleSheetToRead(documentName, "SpreadsheetId");
                 range          = $"{sheetName}!{range}";
 
@@ -336,7 +337,7 @@ namespace BaseballScraper.Infrastructure
 
                 IList<IList<object>> allRows = CreateListOfAllRowsInSheet(valueRange);
                 // PrintRowInfo(allRows);
-                _helpers.CompleteMethod();
+                _helpers.CloseMethod(1);
                 return allRows;
             }
 
