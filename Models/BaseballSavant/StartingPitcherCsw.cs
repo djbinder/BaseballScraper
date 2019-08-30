@@ -1,25 +1,17 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using CsvHelper.Configuration;
-// using CsvHelper.Configuration;
-// using Ganss.Excel;
 
 #pragma warning disable CS0649
 namespace BaseballScraper.Models.BaseballSavant
 {
     public class StartingPitcherCsw : BaseEntity
     {
-        [Key]
-        public int? StartingPitcherCswId { get; set; }
-
-        public string PlayerName { get; set; }
-
-        public int? PlayerId { get; set; }
-
-        public int? CswPitches { get; set; }
-
-        public int? TotalPitches { get; set; }
-
+        public string PlayerName        { get; set; }
+        public int? PlayerId            { get; set; }
+        public int? CswPitches          { get; set; }
+        public int? TotalPitches        { get; set; }
         public decimal? CswPitchPercent { get; set; }
 
 
@@ -27,8 +19,26 @@ namespace BaseballScraper.Models.BaseballSavant
         private readonly string abs;
         public string Abs => abs ?? "NA";
 
+        [NotMapped]
+        private object SpinRateObj { get; set; }
 
-        public int? SpinRate { get; set; }
+        public int? SpinRate
+        {
+            get
+            {
+                if(SpinRateObj is string)
+                {
+                    return 0;
+                }
+                else
+                {
+                    return Int32.Parse(SpinRateObj.ToString());
+                }
+            }
+        }
+
+
+        // public int? SpinRate { get; set; }
 
         public decimal? Velocity { get; set; }
 
@@ -110,9 +120,20 @@ namespace BaseballScraper.Models.BaseballSavant
     }
 
 
+    public class StartingPitcherCswFullSeason : StartingPitcherCsw
+    {
+
+        // public Guid Id { get; set; }
+
+        public int Season { get; set; }
+    }
+
+
+    // public class StartingPitcherCswSingleDay : StartingPitcherCsw
     public class StartingPitcherCswSingleDay : StartingPitcherCsw
     {
         public DateTime DatePitched { get; set; }
+        // public virtual StartingPitcherCsw StartingPitcherCsw { get; set; }
     }
 
     public class StartingPitcherCswDateRange : StartingPitcherCsw

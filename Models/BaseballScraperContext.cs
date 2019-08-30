@@ -6,20 +6,14 @@ using BaseballScraper.Models.Player;
 using BaseballScraper.Models.Yahoo;
 using BaseballScraper.Models.Yahoo.Resources.YahooTeamResource;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.EntityFrameworkCore.ValueGeneration;
-using Microsoft.EntityFrameworkCore.Migrations;
-using System.Data;
-
-using System.Linq;
-using System;
 
 namespace BaseballScraper.Models
 {
     public class BaseballScraperContext: DbContext
     {
         public BaseballScraperContext(DbContextOptions<BaseballScraperContext> options): base(options) { }
+
+
 
         public string Name                { get; set; }
         public string ConnectionString    { get; set; }
@@ -40,6 +34,10 @@ namespace BaseballScraper.Models
         /* BASEBALL SAVANT */
         public DbSet<ExitVelocityAndBarrelsHitter>      ExitVelocityAndBarrelsHitters   { get; set; }
         public DbSet<XstatsHitter>                      XStatsHitters                   { get; set; }
+        // public DbSet<StartingPitcherCsw>                StartingPitcherCsws             { get; set; }
+        public DbSet<StartingPitcherCswSingleDay>       StartingPitcherCswsSingleDays   { get; set; }
+        public DbSet<StartingPitcherCswDateRange>       StartingPitcherCswsDateRanges   { get; set; }
+        public DbSet<StartingPitcherCswFullSeason>      StartingPitcherCswsFullSeason   { get; set; }
 
 
         /* YAHOO */
@@ -47,9 +45,6 @@ namespace BaseballScraper.Models
 
 
         /* FANGRAPHS */
-        public DbSet<StartingPitcherCsw>                StartingPitcherCsws             { get; set; }
-        public DbSet<StartingPitcherCswSingleDay>       StartingPitcherCswsSingleDays   { get; set; }
-        public DbSet<StartingPitcherCswDateRange>       StartingPitcherCswsDateRanges   { get; set; }
         public DbSet<FanGraphsPitcherForWpdiReport>     FanGraphsPitchersForWpdiReport  { get; set; }
 
 
@@ -73,6 +68,19 @@ namespace BaseballScraper.Models
             modelBuilder.Entity<ExitVelocityAndBarrelsHitter>().ToTable("SAVANT_HIT_ExVeloBarrels");
             modelBuilder.Entity<XstatsHitter>().ToTable("SAVANT_HIT_XStats");
 
+
+            modelBuilder.Entity<StartingPitcherCswSingleDay>()
+                .ToTable("SAVANT_SP_SINGLE")
+                .HasKey(s => new { s.PlayerId, s.DatePitched });
+
+            modelBuilder.Entity<StartingPitcherCswDateRange>()
+                .ToTable("SAVANT_SP_RANGE")
+                .HasKey(s => new { s.PlayerId, s.StartDate, s.EndDate });
+
+            modelBuilder.Entity<StartingPitcherCswFullSeason>()
+                .ToTable("SAVANT_SP_SEASON")
+                .HasKey(s => new { s.PlayerId, s.Season });
+
             /* YAHOO */
             modelBuilder.Entity<YahooTeamResource>().ToTable("Y!_TeamResource");
             modelBuilder.Entity<YahooTeamLogo>().ToTable("Y!_TeamLogo");
@@ -80,7 +88,6 @@ namespace BaseballScraper.Models
             modelBuilder.Entity<YahooTeamRosterAdds>().ToTable("Y!_TmRosterAdds");
 
             /* FANGRAPHS */
-            modelBuilder.Entity<StartingPitcherCsw>().ToTable("FG_SP_CSW");
             modelBuilder.Entity<FanGraphsPitcherForWpdiReport>().ToTable("FG_SP_wPDI");
 
         }
@@ -100,6 +107,7 @@ namespace BaseballScraper.Models
 // 3) delete old Migrations folder
 // 4) dotnet ef migrations add YourMigrationName
         // dotnet ef migrations add mig05302019_1 OR mig08_06_2019_1
+        // dotnet ef migrations add MIG_08_29_2019_1
 // 5) dotnet ef database update
 
 // To add a table to an already migrated database, just do steps 4 and 5 (after you've added the DbSet to this file)
@@ -136,7 +144,7 @@ namespace BaseballScraper.Models
 
 
 
-
+// modelBuilder.Entity<StartingPitcherCsw>().ToTable("SAVANT_SP_CSW");
 
 // modelBuilder.Entity<BaseballSavantHitter>(entity =>
 // {

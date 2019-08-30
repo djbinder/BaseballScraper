@@ -199,15 +199,15 @@ namespace BaseballScraper.EndPoints
                 get => "BASEBALL_SAVANT/";
             }
 
-            private string BaseballSavantHitterWriteDirectoryName
-            {
-                get => "HITTERS/";
-            }
+            // private string BaseballSavantHitterWriteDirectoryName
+            // {
+            //     get => "HITTERS/";
+            // }
 
-            private string BaseballSavantPitcherWriteDirectoryName
-            {
-                get => "PITCHERS/";
-            }
+            // private string BaseballSavantPitcherWriteDirectoryName
+            // {
+            //     get => "PITCHERS/";
+            // }
 
             // BaseballData/02_WRITE/BASEBALL_SAVANT/
             public string BaseballSavantWriteRelativePath
@@ -218,13 +218,13 @@ namespace BaseballScraper.EndPoints
             // BaseballData/02_WRITE/BASEBALL_SAVANT/HITTERS/
             public string BaseballSavantHitterWriteRelativePath
             {
-                get => $"{BaseballSavantWriteRelativePath}{BaseballSavantHitterWriteDirectoryName}";
+                get => $"{BaseballSavantWriteRelativePath}{HITTER_DirectoryName}";
             }
 
             // BaseballData/02_WRITE/BASEBALL_SAVANT/PITCHERS/
             public string BaseballSavantPitcherWriteRelativePath
             {
-                get => $"{BaseballSavantWriteRelativePath}{BaseballSavantPitcherWriteDirectoryName}";
+                get => $"{BaseballSavantWriteRelativePath}{PITCHER_DirectoryName}";
             }
 
 

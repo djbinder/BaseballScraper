@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BaseballScraper.EndPoints;
@@ -16,7 +16,7 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
     [Route("api/hq/[controller]")]
     [ApiController]
     // [ApiExplorerSettings(IgnoreApi = true)]
-    public class BaseballHQHitterController : ControllerBase
+    public class BaseballHqHitterController : ControllerBase
     {
         private readonly Helpers                       _helpers;
         private readonly CsvHandler                    _csvHandler;
@@ -25,7 +25,7 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
         private readonly ProjectDirectoryEndPoints     _projectDirectory;
 
 
-        public BaseballHQHitterController(Helpers helpers, BaseballHqUtilitiesController hqUtilitiesController, CsvHandler csvHandler, BaseballScraperContext context, ProjectDirectoryEndPoints projectDirectory)
+        public BaseballHqHitterController(Helpers helpers, BaseballHqUtilitiesController hqUtilitiesController, CsvHandler csvHandler, BaseballScraperContext context, ProjectDirectoryEndPoints projectDirectory)
         {
             _helpers               = helpers;
             _hqUtilitiesController = hqUtilitiesController;
@@ -34,7 +34,7 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
             _projectDirectory      = projectDirectory;
         }
 
-        public BaseballHQHitterController() {}
+        public BaseballHqHitterController() {}
 
 
         // Defined by me

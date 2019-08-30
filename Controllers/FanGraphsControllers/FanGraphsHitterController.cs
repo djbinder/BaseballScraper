@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseballScraper.EndPoints;
@@ -15,21 +15,22 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
     [Route("api/fangraphs/[controller]")]
     [ApiController]
     [ApiExplorerSettings(IgnoreApi = true)]
-    public class FgHitterMasterReportController : ControllerBase
+    public class FanGraphsHitterController : ControllerBase
     {
         private readonly Helpers _h;
         private readonly GoogleSheetsConnector _gSC;
         private readonly FanGraphsUriEndPoints _fgEndPoints;
 
 
-        public FgHitterMasterReportController(Helpers h, GoogleSheetsConnector gSC, FanGraphsUriEndPoints fgEndPoints)
+        public FanGraphsHitterController(Helpers h, GoogleSheetsConnector gSC, FanGraphsUriEndPoints fgEndPoints)
         {
             _h = h;
             _gSC = gSC;
             _fgEndPoints = fgEndPoints;
         }
 
-        public FgHitterMasterReportController(){}
+
+        public FanGraphsHitterController(){}
 
 
 
