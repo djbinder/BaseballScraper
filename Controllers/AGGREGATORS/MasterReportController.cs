@@ -22,15 +22,17 @@ namespace BaseballScraper.Controllers.AGGREGATORS
         private readonly BaseballSavantHitterController _baseballSavantHitterController;
         private readonly BaseballHQHitterController     _hqHitterController;
         private readonly FanGraphsSpController          _fanGraphsSpController;
+        private readonly BaseballSavantSpController     _baseballSavantSpController;
 
 
-        public MasterReportController(Helpers helpers, PlayerBaseController playerBaseController, BaseballSavantHitterController baseballSavantHitterController, BaseballHQHitterController hqHitterController, FanGraphsSpController fanGraphsSpController)
+        public MasterReportController(Helpers helpers, PlayerBaseController playerBaseController, BaseballSavantHitterController baseballSavantHitterController, BaseballHQHitterController hqHitterController, FanGraphsSpController fanGraphsSpController, BaseballSavantSpController     baseballSavantSpController)
         {
             _helpers                        = helpers;
             _playerBaseController           = playerBaseController;
             _baseballSavantHitterController = baseballSavantHitterController;
             _hqHitterController             = hqHitterController;
             _fanGraphsSpController          = fanGraphsSpController;
+            _baseballSavantSpController     = baseballSavantSpController;
         }
 
         public MasterReportController(){}
@@ -48,24 +50,32 @@ namespace BaseballScraper.Controllers.AGGREGATORS
             Stopwatch sw = new Stopwatch();
             sw.Start();
 
-            // /* ADD ALL SFBB & CRUNCH TIME PLAYER BASES */
-            // await _playerBaseController.MASTER_REPORT_CALLER("A7:AQ2333");
-            // C.WriteLine($"[ 1 ] {sw.ElapsedMilliseconds}");
+            bool doNotRunThese = true;
+
+            if(doNotRunThese == false)
+            {
+                /* ADD ALL SFBB & CRUNCH TIME PLAYER BASES */
+                await _playerBaseController.MASTER_REPORT_CALLER("A7:AQ2333");
+                C.WriteLine($"[ 1 ] {sw.Elapsed.Seconds}");
 
 
-            // /* ADD X-STATS & EXIT VELO REPORTS */
-            // _baseballSavantHitterController.MASTER_REPORT_CALLER(2019, 100);
-            // C.WriteLine($"[ 2 ] {sw.ElapsedMilliseconds}");
+                /* ADD X-STATS & EXIT VELO REPORTS */
+                _baseballSavantHitterController.MASTER_REPORT_CALLER(2019, 100);
+                C.WriteLine($"[ 2 ] {sw.Elapsed.Seconds}");
 
 
-            // /* ADD YTD & ROS PROJECTION HITTER REPORTS */
-            // await _hqHitterController.MASTER_REPORT_CALLER(false, false);
-            // C.WriteLine($"[ 3 ] {sw.Elapsed}");
+                /* ADD YTD & ROS PROJECTION HITTER REPORTS */
+                await _hqHitterController.MASTER_REPORT_CALLER(false, false);
+                C.WriteLine($"[ 3 ] {sw.Elapsed.Seconds}");
 
-            /* FANGRAPHS SP */
-            await _fanGraphsSpController.MASTER_REPORT_CALLER();
-            C.WriteLine($"[ 4 ] {sw.Elapsed.Seconds}");
 
+                /* FANGRAPHS SP */
+                await _fanGraphsSpController.MASTER_REPORT_CALLER();
+                C.WriteLine($"[ 4 ] {sw.Elapsed.Seconds}");
+            }
+
+            await _baseballSavantSpController.MASTER_REPORT_CALLER();
+            C.WriteLine($"[ 5 ] {sw.Elapsed.Seconds}");
 
             sw.Stop();
             return Ok();

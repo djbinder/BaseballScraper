@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Net;
 using BaseballScraper.Infrastructure;
@@ -11,7 +11,7 @@ namespace BaseballScraper.Controllers.BaseballProspectusControllers
     [Route("api/baseballprospectus/[controller]")]
     [ApiController]
     [ApiExplorerSettings(IgnoreApi = true)]
-    public class BpSpController : ControllerBase
+    public class BaseballProspectusSpController : ControllerBase
     {
         private readonly Helpers _helpers;
 
@@ -20,7 +20,7 @@ namespace BaseballScraper.Controllers.BaseballProspectusControllers
         private readonly string _bpSpDraLeaderboardLink = "https://legacy.baseballprospectus.com/sortable/extras/dra_runs.php";
 
 
-        public BpSpController(Helpers helpers, CsvHandler csvHandler)
+        public BaseballProspectusSpController(Helpers helpers, CsvHandler csvHandler)
         {
             _helpers = helpers;
             _csvHandler = csvHandler;

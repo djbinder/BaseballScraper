@@ -166,7 +166,7 @@
                 * 5) Add records to the HqHitterYearToDate table
             </remarks>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.WriteBaseballSavantSingleDayDataToCsv(System.Int32,System.Int32,System.Int32)">
+        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BaseballSavantSpController.WriteBaseballSavantSingleDayDataToCsv(System.Int32,System.Int32,System.Int32)">
             <summary>
                 Write SP CSW data from Baseball Savant to CSV File
                 Uses 'GetAllSpCswSingleDayEndPointUri' end point
@@ -184,27 +184,28 @@
                 ints that represents the day number you want to get data for and write to a CSV
             </param>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.GetAllSpCswSingleDayEndPointUri(System.Int32,System.Int32,System.Int32)">
+        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BaseballSavantSpController.GetAllSpCswSingleDayEndPointUri(System.Int32,System.Int32,System.Int32)">
             <summary>
                 Create end point for 'WriteBaseballSavantSingleDayDataToCsv' method to write to
             </summary>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.SetCsvFilePathSpCswSingleDay(System.Int32,System.Int32,System.Int32)">
+        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BaseballSavantSpController.SetCsvFilePathSpCswSingleDay(System.Int32,System.Int32,System.Int32)">
             <summary>
                 Creates a string of the fill path name
             </summary>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.ReadSpCswCsvSingleDayAsync(System.Int32,System.Int32,System.Int32)">
+        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BaseballSavantSpController.ReadSpCswCsvSingleDayAsync(System.Int32,System.Int32,System.Int32)">
             <summary>
                 Read CSV File of 'StartingPitcherCswSingleDay' instances
                 The file includes SP CSW(called strike + whiffs) for pitchers that pitched on a certain day
             </summary>
             <remarks>
-                This reads a given file in BaseballData/02_Target_Write/BaseballSavant_Target_Write project folder
-                If a file does not exist for the date entered, you'll get an error
-                Uses CsvHandler from project Infrastructure to read the file
-                'csvFilePath' will be something like:
+                * This reads a given file in BaseballData/02_Target_Write/BaseballSavant_Target_Write project folder
+                * If a file does not exist for the date entered, you'll get an error
+                * Uses CsvHandler from project Infrastructure to read the file
+                * 'csvFilePath' will be something like:
                     BaseballData/02_Target_Write/BaseballSavant_Target_Write/Bs_AllSpSingleDayCsw5_29_2019.csv
+                * file name example: Bs_AllSpSingleDayCsw5_29_2019.csv
             </remarks>
             <param name="monthNumber">
                 ints that represents the month number you want to get data for and write to a CSV
@@ -222,22 +223,22 @@
                 A list of StartingPitcherCswSingleDay
             </returns>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.AddStartingPitcherCswSingleDayToDatabase(BaseballScraper.Models.BaseballSavant.StartingPitcherCswSingleDay)">
+        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BaseballSavantSpController.AddStartingPitcherCswSingleDayToDatabase(BaseballScraper.Models.BaseballSavant.StartingPitcherCswSingleDay)">
             <summary>
                 Add StartingPitcherCswSingleDay to Database
             </summary>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.AddStartingPitcherCswsSingleDayToDatabaseFromList(System.Collections.Generic.List{BaseballScraper.Models.BaseballSavant.StartingPitcherCswSingleDay})">
+        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BaseballSavantSpController.AddStartingPitcherCswsSingleDayToDatabaseFromList(System.Collections.Generic.List{BaseballScraper.Models.BaseballSavant.StartingPitcherCswSingleDay})">
             <summary>
                 Add StartingPitcherCswSingleDay to Database from list
             </summary>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.CreateSpCswSingleDayList(System.Collections.Generic.List{System.Object},System.Int32,System.Int32,System.Int32)">
+        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BaseballSavantSpController.CreateSpCswSingleDayList(System.Collections.Generic.List{System.Object},System.Int32,System.Int32,System.Int32)">
             <summary>
                 Create list of StartingPitcherCswSingleDay
             </summary>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.WriteBaseballSavantDateRangeDataToCsv(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
+        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BaseballSavantSpController.WriteBaseballSavantDateRangeDataToCsv(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
             <summary>
                 Write SP CSW data from Baseball Savant to CSV File
                 Uses 'GetAllSpCswRangeOfDaysEndPointUri' end point
@@ -258,27 +259,28 @@
                 ints that represents the end day number you want to get data for and write to a CSV
             </param>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.GetAllSpCswRangeOfDaysEndPointUri(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
+        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BaseballSavantSpController.GetAllSpCswRangeOfDaysEndPointUri(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
             <summary>
                 Create end point for 'WriteBaseballSavantDateRangeDataToCsv' method to write to
             </summary>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.SetCsvFilePathSpCswDateRange(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
+        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BaseballSavantSpController.SetCsvFilePathSpCswDateRange(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
             <summary>
                 Creates a string of the fill path name
             </summary>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.ReadSpCswCsvDateRangeAsync(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
+        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BaseballSavantSpController.ReadSpCswCsvDateRangeAsync(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
             <summary>
                 Read CSV File of 'StartingPitcherCswFullSeason' instances from day X to day Y
                 The file includes SP CSW(called strike + whiffs) for pitchers in that date range
             </summary>
             <remarks>
-                This reads a given file in BaseballData/02_Target_Write/BaseballSavant_Target_Write project folder
-                If a file does not exist for the date range entered, you'll get an error
-                Uses CsvHandler from project Infrastructure to read the file
-                'csvFilePath' will be something like:
+                * This reads a given file in BaseballData/02_Target_Write/BaseballSavant_Target_Write project folder
+                * If a file does not exist for the date range entered, you'll get an error
+                * Uses CsvHandler from project Infrastructure to read the file
+                * 'csvFilePath' will be something like:
                     BaseballData/02_Target_Write/BaseballSavant_Target_Write/Bs_SpCswDateRange5_1_2019_to_5_15_2019.csv
+                * file name example: Bs_SpCswDateRange5_1_2019_to_5_15_2019.csv
             </remarks>
             <param name="year">
                 ints that represents the year you want to get data for and write to a CSV
@@ -302,22 +304,22 @@
                 A list of StartingPitcherCswDateRange
             </returns>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.AddStartingPitcherCswDateRangeToDatabase(BaseballScraper.Models.BaseballSavant.StartingPitcherCswDateRange)">
+        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BaseballSavantSpController.AddStartingPitcherCswDateRangeToDatabase(BaseballScraper.Models.BaseballSavant.StartingPitcherCswDateRange)">
             <summary>
                 Add StartingPitcherCswDateRange to Database
             </summary>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.AddStartingPitcherCswsDateRangeToDatabaseFromList(System.Collections.Generic.List{BaseballScraper.Models.BaseballSavant.StartingPitcherCswDateRange})">
+        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BaseballSavantSpController.AddStartingPitcherCswsDateRangeToDatabaseFromList(System.Collections.Generic.List{BaseballScraper.Models.BaseballSavant.StartingPitcherCswDateRange})">
             <summary>
                 Add StartingPitcherCswDateRange to Database from list
             </summary>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.CreateSpCswDateRangeList(System.Collections.Generic.List{System.Object},System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
+        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BaseballSavantSpController.CreateSpCswDateRangeList(System.Collections.Generic.List{System.Object},System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
             <summary>
                 Create list of StartingPitcherCswDateRange
             </summary>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.WriteBaseballSavantFullSeasonData(System.Int32)">
+        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BaseballSavantSpController.WriteBaseballSavantFullSeasonData(System.Int32)">
             <summary>
                 Write SP CSW data from Baseball Savant to CSV File
                 Uses 'GetAllSpCswFullSeasonEndPointUri' end point
@@ -326,27 +328,28 @@
                 The year / season you want to search for
             </param>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.GetAllSpCswFullSeasonEndPointUri(System.Int32)">
+        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BaseballSavantSpController.GetAllSpCswFullSeasonEndPointUri(System.Int32)">
             <summary>
                 Create end point for 'WriteBaseballSavantFullSeasonData' method to write to
             </summary>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.SetCsvFilePathSpCswFulLSeason(System.Int32)">
+        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BaseballSavantSpController.SetCsvFilePathSpCswFulLSeason(System.Int32)">
             <summary>
                 Creates a string of the fill path name
             </summary>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.ReadSpCswCsvFullSeasonAsync(System.Int32)">
+        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BaseballSavantSpController.ReadSpCswCsvFullSeasonAsync(System.Int32)">
             <summary>
                 Read CSV File of 'StartingPitcherCsw' instances for a year / season
                 The file includes SP CSW(called strike + whiffs) for pitchers in that season
             </summary>
             <remarks>
-                This reads a given file in BaseballData/02_Target_Write/BaseballSavant_Target_Write project folder
-                If a file does not exist for the season / year entered, you'll get an error
-                Uses CsvHandler from project Infrastructure to read the file
-                'csvFilePath' will be something like:
+                * This reads a given file in BaseballData/02_Target_Write/BaseballSavant_Target_Write project folder
+                * If a file does not exist for the season / year entered, you'll get an error
+                * Uses CsvHandler from project Infrastructure to read the file
+                * 'csvFilePath' will be something like:
                     BaseballData/02_Target_Write/BaseballSavant_Target_Write/Bs_SpCswDateRange_FULL_SEASON_2019.csv
+                * file name example: Bs_SpCswDateRange_FULL_SEASON_2019.csv
             </remarks>
             <param name="year">
                 The year / season you want to search for
@@ -358,17 +361,17 @@
                 A list of StartingPitcherCsw
             </returns>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.AddStartingPitcherCswToDatabase(BaseballScraper.Models.BaseballSavant.StartingPitcherCsw)">
+        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BaseballSavantSpController.AddStartingPitcherCswFullSeasonToDatabase(BaseballScraper.Models.BaseballSavant.StartingPitcherCswFullSeason)">
             <summary>
                 Add StartingPitcherCsw to Database
             </summary>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.AddStartingPitcherCswsToDatabaseFromList(System.Collections.Generic.List{BaseballScraper.Models.BaseballSavant.StartingPitcherCsw})">
+        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BaseballSavantSpController.AddStartingPitcherCswsFullSeasonToDatabaseFromList(System.Collections.Generic.List{BaseballScraper.Models.BaseballSavant.StartingPitcherCswFullSeason})">
             <summary>
                 Add StartingPitcherCsw to Database from list
             </summary>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BsSpController.CreateSpCswFullSeasonList(System.Collections.Generic.List{System.Object},System.Int32)">
+        <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BaseballSavantSpController.CreateSpCswFullSeasonList(System.Collections.Generic.List{System.Object},System.Int32)">
             <summary>
                 Create list of StartingPitcherCsw
             </summary>

@@ -161,41 +161,41 @@ namespace BaseballScraper.Models.Player
     public class CrunchTimePlayerBase : BaseEntity
     {
         [Key]
-        public int MlbId { get; set; }
-        public string MlbName { get; set; }
-        public string MlbPos { get; set; }
-        public string MlbTeam { get; set; }
-        public string MlbTeamLong { get; set; }
-        public string Bats { get; set; }
-        public string Throws { get; set; }
-        public int BirthYear { get; set; }
-        public int BpId { get; set; }
-        public string BrefId { get; set; }
-        public string BrefName { get; set; }
-        public int? CbsId { get; set; }
-        public string CbsName { get; set; }
-        public string CbsPos { get; set; }
-        public int? EspnId { get; set; }
-        public string EspnName { get; set; }
-        public string EspnPos { get; set; }
-        public string FgId { get; set; }
-        public string FgName { get; set; }
-        public string FgPos { get; set; }
-        public string LahmanId { get; set; }
-        public int? NfbcId { get; set; }
-        public string NfbcName { get; set; }
-        public string NfbcPos { get; set; }
-        public string RetroId { get; set; }
-        public string RetroName { get; set; }
-        public int Debut { get; set; }
-        public int? YahooId { get; set; }
-        public string YahooName { get; set; }
-        public int? OttoneuId { get; set; }
-        public string OttoneuName { get; set; }
-        public string OttoneuPos { get; set; }
-        public int? RotowireId { get; set; }
+        public int MlbId           { get; set; }
+        public string MlbName      { get; set; }
+        public string MlbPos       { get; set; }
+        public string MlbTeam      { get; set; }
+        public string MlbTeamLong  { get; set; }
+        public string Bats         { get; set; }
+        public string Throws       { get; set; }
+        public int BirthYear       { get; set; }
+        public int BpId            { get; set; }
+        public string BrefId       { get; set; }
+        public string BrefName     { get; set; }
+        public int? CbsId          { get; set; }
+        public string CbsName      { get; set; }
+        public string CbsPos       { get; set; }
+        public int? EspnId         { get; set; }
+        public string EspnName     { get; set; }
+        public string EspnPos      { get; set; }
+        public string FgId         { get; set; }
+        public string FgName       { get; set; }
+        public string FgPos        { get; set; }
+        public string LahmanId     { get; set; }
+        public int? NfbcId         { get; set; }
+        public string NfbcName     { get; set; }
+        public string NfbcPos      { get; set; }
+        public string RetroId      { get; set; }
+        public string RetroName    { get; set; }
+        public int Debut           { get; set; }
+        public int? YahooId        { get; set; }
+        public string YahooName    { get; set; }
+        public int? OttoneuId      { get; set; }
+        public string OttoneuName  { get; set; }
+        public string OttoneuPos   { get; set; }
+        public int? RotowireId     { get; set; }
         public string RotowireName { get; set; }
-        public string RotowirePos { get; set; }
+        public string RotowirePos  { get; set; }
     }
 
     public class CrunchTimePlayerBaseClassMap : ClassMap<CrunchTimePlayerBase>
@@ -240,98 +240,6 @@ namespace BaseballScraper.Models.Player
         }
     }
 
-    // public class CrunchTimePlayerBase : BaseEntity
-    // {
-    //     public int? MlbId                             { get; set; }
-
-    //     public string MlbName                         { get; set; }
-
-    //     public string MlbPosition                     { get; set; }
-
-    //     public string MlbTeamAbbreviation             { get; set; }
-
-    //     public string MlbTeamFullName                 { get; set; }
-
-    //     public char Bats                              { get; set; }
-
-    //     public char Throws                            { get; set; }
-
-    //     public int? BirthYear                         { get; set; }
-
-    //     public int? BaseballProspectusPlayerId        { get; set; }
-
-    //     public string BaseballPlayerReferencePlayerId { get; set; }
-
-    //     public string BaseballPlayerReferenceName     { get; set; }
-
-    //     public int? CbsPlayerId                       { get; set; }
-
-    //     public string CbsPlayerName                   { get; set; }
-
-    //     public string CbsPlayerPosition               { get; set; }
-
-    //     public string EspnPlayerId                    { get; set; }
-
-    //     public string EspnPlayerName                  { get; set; }
-
-    //     public string EspnPlayerPosition              { get; set; }
-
-    //     public string FanGraphsPlayerId               { get; set; }
-
-    //     public string FanGraphsPlayerName             { get; set; }
-
-    //     public string FanGraphsPlayerPosition         { get; set; }
-
-    //     public string LahmanPlayerId                  { get; set; }
-
-    //     public int? NfbcPlayerId                      { get; set; }
-
-    //     public string NfbcPlayerName                  { get; set; }
-
-    //     public string NfbcPlayerPosition              { get; set; }
-
-    //     public string RetroPlayerId                   { get; set; }
-
-    //     public string RetroPlayerName                 { get; set; }
-
-    //     public int? MlbDebut                          { get; set; }
-
-    //     public int? YahooPlayerId                     { get; set; }
-
-    //     public string YahooPlayerName                 { get; set; }
-
-    //     public string YahooPlayerPosition             { get; set; }
-
-    //     public int? OttoneuPlayerId                   { get; set; }
-
-    //     public string OttoneuPlayerName               { get; set; }
-
-    //     public string OttoneuPlayerPosition           { get; set; }
-
-    //     public int? RotoWirePlayerId                  { get; set; }
-
-    //     public string RotoWirePlayerName              { get; set; }
-
-    //     public string RotoWirePlayerPosition          { get; set; }
-
-
-    // }
-
-    // public sealed class CrunchTimePlayerBaseClassMap : ClassMap<CrunchTimePlayerBase>
-    // {
-    //     public CrunchTimePlayerBaseClassMap()
-    //     {
-    //         Map(m => m.MlbId).Name("mlb_id");
-    //         Map(m => m.MlbName).Name("mlb_name");
-    //         Map(m => m.MlbPosition).Name("mlb_pos");
-    //         Map(m => m.MlbTeamAbbreviation).Name("mlb_team");
-    //         Map(m => m.MlbTeamFullName).Name("mlb_team_long");
-    //         Map(m => m.Bats).Name("bats");
-    //         Map(m => m.Throws).Name("throws");
-    //         Map(m => m.BirthYear).Name("birth_year");
-    //     }
-    // }
-
 
     // this references SfbbPlayerIdMap in BaseballScraper/Configuration/gSheetNames.json
     // * SFBB Player Id Map : http://bit.ly/2UdNAGy
@@ -339,199 +247,97 @@ namespace BaseballScraper.Models.Player
     {
         public virtual XstatsHitter XstatsHitter { get; set; }
         public virtual ExitVelocityAndBarrelsHitter ExitVelocityAndBarrelsHitter { get; set; }
-        // public virtual BaseballHqReportHitterBase BaseballHqReportHitterBase { get; set; }
         public virtual HqHitterRestOfSeasonProjection HqHitterRestOfSeasonProjection { get; set; }
         public virtual HqHitterYearToDate HqHitterYearToDate { get; set; }
 
 
-
-
-        // [ForeignKey("BaseballSavantHitter")]
         public int? MLBID  { get; set; }
-
-
-        // [ForeignKey("BaseballHqReportHitterBase")]
         public int? HQID { get; set; }
-
-
 
 
 
         // [Ganss.Excel.Column("IDPLAYER")]
         [Key]
-        public string IDPLAYER  { get; set; }
+        public string IDPLAYER                    { get; set; }
 
-        // [Ganss.Excel.Column("PLAYERNAME")]
-        public string PLAYERNAME  { get; set; }
+        public string PLAYERNAME                  { get; set; }
 
-        // [Ganss.Excel.Column("BIRTHDATE")]
-        public string BIRTHDATE  { get; set; }
+        public string BIRTHDATE                   { get; set; }
 
-        // [Ganss.Excel.Column("FIRSTNAME")]
-        public string FIRSTNAME  { get; set; }
+        public string FIRSTNAME                   { get; set; }
 
-        // [Ganss.Excel.Column("LASTNAME")]
-        public string LASTNAME  { get; set; }
+        public string LASTNAME                    { get; set; }
 
-        // [Ganss.Excel.Column("TEAM")]
-        public string TEAM  { get; set; }
+        public string TEAM                        { get; set; }
 
-        // [Ganss.Excel.Column("LG")]
-        public string LG  { get; set; }
+        public string LG                          { get; set; }
 
-        // [Ganss.Excel.Column("POS")]
-        public string POS  { get; set; }
+        public string POS                         { get; set; }
 
-        // [Ganss.Excel.Column("IDFANGRAPHS")]
-        public string IDFANGRAPHS  { get; set; }
+        public string IDFANGRAPHS                 { get; set; }
 
-        // [Ganss.Excel.Column("FANGRAPHSNAME")]
-        public string FANGRAPHSNAME  { get; set; }
+        public string FANGRAPHSNAME               { get; set; }
 
-        // [Ganss.Excel.Column("MLBNAME")]
-        public string MLBNAME  { get; set; }
+        public string MLBNAME                     { get; set; }
 
-        // [Ganss.Excel.Column("CBSID")]
-        public string CBSID  { get; set; }
+        public string CBSID                       { get; set; }
 
-        // [Ganss.Excel.Column("CBSNAME")]
-        public string CBSNAME  { get; set; }
+        public string CBSNAME                     { get; set; }
 
-        // [Ganss.Excel.Column("RETROID")]
-        public string RETROID  { get; set; }
+        public string RETROID                     { get; set; }
 
-        // [Ganss.Excel.Column("BREFID")]
-        public string BREFID  { get; set; }
+        public string BREFID                      { get; set; }
 
-        // [Ganss.Excel.Column("NFBCID")]
-        public string NFBCID  { get; set; }
+        public string NFBCID                      { get; set; }
 
-        // [Ganss.Excel.Column("NFBCNAME")]
-        public string NFBCNAME  { get; set; }
+        public string NFBCNAME                    { get; set; }
 
-        // [Ganss.Excel.Column("ESPNID")]
-        public string ESPNID  { get; set; }
+        public string ESPNID                      { get; set; }
 
-        // [Ganss.Excel.Column("ESPNNAME")]
-        public string ESPNNAME  { get; set; }
+        public string ESPNNAME                    { get; set; }
 
-        // [Ganss.Excel.Column("KFFLNAME")]
-        public string KFFLNAME  { get; set; }
+        public string KFFLNAME                    { get; set; }
 
-        // [Ganss.Excel.Column("DAVENPORTID")]
-        public string DAVENPORTID  { get; set; }
+        public string DAVENPORTID                 { get; set; }
 
-        // [Ganss.Excel.Column("BPID")]
-        public string BPID  { get; set; }
+        public string BPID                        { get; set; }
 
-        // [Ganss.Excel.Column("YAHOOID")]
-        public string YAHOOID  { get; set; }
+        public string YAHOOID                     { get; set; }
 
-        // [Ganss.Excel.Column("YAHOONAME")]
-        public string YAHOONAME  { get; set; }
+        public string YAHOONAME                   { get; set; }
 
-        // [Ganss.Excel.Column("MSTRBLLNAME")]
-        public string MSTRBLLNAME  { get; set; }
+        public string MSTRBLLNAME                 { get; set; }
 
-        // [Ganss.Excel.Column("BATS")]
-        public string BATS  { get; set; }
+        public string BATS                        { get; set; }
 
-        // [Ganss.Excel.Column("THROWS")]
-        public string THROWS  { get; set; }
+        public string THROWS                      { get; set; }
 
-        // [Ganss.Excel.Column("FANPROSNAME")]
-        public string FANTPROSNAME  { get; set; }
+        public string FANTPROSNAME                { get; set; }
 
-        // [Ganss.Excel.Column("LASTCOMMAFIRST")]
-        public string LASTCOMMAFIRST  { get; set; }
+        public string LASTCOMMAFIRST              { get; set; }
 
-        // [Ganss.Excel.Column("ROTOWIREID")]
-        public string ROTOWIREID  { get; set; }
+        public string ROTOWIREID                  { get; set; }
 
-        // [Ganss.Excel.Column("FANDUELNAME")]
-        public string FANDUELNAME  { get; set; }
+        public string FANDUELNAME                 { get; set; }
 
-        // [Ganss.Excel.Column("FANDUELID")]
-        public string FANDUELID  { get; set; }
+        public string FANDUELID                   { get; set; }
 
-        // [Ganss.Excel.Column("DRAFTKINGSNAME")]
-        public string DRAFTKINGSNAME  { get; set; }
+        public string DRAFTKINGSNAME              { get; set; }
 
-        // [Ganss.Excel.Column("OTTONEUID")]
-        public string OTTONEUID  { get; set; }
+        public string OTTONEUID                   { get; set; }
 
+        public string RAZZBALLNAME                { get; set; }
 
+        public string FANTRAXID                   { get; set; }
 
-        // [Ganss.Excel.Column("RAZZBALLNAME")]
-        public string RAZZBALLNAME  { get; set; }
+        public string FANTRAXNAME                 { get; set; }
 
-        // [Ganss.Excel.Column("FANTRAXID")]
-        public string FANTRAXID  { get; set; }
+        public string ROTOWIRENAME                { get; set; }
 
-        // [Ganss.Excel.Column("FANTRAXNAME")]
-        public string FANTRAXNAME  { get; set; }
+        public string ALLPOS                      { get; set; }
 
-        // [Ganss.Excel.Column("ROTOWIRENAME")]
-        public string ROTOWIRENAME  { get; set; }
+        public string NFBCLASTFIRST               { get; set; }
 
-        // [Ganss.Excel.Column("ALLPOS")]
-        public string ALLPOS  { get; set; }
-
-        // [Ganss.Excel.Column("NFBCLASTFIRST")]
-        public string NFBCLASTFIRST  { get; set; }
-
-
-        // private int? _baseballSavantHitterForeignKey;
-
-        // [ForeignKey("BaseballSavantHitter")]
-        // public int? BaseballSavantHitterForeignKey
-        // {
-        //     get
-        //     {
-        //         if(MLBID.ToString() == "")
-        //         {
-        //             return null;
-        //         }
-        //         else
-        //         {
-        //             return Int32.Parse(MLBID.ToString());
-        //         }
-        //     }
-        //     // set => _baseballSavantHitterForeignKey = value;
-        // }
-
-        // public int? _mlbId;
-
-
-        // [ForeignKey("BaseballSavantHitter")]
-        // public int? MLBID_
-        // {
-        //     get => MLBID;
-        //     set => _mlbId = value;
-        // }
-
-                // [Ganss.Excel.Column("HQID")]
-        // public string HQID_String  { get; set; }
-
-        // public int? _hqId;
-
-
-        // // [ForeignKey("BaseballHqReportHitterBase")]
-        // public int? HQID
-        // {
-        //     get
-        //     {
-        //         if(HQID_String.ToString() == "")
-        //         {
-        //             return null;
-        //         }
-        //         else
-        //         {
-        //             return Int32.Parse(HQID_String.ToString());
-        //         }
-        //     }
-        //     set => _hqId = value;
-        // }
     }
 
     public sealed class SfbbPlayerBaseClassMap : ClassMap<SfbbPlayerBase>

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using CsvHelper;
@@ -11,6 +10,7 @@ using CsvHelper.Configuration;
 using Microsoft.Scripting.Utils;
 using Newtonsoft.Json.Linq;
 using PuppeteerSharp;
+using C = System.Console;
 
 
 #pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
@@ -70,6 +70,7 @@ namespace BaseballScraper.Infrastructure
             // * Rename file when it is moved by appending a date string with year, month, day
             public void MoveCsvFileToFolder(string currentFilePath, string filePathToSaveCsv, string reportType, int month = 0, int year = 0, int day = 0)
             {
+                _helpers.OpenMethod(1);
                 string fileName      = string.Empty;
                 string targetPath    = filePathToSaveCsv;
 
@@ -108,6 +109,7 @@ namespace BaseballScraper.Infrastructure
             // STATUS [ August 13, 2019 ] : this works
             public string GetPathToLastUpdatedFileInFolder(string folderPath)
             {
+                _helpers.OpenMethod(1);
                 string fileName = string.Empty;
                 if (Directory.Exists(folderPath))
                 {
@@ -137,34 +139,37 @@ namespace BaseballScraper.Infrastructure
             // STATUS [ August 13, 2019 ] : this works
             public string FindFileInFolder(string fileName, string folderPath)
             {
+                _helpers.OpenMethod(1);
                 string filePath = string.Empty;
                 if (Directory.Exists(folderPath))
-                {
                     filePath = Path.Combine(folderPath, fileName);
-                }
+
                 return filePath;
             }
 
             // STATUS [ August 13, 2019 ] : this works
             public void MoveFile(string fullSourceFilePath, string fullDestinationFilePath)
             {
+                _helpers.OpenMethod(1);
                 File.Move(fullSourceFilePath, fullDestinationFilePath);
             }
 
             // STATUS [ August 13, 2019 ] : this works
             public void ReplaceFile(string fullSourceFilePath, string fullDestinationFilePath, string backupFileName)
             {
+                _helpers.OpenMethod(1);
                 File.Replace(fullSourceFilePath, fullDestinationFilePath, backupFileName);
             }
 
 
             public bool CheckIfFileExists(string filePath)
             {
+                _helpers.OpenMethod(1);
                 bool doesFileExist = false;
-                if(System.IO.File.Exists(filePath))
-                {
+
+                if(File.Exists(filePath))
                     doesFileExist = true;
-                }
+
                 return doesFileExist;
             }
 
@@ -193,6 +198,7 @@ namespace BaseballScraper.Infrastructure
             /// </example>
             public void DownloadCsvFromLink(string csvUrl, string fullPathWithFileName)
             {
+                _helpers.OpenMethod(1);
                 WebClient webClient = new WebClient();
                 {
                     webClient.DownloadFile(csvUrl, fullPathWithFileName);
@@ -204,6 +210,7 @@ namespace BaseballScraper.Infrastructure
 
             public string LocalDownloadsFolderLocation()
             {
+                _helpers.OpenMethod(1);
                 var downloadsFolderToken = _appSettingsJson["LocalComputerItems"]["DownloadsFolderLocation"];
                 string downloadsPath     = downloadsFolderToken.ToString();
                 return downloadsPath;
@@ -225,15 +232,20 @@ namespace BaseballScraper.Infrastructure
             /// <example> _cH.ReadCsv("BaseballData/Lahman/Teams.csv"); </example>
             public IEnumerable<dynamic> ReadCsvRecords(string csvFilePath, Type modelType, Type modelMapType)
             {
+                _helpers.OpenMethod(1);
                 using(TextReader fileReader = File.OpenText(csvFilePath))
                 {
                     var csvReader = new CsvReader( fileReader );
-                    RegisterMapForClass(csvReader, modelMapType);
+
+                    RegisterMapForClass(
+                        csvReader,
+                        modelMapType
+                    );
 
                     csvReader.Read();
                     csvReader.ReadHeader();
 
-                    IEnumerable<object> records      = csvReader.GetRecords(modelType);
+                    IEnumerable<object> records = csvReader.GetRecords(modelType);
                     return records;
                 }
             }
@@ -241,19 +253,24 @@ namespace BaseballScraper.Infrastructure
 
             public IList<object> ReadCsvRecordsToList(string csvFilePath, Type modelType, Type modelMapType)
             {
+                _helpers.OpenMethod(1);
                 using(TextReader fileReader = File.OpenText(csvFilePath))
                 {
                     var csvReader = new CsvReader( fileReader );
-                    RegisterMapForClass(csvReader, modelMapType);
 
-                    csvReader.Configuration.TrimOptions = TrimOptions.Trim;
-                    csvReader.Configuration.IgnoreBlankLines = true;
+                    RegisterMapForClass(
+                        csvReader,
+                        modelMapType
+                    );
+
+                    csvReader.Configuration.TrimOptions       = TrimOptions.Trim;
+                    csvReader.Configuration.IgnoreBlankLines  = true;
                     csvReader.Configuration.MissingFieldFound = null;
 
                     csvReader.Read();
                     csvReader.ReadHeader();
 
-                    var records      = csvReader.GetRecords(modelType).ToList();
+                    var records = csvReader.GetRecords(modelType).ToList();
                     return records;
                 }
             }
@@ -281,6 +298,7 @@ namespace BaseballScraper.Infrastructure
             // *    6) When reading records, ignores last row of data in csv (it's a disclaimer added by bb hq)
             public IList<object> ReadCsvRecordsToList(string csvFolderPath, string csvFileName, Type modelType, Type modelMapType, bool headersAreInFirstRow)
             {
+                _helpers.OpenMethod(1);
                 string csvFileFullPath      = string.Empty;
                 string newCsvFileName       = string.Empty;
                 string fileLocationFullPath = $"{csvFolderPath}{csvFileName}";
@@ -290,7 +308,7 @@ namespace BaseballScraper.Infrastructure
                 if(fileLocationFullPath.Contains("csv"))
                 {
                     csvFileFullPath = $"{csvFolderPath}{csvFileName}";
-                    newCsvFileName = $"_{csvFileName}";
+                    newCsvFileName  = $"_{csvFileName}";
                 }
 
                 string updatedPath = $"{csvFolderPath}{newCsvFileName}";
@@ -324,6 +342,7 @@ namespace BaseballScraper.Infrastructure
 
             public JObject ReadCsvRecordsToJObject(string csvFilePath, Type modelType, Type modelMapType)
             {
+                _helpers.OpenMethod(1);
                 using(TextReader fileReader = File.OpenText(csvFilePath))
                 {
                     var csvReader = new CsvReader( fileReader );
@@ -366,12 +385,17 @@ namespace BaseballScraper.Infrastructure
             /// </example>
             public async Task<IEnumerable<dynamic>> ReadCsvRecordsAsync(string csvFilePath, Type modelType, Type modelMapType)
             {
-                // MODEL TYPE type & MODEL MAP TYPE type --> System.RuntimeType
+                _helpers.OpenMethod(3);
+
                 using(TextReader fileReader = File.OpenText(csvFilePath))
                 {
                     CsvReader csvReader = new CsvReader( fileReader );
 
-                    RegisterMapForClass(csvReader, modelMapType);
+                    RegisterMapForClass(
+                        csvReader,
+                        modelMapType
+                    );
+
                     csvReader.Configuration.DetectColumnCountChanges = true;
 
                     await csvReader.ReadAsync();
@@ -386,13 +410,18 @@ namespace BaseballScraper.Infrastructure
 
             public async Task<IEnumerable<object>> ReadCsvRecordsAsyncToList(string csvFilePath, Type modelType, Type modelMapType, List<object> list)
             {
+                _helpers.OpenMethod(3);
                 PrintPathModelMap(csvFilePath, modelType, modelMapType);
-                // MODEL TYPE type & MODEL MAP TYPE type --> System.RuntimeType
+
                 using(TextReader fileReader = File.OpenText(csvFilePath))
                 {
                     CsvReader csvReader = new CsvReader( fileReader );
 
-                    RegisterMapForClass(csvReader, modelMapType);
+                    RegisterMapForClass(
+                        csvReader,
+                        modelMapType
+                    );
+
                     csvReader.Configuration.DetectColumnCountChanges = true;
 
                     await csvReader.ReadAsync();
@@ -401,13 +430,14 @@ namespace BaseballScraper.Infrastructure
                     // RECORDS type --> CsvHelper.CsvReader+<GetRecords>d__65
                     records = csvReader.GetRecords(modelType);
 
-                    _helpers.EnumerateOverRecordsDynamic(records);
-
+                    int counter = 1;
                     foreach(var record in records)
                     {
                         // Console.WriteLine(record);
                         list.Add(record);
+                        counter++;
                     }
+                    C.WriteLine($"COUNTER: {counter}");
                 }
                 return records;
             }
@@ -429,9 +459,8 @@ namespace BaseballScraper.Infrastructure
             /// </param>
             public void RegisterMapForClass(CsvReader csvReader, Type modelType)
             {
-                // Console.WriteLine($"CSV HANDLER > RegisterMapForClass > modelType: {modelType}");
+                _helpers.OpenMethod(1);
                 var mapClass = csvReader.Configuration.RegisterClassMap(modelType);
-                // Console.WriteLine($"mapClass.ClassType: {mapClass.ClassType} \tmapClass.MemberMaps: {mapClass.MemberMaps}\n");
             }
 
         #endregion READ CSV ------------------------------------------------------------
@@ -450,6 +479,7 @@ namespace BaseballScraper.Infrastructure
             // * It's basically what Text-to-Columns is in Excel
             public void WriteValuesAcrossRows(string fullPathOfWriteFile, IEnumerable<string> recordsToWrite)
             {
+                _helpers.OpenMethod(1);
                 using(var stream = new MemoryStream())
                 using(var writer = new StreamWriter(fullPathOfWriteFile))
                 using(var reader = new StreamReader(stream))
@@ -529,8 +559,8 @@ namespace BaseballScraper.Infrastructure
 
             public double ConvertCellWithPercentageSymbolToDouble(string s)
             {
+                _helpers.OpenMethod(1);
                 double doubleValue = 0.00;
-                // double doubleValue = double.Parse(dataToConvert[0]);
 
                 // if the cell has data, parse the data
                 try
@@ -542,7 +572,10 @@ namespace BaseballScraper.Infrastructure
                 // if the cell does not have data, error
                 catch
                 {
-                    Console.WriteLine($"\nIssue converting string to double - likely because no data in csv cell");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"\nERROR:");
+                    Console.ResetColor();
+                    Console.WriteLine($"Issue converting string to double - likely because no data in csv cell");
                     Console.WriteLine($"In: CsvHandler > ConvertCellWithPercentageSymbolToDouble() Method\n");
                 }
                 return doubleValue;
@@ -558,6 +591,7 @@ namespace BaseballScraper.Infrastructure
             // * Quotation marks can mess with mapping header rows to model properties
             public void CleanQuotationMarksFromString(string[] values)
             {
+                _helpers.OpenMethod(1);
                 foreach(var value in values)
                 {
                     if(value.Contains("\""))
@@ -584,6 +618,7 @@ namespace BaseballScraper.Infrastructure
             // * This basically makes the file unique for the day it was downloaded
             public string TodaysDateString()
             {
+                _helpers.OpenMethod(1);
                 string dateString = string.Empty;
                 DateTime today    = DateTime.Now;
 
@@ -602,6 +637,7 @@ namespace BaseballScraper.Infrastructure
             // * This basically makes the file unique for the day it was downloaded
             public string TodaysDateStringComplex()
             {
+                _helpers.OpenMethod(1);
                 string dateString = string.Empty;
 
                 DateTime today    = DateTime.Now;
@@ -622,7 +658,6 @@ namespace BaseballScraper.Infrastructure
             public string GetFieldNameByIndex(CsvReader csvReader, int indexNumber)
             {
                 string fieldName = csvReader[indexNumber];
-                Console.WriteLine($"field: {fieldName}");
                 return fieldName;
             }
 
@@ -631,7 +666,6 @@ namespace BaseballScraper.Infrastructure
             public int GetFieldPosition(CsvReader csvReader, int indexNumber)
             {
                 var field = csvReader.GetField<int>(indexNumber);
-                _helpers.Intro(field, "field int");
                 return field;
             }
 
@@ -644,16 +678,20 @@ namespace BaseballScraper.Infrastructure
 
             public void PrintPathModelMap(string csvFilePath, Type modelType, Type modelMapType)
             {
-                Console.WriteLine($"\nPATH: {csvFilePath}");
-                Console.WriteLine($"MODEL: {modelType}\nMAP TYPE: {modelMapType}\n");
+                C.WriteLine($"\n-------------------------------------------------------------------");
+                _helpers.PrintNameSpaceControllerNameMethodName(typeof(CsvHandler));
+                C.WriteLine($"CSV FILE PATH  : {csvFilePath}");
+                C.WriteLine($"MODEL TYPE     : {modelType}");
+                C.WriteLine($"MODEL MAP TYPE : {modelMapType}");
+                C.WriteLine($"-------------------------------------------------------------------\n");
             }
 
 
             public void PrintFileInfoDetails(FileInfo file)
             {
-                Console.WriteLine($"\nfileName: {file.FullName}");
-                Console.WriteLine($"Last Access: {file.LastAccessTime}");
-                Console.WriteLine($"Last Write: {file.LastWriteTime}\n");
+                C.WriteLine($"\nfileName: {file.FullName}");
+                C.WriteLine($"Last Access: {file.LastAccessTime}");
+                C.WriteLine($"Last Write: {file.LastWriteTime}\n");
             }
 
         #endregion PRINTING PRESS ------------------------------------------------------------
