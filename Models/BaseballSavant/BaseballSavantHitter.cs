@@ -8,8 +8,10 @@ using Ganss.Excel;
 #pragma warning disable CS0649, IDE0051, IDE0052
 namespace BaseballScraper.Models.BaseballSavant
 {
-    public partial class BaseballSavantHitter : BaseEntity
+    public partial class BaseballSavantHitter : IBaseEntity
     {
+        public DateTime DateCreated { get; set; }  // from IBaseEntity interface
+        public DateTime DateUpdated { get; set; }  // from IBaseEntity interface
         //         [Key]
         // public int MLBID                          { get; set; }
         // public string LastName                       { get; set; }
@@ -35,8 +37,12 @@ namespace BaseballScraper.Models.BaseballSavant
 
 
     // public partial class XstatsHitter : BaseballSavantHitter
-    public partial class XstatsHitter : BaseEntity
+    public partial class XstatsHitter : IBaseEntity
     {
+        public DateTime DateCreated { get; set; }  // from IBaseEntity interface
+        public DateTime DateUpdated { get; set; }  // from IBaseEntity interface
+
+
         [Key]
         public int MLBID                          { get; set; }
         public string LastName                       { get; set; }
@@ -87,12 +93,15 @@ namespace BaseballScraper.Models.BaseballSavant
 
 
     // public partial class ExitVelocityAndBarrelsHitter : BaseballSavantHitter
-    public partial class ExitVelocityAndBarrelsHitter : BaseEntity
+    public partial class ExitVelocityAndBarrelsHitter : IBaseEntity
     {
+        public DateTime DateCreated { get; set; }  // from IBaseEntity interface
+        public DateTime DateUpdated { get; set; }  // from IBaseEntity interface
+
         [Key]
-        public int MLBID                          { get; set; }
-        public string LastName                       { get; set; }
-        public string FirstName                      { get; set; }
+        public int MLBID         { get; set; }
+        public string LastName   { get; set; }
+        public string FirstName  { get; set; }
 
 
         [ForeignKey("SfbbPlayerBase")]

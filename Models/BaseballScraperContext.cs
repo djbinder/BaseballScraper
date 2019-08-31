@@ -1,17 +1,30 @@
 // using BaseballScraper.Models.Player;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using BaseballScraper.Infrastructure;
 using BaseballScraper.Models.BaseballHq;
 using BaseballScraper.Models.BaseballSavant;
 using BaseballScraper.Models.FanGraphs;
 using BaseballScraper.Models.Player;
 using BaseballScraper.Models.Yahoo;
 using BaseballScraper.Models.Yahoo.Resources.YahooTeamResource;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace BaseballScraper.Models
 {
     public class BaseballScraperContext: DbContext
     {
-        public BaseballScraperContext(DbContextOptions<BaseballScraperContext> options): base(options) { }
+        private readonly Helpers _helpers;
+        public BaseballScraperContext(DbContextOptions<BaseballScraperContext> options, Helpers helpers): base(options)
+        {
+            _helpers = helpers;
+        }
+
+        public BaseballScraperContext(){}
 
 
 
@@ -34,7 +47,7 @@ namespace BaseballScraper.Models
         /* BASEBALL SAVANT */
         public DbSet<ExitVelocityAndBarrelsHitter>      ExitVelocityAndBarrelsHitters   { get; set; }
         public DbSet<XstatsHitter>                      XStatsHitters                   { get; set; }
-        // public DbSet<StartingPitcherCsw>                StartingPitcherCsws             { get; set; }
+
         public DbSet<StartingPitcherCswSingleDay>       StartingPitcherCswsSingleDays   { get; set; }
         public DbSet<StartingPitcherCswDateRange>       StartingPitcherCswsDateRanges   { get; set; }
         public DbSet<StartingPitcherCswFullSeason>      StartingPitcherCswsFullSeason   { get; set; }
@@ -52,10 +65,12 @@ namespace BaseballScraper.Models
 
 
 
-        // public DbSet<BaseballSavantHitter> BaseballSavantHitter { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            _helpers.OpenMethod(1);
+
             /* PLAYER BASES */
             modelBuilder.Entity<SfbbPlayerBase>().ToTable("_BASE_Sfbb");
             modelBuilder.Entity<CrunchTimePlayerBase>().ToTable("_BASE_CrunchTime");
@@ -90,12 +105,74 @@ namespace BaseballScraper.Models
             /* FANGRAPHS */
             modelBuilder.Entity<FanGraphsPitcherForWpdiReport>().ToTable("FG_SP_wPDI");
 
+
+            _helpers.CloseMethod(1);
+
         }
+
+
+        // See: http://bit.ly/2ZJTvbK
+        // * Runs when you do _context.SaveChanges();
+        public override int SaveChanges()
+        {
+            _helpers.OpenMethod(1);
+
+            var now = DateTime.Now;
+
+            ChangeTracker.DetectChanges();
+            foreach (EntityEntry item in ChangeTracker.Entries()
+                                .Where(
+                                    i => i.State == EntityState.Added ||
+                                    i.State == EntityState.Modified
+                                )
+                                .Where(
+                                    i => i as IBaseEntity != null
+                                ))
+            {
+                if (item.State == EntityState.Added)
+                {
+                    (item as IBaseEntity).DateCreated = now;
+                }
+                (item as IBaseEntity).DateUpdated = now;
+            }
+            _helpers.CloseMethod(3);
+            // Call the SaveChanges method on the context;
+            return base.SaveChanges();
+        }
+
+
+        // See: http://bit.ly/2ZJTvbK
+        // * Runs when you do _context.SaveChangesAsync();
+        public override Task<int> SaveChangesAsync(System.Threading.CancellationToken cancellationToken)
+        {
+            _helpers.OpenMethod(3);
+
+            IEnumerable<EntityEntry> entities = ChangeTracker.Entries()
+                .Where(
+                    entityEntry => entityEntry.Entity is IBaseEntity && (
+                        entityEntry.State == EntityState.Added ||
+                        entityEntry.State == EntityState.Modified
+                    )
+                );
+
+            foreach (EntityEntry entity in entities)
+            {
+                if (entity.State == EntityState.Added)
+                    ((IBaseEntity)entity.Entity).DateCreated = DateTime.Now;
+
+                ((IBaseEntity)entity.Entity).DateUpdated = DateTime.Now;
+            }
+            _helpers.CloseMethod(3);
+            return base.SaveChangesAsync(cancellationToken);
+        }
+
+
+
     }
 }
 
 
-// Database Migrations
+// DATABASE MIGRATIONS
 // 1) update appsettings.Development.json first
 //      i.e., change this "database=BS_08_05_2019_1" to today's date
 // 2) Clear secrets; set new secrets (for DB info in appsettings files)
@@ -107,7 +184,9 @@ namespace BaseballScraper.Models
 // 3) delete old Migrations folder
 // 4) dotnet ef migrations add YourMigrationName
         // dotnet ef migrations add mig05302019_1 OR mig08_06_2019_1
-        // dotnet ef migrations add MIG_08_29_2019_1
+        /*
+            dotnet ef migrations add MIG_08_29_2019_1
+        */
 // 5) dotnet ef database update
 
 // To add a table to an already migrated database, just do steps 4 and 5 (after you've added the DbSet to this file)

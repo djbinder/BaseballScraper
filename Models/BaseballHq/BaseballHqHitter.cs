@@ -1,5 +1,6 @@
 // SEE: https://joshclose.github.io/CsvHelper/examples/configuration/class-maps/mapping-duplicate-names/
 
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using BaseballScraper.Models.Player;
@@ -17,8 +18,12 @@ namespace BaseballScraper.Models.BaseballHq
     // There are two different CSV reports run / downloaded from Baseball Hq
     // * 1) Year to Date    2) Rest of Season Projection
     // * These are the fields / columns they both have in common
-    public partial class BaseballHqReportHitterBase : BaseEntity
+    public partial class BaseballHqReportHitterBase : IBaseEntity
     {
+        public DateTime DateCreated { get; set; }  // from IBaseEntity interface
+        public DateTime DateUpdated { get; set; }  // from IBaseEntity interface
+
+
         // [ForeignKey("SfbbPlayerBase")]
         [Key]
         public int HQID { get; set; }

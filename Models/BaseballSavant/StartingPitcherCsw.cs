@@ -6,8 +6,38 @@ using CsvHelper.Configuration;
 #pragma warning disable CS0649
 namespace BaseballScraper.Models.BaseballSavant
 {
-    public class StartingPitcherCsw : BaseEntity
+    public class StartingPitcherCswFullSeason : StartingPitcherCsw
     {
+        public int Season { get; set; }
+        new public DateTime DateCreated { get; set; }  // from IBaseEntity interface
+        new public DateTime DateUpdated { get; set; }  // from IBaseEntity interface
+    }
+
+
+    public class StartingPitcherCswSingleDay : StartingPitcherCsw
+    {
+        public DateTime DatePitched { get; set; }
+        // public virtual StartingPitcherCsw StartingPitcherCsw { get; set; }
+    }
+
+    public class StartingPitcherCswDateRange : StartingPitcherCsw
+    {
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+
+        new public DateTime DateCreated { get; set; }  // from IBaseEntity interface
+        new public DateTime DateUpdated { get; set; }  // from IBaseEntity interface
+    }
+
+
+
+    public class StartingPitcherCsw : IBaseEntity
+    {
+        public DateTime DateCreated { get; set; }  // from IBaseEntity interface
+        public DateTime DateUpdated { get; set; }  // from IBaseEntity interface
+
+
+
         public string PlayerName        { get; set; }
         public int? PlayerId            { get; set; }
         public int? CswPitches          { get; set; }
@@ -120,25 +150,5 @@ namespace BaseballScraper.Models.BaseballSavant
     }
 
 
-    public class StartingPitcherCswFullSeason : StartingPitcherCsw
-    {
 
-        // public Guid Id { get; set; }
-
-        public int Season { get; set; }
-    }
-
-
-    // public class StartingPitcherCswSingleDay : StartingPitcherCsw
-    public class StartingPitcherCswSingleDay : StartingPitcherCsw
-    {
-        public DateTime DatePitched { get; set; }
-        // public virtual StartingPitcherCsw StartingPitcherCsw { get; set; }
-    }
-
-    public class StartingPitcherCswDateRange : StartingPitcherCsw
-    {
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-    }
 }

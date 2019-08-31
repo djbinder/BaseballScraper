@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using BaseballScraper.Models.BaseballSavant;
 using BaseballScraper.Models.BaseballHq;
 using CsvHelper.Configuration;
+using System;
 
 namespace BaseballScraper.Models.Player
 {
@@ -156,10 +157,14 @@ namespace BaseballScraper.Models.Player
     }
 
 
+
     // * CrunchTime Map : http://crunchtimebaseball.com/baseball_map.html
     // * CrunchTime CSV : http://crunchtimebaseball.com/master.csv
-    public class CrunchTimePlayerBase : BaseEntity
+    public class CrunchTimePlayerBase : IBaseEntity
     {
+        public DateTime DateCreated { get; set; }  // from IBaseEntity interface
+        public DateTime DateUpdated { get; set; }  // from IBaseEntity interface
+
         [Key]
         public int MlbId           { get; set; }
         public string MlbName      { get; set; }
@@ -243,8 +248,13 @@ namespace BaseballScraper.Models.Player
 
     // this references SfbbPlayerIdMap in BaseballScraper/Configuration/gSheetNames.json
     // * SFBB Player Id Map : http://bit.ly/2UdNAGy
-    public class SfbbPlayerBase : BaseEntity
+    public class SfbbPlayerBase : IBaseEntity
     {
+        public DateTime DateCreated { get; set; }  // from IBaseEntity interface
+        public DateTime DateUpdated { get; set; }  // from IBaseEntity interface
+
+
+
         public virtual XstatsHitter XstatsHitter { get; set; }
         public virtual ExitVelocityAndBarrelsHitter ExitVelocityAndBarrelsHitter { get; set; }
         public virtual HqHitterRestOfSeasonProjection HqHitterRestOfSeasonProjection { get; set; }

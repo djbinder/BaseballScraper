@@ -1,14 +1,15 @@
-// DJB this is right
-
 using System.ComponentModel.DataAnnotations;
 using System.Xml.Serialization;
+using System;
 
 namespace BaseballScraper.Models.Yahoo
 {
 
     [XmlRoot (ElementName = "team_logos")]
-    public class YahooTeamLogos
+    public class YahooTeamLogos : IBaseEntity
     {
+        public DateTime DateCreated { get; set; }  // from IBaseEntity interface
+        public DateTime DateUpdated { get; set; }  // from IBaseEntity interface
         public YahooTeamLogo TeamLogo { get; set; }
     }
 

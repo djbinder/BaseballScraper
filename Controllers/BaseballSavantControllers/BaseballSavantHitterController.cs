@@ -30,6 +30,8 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
         private readonly BaseballScraperContext        _context;
         private readonly ProjectDirectoryEndPoints     _projectDirectory;
 
+        public System.Threading.CancellationToken cancellationToken = new System.Threading.CancellationToken();
+
 
         public BaseballSavantHitterController(Helpers helpers, CsvHandler csvHandler, BaseballSavantHitterEndPoints hitterEndpoints, BaseballScraperContext context, ProjectDirectoryEndPoints projectDirectory)
         {
@@ -419,7 +421,8 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
                     }
                     counter++;
                 }
-                await _context.SaveChangesAsync();
+                // await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(cancellationToken);
                 return Ok();
             }
 
@@ -518,7 +521,8 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
                 {
                     _context.Remove(hitter);
                 }
-                _context.SaveChangesAsync();
+                // _context.SaveChangesAsync();
+                _context.SaveChangesAsync(cancellationToken);
                 return Ok();
             }
 

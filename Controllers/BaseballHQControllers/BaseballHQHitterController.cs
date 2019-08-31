@@ -24,6 +24,8 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
         private readonly BaseballScraperContext        _context;
         private readonly ProjectDirectoryEndPoints     _projectDirectory;
 
+        public System.Threading.CancellationToken cancellationToken = new System.Threading.CancellationToken();
+
 
         public BaseballHqHitterController(Helpers helpers, BaseballHqUtilitiesController hqUtilitiesController, CsvHandler csvHandler, BaseballScraperContext context, ProjectDirectoryEndPoints projectDirectory)
         {
@@ -108,6 +110,7 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
                 await UpdateBothHqHitterDatabases(openRosFileAfterMove, openYtdFileAfterMove);
                 return Ok();
             }
+
 
 
             // STATUS [ August 13, 2019 ] : this works
@@ -366,7 +369,8 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
             public async Task<IActionResult> AddRestOfSeasonProjectionToDatabase(HqHitterRestOfSeasonProjection hitter)
             {
                 await _context.AddAsync(hitter);
-                await _context.SaveChangesAsync();
+                // await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(cancellationToken);
                 return Ok();
             }
 
@@ -393,7 +397,8 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
                         // C.WriteLine("HQ ROS HITTER EXISTS");
                     }
                 }
-                await _context.SaveChangesAsync();
+                // await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(cancellationToken);
                 return Ok();
             }
 
@@ -451,7 +456,8 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
                     try
                     {
                         _context.Update(playerToUpdate);
-                        await _context.SaveChangesAsync();
+                        // await _context.SaveChangesAsync();
+                        await _context.SaveChangesAsync(cancellationToken);
                         return Ok();
                     }
                     catch(DbUpdateException /* ex */)
@@ -476,7 +482,8 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
                 _helpers.OpenMethod(3);
                 HqHitterRestOfSeasonProjection hitter = await _context.HqHitterRestOfSeasonProjections.SingleOrDefaultAsync(h => h.HQID == hqId);
                 _context.Remove(hitter);
-                await _context.SaveChangesAsync();
+                // await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(cancellationToken);
                 return Ok();
             }
 
@@ -699,7 +706,8 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
             public async Task<IActionResult> AddYearToDateRecordToDatabase(HqHitterYearToDate hitter)
             {
                 await _context.AddAsync(hitter);
-                await _context.SaveChangesAsync();
+                // await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(cancellationToken);
                 return Ok();
             }
 
@@ -722,7 +730,8 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
 
                     }
                 }
-                await _context.SaveChangesAsync();
+                // await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(cancellationToken);
                 return Ok();
             }
 
@@ -772,7 +781,8 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
                     try
                     {
                         _context.Update(playerToUpdate);
-                        await _context.SaveChangesAsync();
+                        // await _context.SaveChangesAsync();
+                        await _context.SaveChangesAsync(cancellationToken);
                         return Ok();
                     }
                     catch(DbUpdateException /* ex */)
@@ -796,7 +806,8 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
                 _helpers.OpenMethod(3);
                 var hitter = await _context.HqHitterYearToDates.SingleOrDefaultAsync(h => h.HQID == hqId);
                 _context.Remove(hitter);
-                await _context.SaveChangesAsync();
+                // await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(cancellationToken);
                 return Ok();
             }
 
@@ -864,7 +875,7 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
             public async Task DownloadHqHitterReport(string reportCssSelector, string downloadedCsvFileName, string fileNamePrefix, bool openFileAfterMove)
             {
                 _helpers.OpenMethod(3);
-                PrintDownloadedReportDetails(reportCssSelector, downloadedCsvFileName, fileNamePrefix);
+                PrintDownloadedReportDetails(reportCssSelector, downloadedCsvFileName, fileNamePrefix, openFileAfterMove);
                 var page = await _hqUtilitiesController.CreateChromePage();
                 await _hqUtilitiesController.LoginToBaseballHq(page);
                 await _hqUtilitiesController.DownloadHqReport(page, reportCssSelector);
@@ -895,14 +906,10 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
             {
                 bool doesCsvFileForTodayExist = false;
 
-                // string fullHqPathAndFileToCheck =               $"{_hqHitterTargetWriteFolderPath}{todaysReportName}";
-                // string fullHqArchivePathAndFileToCheck =        $"{_hqHitterTargetWriteArchiveFolderPath}{todaysReportName}";
-                // string fullHqPathAndFileToCheckCleaned =        $"{_hqHitterTargetWriteFolderPath}_{todaysReportName}";
-                // string fullHqArchivePathAndFileToCheckCleaned = $"{_hqHitterTargetWriteArchiveFolderPath}_{todaysReportName}";
-                string fullHqPathAndFileToCheck =               $"{BaseballHqHitterWriteDirectory}{todaysReportName}";
-                string fullHqArchivePathAndFileToCheck =        $"{BaseballHqArchiveDirectory}{todaysReportName}";
-                string fullHqPathAndFileToCheckCleaned =        $"{BaseballHqHitterWriteDirectory}_{todaysReportName}";
-                string fullHqArchivePathAndFileToCheckCleaned = $"{BaseballHqArchiveDirectory}_{todaysReportName}";
+                string fullHqPathAndFileToCheck               =   $"{BaseballHqHitterWriteDirectory}{todaysReportName}";
+                string fullHqArchivePathAndFileToCheck        =   $"{BaseballHqArchiveDirectory}{todaysReportName}";
+                string fullHqPathAndFileToCheckCleaned        =   $"{BaseballHqHitterWriteDirectory}_{todaysReportName}";
+                string fullHqArchivePathAndFileToCheckCleaned =   $"{BaseballHqArchiveDirectory}_{todaysReportName}";
 
                 if(System.IO.File.Exists(fullHqPathAndFileToCheck))
                     doesCsvFileForTodayExist = true;
@@ -916,8 +923,8 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
                 else if(System.IO.File.Exists(fullHqArchivePathAndFileToCheckCleaned))
                     doesCsvFileForTodayExist = true;
 
-                else
-                    C.WriteLine("DoesCsvFileForTodayExist(): FILE FOR TODAY DOES NOT EXIST");
+                // else
+                    // C.WriteLine("DoesCsvFileForTodayExist(): FILE FOR TODAY DOES NOT EXIST");
 
                 return doesCsvFileForTodayExist;
             }
@@ -932,12 +939,15 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
         #region PRINTING PRESS ------------------------------------------------------------
 
             [ApiExplorerSettings(IgnoreApi = true)]
-            private void PrintDownloadedReportDetails(string reportCssSelector, string downloadedCsvFileName, string fileNamePrefix)
+            private void PrintDownloadedReportDetails(string reportCssSelector, string downloadedCsvFileName, string fileNamePrefix, bool openFileAfterMove)
             {
                 C.WriteLine($"\n-------------------------------------------------------------------");
-                C.WriteLine($"CSS Selector: {reportCssSelector}");
-                C.WriteLine($"Downloaded Csv FileName: {downloadedCsvFileName}");
-                C.WriteLine($"File Name Prefix: {fileNamePrefix}");
+                _helpers.PrintNameSpaceControllerNameMethodName(typeof(BaseballHqHitterController));
+                C.WriteLine($"CLICK CSS SELECTOR   : {reportCssSelector}");
+                C.WriteLine($"CSV DL FILE NAME     : {downloadedCsvFileName}");
+                C.WriteLine($"CSV FILE NAME PREFIX : {fileNamePrefix}");
+                C.WriteLine($"MOVE TO              : {BaseballHqHitterWriteDirectory}");
+                C.WriteLine($"OPEN CSV AFTER MOVE  : {openFileAfterMove}");
                 C.WriteLine($"-------------------------------------------------------------------\n");
             }
 

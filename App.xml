@@ -65,7 +65,7 @@
                 Without this, you will get an error / will not find player in sheet
             </summary>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHQHitterController.UpdateBothHqHitterDatabases(System.Boolean,System.Boolean)">
+        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.UpdateBothHqHitterDatabases(System.Boolean,System.Boolean)">
             <summary>
                 * Gets all hitter reports from hq and adds them to database
                 * Updates the two main bases with day from today
@@ -74,7 +74,7 @@
                 * SEE: MasterHitterController (as of August 13, 2019)
             </remarks>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHQHitterController.UpdateDatabaseWithTodaysHitterRestOfSeasonProjectionsData(System.Boolean)">
+        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.UpdateDatabaseWithTodaysHitterRestOfSeasonProjectionsData(System.Boolean)">
             <summary>
                 Gets ROS csv from hq site and adds hitters to database
             </summary>
@@ -87,7 +87,7 @@
                 * 5) Add records to the HqHitter ROS Projection table
             </remarks>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHQHitterController.DownloadRestOfSeasonProjections(System.Boolean)">
+        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.DownloadRestOfSeasonProjections(System.Boolean)">
             <summary>
                 * Downloads csv from hq
                 * File should be downloaded each day to get the latest and greatest data
@@ -102,7 +102,7 @@
                   * _hitterRestOfSeasonProjectionsCsvFileNameBase      = HqHitterReport_PROJ_
             </remarks>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHQHitterController.CreateRestOfSeasonProjectionsListFromCsvAndAddToDatabase(System.String)">
+        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.CreateRestOfSeasonProjectionsListFromCsvAndAddToDatabase(System.String)">
              <summary>
                  * Outcome is that all records are added to the database
              </summary>
@@ -114,7 +114,7 @@
              </remarks>
             
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHQHitterController.CreateListOfRestOfSeasonProjectionObjectsFromCsvRows(System.String)">
+        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.CreateListOfRestOfSeasonProjectionObjectsFromCsvRows(System.String)">
             <summary>
                 Creates a list of generic objects (to be turned into ROS hitters) from csv
             </summary>
@@ -123,7 +123,7 @@
                 * Ex: csvFileName e.g., HqHitterReport_PROJ_8_12_2019.csv
             </param>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHQHitterController.CreateListOfHqHittersRestOfSeasonProjections(System.Collections.Generic.IList{System.Object})">
+        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.CreateListOfHqHittersRestOfSeasonProjections(System.Collections.Generic.IList{System.Object})">
             <summary>
                 Takes a list of generic objects and turns them into HqHitterRestOfSeasonProjection
             </summary>
@@ -131,29 +131,29 @@
                 * A list generated from CreateListOfRestOfSeasonProjectionObjectsFromCsvRows() method
             </param>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHQHitterController.AddRestOfSeasonProjectionToDatabase(BaseballScraper.Models.BaseballHq.HqHitterRestOfSeasonProjection)">
+        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.AddRestOfSeasonProjectionToDatabase(BaseballScraper.Models.BaseballHq.HqHitterRestOfSeasonProjection)">
             <summary>
                 * Add one HqHitterRestOfSeasonProjection to the database
             </summary>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHQHitterController.AddRestOfSeasonProjectionsToDatabase(System.Collections.Generic.List{BaseballScraper.Models.BaseballHq.HqHitterRestOfSeasonProjection})">
+        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.AddRestOfSeasonProjectionsToDatabase(System.Collections.Generic.List{BaseballScraper.Models.BaseballHq.HqHitterRestOfSeasonProjection})">
             <summary>
                 * Add list of HqHitterRestOfSeasonProjection hitters to the database
             </summary>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHQHitterController.GetOneRestOfSeasonProjectionRecord(System.Nullable{System.Int32})">
+        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.GetOneRestOfSeasonProjectionRecord(System.Nullable{System.Int32})">
             <summary>
                 * Read one HqHitterRestOfSeasonProjection hitter from database
             </summary>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHQHitterController.GetListOfAllRestOfSeasonProjectionRecords">
+        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.GetListOfAllRestOfSeasonProjectionRecords">
             STATUS [ August 13, 2019 ] : this works
             CRUD -> READ | ALL
             <summary>
                 * Read all HqHitterRestOfSeasonProjection hitters from database
             </summary>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHQHitterController.UpdateDatabaseWithTodaysHitterYearToDateData(System.Boolean)">
+        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.UpdateDatabaseWithTodaysHitterYearToDateData(System.Boolean)">
             <summary>
                 Gets YTD csv from hq site and adds hitters to database
             </summary>
@@ -206,6 +206,7 @@
                 * 'csvFilePath' will be something like:
                     BaseballData/02_Target_Write/BaseballSavant_Target_Write/Bs_AllSpSingleDayCsw5_29_2019.csv
                 * file name example: Bs_AllSpSingleDayCsw5_29_2019.csv
+                * Printer --> PrintBsSpCswDetail(_dynamicList);
             </remarks>
             <param name="monthNumber">
                 ints that represents the month number you want to get data for and write to a CSV
@@ -437,11 +438,17 @@
             <summary> Gets the top 25 most dropped players from ESPN </summary>
             <returns> A list of EspnTransactionTrendPlayer </returns>
         </member>
-        <member name="M:BaseballScraper.Controllers.FanGraphsControllers.FgHitterMasterReportController.ScrapeMasterHittersReport(BaseballScraper.EndPoints.FanGraphsUriEndPoints.PositionEnum,System.Int32,System.String,System.Int32)">
+        <member name="M:BaseballScraper.Controllers.FanGraphsControllers.FanGraphsHitterController.ScrapeMasterHittersReport(BaseballScraper.EndPoints.FanGraphsUriEndPoints.PositionEnum,System.Int32,System.String,System.Int32)">
             <summary>
                 Scapes FanGraphs hitter master report html
                 By default, returns 30 rows per page
             </summary>
+            <remarks>
+                * Launches browser (i.e., Headless = false)
+                * // * Uses local chrome instance instead of Chromium (i.e., ExecutablePath = GoogleChromePath)
+                * See: FanGraphsUriEndPoints more info
+                * See: http://www.puppeteersharp.com/api/index.html
+            </remarks>
             <param name="positionEnum">
                 See FanGraphsUriEndPoints for enum options
                 Examples are: PositionEnum.Catcher, PositionEnum.Outfield, PositionEnum.FirstBase
@@ -459,10 +466,6 @@
                 The year or season (e.g., 2019) to search for
                 Optional parameter; Defaults to current year no value is passed in method
             </param>
-            <remarks>
-                See: FanGraphsUriEndPoints more info
-                See: http://www.puppeteersharp.com/api/index.html
-            </remarks>
             <example>
                 NO FILTERS:     var scrapeWithNoFilters = await ScrapeMasterHittersReport();
                 CATCHERS ONLY:  var scrapeForCatchers = await ScrapeMasterHittersReport(positionEnum: PositionEnum.Catcher);
@@ -470,7 +473,7 @@
                 NL SS, 100PA+:  var scrapeForOutfieldersIn2018 = await ScrapeMasterHittersReport(positionEnum: PositionEnum.Shortstop, minPlateAppearances: 100, league: "nl");
             </example>
         </member>
-        <member name="M:BaseballScraper.Controllers.FanGraphsControllers.FgHitterMasterReportController.GetIntFromPage(PuppeteerSharp.Page,System.String)">
+        <member name="M:BaseballScraper.Controllers.FanGraphsControllers.FanGraphsHitterController.GetIntFromPage(PuppeteerSharp.Page,System.String)">
             <summary>
                 Gets a specific value from within the html of the page
             </summary>
@@ -487,7 +490,7 @@
                 int numberOfPagesToScrape = await GetIntFromPage(page, _pageCountSelector);
             </example>
         </member>
-        <member name="M:BaseballScraper.Controllers.FanGraphsControllers.FgHitterMasterReportController.GetNumberOfPagesToScape(PuppeteerSharp.Page,System.String)">
+        <member name="M:BaseballScraper.Controllers.FanGraphsControllers.FanGraphsHitterController.GetNumberOfPagesToScape(PuppeteerSharp.Page,System.String)">
             <summary>
                 Gets the number of rows on page to scrape
             </summary>
@@ -495,7 +498,7 @@
                 int numberOfPagesToScrape = await GetNumberOfPagesToScape(page, endPoint);
             </example>
         </member>
-        <member name="M:BaseballScraper.Controllers.FanGraphsControllers.FgHitterMasterReportController.GetNumberOfPagesToScape(PuppeteerSharp.Page)">
+        <member name="M:BaseballScraper.Controllers.FanGraphsControllers.FanGraphsHitterController.GetNumberOfPagesToScape(PuppeteerSharp.Page)">
             <summary>
                 Gets the number of rows on page to scrape
             </summary>
@@ -503,7 +506,7 @@
                 int numberOfPagesToScrape = await GetNumberOfPagesToScape(page);
             </example>
         </member>
-        <member name="M:BaseballScraper.Controllers.FanGraphsControllers.FgHitterMasterReportController.ConvertCellWithPercentageSymbolToDecimal(Newtonsoft.Json.Linq.JToken)">
+        <member name="M:BaseballScraper.Controllers.FanGraphsControllers.FanGraphsHitterController.ConvertCellWithPercentageSymbolToDecimal(Newtonsoft.Json.Linq.JToken)">
             <summary>
                 Some cells have % symbol in them; this removes it and just gives the number back
                 e.g., 13.1% becomes 13.1
@@ -812,7 +815,7 @@
                 Uses LinqToTwitter
                 See: https://github.com/JoeMayo/LinqToTwitter/wiki/Searching-Twitter
             </remarks>
-            <param name="searchResponse">
+            <param name="SearchResponse">
                 Search from LinqToTwitter
             </param>
             <example>
@@ -882,7 +885,7 @@
                 Uses tweetinvi to get the user
                 https://github.com/linvi/tweetinvi/wiki/Custom-Queries
             </remarks>
-            <param name="IUserDTO">
+            <param name="userDTO">
                 IUserDTO instance of model defined by tweetinvi
             </param>
             <example>
@@ -1478,7 +1481,7 @@
             <summary>
                 Create list of YahooRosterResource instances for all leagues in team
             </summary>
-            <param name="teamNumber">
+            <param name="numberOfTeamsInLeague">
                 A number 0 - X; Where X is the total number of teams in the league;
                 Basically every manager has their own single number Id;
                 Select the Id of the Manager you would want to view
@@ -2265,6 +2268,9 @@
             <summary> Returns a JToken that lists keys/values for player items in PlayerSearch api </summary>
             <returns> A JToken</returns>
         </member>
+        <member name="M:BaseballScraper.Infrastructure.CsvHandler.MoveMultipleFiles(System.String,System.String)">
+            <summary></summary>
+        </member>
         <member name="M:BaseballScraper.Infrastructure.CsvHandler.DownloadCsvFromLink(System.String,System.String)">
             <summary>
                 Download remote CSV and save it to local location
@@ -2286,6 +2292,8 @@
                 Reads a csv file, non async
             </summary>
             <param name="csvFilePath"> The location / path of the file that you want to read </param>
+            <param name="modelType">  </param>
+            <param name="modelMapType"> </param>
             <example> _cH.ReadCsv("BaseballData/Lahman/Teams.csv"); </example>
         </member>
         <member name="M:BaseballScraper.Infrastructure.CsvHandler.ReadCsvRecordsAsync(System.String,System.Type,System.Type)">
@@ -2420,7 +2428,8 @@
         </member>
         <member name="M:BaseballScraper.Infrastructure.DataTabler.PrintTable(System.Data.DataTable)">
             <summary>
-                Print a data table in console </summary>
+                Print a data table in console
+            </summary>
             <param name="dataTable">
                 The data table that you want to print in console
             </param>
@@ -2448,13 +2457,6 @@
                 _emailHelper.SendEmail("TEST2", "TESTING SOMETHING NEW");
             </example>
         </member>
-        <member name="T:BaseballScraper.Infrastructure.ExcelHandler">
-            <summary> </summary>
-            <list> RESOURCES
-            <item> https://github.com/perevoznyk/excel-export/blob/master/README.md </item>
-            <item> https://github.com/dotnetcore/NPOI/blob/master/samples/Npoi.Samples.CreateNewSpreadsheet/Program.cs </item>
-            </list>
-        </member>
         <member name="M:BaseballScraper.Infrastructure.ExcelHandler.RegisterProviderToStart">
             <summary> Needs to be run before most Excel methods </summary>
         </member>
@@ -2477,8 +2479,10 @@
         </member>
         <member name="M:BaseballScraper.Infrastructure.ExcelHandler.CreateNewExcelWorkbook">
             <summary> OPTION 1 --> Create and save a new Excel (xlsx) file </summary>
-            <remarks> File Type: XLSX </remarks>
-            <remarks> The name of the new Excel document and its first tab are defined within the method </remarks>
+            <remarks>
+                * File Type: XLSX
+                * The name of the new Excel document and its first tab are defined within the method
+            </remarks>
         </member>
         <member name="M:BaseballScraper.Infrastructure.ExcelHandler.CreateNewExcelWorkbook(System.String,System.String)">
             <summary> OPTION 2 --> Create and save a new Excel (xlsx) file </summary>
@@ -2543,7 +2547,7 @@
             <remarks> In option 2, you provide a number to represent the target column </remarks>
             <param name="document"> Excel document that the cell is in </param>
             <param name="rowNumber"> The row of the cell </param>
-            <param name="columnLetter"> The column number of the cell </param>
+            <param name="columnNumber"> The column number of the cell </param>
             <param name="cellValue"> What you want to add to the cell </param>
         </member>
         <member name="M:BaseballScraper.Infrastructure.ExcelHandler.SetFont(Export.XLS.ExcelDocument,System.Int32,System.String,System.String,System.Int32)">
@@ -2561,8 +2565,46 @@
             <param name="letter"> A letter that corresponds to an Excel column </param>
             <returns> The column number of an Excel column </returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Infrastructure.GoogleSheetsConnector.GetSfbbPlayerIdMapConfiguration" -->
-        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Infrastructure.GoogleSheetsConnector.GetCrunchTimePlayerIdMapConfiguration" -->
+        <member name="M:BaseballScraper.Infrastructure.GoogleSheetsConnector.GetSfbbPlayerIdMapConfiguration">
+            <summary>
+                Gets all configuration information from SffbPlayerIdMap from gSheetNames.json configuration file
+            </summary>
+            <remarks>
+                See: gSheetNames.json, GoogleSheetsConnector.cs, GoogleSheetConfiguration.cs
+                Inserted into Dependency Injection in Startup.cs
+            </remarks>
+            <example>
+            <code>
+            public class GenericController
+            private readonly GoogleSheetConfiguration _sfbbPlayerIdMapConfiguration;
+            public GenericController(IOptionsSnapshot GoogleSheetConfiguration options)
+            {
+                _sfbbPlayerIdMapConfiguration = options.Get("SfbbPlayerIdMap");
+            }
+            var sfbbDocumentName = _sfbbPlayerIdMapConfiguration.DocumentName;
+            </code>
+            </example>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.GoogleSheetsConnector.GetCrunchTimePlayerIdMapConfiguration">
+            <summary>
+                Gets all configuration information from CrunchtimePlayerIdMap from gSheetNames.json configuration file
+            </summary>
+            <remarks>
+                See: gSheetNames.json, GoogleSheetsConnector.cs, GoogleSheetConfiguration.cs
+                Inserted into Dependency Injection in Startup.cs
+            </remarks>
+            <example>
+            <code>
+                public class GenericController
+                private readonly GoogleSheetConfiguration _crunchTimePlayerIdMapConfiguration;
+                public GenericController(IOptionsSnapshot GoogleSheetConfiguration options)
+                {
+                    _crunchTimePlayerIdMapConfiguration = options.Get("CrunchtimePlayerIdMap");
+                }
+                var crunchtimeDocumentName = _crunchTimePlayerIdMapConfiguration.DocumentName;
+            </code>
+            </example>
+        </member>
         <member name="M:BaseballScraper.Infrastructure.GoogleSheetsConnector.WriteGoogleSheetRows(System.Collections.Generic.IList{System.Collections.Generic.IList{System.Object}},System.String,System.String,System.String)">
             <example>
                 private static readonly GoogleSheetsConnector _gSC = new GoogleSheetsConnector();
@@ -2598,14 +2640,6 @@
             <param name="keyValuePairs">
                 An IEnumerable containing variable keys and values
             </param>
-        </member>
-        <member name="M:BaseballScraper.Infrastructure.Helpers.IterateForEach(System.Collections.Generic.List{System.Object})">
-            <summary> Given a model / class, create a list(string) of the models property names (e.g, Wins) </summary>
-            <returns> A list of property names </returns>
-        </member>
-        <member name="T:BaseballScraper.Infrastructure.Helpers.MiddlewareDiagnoser">
-            <summary> </summary>
-            <param name="itemsToList"> e.g., string[] planet = { "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune" };</param>
         </member>
         <member name="M:BaseballScraper.Infrastructure.PostmanMethods.PostmanToken(System.String)">
             <summary>
@@ -2697,7 +2731,28 @@
                 SetPythonVariableKeyAndValue(scope, "myObjectKey", "my object value");
             </example>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:BaseballScraper.Infrastructure.PythonConnector.SetPythonKeyValueDictionary(Microsoft.Scripting.Hosting.ScriptScope,System.Collections.Generic.Dictionary{System.String,System.Object},System.String)" -->
+        <member name="M:BaseballScraper.Infrastructure.PythonConnector.SetPythonKeyValueDictionary(Microsoft.Scripting.Hosting.ScriptScope,System.Collections.Generic.Dictionary{System.String,System.Object},System.String)">
+            <summary>
+                Given a dictionary of keys and values, set Keys and Values as Python variable Keys and Values
+            </summary>
+            <remarks>
+                This must be run AFTER establishing connection to a Python file (i.e, run 'ConnectToPythonFile' method before running this method)
+                To print the dictionary in Python --> 'print('dictionaryName')
+            </remarks>
+            <param name="scope">
+                ScriptScope generated to connect to Python file
+            </param>
+            <param name="keysAndValuesDictionary">
+                A dictionary of keys and values where keys are strings and values are objects
+            </param>
+            <param name="dictionaryName">
+                The name of the dictionary
+            </param>
+            <example>
+            <code>
+            </code>
+            </example>
+        </member>
         <member name="M:BaseballScraper.Infrastructure.PythonConnector.PrintPythonKeyValuePairs(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.Object}})">
             <summary> Print the keys and values from a given IEnumerable </summary>
             <example> PrintPythonKeyValuePairs(pythonKeyValuePairs); </example>

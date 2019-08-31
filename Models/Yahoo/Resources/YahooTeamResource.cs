@@ -1,22 +1,17 @@
-﻿// DJB WORKING ON
-// I think this is right
-
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 using System.Xml.Serialization;
-
-using BaseballScraper.Models;
-using BaseballScraper.Models.Yahoo;
 using Newtonsoft.Json;
+using System;
 
 namespace BaseballScraper.Models.Yahoo.Resources.YahooTeamResource
 {
     // meta: /fantasy/v2/team/{team_key}/metadata
     [XmlRoot(ElementName = "team")]
-    public class YahooTeamResource
+    public class YahooTeamResource : IBaseEntity
     {
+        public DateTime DateCreated { get; set; }  // from IBaseEntity interface
+        public DateTime DateUpdated { get; set; }  // from IBaseEntity interface
         [Key]
         public int YahooTeamBaseRecordId { get; set; }
 

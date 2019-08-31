@@ -29,6 +29,8 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
         private readonly BaseballScraperContext       _context;
         private readonly ProjectDirectoryEndPoints    _projectDirectory;
 
+        public System.Threading.CancellationToken cancellationToken = new System.Threading.CancellationToken();
+
 
 
         public FanGraphsSpController(Helpers helpers, FanGraphsUriEndPoints endPoints, GoogleSheetsConnector googleSheetsConnector, CsvHandler csvHandler, BaseballScraperContext context, ProjectDirectoryEndPoints projectDirectory)
@@ -457,14 +459,16 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
                     try
                     {
                         _context.Update(exists);
-                        await _context.SaveChangesAsync();
+                        // await _context.SaveChangesAsync();
+                        await _context.SaveChangesAsync(cancellationToken);
                     }
                     catch { Console.WriteLine("Error either adding or updating pitcher"); }
                 }
                 else
                 {
                     await _context.AddAsync(pitcher);
-                    await _context.SaveChangesAsync();
+                    // await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync(cancellationToken);
                 }
                 return Ok();
             }
@@ -479,7 +483,8 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
                 if(ModelState.IsValid)
                 {
                     await _context.AddAsync(pitcher);
-                    await _context.SaveChangesAsync();
+                    // await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync(cancellationToken);
                 }
                 return Ok();
             }
@@ -502,7 +507,8 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
             {
                 FanGraphsPitcherForWpdiReport pitcher = await _context.FanGraphsPitchersForWpdiReport.SingleOrDefaultAsync(p => p.FanGraphsId == fangraphsid);
                 _context.Remove(pitcher);
-                await _context.SaveChangesAsync();
+                // await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(cancellationToken);
                 return Ok();
             }
 

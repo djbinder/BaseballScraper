@@ -128,7 +128,7 @@ namespace BaseballScraper.Controllers.TwitterControllers
             ///     Uses tweetinvi to get the user
             ///     https://github.com/linvi/tweetinvi/wiki/Custom-Queries
             /// </remarks>
-            /// <param name="IUserDTO">
+            /// <param name="userDTO">
             ///     IUserDTO instance of model defined by tweetinvi
             /// </param>
             /// <example>

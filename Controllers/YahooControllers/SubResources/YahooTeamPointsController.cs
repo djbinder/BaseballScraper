@@ -28,11 +28,11 @@ namespace BaseballScraper.Controllers.YahooControllers
             _yahooApiRequestController = yahooApiRequestController;
         }
 
-        /// <summary>
+
         // FILE NOTE: provides two options on how to instantiate new instance of model
             // OPTION 1 - endpoint parameters defined within the method
             // OPTION 2 - endpoint parameters passed as parameters to method
-        /// </summary>
+
 
 
 

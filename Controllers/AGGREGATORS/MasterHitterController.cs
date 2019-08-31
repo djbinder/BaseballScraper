@@ -1,15 +1,11 @@
 using System.Threading.Tasks;
 using BaseballScraper.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
-using BaseballScraper.Controllers.BaseballHQControllers;
 using static BaseballScraper.Controllers.PlayerControllers.PlayerBaseController;
 using BaseballScraper.Controllers.PlayerControllers;
 using BaseballScraper.Controllers.BaseballSavantControllers;
-using System.Collections.Generic;
-using BaseballScraper.Models.Player;
 using BaseballScraper.EndPoints;
-using System.Diagnostics;
-using System;
+using BaseballScraper.Controllers.BaseballHQControllers;
 
 #pragma warning disable CS1998, CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE1006
 namespace BaseballScraper.Controllers.AGGREGATORS
@@ -21,13 +17,14 @@ namespace BaseballScraper.Controllers.AGGREGATORS
     {
 
         private readonly Helpers _helpers;
-        private readonly BaseballHQHitterController _hqHitterController;
+        private readonly BaseballHqHitterController _hqHitterController;
+
         private readonly PlayerBaseFromGoogleSheet gSheet;
         private readonly PlayerBaseController playerBaseController;
         private readonly BaseballSavantHitterController baseballSavantHitterController;
         private readonly ProjectDirectoryEndPoints _projectDirectory;
 
-        public MasterHitterController(Helpers helpers, BaseballHQHitterController hqHitterController, PlayerBaseFromGoogleSheet gSheet, PlayerBaseController playerBaseController, BaseballSavantHitterController baseballSavantHitterController, ProjectDirectoryEndPoints projectDirectory)
+        public MasterHitterController(Helpers helpers, BaseballHqHitterController hqHitterController, PlayerBaseFromGoogleSheet gSheet, PlayerBaseController playerBaseController, BaseballSavantHitterController baseballSavantHitterController, ProjectDirectoryEndPoints projectDirectory)
         {
             _helpers                            = helpers;
             _hqHitterController                 = hqHitterController;

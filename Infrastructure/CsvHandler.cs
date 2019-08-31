@@ -101,7 +101,7 @@ namespace BaseballScraper.Infrastructure
                 }
                 else
                 {
-                    Console.WriteLine("Source path does not exist!");
+                    C.WriteLine("Source path does not exist!");
                 }
             }
 
@@ -133,6 +133,57 @@ namespace BaseballScraper.Infrastructure
                 }
                 string filePath = Path.Combine(folderPath, fileName);
                 return filePath;
+            }
+
+
+            /// <summary></summary>
+            public void MoveMultipleFiles(string sourceDirectoryPath, string destinationDirectoryPath)
+            {
+                _helpers.OpenMethod(1);
+                int countFilesMoved = 1;
+
+                if(Directory.Exists(sourceDirectoryPath))
+                {
+                    var fileInfo = new DirectoryInfo(sourceDirectoryPath).GetFiles();
+
+                    foreach(FileInfo file in fileInfo)
+                    {
+                        string fileName = file.Name;
+
+                        var sourceDirectoryPathAndFileName = $"{sourceDirectoryPath}{fileName}";
+                        var destinationDirectoryPathAndFileName = $"{destinationDirectoryPath}{fileName}";
+
+                        if(File.Exists(destinationDirectoryPathAndFileName))
+                        {
+                            C.WriteLine("File Exists. Replacing File");
+                            string backupFileName = $"{destinationDirectoryPathAndFileName}_";
+                            File.Replace(
+                                sourceDirectoryPathAndFileName,
+                                destinationDirectoryPathAndFileName,
+                                backupFileName
+                            );
+                        }
+
+                        else
+                        {
+                            C.WriteLine("File does NOT exist. Moving File");
+                            File.Move(
+                                sourceDirectoryPathAndFileName,
+                                destinationDirectoryPathAndFileName
+                            );
+                        }
+
+                        countFilesMoved++;
+                    }
+                }
+
+                else
+                {
+                    C.WriteLine("File Path Does Not Exist. Creating Path: ");
+                    C.WriteLine(sourceDirectoryPath);
+                    Directory.CreateDirectory(sourceDirectoryPath);
+                }
+                C.WriteLine($"\nMOVED {countFilesMoved} FILES\n");
             }
 
 
@@ -229,6 +280,8 @@ namespace BaseballScraper.Infrastructure
             ///     Reads a csv file, non async
             /// </summary>
             /// <param name="csvFilePath"> The location / path of the file that you want to read </param>
+            /// <param name="modelType">  </param>
+            /// <param name="modelMapType"> </param>
             /// <example> _cH.ReadCsv("BaseballData/Lahman/Teams.csv"); </example>
             public IEnumerable<dynamic> ReadCsvRecords(string csvFilePath, Type modelType, Type modelMapType)
             {
@@ -303,8 +356,7 @@ namespace BaseballScraper.Infrastructure
                 string newCsvFileName       = string.Empty;
                 string fileLocationFullPath = $"{csvFolderPath}{csvFileName}";
 
-                /*  STEP 1  */
-                /*  STEP 2  */
+                /*  STEPS 1 & 2 */
                 if(fileLocationFullPath.Contains("csv"))
                 {
                     csvFileFullPath = $"{csvFolderPath}{csvFileName}";
@@ -317,13 +369,19 @@ namespace BaseballScraper.Infrastructure
                 IEnumerable<string> preProcessedRecords = File.ReadLines(csvFileFullPath).Skip(1);
 
                 /*  STEP 4  */
-                WriteValuesAcrossRows(updatedPath, preProcessedRecords);
+                WriteValuesAcrossRows(
+                    updatedPath,
+                    preProcessedRecords
+                );
 
                 /*  STEP 5  */
                 using(TextReader fileReader = File.OpenText(updatedPath))
                 {
                     var csvReader = new CsvReader( fileReader );
-                    RegisterMapForClass(csvReader, modelMapType);
+                    RegisterMapForClass(
+                        csvReader,
+                        modelMapType
+                    );
 
                     /*  STEP 6  */
                     csvReader.Configuration.ShouldSkipRecord = row =>
@@ -340,19 +398,23 @@ namespace BaseballScraper.Infrastructure
             }
 
 
+            // _h.EnumerateOverRecordsDynamic(records);
             public JObject ReadCsvRecordsToJObject(string csvFilePath, Type modelType, Type modelMapType)
             {
                 _helpers.OpenMethod(1);
                 using(TextReader fileReader = File.OpenText(csvFilePath))
                 {
                     var csvReader = new CsvReader( fileReader );
-                    RegisterMapForClass(csvReader, modelMapType);
+
+                    RegisterMapForClass(
+                        csvReader,
+                        modelMapType
+                    );
 
                     csvReader.Read();
                     csvReader.ReadHeader();
 
                     var records      = csvReader.GetRecords(modelType).ToList();
-                    // _h.EnumerateOverRecordsDynamic(records);
 
                     JObject jObject = new JObject
                     {
@@ -411,7 +473,9 @@ namespace BaseballScraper.Infrastructure
             public async Task<IEnumerable<object>> ReadCsvRecordsAsyncToList(string csvFilePath, Type modelType, Type modelMapType, List<object> list)
             {
                 _helpers.OpenMethod(3);
-                PrintPathModelMap(csvFilePath, modelType, modelMapType);
+                bool doesFileExist = CheckIfFileExists(csvFilePath);
+
+                PrintPathModelMap(csvFilePath, doesFileExist, modelType, modelMapType);
 
                 using(TextReader fileReader = File.OpenText(csvFilePath))
                 {
@@ -433,15 +497,14 @@ namespace BaseballScraper.Infrastructure
                     int counter = 1;
                     foreach(var record in records)
                     {
-                        // Console.WriteLine(record);
+                        // C.WriteLine(record);
                         list.Add(record);
                         counter++;
                     }
-                    C.WriteLine($"COUNTER: {counter}");
+                    // C.WriteLine($"COUNTER: {counter}");
                 }
                 return records;
             }
-
 
 
             // STATUS: this works
@@ -459,7 +522,7 @@ namespace BaseballScraper.Infrastructure
             /// </param>
             public void RegisterMapForClass(CsvReader csvReader, Type modelType)
             {
-                _helpers.OpenMethod(1);
+                // _helpers.OpenMethod(1);
                 var mapClass = csvReader.Configuration.RegisterClassMap(modelType);
             }
 
@@ -506,29 +569,6 @@ namespace BaseballScraper.Infrastructure
 
 
 
-        #region RECORDS ------------------------------------------------------------
-
-            // STATUS: this works
-            public void FilterRecordsByKey(JObject obj, string filterCriteria)
-            {
-                // KEY VALUE PAIR --> KeyValuePair<string, JToken> recordObject
-                foreach(var keyValuePair in obj)
-                {
-                    var key = keyValuePair.Key;
-                    if(key == filterCriteria)
-                    {
-                        var value = keyValuePair.Value;
-                        Console.WriteLine($"Value: {value}");
-                    }
-                }
-            }
-
-        #endregion RECORDS ------------------------------------------------------------
-
-
-
-
-
         #region CELLS ------------------------------------------------------------
 
             // STATUS [ July 8, 2019 ] : this works
@@ -559,7 +599,7 @@ namespace BaseballScraper.Infrastructure
 
             public double ConvertCellWithPercentageSymbolToDouble(string s)
             {
-                _helpers.OpenMethod(1);
+                // _helpers.OpenMethod(1);
                 double doubleValue = 0.00;
 
                 // if the cell has data, parse the data
@@ -572,11 +612,11 @@ namespace BaseballScraper.Infrastructure
                 // if the cell does not have data, error
                 catch
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"\nERROR:");
-                    Console.ResetColor();
-                    Console.WriteLine($"Issue converting string to double - likely because no data in csv cell");
-                    Console.WriteLine($"In: CsvHandler > ConvertCellWithPercentageSymbolToDouble() Method\n");
+                    C.ForegroundColor = ConsoleColor.Red;
+                    C.WriteLine($"\nERROR:");
+                    C.ResetColor();
+                    C.WriteLine($"Issue converting string to double - likely because no data in csv cell");
+                    C.WriteLine($"In: CsvHandler > ConvertCellWithPercentageSymbolToDouble() Method\n");
                 }
                 return doubleValue;
             }
@@ -591,7 +631,7 @@ namespace BaseballScraper.Infrastructure
             // * Quotation marks can mess with mapping header rows to model properties
             public void CleanQuotationMarksFromString(string[] values)
             {
-                _helpers.OpenMethod(1);
+                // _helpers.OpenMethod(1);
                 foreach(var value in values)
                 {
                     if(value.Contains("\""))
@@ -618,7 +658,7 @@ namespace BaseballScraper.Infrastructure
             // * This basically makes the file unique for the day it was downloaded
             public string TodaysDateString()
             {
-                _helpers.OpenMethod(1);
+                // _helpers.OpenMethod(1);
                 string dateString = string.Empty;
                 DateTime today    = DateTime.Now;
 
@@ -637,7 +677,7 @@ namespace BaseballScraper.Infrastructure
             // * This basically makes the file unique for the day it was downloaded
             public string TodaysDateStringComplex()
             {
-                _helpers.OpenMethod(1);
+                // _helpers.OpenMethod(1);
                 string dateString = string.Empty;
 
                 DateTime today    = DateTime.Now;
@@ -674,13 +714,17 @@ namespace BaseballScraper.Infrastructure
 
 
 
+
+
+
         #region PRINTING PRESS ------------------------------------------------------------
 
-            public void PrintPathModelMap(string csvFilePath, Type modelType, Type modelMapType)
+            public void PrintPathModelMap(string csvFilePath, bool doesFileExist, Type modelType, Type modelMapType)
             {
                 C.WriteLine($"\n-------------------------------------------------------------------");
                 _helpers.PrintNameSpaceControllerNameMethodName(typeof(CsvHandler));
                 C.WriteLine($"CSV FILE PATH  : {csvFilePath}");
+                C.WriteLine($"FILE EXISTS?   : {doesFileExist}");
                 C.WriteLine($"MODEL TYPE     : {modelType}");
                 C.WriteLine($"MODEL MAP TYPE : {modelMapType}");
                 C.WriteLine($"-------------------------------------------------------------------\n");
@@ -698,3 +742,25 @@ namespace BaseballScraper.Infrastructure
 
     }
 }
+
+
+
+// 08.30.2019 - not sure if this is needed
+// #region RECORDS ------------------------------------------------------------
+
+//     // STATUS: this works
+//     public void FilterRecordsByKey(JObject obj, string filterCriteria)
+//     {
+//         // KEY VALUE PAIR --> KeyValuePair<string, JToken> recordObject
+//         foreach(var keyValuePair in obj)
+//         {
+//             var key = keyValuePair.Key;
+//             if(key == filterCriteria)
+//             {
+//                 var value = keyValuePair.Value;
+//                 C.WriteLine($"Value: {value}");
+//             }
+//         }
+//     }
+
+// #endregion RECORDS ------------------------------------------------------------

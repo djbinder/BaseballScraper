@@ -43,18 +43,18 @@ namespace BaseballScraper.Infrastructure
             }
 
 
-            public void GuardRails(string logMessage, int numberOfRails)
-            {
-                for(int topRails = 1; numberOfRails >= topRails; topRails++)
-                {
-                    Console.WriteLine("**************************************************************");
-                }
-                Console.WriteLine($"\n{logMessage}\n");
-                for(int bottomRails = 1; numberOfRails >= bottomRails; bottomRails++)
-                {
-                    Console.WriteLine("**************************************************************");
-                }
-            }
+            // public void GuardRails(string logMessage, int numberOfRails)
+            // {
+            //     for(int topRails = 1; numberOfRails >= topRails; topRails++)
+            //     {
+            //         Console.WriteLine("**************************************************************");
+            //     }
+            //     Console.WriteLine($"\n{logMessage}\n");
+            //     for(int bottomRails = 1; numberOfRails >= bottomRails; bottomRails++)
+            //     {
+            //         Console.WriteLine("**************************************************************");
+            //     }
+            // }
 
 
             public void TypeAndIntro(Object o, string x)
@@ -64,14 +64,14 @@ namespace BaseballScraper.Infrastructure
             }
 
 
-            public void PrintKeysAndValues(Object obj)
-            {
-                foreach(PropertyInfo property in obj.GetType().GetProperties())
-                {
-                    var propertyValue = property.GetValue(obj, null).ToString();
-                    Console.WriteLine($"{property.Name} --> {propertyValue}");
-                }
-            }
+            // public void PrintKeysAndValues(Object obj)
+            // {
+            //     foreach(PropertyInfo property in obj.GetType().GetProperties())
+            //     {
+            //         var propertyValue = property.GetValue(obj, null).ToString();
+            //         Console.WriteLine($"{property.Name} --> {propertyValue}");
+            //     }
+            // }
 
 
             public void PrintJObjectItems(JObject JObjectToPrint)
@@ -119,22 +119,22 @@ namespace BaseballScraper.Infrastructure
             }
 
 
-            public void PrintTypes (Type type)
-            {
-                Console.WriteLine($"\nIsArray: {type.IsArray}");
-                Console.WriteLine($"Name: {type.Name}");
-                Console.WriteLine($"IsSealed: {type.IsSealed}");
-                Console.WriteLine($"BaseType.Name: {type.BaseType.Name}\n");
-            }
+            // public void PrintTypes (Type type)
+            // {
+            //     Console.WriteLine($"\nIsArray: {type.IsArray}");
+            //     Console.WriteLine($"Name: {type.Name}");
+            //     Console.WriteLine($"IsSealed: {type.IsSealed}");
+            //     Console.WriteLine($"BaseType.Name: {type.BaseType.Name}\n");
+            // }
 
 
             // STATUS: this works
-            /// <summary>
-            ///     Print a data table in console
-            /// </summary>
-            /// <param name="dataTable">
-            ///     The data table that you want to print in console
-            /// </param>
+            // / <summary>
+            // /     Print a data table in console
+            // / </summary>
+            // / <param name="dataTable">
+            // /     The data table that you want to print in console
+            // / </param>
             // private void PrintDataTable (DataTable dataTable)
             // {
             //     foreach (DataColumn col in dataTable.Columns)
@@ -220,13 +220,13 @@ namespace BaseballScraper.Infrastructure
                 Console.ResetColor();
             }
 
-            public void PrintDictionaryItems(Dictionary<string, object> dict)
-            {
-                foreach(var item in dict)
-                {
-                    Console.WriteLine($"{item.Key} : {item.Value}");
-                }
-            }
+            // public void PrintDictionaryItems(Dictionary<string, object> dict)
+            // {
+            //     foreach(var item in dict)
+            //     {
+            //         Console.WriteLine($"{item.Key} : {item.Value}");
+            //     }
+            // }
 
 
 
@@ -239,8 +239,8 @@ namespace BaseballScraper.Infrastructure
         #region GETTERS ------------------------------------------------------------
 
             // STATUS: //TODO: need to be able to pass a model in as a parameter; it's currently hardcoded into the function
-            /// <summary> Given a model / class, get the properties of that model </summary>
-            /// <returns> Model properties for a given class (e.g, FanGraphsPitcher) </returns>
+            // / <summary> Given a model / class, get the properties of that model </summary>
+            // / <returns> Model properties for a given class (e.g, FanGraphsPitcher) </returns>
             // public PropertyInfo[] GetModelProperties()
             // {
             //     TheGameIsTheGameCategories model = new TheGameIsTheGameCategories();
@@ -251,8 +251,8 @@ namespace BaseballScraper.Infrastructure
             // }
 
             // STATUS: //TODO: need to be able to pass a model in as a parameter to the GetModelProperties() function within the method
-            /// <summary> Given a model / class, create a list(string) of the models property names (e.g, Wins) </summary>
-            /// <returns> A list of property names </returns>
+            // / <summary> Given a model / class, create a list(string) of the models property names (e.g, Wins) </summary>
+            // / <returns> A list of property names </returns>
             // public List<string> CreateListOfModelProperties()
             // {
             //     PropertyInfo [] modelProperties           = GetModelProperties();
@@ -449,13 +449,11 @@ namespace BaseballScraper.Infrastructure
                 Console.ForegroundColor = ConsoleColor.DarkCyan;
                 string json = JsonConvert.SerializeObject(x, Formatting.Indented);
 
-                Console.WriteLine();
                 Console.WriteLine($"\n------------------------------------------------------------------");
                 Console.WriteLine("BEGIN DIG");
                 Console.WriteLine("------------------------------------------------------------------");
                 Console.WriteLine(json);
-                Console.WriteLine("------------------------------------------------------------------");
-                Console.WriteLine();
+                Console.WriteLine($"------------------------------------------------------------------\n");
                 Console.ResetColor();
             }
 
@@ -578,17 +576,17 @@ namespace BaseballScraper.Infrastructure
 
 
             // https://msdn.microsoft.com/en-us/library/system.consolekeyinfo(v=vs.110).aspx
-            public void ConsoleKey ()
-            {
-                ConsoleKeyInfo key = Console.ReadKey();
-                Console.WriteLine(key);
-                Console.WriteLine($"\nCharacter Entered: {key.KeyChar}");
-                Console.WriteLine("Special Keys: " + key.Modifiers);
-            }
+            // public void ConsoleKey ()
+            // {
+            //     ConsoleKeyInfo key = Console.ReadKey();
+            //     Console.WriteLine(key);
+            //     Console.WriteLine($"\nCharacter Entered: {key.KeyChar}");
+            //     Console.WriteLine("Special Keys: " + key.Modifiers);
+            // }
 
 
-            /// <summary> </summary>
-            /// <param name="itemsToList"> e.g., string[] planet = { "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune" };</param>
+            // / <summary> </summary>
+            // / <param name="itemsToList"> e.g., string[] planet = { "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune" };</param>
             // public static void CreateNumberedList(string[] itemsToList)
             // {
             //     Console.Write(itemsToList.ToMarkdownNumberedList());
@@ -694,10 +692,6 @@ namespace BaseballScraper.Infrastructure
 
         #endregion DIAGNOSTICS ------------------------------------------------------------
 
-
-
-
-
     }
 
 
@@ -707,47 +701,47 @@ namespace BaseballScraper.Infrastructure
     // var fieldsCollector = new JsonFieldsCollector(json);
     // var fields = fieldsCollector.GetAllFields();
     // foreach (var field in fields) Console.WriteLine($"{field.Key}: '{field.Value}'");
-    public class JsonFieldsCollector
-    {
-        private readonly Dictionary<string, JValue> fields;
+    // public class JsonFieldsCollector
+    // {
+    //     private readonly Dictionary<string, JValue> fields;
 
-        public JsonFieldsCollector (JToken token)
-        {
-            fields = new Dictionary<string, JValue> ();
-            Console.WriteLine("--------------------------------------------------------");
-            CollectFields (token);
-        }
+    //     public JsonFieldsCollector (JToken token)
+    //     {
+    //         fields = new Dictionary<string, JValue> ();
+    //         Console.WriteLine("--------------------------------------------------------");
+    //         CollectFields (token);
+    //     }
 
-        private void CollectFields(JToken jToken)
-        {
-            switch (jToken.Type)
-            {
-                case JTokenType.Object:
-                    foreach (var child in jToken.Children<JProperty>())
-                    {
-                        Console.WriteLine($"child1: {child}");
-                        CollectFields(child);
-                    }
-                    break;
+    //     private void CollectFields(JToken jToken)
+    //     {
+    //         switch (jToken.Type)
+    //         {
+    //             case JTokenType.Object:
+    //                 foreach (var child in jToken.Children<JProperty>())
+    //                 {
+    //                     Console.WriteLine($"child1: {child}");
+    //                     CollectFields(child);
+    //                 }
+    //                 break;
 
-                case JTokenType.Array:
-                    foreach (var child in jToken.Children())
-                    {
-                        Console.WriteLine($"child2: {child}");
-                        CollectFields(child);
-                    }
-                    break;
+    //             case JTokenType.Array:
+    //                 foreach (var child in jToken.Children())
+    //                 {
+    //                     Console.WriteLine($"child2: {child}");
+    //                     CollectFields(child);
+    //                 }
+    //                 break;
 
-                case JTokenType.Property:
-                    CollectFields(((JProperty) jToken).Value);
-                    break;
-                default:
-                    fields.Add(jToken.Path, (JValue)jToken);
-                    break;
-            }
-        }
+    //             case JTokenType.Property:
+    //                 CollectFields(((JProperty) jToken).Value);
+    //                 break;
+    //             default:
+    //                 fields.Add(jToken.Path, (JValue)jToken);
+    //                 break;
+    //         }
+    //     }
 
-        public IEnumerable<KeyValuePair<string, JValue>> GetAllFields () => fields;
-    }
+    //     public IEnumerable<KeyValuePair<string, JValue>> GetAllFields () => fields;
+    // }
 
 }
