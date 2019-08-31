@@ -61,12 +61,12 @@ namespace BaseballScraper.Infrastructure
 
 
             // STATUS [ June 26, 2019 ]: NOT SURE IF THIS WORKS
-            /// <summary>
-            ///     Create a new data table; add columns / headers to table of model property names
-            /// </summary>
-            /// <returns>
-            ///     A new data table based on the model of your choosing
-            /// </returns>
+            // / <summary>
+            // /     Create a new data table; add columns / headers to table of model property names
+            // / </summary>
+            // / <returns>
+            // /     A new data table based on the model of your choosing
+            // / </returns>
             // public DataTable CreateDataTableForModelInstance(string tableName, Object obj)
             // {
             //     DataTable newDataTable = new DataTable (tableName);
@@ -210,11 +210,7 @@ namespace BaseballScraper.Infrastructure
             }
 
 
-
         #endregion DATA TABLE ROWS ------------------------------------------------------------
-
-
-
 
 
 
@@ -225,15 +221,15 @@ namespace BaseballScraper.Infrastructure
 
             // OPTION 2
             // STATUS: this works but is it needed?
-            /// <summary>
-            ///     Given a data table, set the tables headers with a group of given data columns
-            /// </summary>
-            /// <param name="dataTableColumns">
-            ///     A column including the column name / text
-            /// </param>
-            /// <param name="dataTable">
-            ///     The target data table that you want to set the headers for
-            /// </param>
+            // / <summary>
+            // /     Given a data table, set the tables headers with a group of given data columns
+            // / </summary>
+            // / <param name="dataTableColumns">
+            // /     A column including the column name / text
+            // / </param>
+            // / <param name="dataTable">
+            // /     The target data table that you want to set the headers for
+            // / </param>
             // public void SetDataTableColumnHeaders (DataColumn[] dataTableColumns, DataTable dataTable)
             // {
             //     dataTable.Columns.AddRange(dataTableColumns);
@@ -242,31 +238,23 @@ namespace BaseballScraper.Infrastructure
 
 
 
-
-
-
             // STATUS: this works
-            /// <summary>
-            ///     Set one data table column as the primary key column
-            /// </summary>
-            /// <param name="dataTable">
-            ///     The target data table that you want to set the primary key column for
-            /// </param>
-            /// <param name="keyColumnName">
-            ///     The column that you want to make the primary key column
-            /// </param>
+            // / <summary>
+            // /     Set one data table column as the primary key column
+            // / </summary>
+            // / <param name="dataTable">
+            // /     The target data table that you want to set the primary key column for
+            // / </param>
+            // / <param name="keyColumnName">
+            // /     The column that you want to make the primary key column
+            // / </param>
             // public void SetDataTablePrimaryKeyColumn(DataTable dataTable, string keyColumnName)
             // {
             //     dataTable.PrimaryKey = new DataColumn[] { dataTable.Columns[keyColumnName] };
             // }
 
-
-
-
-
-
-
         #endregion NEEDED? ------------------------------------------------------------
+
 
 
 
@@ -276,7 +264,8 @@ namespace BaseballScraper.Infrastructure
 
             // STATUS [ June 26, 2019 ]: this works
             /// <summary>
-            ///     Print a data table in console </summary>
+            ///     Print a data table in console
+            /// </summary>
             /// <param name="dataTable">
             ///     The data table that you want to print in console
             /// </param>
@@ -336,12 +325,12 @@ namespace BaseballScraper.Infrastructure
 
             // STATUS:
             // TODO: need to be able to pass a model in as a parameter; it's currently hardcoded into the function
-            /// <summary>
-            ///     Given a model / class, get the properties of that model
-            /// </summary>
-            /// <returns>
-            ///     Model properties for a given class (e.g, FanGraphsPitcher)
-            /// </returns>
+            // / <summary>
+            // /     Given a model / class, get the properties of that model
+            // / </summary>
+            // / <returns>
+            // /     Model properties for a given class (e.g, FanGraphsPitcher)
+            // / </returns>
             // public PropertyInfo[] GetModelProperties()
             // {
             //     TheGameIsTheGameCategories model = new TheGameIsTheGameCategories();
@@ -357,12 +346,12 @@ namespace BaseballScraper.Infrastructure
             // OPTION 1
             // STATUS:
             // TODO: need to be able to pass a model in as a parameter to the GetModelProperties() function within the method
-            /// <summary>
-            ///     Given a model / class, create a list(string) of the models property names (e.g, Wins)
-            /// </summary>
-            /// <returns>
-            ///     A list of property names
-            /// </returns>
+            // / <summary>
+            // /     Given a model / class, create a list(string) of the models property names (e.g, Wins)
+            // / </summary>
+            // / <returns>
+            // /     A list of property names
+            // / </returns>
             // public List<string> CreateListOfModelProperties()
             // {
             //     PropertyInfo [] modelProperties           = GetModelProperties();

@@ -1,16 +1,18 @@
-﻿using System;
+﻿using System.Collections;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static BaseballScraper.EndPoints.BaseballSavantUriEndPoints;
+using Microsoft.AspNetCore.Mvc;
+using C = System.Console;
 using BaseballScraper.EndPoints;
 using BaseballScraper.Infrastructure;
 using BaseballScraper.Models;
 using BaseballScraper.Models.BaseballSavant;
-using Microsoft.AspNetCore.Mvc;
-using static BaseballScraper.EndPoints.BaseballSavantUriEndPoints;
 
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
+#pragma warning disable CS0219, CS0414, CS1998, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Controllers.BaseballSavantControllers
 {
     [Route("api/baseballsavant/[controller]")]
@@ -24,6 +26,8 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
         private readonly BaseballSavantPitcherEndPoints _baseballSavantEndPoints;
         private readonly CsvHandler                     _csvHandler;
         private readonly ProjectDirectoryEndPoints      _projectDirectory;
+
+        public System.Threading.CancellationToken cancellationToken = new System.Threading.CancellationToken();
 
 
 
@@ -41,10 +45,18 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
         public BaseballSavantSpController(){}
 
 
+
+
         // BaseballData/02_WRITE/BASEBALL_SAVANT/PITCHERS/
         private string PitcherWriteDirectory
         {
             get => _projectDirectory.BaseballSavantPitcherWriteRelativePath;
+        }
+
+        // BaseballData/02_WRITE/BASEBALL_SAVANT/_archive
+        private string ArchiveDirectory
+        {
+            get => _projectDirectory.BaseballSavantArchiveDirectory;
         }
 
         private string _allSpCswSingleDayCvs
@@ -100,23 +112,42 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
 
             int year = 2019;
             int currentMonth = 8;
-            int currentDay = 29;
+            int currentDay = DateTime.Now.Day;
 
-            WriteBaseballSavantFullSeasonData(year);
-            var cswFullSeason = await ReadSpCswCsvFullSeasonAsync(year);
-            AddStartingPitcherCswsFullSeasonToDatabaseFromList(cswFullSeason);
+            #region FULL SEASON
+                Archive(PitcherWriteDirectory, ArchiveDirectory);
+                WriteBaseballSavantFullSeasonData(year);
+                var cswFullSeason = await ReadSpCswCsvFullSeasonAsync(year);
+                AddStartingPitcherCswsFullSeasonToDatabaseFromList(cswFullSeason);
+            #endregion FULL SEASON
 
+            // #region SINGLE DAY
+            // Archive(PitcherWriteDirectory, ArchiveDirectory);
             // WriteBaseballSavantSingleDayDataToCsv(year, currentMonth, currentDay - 1);
             // var cswSingleDay  = await ReadSpCswCsvSingleDayAsync(currentMonth, currentDay - 1, year);
             // AddStartingPitcherCswsSingleDayToDatabaseFromList(cswSingleDay);
+            // #endregion SINGLE DAY
+
+
+
 
             // WriteBaseballSavantDateRangeDataToCsv(year, currentMonth, 2, currentMonth, currentDay);
             // var cswDateRange  = await ReadSpCswCsvDateRangeAsync(year, currentMonth, 2, currentMonth, currentDay);
             // AddStartingPitcherCswsDateRangeToDatabaseFromList(cswDateRange);
 
-
             return Ok();
         }
+
+
+        public void Archive(string archiveFromDirectory, string archiveToDirectory)
+        {
+            _helpers.OpenMethod(1);
+            C.WriteLine($"Archive From Directory : {archiveFromDirectory}");
+            C.WriteLine($"Archive To Directory   : {archiveToDirectory}");
+            _csvHandler.MoveMultipleFiles(archiveFromDirectory, archiveToDirectory);
+        }
+
+
 
 
 
@@ -261,6 +292,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             ///     * 'csvFilePath' will be something like:
             ///         BaseballData/02_Target_Write/BaseballSavant_Target_Write/Bs_AllSpSingleDayCsw5_29_2019.csv
             ///     * file name example: Bs_AllSpSingleDayCsw5_29_2019.csv
+            ///     * Printer --> PrintBsSpCswDetail(_dynamicList);
             /// </remarks>
             /// <param name="monthNumber">
             ///     ints that represents the month number you want to get data for and write to a CSV
@@ -280,7 +312,12 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             public async Task<List<StartingPitcherCswSingleDay>> ReadSpCswCsvSingleDayAsync(int monthNumber, int dayNumber, int year)
             {
                 _helpers.OpenMethod(1);
-                var csvFilePath = SetCsvFilePathSpCswSingleDay(year, monthNumber, dayNumber);
+
+                var csvFilePath = SetCsvFilePathSpCswSingleDay(
+                    year,
+                    monthNumber,
+                    dayNumber
+                );
 
                 await _csvHandler.ReadCsvRecordsAsyncToList(
                     csvFilePath,
@@ -295,8 +332,6 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
                     monthNumber,
                     dayNumber
                 );
-
-                // PrintBsSpCswDetail(_dynamicList);
                 return listSpCswSingleDay;
             }
 
@@ -331,14 +366,16 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
                 foreach(var sp in listSpCsw)
                 {
                     var checkForCompositeKeyInDb =
-                        _context.StartingPitcherCswsSingleDays.Find(sp.PlayerId, sp.DatePitched);
+                        _context.StartingPitcherCswsSingleDays.Find(
+                            sp.PlayerId,
+                            sp.DatePitched
+                        );
 
-                     var nullCheck = (checkForCompositeKeyInDb == null) ? _context.Add(sp) : null;
+                     var nullCheck      = (checkForCompositeKeyInDb == null) ? _context.Add(sp) : null;
                      int manageCounters = (checkForCompositeKeyInDb == null) ? countAdded++ : countNotAdded++;
                 }
-                Console.WriteLine($"ADDED         : {countAdded}");
-                Console.WriteLine($"ALREADY IN DB : {countNotAdded}");
 
+                PrintDatabaseAddOutcomes(countAdded, countNotAdded);
                 _context.SaveChanges();
                 return Ok();
             }
@@ -352,10 +389,11 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             public List<StartingPitcherCswSingleDay> CreateSpCswSingleDayList(List<dynamic> list, int year, int monthNumber, int dayNumber)
             {
                 _helpers.OpenMethod(1);
-                List<StartingPitcherCswSingleDay> listSpCsw = new List<StartingPitcherCswSingleDay>();
+
+                var listSpCsw = new List<StartingPitcherCswSingleDay>();
                 DateTime datePitched = new DateTime(year, monthNumber, dayNumber);
 
-                foreach(var record in list)
+                foreach(dynamic record in list)
                 {
                     var spCsw = record as StartingPitcherCswSingleDay;
                     spCsw.DatePitched = datePitched;
@@ -546,13 +584,17 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
                 foreach(var sp in listSpCsw)
                 {
                     var checkForCompositeKeyInDb =
-                        _context.StartingPitcherCswsFullSeason.Find(sp.PlayerId, sp.StartDate, sp.EndDate);
+                        _context.StartingPitcherCswsFullSeason.Find(
+                            sp.PlayerId,
+                            sp.StartDate,
+                            sp.EndDate
+                        );
 
-                    var nullCheck = (checkForCompositeKeyInDb == null) ? _context.Add(sp) : null;
+                    var nullCheck      = (checkForCompositeKeyInDb == null) ? _context.Add(sp) : null;
                     int manageCounters = (checkForCompositeKeyInDb == null) ? countAdded++ : countNotAdded++;
                 }
-                Console.WriteLine($"ADDED         : {countAdded}");
-                Console.WriteLine($"ALREADY IN DB : {countNotAdded}");
+
+                PrintDatabaseAddOutcomes(countAdded, countNotAdded);
                 _context.SaveChanges();
                 return Ok();
             }
@@ -566,15 +608,17 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             public List<StartingPitcherCswDateRange> CreateSpCswDateRangeList(List<dynamic> list, int year, int startMonth, int startDay, int endMonth, int endDay)
             {
                 _helpers.OpenMethod(1);
-                List<StartingPitcherCswDateRange> listSpCsw = new List<StartingPitcherCswDateRange>();
-                DateTime startDate = new DateTime(year, startMonth, startDay);
-                DateTime endDate = new DateTime(year, endMonth, endDay);
 
-                foreach(var record in list)
+                var listSpCsw = new List<StartingPitcherCswDateRange>();
+
+                DateTime startDate = new DateTime(year, startMonth, startDay);
+                DateTime endDate   = new DateTime(year, endMonth, endDay);
+
+                foreach(dynamic record in list)
                 {
                     var spCsw = record as StartingPitcherCswDateRange;
                     spCsw.StartDate = startDate;
-                    spCsw.EndDate = endDate;
+                    spCsw.EndDate   = endDate;
                     listSpCsw.Add(spCsw);
                 }
                 return listSpCsw;
@@ -582,6 +626,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
 
 
         #endregion SP CALLED-STRIKE + WALK DATA - DATE RANGE ------------------------------------------------------------
+
 
 
 
@@ -602,8 +647,10 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             public void WriteBaseballSavantFullSeasonData(int year)
             {
                 _helpers.OpenMethod(1);
-                var endPointUri = GetAllSpCswFullSeasonEndPointUri(year);
+
+                var endPointUri     = GetAllSpCswFullSeasonEndPointUri(year);
                 var targetCsvString = SetCsvFilePathSpCswFulLSeason(year);
+
                 DownloadSpCswCvsAndWriteToLocalCsv(endPointUri, $"{targetCsvString}");
             }
 
@@ -660,7 +707,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             public async Task<List<StartingPitcherCswFullSeason>> ReadSpCswCsvFullSeasonAsync(int year)
             {
                 _helpers.OpenMethod(3);
-                var csvFilePath = SetCsvFilePathSpCswFulLSeason(year);
+                string csvFilePath = SetCsvFilePathSpCswFulLSeason(year);
 
                 await _csvHandler.ReadCsvRecordsAsyncToList(
                     csvFilePath,
@@ -669,8 +716,11 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
                     _dynamicList
                 );
 
-                var listSpCsw = CreateSpCswFullSeasonList(_dynamicList, year);
-                // PrintBsSpCswDetail(_dynamicList);
+                var listSpCsw = CreateSpCswFullSeasonList(
+                    _dynamicList,
+                    year
+                );
+
                 return listSpCsw;
             }
 
@@ -699,18 +749,21 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             public ActionResult AddStartingPitcherCswsFullSeasonToDatabaseFromList(List<StartingPitcherCswFullSeason> listSpCsw)
             {
                 _helpers.OpenMethod(1);
-                int countAdded = 0; int countNotAdded = 0;
 
+                int countAdded = 0; int countNotAdded = 0;
                 foreach(var sp in listSpCsw)
                 {
                     var checkForCompositeKeyInDb =
-                        _context.StartingPitcherCswsFullSeason.Find(sp.PlayerId, sp.Season);
+                        _context.StartingPitcherCswsFullSeason.Find(
+                            sp.PlayerId,
+                            sp.Season
+                        );
 
-                    var nullCheck = (checkForCompositeKeyInDb == null) ? _context.Add(sp) : null;
+                    var nullCheck      = (checkForCompositeKeyInDb == null) ? _context.Add(sp) : null;
                     int manageCounters = (checkForCompositeKeyInDb == null) ? countAdded++ : countNotAdded++;
                 }
-                Console.WriteLine($"ADDED          : {countAdded}");
-                Console.WriteLine($"ALREADY IN DB  : {countNotAdded}");
+
+                PrintDatabaseAddOutcomes(countAdded, countNotAdded);
                 _context.SaveChanges();
                 return Ok();
             }
@@ -725,7 +778,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             {
                 _helpers.OpenMethod(1);
                 var listSpCsw = new List<StartingPitcherCswFullSeason>();
-                foreach(var record in list)
+                foreach(dynamic record in list)
                 {
                     var spCsw = record as StartingPitcherCswFullSeason;
                     spCsw.Season = year;
@@ -758,6 +811,17 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
 
         #region PRINTING PRESS ------------------------------------------------------------
 
+
+            public void PrintDatabaseAddOutcomes(int countAdded, int countNotAdded)
+            {
+                C.WriteLine($"\n-------------------------------------------------------------------");
+                _helpers.PrintNameSpaceControllerNameMethodName(typeof(BaseballSavantSpController));
+                C.WriteLine($"ADDED TO DB   : {countAdded}");
+                C.WriteLine($"ALREADY IN DB : {countNotAdded}");
+                C.WriteLine($"-------------------------------------------------------------------\n");
+            }
+
+
             public void PrintBsSpCswDetail(List<dynamic> list)
             {
                 int count = 1;
@@ -767,50 +831,52 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
 
                     // Console.WriteLine($"{spCsw.DatePitched}");
 
-                    Console.ForegroundColor = ConsoleColor.Magenta;
-                    Console.WriteLine($"\n---------------------------------------------------------");
-                    Console.WriteLine($"{count}. PLAYER: {spCsw.PlayerName}  ID: {spCsw.PlayerId}");
-                    Console.WriteLine($"--------------------------------------------------------");
-                    Console.ResetColor();
-                    Console.WriteLine($"TOTAL PITCHES    | {spCsw.TotalPitches}");
-                    Console.WriteLine($"CSW PITCHES      | {spCsw.CswPitches}");
-                    Console.WriteLine($"CSW PITCH %      | {spCsw.CswPitchPercent}\n");
+                    C.ForegroundColor = ConsoleColor.Magenta;
+                    C.WriteLine($"\n---------------------------------------------------------");
+                    C.WriteLine($"{count}. PLAYER: {spCsw.PlayerName}  ID: {spCsw.PlayerId}");
+                    C.WriteLine($"--------------------------------------------------------");
+                    C.ResetColor();
+                    C.WriteLine($"TOTAL PITCHES    | {spCsw.TotalPitches}");
+                    C.WriteLine($"CSW PITCHES      | {spCsw.CswPitches}");
+                    C.WriteLine($"CSW PITCH %      | {spCsw.CswPitchPercent}");
+                    C.WriteLine($"AT BATS          | {spCsw.Abs}");
+                    C.WriteLine($"SPIN RATE        | {spCsw.SpinRate}");
+                    C.WriteLine($"VELOCITY         | {spCsw.Velocity}");
+                    C.WriteLine($"EFFECTIVE SPEED  | {spCsw.EffectiveSpeed}");
+                    C.WriteLine($"WHIFFS           | {spCsw.Whiffs}\n");
+                    C.WriteLine($"--------------------------------------------------------\n");
 
-                    Console.WriteLine($"AT BATS          | {spCsw.Abs}");
-                    Console.WriteLine($"SPIN RATE        | {spCsw.SpinRate}");
-                    Console.WriteLine($"VELOCITY         | {spCsw.Velocity}");
-                    Console.WriteLine($"EFFECTIVE SPEED  | {spCsw.EffectiveSpeed}");
-                    Console.WriteLine($"WHIFFS           | {spCsw.Whiffs}\n");
-                    Console.WriteLine($"--------------------------------------------------------\n");
 
-                    // Console.WriteLine($"{spCsw.Swings}");
-                    // Console.WriteLine($"{spCsw.Takes}");
-                    // Console.WriteLine($"{spCsw.EffectiveMinVelocity}");
-                    // Console.WriteLine($"{spCsw.ReleaseExtension}");
-
-                    // Console.WriteLine($"{spCsw.Pos3IntStartDistance}");
-                    // Console.WriteLine($"{spCsw.Pos4IntStartDistance}");
-                    // Console.WriteLine($"{spCsw.Pos5IntStartDistance}");
-                    // Console.WriteLine($"{spCsw.Pos6IntStartDistance}");
-                    // Console.WriteLine($"{spCsw.Pos7IntStartDistance}");
-                    // Console.WriteLine($"{spCsw.Pos8IntStartDistance}");
-                    // Console.WriteLine($"{spCsw.Pos9IntStartDistance}");
                     count++;
                 }
             }
 
             public void PrintStartingPitcherCswSingleDay(List<StartingPitcherCswSingleDay> spCswList)
             {
+                // type = IOrderedEnumerable<StartingPitcherCswSingleDay> sortedList;
                 var sortedlist = from element in spCswList
                         orderby element.CswPitchPercent descending
-                        select element;
+                        select  element;
 
-                string[] tableHeaders = { "Name", "Pitches", "CswPitches", "CSW%" };
+                string[] tableHeaders =
+                {
+                    "Name",
+                    "Pitches",
+                    "CswPitches",
+                    "CSW%"
+                };
+
                 var dataTable = _dataTabler.CreateDataTableWithCustomHeaders("CSW PITCHERS", tableHeaders);
 
                 foreach(var pitcher in sortedlist)
                 {
-                    Object[] pitcherData = { pitcher.PlayerName, pitcher.TotalPitches, pitcher.CswPitches, pitcher.CswPitchPercent };
+                    object[] pitcherData =
+                    {
+                        pitcher.PlayerName,
+                        pitcher.TotalPitches,
+                        pitcher.CswPitches,
+                        pitcher.CswPitchPercent
+                    };
                     _dataTabler.InsertDataRowIntoTable(dataTable, pitcherData);
                 }
                 _dataTabler.PrintTable(dataTable);
@@ -823,13 +889,15 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
 
 
 
-// await _csvHandler.ReadCsvRecordsAsyncToList(csvFilePath, _spCswTypeSingleDay, _spCswModelMapTypeSingleDay, _dynamicList);
-// private List<StartingPitcherCsw>          _listSpCsw          = new List<StartingPitcherCsw>();
-// private List<StartingPitcherCswSingleDay> _listSpCswSingleDay = new List<StartingPitcherCswSingleDay>();
-// private List<StartingPitcherCswDateRange> _listSpCswDateRange = new List<StartingPitcherCswDateRange>();
-// private Type _spCswTypeSingleDay            = new StartingPitcherCswSingleDay().GetType();
-// private Type _spCswModelMapTypeSingleDay    = new StartingPitcherCswClassMap().GetType();
-// private Type _spCswTypeDateRange            = new StartingPitcherCswDateRange().GetType();
-// private Type _spCswModelMapTypeDateRange    = new StartingPitcherCswClassMap().GetType();
-// private Type _spCswType                     = new StartingPitcherCsw().GetType();
-// private Type _spCswModelMapType             = new StartingPitcherCswClassMap().GetType();
+// Console.WriteLine($"{spCsw.Swings}");
+// Console.WriteLine($"{spCsw.Takes}");
+// Console.WriteLine($"{spCsw.EffectiveMinVelocity}");
+// Console.WriteLine($"{spCsw.ReleaseExtension}");
+
+// Console.WriteLine($"{spCsw.Pos3IntStartDistance}");
+// Console.WriteLine($"{spCsw.Pos4IntStartDistance}");
+// Console.WriteLine($"{spCsw.Pos5IntStartDistance}");
+// Console.WriteLine($"{spCsw.Pos6IntStartDistance}");
+// Console.WriteLine($"{spCsw.Pos7IntStartDistance}");
+// Console.WriteLine($"{spCsw.Pos8IntStartDistance}");
+// Console.WriteLine($"{spCsw.Pos9IntStartDistance}");

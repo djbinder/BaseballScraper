@@ -1,6 +1,7 @@
 // DJB WORKING ON
 // DJB: this is correct
 
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Xml.Serialization;
 
@@ -11,8 +12,11 @@ namespace BaseballScraper.Models.Yahoo
         public YahooManager Manager { get; set; }
     }
 
-    public class YahooManager
+    public class YahooManager : IBaseEntity
     {
+        public DateTime DateCreated { get; set; }  // from IBaseEntity interface
+        public DateTime DateUpdated { get; set; }  // from IBaseEntity interface
+
         [Key]
         public int YahooManagerRecordId { get; set; }
 

@@ -169,7 +169,7 @@ namespace BaseballScraper.Controllers
             ///     Uses LinqToTwitter
             ///     See: https://github.com/JoeMayo/LinqToTwitter/wiki/Searching-Twitter
             /// </remarks>
-            /// <param name="searchResponse">
+            /// <param name="SearchResponse">
             ///     Search from LinqToTwitter
             /// </param>
             /// <example>

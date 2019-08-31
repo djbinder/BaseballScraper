@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using BaseballScraper.Controllers.CbsControllers;
 using BaseballScraper.Controllers.EspnControllers;
 using BaseballScraper.Controllers.YahooControllers;
@@ -5,10 +9,7 @@ using BaseballScraper.Infrastructure;
 using BaseballScraper.Models.Cbs;
 using BaseballScraper.Models.ConfigurationModels;
 using BaseballScraper.Models.Yahoo;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
+using SharpPad;
 
 
 #pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
@@ -81,6 +82,16 @@ namespace BaseballScraper.Controllers
         public IActionResult ViewDashboard()
         {
             Console.WriteLine("DASHBOARD");
+            List<string> ss = new List<string>
+            {
+                "1",
+                "HELLO",
+                "1 IS X and Y not"
+            };
+
+            ss.Dump();
+
+
             return View("Dashboard");
         }
 

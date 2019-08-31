@@ -1,4 +1,4 @@
-﻿/// <summary> Create connection between .NET and Python; Get and Set variables </summary>
+﻿// Summary: Create connection between .NET and Python; Get and Set variables
 
 // https://docs.python-guide.org/dev/virtualenvs/
 // https://docs.pipenv.org/en/latest/install/#installing-pipenv
@@ -294,10 +294,10 @@ namespace BaseballScraper.Infrastructure
             /// </param>
             /// <example>
             /// <code>
-            /// var newDictionary = new Dictionary<string,object>();
-            /// newDictionary.Add{ "itemId", 37};
             /// </code>
             /// </example>
+            // / var newDictionary = new Dictionary<string,object>();
+            // / newDictionary.Add{ "itemId", 37};
             public void SetPythonKeyValueDictionary(ScriptScope scope, Dictionary<string, object> keysAndValuesDictionary, string dictionaryName)
             {
                 // set dictionary as Python variable
@@ -314,10 +314,10 @@ namespace BaseballScraper.Infrastructure
 
 
             // STATUS: this works but is it needed?
-            /// <summary> Create a dictionary of keys and values that will be set as Python keys and values </summary>
-            /// <remarks> Note that keys and values are defined within this function; a dictionary is not passed in as a parameter / argument </remarks>
-            /// <example> var dictionaryForPython = CreateDictionaryOfPythonKeysAndValuesToSet(); </example>
-            /// <returns> A dictionary of keys and values where keys are strings and values are objects </returns>
+            // / <summary> Create a dictionary of keys and values that will be set as Python keys and values </summary>
+            // / <remarks> Note that keys and values are defined within this function; a dictionary is not passed in as a parameter / argument </remarks>
+            // / <example> var dictionaryForPython = CreateDictionaryOfPythonKeysAndValuesToSet(); </example>
+            // / <returns> A dictionary of keys and values where keys are strings and values are objects </returns>
             // public Dictionary<string, object> CreateDictionaryOfPythonKeysAndValuesToSet ()
             // {
             //     // Add some sample parameters. Notice that there is no need in specifically setting the object type, interpreter will do that part for us in the script properly with high probability

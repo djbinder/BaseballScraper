@@ -17,20 +17,28 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
     [ApiExplorerSettings(IgnoreApi = true)]
     public class FanGraphsHitterController : ControllerBase
     {
-        private readonly Helpers _h;
-        private readonly GoogleSheetsConnector _gSC;
-        private readonly FanGraphsUriEndPoints _fgEndPoints;
+        private readonly Helpers                   _helpers;
+        private readonly GoogleSheetsConnector     _googleSheetsConnector;
+        private readonly FanGraphsUriEndPoints     _fanGraphsEndPoints;
+        private readonly ProjectDirectoryEndPoints _projectEndPoints;
 
 
-        public FanGraphsHitterController(Helpers h, GoogleSheetsConnector gSC, FanGraphsUriEndPoints fgEndPoints)
+        public FanGraphsHitterController(Helpers helpers, GoogleSheetsConnector googleSheetsConnector, FanGraphsUriEndPoints fanGraphsEndPoints, ProjectDirectoryEndPoints projectEndPoints)
         {
-            _h = h;
-            _gSC = gSC;
-            _fgEndPoints = fgEndPoints;
+            _helpers               = helpers;
+            _googleSheetsConnector = googleSheetsConnector;
+            _fanGraphsEndPoints    = fanGraphsEndPoints;
+            _projectEndPoints      = projectEndPoints;
         }
 
 
         public FanGraphsHitterController(){}
+
+
+        private string GoogleChromePath
+        {
+            get => _projectEndPoints.GoogleChromePath;
+        }
 
 
 
@@ -40,7 +48,7 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
         [HttpGet("hitters")]
         public void TestFgHitterMasterReportController()
         {
-            _h.StartMethod();
+            _helpers.StartMethod();
         }
 
 
@@ -50,7 +58,7 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
         [HttpGet("hitters/async")]
         public async Task TestFgHitterMasterReportControllerAsync()
         {
-            _h.StartMethod();
+            _helpers.StartMethod();
             var scrapeForOutfieldersIn2018 = await ScrapeMasterHittersReport(positionEnum: PositionEnum.Shortstop, minPlateAppearances: 100, league: "nl");
         }
 
@@ -65,6 +73,12 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
             ///     Scapes FanGraphs hitter master report html
             ///     By default, returns 30 rows per page
             /// </summary>
+            /// <remarks>
+            ///     * Launches browser (i.e., Headless = false)
+            ///     * // * Uses local chrome instance instead of Chromium (i.e., ExecutablePath = GoogleChromePath)
+            ///     * See: FanGraphsUriEndPoints more info
+            ///     * See: http://www.puppeteersharp.com/api/index.html
+            /// </remarks>
             /// <param name="positionEnum">
             ///     See FanGraphsUriEndPoints for enum options
             ///     Examples are: PositionEnum.Catcher, PositionEnum.Outfield, PositionEnum.FirstBase
@@ -82,10 +96,6 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
             ///     The year or season (e.g., 2019) to search for
             ///     Optional parameter; Defaults to current year no value is passed in method
             /// </param>
-            /// <remarks>
-            ///     See: FanGraphsUriEndPoints more info
-            ///     See: http://www.puppeteersharp.com/api/index.html
-            /// </remarks>
             /// <example>
             ///     NO FILTERS:     var scrapeWithNoFilters = await ScrapeMasterHittersReport();
             ///     CATCHERS ONLY:  var scrapeForCatchers = await ScrapeMasterHittersReport(positionEnum: PositionEnum.Catcher);
@@ -94,7 +104,7 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
             /// </example>
             public async Task<List<FanGraphsHitter>> ScrapeMasterHittersReport(PositionEnum positionEnum = PositionEnum.All, int minPlateAppearances = 0, string league="all", int year = 0)
             {
-                LaunchOptions options = new LaunchOptions { Headless = true };
+                LaunchOptions options = new LaunchOptions { Headless = false, ExecutablePath = GoogleChromePath };
                 await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultRevision);
 
                 List<FanGraphsHitter> fgHitterList = new List<FanGraphsHitter>();
@@ -104,14 +114,13 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
                 {
                     // scrape first page of html to get total number of pages that will be scraped
                     int pageNumber = 1;
-                    var endPoint = (_fgEndPoints.FgHitterMasterReport(
+                    var endPoint = (_fanGraphsEndPoints.FgHitterMasterReport(
                         positionEnum: positionEnum,
                         minPlateAppearances: minPlateAppearances,
                         league: league,
                         year: year,
                         pageNumber: pageNumber
                     ).EndPointUri);
-                    // Console.WriteLine($"endPoint: {endPoint}");
 
                     await page.GoToAsync(endPoint,10000000);
 
@@ -120,7 +129,7 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
                     // loop through each page returned in the search
                     for(var pageCounter = 1; pageCounter <= numberOfPagesToScrape; pageCounter++)
                     {
-                        endPoint = (_fgEndPoints.FgHitterMasterReport(
+                        endPoint = (_fanGraphsEndPoints.FgHitterMasterReport(
                             positionEnum: positionEnum,
                             minPlateAppearances: minPlateAppearances,
                             league: league,
@@ -131,8 +140,7 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
                         Console.WriteLine($"endPoint: {endPoint}");
 
                         await page.GoToAsync(endPoint,50000);
-                        // int numberOfRowsInTable = await GetNumberOfRowsOnPage(page);
-                        // Console.WriteLine($"\nPAGE# {pageCounter}\t ROWS{numberOfRowsInTable}\n");
+
                         int rowCount = 30;
 
                         // if there are 30 results on page there will be no year
@@ -471,7 +479,7 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
 //         });
 // }", itemNumberSelector);
 
-// _h.Dig(rowNumberFromPageSizeDropdown);
+// _helpers.Dig(rowNumberFromPageSizeDropdown);
 // int numberOfRowsInTable = Convert.ToInt32(rowNumberFromPageSizeDropdown[0]);
 // Console.WriteLine($"numberOfRowsInTable: {numberOfRowsInTable}");
 

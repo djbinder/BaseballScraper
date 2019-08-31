@@ -28,12 +28,11 @@ namespace BaseballScraper.Controllers.PlayerControllers
         private readonly GoogleSheetsConnector     _googleSheetsConnector;
         private readonly ProjectDirectoryEndPoints _baseballData;
 
+        public System.Threading.CancellationToken cancellationToken = new System.Threading.CancellationToken();
+
         public readonly string _sfbbMapDocName = "SfbbPlayerIdMap";
         public readonly string _sfbbMapTabId = "SFBB_PLAYER_ID_MAP";
 
-        // private readonly string _crunchTimePlayerBaseCsv = "http://crunchtimebaseball.com/master.csv";
-        // private readonly string _crunchTimeCsvTargetWritePath = "BaseballData/02_Target_Write/PlayerBase_Target_Write/";
-        // private readonly string _crunchTimePlayerMapFileName = "CrunchtimePlayerBaseCsv";
 
         private Dictionary<string, object> _d = new Dictionary<string, object>();
 
@@ -174,9 +173,6 @@ namespace BaseballScraper.Controllers.PlayerControllers
                     CrunchTimePlayerBase crunchTimePlayerBase = csvRow as CrunchTimePlayerBase;
                     crunchTimePlayerBases.Add(crunchTimePlayerBase);
                 }
-
-                // Console.WriteLine($"listOfObjects: {listOfObjects.Count}");
-                // Console.WriteLine($"crunchTimePlayerBases: {crunchTimePlayerBases.Count}");
                 _helpers.CloseMethod(1);
                 return crunchTimePlayerBases;
             }
@@ -212,7 +208,8 @@ namespace BaseballScraper.Controllers.PlayerControllers
                         playersExistCounter++;
                     }
                 }
-                await _context.SaveChangesAsync();
+                // await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(cancellationToken);
                 return Ok();
             }
 
@@ -222,7 +219,8 @@ namespace BaseballScraper.Controllers.PlayerControllers
             public async Task<ActionResult> AddOneCrunchTimePlayerBasesToDatabase(CrunchTimePlayerBase crunchTimePlayerBase)
             {
                 await _context.AddAsync(crunchTimePlayerBase);
-                await _context.SaveChangesAsync();
+                // await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(cancellationToken);
                 return Ok();
             }
 
@@ -462,7 +460,8 @@ namespace BaseballScraper.Controllers.PlayerControllers
                     {
                         sb.Append(" --> C"); // C --> ADD TO DATABASE
                         await _context.AddAsync(playerBase);
-                        await _context.SaveChangesAsync();
+                        // await _context.SaveChangesAsync();
+                        await _context.SaveChangesAsync(cancellationToken);
                     }
                 }
                 catch(Exception ex)
@@ -472,7 +471,8 @@ namespace BaseballScraper.Controllers.PlayerControllers
                     {
                         sb.Append(" --> E"); // E --> ADD TO DB
                         await _context.AddAsync(playerBase);
-                        await _context.SaveChangesAsync();
+                        // await _context.SaveChangesAsync();
+                        await _context.SaveChangesAsync(cancellationToken);
                     }
 
                     catch(Exception ex2)

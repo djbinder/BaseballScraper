@@ -2,14 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using BaseballScraper.Controllers.BaseballHQControllers;
 using BaseballScraper.Controllers.BaseballSavantControllers;
 using BaseballScraper.Controllers.FanGraphsControllers;
 using BaseballScraper.Controllers.PlayerControllers;
 using BaseballScraper.Infrastructure;
 using BaseballScraper.Models.Player;
-using Microsoft.AspNetCore.Mvc;
 using C = System.Console;
+
 
 #pragma warning disable CS1998, CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE1006
 namespace BaseballScraper.Controllers.AGGREGATORS
@@ -20,12 +21,12 @@ namespace BaseballScraper.Controllers.AGGREGATORS
         private readonly Helpers                        _helpers;
         private readonly PlayerBaseController           _playerBaseController;
         private readonly BaseballSavantHitterController _baseballSavantHitterController;
-        private readonly BaseballHQHitterController     _hqHitterController;
+        private readonly BaseballHqHitterController     _hqHitterController;
         private readonly FanGraphsSpController          _fanGraphsSpController;
         private readonly BaseballSavantSpController     _baseballSavantSpController;
 
 
-        public MasterReportController(Helpers helpers, PlayerBaseController playerBaseController, BaseballSavantHitterController baseballSavantHitterController, BaseballHQHitterController hqHitterController, FanGraphsSpController fanGraphsSpController, BaseballSavantSpController     baseballSavantSpController)
+        public MasterReportController(Helpers helpers, PlayerBaseController playerBaseController, BaseballSavantHitterController baseballSavantHitterController, BaseballHqHitterController hqHitterController, FanGraphsSpController fanGraphsSpController, BaseballSavantSpController     baseballSavantSpController)
         {
             _helpers                        = helpers;
             _playerBaseController           = playerBaseController;
@@ -39,49 +40,6 @@ namespace BaseballScraper.Controllers.AGGREGATORS
 
 
 
-        /*
-            https://127.0.0.1:5001/master_report/full_season
-        */
-        [HttpPost("full_season")]
-        public async Task<IActionResult> UpdateFullSeasonReports()
-        {
-            _helpers.OpenMethod(3);
-
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-
-            bool doNotRunThese = true;
-
-            if(doNotRunThese == false)
-            {
-                /* ADD ALL SFBB & CRUNCH TIME PLAYER BASES */
-                await _playerBaseController.MASTER_REPORT_CALLER("A7:AQ2333");
-                C.WriteLine($"[ 1 ] {sw.Elapsed.Seconds}");
-
-
-                /* ADD X-STATS & EXIT VELO REPORTS */
-                _baseballSavantHitterController.MASTER_REPORT_CALLER(2019, 100);
-                C.WriteLine($"[ 2 ] {sw.Elapsed.Seconds}");
-
-
-                /* ADD YTD & ROS PROJECTION HITTER REPORTS */
-                await _hqHitterController.MASTER_REPORT_CALLER(false, false);
-                C.WriteLine($"[ 3 ] {sw.Elapsed.Seconds}");
-
-
-                /* FANGRAPHS SP */
-                await _fanGraphsSpController.MASTER_REPORT_CALLER();
-                C.WriteLine($"[ 4 ] {sw.Elapsed.Seconds}");
-            }
-
-            await _baseballSavantSpController.MASTER_REPORT_CALLER();
-            C.WriteLine($"[ 5 ] {sw.Elapsed.Seconds}");
-
-            sw.Stop();
-            return Ok();
-        }
-
-
         // https://127.0.0.1:5001/master_report/report_runner_view
         [HttpGet("report_runner_view")]
         public IActionResult GoToReportRunnerPage()
@@ -90,6 +48,72 @@ namespace BaseballScraper.Controllers.AGGREGATORS
             _helpers.CloseMethod(1);
             return View("ReportRunner");
         }
+
+
+        /*
+            https://127.0.0.1:5001/master_report/full_season
+        */
+        [HttpPost("full_season")]
+        public async Task<IActionResult> UpdateFullSeasonReports()
+        {
+            _helpers.OpenMethod(3);
+
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
+
+            bool shouldTheseBeRun = false;
+            if(shouldTheseBeRun == true)
+            {
+
+                // PLAYER BASES : Sfbb & Crunch Time
+                await _playerBaseController.MASTER_REPORT_CALLER("A7:AQ2333");
+                Mark(1, stopWatch, "PLAYER BASE");
+
+
+                // SAVANT | HITTER : X-Stats and Exit Velo
+                _baseballSavantHitterController.MASTER_REPORT_CALLER(2019, 100);
+                Mark(2, stopWatch, "BASEBALL SAVANT HITTER");
+
+
+                // HQ | HITTER : YTD & ROS Projections
+                await _hqHitterController.MASTER_REPORT_CALLER(false, false);
+                Mark(3, stopWatch,"HQ HITTER");
+
+
+                // FANGRAPHS | SP | wPDI, mPDI
+                await _fanGraphsSpController.MASTER_REPORT_CALLER();
+                Mark(4, stopWatch, "FANGRAPH SP");
+
+
+                // SAVANT | SP | CSW
+                await _baseballSavantSpController.MASTER_REPORT_CALLER();
+                Mark(5, stopWatch, "BASEBALL SAVANT PITCHER");
+            }
+
+            stopWatch.Stop();
+            _helpers.CompleteMethod();
+            return Ok();
+        }
+
+
+
+
+
+
+
+        #region PRINTING PRESS ------------------------------------------------------------
+
+        public void Mark(int orderNumber, Stopwatch stopWatch, string completedType)
+        {
+            C.ForegroundColor = ConsoleColor.DarkMagenta;
+            C.WriteLine($"\n[ {orderNumber} ] {stopWatch.Elapsed.Seconds} seconds\t{completedType}\n");
+            C.ResetColor();
+        }
+
+        // C.WriteLine($"\n-------------------------------------------------------------------");
+        // _helpers.PrintNameSpaceControllerNameMethodName(typeof(BaseballHqHitterController));
+
+        #endregion PRINTING PRESS ------------------------------------------------------------
     }
 }
 
@@ -98,41 +122,23 @@ namespace BaseballScraper.Controllers.AGGREGATORS
 
 
 
-// _helpers.OpenMethod(3);
-
-// Stopwatch sw = new Stopwatch();
-// sw.Start();
-
-// /* ADD ALL SFBB PLAYER BASES */
-// // IEnumerable<SfbbPlayerBase> allPlayerBases = _playerBaseController.GetAllSfbbPlayerBasesFromGoogleSheet("A7:AQ2333");
-// // List<SfbbPlayerBase> allPlayerBasesList    = new List<SfbbPlayerBase>();
-
-// // foreach(SfbbPlayerBase sfbbPlayerBase in allPlayerBases)
-// // {
-// //     allPlayerBasesList.Add(sfbbPlayerBase);
-// // }
-
-// // _playerBaseController.AddAllSfbbPlayerBasesToDatabase(allPlayerBasesList);
-// await _playerBaseController.MASTER_REPORT_CALLER("A7:AQ2333");
-// C.WriteLine($"[ 1 ] {sw.ElapsedMilliseconds}");
+// #region PLAYER BASE --------------------
+// #endregion PLAYER BASE --------------------
 
 
-// /* ADD ALL CRUNCH TIME PLAYER BASES */
-// // List<CrunchTimePlayerBase> crunchTimePlayerBases = _playerBaseController.CreateListOfCrunchTimePlayerBasesForToday();
-// // await _playerBaseController.AddAllCrunchTimePlayerBasesToDatabase(crunchTimePlayerBases);
-// // C.WriteLine($"[ 2 ] {sw.ElapsedMilliseconds}");
 
 
-// /* ADD X-STATS & EXIT VELO REPORTS */
-// // _baseballSavantHitterController.DownloadAndAddAllHitterReports(2019, 100);
-// _baseballSavantHitterController.MASTER_REPORT_CALLER(2019, 100);
-// C.WriteLine($"[ 3 ] {sw.ElapsedMilliseconds}");
+// #region FULL SEASON REPORTS --------------------
+
+// bool runFullSeasonReports = false;
+// if(runFullSeasonReports == true)
+// {
+
+// }
+
+// #endregion FULL SEASON REPORTS --------------------
 
 
-// /* ADD YTD & ROS PROJECTION HITTER REPORTS */
-// // await _hqHitterController.UpdateBothHqHitterDatabases(false, false);
-// await _hqHitterController.MASTER_REPORT_CALLER(false, false);
-// C.WriteLine($"[ 4 ] {sw.Elapsed}");
 
-// sw.Stop();
-// return Ok();
+// #region SINGLE DAY REPORTS --------------------
+// #endregion SINGLE DAY REPORTS --------------------

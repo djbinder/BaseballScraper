@@ -15,11 +15,10 @@ using NPOI.XSSF.UserModel;
 #pragma warning disable CS1998, CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE1006
 namespace BaseballScraper.Infrastructure
 {
-    /// <summary> </summary>
-    /// <list> RESOURCES
-    /// <item> https://github.com/perevoznyk/excel-export/blob/master/README.md </item>
-    /// <item> https://github.com/dotnetcore/NPOI/blob/master/samples/Npoi.Samples.CreateNewSpreadsheet/Program.cs </item>
-    /// </list>
+
+    // RESOURCES
+    // * https://github.com/perevoznyk/excel-export/blob/master/README.md
+    // * https://github.com/dotnetcore/NPOI/blob/master/samples/Npoi.Samples.CreateNewSpreadsheet/Program.cs
 
 
 
@@ -89,8 +88,10 @@ namespace BaseballScraper.Infrastructure
 
             // STATUS: this works
             /// <summary> OPTION 1 --> Create and save a new Excel (xlsx) file </summary>
-            /// <remarks> File Type: XLSX </remarks>
-            /// <remarks> The name of the new Excel document and its first tab are defined within the method </remarks>
+            /// <remarks>
+            ///     * File Type: XLSX
+            ///     * The name of the new Excel document and its first tab are defined within the method
+            /// </remarks>
             public void CreateNewExcelWorkbook()
             {
                 RegisterProviderToStart();
@@ -377,7 +378,7 @@ namespace BaseballScraper.Infrastructure
             /// <remarks> In option 2, you provide a number to represent the target column </remarks>
             /// <param name="document"> Excel document that the cell is in </param>
             /// <param name="rowNumber"> The row of the cell </param>
-            /// <param name="columnLetter"> The column number of the cell </param>
+            /// <param name="columnNumber"> The column number of the cell </param>
             /// <param name="cellValue"> What you want to add to the cell </param>
             private void SetCellValue(ExcelDocument document, int rowNumber, int columnNumber,  object cellValue)
             {

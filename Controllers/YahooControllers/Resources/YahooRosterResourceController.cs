@@ -328,7 +328,7 @@ namespace BaseballScraper.Controllers.YahooControllers.Resources
             /// <summary>
             ///     Create list of YahooRosterResource instances for all leagues in team
             /// </summary>
-            /// <param name="teamNumber">
+            /// <param name="numberOfTeamsInLeague">
             ///     A number 0 - X; Where X is the total number of teams in the league;
             ///     Basically every manager has their own single number Id;
             ///     Select the Id of the Manager you would want to view

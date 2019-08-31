@@ -55,13 +55,15 @@ namespace BaseballScraper.Infrastructure
         ///     Inserted into Dependency Injection in Startup.cs
         /// </remarks>
         /// <example>
-        ///     [1] public class GenericController
-        ///     [2] private readonly GoogleSheetConfiguration _sfbbPlayerIdMapConfiguration;
-        ///     [3] public GenericController(IOptionsSnapshot < GoogleSheetConfiguration > options)
-        ///     {
-        ///         _sfbbPlayerIdMapConfiguration = options.Get("SfbbPlayerIdMap");
-        ///     }
-        ///     [4] var sfbbDocumentName = _sfbbPlayerIdMapConfiguration.DocumentName;
+        /// <code>
+        /// public class GenericController
+        /// private readonly GoogleSheetConfiguration _sfbbPlayerIdMapConfiguration;
+        /// public GenericController(IOptionsSnapshot GoogleSheetConfiguration options)
+        /// {
+        ///     _sfbbPlayerIdMapConfiguration = options.Get("SfbbPlayerIdMap");
+        /// }
+        /// var sfbbDocumentName = _sfbbPlayerIdMapConfiguration.DocumentName;
+        /// </code>
         /// </example>
         public GoogleSheetConfiguration GetSfbbPlayerIdMapConfiguration()
         {
@@ -85,13 +87,15 @@ namespace BaseballScraper.Infrastructure
         ///     Inserted into Dependency Injection in Startup.cs
         /// </remarks>
         /// <example>
-        ///     [1] public class GenericController
-        ///     [2] private readonly GoogleSheetConfiguration _crunchTimePlayerIdMapConfiguration;
-        ///     [3] public GenericController(IOptionsSnapshot < GoogleSheetConfiguration > options)
+        /// <code>
+        ///     public class GenericController
+        ///     private readonly GoogleSheetConfiguration _crunchTimePlayerIdMapConfiguration;
+        ///     public GenericController(IOptionsSnapshot GoogleSheetConfiguration options)
         ///     {
         ///         _crunchTimePlayerIdMapConfiguration = options.Get("CrunchtimePlayerIdMap");
         ///     }
-        ///     [4] var crunchtimeDocumentName = _crunchTimePlayerIdMapConfiguration.DocumentName;
+        ///     var crunchtimeDocumentName = _crunchTimePlayerIdMapConfiguration.DocumentName;
+        /// </code>
         /// </example>
         public GoogleSheetConfiguration GetCrunchTimePlayerIdMapConfiguration()
         {
@@ -104,8 +108,6 @@ namespace BaseballScraper.Infrastructure
             _googleSheetConfiguration.WorkbookName  = _crunchTimePlayerIdMapConfiguration.WorkbookName;
             return _googleSheetConfiguration;
         }
-
-
 
 
 

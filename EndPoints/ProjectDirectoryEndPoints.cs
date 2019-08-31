@@ -227,6 +227,12 @@ namespace BaseballScraper.EndPoints
                 get => $"{BaseballSavantWriteRelativePath}{PITCHER_DirectoryName}";
             }
 
+            // BaseballData/02_WRITE/BASEBALL_SAVANT/_archive
+            public string BaseballSavantArchiveDirectory
+            {
+                get => $"{BaseballSavantWriteRelativePath}{ARCHIVE_DirectoryName}";
+            }
+
 
 
             /* --------------------------------------------------------------- */
@@ -264,5 +270,28 @@ namespace BaseballScraper.EndPoints
 
 
         #endregion WRITE DATA FOLDER  ------------------------------------------------------------
+
+
+
+
+
+
+        #region LOCAL PROGRAMS  ------------------------------------------------------------
+
+            // Path to Chrome Executable on my machine
+            public string GoogleChromePath
+            {
+                get => "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
+            }
+
+
+        #endregion LOCAL PROGRAMS  ------------------------------------------------------------
+
+
+
+
+
+
+
     }
 }
