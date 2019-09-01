@@ -1,5 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
+
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <UserSecretsId>79a3edd0-2092-40a2-a04d-dcb46d5ca9ed</UserSecretsId>
 
@@ -32,9 +33,12 @@
 
 
     <!-- C# - Other -->
-    <!-- https://github.com/jmazouri/SharpPad -->
+    <!-- http://bit.ly/2zJUKc0 -->
     <PackageReference Include="SharpPad" Version="1.0.4" />
     <PackageReference Include="SharpPad.Template" Version="1.0.3" />
+    <!-- http://bit.ly/2ZCryT8,  http://bit.ly/2PwHgv0 -->
+    <PackageReference Include="CsharpMacros" Version="2.0.31" />
+
 
 
     <!-- CSV -->

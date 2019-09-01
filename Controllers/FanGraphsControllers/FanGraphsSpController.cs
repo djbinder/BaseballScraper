@@ -120,12 +120,19 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
             await RunFgSpWpdiReport(2019, minInningsPitched_:1);
             var listFromDatabase = GetMany(season: 2019, minInningsPitched: 100);
             AddManyToGsheet(listFromDatabase);
-            // await RunFgSpWpdiReport(2017, minInningsPitched_:1);
-            // await RunFgSpWpdiReport(2016, minInningsPitched_:1);
-            // await RunFgSpWpdiReport(2015, minInningsPitched_:1);
-            // await RunFgSpWpdiReport(2014, minInningsPitched_:1);
 
             _helpers.CompleteMethod();
+        }
+
+
+        // STATUS [ August 31, 2019 ] : this should work but haven't tested
+        public async Task AddAllPreviousSeasons()
+        {
+            await RunFgSpWpdiReport(2018, minInningsPitched_:1);
+            await RunFgSpWpdiReport(2017, minInningsPitched_:1);
+            await RunFgSpWpdiReport(2016, minInningsPitched_:1);
+            await RunFgSpWpdiReport(2015, minInningsPitched_:1);
+            await RunFgSpWpdiReport(2014, minInningsPitched_:1);
         }
 
 
@@ -193,16 +200,19 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
 
                 foreach(FanGraphsPitcherForWpdiReport pitcher in listFromDatabase)
                 {
-                    double mPDI = CalculateSpMpdi(pitcher.ZonePercentage, pitcher.OSwingPercentage, pitcher.OContactPercentage, pitcher.ZSwingPercentage);
+                    double mPDI = CalculateSpMpdi(
+                        pitcher.ZonePercentage,
+                        pitcher.OSwingPercentage,
+                        pitcher.OContactPercentage,
+                        pitcher.ZSwingPercentage
+                    );
                 }
                 PrintWpdiReportPrimaryMethodInfo(doesCsvReportExistForToday, season_, minInningsPitched_);
                 return Ok();
             }
 
 
-
         #endregion FgSpWpdiReport PRIMARY METHOD ------------------------------------------------------------
-
 
 
 
@@ -353,7 +363,11 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
                 ).EndPointUri.ToString();
 
                 var csvSelector = _endPoints.FanGraphsCsvHtmlSelector();
-                await _csvHandler.ClickLinkToDownloadCsvFile(fgUrl, csvSelector);
+
+                await _csvHandler.ClickLinkToDownloadCsvFile(
+                    fgUrl,
+                    csvSelector
+                );
             }
 
 
@@ -363,12 +377,7 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
             // * This should not run if a Csv file for current day already exists
             // * Once it finds last updated file, it moves and renames the file
             // * Ends up something like: "SpWpdiReport_07_09_2019.csv"
-            public ActionResult MoveFgSpWpdiReportToTargetFolder(
-                string fileNamePrefix,
-                int reportMonth = 0,
-                int reportYear  = 0,
-                int reportDay   = 0
-            )
+            public ActionResult MoveFgSpWpdiReportToTargetFolder(string fileNamePrefix, int reportMonth = 0, int reportYear  = 0,int reportDay = 0)
             {
                 _helpers.OpenMethod(1);
                 string downloadsFolder   = _endPoints.LocalDownloadsFolderLocation();
@@ -411,7 +420,9 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
             // * File name format: 'SpWpdiReport_XXXX.csv' where XXXX is the year
             public async Task MoveDataFromFanGraphsToDatabaseFullSeasonAsync(int year)
             {
-                List<FanGraphsPitcherForWpdiReport> pitcherList = CreateListOfWpdiPitchersFromCsv(year);
+                // type is List<FanGraphsPitcherForWpdiReport>
+                var pitcherList = CreateListOfWpdiPitchersFromCsv(year);
+
                 AddAll(pitcherList, year);
                 foreach(var pitcher in pitcherList)
                 {
@@ -452,14 +463,15 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
             {
                 _helpers.OpenMethod(3);
                 pitcher.Season = season;
-                FanGraphsPitcherForWpdiReport exists = _context.FanGraphsPitchersForWpdiReport.SingleOrDefault(sp => sp.PlayerYearConcat == pitcher.PlayerYearConcat);
+
+                // type is FanGraphsPitcherForWpdiReport
+                var exists = _context.FanGraphsPitchersForWpdiReport.SingleOrDefault(sp => sp.PlayerYearConcat == pitcher.PlayerYearConcat);
 
                 if(exists != null)
                 {
                     try
                     {
                         _context.Update(exists);
-                        // await _context.SaveChangesAsync();
                         await _context.SaveChangesAsync(cancellationToken);
                     }
                     catch { Console.WriteLine("Error either adding or updating pitcher"); }
@@ -467,7 +479,6 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
                 else
                 {
                     await _context.AddAsync(pitcher);
-                    // await _context.SaveChangesAsync();
                     await _context.SaveChangesAsync(cancellationToken);
                 }
                 return Ok();
@@ -483,7 +494,6 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
                 if(ModelState.IsValid)
                 {
                     await _context.AddAsync(pitcher);
-                    // await _context.SaveChangesAsync();
                     await _context.SaveChangesAsync(cancellationToken);
                 }
                 return Ok();
@@ -495,7 +505,8 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
             [ApiExplorerSettings(IgnoreApi = false)]
             public ActionResult GetOne(int fangraphsid)
             {
-                FanGraphsPitcherForWpdiReport pitcher = _context.FanGraphsPitchersForWpdiReport.SingleOrDefault(p => p.FanGraphsId == fangraphsid);
+                // type is FanGraphsPitcherForWpdiReport
+                var pitcher = _context.FanGraphsPitchersForWpdiReport.SingleOrDefault(p => p.FanGraphsId == fangraphsid);
                 return Ok(pitcher);
             }
 
@@ -505,9 +516,9 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
             [ApiExplorerSettings(IgnoreApi = false)]
             public async Task<IActionResult> DeleteOne(int fangraphsid)
             {
-                FanGraphsPitcherForWpdiReport pitcher = await _context.FanGraphsPitchersForWpdiReport.SingleOrDefaultAsync(p => p.FanGraphsId == fangraphsid);
+                // type is FanGraphsPitcherForWpdiReport
+                var pitcher = await _context.FanGraphsPitchersForWpdiReport.SingleOrDefaultAsync(p => p.FanGraphsId == fangraphsid);
                 _context.Remove(pitcher);
-                // await _context.SaveChangesAsync();
                 await _context.SaveChangesAsync(cancellationToken);
                 return Ok();
             }
@@ -534,15 +545,21 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
             public IActionResult AddAll(List<FanGraphsPitcherForWpdiReport> pitchers, int season)
             {
                 _helpers.OpenMethod(1);
-                foreach(var pitcher in pitchers)
+
+                int countAdded = 0; int countNotAdded = 0;
+                foreach(var sp in pitchers)
                 {
-                    pitcher.Season = season;
-                    FanGraphsPitcherForWpdiReport checkDbForPitcher = _context.FanGraphsPitchersForWpdiReport.SingleOrDefault(sp => sp.PlayerYearConcat == pitcher.PlayerYearConcat);
+                    sp.Season = season;
 
-                    if(checkDbForPitcher == null)
-                        _context.Add(pitcher);
+                    var checkDbForPitcher = _context.FanGraphsPitchersForWpdiReport.SingleOrDefault(p => p.PlayerYearConcat == sp.PlayerYearConcat);
 
+                    var nullCheck = checkDbForPitcher == null ? _context.Add(sp) : null;
+                    int manageCounters = (checkDbForPitcher == null) ? countAdded++ : countNotAdded++;
+
+                    // if(checkDbForPitcher == null)
+                    //     _context.Add(sp);
                 }
+                PrintDatabaseAddOutcomes(countAdded, countNotAdded);
                 _context.SaveChanges();
                 return Ok();
             }
@@ -609,8 +626,8 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
                     typeof(WpdiReportClassMap)
                 );
 
-                List<FanGraphsPitcherForWpdiReport> pitchers = new List<FanGraphsPitcherForWpdiReport>();
-                FanGraphsPitcherForWpdiReport pitcher        = new FanGraphsPitcherForWpdiReport();
+                var pitchers = new List<FanGraphsPitcherForWpdiReport>();
+                var pitcher  = new FanGraphsPitcherForWpdiReport();
 
                 foreach(var kvp in records)
                 {
@@ -880,7 +897,7 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
                 int counter = 1;
                 foreach(var pitcher in pitchers)
                 {
-                    Console.Write($"{counter}.");
+                    C.Write($"{counter}.");
                     PrintPitcherWpdiBasics(pitcher);
                     counter++;
                 }
@@ -893,76 +910,76 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
 
             private void PrintAllPitcherWpdiData(FanGraphsPitcherForWpdiReport pitcher)
             {
-                Console.WriteLine($"\n-----------------------------------------------------------------");
-                Console.WriteLine($"\n{pitcher.PitcherName}\t {pitcher.Team}\t {pitcher.FanGraphsId}");
-                Console.WriteLine($"GAMES: {pitcher.GamesStarted}\t IP: {pitcher.InningsPitched}");
+                C.WriteLine($"\n-----------------------------------------------------------------");
+                C.WriteLine($"\n{pitcher.PitcherName}\t {pitcher.Team}\t {pitcher.FanGraphsId}");
+                C.WriteLine($"GAMES: {pitcher.GamesStarted}\t IP: {pitcher.InningsPitched}");
 
-                Console.WriteLine($"WPDI: {pitcher.Wpdi}");
+                C.WriteLine($"WPDI: {pitcher.Wpdi}");
 
-                Console.WriteLine($"\nZONE%: {pitcher.ZonePercentage}");
-                Console.WriteLine($"O-SWING%: {pitcher.OSwingPercentage}");
-                Console.WriteLine($"Z-SWING%: {pitcher.ZSwingPercentage}");
-                Console.WriteLine($"O-CONTACT%: {pitcher.OContactPercentage}");
-                Console.WriteLine($"Z-CONTACT%: {pitcher.ZContactPercentage}");
+                C.WriteLine($"\nZONE%   : {pitcher.ZonePercentage}");
+                C.WriteLine($"O-SWING%   : {pitcher.OSwingPercentage}");
+                C.WriteLine($"Z-SWING%   : {pitcher.ZSwingPercentage}");
+                C.WriteLine($"O-CONTACT% : {pitcher.OContactPercentage}");
+                C.WriteLine($"Z-CONTACT% : {pitcher.ZContactPercentage}");
 
-                Console.WriteLine($"\naPercentage: {pitcher.Apercentage}");
-                Console.WriteLine($"bPercentage:   {pitcher.Bpercentage}");
-                Console.WriteLine($"cPercentage:   {pitcher.Cpercentage}");
-                Console.WriteLine($"dPercentage:   {pitcher.Dpercentage}");
-                Console.WriteLine($"ePercentage:   {pitcher.Epercentage}");
-                Console.WriteLine($"fPercentage:   {pitcher.Fpercentage}");
+                C.WriteLine($"\naPercentage : {pitcher.Apercentage}");
+                C.WriteLine($"bPercentage :   {pitcher.Bpercentage}");
+                C.WriteLine($"cPercentage :   {pitcher.Cpercentage}");
+                C.WriteLine($"dPercentage :   {pitcher.Dpercentage}");
+                C.WriteLine($"ePercentage :   {pitcher.Epercentage}");
+                C.WriteLine($"fPercentage :   {pitcher.Fpercentage}");
 
-                Console.WriteLine($"\nfinalA: {pitcher.OutcomeApercentage}");
-                Console.WriteLine($"finalB:   {pitcher.OutcomeBpercentage}");
-                Console.WriteLine($"finalC:   {pitcher.OutcomeCpercentage}");
-                Console.WriteLine($"finalD:   {pitcher.OutcomeDpercentage}");
-                Console.WriteLine($"finalE:   {pitcher.OutcomeEpercentage}");
-                Console.WriteLine($"finalF:   {pitcher.OutcomeFpercentage}");
+                C.WriteLine($"\nfinalA : {pitcher.OutcomeApercentage}");
+                C.WriteLine($"finalB :   {pitcher.OutcomeBpercentage}");
+                C.WriteLine($"finalC :   {pitcher.OutcomeCpercentage}");
+                C.WriteLine($"finalD :   {pitcher.OutcomeDpercentage}");
+                C.WriteLine($"finalE :   {pitcher.OutcomeEpercentage}");
+                C.WriteLine($"finalF :   {pitcher.OutcomeFpercentage}");
 
-                Console.WriteLine($"\n-----------------------------------------------------------------\n");
+                C.WriteLine($"\n-----------------------------------------------------------------\n");
             }
 
 
             private void PrintPitcherPlateDiscriplineData(FanGraphsPitcherForWpdiReport pitcher)
             {
-                Console.WriteLine($"\n{pitcher.PitcherName}\t {pitcher.Team}\t {pitcher.FanGraphsId}");
-                Console.WriteLine($"GAMES: {pitcher.GamesStarted}\t IP: {pitcher.InningsPitched}");
-                Console.WriteLine($"ZONE%: {pitcher.ZonePercentage}");
-                Console.WriteLine($"O-SWING%: {pitcher.OSwingPercentage}\t Z-SWING%: {pitcher.ZSwingPercentage}");
-                Console.WriteLine($"O-CONTACT%: {pitcher.OContactPercentage}\t Z-CONTACT%: {pitcher.ZContactPercentage}\n");
+                C.WriteLine($"\n{pitcher.PitcherName}\t {pitcher.Team}\t {pitcher.FanGraphsId}");
+                C.WriteLine($"GAMES      : {pitcher.GamesStarted}\t IP: {pitcher.InningsPitched}");
+                C.WriteLine($"ZONE%      : {pitcher.ZonePercentage}");
+                C.WriteLine($"O-SWING%   : {pitcher.OSwingPercentage}\t Z-SWING%: {pitcher.ZSwingPercentage}");
+                C.WriteLine($"O-CONTACT% : {pitcher.OContactPercentage}\t Z-CONTACT%: {pitcher.ZContactPercentage}\n");
             }
 
 
             private void PrintWpdiPercentage(double aPercentage, double bPercentage, double cPercentage, double dPercentage, double ePercentage, double fPercentage)
             {
-                Console.WriteLine($"\naPercentage: {aPercentage}");
-                Console.WriteLine($"bPercentage: {bPercentage}");
-                Console.WriteLine($"cPercentage: {cPercentage}");
-                Console.WriteLine($"dPercentage: {dPercentage}");
-                Console.WriteLine($"ePercentage: {ePercentage}");
-                Console.WriteLine($"fPercentage: {fPercentage}\n");
+                C.WriteLine($"\naPercentage : {aPercentage}");
+                C.WriteLine($"bPercentage : {bPercentage}");
+                C.WriteLine($"cPercentage : {cPercentage}");
+                C.WriteLine($"dPercentage : {dPercentage}");
+                C.WriteLine($"ePercentage : {ePercentage}");
+                C.WriteLine($"fPercentage : {fPercentage}\n");
             }
 
             private void PrintIndividualOutcomes(double finalA, double finalB, double finalC, double finalD, double finalE, double finalF)
             {
-                Console.WriteLine($"\nfinalA: {finalA}");
-                Console.WriteLine($"finalB: {finalB}");
-                Console.WriteLine($"finalC: {finalC}");
-                Console.WriteLine($"finalD: {finalD}");
-                Console.WriteLine($"finalE: {finalE}");
-                Console.WriteLine($"finalF: {finalF}\n");
+                C.WriteLine($"\nfinalA : {finalA}");
+                C.WriteLine($"finalB : {finalB}");
+                C.WriteLine($"finalC : {finalC}");
+                C.WriteLine($"finalD : {finalD}");
+                C.WriteLine($"finalE : {finalE}");
+                C.WriteLine($"finalF : {finalF}\n");
             }
 
 
             private void PrintCsvMoveInfo(string movingFromDirectory, string movingToDirectory, string fileNamePrefix, int reportMonth, int reportDay, int reportYear)
             {
-                Console.WriteLine($"\n--------------------------------------------");
+                C.WriteLine($"\n--------------------------------------------");
                 _helpers.PrintNameSpaceControllerNameMethodName(typeof(FanGraphsSpController));
-                Console.WriteLine($"MOVING FROM : {movingFromDirectory}");
-                Console.WriteLine($"MOVING TO   : {movingToDirectory}");
-                Console.WriteLine($"PREFIX      : {fileNamePrefix}");
-                Console.WriteLine($"REPORT DATE : {reportMonth}.{reportDay}.{reportYear}");
-                Console.WriteLine($"--------------------------------------------\n");
+                C.WriteLine($"MOVING FROM : {movingFromDirectory}");
+                C.WriteLine($"MOVING TO   : {movingToDirectory}");
+                C.WriteLine($"PREFIX      : {fileNamePrefix}");
+                C.WriteLine($"REPORT DATE : {reportMonth}.{reportDay}.{reportYear}");
+                C.WriteLine($"--------------------------------------------\n");
             }
 
 
@@ -973,6 +990,17 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
                 C.WriteLine($"REPORT DETAILS          : SEASON > {season}  MIN IP > {minInningsPitched}");
                 C.WriteLine($"TODAY'S REPORT EXISTS?  : {doesCsvReportExistForToday}");
                 C.WriteLine($"--------------------------------------------\n");
+            }
+
+
+
+            public void PrintDatabaseAddOutcomes(int countAdded, int countNotAdded)
+            {
+                C.WriteLine($"\n-------------------------------------------------------------------");
+                _helpers.PrintNameSpaceControllerNameMethodName(typeof(FanGraphsSpController));
+                C.WriteLine($"ADDED TO DB   : {countAdded}");
+                C.WriteLine($"ALREADY IN DB : {countNotAdded}");
+                C.WriteLine($"-------------------------------------------------------------------\n");
             }
 
         #endregion PRINTING PRESS ------------------------------------------------------------

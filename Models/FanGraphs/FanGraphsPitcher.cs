@@ -70,18 +70,39 @@ namespace BaseballScraper.Models.FanGraphs
     }
 
 
+    public class FanGraphsPitcherForWpdiReportSingleDay : FanGraphsPitcherForWpdiReport
+    {
+        new public DateTime DateCreated { get; set; }  // from IBaseEntity interface
+        new public DateTime DateUpdated { get; set; }  // from IBaseEntity interface
+        public DateTime DatePitched     { get; set; }
+    }
+
+
+    // public class FanGraphsPitcherForWpdiReportFullSeason : FanGraphsPitcherForWpdiReport
+    // {
+    //     public int Season { get; set; }
+    //     new public DateTime DateCreated { get; set; }  // from IBaseEntity interface
+    //     new public DateTime DateUpdated { get; set; }  // from IBaseEntity interface
+    // }
+
+
     // See: https://www.fangraphs.com/leaders.aspx?pos=all&stats=sta&lg=all&qual=150&type=c,8,13,210,204,205,208,207,111,105,106,109,108&season=2018&month=0&season1=2018&ind=0&team=0&rost=0&age=0&filter=&players=0&startdate=2018-01-01&enddate=2018-12-31
     // See: https://bit.ly/33abnet
     // See: https://bit.ly/2YPh1TU
-    public class FanGraphsPitcherForWpdiReport : BaseEntity
+    public class FanGraphsPitcherForWpdiReport : IBaseEntity
     {
         private readonly CsvHandler _csvHandler = new CsvHandler();
 
-        [Key]
-        public int RecordId { get; set; }
+
+        public DateTime DateCreated { get; set; }  // from IBaseEntity interface
+        public DateTime DateUpdated { get; set; }  // from IBaseEntity interface
+
+        // [Key]
+        // public int RecordId { get; set; }
 
         private string _playerYearConcat;
 
+        [Key]
         public string PlayerYearConcat
         {
             get => $"{FanGraphsId}-{Season}";
