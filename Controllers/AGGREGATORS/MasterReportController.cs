@@ -61,7 +61,7 @@ namespace BaseballScraper.Controllers.AGGREGATORS
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
 
-            bool shouldTheseBeRun = false;
+            bool shouldTheseBeRun = true;
             if(shouldTheseBeRun == true)
             {
 
@@ -80,15 +80,16 @@ namespace BaseballScraper.Controllers.AGGREGATORS
                 Mark(3, stopWatch,"HQ HITTER");
 
 
-                // FANGRAPHS | SP | wPDI, mPDI
-                await _fanGraphsSpController.MASTER_REPORT_CALLER();
-                Mark(4, stopWatch, "FANGRAPH SP");
 
 
                 // SAVANT | SP | CSW
                 await _baseballSavantSpController.MASTER_REPORT_CALLER();
                 Mark(5, stopWatch, "BASEBALL SAVANT PITCHER");
             }
+
+            // FANGRAPHS | SP | wPDI, mPDI
+            await _fanGraphsSpController.MASTER_REPORT_CALLER();
+            Mark(4, stopWatch, "FANGRAPH SP");
 
             stopWatch.Stop();
             _helpers.CompleteMethod();
@@ -106,7 +107,7 @@ namespace BaseballScraper.Controllers.AGGREGATORS
         public void Mark(int orderNumber, Stopwatch stopWatch, string completedType)
         {
             C.ForegroundColor = ConsoleColor.DarkMagenta;
-            C.WriteLine($"\n[ {orderNumber} ] {stopWatch.Elapsed.Seconds} seconds\t{completedType}\n");
+            C.WriteLine($"\n[ {orderNumber} ] {stopWatch.Elapsed.Seconds} seconds | {completedType}\n");
             C.ResetColor();
         }
 
