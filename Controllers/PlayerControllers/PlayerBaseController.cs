@@ -10,12 +10,11 @@ using BaseballScraper.Models;
 using BaseballScraper.Models.Player;
 using Ganss.Excel;
 using Microsoft.AspNetCore.Mvc;
+using C = System.Console;
 
 #pragma warning disable CS0168, CS0219, CS0414, CS1998, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Controllers.PlayerControllers
 {
-
-
     [Route("api/player/[controller]")]
     [ApiController]
     [ApiExplorerSettings(IgnoreApi = true)]
@@ -74,11 +73,16 @@ namespace BaseballScraper.Controllers.PlayerControllers
         // * SFBB Player Id Map : http://bit.ly/2UdNAGy
 
 
+
+
         // range is something like: "A7:AQ2333"
         [HttpPost("mrc")]
         public async Task<IActionResult> MASTER_REPORT_CALLER(string range)
         {
             _helpers.OpenMethod(3);
+
+
+
             IEnumerable<SfbbPlayerBase> allPlayerBases = GetAllSfbbPlayerBasesFromGoogleSheet(range);
             List<SfbbPlayerBase> allPlayerBasesList    = new List<SfbbPlayerBase>();
 
@@ -100,21 +104,21 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
         #region CRUNCHTIME ------------------------------------------------------------
 
-            // "BaseballData/02_WRITE/PlayerBase/CRUNCH_TIME/"
+            // * "BaseballData/02_WRITE/PlayerBase/CRUNCH_TIME/"
             // * Defined in: ProjectDirectoryEndPoints
             private string CrunchTimeWriteFolder
             {
                get => _baseballData.CrunchTimeWriteDirectoryRelativePath;
             }
 
-            // "CrunchTime_Csv"
+            // * "CrunchTime_Csv"
             // * Defined in: ProjectDirectoryEndPoints
             private string CrunchTimeReportFileBaseName
             {
                 get => _baseballData.CrunchTimeReportFileBaseName;
             }
 
-            // "http://crunchtimebaseball.com/master.csv"
+            // * "http://crunchtimebaseball.com/master.csv"
             // * Defined in: ProjectDirectoryEndPoints
             public string CrunchTimeCsvSourceUrl
             {
@@ -254,6 +258,23 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
 
         #region SFBB DATABASE ------------------------------------------------------------
+
+            // var dBaseCount = NumberOfSfbbPlayerBasesInDatabase();
+            public int NumberOfSfbbPlayerBasesInDatabase()
+            {
+                var playerBaseCount = _context.SfbbPlayerBases.Count();
+                C.WriteLine($"SFBB COUNT DATABASE: {playerBaseCount}");
+                return playerBaseCount;
+            }
+
+
+            // var gsBaseCount = NumberOfSfbbPlayerBasesInGoogleSheet();
+            public int NumberOfSfbbPlayerBasesInGoogleSheet()
+            {
+                var playerBaseCount = GetAllSfbbPlayerBasesFromGoogleSheet("A7:AQ2333").Count();
+                C.WriteLine($"SFBB COUNT GOOGLE SHEET: {playerBaseCount}");
+                return playerBaseCount;
+            }
 
 
             public IEnumerable<SfbbPlayerBase> GetAllSfbbPlayerBasesFromGoogleSheet(string range)

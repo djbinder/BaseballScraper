@@ -22,6 +22,8 @@ namespace BaseballScraper.Models
         public BaseballScraperContext(DbContextOptions<BaseballScraperContext> options, Helpers helpers): base(options)
         {
             _helpers = helpers;
+
+
         }
 
         public BaseballScraperContext(){}
@@ -71,8 +73,12 @@ namespace BaseballScraper.Models
         {
             _helpers.OpenMethod(1);
 
+
+
             /* PLAYER BASES */
-            modelBuilder.Entity<SfbbPlayerBase>().ToTable("_BASE_Sfbb");
+            modelBuilder.Entity<SfbbPlayerBase>()
+                .ToTable("_BASE_Sfbb");
+
             modelBuilder.Entity<CrunchTimePlayerBase>().ToTable("_BASE_CrunchTime");
 
             /* BASEBALL HQ */
@@ -116,26 +122,31 @@ namespace BaseballScraper.Models
         public override int SaveChanges()
         {
             _helpers.OpenMethod(1);
+            int counter = 1;
 
             var now = DateTime.Now;
 
-            ChangeTracker.DetectChanges();
-            foreach (EntityEntry item in ChangeTracker.Entries()
-                                .Where(
-                                    i => i.State == EntityState.Added ||
-                                    i.State == EntityState.Modified
-                                )
-                                .Where(
-                                    i => i as IBaseEntity != null
-                                ))
+            this.ChangeTracker.DetectChanges();
+            foreach (EntityEntry item in this.ChangeTracker.Entries()
+                        .Where(i => i.State == EntityState.Added || i.State == EntityState.Modified)
+                        .Where(i => i as IBaseEntity != null)
+            )
             {
+                Console.WriteLine($"\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                Console.WriteLine($"Item State: {item.State}");
                 if (item.State == EntityState.Added)
                 {
                     (item as IBaseEntity).DateCreated = now;
+                    counter++;
                 }
                 (item as IBaseEntity).DateUpdated = now;
+
+                Console.WriteLine($"item {item.State}");
+                _helpers.Dig(item);
             }
-            _helpers.CloseMethod(3);
+
+            _helpers.CompleteMethod();
+            Console.WriteLine($"counter: {counter}");
             // Call the SaveChanges method on the context;
             return base.SaveChanges();
         }
@@ -162,7 +173,7 @@ namespace BaseballScraper.Models
 
                 ((IBaseEntity)entity.Entity).DateUpdated = DateTime.Now;
             }
-            _helpers.CloseMethod(3);
+
             return base.SaveChangesAsync(cancellationToken);
         }
 

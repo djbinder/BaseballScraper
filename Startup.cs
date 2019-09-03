@@ -282,6 +282,8 @@ namespace BaseballScraper
 
         public void ConfigureAirtableServices(IServiceCollection services)
         {
+            string airtableConfiguration = "AirtableConfiguration";
+
             #region AIR TABLE KEY
                 services.Configure<AirtableConfiguration>(Configuration.GetSection("AirtableConfiguration"));
                 services.Configure<AirtableConfiguration>(config =>
@@ -312,10 +314,12 @@ namespace BaseballScraper
             string spRankings = "SpRankings";
             string authors    = "Authors";
             string websites   = "Websites";
+            string baScConfig = "BaseballScraperConfig";
 
             services.Configure<AirtableConfiguration>(spRankings, Configuration.GetSection(spRankings));
             services.Configure<AirtableConfiguration>(authors,    Configuration.GetSection(authors));
             services.Configure<AirtableConfiguration>(websites,   Configuration.GetSection(websites));
+            services.Configure<AirtableConfiguration>(baScConfig, Configuration.GetSection($"{airtableConfiguration}:{baScConfig}"));
 
             services.AddTransient<AirtableConfiguration>();
             services.AddTransient<AirtableManager>();

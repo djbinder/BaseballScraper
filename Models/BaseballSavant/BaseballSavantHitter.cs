@@ -8,20 +8,20 @@ using Ganss.Excel;
 #pragma warning disable CS0649, IDE0051, IDE0052
 namespace BaseballScraper.Models.BaseballSavant
 {
-    public partial class BaseballSavantHitter : IBaseEntity
-    {
-        public DateTime DateCreated { get; set; }  // from IBaseEntity interface
-        public DateTime DateUpdated { get; set; }  // from IBaseEntity interface
-        //         [Key]
-        // public int MLBID                          { get; set; }
-        // public string LastName                       { get; set; }
-        // public string FirstName                      { get; set; }
+    // public partial class BaseballSavantHitter : IBaseEntity
+    // {
+    //     public DateTime DateCreated { get; set; }  // from IBaseEntity interface
+    //     public DateTime DateUpdated { get; set; }  // from IBaseEntity interface
+    //     //         [Key]
+    //     // public int MLBID                          { get; set; }
+    //     // public string LastName                       { get; set; }
+    //     // public string FirstName                      { get; set; }
 
 
-        // [ForeignKey("SfbbPlayerBase")]
-        // public string IDPLAYER { get; set; }
-        // public virtual SfbbPlayerBase SfbbPlayerBase { get; set; }
-    }
+    //     // [ForeignKey("SfbbPlayerBase")]
+    //     // public string IDPLAYER { get; set; }
+    //     // public virtual SfbbPlayerBase SfbbPlayerBase { get; set; }
+    // }
 
 
         // private int? _mlbid;
