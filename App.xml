@@ -74,19 +74,6 @@
                 * SEE: MasterHitterController (as of August 13, 2019)
             </remarks>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.UpdateDatabaseWithTodaysHitterRestOfSeasonProjectionsData(System.Boolean)">
-            <summary>
-                Gets ROS csv from hq site and adds hitters to database
-            </summary>
-            <remarks>
-                * Should be run each day
-                * 1) Checks if Csv File for todays exists in Hq Target_Write folders
-                * 2) If file doesn't exist, go to Hq website and download report
-                * 3) Check if there are records in the database table
-                * 4) If there are records, delete them (so you can replace them with todays data)
-                * 5) Add records to the HqHitter ROS Projection table
-            </remarks>
-        </member>
         <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.DownloadRestOfSeasonProjections(System.Boolean)">
             <summary>
                 * Downloads csv from hq
@@ -102,51 +89,22 @@
                   * _hitterRestOfSeasonProjectionsCsvFileNameBase      = HqHitterReport_PROJ_
             </remarks>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.CreateRestOfSeasonProjectionsListFromCsvAndAddToDatabase(System.String)">
-             <summary>
-                 * Outcome is that all records are added to the database
-             </summary>
-             <remarks>
-                 * STEPS
-                 * 1) CreateListOfRestOfSeasonProjectionObjectsFromCsvRows(todaysFileName)
-                 * 2) CreateListOfHqHittersRestOfSeasonProjections(listOfGenericObjects)
-                 * 3) await AddRestOfSeasonProjectionsToDatabase(listHittersYTD);
-             </remarks>
-            
-        </member>
-        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.CreateListOfRestOfSeasonProjectionObjectsFromCsvRows(System.String)">
-            <summary>
-                Creates a list of generic objects (to be turned into ROS hitters) from csv
-            </summary>
-            <param name="csvFileName">
-                * 'csvFileName' is just the file name; no path included
-                * Ex: csvFileName e.g., HqHitterReport_PROJ_8_12_2019.csv
-            </param>
-        </member>
-        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.CreateListOfHqHittersRestOfSeasonProjections(System.Collections.Generic.IList{System.Object})">
-            <summary>
-                Takes a list of generic objects and turns them into HqHitterRestOfSeasonProjection
-            </summary>
-            <param name="playerRecordsList">
-                * A list generated from CreateListOfRestOfSeasonProjectionObjectsFromCsvRows() method
-            </param>
-        </member>
-        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.AddRestOfSeasonProjectionToDatabase(BaseballScraper.Models.BaseballHq.HqHitterRestOfSeasonProjection)">
+        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.AddOneROS(BaseballScraper.Models.BaseballHq.HqHitterRestOfSeasonProjection)">
             <summary>
                 * Add one HqHitterRestOfSeasonProjection to the database
             </summary>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.AddRestOfSeasonProjectionsToDatabase(System.Collections.Generic.List{BaseballScraper.Models.BaseballHq.HqHitterRestOfSeasonProjection})">
+        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.AddManyROS(System.Collections.Generic.List{BaseballScraper.Models.BaseballHq.HqHitterRestOfSeasonProjection})">
             <summary>
                 * Add list of HqHitterRestOfSeasonProjection hitters to the database
             </summary>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.GetOneRestOfSeasonProjectionRecord(System.Nullable{System.Int32})">
+        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.GetOneROS(System.Nullable{System.Int32})">
             <summary>
                 * Read one HqHitterRestOfSeasonProjection hitter from database
             </summary>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.GetListOfAllRestOfSeasonProjectionRecords">
+        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.GetAllROS">
             STATUS [ August 13, 2019 ] : this works
             CRUD -> READ | ALL
             <summary>
@@ -2130,6 +2088,19 @@
             <returns>
                 List of hitting leaders for defined season and game type
             </returns>
+        </member>
+        <member name="M:BaseballScraper.Infrastructure.AirtableManager.GetBaseballScraperConfiguration">
+            <summary>
+                * Get configuration for Baseball Scraper project that is stored in airtable
+                * This allows access to the table data
+                * The table data is centralized config data for this app (i.e., it is not baseball data)
+            </summary>
+            <remarks>
+                To get this working in other tables
+                  1) private readonly AirtableManager _airtableManager;
+                  2) DI into the class
+                  3) Call by something like: var thisConfig = _airtableManager.GetBaseballScraperConfiguration();
+            </remarks>
         </member>
         <member name="M:BaseballScraper.Infrastructure.AirtableManager.GetAllRecordsFromAirtableAsync(System.String,System.String)">
             <summary>

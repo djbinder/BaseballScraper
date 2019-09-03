@@ -15,7 +15,7 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
 {
     [Route("api/hq/[controller]")]
     [ApiController]
-    // [ApiExplorerSettings(IgnoreApi = true)]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class BaseballHqHitterController : ControllerBase
     {
         private readonly Helpers                       _helpers;
@@ -40,7 +40,10 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
 
 
         // Defined by me
-        private readonly string        _csvFileNameBase = "HqHitterReport_";
+        private string BaseballHqHitterReportPrefix
+        {
+            get => _projectDirectory.BaseballHqHitterReportPrefix;
+        }
 
 
 
@@ -107,7 +110,12 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
             public async Task<IActionResult> MASTER_REPORT_CALLER(bool openRosFileAfterMove, bool openYtdFileAfterMove)
             {
                 _helpers.OpenMethod(3);
-                await UpdateBothHqHitterDatabases(openRosFileAfterMove, openYtdFileAfterMove);
+
+                await UpdateBothHqHitterDatabases(
+                    openRosFileAfterMove,
+                    openYtdFileAfterMove
+                );
+
                 return Ok();
             }
 
@@ -128,38 +136,17 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
                 _helpers.OpenMethod(3);
 
                 // * PRIMARY METHOD - REST OF SEASON PROJECTIONS
-                await UpdateDatabaseWithTodaysHitterRestOfSeasonProjectionsData(openRosFileAfterMove);
+                // await UpdateDatabaseWithTodaysHitterRestOfSeasonProjectionsData(openRosFileAfterMove);
+                var rosList = GetAllROS_CSV(openRosFileAfterMove);
+                await AddManyROS(rosList);
 
                 // * PRIMARY METHOD - YEAR TO DATE
-                await UpdateDatabaseWithTodaysHitterYearToDateData(openYtdFileAfterMove);
+                // await UpdateDatabaseWithTodaysHitterYearToDateData(openYtdFileAfterMove);
                 return Ok();
             }
 
 
-            // STATUS [ August 13, 2019 ] : this should work but not tested
-            // * Downloads a report that includes both projections and YTD
-            // * Better to use to separate methods for projections and YTD that are below
-            [HttpGet]
-            public async Task DownloadHitterStatsAndProjectionsReport()
-            {
-                await DownloadHqHitterReport(
-                    _currentStatsAndProjectionsReportSelector,
-                    _hqYearToDateAndProjectionReportInitialCsvFileName,     // BaseballHQ_M_B_PY.csv
-                    _csvFileNameBase,                                       // HqHitterReport_8_12_2019
-                    false
-                );
-            }
 
-            // Projections and YTD
-            // Named by Baseball Hq when downloading to local downloads folder
-            public string _hqYearToDateAndProjectionReportInitialCsvFileName
-            {
-                get => "BaseballHQ_M_B_PY.csv";
-            }
-
-            // Css selector used to identify link to click to download hitter report
-            // Projections and YTD
-            private readonly string _currentStatsAndProjectionsReportSelector = "table.stats-links:nth-child(5) > tbody:nth-child(1) > tr:nth-child(3) > td:nth-child(2) > a:nth-child(8)";
 
         #endregion ROS PROJECTIONS AND YEAR TO DATE ------------------------------------------------------------
 
@@ -186,17 +173,13 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
             }
 
             // Defined by me
-            private readonly string _hitterRestOfSeasonProjectionsCsvFileIdentifier = "PROJ_";
+            // private readonly string _hitterRestOfSeasonProjectionsCsvFileIdentifier = "PROJ_";
 
             // Defined by me
             // Returns: HqHitterReport_PROJ_
             private string _hitterRestOfSeasonProjectionsCsvFileNameBase
             {
-                get
-                {
-                    return $"{_csvFileNameBase}{_hitterRestOfSeasonProjectionsCsvFileIdentifier}";
-                }
-                set {}
+                get => _projectDirectory.BaseballHqHitterRosProjectionsCsvFileNameBase;
             }
 
 
@@ -204,53 +187,10 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
             /* PRIMARY METHOD - REST OF SEASON PROJECTIONS                     */
             /* --------------------------------------------------------------- */
 
-            // STATUS [ August 13, 2019 ] : this works
-            // * PRIMARY METHOD - REST OF SEASON PROJECTIONS
-            /// <summary>
-            ///     Gets ROS csv from hq site and adds hitters to database
-            /// </summary>
-            /// <remarks>
-            ///     * Should be run each day
-            ///     * 1) Checks if Csv File for todays exists in Hq Target_Write folders
-            ///     * 2) If file doesn't exist, go to Hq website and download report
-            ///     * 3) Check if there are records in the database table
-            ///     * 4) If there are records, delete them (so you can replace them with todays data)
-            ///     * 5) Add records to the HqHitter ROS Projection table
-            /// </remarks>
-            [HttpPost("update_projections")]
-            public async Task<IActionResult> UpdateDatabaseWithTodaysHitterRestOfSeasonProjectionsData(bool openFileAfterMove)
-            {
-                _helpers.OpenMethod(3);
-                /*     STEP 1     */
-                string todaysFileName = GetTodaysCsvFileName(_hitterRestOfSeasonProjectionsCsvFileNameBase);
-                bool fileCheck        = DoesCsvFileForTodayExist(todaysFileName);
-
-                /*     STEP 2     */
-                if(fileCheck == false)
-                {
-                    /*     PROCESS A     */
-                    await DownloadRestOfSeasonProjections(openFileAfterMove);
-                }
-
-                /*     STEP 3     */
-                bool areThereRecordsInDatabase = CheckIfThereAreRestOfSeasonProjectionsRecordsInDatabase();
-
-                /*     STEP 4     */
-                if(areThereRecordsInDatabase == true)
-                {
-                    List<HqHitterRestOfSeasonProjection> hqHitters = GetListOfAllRestOfSeasonProjectionRecords();
-                    // await DeleteAllRestOfSeasonProjectionRecords(hqHitters);
-                }
-
-                /*     STEP 5     */
-                /*     PROCESS B     */
-                await CreateRestOfSeasonProjectionsListFromCsvAndAddToDatabase(todaysFileName);
-                return Ok();
-            }
 
 
             /* --------------------------------------------------------------- */
-            /* HQ CSV TO DATABASE - REST OF SEASON PROJECTION                  */
+            /* HQ CSV - REST OF SEASON PROJECTION                  */
             /* --------------------------------------------------------------- */
 
             // STATUS [ August 13, 2019 ] : this works
@@ -268,8 +208,6 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
             ///       * _hqRestOfSeasonProjectionReportInitialCsvFileName  = BaseballHQ_M_B_P.csv
             ///       * _hitterRestOfSeasonProjectionsCsvFileNameBase      = HqHitterReport_PROJ_
             /// </remarks>
-            [HttpGet]
-            [Route("ros")]
             public async Task DownloadRestOfSeasonProjections(bool openFileAfterMove)
             {
                 _helpers.OpenMethod(3);
@@ -282,97 +220,57 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
             }
 
 
-            // STATUS [ August 13, 2019 ] : this works
-            // * PROCESS B
-            /// <summary>
-            ///     * Outcome is that all records are added to the database
-            /// </summary>
-            /// <remarks>
-            ///     * STEPS
-            ///     * 1) CreateListOfRestOfSeasonProjectionObjectsFromCsvRows(todaysFileName)
-            ///     * 2) CreateListOfHqHittersRestOfSeasonProjections(listOfGenericObjects)
-            ///     * 3) await AddRestOfSeasonProjectionsToDatabase(listHittersYTD);
-            /// </remarks>
-            ///
-            [HttpPost]
-            [Route("ros")]
-            public async Task<ActionResult> CreateRestOfSeasonProjectionsListFromCsvAndAddToDatabase(string todaysFileName)
-            {
-                _helpers.OpenMethod(3);
-                IList<object> listOfGenericObjects      = CreateListOfRestOfSeasonProjectionObjectsFromCsvRows(todaysFileName);
-                List<HqHitterRestOfSeasonProjection> listHittersRosProjection = CreateListOfHqHittersRestOfSeasonProjections(listOfGenericObjects);
-                await AddRestOfSeasonProjectionsToDatabase(listHittersRosProjection);
-                return Ok();
-            }
-
-
-            // STATUS [ August 13, 2019 ] : this works
-            // PROCESS B : STEP 1
-            /// <summary>
-            ///     Creates a list of generic objects (to be turned into ROS hitters) from csv
-            /// </summary>
-            /// <param name="csvFileName">
-            ///     * 'csvFileName' is just the file name; no path included
-            ///     * Ex: csvFileName e.g., HqHitterReport_PROJ_8_12_2019.csv
-            /// </param>
-            [HttpGet]
-            [Route("ros_list_objects")]
-            public IList<object> CreateListOfRestOfSeasonProjectionObjectsFromCsvRows(string csvFileName)
+            // public List<HqHitterRestOfSeasonProjection> GetAllROS_CSV(string csvFileName)
+            public List<HqHitterRestOfSeasonProjection> GetAllROS_CSV(bool openCsvAfterCreation)
             {
                 _helpers.OpenMethod(1);
-                var playerRecordsList = _csvHandler.ReadCsvRecordsToList(
+
+                string todaysFileName = GetTodaysCsvFileName(_hitterRestOfSeasonProjectionsCsvFileNameBase);
+                bool fileCheck        = DoesCsvFileForTodayExist(todaysFileName);
+
+                C.WriteLine($"\nROS: todaysFileName: {todaysFileName} fileCheck: {fileCheck}\n");
+
+                // IList<object>
+                var listOfCsvRows = _csvHandler.ReadCsvRecordsToList(
                     BaseballHqHitterWriteDirectory,
-                    csvFileName,
+                    todaysFileName,
                     typeof(HqHitterRestOfSeasonProjection),
                     typeof(HqHitterRestOfSeasonProjectionClassMap),
-                    true
+                    openCsvAfterCreation
                 );
-                return playerRecordsList;
-            }
 
+                var allRosList = new List<HqHitterRestOfSeasonProjection>();
 
-            // STATUS [ August 12, 2019 ] : this works
-            // PROCESS B : STEP 2
-            /// <summary>
-            ///     Takes a list of generic objects and turns them into HqHitterRestOfSeasonProjection
-            /// </summary>
-            /// <param name="playerRecordsList">
-            ///     * A list generated from CreateListOfRestOfSeasonProjectionObjectsFromCsvRows() method
-            /// </param>
-            [HttpGet]
-            [Route("ros_list")]
-            public List<HqHitterRestOfSeasonProjection> CreateListOfHqHittersRestOfSeasonProjections(IList<object> playerRecordsList)
-            {
-                _helpers.OpenMethod(1);
-                List<HqHitterRestOfSeasonProjection> listOfHitterRestOfSeasonProjections = new List<HqHitterRestOfSeasonProjection>();
-
-                foreach(object playerObject in playerRecordsList)
+                foreach(object playerObject in listOfCsvRows)
                 {
                     HqHitterRestOfSeasonProjection player = playerObject as HqHitterRestOfSeasonProjection;
-                    listOfHitterRestOfSeasonProjections.Add(player);
+                    allRosList.Add(player);
                 }
-                return listOfHitterRestOfSeasonProjections;
+                return allRosList;
             }
 
 
             /* --------------------------------------------------------------- */
-            /* CRUD - CREATE - REST OF SEASON PROJECTION                       */
+            /* CRUD - REST OF SEASON PROJECTION                                */
             /* --------------------------------------------------------------- */
+
+            /* ----- CRUD - CREATE - ROS PROJECTIONS ----- */
+
 
             // STATUS [ August 13, 2019 ] : this works
             // CRUD -> CREATE | ONE
             /// <summary>
             ///     * Add one HqHitterRestOfSeasonProjection to the database
             /// </summary>
-            [HttpPost]
-            [Route("add_ros/{hitter}")]
-            public async Task<IActionResult> AddRestOfSeasonProjectionToDatabase(HqHitterRestOfSeasonProjection hitter)
+            public async Task<IActionResult> AddOneROS(HqHitterRestOfSeasonProjection hitter)
             {
-                await _context.AddAsync(hitter);
-                // await _context.SaveChangesAsync();
+                _helpers.OpenMethod(3);
+                _context.HqHitterRestOfSeasonProjections.Attach(hitter);
+                // await _context.AddAsync(hitter);
                 await _context.SaveChangesAsync(cancellationToken);
                 return Ok();
             }
+
 
             // STATUS [ August 12, 2019 ] : this works
             // PROCESS B : STEP 3
@@ -380,43 +278,62 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
             /// <summary>
             ///     * Add list of HqHitterRestOfSeasonProjection hitters to the database
             /// </summary>
-            [HttpPost]
-            [Route("add_ros/all")]
-            public async Task<IActionResult> AddRestOfSeasonProjectionsToDatabase(List<HqHitterRestOfSeasonProjection> listOfHitterRestOfSeasonProjections)
+            public async Task<IActionResult> AddManyROS(List<HqHitterRestOfSeasonProjection> listOfHitterRestOfSeasonProjections)
             {
                 _helpers.OpenMethod(3);
+                int countAdded = 0; int countDeleted = 0;
                 foreach(var player in listOfHitterRestOfSeasonProjections)
                 {
+                    // HqHitterRestOfSeasonProjection
                     var checkDbForBase = _context.HqHitterRestOfSeasonProjections.SingleOrDefault(h => h.HQID == player.HQID);
+
                     if(checkDbForBase is null)
                     {
+                        C.WriteLine($"NULL : New {countAdded} Deleted {countDeleted}");
                         await _context.AddAsync(player);
+                        countAdded++;
                     }
                     else
                     {
-                        // C.WriteLine("HQ ROS HITTER EXISTS");
+                        C.WriteLine($"NOT NULL : New {countAdded} Deleted {countDeleted}");
+                        _context.Entry(checkDbForBase).State = EntityState.Detached;
+                        _context.Remove(checkDbForBase);
+                        // _context.SaveChanges();
+                        _context.Add(player);
+                        countDeleted++;
                     }
                 }
-                // await _context.SaveChangesAsync();
                 await _context.SaveChangesAsync(cancellationToken);
+                PrintDatabaseAddOutcomes(countAdded, countDeleted);
                 return Ok();
             }
 
 
-            /* --------------------------------------------------------------- */
-            /* CRUD - READ - REST OF SEASON PROJECTION                         */
-            /* --------------------------------------------------------------- */
+            public void PrintDatabaseAddOutcomes(int countAddedNew, int deletedAndAdded)
+            {
+                C.WriteLine($"\n-------------------------------------------------------------------");
+                _helpers.PrintNameSpaceControllerNameMethodName(typeof(BaseballHqHitterController));
+                C.WriteLine($"ADDED NEW TO DB : {countAddedNew}");
+                C.WriteLine($"UPDATED IN DB   : {deletedAndAdded}");
+                C.WriteLine($"-------------------------------------------------------------------\n");
+            }
+
+            // public async Task<IActionResult> AddAllRosProjections()
+
+
+            /* ----- CRUD - READ - ROS PROJECTIONS ----- */
+
 
             // STATUS [ August 13, 2019 ] : this works
             // CRUD -> READ | ONE
             /// <summary>
             ///     * Read one HqHitterRestOfSeasonProjection hitter from database
             /// </summary>
-            [HttpGet]
-            [Route("read_ros/{hqid}")]
-            public async Task<HqHitterRestOfSeasonProjection> GetOneRestOfSeasonProjectionRecord(int? hqid)
+            public async Task<HqHitterRestOfSeasonProjection> GetOneROS(int? hqid)
             {
-                HqHitterRestOfSeasonProjection player = await _context.HqHitterRestOfSeasonProjections.SingleOrDefaultAsync(h => h.HQID == hqid);
+                _helpers.OpenMethod(3);
+                // HqHitterRestOfSeasonProjection
+                var player = await _context.HqHitterRestOfSeasonProjections.SingleOrDefaultAsync(h => h.HQID == hqid);
                 return player;
             }
 
@@ -425,38 +342,35 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
             /// <summary>
             ///     * Read all HqHitterRestOfSeasonProjection hitters from database
             /// </summary>
-            [HttpGet]
-            [Route("read_ros/all")]
-            public List<HqHitterRestOfSeasonProjection> GetListOfAllRestOfSeasonProjectionRecords()
+            public List<HqHitterRestOfSeasonProjection> GetAllROS()
             {
                 _helpers.OpenMethod(1);
-                List<HqHitterRestOfSeasonProjection> hqHitters = _context.HqHitterRestOfSeasonProjections.ToList();
+
+                //List<HqHitterRestOfSeasonProjection>
+                var hqHitters = _context.HqHitterRestOfSeasonProjections.ToList();
                 return hqHitters;
             }
 
 
-            /* --------------------------------------------------------------- */
-            /* CRUD - UPDATE - REST OF SEASON PROJECTION                       */
-            /* --------------------------------------------------------------- */
+            /* ----- CRUD - UPDATE - ROS PROJECTIONS ----- */
 
             // STATUS [ August 13, 2019 ] : haven't tested but should work
             // CRUD -> UPDATE | ONE
-            [HttpPut("update_ros/{hitter}")]
-            public async Task<IActionResult> UpdateOneRestOfSeasonProjectionRecord(HqHitterRestOfSeasonProjection hitter)
+            public async Task<IActionResult> UpdateOneROS(HqHitterRestOfSeasonProjection hitter)
             {
+                _helpers.OpenMethod(3);
                 if(hitter == null)
                 {
                     return NotFound();
                 }
 
-                HqHitterRestOfSeasonProjection playerToUpdate = await _context.HqHitterRestOfSeasonProjections.FirstOrDefaultAsync(h => h.HQID == hitter.HQID);
+                // HqHitterRestOfSeasonProjection playerToUpdate = await _context.HqHitterRestOfSeasonProjections.FirstOrDefaultAsync(h => h.HQID == hitter.HQID);
 
                 if(ModelState.IsValid)
                 {
                     try
                     {
-                        _context.Update(playerToUpdate);
-                        // await _context.SaveChangesAsync();
+                        _context.Update(hitter);
                         await _context.SaveChangesAsync(cancellationToken);
                         return Ok();
                     }
@@ -469,34 +383,44 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
             }
 
 
-
-            /* --------------------------------------------------------------- */
-            /* CRUD - DELETE - REST OF SEASON PROJECTION                       */
-            /* --------------------------------------------------------------- */
+            /* ----- CRUD - DELETE - ROS PROJECTIONS ----- */
 
             // STATUS [ August 13, 2019 ] : this works
             // CRUD -> DELETE | ONE
-            [HttpDelete("delete_ros/{hqId}")]
-            public async Task<IActionResult> DeleteOneRestOfSeasonProjectionRecord(int hqId)
+            // public async Task<IActionResult> DeleteOneROS(HqHitterRestOfSeasonProjection hitter)
+            // {
+            //     _helpers.OpenMethod(3);
+            //     _context.Entry(hitter).State = EntityState.Detached;
+            //     _context.Remove(hitter);
+            //     await _context.SaveChangesAsync(cancellationToken);
+            //     return Ok();
+            // }
+            public void DeleteOneROS(HqHitterRestOfSeasonProjection hitter)
+            {
+                _helpers.OpenMethod(3);
+                _context.Entry(hitter).State = EntityState.Detached;
+                _context.Remove(hitter);
+                _context.SaveChanges();
+            }
+
+            public async Task<IActionResult> DeleteOneROS(int hqId)
             {
                 _helpers.OpenMethod(3);
                 HqHitterRestOfSeasonProjection hitter = await _context.HqHitterRestOfSeasonProjections.SingleOrDefaultAsync(h => h.HQID == hqId);
                 _context.Remove(hitter);
-                // await _context.SaveChangesAsync();
                 await _context.SaveChangesAsync(cancellationToken);
                 return Ok();
             }
 
             // STATUS [ August 13, 2019 ] : this works
             // CRUD -> DELETE | ALL
-            [HttpDelete("delete_ros/all")]
-            public async Task<IActionResult> DeleteAllRestOfSeasonProjectionRecords(List<HqHitterRestOfSeasonProjection> hitters)
+            public async Task<IActionResult> DeleteAllROS(List<HqHitterRestOfSeasonProjection> hitters)
             {
                 _helpers.OpenMethod(3);
+
                 foreach(var hitter in hitters)
-                {
-                    await DeleteOneRestOfSeasonProjectionRecord(hitter.HQID);
-                }
+                    await DeleteOneROS(hitter.HQID);
+
                 return Ok();
             }
 
@@ -509,7 +433,7 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
             public bool CheckIfThereAreRestOfSeasonProjectionsRecordsInDatabase()
             {
                 _helpers.OpenMethod(1);
-                List<HqHitterRestOfSeasonProjection> hqHitters = GetListOfAllRestOfSeasonProjectionRecords();
+                List<HqHitterRestOfSeasonProjection> hqHitters = GetAllROS();
                 int count = hqHitters.Count;
                 bool areThereRecordsInDatabase;
 
@@ -540,15 +464,13 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
             // Can be found in the html of the hq page
             private readonly string _hitterYearToDateReportSelector = "table.stats-links:nth-child(5) > tbody:nth-child(1) > tr:nth-child(3) > td:nth-child(2) > a:nth-child(9)";
 
+
             // Defined by Baseball HQ
             // Named by Baseball Hq when downloading to local downloads folder
             public string _hqYearToDateReportInitialCsvFileName
             {
                 get => "BaseballHQ_M_B_Y.csv";
             }
-
-            // Defined by me
-            private readonly string _hitterYearToDateCsvFileIdentifier = "YTD_";
 
 
             // Defined by me
@@ -557,9 +479,8 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
             {
                 get
                 {
-                    return $"{_csvFileNameBase}{_hitterYearToDateCsvFileIdentifier}";
+                    return _projectDirectory.BaseballHqHitterYearToDateCsvFileNameBase;
                 }
-                set {}
             }
 
 
@@ -603,7 +524,7 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
                 /*     STEP 4     */
                 if(areThereRecordsInDatabase == true)
                 {
-                    List<HqHitterYearToDate> hqHitters = GetListOfAllYearToDateRecordsInDatabase();
+                    List<HqHitterYearToDate> hqHitters = GetAllYTD();
                     // await DeleteAllYearToDateRecords(hqHitters);
                 }
 
@@ -697,8 +618,11 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
 
 
             /* --------------------------------------------------------------- */
-            /* CRUD - CREATE - YEAR TO DATE                                    */
+            /* CRUD - YEAR TO DATE                                             */
             /* --------------------------------------------------------------- */
+
+
+            /* ----- CRUD - READ - YEAR TO DATE ----- */
 
             // STATUS [ August 13, 2019 ] : this works
             // CRUD -> CREATE | ONE
@@ -706,7 +630,6 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
             public async Task<IActionResult> AddYearToDateRecordToDatabase(HqHitterYearToDate hitter)
             {
                 await _context.AddAsync(hitter);
-                // await _context.SaveChangesAsync();
                 await _context.SaveChangesAsync(cancellationToken);
                 return Ok();
             }
@@ -730,20 +653,18 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
 
                     }
                 }
-                // await _context.SaveChangesAsync();
                 await _context.SaveChangesAsync(cancellationToken);
                 return Ok();
             }
 
 
-            /* --------------------------------------------------------------- */
-            /* CRUD - READ - YEAR TO DATE                                      */
-            /* --------------------------------------------------------------- */
+
+            /* ----- CRUD - READ - YEAR TO DATE ----- */
+
 
             // STATUS [ August 13, 2019 ] : this works
             // CRUD -> READ | ONE
-            [HttpGet("read_ytd/{hqid}")]
-            public async Task<HqHitterYearToDate> GetOneYearToDateRecord(int? hqid)
+            public async Task<HqHitterYearToDate> GetOneYTD(int? hqid)
             {
                 HqHitterYearToDate player = await _context.HqHitterYearToDates.SingleOrDefaultAsync(h => h.HQID == hqid);
                 return player;
@@ -751,8 +672,7 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
 
             // STATUS [ August 13, 2019 ] : this works
             // CRUD -> READ | ALL
-            [HttpGet("read_ytd/all")]
-            public List<HqHitterYearToDate> GetListOfAllYearToDateRecordsInDatabase()
+            public List<HqHitterYearToDate> GetAllYTD()
             {
                 _helpers.OpenMethod(1);
                 List<HqHitterYearToDate> hqHitters = _context.HqHitterYearToDates.ToList();
@@ -760,14 +680,12 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
             }
 
 
-            /* --------------------------------------------------------------- */
-            /* CRUD - UPDATE - YEAR TO DATE                                    */
-            /* --------------------------------------------------------------- */
+
+            /* ----- CRUD - UPDATE - YEAR TO DATE ----- */
 
             // STATUS [ August 13, 2019 ] : this works
             // CRUD -> UPDATE | ONE
-            [HttpPut("update_ytd/{hitter}")]
-            public async Task<IActionResult> UpdateOneYearToDateRecord(HqHitterYearToDate hitter)
+            public async Task<IActionResult> UpdateOneYTD(HqHitterYearToDate hitter)
             {
                 if(hitter == null)
                 {
@@ -781,7 +699,6 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
                     try
                     {
                         _context.Update(playerToUpdate);
-                        // await _context.SaveChangesAsync();
                         await _context.SaveChangesAsync(cancellationToken);
                         return Ok();
                     }
@@ -794,35 +711,41 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
             }
 
 
-            /* --------------------------------------------------------------- */
-            /* CRUD - DELETE - YEAR TO DATE                                    */
-            /* --------------------------------------------------------------- */
+            /* ----- CRUD - DELETE - YEAR TO DATE ----- */
 
             // STATUS [ August 13, 2019 ] : this works
             // CRUD -> DELETE | ONE
-            [HttpDelete("delete_ytd/{hqId}")]
-            public async Task<IActionResult> DeleteOneYearToDateRecord(int hqId)
+            public async Task<IActionResult> DeleteOneYTD(int hqId)
             {
                 _helpers.OpenMethod(3);
                 var hitter = await _context.HqHitterYearToDates.SingleOrDefaultAsync(h => h.HQID == hqId);
                 _context.Remove(hitter);
-                // await _context.SaveChangesAsync();
                 await _context.SaveChangesAsync(cancellationToken);
                 return Ok();
             }
 
             // STATUS [ August 13, 2019 ] : this works
             // CRUD -> DELETE | ALL
-            [HttpDelete("delete_ytd/all")]
-            public async Task<IActionResult> DeleteAllYearToDateRecords(List<HqHitterYearToDate> hitters)
+            public async Task<IActionResult> DeleteManyYTDs(List<HqHitterYearToDate> hitters)
             {
                 _helpers.OpenMethod(3);
                 foreach(var hitter in hitters)
                 {
-                    await DeleteOneYearToDateRecord(hitter.HQID);
+                    await DeleteOneYTD(hitter.HQID);
                 }
                 return Ok();
             }
+
+            // STATUS [ August 13, 2019 ] : this works
+            // CRUD -> DELETE | ALL
+            public async Task<IActionResult> DeleteAllYTDs()
+            {
+                _helpers.OpenMethod(3);
+                var hitters = _context.HqHitterYearToDates.ToList();
+                await DeleteManyYTDs(hitters);
+                return Ok();
+            }
+
 
 
             // STATUS [ August 13, 2019 ] : this works
@@ -836,7 +759,7 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
             public bool CheckIfThereAreYearToDateRecordsInDatabase()
             {
                 _helpers.OpenMethod(1);
-                List<HqHitterYearToDate> hqHitters = GetListOfAllYearToDateRecordsInDatabase();
+                List<HqHitterYearToDate> hqHitters = GetAllYTD();
                 int count = hqHitters.Count;
                 bool areThereRecordsInDatabase;
 
@@ -952,7 +875,7 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
             }
 
             [ApiExplorerSettings(IgnoreApi = true)]
-            public void PrintDetailsOfTodaysYearToDateDatabaseUpdate(string todaysFileName, bool fileCheck, bool areThereRecordsInDatabase,List<HqHitterYearToDate> listHittersYTD)
+            public void PrintDatabaseAddOutcomes(string todaysFileName, bool fileCheck, bool areThereRecordsInDatabase,List<HqHitterYearToDate> listHittersYTD)
             {
                 C.WriteLine($"\n-----------------------------------------------");
                 C.WriteLine($"DETAILS FOR TODAYS YTD DATABASE UPDATE");
@@ -964,6 +887,182 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
                 C.WriteLine($"-----------------------------------------------\n");
             }
 
+            [ApiExplorerSettings(IgnoreApi = true)]
+            public void PrintDatabaseAddOutcomes(string todaysFileName, bool fileCheck, bool areThereRecordsInDatabase,List<HqHitterRestOfSeasonProjection> listHittersROS)
+            {
+                C.WriteLine($"\n-----------------------------------------------");
+                C.WriteLine($"DETAILS FOR TODAYS YTD DATABASE UPDATE");
+                C.WriteLine($"-----------------------------------------------");
+                C.WriteLine($"Todays Csv File: {todaysFileName}");
+                C.WriteLine($"Does Csv File Exist? {fileCheck}");
+                C.WriteLine($"Are there records in database? {areThereRecordsInDatabase}");
+                C.WriteLine($"UpdateDatabaseWithTodaysData(): adding {listHittersROS.Count} to database");
+                C.WriteLine($"-----------------------------------------------\n");
+            }
+
         #endregion PRINTING PRESS ------------------------------------------------------------
     }
 }
+
+
+
+
+
+
+
+
+/*
+// STATUS [ August 13, 2019 ] : this works
+// * PRIMARY METHOD - REST OF SEASON PROJECTIONS
+/// <summary>
+///     Gets ROS csv from hq site and adds hitters to database
+/// </summary>
+/// <remarks>
+///     * Should be run each day
+///     * 1) Checks if Csv File for todays exists in Hq Target_Write folders
+///     * 2) If file doesn't exist, go to Hq website and download report
+///     * 3) Check if there are records in the database table
+///     * 4) If there are records, delete them (so you can replace them with todays data)
+///     * 5) Add records to the HqHitter ROS Projection table
+/// </remarks>
+*/
+// [HttpPost("update_projections")]
+// public async Task<IActionResult> UpdateDatabaseWithTodaysHitterRestOfSeasonProjectionsData(bool openFileAfterMove)
+// {
+//     _helpers.OpenMethod(3);
+//     /*     STEP 1     */
+//     string todaysFileName = GetTodaysCsvFileName(_hitterRestOfSeasonProjectionsCsvFileNameBase);
+//     bool fileCheck        = DoesCsvFileForTodayExist(todaysFileName);
+
+//     /*     STEP 2     */
+//     if(fileCheck == false)
+//     {
+//         /*     PROCESS A     */
+//         await DownloadRestOfSeasonProjections(openFileAfterMove);
+//     }
+
+//     /*     STEP 3     */
+//     bool areThereRecordsInDatabase = CheckIfThereAreRestOfSeasonProjectionsRecordsInDatabase();
+
+//     /*     STEP 4     */
+//     if(areThereRecordsInDatabase == true)
+//     {
+//         List<HqHitterRestOfSeasonProjection> hqHitters = GetAllROS();
+//         // await DeleteAllRestOfSeasonProjectionRecords(hqHitters);
+//     }
+
+//     /*     STEP 5     */
+//     /*     PROCESS B     */
+//     // await CreateRestOfSeasonProjectionsListFromCsvAndAddToDatabase(todaysFileName);
+//     // PrintDatabaseAddOutcomes()
+//     return Ok();
+// }
+
+
+
+// // STATUS [ August 13, 2019 ] : this works
+// // * PROCESS B
+// /// <summary>
+// ///     * Outcome is that all records are added to the database
+// /// </summary>
+// /// <remarks>
+// ///     * STEPS
+// ///     * 1) CreateListOfRestOfSeasonProjectionObjectsFromCsvRows(todaysFileName)
+// ///     * 2) CreateListOfHqHittersRestOfSeasonProjections(listOfGenericObjects)
+// ///     * 3) await AddRestOfSeasonProjectionsToDatabase(listHittersYTD);
+// /// </remarks>
+// ///
+// public async Task<ActionResult> CreateRestOfSeasonProjectionsListFromCsvAndAddToDatabase(string todaysFileName)
+// {
+//     _helpers.OpenMethod(3);
+
+//     // IList<object>
+//     var listOfGenericObjects = CreateListOfRestOfSeasonProjectionObjectsFromCsvRows(todaysFileName);
+
+//     // List<HqHitterRestOfSeasonProjection>
+//     var listHittersRosProjection = CreateListOfHqHittersRestOfSeasonProjections(listOfGenericObjects);
+
+//     await AddManyROS(listHittersRosProjection);
+
+//     return Ok();
+// }
+
+
+/*
+// STATUS [ August 13, 2019 ] : this works
+// PROCESS B : STEP 1
+/// <summary>
+///     Creates a list of generic objects (to be turned into ROS hitters) from csv
+/// </summary>
+/// <param name="csvFileName">
+///     * 'csvFileName' is just the file name; no path included
+///     * Ex: csvFileName e.g., HqHitterReport_PROJ_8_12_2019.csv
+/// </param>
+*/
+// public IList<object> CreateListOfRestOfSeasonProjectionObjectsFromCsvRows(string csvFileName)
+// {
+//     _helpers.OpenMethod(1);
+
+//     // IList<object>
+//     var playerRecordsList = _csvHandler.ReadCsvRecordsToList(
+//         BaseballHqHitterWriteDirectory,
+//         csvFileName,
+//         typeof(HqHitterRestOfSeasonProjection),
+//         typeof(HqHitterRestOfSeasonProjectionClassMap),
+//         true
+//     );
+
+//     return playerRecordsList;
+// }
+
+
+// STATUS [ August 12, 2019 ] : this works
+// PROCESS B : STEP 2
+/// <summary>
+///     Takes a list of generic objects and turns them into HqHitterRestOfSeasonProjection
+/// </summary>
+/// <param name="playerRecordsList">
+///     * A list generated from CreateListOfRestOfSeasonProjectionObjectsFromCsvRows() method
+/// </param>
+// public List<HqHitterRestOfSeasonProjection> CreateListROS(IList<object> playerRecordsList)
+// {
+//     _helpers.OpenMethod(1);
+
+//     // List<HqHitterRestOfSeasonProjection>
+//     var listOfHitterRestOfSeasonProjections = new List<HqHitterRestOfSeasonProjection>();
+
+//     foreach(object playerObject in playerRecordsList)
+//     {
+//         HqHitterRestOfSeasonProjection player = playerObject as HqHitterRestOfSeasonProjection;
+//         listOfHitterRestOfSeasonProjections.Add(player);
+//     }
+//     return listOfHitterRestOfSeasonProjections;
+// }
+
+
+
+// These are all probably not needed
+// STATUS [ August 13, 2019 ] : this should work but not tested
+// * Downloads a report that includes both projections and YTD
+// * Better to use to separate methods for projections and YTD that are below
+// [HttpGet]
+// public async Task DownloadHitterStatsAndProjectionsReport()
+// {
+//     await DownloadHqHitterReport(
+//         _currentStatsAndProjectionsReportSelector,
+//         _hqYearToDateAndProjectionReportInitialCsvFileName,     // BaseballHQ_M_B_PY.csv
+//         BaseballHqHitterReportPrefix,                           // HqHitterReport_
+//         false
+//     );
+// }
+
+// // Projections and YTD
+// // Named by Baseball Hq when downloading to local downloads folder
+// public string _hqYearToDateAndProjectionReportInitialCsvFileName
+// {
+//     get => "BaseballHQ_M_B_PY.csv";
+// }
+
+// // Css selector used to identify link to click to download hitter report
+// // Projections and YTD
+// private readonly string _currentStatsAndProjectionsReportSelector = "table.stats-links:nth-child(5) > tbody:nth-child(1) > tr:nth-child(3) > td:nth-child(2) > a:nth-child(8)";

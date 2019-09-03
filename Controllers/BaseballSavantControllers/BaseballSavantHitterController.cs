@@ -30,7 +30,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
         private readonly BaseballScraperContext        _context;
         private readonly ProjectDirectoryEndPoints     _projectDirectory;
 
-        public System.Threading.CancellationToken cancellationToken = new System.Threading.CancellationToken();
+        public CancellationToken cancellationToken = new CancellationToken();
 
 
         public BaseballSavantHitterController(Helpers helpers, CsvHandler csvHandler, BaseballSavantHitterEndPoints hitterEndpoints, BaseballScraperContext context, ProjectDirectoryEndPoints projectDirectory)
@@ -38,15 +38,13 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             _helpers          = helpers;
             _csvHandler       = csvHandler;
             _hitterEndpoints  = hitterEndpoints;
-            this._context     = context;
+            _context     = context;
             _projectDirectory = projectDirectory;
         }
 
         public BaseballSavantHitterController() {}
 
 
-
-        // private static string _targetWriteDirectory = "BaseballData/02_Target_Write/BaseballSavant_Target_Write/BbSavant_Hitters/";
 
 
         // BaseballData/02_WRITE/BASEBALL_SAVANT/HITTERS/
@@ -119,6 +117,10 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             {
                 _helpers.OpenMethod(1);
                 DownloadExpectedStatsCsv(year, minAtBats);
+                int monthNumber = 9;
+                int dayNumber = 1;
+                int yearNumber = 2019;
+
                 string xStatsReportPath = "BaseballData/02_WRITE/BASEBALL_SAVANT/HITTERS/8_27_2019_x_stats.csv";
                 var xList = CreateListOfXStatsObjectsFromCsvRows(xStatsReportPath).ToList();
                 AddAll(xList);
@@ -132,14 +134,20 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             public IActionResult DownloadExpectedStatsCsv(int year, int minAtBats, BaseballSavantHitterEndPoints.BaseballSavantPositionEnum position = BaseballSavantHitterEndPoints.BaseballSavantPositionEnum.All)
             {
                 _helpers.OpenMethod(1);
-                var csvEndPoint = _hitterEndpoints.HitterExpectedStatisticsEndPoint_Csv(year, minAtBats, position).EndPointUri;
+                var csvEndPoint = _hitterEndpoints.HitterExpectedStatisticsEndPoint_Csv(
+                    year,
+                    minAtBats,
+                    position
+                ).EndPointUri;
 
-                // string pathAndFileToWrite = $"{_targetWriteDirectory}{_todaysDateString}{_expectedStatsStringAppendix}";
                 string pathAndFileToWrite = $"{HitterWriteDirectory}{_todaysDateString}{_expectedStatsStringAppendix}";
 
                 PrintCsvFileDownloadDetails(csvEndPoint, pathAndFileToWrite);
 
-                _csvHandler.DownloadCsvFromLink(csvEndPoint, pathAndFileToWrite);
+                _csvHandler.DownloadCsvFromLink(
+                    csvEndPoint,
+                    pathAndFileToWrite
+                );
 
                 if(SIO.File.Exists(pathAndFileToWrite))
                 {
@@ -161,27 +169,26 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             public IList<XstatsHitter> CreateListOfXStatsObjectsFromCsvRows(string pathAndFileToWrite)
             {
                 _helpers.OpenMethod(1);
-                List<object> allRowsList = _csvHandler.ReadCsvRecordsToList(pathAndFileToWrite, typeof(XstatsHitter), typeof(XstatsHitterClassMap)).ToList();
+
+                List<object> allRowsInCsv = _csvHandler.ReadCsvRecordsToList(
+                    pathAndFileToWrite,
+                    typeof(XstatsHitter),
+                    typeof(XstatsHitterClassMap)
+                ).ToList();
 
                 List<XstatsHitter> hitters = new List<XstatsHitter>();
 
-                foreach(object row in allRowsList)
+                foreach(object row in allRowsInCsv)
                 {
                     XstatsHitter playerRow = row as XstatsHitter;
-                    // C.WriteLine($"{playerRow.FirstName} {playerRow.LastName}");
 
                     var playerBase = _context.SfbbPlayerBases.SingleOrDefault(s => s.MLBID == playerRow.MLBID);
 
                     if(playerBase != null)
-                    {
                         playerRow.IDPLAYER = playerBase.IDPLAYER;
-                    }
 
                     hitters.Add(playerRow);
-                    // Add(playerRow);
-                    // _context.Add(playerRow);
                 }
-                // _context.SaveChanges();
                 return hitters;
             }
 
@@ -199,19 +206,26 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             [HttpPost("xstats/add")]
             public IActionResult Add(XstatsHitter hitter)
             {
-                _helpers.StartMethod();
-                var hitterCheck = _context.XStatsHitters.SingleOrDefault(h => h.MLBID == hitter.MLBID);
+                _helpers.OpenMethod(1);
+                int countAdded = 0; int countNotAdded = 0;
 
-                if(hitterCheck == null)
-                {
-                    _context.Add(hitter);
-                    _context.SaveChanges();
-                }
-                else
-                {
-                    // hitterCheck.PlateAppearances = hitter.PlateAppearances;
-                    // Update(hitterCheck);
-                }
+                // XStatsHitter
+                var checkForHitterInDb = _context.XStatsHitters.SingleOrDefault(h => h.MLBID == hitter.MLBID);
+
+                var nullCheck = (checkForHitterInDb == null) ? _context.Add(hitter) : null;
+                int manageCounters = (checkForHitterInDb == null) ? countAdded++ : countNotAdded++;
+
+                // if(hitterCheck == null)
+                // {
+                //     _context.Add(hitter);
+                // }
+                // else
+                // {
+                //     // hitterCheck.PlateAppearances = hitter.PlateAppearances;
+                //     // Update(hitterCheck);
+                // }
+                PrintDatabaseAddOutcomes(countAdded, countNotAdded);
+                _context.SaveChanges();
                 return Ok();
             }
 
@@ -232,21 +246,28 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             public IActionResult AddAll(List<XstatsHitter> hitters)
             {
                 _helpers.OpenMethod(1);
-                int counter = 1;
+                int countAdded = 0; int countNotAdded = 0; int countUpdated = 0;
+
                 foreach(var hitter in hitters)
                 {
-                    var checkDbForHitter = _context.XStatsHitters.SingleOrDefault(x => x.MLBID == hitter.MLBID);
-                    if(checkDbForHitter == null)
+                    // XstatsHitter
+                    var checkForHitterInDb = _context.XStatsHitters.SingleOrDefault(x => x.MLBID == hitter.MLBID);
+
+                    var nullCheck      = (checkForHitterInDb == null) ? _context.Add(hitter) : null;
+                    int manageCounters = (checkForHitterInDb == null) ? countAdded++ : countNotAdded++;
+
+                    // var updateCheck    = (checkForHitterInDb != null) ? _context.Update(hitter) : null;
+                    if(checkForHitterInDb != null)
                     {
+                        _context.Remove(checkForHitterInDb);
+                        _context.XStatsHitters.Attach(hitter);
                         _context.Add(hitter);
+                        countUpdated++;
                     }
-                    else
-                    {
-                        // Console.WriteLine($"{counter} | X STATS HITTER ALREADY EXISTS");
-                    }
-                    counter++;
                 }
                 _context.SaveChanges();
+                PrintDatabaseAddOutcomes(countAdded, countNotAdded);
+                C.WriteLine($"Update: {countUpdated}");
                 return Ok();
             }
 
@@ -302,11 +323,17 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             public IActionResult DownloadExitVelocityAndBarrelsCsv(int year, int minAtBats)
             {
                 _helpers.OpenMethod(1);
-                var csvEndPoint = _hitterEndpoints.HitterExitVelocityAndBarrelsEndPoint_Csv(year, minAtBats).EndPointUri;
+                var csvEndPoint = _hitterEndpoints.HitterExitVelocityAndBarrelsEndPoint_Csv(
+                    year,
+                    minAtBats
+                ).EndPointUri;
 
                 string pathAndFileToWrite = $"{HitterWriteDirectory}{_todaysDateString}{_velocityAndBarrelsStringAppendix}";
 
-                _csvHandler.DownloadCsvFromLink(csvEndPoint, pathAndFileToWrite);
+                _csvHandler.DownloadCsvFromLink(
+                    csvEndPoint,
+                    pathAndFileToWrite
+                );
 
                 PrintCsvFileDownloadDetails(csvEndPoint, pathAndFileToWrite);
                 if(SIO.File.Exists(pathAndFileToWrite))
@@ -329,20 +356,24 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             public IList<ExitVelocityAndBarrelsHitter> CreateListOfExitVelocityAndBarrelsHittersFromCsvRows(string pathAndFileToWrite)
             {
                 _helpers.OpenMethod(1);
-                List<object> allRowsList = _csvHandler.ReadCsvRecordsToList(pathAndFileToWrite, typeof(ExitVelocityAndBarrelsHitter), typeof(ExitVelocityAndBarrelsHitterClassMap)).ToList();
+
+                List<object> allRowsInCsv = _csvHandler.ReadCsvRecordsToList(
+                    pathAndFileToWrite,
+                    typeof(ExitVelocityAndBarrelsHitter),
+                    typeof(ExitVelocityAndBarrelsHitterClassMap)
+                ).ToList();
 
                 List<ExitVelocityAndBarrelsHitter> hitters = new List<ExitVelocityAndBarrelsHitter>();
 
-                foreach(object row in allRowsList)
+                foreach(object row in allRowsInCsv)
                 {
                     ExitVelocityAndBarrelsHitter playerRow = row as ExitVelocityAndBarrelsHitter;
 
                     SfbbPlayerBase playerBase = _context.SfbbPlayerBases.SingleOrDefault(s => s.MLBID == playerRow.MLBID);
 
                     if(playerBase != null)
-                    {
                         playerRow.IDPLAYER = playerBase.IDPLAYER;
-                    }
+
                     hitters.Add(playerRow);
                 }
                 return hitters;
@@ -392,6 +423,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
                 }
                 return Ok();
             }
+
 
             // STATUS [ August 27, 2019 ] : this works
             // Link: https://127.0.0.1:5001/api/baseballsavant/baseballsavanthitter/velo_barrel/add_many
@@ -550,6 +582,16 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
                 C.WriteLine($"LOCAL FILE PATH : {pathAndFileToWrite}");
                 C.WriteLine($"FILE EXISTS?    : {doesFileExistLocally}");
                 C.WriteLine($"--------------------------------------------\n");
+            }
+
+
+            public void PrintDatabaseAddOutcomes(int countAdded, int countNotAdded)
+            {
+                C.WriteLine($"\n-------------------------------------------------------------------");
+                _helpers.PrintNameSpaceControllerNameMethodName(typeof(BaseballSavantHitterController));
+                C.WriteLine($"ADDED TO DB   : {countAdded}");
+                C.WriteLine($"ALREADY IN DB : {countNotAdded}");
+                C.WriteLine($"-------------------------------------------------------------------\n");
             }
 
         #endregion PRINTING PRESS ------------------------------------------------------------

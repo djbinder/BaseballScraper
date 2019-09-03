@@ -671,27 +671,28 @@ namespace BaseballScraper.Infrastructure
             }
 
 
-            // STATUS [ August 13, 2019 ] : this works
-            // * Appends data string that includes month, day, year, minute, hour, second, to another string
-            // * Helps when downloaded files initially have the same generic name
-            // * This basically makes the file unique for the day it was downloaded
-            public string TodaysDateStringComplex()
-            {
-                // _helpers.OpenMethod(1);
-                string dateString = string.Empty;
+            // // STATUS [ September 1, 2019 ] : moved to FileManagerMethods
+            // // STATUS [ August 13, 2019 ] : this works
+            // // * Appends data string that includes month, day, year, minute, hour, second, to another string
+            // // * Helps when downloaded files initially have the same generic name
+            // // * This basically makes the file unique for the day it was downloaded
+            // public string TodaysDateStringComplex()
+            // {
+            //     // _helpers.OpenMethod(1);
+            //     string dateString = string.Empty;
 
-                DateTime today    = DateTime.Now;
-                    string todayString = today.ToString();
-                    string month       = today.Month.ToString();
-                    string day         = today.Day.ToString();
-                    string year        = today.Year.ToString();
-                    string minute      = today.Minute.ToString();
-                    string hour        = today.Hour.ToString();
-                    string second      = today.Second.ToString();
+            //     DateTime today    = DateTime.Now;
+            //         string todayString = today.ToString();
+            //         string month       = today.Month.ToString();
+            //         string day         = today.Day.ToString();
+            //         string year        = today.Year.ToString();
+            //         string minute      = today.Minute.ToString();
+            //         string hour        = today.Hour.ToString();
+            //         string second      = today.Second.ToString();
 
-                dateString        = $"{month}_{day}_{year}_{hour}_{minute}_{second}";
-                return dateString;
-            }
+            //     dateString        = $"{month}_{day}_{year}_{hour}_{minute}_{second}";
+            //     return dateString;
+            // }
 
 
             // STATUS: this works

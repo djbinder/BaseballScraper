@@ -16,22 +16,24 @@ namespace BaseballScraper.Infrastructure
 {
     public class AirtableManager
     {
-        private readonly Helpers               _h;
+        private readonly Helpers               _helpers;
         private AirtableConfiguration          _airtableConfig;
         private readonly AirtableConfiguration _spRankingsConfiguration;
         private readonly AirtableConfiguration _authorsConfiguration;
         private readonly AirtableConfiguration _websitesConfiguration;
+        private readonly AirtableConfiguration _baseballScraperConfiguration;
 
-        private string spRankings = "SpRankings";
+        // private string spRankings = "SpRankings";
 
 
-        public AirtableManager(Helpers h, IOptions<AirtableConfiguration> airtableConfig, IOptionsSnapshot<AirtableConfiguration> options)
+        public AirtableManager(Helpers helpers, IOptions<AirtableConfiguration> airtableConfig, IOptionsSnapshot<AirtableConfiguration> options, AirtableConfiguration baseballScraperConfiguration)
         {
-            _h                       = h;
-            _airtableConfig          = airtableConfig.Value;
-            _spRankingsConfiguration = options.Get(spRankings);
-            _authorsConfiguration    = options.Get("Authors");
-            _websitesConfiguration   = options.Get("Websites");
+            _helpers                      = helpers;
+            _airtableConfig               = airtableConfig.Value;
+            _spRankingsConfiguration      = options.Get("SpRankings");
+            _authorsConfiguration         = options.Get("Authors");
+            _websitesConfiguration        = options.Get("Websites");
+            _baseballScraperConfiguration = options.Get("BaseballScraperConfig");
         }
 
         public AirtableManager(){}
@@ -52,6 +54,7 @@ namespace BaseballScraper.Infrastructure
                 return _airtableConfig;
             }
 
+
             public AirtableConfiguration GetSpRankingsTableConfiguration()
             {
                 _airtableConfig.AuthenticationString = _spRankingsConfiguration.AuthenticationString;
@@ -62,31 +65,27 @@ namespace BaseballScraper.Infrastructure
                 return _airtableConfig;
             }
 
-            // // STATUS [ July 11, 2019 ] : this works but probably not needed
-            // public AirtableConfiguration GetTableConfigurationThroughFileRead()
-            // {
-            //     using(FileStream stream = new FileStream("Configuration/airtableConfiguration.json", FileMode.Open, FileAccess.Read))
-            //     {
-            //         using(var reader = new StreamReader(stream))
-            //         {
-            //             string content = reader.ReadToEnd();
-            //             var json       = JObject.Parse(content);
-            //             var group      = json["SpRankings"];
 
-            //             JToken tableNameToken = group["TableName"];
-            //             string tableName      = tableNameToken.ToString();
-            //             string baseName       = group["Base"].ToString();
-            //             string authString     = group["AuthenticationString"].ToString();
-            //             string postmanToken   = group["PostmanToken"].ToString();
-
-            //             _airtableConfig.TableName            = tableName;
-            //             _airtableConfig.Base                 = baseName;
-            //             _airtableConfig.AuthenticationString = authString;
-            //             _airtableConfig.PostmanToken         = postmanToken;
-            //         }
-            //     }
-            //     return _airtableConfig;
-            // }
+            /// <summary>
+            ///     * Get configuration for Baseball Scraper project that is stored in airtable
+            ///     * This allows access to the table data
+            ///     * The table data is centralized config data for this app (i.e., it is not baseball data)
+            /// </summary>
+            /// <remarks>
+            ///     To get this working in other tables
+            ///       1) private readonly AirtableManager _airtableManager;
+            ///       2) DI into the class
+            ///       3) Call by something like: var thisConfig = _airtableManager.GetBaseballScraperConfiguration();
+            /// </remarks>
+            public AirtableConfiguration GetBaseballScraperConfiguration()
+            {
+                _airtableConfig.AuthenticationString = _baseballScraperConfiguration.AuthenticationString;
+                _airtableConfig.Base                 = _baseballScraperConfiguration.Base;
+                _airtableConfig.Link                 = _baseballScraperConfiguration.Link;
+                _airtableConfig.PostmanToken         = _baseballScraperConfiguration.PostmanToken;
+                _airtableConfig.TableName            = _baseballScraperConfiguration.TableName;
+                return _airtableConfig;
+            }
 
         #endregion GET TABLE CONFIGURATION INFO ------------------------------------------------------------
 
@@ -158,10 +157,19 @@ namespace BaseballScraper.Infrastructure
                         records.AddRange(airResponse.Records.ToList());
                         offset = airResponse.Offset;
                     }
-                    else if (airResponse.AirtableApiError is AirtableApiException) { errorMessage = airResponse.AirtableApiError.ErrorMessage; }
-                    else { errorMessage = "Unknown error"; }
+                    else if (airResponse.AirtableApiError is AirtableApiException)
+                    {
+                        errorMessage = airResponse.AirtableApiError.ErrorMessage;
+                    }
+                    else
+                    {
+                        errorMessage = "Unknown error";
+                    }
                 }
-                if(!string.IsNullOrEmpty(errorMessage)) { C.WriteLine("ERROR"); };
+
+                if(!string.IsNullOrEmpty(errorMessage))
+                    C.WriteLine("ERROR");
+
                 return records;
             }
 

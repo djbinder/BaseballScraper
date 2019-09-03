@@ -6,7 +6,8 @@
 
     <!-- When set to 'true' you get the MSB3276 error -->
     <!-- See: http://bit.ly/2LeqT2b -->
-    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+    <!-- <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects> -->
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <DocumentationFile>App.xml</DocumentationFile>
@@ -28,6 +29,7 @@
   <ItemGroup>
 
     <!-- APIs - General -->
+    <PackageReference Include="Google.Cloud.Storage.V1" Version="2.3.0" />
     <PackageReference Include="RestSharp" Version="106.2.2" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
 
