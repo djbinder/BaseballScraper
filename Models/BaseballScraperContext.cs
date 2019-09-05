@@ -13,6 +13,7 @@ using BaseballScraper.Models.Yahoo.Resources.YahooTeamResource;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using C = System.Console;
 
 namespace BaseballScraper.Models
 {
@@ -74,6 +75,18 @@ namespace BaseballScraper.Models
             _helpers.OpenMethod(1);
 
 
+            var cascadeFks = modelBuilder.Model.GetEntityTypes()
+                .SelectMany(t => t.GetForeignKeys())
+                .Where(
+                    fk => !fk.IsOwnership &&
+                    fk.DeleteBehavior == DeleteBehavior.Cascade
+                );
+
+            foreach(var fk in cascadeFks)
+                fk.DeleteBehavior = DeleteBehavior.SetNull;
+
+            base.OnModelCreating(modelBuilder);
+
 
             /* PLAYER BASES */
             modelBuilder.Entity<SfbbPlayerBase>()
@@ -87,6 +100,8 @@ namespace BaseballScraper.Models
 
             /* BASEBALL SAVANT */
             modelBuilder.Entity<ExitVelocityAndBarrelsHitter>().ToTable("SAVANT_HIT_ExVeloBarrels");
+
+
             modelBuilder.Entity<XstatsHitter>().ToTable("SAVANT_HIT_XStats");
 
 
@@ -125,6 +140,13 @@ namespace BaseballScraper.Models
             int counter = 1;
 
             var now = DateTime.Now;
+            C.WriteLine($"NOW : {now}\n \n \n \n \n");
+
+            var entities = ChangeTracker.Entries().Where(x => x.Entity is BaseEntity && (x.State == EntityState.Added || x.State == EntityState.Modified));
+            foreach(var e in entities)
+            {
+                C.WriteLine($"e: {e}");
+            }
 
             this.ChangeTracker.DetectChanges();
             foreach (EntityEntry item in this.ChangeTracker.Entries()
@@ -132,21 +154,15 @@ namespace BaseballScraper.Models
                         .Where(i => i as IBaseEntity != null)
             )
             {
-                Console.WriteLine($"\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                Console.WriteLine($"Item State: {item.State}");
                 if (item.State == EntityState.Added)
                 {
                     (item as IBaseEntity).DateCreated = now;
                     counter++;
                 }
                 (item as IBaseEntity).DateUpdated = now;
-
-                Console.WriteLine($"item {item.State}");
-                _helpers.Dig(item);
             }
 
             _helpers.CompleteMethod();
-            Console.WriteLine($"counter: {counter}");
             // Call the SaveChanges method on the context;
             return base.SaveChanges();
         }
@@ -156,7 +172,7 @@ namespace BaseballScraper.Models
         // * Runs when you do _context.SaveChangesAsync();
         public override Task<int> SaveChangesAsync(System.Threading.CancellationToken cancellationToken)
         {
-            _helpers.OpenMethod(3);
+            // _helpers.OpenMethod(3);
 
             IEnumerable<EntityEntry> entities = ChangeTracker.Entries()
                 .Where(
@@ -175,6 +191,46 @@ namespace BaseballScraper.Models
             }
 
             return base.SaveChangesAsync(cancellationToken);
+        }
+
+
+        // See:
+        // * https://docs.microsoft.com/en-us/dotnet/api/system.data.entity.entitystate?view=entity-framework-6.2.0
+        // STATES:
+        // 1) ADD -> EntityState.Added
+        // * Entity is being tracked by context but does not yet exist in db
+        //
+        // 2) DELETED -> EntityState.Deleted
+        // * Entity is being tracked by context and exists in db, but has been marked for deletion from db next time SaveChanges is called.
+        //
+        // 3) DETACHED -> EntityState.Detached
+        // * Entity is not being tracked by the context.
+        // * An entity is in this state immediately after it has been created with the new operator or with one of the DbSet Create methods.
+        //
+        // 4) MODIFIED -> entityEntry.State == EntityState.Modified
+        // * > Entity is being tracked by context and exists in db; some or all its property values have been modified.
+        //
+        // 5) UNCHANGED -> entityEntry.State == EntityState.Unchanged
+        // * > Entity is being tracked by the context and exists in dbe, and its property values have not changed from the values in db.
+        //
+
+
+
+        public void PrintDatabaseAddOutcomes(int countAdded, int countNotAdded, Type type)
+        {
+            C.WriteLine($"\n-------------------------------------------------------------------");
+            _helpers.PrintNameSpaceControllerNameMethodName(type);
+            C.WriteLine($"ADDED TO DB   : {countAdded}");
+            C.WriteLine($"ALREADY IN DB : {countNotAdded}");
+            C.WriteLine($"-------------------------------------------------------------------\n");
+        }
+
+        public void PrintDatabaseAddOutcomes(int countAdded, int countNotAdded)
+        {
+            C.WriteLine($"\n-------------------------------------------------------------------");
+            C.WriteLine($"ADDED TO DB   : {countAdded}");
+            C.WriteLine($"ALREADY IN DB : {countNotAdded}");
+            C.WriteLine($"-------------------------------------------------------------------\n");
         }
 
 

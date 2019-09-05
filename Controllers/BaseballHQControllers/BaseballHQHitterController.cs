@@ -39,10 +39,27 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
         public BaseballHqHitterController() {}
 
 
-        // Defined by me
+        // * Defined by me
+        // * = "HqHitterReport_"
         private string BaseballHqHitterReportPrefix
         {
             get => _projectDirectory.BaseballHqHitterReportPrefix;
+        }
+
+
+        // * Defined by me in ProjectDirectoryEndPoints
+        // * = "BaseballData/02_WRITE/BASEBALL_HQ/HITTERS/"
+        private string BaseballHqHitterWriteDirectory
+        {
+            get => _projectDirectory.BaseballHqHitterWriteRelativePath;
+        }
+
+
+        // * Defined by me in ProjectDirectoryEndPoints
+        // * = "BaseballData/02_WRITE/BASEBALL_HQ/_archive/"
+        private string BaseballHqArchiveDirectory
+        {
+            get => _projectDirectory.BaseballHqArchiveRelativePath;
         }
 
 
@@ -88,19 +105,7 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
         // * See: https://bit.ly/2KyPY7p
 
 
-        // BaseballData/02_WRITE/BASEBALL_HQ/HITTERS/
-        // * Set in ProjectDirectoryEndPoints
-        private string BaseballHqHitterWriteDirectory
-        {
-            get => _projectDirectory.BaseballHqHitterWriteRelativePath;
-        }
 
-        // BaseballData/02_WRITE/BASEBALL_HQ/_archive/
-        // * Set in ProjectDirectoryEndPoints
-        private string BaseballHqArchiveDirectory
-        {
-            get => _projectDirectory.BaseballHqArchiveRelativePath;
-        }
 
 
 
@@ -172,11 +177,9 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
                 get => "BaseballHQ_M_B_P.csv";
             }
 
-            // Defined by me
-            // private readonly string _hitterRestOfSeasonProjectionsCsvFileIdentifier = "PROJ_";
 
             // Defined by me
-            // Returns: HqHitterReport_PROJ_
+            // = "HqHitterReport_PROJ_"
             private string _hitterRestOfSeasonProjectionsCsvFileNameBase
             {
                 get => _projectDirectory.BaseballHqHitterRosProjectionsCsvFileNameBase;
@@ -190,7 +193,7 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
 
 
             /* --------------------------------------------------------------- */
-            /* HQ CSV - REST OF SEASON PROJECTION                  */
+            /* HQ CSV - REST OF SEASON PROJECTION                              */
             /* --------------------------------------------------------------- */
 
             // STATUS [ August 13, 2019 ] : this works
@@ -891,7 +894,7 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
             public void PrintDatabaseAddOutcomes(string todaysFileName, bool fileCheck, bool areThereRecordsInDatabase,List<HqHitterRestOfSeasonProjection> listHittersROS)
             {
                 C.WriteLine($"\n-----------------------------------------------");
-                C.WriteLine($"DETAILS FOR TODAYS YTD DATABASE UPDATE");
+                C.WriteLine($"DETAILS FOR TODAYS ROS DATABASE UPDATE");
                 C.WriteLine($"-----------------------------------------------");
                 C.WriteLine($"Todays Csv File: {todaysFileName}");
                 C.WriteLine($"Does Csv File Exist? {fileCheck}");

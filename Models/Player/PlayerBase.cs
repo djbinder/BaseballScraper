@@ -166,15 +166,15 @@ namespace BaseballScraper.Models.Player
         public DateTime DateUpdated { get; set; }  // from IBaseEntity interface
 
         [Key]
-        public int MlbId           { get; set; }
+        public int? MlbId           { get; set; }
         public string MlbName      { get; set; }
         public string MlbPos       { get; set; }
         public string MlbTeam      { get; set; }
         public string MlbTeamLong  { get; set; }
         public string Bats         { get; set; }
         public string Throws       { get; set; }
-        public int BirthYear       { get; set; }
-        public int BpId            { get; set; }
+        public int? BirthYear       { get; set; }
+        public int? BpId            { get; set; }
         public string BrefId       { get; set; }
         public string BrefName     { get; set; }
         public int? CbsId          { get; set; }
@@ -192,7 +192,7 @@ namespace BaseballScraper.Models.Player
         public string NfbcPos      { get; set; }
         public string RetroId      { get; set; }
         public string RetroName    { get; set; }
-        public int Debut           { get; set; }
+        public int? Debut           { get; set; }
         public int? YahooId        { get; set; }
         public string YahooName    { get; set; }
         public int? OttoneuId      { get; set; }
@@ -255,10 +255,10 @@ namespace BaseballScraper.Models.Player
 
 
 
-        public virtual XstatsHitter XstatsHitter { get; set; }
-        public virtual ExitVelocityAndBarrelsHitter ExitVelocityAndBarrelsHitter { get; set; }
+        public virtual XstatsHitter XstatsHitter                                     { get; set; }
+        public virtual HqHitterYearToDate HqHitterYearToDate                         { get; set; }
         public virtual HqHitterRestOfSeasonProjection HqHitterRestOfSeasonProjection { get; set; }
-        public virtual HqHitterYearToDate HqHitterYearToDate { get; set; }
+        public virtual ExitVelocityAndBarrelsHitter ExitVelocityAndBarrelsHitter     { get; set; }
 
 
         public int? MLBID  { get; set; }

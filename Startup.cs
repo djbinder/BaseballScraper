@@ -25,6 +25,7 @@ using static BaseballScraper.Infrastructure.Helpers;
 using System;
 using System.Diagnostics;
 using System.Text;
+using C = System.Console;
 
 #pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper
@@ -157,7 +158,7 @@ namespace BaseballScraper
             services.AddSingleton<RdotNetConnector>();
             services.AddSingleton<YahooApiEndPoints>();
 
-            services.AddTransient<PlayerBaseFromGoogleSheet>();
+            // services.AddTransient<PlayerBaseFromGoogleSheet>();
 
             // test
             // Scoped:
@@ -176,8 +177,8 @@ namespace BaseballScraper
             services.AddMiddlewareAnalysis();
 
             // example of how to console config items
-            // Console.WriteLine(Configuration["YahooConfiguration:Name"]);
-            // Console.WriteLine(Configuration["TheGameIsTheGame:2018Season:LeagueKey"]);
+            // C.WriteLine(Configuration["YahooConfiguration:Name"]);
+            // C.WriteLine(Configuration["TheGameIsTheGame:2018Season:LeagueKey"]);
         }
 
 
@@ -461,8 +462,8 @@ namespace BaseballScraper
                 config.ExpiresIn       = int.Parse(Configuration["YahooConfiguration:ExpiresIn"]);
             });
 
-            // Console.WriteLine(Configuration["YahooConfiguration:Name"]);
-            // Console.WriteLine(Configuration["YahooConfiguration:XOAuthYahooGuid"]);
+            // C.WriteLine(Configuration["YahooConfiguration:Name"]);
+            // C.WriteLine(Configuration["YahooConfiguration:XOAuthYahooGuid"]);
 
             services.Configure<TheGameIsTheGameConfiguration>(config =>
             {
@@ -495,8 +496,8 @@ namespace BaseballScraper
 
             services.AddDbContext<BaseballScraperContext>(options =>
                 options.UseSqlServer(Configuration["DBInfo2:ConnectionString"]));
-            // Console.WriteLine($"DBInfo2 Name: {Configuration["DBInfo2:Name"]}");
-            // Console.WriteLine($"DBInfo2 Connection String: {Configuration["DBInfo2:ConnectionString"]}");
+            // C.WriteLine($"DBInfo2 Name: {Configuration["DBInfo2:Name"]}");
+            // C.WriteLine($"DBInfo2 Connection String: {Configuration["DBInfo2:ConnectionString"]}");
         }
 
     #endregion CONFIGURE SQL DB SERVICES  ------------------------------------------------------------

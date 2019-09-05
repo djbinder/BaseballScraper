@@ -37,12 +37,14 @@ namespace BaseballScraper.EndPoints
 
 
 
-        // 2) WRITE > "02_WRITE"
+        /* ---------------------------------------------------------------------------------- */
+        /*  PATH 2) WRITE > "02_WRITE"                                                        */
+        /* ---------------------------------------------------------------------------------- */
         #region WRITE DATA FOLDER  ------------------------------------------------------------
 
-            /* --------------------------------------------------------------- */
-            /* READ DIRECTORY BUILDING BLOCKS                                  */
-            /* --------------------------------------------------------------- */
+        /* --------------------------------------------------------------- */
+        /* WRITE DIRECTORY BUILDING BLOCKS                                 */
+        /* --------------------------------------------------------------- */
 
             // 02_WRITE/
             private string WRITE_DirectoryName
@@ -72,19 +74,22 @@ namespace BaseballScraper.EndPoints
             }
 
 
-            // READ DIRECTORY SUB-DIRECTORIES
+
+
+
+
+        /* --------------------------------------------------------------- */
+        /* PLAYER BASE                                                     */
+        /* --------------------------------------------------------------- */
+
+        /* ----->  PLAYER BASE : SECTION OVERVIEW  <----- */
             // 1) PLAYER BASE
             // *  A) ARCHIVE
             // *  B) CRUNCH TIME
             // *  C) SFBB
 
 
-
-
-            /* --------------------------------------------------------------- */
-            /* PLAYER BASE                                                     */
-            /* --------------------------------------------------------------- */
-
+        /* ----->  PLAYER BASE : BUILDING BLOCKS  <----- */
 
             // PlayerBase/
             private string PlayerBaseWriteDirectoryName
@@ -99,25 +104,18 @@ namespace BaseballScraper.EndPoints
             }
 
 
-            /* ----->  PLAYER BASE : ARCHIVE <----- */
-
-            public string PlayerBaseWriteArchiveDirectoryName
-            {
-                get => "_archive/";
-            }
+        /* ----->  PLAYER BASE : ARCHIVE <----- */
 
             // BaseballData/02_WRITE/PlayerBase/_archive/
             public string PlayerBaseWriteArchiveDirectoryRelativePath
             {
-
-                get => $"{PlayerBaseWriteDirectoryRelativePath}{PlayerBaseWriteArchiveDirectoryName}";
+                get => $"{PlayerBaseWriteDirectoryRelativePath}{ARCHIVE_DirectoryName}";
             }
 
 
-            /* ----->  PLAYER BASE : CRUNCH TIME <----- */
+        /* ----->  PLAYER BASE : CRUNCH TIME <----- */
 
-
-            // URL of the Crunch time source file
+            // * URL of the Crunch time source file
             // * Not defined by me
             public string CrunchTimePlayerBaseCsvSourceUrl
             {
@@ -129,7 +127,7 @@ namespace BaseballScraper.EndPoints
                 get => $"CRUNCH_TIME/";
             }
 
-            // BaseballData/02_WRITE/PlayerBase/CRUNCH_TIME/
+            // = "BaseballData/02_WRITE/PlayerBase/CRUNCH_TIME/"
             public string CrunchTimeWriteDirectoryRelativePath
             {
                 get => $"{PlayerBaseWriteDirectoryRelativePath}{CrunchTimeWriteDirectoryName}";
@@ -141,7 +139,7 @@ namespace BaseballScraper.EndPoints
             }
 
 
-            /* ----->  PLAYER BASE : SFBB <----- */
+        /* ----->  PLAYER BASE : SFBB <----- */
             private string SfbbWriteDirectoryName
             {
                 get => $"SFBB/";
@@ -154,11 +152,11 @@ namespace BaseballScraper.EndPoints
             }
 
 
-            /* --------------------------------------------------------------- */
-            /* BASEBALL HQ                                                     */
-            /* --------------------------------------------------------------- */
+        /* --------------------------------------------------------------- */
+        /* BASEBALL HQ                                                     */
+        /* --------------------------------------------------------------- */
 
-            /* <----- DIRECTORIES / FOLDERS / PATHS -----> */
+        /* <----- HQ : DIRECTORIES / FOLDERS / PATHS -----> */
 
             private string BaseballHqWriteDirectoryName
             {
@@ -190,8 +188,7 @@ namespace BaseballScraper.EndPoints
             }
 
 
-            /* <----- FILE NAME STRINGS -----> */
-
+        /* <----- HQ : FILE NAME STRINGS -----> */
 
             public string BaseballHqHitterReportPrefix
             {
@@ -220,25 +217,16 @@ namespace BaseballScraper.EndPoints
                 get => $"{BaseballHqHitterReportPrefix}{BaseballHqHitterRosProjectionsFileNameIdentifier}";
             }
 
-            /* --------------------------------------------------------------- */
-            /* BASEBALL SAVANT                                                 */
-            /* --------------------------------------------------------------- */
+
+        /* --------------------------------------------------------------- */
+        /* BASEBALL SAVANT                                                 */
+        /* --------------------------------------------------------------- */
 
 
             private string BaseballSavantWriteDirectoryName
             {
                 get => "BASEBALL_SAVANT/";
             }
-
-            // private string BaseballSavantHitterWriteDirectoryName
-            // {
-            //     get => "HITTERS/";
-            // }
-
-            // private string BaseballSavantPitcherWriteDirectoryName
-            // {
-            //     get => "PITCHERS/";
-            // }
 
             // BaseballData/02_WRITE/BASEBALL_SAVANT/
             public string BaseballSavantWriteRelativePath
@@ -266,9 +254,9 @@ namespace BaseballScraper.EndPoints
 
 
 
-            /* --------------------------------------------------------------- */
-            /* FANGRAPHS                                                       */
-            /* --------------------------------------------------------------- */
+        /* --------------------------------------------------------------- */
+        /* FANGRAPHS                                                       */
+        /* --------------------------------------------------------------- */
 
             private string FanGraphsWriteDirectoryName
             {
@@ -322,14 +310,13 @@ namespace BaseballScraper.EndPoints
 
 
 
-
-
         public class FileManagerMethods
         {
             // STATUS [ August 13, 2019 ] : this works
-            // * Appends data string that includes month, day, year to another string
+            // * Appends date string that includes month, day, year to another string
             // * Helps when downloaded files initially have the same generic name
             // * This basically makes the file unique for the day it was downloaded
+            // * Example : 08_01_2019
             public string TodaysDateString()
             {
                 // _helpers.OpenMethod(1);
