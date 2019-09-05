@@ -28,7 +28,7 @@ namespace BaseballScraper.Controllers.AGGREGATORS
         private readonly Helpers                   _helpers;
         private readonly AirtableManager           _atM;
         private readonly PlayerBaseController      _playerBaseController;
-        private readonly PlayerBaseFromGoogleSheet _playerBaseFromGoogleSheet;
+        // private readonly PlayerBaseFromGoogleSheet _playerBaseFromGoogleSheet;
         private readonly AirtableConfiguration     _airtableConfig;
         private readonly PostmanMethods            _postmanMethods;
         private readonly GoogleSheetsConnector     _googleSheetsConnector;
@@ -41,7 +41,7 @@ namespace BaseballScraper.Controllers.AGGREGATORS
         (
             Helpers helpers,
             AirtableManager atM,
-            PlayerBaseFromGoogleSheet playerBaseFromGoogleSheet,
+            // PlayerBaseFromGoogleSheet playerBaseFromGoogleSheet,
             PlayerBaseController playerBaseController,
             IOptions<AirtableConfiguration> airtableConfig,
             PostmanMethods postmanMethods,
@@ -52,7 +52,7 @@ namespace BaseballScraper.Controllers.AGGREGATORS
         {
             _helpers                            = helpers;
             _atM                                = atM;
-            _playerBaseFromGoogleSheet          = playerBaseFromGoogleSheet;
+            // _playerBaseFromGoogleSheet          = playerBaseFromGoogleSheet;
             _playerBaseController               = playerBaseController;
             _airtableConfig                     = airtableConfig.Value;
             _postmanMethods                     = postmanMethods;
@@ -117,11 +117,11 @@ namespace BaseballScraper.Controllers.AGGREGATORS
                         _authorsConfiguration.AuthenticationString
                     );
 
-                foreach(var ranking in listOfSpRankings)
+                foreach(AirtableRecord ranking in listOfSpRankings)
                 {
-                    var authorField = ranking.GetField("Author");
+                    var authorField    = ranking.GetField("Author");
                     JArray fieldJArray = authorField as JArray;
-                    string authorId = fieldJArray[0].ToString();
+                    string authorId    = fieldJArray[0].ToString();
                     C.WriteLine($"authorId: {authorId}");
                 }
 
@@ -174,7 +174,7 @@ namespace BaseballScraper.Controllers.AGGREGATORS
                 lastName = FormatPlayerFirstAndLastName(lastName);   // capitalize first letter if needed
                 string playerName = $"{firstName} {lastName}";
 
-                IEnumerable<SfbbPlayerBase> allPlayerBases = _playerBaseController.GetAllSfbbPlayerBasesFromGoogleSheet("A7:AQ2284");
+                IEnumerable<SfbbPlayerBase> allPlayerBases = _playerBaseController.GetAll_GSheet("A7:AQ2284");
 
                 IEnumerable<SfbbPlayerBase> onePlayerBase =
                     from playerBases in allPlayerBases
@@ -345,29 +345,5 @@ namespace BaseballScraper.Controllers.AGGREGATORS
         #endregion LAUNCH SITES - SUPPORT METHODS ------------------------------------------------------------
 
 
-
-
-
-        // #endregion START ------------------------------------------------------------
     }
-
 }
-
-
-
-        // NOT NEEDED; JUST PRACTICE
-        // string linkToDownload = "https://www.fangraphs.com/leaders.aspx?pos=all&stats=bat&lg=all&qual=y&type=8&season=2019&month=0&season1=2019&ind=0";
-        // string outputFileName = ""scratch/puppeteer_test2.pdf";
-        // public async Task DownloadWebPageAsPDF(string linkToDownLoad, string outputFileName)
-        // {
-        //     await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultRevision);
-        //     var browser = await Puppeteer.LaunchAsync(new LaunchOptions
-        //     {
-        //         Headless = true
-        //     });
-        //     var page = await browser.NewPageAsync();
-
-        //     await page.GoToAsync(linkToDownLoad);
-
-        //     await page.PdfAsync(outputFileName);
-        // }

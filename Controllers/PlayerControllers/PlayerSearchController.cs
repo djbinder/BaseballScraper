@@ -20,15 +20,15 @@ namespace BaseballScraper.Controllers.PlayerControllers
     public class PlayerSearchController : Controller
     {
         private readonly Helpers _helpers;
-        private readonly PlayerBaseFromGoogleSheet    _playerBaseFromGoogleSheet;
+        // private readonly PlayerBaseFromGoogleSheet    _playerBaseFromGoogleSheet;
         private readonly LaunchCoreSpSitesController  _launchCoreSpSitesController;
         private readonly MlbDataSeasonHittingStatsController _mlbDataSeasonHittingStatsController;
 
 
-        public PlayerSearchController(Helpers helpers, PlayerBaseFromGoogleSheet playerBaseFromGoogleSheet, LaunchCoreSpSitesController  launchCoreSpSitesController, MlbDataSeasonHittingStatsController mlbDataSeasonHittingStatsController)
+        public PlayerSearchController(Helpers helpers, LaunchCoreSpSitesController  launchCoreSpSitesController, MlbDataSeasonHittingStatsController mlbDataSeasonHittingStatsController)
         {
             _helpers = helpers;
-            _playerBaseFromGoogleSheet = playerBaseFromGoogleSheet;
+            // _playerBaseFromGoogleSheet = playerBaseFromGoogleSheet;
             _launchCoreSpSitesController         = launchCoreSpSitesController;
             _mlbDataSeasonHittingStatsController = mlbDataSeasonHittingStatsController;
         }
@@ -44,16 +44,16 @@ namespace BaseballScraper.Controllers.PlayerControllers
         // [BindProperty(SupportsGet = true)]
         // public string PlayerName { get; set; }
 
-        [TempData] public string Games { get; set; }
+        [TempData] public string Games            { get; set; }
         [TempData] public string PlateAppearances { get; set; }
-        [TempData] public string AtBats { get; set; }
-        [TempData] public string Hits { get; set; }
-        [TempData] public string Runs { get; set; }
-        [TempData] public string HomeRuns { get; set; }
-        [TempData] public string RBIs { get; set; }
-        [TempData] public string SBs { get; set; }
-        [TempData] public string Walks { get; set; }
-        [TempData] public string AVG { get; set; }
+        [TempData] public string AtBats           { get; set; }
+        [TempData] public string Hits             { get; set; }
+        [TempData] public string Runs             { get; set; }
+        [TempData] public string HomeRuns         { get; set; }
+        [TempData] public string RBIs             { get; set; }
+        [TempData] public string SBs              { get; set; }
+        [TempData] public string Walks            { get; set; }
+        [TempData] public string AVG              { get; set; }
 
 
 
@@ -86,17 +86,17 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
         // STATUS [ July 24, 2019 ]: DOES NOT WORK; ISSUES WITH THE HTML
         // https://nimblegecko.com/using-simple-drop-down-lists-in-ASP-NET-MVC/
-        [HttpGet("player_search")]
-        public IActionResult ViewPlayerSearch()
-        {
-            C.WriteLine("PlayerSearch");
+        // [HttpGet("player_search")]
+        // public IActionResult ViewPlayerSearch()
+        // {
+        //     C.WriteLine("PlayerSearch");
 
-            PlayerSearchViewModel playerSearchViewModel = new PlayerSearchViewModel
-            {
-                PlayersEnumerable = CreateListOfPlayerNamesToSelect()
-            };
-            return View("PlayerSearch", playerSearchViewModel);
-        }
+        //     PlayerSearchViewModel playerSearchViewModel = new PlayerSearchViewModel
+        //     {
+        //         PlayersEnumerable = CreateListOfPlayerNamesToSelect()
+        //     };
+        //     return View("PlayerSearch", playerSearchViewModel);
+        // }
 
 
 
@@ -123,22 +123,22 @@ namespace BaseballScraper.Controllers.PlayerControllers
         // }
 
 
-        public IEnumerable<SelectListItem> CreateListOfPlayerNamesToSelect()
-        {
-            List<IList<object>> allPlayerBasesFromGoogleSheets = _playerBaseFromGoogleSheet.GetAllPlayerBaseObjectsFromGoogleSheet("B7:B2333").ToList();
+        // public IEnumerable<SelectListItem> CreateListOfPlayerNamesToSelect()
+        // {
+        //     List<IList<object>> allPlayerBasesFromGoogleSheets = _playerBaseFromGoogleSheet.GetAllPlayerBaseObjectsFromGoogleSheet("B7:B2333").ToList();
 
-            var selectOptions = _playerSearchViewModel.PlayersList;
+        //     var selectOptions = _playerSearchViewModel.PlayersList;
 
-            selectOptions = allPlayerBasesFromGoogleSheets.Select(player =>
-                new SelectListItem
-                {
-                    Value   = player[0].ToString(),
-                    Text    = player[0].ToString(),
-                })
-                .OrderBy(y => y.Text).ToList();
+        //     selectOptions = allPlayerBasesFromGoogleSheets.Select(player =>
+        //         new SelectListItem
+        //         {
+        //             Value   = player[0].ToString(),
+        //             Text    = player[0].ToString(),
+        //         })
+        //         .OrderBy(y => y.Text).ToList();
 
-            return selectOptions;
-        }
+        //     return selectOptions;
+        // }
 
 
         // public IActionResult SearchForPlayer(PlayerSearchViewModel selectedPlayer)

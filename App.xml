@@ -656,7 +656,7 @@
             <example> https://127.0.0.1:5001/api/mlb/projectedhittingstats/493316 </example>
             <returns> A view of a projectedhittingstats model </returns>
         </member>
-        <member name="M:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController.GetCrunchTimePlayerBaseCsvForToday">
+        <member name="M:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController.DownloadTodaysCrunchTimeCSV">
             <summary>
             * Downloads CrunchTime CSV and saves to local directory
             </summary>
@@ -669,12 +669,7 @@
             *    > These are set in corresponding EndPoints class
             </remarks>
         </member>
-        <member name="M:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController.AddSfbbPlayerBasesToDatabase">
-            <summary>
-                Add list of playerBases
-            </summary>
-        </member>
-        <member name="M:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController.AddSfbbPlayerBaseToDatabase(BaseballScraper.Models.Player.SfbbPlayerBase)">
+        <member name="M:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController.AddOneAsync_DB(BaseballScraper.Models.Player.SfbbPlayerBase)">
             <summary>
                 Add one SfbbPlayer to database
             </summary>
@@ -691,6 +686,12 @@
             <param name="playerBase">
                 An SfbbPlayerBase
             </param>
+        </member>
+        <member name="M:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController.AddAll_DB(System.Collections.Generic.List{BaseballScraper.Models.Player.SfbbPlayerBase})">
+            <summary>
+                * Add list of playerBases
+                * AddAll_DB Option 1 for SfbbPlayerBases
+            </summary>
         </member>
         <member name="M:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController.PlayerBaseFromExcel.GetAllPlayerBasesFromExcel">
             <summary>

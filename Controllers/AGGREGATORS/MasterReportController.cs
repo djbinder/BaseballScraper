@@ -68,25 +68,25 @@ namespace BaseballScraper.Controllers.AGGREGATORS
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
 
+            // 1) PLAYER BASES : Sfbb & Crunch Time
+            await _playerBaseController.MASTER_REPORT_CALLER("A7:AQ2333");
+            Mark(1, stopWatch, "PLAYER BASE");
 
-                // 3) HQ | HITTER : YTD & ROS Projections
-                await _hqHitterController.MASTER_REPORT_CALLER(false, false);
-                Mark(3, stopWatch,"HQ HITTER");
+
+
+
 
 
             bool shouldTheseBeRun = false;
             if(shouldTheseBeRun == true)
             {
-                // 1) PLAYER BASES : Sfbb & Crunch Time
-                await _playerBaseController.MASTER_REPORT_CALLER("A7:AQ2333");
-                Mark(1, stopWatch, "PLAYER BASE");
+                // 2) SAVANT | HITTER : X-Stats and Exit Velo
+                _baseballSavantHitterController.MASTER_REPORT_CALLER(2019, 100);
+                Mark(2, stopWatch, "BASEBALL SAVANT HITTER");
 
-
-            // 2) SAVANT | HITTER : X-Stats and Exit Velo
-            _baseballSavantHitterController.MASTER_REPORT_CALLER(2019, 100);
-            Mark(2, stopWatch, "BASEBALL SAVANT HITTER");
-
-
+                // 3) HQ | HITTER : YTD & ROS Projections
+                await _hqHitterController.MASTER_REPORT_CALLER(false, false);
+                Mark(3, stopWatch,"HQ HITTER");
 
 
                 // 4) FANGRAPHS | SP | wPDI, mPDI
@@ -97,6 +97,7 @@ namespace BaseballScraper.Controllers.AGGREGATORS
                 // 5) SAVANT | SP | CSW
                 await _baseballSavantSpController.MASTER_REPORT_CALLER();
                 Mark(5, stopWatch, "BASEBALL SAVANT PITCHER");
+
             }
 
 

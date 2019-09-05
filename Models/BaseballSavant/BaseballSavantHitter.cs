@@ -3,41 +3,12 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using BaseballScraper.Models.Player;
 using CsvHelper.Configuration;
-using Ganss.Excel;
+// using Ganss.Excel;
 
 #pragma warning disable CS0649, IDE0051, IDE0052
 namespace BaseballScraper.Models.BaseballSavant
 {
-    // public partial class BaseballSavantHitter : IBaseEntity
-    // {
-    //     public DateTime DateCreated { get; set; }  // from IBaseEntity interface
-    //     public DateTime DateUpdated { get; set; }  // from IBaseEntity interface
-    //     //         [Key]
-    //     // public int MLBID                          { get; set; }
-    //     // public string LastName                       { get; set; }
-    //     // public string FirstName                      { get; set; }
-
-
-    //     // [ForeignKey("SfbbPlayerBase")]
-    //     // public string IDPLAYER { get; set; }
-    //     // public virtual SfbbPlayerBase SfbbPlayerBase { get; set; }
-    // }
-
-
-        // private int? _mlbid;
-
-        // [Key]
-        // [ForeignKey("SfbbPlayerBase")]
-        // public int? MLBID_
-        // {
-        //     get => MLBID;
-        //     set => _mlbid = value;
-        // }
-
-
-
-    // public partial class XstatsHitter : BaseballSavantHitter
-    public partial class XstatsHitter : IBaseEntity
+    public class XstatsHitter : IBaseEntity
     {
         public DateTime DateCreated { get; set; }  // from IBaseEntity interface
         public DateTime DateUpdated { get; set; }  // from IBaseEntity interface
@@ -92,8 +63,8 @@ namespace BaseballScraper.Models.BaseballSavant
     }
 
 
-    // public partial class ExitVelocityAndBarrelsHitter : BaseballSavantHitter
-    public partial class ExitVelocityAndBarrelsHitter : IBaseEntity
+
+    public class ExitVelocityAndBarrelsHitter : IBaseEntity
     {
         public DateTime DateCreated { get; set; }  // from IBaseEntity interface
         public DateTime DateUpdated { get; set; }  // from IBaseEntity interface
