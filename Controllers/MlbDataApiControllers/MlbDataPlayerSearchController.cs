@@ -92,12 +92,6 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
 
             return response;
         }
-
-
-        public void GetPlayerHittingStats()
-        {
-
-        }
     }
 }
 

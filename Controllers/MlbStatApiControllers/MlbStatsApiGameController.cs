@@ -6,7 +6,6 @@ using RestSharp;
 using static BaseballScraper.Infrastructure.PostmanMethods;
 using BaseballScraper.Models.MlbStatsApi;
 
-
 #pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Controllers.MlbStatsApiControllers
 {
@@ -15,52 +14,48 @@ namespace BaseballScraper.Controllers.MlbStatsApiControllers
     [ApiExplorerSettings(IgnoreApi = true)]
     public class MlbStatsApiGameController: ControllerBase
     {
-        private static readonly Helpers _h = new Helpers();
-
-        private static readonly MlbDataApiEndPoints _mlbDataApiEndPoints = new MlbDataApiEndPoints();
-
-        private static readonly PostmanMethods _pmMethods = new PostmanMethods();
-
-        // private static string _endpoint;
+        private readonly Helpers             _helpers;
+        private readonly ApiInfrastructure   _apiInfrastructure;
+        private readonly MlbDataApiEndPoints _endPoints;
+        private readonly PostmanMethods      _postman;
 
 
+        public MlbStatsApiGameController(Helpers helpers, ApiInfrastructure apiInfrastructure, MlbDataApiEndPoints endPoints, PostmanMethods postman)
+        {
+            _helpers           = helpers;
+            _apiInfrastructure = apiInfrastructure;
+            _endPoints         = endPoints;
+            _postman           = postman;
+        }
 
+        public MlbStatsApiGameController(){}
+
+
+
+        // See: https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=5%2F16%2F2016
         [Route("test")]
         public void MlbStatsApiTesting()
         {
-            _h.StartMethod();
+            _helpers.StartMethod();
 
-            var endPoint = _mlbDataApiEndPoints.AllGamesForDateEndPoint(5,16,2016);
+            var endPoint    = _endPoints.AllGamesForDateEndPoint(5,16,2016);
             var endPointUri = endPoint.EndPointUri;
-
-            // BaseballScraper.EndPoints.MlbDataApiEndPoints+MlbDataEndPoint
-            Console.WriteLine(endPoint);
-
-            // https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=5%2F16%2F2016
-            Console.WriteLine(endPointUri);
-
 
             var type = "MlbStatsApiEndPoints_AllGamesDate";
 
-            PostmanResponse pmResponse = _pmMethods.CreatePostmanRequestGetResponse(endPointUri, type);
+            PostmanResponse pmResponse     = _postman.CreatePostmanRequestGetResponse(endPointUri, type);
+            IRestResponse fullResponse     = pmResponse.Response;
 
-            IRestResponse fullResponse = pmResponse.Response;
-            var fullResponseContentLength = fullResponse.ContentLength;
+            // long fullResponseContentLength = fullResponse.ContentLength;
+
+            string content    = fullResponse.Content;
+            int contentLength = content.Length;
+
+            AllGamesForDate allGamesDate = fullResponse as AllGamesForDate;
+
             Console.WriteLine(fullResponse.ContentLength);
-
-            string content = fullResponse.Content;
-            var contentLength = content.Length;
             Console.WriteLine(contentLength);
-
-
-            var allGamesDate = fullResponse as AllGamesForDate;
             Console.WriteLine(allGamesDate.Copyright);
-
-
-
-            // Console.WriteLine(pmResponse.Response);
-
         }
-
     }
 }

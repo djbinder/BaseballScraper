@@ -21,11 +21,8 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
     public class MlbDataPlayerTeamsController : ControllerBase
     {
         private readonly Helpers             _helpers;
-
         private readonly MlbDataApiEndPoints _endPoints;
-
         private readonly PostmanMethods      _postman;
-
         private readonly ApiInfrastructure   _apI;
 
 
@@ -71,7 +68,6 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
                 ptList.Add(pTeamInstance);
             }
             return ptList;
-
         }
 
 
@@ -108,7 +104,6 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
             }
             // Console.WriteLine($"ptList Count: {ptList.Count}");
             return ptList;
-
         }
 
 

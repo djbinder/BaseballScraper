@@ -148,9 +148,6 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
                 await Task.Run(() => { CreateHittingLeadersModel(numberToReturn, year, sortColumn); });
             }
 
-
-
-
         #endregion STEP 2 ------------------------------------------------------------
 
 
@@ -175,12 +172,7 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
                 return Content($"CURRENT TASK: {currently}");
             }
 
-
-
-
         #endregion STEP 3 ------------------------------------------------------------
-
-
     }
 }
 

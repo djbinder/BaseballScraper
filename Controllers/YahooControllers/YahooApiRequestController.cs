@@ -20,21 +20,22 @@ namespace BaseballScraper.Controllers.YahooControllers
     [ApiExplorerSettings(IgnoreApi = true)]
     public class YahooApiRequestController: ControllerBase
     {
-        private readonly Helpers _h = new Helpers();
-        private static YahooApiEndPoints _endPoints = new YahooApiEndPoints();
-        private readonly BaseballScraperContext _context;
-        private readonly BaseballScraper.Controllers.YahooControllers.YahooAuthController _yahooAuthController;
+        private readonly Helpers                       _helpers;
+        private static YahooApiEndPoints               _endPoints;
+        private readonly BaseballScraperContext        _context;
+        private readonly YahooAuthController           _yahooAuthController;
         private readonly TheGameIsTheGameConfiguration _theGameConfig;
-        private readonly IHttpContextAccessor _contextAccessor;
+        private readonly IHttpContextAccessor          _contextAccessor;
         public static readonly string theGameConfigFilePath = "Configuration/theGameIsTheGameConfig.json";
         public static readonly JsonHandler.NewtonsoftJsonHandlers _newtonHandler = new JsonHandler.NewtonsoftJsonHandlers();
 
-        // public static readonly YahooGameResourceConroller _yahooGameResourceController = new YahooGameResourceConroller();
 
 
 
-        public YahooApiRequestController(YahooAuthController yahooAuthController, IHttpContextAccessor contextAccessor, BaseballScraperContext context,IOptions<TheGameIsTheGameConfiguration> theGameConfig)
+        public YahooApiRequestController(Helpers helpers, YahooApiEndPoints endPoints, YahooAuthController yahooAuthController, IHttpContextAccessor contextAccessor, BaseballScraperContext context,IOptions<TheGameIsTheGameConfiguration> theGameConfig)
         {
+            _helpers             = helpers;
+            _endPoints           = endPoints;
             _yahooAuthController = yahooAuthController;
             _contextAccessor     = contextAccessor;
             _context             = context;
@@ -45,12 +46,11 @@ namespace BaseballScraper.Controllers.YahooControllers
 
 
 
-
         [HttpGet]
         [Route("")]
         public void ViewYahooHomePage()
         {
-            _h.StartMethod();
+            _helpers.StartMethod();
 
             // var x = _yahooAuthController.ExchangeRefreshTokenForNewAccessToken();
 
@@ -61,9 +61,8 @@ namespace BaseballScraper.Controllers.YahooControllers
             Console.WriteLine($"HOME CreateYahooScoreboard > uriLeagueScoreboard: {uriLeagueScoreboard}");
 
             JObject leagueScoreboard = GenerateYahooResourceJObject(uriLeagueScoreboard);
-            _h.Dig(leagueScoreboard);
+            _helpers.Dig(leagueScoreboard);
         }
-
 
 
 
@@ -109,7 +108,10 @@ namespace BaseballScraper.Controllers.YahooControllers
                 TheGameIsTheGameConfiguration theGameConfig = new TheGameIsTheGameConfiguration();
                 Type theGameConfigType = theGameConfig.GetType();
 
-                var configObject = _newtonHandler.DeserializeJsonFromFile(theGameConfigFilePath, theGameConfigType) as TheGameIsTheGameConfiguration;
+                var configObject = _newtonHandler.DeserializeJsonFromFile(
+                    theGameConfigFilePath,
+                    theGameConfigType
+                ) as TheGameIsTheGameConfiguration;
 
                 string leagueKeySuffix = configObject.LeagueKeySuffix;
                 return leagueKeySuffix;
@@ -129,10 +131,9 @@ namespace BaseballScraper.Controllers.YahooControllers
             /// </returns>
             public string GetTheGameIsTheGameLeagueKey()
             {
-                // _h.StartMethod();
-                var gameKey = GetYahooMlbGameKeyForThisYear();
+                var gameKey          = GetYahooMlbGameKeyForThisYear();
                 var theGameKeySuffix = GetTheGameIsTheGameLeagueKeySuffix();
-                var leagueKey = $"{gameKey}{theGameKeySuffix}";
+                var leagueKey        = $"{gameKey}{theGameKeySuffix}";
                 // PrintLeagueKeyDetails(gameKey,theGameKeySuffix,leagueKey);
                 return leagueKey;
             }
@@ -144,7 +145,7 @@ namespace BaseballScraper.Controllers.YahooControllers
 
 
 
-        // SEE: https://developer.yahoo.com/fantasysports/guide/#description
+        // See: https://developer.yahoo.com/fantasysports/guide/#description
         #region GET FANTASY LEAGUE DATA FROM YAHOO API ------------------------------------------------------------
 
 
@@ -160,7 +161,7 @@ namespace BaseballScraper.Controllers.YahooControllers
             /// </param>
             public HttpWebRequest GenerateWebRequest(string uri)
             {
-                // _h.StartMethod();
+                // _helpers.StartMethod();
                 var aTR = _yahooAuthController.GetYahooAccessTokenResponse();
                 var accessToken = aTR.AccessToken;
                 // Console.WriteLine($"HOME GenerateWebRequest > accessToken: {accessToken}");
@@ -189,7 +190,7 @@ namespace BaseballScraper.Controllers.YahooControllers
             /// </returns>
             public string GetResponseFromServer(HttpWebRequest request)
             {
-                // _h.StartMethod();
+                // _helpers.StartMethod();
                 string serverResponse = "";
                 using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
                 {
@@ -197,7 +198,6 @@ namespace BaseballScraper.Controllers.YahooControllers
                     serverResponse = reader.ReadToEnd();
                     return serverResponse;
                 }
-                // _h.CompleteMethod();
             }
 
 
@@ -216,11 +216,10 @@ namespace BaseballScraper.Controllers.YahooControllers
             /// </returns>
             public XmlDocument TranslateServerResponseToXml (string serverResponse)
             {
-                // _h.StartMethod();
+                // _helpers.StartMethod();
                 XmlDocument doc       = new XmlDocument();
-                XmlReader   xmlReader = XmlReader.Create(new System.IO.StringReader(serverResponse));
+                XmlReader   xmlReader = XmlReader.Create(new StringReader(serverResponse));
                 doc.LoadXml(serverResponse);
-                // _h.CompleteMethod();
                 return doc;
             }
 
@@ -239,7 +238,7 @@ namespace BaseballScraper.Controllers.YahooControllers
             /// </returns>
             public JObject GenerateYahooResourceJObject(string uri)
             {
-                // _h.StartMethod();
+                // _helpers.StartMethod();
                 // Console.WriteLine($"HOME GenerateYahooResourceJObject > uri: {uri}");
                 HttpWebRequest request = GenerateWebRequest(uri);
 
@@ -252,7 +251,6 @@ namespace BaseballScraper.Controllers.YahooControllers
 
                 // clean the json up
                 JObject resourceJson = JObject.Parse(json);
-                // _h.CompleteMethod();
                 return resourceJson;
             }
 
@@ -273,20 +271,13 @@ namespace BaseballScraper.Controllers.YahooControllers
             /// <param name="yahoomodel"></param>
             public void SaveObjectToDatabase(Object yahoomodel)
             {
-                _h.StartMethod();
-
+                _helpers.StartMethod();
                 _context.Add(yahoomodel);
                 _context.SaveChanges();
             }
 
 
         #endregion ADD YAHOO DATA TO DATABASE ------------------------------------------------------------
-
-
-
-
-
-
 
 
 
@@ -301,7 +292,6 @@ namespace BaseballScraper.Controllers.YahooControllers
                 Console.WriteLine("---");
                 Console.WriteLine($"{request.Credentials}");
                 Console.WriteLine("---");
-
                 Console.WriteLine($"{request.Headers}");
                 Console.WriteLine("---");
                 Console.WriteLine();

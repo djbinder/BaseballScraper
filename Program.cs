@@ -15,6 +15,15 @@ namespace BaseballScraper
             Console.WriteLine($"\n***** ---> READY TO ROLL <--- *****");
             Console.WriteLine ($"Version: {Environment.Version}");
 
+            if(Environment.Version.ToString() == "Production")
+            {
+                Console.WriteLine();
+                Console.WriteLine("***************************************************");
+                Console.WriteLine("SWITCH TO DEV ENVIRONMENT");
+                Console.WriteLine("***************************************************");
+                Console.WriteLine();
+            }
+
             CreateWebHostBuilder(args).Build().Run();
         }
 

@@ -99,14 +99,11 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
         [Route("test/async")]
         public async Task BaseballSavantTestingAsync()
         {
-            // var spCswList = await ReadSpCswCsvSingleDayAsync(6,24,2019);
             await WriteBaseballSavantDataForYesterdayToCsv();
         }
 
 
-        [HttpPost("mrc")]
-        [ApiExplorerSettings(IgnoreApi = false)]
-        public async Task<IActionResult> MASTER_REPORT_CALLER()
+        public async Task<IActionResult> DAILY_REPORT_RUNNER()
         {
             _helpers.OpenMethod(3);
 

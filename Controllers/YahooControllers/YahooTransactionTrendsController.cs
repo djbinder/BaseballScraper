@@ -60,7 +60,6 @@ namespace BaseballScraper.Controllers.YahooControllers
         }
 
 
-
         [HttpGet("trends")]
         public void ViewYahooTransactionTrends()
         {

@@ -3,6 +3,8 @@ using CsvHelper.Configuration;
 using BaseballScraper.Infrastructure;
 using System.ComponentModel.DataAnnotations;
 using System;
+using BaseballScraper.Models.Player;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BaseballScraper.Models.FanGraphs
 {
@@ -70,7 +72,7 @@ namespace BaseballScraper.Models.FanGraphs
     }
 
 
-    public class FanGraphsPitcherForWpdiReportSingleDay : FanGraphsPitcherForWpdiReport
+    public class FanGraphsPitcherForWpdiReportSingleDay : FanGraphsPitcherWpdi
     {
         new public DateTime DateCreated { get; set; }  // from IBaseEntity interface
         new public DateTime DateUpdated { get; set; }  // from IBaseEntity interface
@@ -78,27 +80,22 @@ namespace BaseballScraper.Models.FanGraphs
     }
 
 
-    // public class FanGraphsPitcherForWpdiReportFullSeason : FanGraphsPitcherForWpdiReport
-    // {
-    //     public int Season { get; set; }
-    //     new public DateTime DateCreated { get; set; }  // from IBaseEntity interface
-    //     new public DateTime DateUpdated { get; set; }  // from IBaseEntity interface
-    // }
 
-
-    // See: https://www.fangraphs.com/leaders.aspx?pos=all&stats=sta&lg=all&qual=150&type=c,8,13,210,204,205,208,207,111,105,106,109,108&season=2018&month=0&season1=2018&ind=0&team=0&rost=0&age=0&filter=&players=0&startdate=2018-01-01&enddate=2018-12-31
-    // See: https://bit.ly/33abnet
-    // See: https://bit.ly/2YPh1TU
-    public class FanGraphsPitcherForWpdiReport : IBaseEntity
+    // See [Example report]: https://www.fangraphs.com/leaders.aspx?pos=all&stats=sta&lg=all&qual=150&type=c,8,13,210,204,205,208,207,111,105,106,109,108&season=2018&month=0&season1=2018&ind=0&team=0&rost=0&age=0&filter=&players=0&startdate=2018-01-01&enddate=2018-12-31
+    // See [FanGraphs Explanation]: https://bit.ly/33abnet
+    // See [FanGraphs Explanation]: https://bit.ly/2YPh1TU
+    public class FanGraphsPitcherWpdi : IBaseEntity
     {
         private readonly CsvHandler _csvHandler = new CsvHandler();
-
 
         public DateTime DateCreated { get; set; }  // from IBaseEntity interface
         public DateTime DateUpdated { get; set; }  // from IBaseEntity interface
 
-        // [Key]
-        // public int RecordId { get; set; }
+
+        public virtual SfbbPlayerBase SfbbPlayerBase { get; set; }
+
+        [ForeignKey("SfbbPlayerBase")]
+        public string IDPLAYER { get; set; }
 
         private string _playerYearConcat;
 
@@ -291,7 +288,7 @@ namespace BaseballScraper.Models.FanGraphs
     }
 
 
-    public sealed class WpdiReportClassMap: ClassMap<FanGraphsPitcherForWpdiReport>
+    public sealed class WpdiReportClassMap: ClassMap<FanGraphsPitcherWpdi>
     {
         public WpdiReportClassMap()
         {

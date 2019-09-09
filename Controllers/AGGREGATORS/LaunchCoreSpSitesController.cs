@@ -91,8 +91,6 @@ namespace BaseballScraper.Controllers.AGGREGATORS
 
 
 
-
-
         #region PITCHER RANKINGS ------------------------------------------------------------
 
 
@@ -343,7 +341,5 @@ namespace BaseballScraper.Controllers.AGGREGATORS
             }
 
         #endregion LAUNCH SITES - SUPPORT METHODS ------------------------------------------------------------
-
-
     }
 }

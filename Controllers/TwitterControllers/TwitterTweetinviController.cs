@@ -44,7 +44,6 @@ namespace BaseballScraper.Controllers.TwitterControllers
 
 
 
-
         /*
         SUMMARY:
             # There are a lot of different methods in this controller
@@ -53,7 +52,6 @@ namespace BaseballScraper.Controllers.TwitterControllers
                 1) GetListOfITweetsInJToken
                 2) GetListOfAllTweetsFullTextInJToken
          */
-
 
 
 
@@ -88,10 +86,8 @@ namespace BaseballScraper.Controllers.TwitterControllers
             public IUser GetIUserFromScreenName(string screenName)
             {
                 IUser user = Tweetinvi.User.GetUserFromScreenName(screenName);
-                // Console.WriteLine($"user: {user}");
                 return user;
             }
-
 
 
             // STATUS [ June 24, 2019 ]: this works
@@ -114,10 +110,8 @@ namespace BaseballScraper.Controllers.TwitterControllers
             public IUserDTO GetUserDTO(string screenName)
             {
                 IUserDTO userDTO = TwitterAccessor.ExecuteGETQuery<IUserDTO>($"https://api.twitter.com/1.1/users/show.json?screen_name={screenName}");
-                // _h.Dig(userDTO);
                 return userDTO;
             }
-
 
 
             // STATUS [ June 24, 2019 ]: this works
@@ -141,7 +135,6 @@ namespace BaseballScraper.Controllers.TwitterControllers
             public IUser GetIUserFromUserDTO(IUserDTO userDTO)
             {
                 IUser user = Tweetinvi.User.GenerateUserFromDTO(userDTO);
-                // _h.Dig(user);
                 return user;
             }
 
@@ -166,19 +159,8 @@ namespace BaseballScraper.Controllers.TwitterControllers
             public IEnumerable<long> GetUserIdsForFollowersOfUser(string screenName)
             {
                 IEnumerable<long> userIds = TwitterAccessor.ExecuteCursorGETQuery<long, IIdsCursorQueryResultDTO>($"https://api.twitter.com/1.1/followers/ids.json?screen_name={screenName}");
-                // _h.Dig(userIds);
                 return userIds;
             }
-
-
-            // not sure if this works or is needed
-            // https://github.com/linvi/tweetinvi/wiki/Custom-Queries
-            // public string GetUserJson(string screenName)
-            // {
-            //     var userJson = TwitterAccessor.ExecuteGETQueryReturningJson($"https://api.twitter.com/1.1/users/show.json?screen_name={screenName}");
-            //     _h.Dig(userJson);
-            //     return userJson;
-            // }
 
 
         #endregion TWITTER USER ------------------------------------------------------------
@@ -209,7 +191,6 @@ namespace BaseballScraper.Controllers.TwitterControllers
             {
                 RunPreCheck();
                 var tweets = Timeline.GetHomeTimeline();
-                // PrintTweetInfoFromIEnumerableITweet(tweets);
                 RunPostCheck();
                 return tweets;
             }
@@ -234,12 +215,11 @@ namespace BaseballScraper.Controllers.TwitterControllers
             /// </returns>
             public IEnumerable<ITweet> GetTweetsFromUsersTimeline(string screenName)
             {
-                var user = GetIUserFromScreenName(screenName);
+                var user   = GetIUserFromScreenName(screenName);
                 var tweets = Timeline.GetUserTimeline(user);
                 PrintTweetInfoFromIEnumerableITweet(tweets);
                 return tweets;
             }
-
 
 
             // STATUS [ June 24, 2019 ]: this works
@@ -267,7 +247,6 @@ namespace BaseballScraper.Controllers.TwitterControllers
             }
 
 
-
             // STATUS [ June 24, 2019 ]: this works
             // OPTION 1: tweet id parameter is long
             /// <summary>
@@ -290,10 +269,8 @@ namespace BaseballScraper.Controllers.TwitterControllers
             public ITweet GetTweetFromTweetId(long tweetId)
             {
                 ITweet tweet = Tweet.GetTweet(tweetId);
-                // PrintTweetInfo(tweet);
                 return tweet;
             }
-
 
 
             // STATUS [ June 24, 2019 ]: this works
@@ -317,9 +294,8 @@ namespace BaseballScraper.Controllers.TwitterControllers
             /// </returns>
             public ITweet GetTweetFromTweetId(string tweetIdString)
             {
-                var tweetId = Int64.Parse(tweetIdString);
+                var tweetId = long.Parse(tweetIdString);
                 ITweet tweet = Tweet.GetTweet(tweetId);
-                // PrintTweetInfo(tweet);
                 return tweet;
             }
 
@@ -333,30 +309,7 @@ namespace BaseballScraper.Controllers.TwitterControllers
         #region LISTS ------------------------------------------------------------
 
 
-            // public string CreateSearchStringToSearchListFor(string screenName, string listName, string searchString)
-            // {
-            //     TweetinviConfig.CurrentThreadSettings.TweetMode = TweetMode.Extended;
-            //     string urlBase = "https://api.twitter.com/1.1/search/tweets.json?q=";
-            //     string prefix = $"list%3A%40{screenName}%2F{listName}%20";
-
-            //     // "+tweet_mode=extended" = %2Btweet_mode%3Dextended
-            //     // "tweet_mode=extended" = tweet_mode%3Dextended
-            //     string searchForExtendedTweetsString = " tweet_mode=extended";
-
-            //     var stringEncoded = Uri.EscapeDataString(searchForExtendedTweetsString);
-            //     Console.WriteLine($"\nstringEncoded: {stringEncoded}\n");
-
-            //     string fullSearchString = $"{urlBase}{prefix}{searchString}";
-            //     // string fullSearchString = $"{urlBase}{prefix}{searchString}{stringEncoded}";
-            //     // string fullSearchString = $"{urlBase}{prefix}{searchString}{searchForExtendedTweetsString}";
-            //     Console.WriteLine($"fullSearchString: {fullSearchString}");
-            //     return fullSearchString;
-            // }
-
-
             // STATUS [ June 24, 2019 ]: this works
-
-
             /// <summary>
             ///     Create search string to execute twitter list search based on searchString
             /// </summary>
@@ -385,14 +338,12 @@ namespace BaseballScraper.Controllers.TwitterControllers
             /// </returns>
             public string CreateSearchStringToSearchListFor(string screenName, string listName, string searchString, int numberOfResultsToReturn)
             {
-                string urlBase = "https://api.twitter.com/1.1/search/tweets.json?q=";
-                string prefix = $"list%3A%40{screenName}%2F{listName}%20";
-                string resultsCount = $"&count={numberOfResultsToReturn}";
+                string urlBase          = "https://api.twitter.com/1.1/search/tweets.json?q=";
+                string prefix           = $"list%3A%40{screenName}%2F{listName}%20";
+                string resultsCount     = $"&count={numberOfResultsToReturn}";
                 string fullSearchString = $"{urlBase}{prefix}{searchString}{resultsCount}";
-                Console.WriteLine($"{fullSearchString}");
                 return fullSearchString;
             }
-
 
 
             // STATUS [ June 24, 2019 ]: this works
@@ -426,12 +377,17 @@ namespace BaseballScraper.Controllers.TwitterControllers
             public JObject GetJObjectOfTweetsFromListFiltered(string screenName, string listName, string searchString, int numberOfResultsToReturn)
             {
                 TweetinviConfig.CurrentThreadSettings.TweetMode = TweetMode.Extended;
-                string fullSearchString = CreateSearchStringToSearchListFor(screenName, listName, searchString, numberOfResultsToReturn);
+
+                string fullSearchString = CreateSearchStringToSearchListFor(
+                    screenName,
+                    listName,
+                    searchString,
+                    numberOfResultsToReturn
+                );
+
                 JObject jsonObject = TwitterAccessor.GetQueryableJsonObjectFromGETQuery(fullSearchString);
-                // _h.Dig(jsonObject);
                 return jsonObject;
             }
-
 
 
             // STATUS [ June 24, 2019 ]: this works
@@ -465,13 +421,18 @@ namespace BaseballScraper.Controllers.TwitterControllers
             public JToken GetJTokenOfAllTweetTextInJObject(string screenName, string listName, string searchString, int numberOfResultsToReturn)
             {
                 TweetinviConfig.CurrentThreadSettings.TweetMode = TweetMode.Extended;
-                JObject jsonObject = GetJObjectOfTweetsFromListFiltered(screenName, listName, searchString, numberOfResultsToReturn);
+
+                JObject jsonObject = GetJObjectOfTweetsFromListFiltered(
+                    screenName,
+                    listName,
+                    searchString,
+                    numberOfResultsToReturn
+                );
+
                 JToken allStatusesJToken = jsonObject["statuses"];
-                // _h.Dig(allStatusesJToken[0]);
-                // Console.WriteLine($"allStatusesJToken.Count: {allStatusesJToken.Count()}");
+
                 return allStatusesJToken;
             }
-
 
 
             // STATUS [ June 24, 2019 ]: this works
@@ -504,21 +465,27 @@ namespace BaseballScraper.Controllers.TwitterControllers
             public List<string> GetListOfAllTweetsFullTextInJToken(string screenName, string listName, string searchString, int numberOfResultsToReturn)
             {
                 TweetinviConfig.CurrentThreadSettings.TweetMode = TweetMode.Extended;
+
                 List<string> tweetTextList = new List<string>();
-                JToken allStatusesJToken = GetJTokenOfAllTweetTextInJObject(screenName, listName, searchString, numberOfResultsToReturn);
+
+                JToken allStatusesJToken = GetJTokenOfAllTweetTextInJObject(
+                    screenName,
+                    listName,
+                    searchString,
+                    numberOfResultsToReturn
+                );
 
                 var numberOfTweets = allStatusesJToken.Children().Count();
                 for(var count = 0; count <= numberOfTweets - 1; count++)
                 {
                     var sinceIdString = allStatusesJToken[count]["id_str"].ToString();
-                    var tweet = GetTweetFromTweetId(sinceIdString);
+                    var tweet         = GetTweetFromTweetId(sinceIdString);
                     var tweetFullText = tweet.FullText;
                     tweetTextList.Add(tweetFullText);
                     PrintTweetInfo(tweet);
                 }
                 return tweetTextList;
             }
-
 
 
             // STATUS [ June 24, 2019 ]: this works
@@ -553,20 +520,24 @@ namespace BaseballScraper.Controllers.TwitterControllers
                 TweetinviConfig.CurrentThreadSettings.TweetMode = TweetMode.Extended;
 
                 List<ITweet> listOfITweets = new List<ITweet>();
-                JToken allStatusesJToken = GetJTokenOfAllTweetTextInJObject(screenName, listName, searchString, numberOfResultsToReturn);
+
+                JToken allStatusesJToken = GetJTokenOfAllTweetTextInJObject(
+                    screenName,
+                    listName,
+                    searchString,
+                    numberOfResultsToReturn
+                );
 
                 var numberOfTweets = allStatusesJToken.Children().Count();
                 for(var count = 0; count <= numberOfTweets - 1; count++)
                 {
                     var sinceIdString = allStatusesJToken[count]["id_str"].ToString();
-                    var tweet = GetTweetFromTweetId(sinceIdString);
+                    var tweet         = GetTweetFromTweetId(sinceIdString);
                     listOfITweets.Add(tweet);
                     PrintTweetInfo(tweet);
                 }
-                Console.WriteLine($"\nRETURNED {numberOfTweets} tweets");
                 return listOfITweets;
             }
-
 
 
             // STATUS [ June 21, 2019 ]: this works
@@ -592,12 +563,11 @@ namespace BaseballScraper.Controllers.TwitterControllers
             /// </returns>
             public IEnumerable<ITweet> GetAllTweetsFromTwitterList(string listName, string screenName)
             {
-                var list = TwitterList.GetExistingList(listName, screenName);
+                var list   = TwitterList.GetExistingList(listName, screenName);
                 var tweets = list.GetTweets();
                 PrintTweetInfoFromIEnumerableITweet(tweets);
                 return tweets;
             }
-
 
 
             // STATUS [ June 24, 2019 ]: this works
@@ -629,7 +599,6 @@ namespace BaseballScraper.Controllers.TwitterControllers
                 ITwitterList list = TwitterList.GetExistingList(listName, screenName);
 
                 var currentSinceId = ReadCurrentSinceIdFromTxtFile();
-                // Console.WriteLine($"currentSinceId: {currentSinceId}");
 
                 var tweetsParameters = new GetTweetsFromListParameters()
                 {
@@ -647,18 +616,15 @@ namespace BaseballScraper.Controllers.TwitterControllers
                     }
                 }
                 WriteSinceIdToTxtFile(newSinceId);
-                Console.WriteLine($"newSinceId: {newSinceId}");
                 // PrintTweetInfoFromIEnumerableITweet(tweets);
                 return tweets;
             }
-
 
 
             // STATUS [ June 24, 2019 ]: THIS DOES NOT WORK
             public IEnumerable<ITweet> GetTweetsFromTwitterListAfterDate(string listName, string screenName, bool includeRetweets, DateTime date)
             {
                 ITwitterList list = TwitterList.GetExistingList(listName, screenName);
-                _h.Dig(list);
 
                 var tweetsParameters = new GetTweetsFromListParameters()
                 {
@@ -671,16 +637,13 @@ namespace BaseballScraper.Controllers.TwitterControllers
             }
 
 
-
             // STATUS [ June 24, 2019 ]: this works but probably not needed
             public ITwitterListDTO GetITwitterListDTO(string listName, string screenName)
             {
-                ITwitterList list = TwitterList.GetExistingList(listName, screenName);
+                ITwitterList list   = TwitterList.GetExistingList(listName, screenName);
                 var iTwitterListDTO = list.TwitterListDTO;
-                _h.Dig(iTwitterListDTO);
                 return iTwitterListDTO;
             }
-
 
 
             // STATUS [ June 24, 2019 ]: this works
@@ -705,13 +668,12 @@ namespace BaseballScraper.Controllers.TwitterControllers
             /// </returns>
             public IEnumerable<IUser> GetAllMembersOfTwitterList(string listName, string screenName)
             {
-                ITwitterList list = TwitterList.GetExistingList(listName, screenName);
-                int listMemberCount = list.MemberCount;
+                ITwitterList list          = TwitterList.GetExistingList(listName, screenName);
+                int listMemberCount        = list.MemberCount;
                 IEnumerable<IUser> members = list.GetMembers(listMemberCount);
                 PrintListMemberInfo(members);
                 return members;
             }
-
 
 
             // STATUS [ June 23, 2019 ]: this works
@@ -723,7 +685,6 @@ namespace BaseballScraper.Controllers.TwitterControllers
                 // PrintListMemberInfo(members);
                 return members;
             }
-
 
 
             // STATUS [ June 23, 2019 ]: this works
@@ -755,7 +716,6 @@ namespace BaseballScraper.Controllers.TwitterControllers
                 Console.WriteLine($"# of user ids in list: {userIds.Count}");
                 return userIds;
             }
-
 
 
             // STATUS [ June 24, 2019 ]: this works
@@ -840,7 +800,7 @@ namespace BaseballScraper.Controllers.TwitterControllers
                     sinceIdString = line;
                     try
                     {
-                        sinceId = Int64.Parse(sinceIdString);
+                        sinceId = long.Parse(sinceIdString);
                     }
                     catch { }
                     counter++;
@@ -1022,12 +982,10 @@ namespace BaseballScraper.Controllers.TwitterControllers
                 }
             }
 
-
             public void PrintListMemberInfo(IEnumerable<IUser> members)
             {
                 foreach(var member in members) { Console.WriteLine($"{member.Id}\t{member.Name}\t{member.ScreenName}");}
             }
-
 
             public void PrintTweetInfo(ITweet tweet)
             {

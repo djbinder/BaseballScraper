@@ -6,7 +6,6 @@ using Newtonsoft.Json.Linq;
 using RestSharp;
 using System;
 
-
 #pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Controllers.MlbDataApiControllers.cs
 {
@@ -15,10 +14,23 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers.cs
     [ApiExplorerSettings(IgnoreApi = true)]
     public class MlbDataProjectedPitchingStatsController: ControllerBase
     {
-        private readonly Helpers _h                            = new Helpers();
-        private readonly ApiInfrastructure _a                  = new ApiInfrastructure();
-        private static readonly MlbDataApiEndPoints _endPoints = new MlbDataApiEndPoints();
-        private static readonly PostmanMethods _postman        = new PostmanMethods();
+        private readonly Helpers             _helpers;
+        private readonly ApiInfrastructure   _apiInfrastructure;
+        private readonly MlbDataApiEndPoints _endPoints;
+        private readonly PostmanMethods      _postman;
+
+
+        public MlbDataProjectedPitchingStatsController(Helpers helpers, ApiInfrastructure apiInfrastructure, MlbDataApiEndPoints endPoints, PostmanMethods postman)
+        {
+            _helpers           = helpers;
+            _apiInfrastructure = apiInfrastructure;
+            _endPoints         = endPoints;
+            _postman           = postman;
+        }
+
+        public MlbDataProjectedPitchingStatsController() {}
+
+
 
         // https://appac.github.io/mlb-data-api-docs/#stats-data-projected-pitching-stats-get
         /// <summary> View instantiated pecota projections for a selected pitcher in a selected season  </summary>
@@ -33,13 +45,13 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers.cs
 
             IRestResponse response = GetProjectedPitchingStatsPostmanResponse(playerId);
 
-            JObject playerJObject = _a.CreateModelJObject(response);
+            JObject playerJObject = _apiInfrastructure.CreateModelJObject(response);
 
-            JToken playerJToken = _a.CreateModelJToken(playerJObject, "ProjectedPitchingStats");
+            JToken playerJToken = _apiInfrastructure.CreateModelJToken(playerJObject, "ProjectedPitchingStats");
 
             ProjectedPitchingStats newInstance = new ProjectedPitchingStats();
 
-            _a.CreateInstanceOfModel(playerJToken, newInstance, "ProjectedPitchingStats");
+            _apiInfrastructure.CreateInstanceOfModel(playerJToken, newInstance, "ProjectedPitchingStats");
 
             return Content($"{playerJToken}");
         }

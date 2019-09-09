@@ -13,16 +13,26 @@ using System;
 #pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Controllers.MlbDataApiControllers
 {
-
     [Route("api/mlb/[controller]")]
     [ApiController]
     [ApiExplorerSettings(IgnoreApi = true)]
     public class MlbDataProjectedHittingStatsController: ControllerBase
     {
-        private readonly Helpers _h                            = new Helpers();
-        private readonly ApiInfrastructure _a                  = new ApiInfrastructure();
-        private static readonly MlbDataApiEndPoints _endPoints = new MlbDataApiEndPoints();
-        private static readonly PostmanMethods _postman        = new PostmanMethods();
+        private readonly Helpers             _helpers;
+        private readonly ApiInfrastructure   _apiInfrastructure;
+        private readonly MlbDataApiEndPoints _endPoints;
+        private readonly PostmanMethods      _postman;
+
+
+        public MlbDataProjectedHittingStatsController(Helpers helpers, ApiInfrastructure apiInfrastructure, MlbDataApiEndPoints endPoints, PostmanMethods postman)
+        {
+            _helpers           = helpers;
+            _apiInfrastructure = apiInfrastructure;
+            _endPoints         = endPoints;
+            _postman           = postman;
+        }
+
+
 
         // https://appac.github.io/mlb-data-api-docs/#stats-data-projected-hitting-stats-get
         /// <summary> View instantiated pecota projections for a selected hitter in a selected season  </summary>
@@ -31,21 +41,19 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
         [Route("projectedhittingstats/{playerId}")]
         public IActionResult ViewPlayerInfo(int playerId)
         {
-            _h.StartMethod();
-
             // this gets you Cespedes
             // int playerIdPlaceHolder = 493316;
             Console.WriteLine($"GETTING INFO FOR PLAYER ID: {playerId}");
 
             IRestResponse response = GetProjectedHittingStatsPostmanResponse(playerId);
 
-            JObject playerJObject = _a.CreateModelJObject(response);
+            JObject playerJObject = _apiInfrastructure.CreateModelJObject(response);
 
-            JToken playerJToken = _a.CreateModelJToken(playerJObject, "ProjectedHittingStats");
+            JToken playerJToken = _apiInfrastructure.CreateModelJToken(playerJObject, "ProjectedHittingStats");
 
             ProjectedHittingStats newInstance = new ProjectedHittingStats();
 
-            _a.CreateInstanceOfModel(playerJToken, newInstance, "ProjectedHittingStats");
+            _apiInfrastructure.CreateInstanceOfModel(playerJToken, newInstance, "ProjectedHittingStats");
 
             return Content($"{playerJToken}");
         }
@@ -53,7 +61,7 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
 
         public IRestResponse GetProjectedHittingStatsPostmanResponse(int playerId)
         {
-            _h.StartMethod();
+            _helpers.StartMethod();
 
             // type ---> BaseballScraper.EndPoints.MlbDataApiEndPoints+MlbDataEndPoint
             var newEndPoint = _endPoints.ProjectedHittingStatsEndPoint(2017, playerId);

@@ -11,13 +11,6 @@ namespace BaseballScraper.Models
 
     public class BaseEntity
     {
-        // public BaseEntity()
-        // {
-
-        // }
-        // public DateTime DateCreated { get; set; }
-        // public DateTime DateUpdated { get; set; }
-
         private DateTime _dateTime;
         public DateTime CreatedAt
         {
