@@ -2,43 +2,33 @@ using System.Runtime.Serialization;
 
 namespace BaseballScraper.Models.ConfigurationModels
 {
+    // * These connect to 'mongoDbConfiguration.json' file in Configuration folder
     [DataContract]
     public class MongoDbConfiguration : IMongoDbConfiguration
     {
-
-        // connects to 'mongoDbConfiguration.json' file in Configuration folder
         [DataMember(Name="TweetsCollectionName")]
-        public string TweetsCollectionName { get; set; }
+        public string TweetsCollectionName          { get; set; }
 
-
-        // connects to 'mongoDbConfiguration.json' file in Configuration folder
         [DataMember(Name="ConnectionString")]
-        public string ConnectionString { get; set; }
+        public string ConnectionString              { get; set; }
 
-
-        // connects to 'mongoDbConfiguration.json' file in Configuration folder
         [DataMember(Name="DatabaseName")]
-        public string DatabaseName { get; set; }
+        public string DatabaseName                  { get; set; }
     }
 
 
+    // * These connect to 'mongoDbConfiguration.json' file in Configuration folder
     public interface IMongoDbConfiguration
     {
-        // connects to 'mongoDbConfiguration.json' file in Configuration folder
         string TweetsCollectionName { get; set; }
-
-        // connects to 'mongoDbConfiguration.json' file in Configuration folder
-        string ConnectionString { get; set; }
-
-        // connects to 'mongoDbConfiguration.json' file in Configuration folder
-        string DatabaseName { get; set; }
+        string ConnectionString     { get; set; }
+        string DatabaseName         { get; set; }
     }
 }
 
 
-// https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-mongo-app?view=aspnetcore-2.2&tabs=visual-studio-mac
+// See: https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-mongo-app?view=aspnetcore-2.2&tabs=visual-studio-mac
 // MongoDb Commands:
-
     // Switch to or create new Db
         // use <name_of_new_database>
         // if it already exists, will switch to it

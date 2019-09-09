@@ -65,15 +65,6 @@
                 Without this, you will get an error / will not find player in sheet
             </summary>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.UpdateBothHqHitterDatabases(System.Boolean,System.Boolean)">
-            <summary>
-                * Gets all hitter reports from hq and adds them to database
-                * Updates the two main bases with day from today
-            </summary>
-            <remarks>
-                * SEE: MasterHitterController (as of August 13, 2019)
-            </remarks>
-        </member>
         <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.DownloadRestOfSeasonProjections(System.Boolean)">
             <summary>
                 * Downloads csv from hq
@@ -89,29 +80,27 @@
                   * _hitterRestOfSeasonProjectionsCsvFileNameBase      = HqHitterReport_PROJ_
             </remarks>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.AddOneROS(BaseballScraper.Models.BaseballHq.HqHitterRestOfSeasonProjection)">
+        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.AddOneRosAsync_DB(BaseballScraper.Models.BaseballHq.HqHitterRestOfSeasonProjection)">
             <summary>
                 * Add one HqHitterRestOfSeasonProjection to the database
             </summary>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.AddManyROS(System.Collections.Generic.List{BaseballScraper.Models.BaseballHq.HqHitterRestOfSeasonProjection})">
+        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.AddAllRosAsync_DB(System.Collections.Generic.List{BaseballScraper.Models.BaseballHq.HqHitterRestOfSeasonProjection})">
             <summary>
                 * Add list of HqHitterRestOfSeasonProjection hitters to the database
             </summary>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.GetOneROS(System.Nullable{System.Int32})">
+        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.GetOneRosAsync_DB(System.Nullable{System.Int32})">
             <summary>
                 * Read one HqHitterRestOfSeasonProjection hitter from database
             </summary>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.GetAllROS">
-            STATUS [ August 13, 2019 ] : this works
-            CRUD -> READ | ALL
+        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.GetAllRos_DB">
             <summary>
                 * Read all HqHitterRestOfSeasonProjection hitters from database
             </summary>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.UpdateDatabaseWithTodaysHitterYearToDateData(System.Boolean)">
+        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.GetAllYtdAsync_CSV(System.Boolean)">
             <summary>
                 Gets YTD csv from hq site and adds hitters to database
             </summary>
@@ -687,7 +676,7 @@
                 An SfbbPlayerBase
             </param>
         </member>
-        <member name="M:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController.AddAll_DB(System.Collections.Generic.List{BaseballScraper.Models.Player.SfbbPlayerBase})">
+        <member name="M:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController.AddAllAsync_DB(System.Collections.Generic.List{BaseballScraper.Models.Player.SfbbPlayerBase})">
             <summary>
                 * Add list of playerBases
                 * AddAll_DB Option 1 for SfbbPlayerBases

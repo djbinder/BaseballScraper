@@ -177,14 +177,11 @@ namespace BaseballScraper.Infrastructure
 
                     case "MlbStatsApiEndPoints_AllGamesDate":
                         return "fdc3f291-2428-450a-9eb7-3f45c0f01467";
-
-
                 }
                 throw new System.Exception("no api type found");
             }
 
         #endregion POSTMAN TOKEN ------------------------------------------------------------
-
 
     }
 }

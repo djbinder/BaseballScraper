@@ -59,21 +59,16 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
             IRestResponse response          = postmanResponse.Response;
 
             var jObject = _apiInfrastructure.CreateModelJObject(response);
-            // _helpers.Dig(jObject);
             var jToken  = _apiInfrastructure.CreateModelJToken(jObject,"HitterSeasonStats");
             var hitter  = _apiInfrastructure.CreateInstanceOfModel(jToken,_hSS,"HitterSeasonStats") as HitterSeasonStats;
 
-            // _helpers.Dig(hitter);
             return hitter;
 
         }
     }
 }
 
-// C.WriteLine($"response: {response.Content}\n");
-// C.WriteLine($"jObject: {jObject}\n");
-// C.WriteLine($"jToken: {jToken}\n");
-// C.WriteLine($"hitter: {hitter}\n");
+
 
 
 // http://lookup-service-prod.mlb.com/json/named.sport_hitting_tm.bam?league_list_id='mlb'&game_type='R'&season='2017'&player_id='493316'

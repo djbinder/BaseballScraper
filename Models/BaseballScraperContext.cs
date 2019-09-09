@@ -61,7 +61,7 @@ namespace BaseballScraper.Models
 
 
         /* FANGRAPHS */
-        public DbSet<FanGraphsPitcherForWpdiReport>     FanGraphsPitchersForWpdiReport  { get; set; }
+        public DbSet<FanGraphsPitcherWpdi>     FanGraphsPitchersForWpdiReport  { get; set; }
 
 
         public DbSet<PlayerNote>                        PlayerNotes                     { get; set; }
@@ -124,7 +124,7 @@ namespace BaseballScraper.Models
             modelBuilder.Entity<YahooTeamRosterAdds>().ToTable("Y!_TmRosterAdds");
 
             /* FANGRAPHS */
-            modelBuilder.Entity<FanGraphsPitcherForWpdiReport>().ToTable("FG_SP_wPDI");
+            modelBuilder.Entity<FanGraphsPitcherWpdi>().ToTable("FG_SP_wPDI");
 
 
             _helpers.CloseMethod(1);
@@ -136,33 +136,25 @@ namespace BaseballScraper.Models
         // * Runs when you do _context.SaveChanges();
         public override int SaveChanges()
         {
-            _helpers.OpenMethod(1);
-            int counter = 1;
+            // _helpers.OpenMethod(1);
 
-            var now = DateTime.Now;
-            C.WriteLine($"NOW : {now}\n \n \n \n \n");
+            IEnumerable<EntityEntry> entities = ChangeTracker.Entries()
+                .Where(
+                    entityEntry => entityEntry.Entity is IBaseEntity && (
+                        entityEntry.State == EntityState.Added ||
+                        entityEntry.State == EntityState.Modified
+                    )
+                );
 
-            var entities = ChangeTracker.Entries().Where(x => x.Entity is BaseEntity && (x.State == EntityState.Added || x.State == EntityState.Modified));
-            foreach(var e in entities)
+            foreach (EntityEntry entity in entities)
             {
-                C.WriteLine($"e: {e}");
+                if (entity.State == EntityState.Added)
+                    ((IBaseEntity)entity.Entity).DateCreated = DateTime.Now;
+
+                ((IBaseEntity)entity.Entity).DateUpdated = DateTime.Now;
             }
 
-            this.ChangeTracker.DetectChanges();
-            foreach (EntityEntry item in this.ChangeTracker.Entries()
-                        .Where(i => i.State == EntityState.Added || i.State == EntityState.Modified)
-                        .Where(i => i as IBaseEntity != null)
-            )
-            {
-                if (item.State == EntityState.Added)
-                {
-                    (item as IBaseEntity).DateCreated = now;
-                    counter++;
-                }
-                (item as IBaseEntity).DateUpdated = now;
-            }
-
-            _helpers.CompleteMethod();
+            // _helpers.CompleteMethod();
             // Call the SaveChanges method on the context;
             return base.SaveChanges();
         }
@@ -211,7 +203,7 @@ namespace BaseballScraper.Models
         // * > Entity is being tracked by context and exists in db; some or all its property values have been modified.
         //
         // 5) UNCHANGED -> entityEntry.State == EntityState.Unchanged
-        // * > Entity is being tracked by the context and exists in dbe, and its property values have not changed from the values in db.
+        // * > Entity is being tracked by the context and exists in db, and its property values have not changed from the values in db.
         //
 
 

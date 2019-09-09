@@ -1,17 +1,15 @@
-using System.Collections.Generic;
-using System.Configuration;
-using System.Text;
+// using System.Collections.Generic;
+// using System.Configuration;
+// using System.Text;
 
-namespace BaseballScraper.Models.ConfigurationModels
+// namespace BaseballScraper.Models.ConfigurationModels
+// {
+//     public class YahooConfigurationX
+//     {
+//         public string ClientId { get; set; }
 
-{
-    public class YahooConfigurationX
-    {
+//         public string ClientSecret { get; set; }
 
-        public string ClientId { get; set; }
-
-        public string ClientSecret { get; set; }
-
-        public string RedirectUri { get; set; }
-    }
-}
+//         public string RedirectUri { get; set; }
+//     }
+// }

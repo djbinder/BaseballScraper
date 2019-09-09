@@ -18,8 +18,8 @@ namespace BaseballScraper.Controllers
     [ApiExplorerSettings(IgnoreApi = true)]
     public class TwitterController: ControllerBase
     {
-        private readonly Helpers _h = new Helpers();
-        private readonly TwitterConfiguration _twitterConfig;
+        private readonly Helpers               _helpers;
+        private readonly TwitterConfiguration  _twitterConfig;
         private readonly AirtableConfiguration _airtableConfig;
 
 
@@ -28,10 +28,11 @@ namespace BaseballScraper.Controllers
         private readonly MongoDbServicer _mongoDbServicer;
 
 
-        public TwitterController(IOptions<AirtableConfiguration> airtableConfig, IOptions<TwitterConfiguration> twitterConfig, MongoDbServicer mongoDbServicer)
+        public TwitterController(Helpers helpers, IOptions<AirtableConfiguration> airtableConfig, IOptions<TwitterConfiguration> twitterConfig, MongoDbServicer mongoDbServicer)
         {
-            _airtableConfig = airtableConfig.Value;
-            _twitterConfig  = twitterConfig.Value;
+            _helpers         = helpers;
+            _airtableConfig  = airtableConfig.Value;
+            _twitterConfig   = twitterConfig.Value;
             _mongoDbServicer = mongoDbServicer;
         }
 
@@ -114,11 +115,6 @@ namespace BaseballScraper.Controllers
                 List<TwitterStatus> twitterStatus = CreateNewStatusListForEach(searchResponse);
 
                 PrintTwitterStatuses(twitterStatus);
-
-                // foreach(TwitterStatus status in twitterStatus)
-                // {
-                //     // Create(status);
-                // }
                 return twitterStatus;
             }
 
@@ -138,21 +134,21 @@ namespace BaseballScraper.Controllers
             /// <example>
             ///     var twitterStatus = CreateNewStatusListForEach(searchResponse);
             /// </example>
-            public List<TwitterStatus> CreateNewStatusListForEach(LinqToTwitter.Search searchResponse)
+            public List<TwitterStatus> CreateNewStatusListForEach(Search searchResponse)
             {
                 List<TwitterStatus> allStatuses = new List<TwitterStatus>();
 
-                foreach(LinqToTwitter.Status status in searchResponse.Statuses)
+                foreach(Status status in searchResponse.Statuses)
                 {
                     TwitterStatus twitterStatus = new TwitterStatus
                     {
-                        ScreenName = status.User.ScreenNameResponse,
-                        CreatedAt = status.CreatedAt,
-                        Text = status.Text,
-                        UserId = (int)status.UserID,
-                        StatusType = (int)status.Type,
+                        ScreenName     = status.User.ScreenNameResponse,
+                        CreatedAt      = status.CreatedAt,
+                        Text           = status.Text,
+                        UserId         = (int)status.UserID,
+                        StatusType     = (int)status.Type,
                         StatusIdString = status.StatusID,
-                        FullText = status.ExtendedTweet.FullText
+                        FullText       = status.ExtendedTweet.FullText
                     };
                     allStatuses.Add(twitterStatus);
                 }
@@ -271,7 +267,7 @@ namespace BaseballScraper.Controllers
             }
 
 
-            private void PrintLinqToTwitterListInfo(List<LinqToTwitter.List> listItems)
+            private void PrintLinqToTwitterListInfo(List<List> listItems)
             {
                 Console.WriteLine("---------------------------------------------");
                 Console.WriteLine($"USER'S TWITTER LISTS INFO || COUNT: {listItems.Count}");
@@ -295,7 +291,7 @@ namespace BaseballScraper.Controllers
                 foreach(TwitterStatus item in statuses)
                 {
                     Console.WriteLine();
-                    _h.Spotlight($"# {xCount}");
+                    _helpers.Spotlight($"# {xCount}");
                     Console.WriteLine("-------------------------------------------------------");
                     Console.WriteLine($"SCREEN NAME         | {item.ScreenName}");
                     Console.WriteLine($"STATUS TYPE         | {item.StatusType}");
@@ -321,7 +317,7 @@ namespace BaseballScraper.Controllers
             }
 
 
-            public void PrintLinqToTwitterUserInfo(LinqToTwitter.User user)
+            public void PrintLinqToTwitterUserInfo(User user)
             {
                 Console.WriteLine("-----USER-----");
                 Console.WriteLine($"ScreenNameResponse: {user.ScreenNameResponse}");
@@ -338,7 +334,7 @@ namespace BaseballScraper.Controllers
             }
 
 
-            private void PrintLinqToTwitterStatus(LinqToTwitter.Status Status)
+            private void PrintLinqToTwitterStatus(Status Status)
             {
                 Console.WriteLine($"@{Status.User.Name} | {Status.CreatedAt} | [{Status.StatusID}]");
                 Console.WriteLine(Status.Text);
@@ -346,7 +342,7 @@ namespace BaseballScraper.Controllers
             }
 
 
-            private void PrintListOfLinqToTwitterStatuses(List<LinqToTwitter.Status> listOfStatuses)
+            private void PrintListOfLinqToTwitterStatuses(List<Status> listOfStatuses)
             {
                 Console.WriteLine("---------------------------------------------");
                 Console.WriteLine($"TWEETS || COUNT: {listOfStatuses.Count}");

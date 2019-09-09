@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +11,7 @@ using Ganss.Excel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using C = System.Console;
-using EFCore.BulkExtensions;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 #pragma warning disable CS0168, CS0219, CS0414, CS1998, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Controllers.PlayerControllers
@@ -86,74 +85,22 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
 
         // range is something like: "A7:AQ2333"
-        [HttpPost("mrc")]
-        public async Task<IActionResult> MASTER_REPORT_CALLER(string range)
+        public async Task<IActionResult> DAILY_REPORT_RUNNER(string range)
         {
             _helpers.OpenMethod(3);
 
-            var sfbbPlayerBasesList = GetAll();
-            // _context.AddRange(sfbbPlayerBasesList);
-            // _context.SaveChanges();
 
-            foreach(var p in sfbbPlayerBasesList)
-            {
-                C.WriteLine(p.PLAYERNAME);
-                p.DateCreated = DateTime.Now;
-                // p.DateUpdated = DateTime.Now;
-
-                _context.Entry(p).State = EntityState.Added;
-                // C.WriteLine($"START {_context.Entry(p).State}");
-
-                // _context.Attach(p);
-                // _context.Add(p);
-
-                _context.Set<SfbbPlayerBase>().Add(p);
-
-                // C.WriteLine($"END {_context.Entry(p).State}\n");
-
-            }
-                _context.SaveChanges();
-
-
-
+            // List<SfbbPlayerBase>
+            var sfbbPlayerBasesList = GetAll_GSheet(_googleSheetRange);
+            await AddAllAsync_DB(sfbbPlayerBasesList);
 
 
             // List<CrunchTimePlayerBase>
-            // var crunchTimePlayerBases = GetAllToday_CSV();
-            // await AddAll_DB(crunchTimePlayerBases);
+            var crunchTimePlayerBases = GetAllToday_CSV();
+            await AddAll_DB(crunchTimePlayerBases);
 
             return Ok();
         }
-
-        /*
-
-            var newUserIDs = NewUsers.Select(u => u.UserId).Distinct().ToArray();
-
-            var usersInDb = dbcontext.Users.Where(u => newUserIDs.Contains(u.UserId))
-                                        .Select(u => u.UserId).ToArray();
-
-            var usersNotInDb = NewUsers.Where(u => !usersInDb.Contains(u.UserId));
-
-            foreach(User user in usersNotInDb)
-            {
-                context.Add(user);
-            }
-
-            dbcontext.SaveChanges();
-        */
-
-            // string[] newBases = sfbbPlayerBases.Select(u => u.IDPLAYER).Distinct().ToArray();
-            // var x = sfbbPlayerBases.Select(u => u.IDPLAYER).Distinct();
-
-            // var basesInDb = _context.SfbbPlayerBases.Where(u => newBases.Contains(u.IDPLAYER))
-            //                                         .Select(u => u.IDPLAYER).ToArray();
-
-            // var usersNotInDb = sfbbPlayerBases.Where(u => !basesInDb.Contains(u.IDPLAYER));
-
-            // C.WriteLine($"SFBB PLAYER BASES : {sfbbPlayerBases.ToList().Count}");
-            // C.WriteLine($"NEW BASES         : {newBases.ToList().Count}");
-            // C.WriteLine($"BASES IN DB       : {basesInDb.ToList().Count}");
-            // C.WriteLine($"USERS NOT IN DB   : {usersNotInDb.ToList().Count}");
 
 
         #region CRUNCHTIME ------------------------------------------------------------
@@ -282,10 +229,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
                 foreach(CrunchTimePlayerBase playerBase in crunchTimePlayerBases)
                 {
-                    var checkDbForPlayerBase =
-                        _context.CrunchTimePlayerBases.SingleOrDefault(
-                            ct => ct.MlbId == playerBase.MlbId
-                        );
+                    var checkDbForPlayerBase =_context.CrunchTimePlayerBases.SingleOrDefault(ct => ct.MlbId == playerBase.MlbId);
 
                     if(checkDbForPlayerBase == null)
                     {
@@ -362,21 +306,9 @@ namespace BaseballScraper.Controllers.PlayerControllers
             }
 
 
-            // STATUS [ August 19, 2019 ] : haven't tested
-            public void GetMany_GSheet(string range)
-            {
-                var allPlayerBaseObjects = _googleSheetsConnector.ReadDataFromSheetRange(
-                    _sfbbMapDocName,    // "SfbbPlayerIdMap"
-                    _sfbbMapTabId,      // "SFBB_PLAYER_ID_MAP"
-                    range               // "A7:AQ2333"
-                );
-
-                IEnumerable<SfbbPlayerBase> allPlayerBases = Enumerable.Empty<SfbbPlayerBase>();
-            }
-
 
             // SFBB PLAYER BASE
-            public IEnumerable<SfbbPlayerBase> GetAll_GSheet(string range)
+            public List<SfbbPlayerBase> GetAll_GSheet(string range)
             {
                 _helpers.OpenMethod(1);
                 IList<IList<object>> allPlayerBaseObjects = _googleSheetsConnector.ReadDataFromSheetRange(
@@ -385,12 +317,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
                     range               // "A7:AQ2333"
                 );
 
-                PrintPlayerBaseObjectDetails(
-                    allPlayerBaseObjects,
-                    _sfbbMapDocName,
-                    _sfbbMapTabId,
-                    range
-                );
+                PrintPlayerBaseObjectDetails(allPlayerBaseObjects, _sfbbMapDocName, _sfbbMapTabId, range);
 
                 List<SfbbPlayerBase> allPlayerBases = new List<SfbbPlayerBase>();
 
@@ -399,54 +326,35 @@ namespace BaseballScraper.Controllers.PlayerControllers
                     SfbbPlayerBase playerBase = InstantiateSfbbPlayerBase(row);
                     allPlayerBases.Add(playerBase);
                 }
+
+                var filteredList = FilterOutDuplicateRecords(allPlayerBases);
+
                 _helpers.CloseMethod(1);
-                return allPlayerBases;
+                return filteredList;
             }
 
-            public List<SfbbPlayerBase> GetAll()
+
+            // *  The source Sfbb Player Base sheet (that I do not own) has one guy in there twice
+            // * This filters out any player listed twice
+            public List<SfbbPlayerBase> FilterOutDuplicateRecords(List<SfbbPlayerBase> allPlayerBases)
             {
-                var playerBasesEnumerable = GetAll_GSheet(_googleSheetErrorRange);
-
-                List<SfbbPlayerBase> playerBasesEnumerableToList = playerBasesEnumerable.ToList();
-
+                var filteredList = new List<SfbbPlayerBase>();
                 List<string> idPlayers = new List<string>();
 
-                var newList = new List<SfbbPlayerBase>();
-
-                foreach(var p in playerBasesEnumerableToList)
+                foreach(var p in allPlayerBases)
                 {
-                    if(idPlayers.Contains(p.IDPLAYER))
-                    {
-                        C.WriteLine("DUPLICATE");
-                        C.WriteLine(p.PLAYERNAME);
-                    }
+                    if(idPlayers.Contains(p.IDPLAYER)){}
                     else
                     {
-                        _context.Entry(p).State = EntityState.Added;
-                        newList.Add(p);
+                        filteredList.Add(p);
                         idPlayers.Add(p.IDPLAYER);
                     }
                 }
 
-                C.WriteLine($"NEW COUNT: {newList.Count}");
-
-                return newList;
+                C.WriteLine($"OLD COUNT: {allPlayerBases.Count}");
+                C.WriteLine($"NEW COUNT: {filteredList.Count}");
+                return filteredList;
             }
-
-
-            // public void PrintSomething(
-            //     List<SfbbPlayerBase> playerBasesEnumerableToList,
-            //     [FromQuery] string[] listOfUniqueIdPlayer,
-            //     [FromQuery] string[] basesInDb,
-            //     [FromQuery] List<SfbbPlayerBase> finalList)
-            // {
-            //     C.WriteLine($"SFBB PLAYER BASES : {playerBasesEnumerableToList}.Count");
-            //     C.WriteLine($"UNIQUE IDS        : {listOfUniqueIdPlayer.ToList().Count}");
-            //     C.WriteLine($"BASES IN DB       : {basesInDb.ToList().Count}");
-            //     C.WriteLine($"FINAL LIST        : {finalList.Count}");
-            // }
-
-
 
 
 
@@ -456,37 +364,6 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
 
         /* ----- CRUD - CREATE - SFBB PLAYERBASE ----- */
-
-            // SFBB PLAYER BASE
-            // POST ONE SfbbplayerBase Option 1
-            // public IActionResult AddOne_DB(SfbbPlayerBase playerBase, int playersAddedCounter, int playersExistCounter)
-            public IActionResult AddOne_DB(SfbbPlayerBase playerBase)
-            {
-                var checkDbForBase =
-                    _context.SfbbPlayerBases.SingleOrDefault(
-                        pb => pb.IDPLAYER == playerBase.IDPLAYER
-                    );
-
-                if(checkDbForBase == null)
-                {
-                    // _context.SfbbPlayerBases.Attach(playerBase);
-                    _context.Add(playerBase);
-
-                    // playersAddedCounter++;
-                }
-
-                else
-                {
-                    // _context.Entry(checkDbForBase).State = EntityState.Detached;
-                    // _context.Remove(checkDbForBase);
-                    // _context.SaveChanges();
-
-                    // _context.Add(checkDbForBase);
-                    // _context.SaveChanges();
-                    // playersExistCounter++;
-                }
-                return Ok();
-            }
 
 
             // STATUS [ August 19, 2019 ] : this works
@@ -559,106 +436,67 @@ namespace BaseballScraper.Controllers.PlayerControllers
             ///     * Add list of playerBases
             ///     * AddAll_DB Option 1 for SfbbPlayerBases
             /// </summary>
-            public async Task<ActionResult> AddAll_DB(List<SfbbPlayerBase> allPlayerBases)
+            public async Task<ActionResult> AddAllAsync_DB(List<SfbbPlayerBase> allPlayerBases)
             {
                 _helpers.OpenMethod(3);
 
-                int playersAddedCounter = 0; int playersExistCounter = 0;
+                int playersAddedCounter = 0; int playersExistCounter = 0; int counter = 1;
 
-                // var allPlayerBases = GetAll_GSheet(_googleSheetRange);
-
-                foreach(SfbbPlayerBase playerBase in allPlayerBases)
+                foreach(var p in allPlayerBases)
                 {
-                    // AddOne_DB(playerBase, playersAddedCounter, playersExistCounter);
-                    await AddOneAsync_DB(playerBase);
+                    var checkDbForBase =_context.SfbbPlayerBases.SingleOrDefault(pb => pb.IDPLAYER == p.IDPLAYER);
+
+                    if(checkDbForBase == null)
+                    {
+                        _context.Entry(p).State = EntityState.Added;
+                        _context.Set<SfbbPlayerBase>().Add(p);
+                    }
+                    else
+                    {
+                        _context.Entry(checkDbForBase).State = EntityState.Unchanged;
+                    }
+
+                    if(counter % 500 == 0 )
+                    {
+                        C.WriteLine(counter);
+                    }
+
+                    int manageCounters = (checkDbForBase == null) ? playersAddedCounter++ : playersExistCounter++;
+                    counter++;
                 }
 
                 await _context.SaveChangesAsync(cancellationToken);
-
-                // _context.PrintDatabaseAddOutcomes(
-                //     playersAddedCounter,
-                //     playersExistCounter,
-                //     typeof(PlayerBaseController)
-                // );
-
+                _context.PrintDatabaseAddOutcomes(playersAddedCounter, playersExistCounter, typeof(PlayerBaseController));
                 return Ok();
             }
 
 
+            // STATUS [ September 6, 2019 ] : not sure if this works; haven't tested
+            public EntityEntry<SfbbPlayerBase> AddOne_DB(SfbbPlayerBase s) => _context.Add(s);
+
+
+            // STATUS [ September 6, 2019 ] : not sure if this works; haven't tested
+            public void AddAllList_DB (List<SfbbPlayerBase> allPlayerBases) => allPlayerBases.ForEach(pb => _context.Add(pb));
+
+
+            // STATUS [ September 6, 2019 ] : not sure if this works; haven't tested
+            public void AddRange_DB (List<SfbbPlayerBase> allPlayerBases) => _context.SfbbPlayerBases.AddRange(allPlayerBases);
 
 
 
+            // TO DO : https://blog.zhaytam.com/2019/03/14/generic-repository-pattern-csharp/
+            // TO DO : https://stackoverflow.com/questions/39656794/entity-framework-update-insert-multiple-entities
 
-            // SFBB PLAYER BASE
-            // POST ALL SfbbplayerBase Option 2
-            // public IActionResult AddAll_DB(List<SfbbPlayerBase> allPlayerBases)
-            // {
-            //     _helpers.OpenMethod(1);
-            //     int countAdded = 0; int countDeleted = 0;
-            //     var someOfThePlayerBases = new List<SfbbPlayerBase>();
-            //     int counter = 1;
-            //     foreach(SfbbPlayerBase pb in allPlayerBases)
-            //     {
-            //         someOfThePlayerBases.Add(pb);
-            //         if(counter % 500 == 0 )
-            //         {
-            //             C.WriteLine(counter);
-            //             _context.Set<SfbbPlayerBase>().AddRange(someOfThePlayerBases);
-            //             someOfThePlayerBases = new List<SfbbPlayerBase>();
-            //             _context.ChangeTracker.DetectChanges();
-            //             _context.SaveChanges();
-            //             // _context?.Dispose();
-            //             C.WriteLine(counter);
-            //         }
-            //         // var checkDbForPlayer =
-            //         //     _context.SfbbPlayerBases.SingleOrDefault(b => b.IDPLAYER == pb.IDPLAYER);
-            //         // if(checkDbForPlayer != null)
-            //         // {
-            //         //     C.WriteLine("================= NOT NULL =================");
-            //         //     _context.Remove(checkDbForPlayer);
-            //         // }
-            //         // else
-            //         // {
-            //         //     try
-            //         //     {
-            //         //         if(counter < 2500)
-            //         //         {
-            //         //             if(counter % 2000 == 0 )
-            //         //             {
-            //         //                 C.WriteLine(counter);
-            //         //                 // C.WriteLine(pb.PLAYERNAME);
-            //         //             }
-            //         //             _context.Entry(pb).State = EntityState.Added;
-            //         //             _context.Add(pb);
-            //         //         }
-            //         //     }
-            //         //     catch(Exception ex)
-            //         //     {
-            //         //         C.WriteLine("================= CATCH =================");
-            //         //     }
-            //         // }
-            //         // var nullCheck  = (checkDbForPlayer == null) ? _context.Attach(pb) : null;
-            //         // nullCheck      = (checkDbForPlayer == null) ? _context.Add(pb) : null;
-            //         // int manageCounters = (checkDbForPlayer == null) ? countAdded++ : countDeleted++;
-            //         // _context.Entry(pb).State = EntityState.Detached;
-            //             // if(checkDbForPlayer == null)
-            //             // {
-            //             //     // C.WriteLine($"NULL : New {countAdded} Deleted {countDeleted}");
-            //             //     _context.SfbbPlayerBases.Attach(pb);
-            //             //     _context.Add(pb);
-            //             //     countAdded++;
-            //             // }
-            //             // else
-            //             // {
-            //             //     countDeleted++;
-            //             // }
-            //         counter++;
-            //     }
-            //     _context.PrintDatabaseAddOutcomes(countAdded, countDeleted);
-            //     _context.SaveChanges();
-            //     _helpers.CloseMethod(1);
-            //     return Ok();
-            // }
+
+
+            // _context.Set<SfbbPlayerBase>().AddRange(someOfThePlayerBases);
+            // someOfThePlayerBases = new List<SfbbPlayerBase>();
+            // _context.ChangeTracker.DetectChanges();
+            // _context.SaveChanges();
+            // _context?.Dispose();
+            // nullCheck      = (checkDbForPlayer == null) ? _context.Add(pb) : null;
+
+
 
 
 
@@ -747,26 +585,23 @@ namespace BaseballScraper.Controllers.PlayerControllers
         /* --------------------------------------------------------------- */
 
 
-            // SFBB PLAYER BASE
-            public int NumberOfSfbbPlayerBasesInDatabase()
-            {
-                int playerBaseCount = _context.SfbbPlayerBases.Count();
-                return playerBaseCount;
-            }
+            // // SFBB PLAYER BASE
+            // public int NumberOfSfbbPlayerBasesInDatabase()
+            // {
+            //     int playerBaseCount = _context.SfbbPlayerBases.Count();
+            //     return playerBaseCount;
+            // }
 
 
-            // SFBB PLAYER BASE
-            public int NumberOfSfbbPlayerBasesInGoogleSheet()
-            {
-                int playerBaseCount = GetAll_GSheet(_googleSheetRange).Count();
-                return playerBaseCount;
-            }
+            // // SFBB PLAYER BASE
+            // public int NumberOfSfbbPlayerBasesInGoogleSheet()
+            // {
+            //     int playerBaseCount = GetAll_GSheet(_googleSheetRange).Count();
+            //     return playerBaseCount;
+            // }
 
 
         #endregion SFBB DATABASE ------------------------------------------------------------
-
-
-
 
 
 
@@ -930,7 +765,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
                     where playerBases.CbsPlayerId == playersCbsPlayerId
                     select playerBases;
 
-                onePlayersBase.ToList().ForEach((playerBase) => Console.WriteLine(playerBase.CbsName));
+                onePlayersBase.ToList().ForEach((playerBase) => C.WriteLine(playerBase.CbsName));
                 return onePlayersBase;
             }
 
@@ -945,7 +780,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
                     where playerBases.DavenportId == playersDavenportPlayerId
                     select playerBases;
 
-                onePlayersBase.ToList().ForEach((playerBase) => Console.WriteLine(playerBase.CbsName));
+                onePlayersBase.ToList().ForEach((playerBase) => C.WriteLine(playerBase.CbsName));
                 return onePlayersBase;
             }
 
@@ -960,7 +795,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
                     where playerBases.EspnPlayerId == playersEspnPlayerId
                     select playerBases;
 
-                onePlayersBase.ToList().ForEach((playerBase) => Console.WriteLine(playerBase.CbsName));
+                onePlayersBase.ToList().ForEach((playerBase) => C.WriteLine(playerBase.CbsName));
                 return onePlayersBase;
             }
 
@@ -1295,6 +1130,39 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
     }
 }
+
+
+
+// public List<SfbbPlayerBase> GetAll()
+// {
+//     IEnumerable<SfbbPlayerBase> playerBasesEnumerable = GetAll_GSheet(_googleSheetErrorRange);
+
+//     List<SfbbPlayerBase> playerBasesEnumerableToList = playerBasesEnumerable.ToList();
+//     C.WriteLine($"OLD COUNT: {playerBasesEnumerableToList.Count}");
+
+//     List<string> idPlayers = new List<string>();
+
+//     var newList = new List<SfbbPlayerBase>();
+
+//     foreach(var p in playerBasesEnumerableToList)
+//     {
+//         if(idPlayers.Contains(p.IDPLAYER))
+//         {
+//             C.WriteLine("DUPLICATE");
+//             C.WriteLine(p.PLAYERNAME);
+//         }
+//         else
+//         {
+//             _context.Entry(p).State = EntityState.Added;
+//             newList.Add(p);
+//             idPlayers.Add(p.IDPLAYER);
+//         }
+//     }
+
+//     C.WriteLine($"NEW COUNT: {newList.Count}");
+
+//     return newList;
+// }
 
 
 
