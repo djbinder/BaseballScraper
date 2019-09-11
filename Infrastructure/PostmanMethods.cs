@@ -1,6 +1,7 @@
 ﻿using BaseballScraper.EndPoints;
 using RestSharp;
 
+#pragma warning disable IDE0066
 namespace BaseballScraper.Infrastructure
 {
     public class PostmanMethods

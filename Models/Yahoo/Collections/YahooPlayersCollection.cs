@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 
+#pragma warning disable IDE0066
 namespace BaseballScraper.Models.Yahoo.Collections.YahooPlayersCollection
 {
     public partial class YahooPlayersCollection

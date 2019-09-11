@@ -7,6 +7,7 @@ using System;
 using Newtonsoft.Json.Converters;
 using System.Globalization;
 
+#pragma warning disable IDE0066
 namespace BaseballScraper.Models.Yahoo.Resources.YahooRosterResource
 {
     [XmlRoot (ElementName = "team", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]

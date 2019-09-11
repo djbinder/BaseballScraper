@@ -26,6 +26,7 @@ using System;
 using System.Diagnostics;
 using System.Text;
 using C = System.Console;
+using BaseballScraper.Controllers.BrooksBaseballControllers;
 
 #pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper
@@ -145,7 +146,8 @@ namespace BaseballScraper
             services.AddSingleton<BaseballSavantUriEndPoints>();
             services.AddSingleton<BaseballSavantHitterEndPoints>();
             services.AddSingleton<BaseballSavantPitcherEndPoints>();
-            services.AddSingleton<ProjectDirectoryEndPoints>();
+            services.AddSingleton<BrooksBaseballEndPoints>();
+            services.AddSingleton<BrooksBaseballUtilitiesController>();
             services.AddSingleton<CsvHandler>();
             services.AddSingleton<DataTabler>();
             services.AddSingleton<EmailHelper>();
@@ -154,6 +156,7 @@ namespace BaseballScraper
             services.AddSingleton<MlbDataApiEndPoints>();
             services.AddSingleton<MlbDataSeasonHittingStatsController>();
             services.AddSingleton<PostmanMethods>();
+            services.AddSingleton<ProjectDirectoryEndPoints>();
             services.AddSingleton<PythonConnector>();
             services.AddSingleton<RdotNetConnector>();
             services.AddSingleton<YahooApiEndPoints>();
@@ -168,6 +171,9 @@ namespace BaseballScraper
             services.AddScoped<CbsTransactionTrendsController>();
             services.AddScoped<EspnTransactionTrendsController>();
             services.AddScoped<YahooTransactionTrendsController>();
+
+            // * See: https://blog.zhaytam.com/2019/03/14/generic-repository-pattern-csharp/
+            services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
 
             _gmail1 = Configuration["Gmail1"];
             _gmail1PasswordAppAccess = Configuration["Gmail1_Password_App_Access"];

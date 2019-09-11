@@ -347,10 +347,6 @@
             <example> Most Dropped --> GetListOfCbsMostAddedOrDroppedByPosition(urlForMostDroppedByPositionPrefix,"1B"); </example>
             <returns> A list of most added or dropped players for one position </returns>
         </member>
-        <member name="M:BaseballScraper.Controllers.CbsControllers.CbsTransactionTrendsController.PrintCbsAddedOrDroppedListOfPlayers(System.Collections.Generic.List{BaseballScraper.Models.Cbs.CbsMostAddedOrDroppedPlayer})">
-            <summary> Print the lists from previous two methods </summary>
-            <param name="players"> A list of added or dropped players</param>
-        </member>
         <member name="M:BaseballScraper.Controllers.CbsControllers.CbsTransactionTrendsController.GetListOfCbsMostViewedPlayers(System.String)">
             <summary> Returns a list of the most viewed players according to Cbs trends; Does not filter by position </summary>
             <param name="urlToScrape"> The url of the Cbs roster trends for most viewed </param>
@@ -542,26 +538,9 @@
             <example> https://127.0.0.1:5001/api/mlb/hittingleaders </example>
             <returns> Hitting leaders for current season </returns>
         </member>
-        <member name="T:BaseballScraper.Controllers.MlbDataApiControllers.cs.MlbDataPitchingLeadersController">
-            <summary> Provides two options on how to generate leading pitcher model
-            <item> OPTION 1 - endpoint parameters defined within the method </item>
-            <item> OPTION 2 - endpoint parameters passed as parameters to method </item>
-            </summary>
-        </member>
-        <member name="M:BaseballScraper.Controllers.MlbDataApiControllers.cs.MlbDataPitchingLeadersController.CreatePitchingLeadersModel">
-            <summary>
-                OPTION 1: Get the current seasons pitching leaders; Endpoint parameters defined within method
-            </summary>
-            <remarks>
-                Parameters for 'PitchingLeadersEndPoint' are defined within the method
-            </remarks>
-            <returns>
-                A list of instantiated 'LeadingPitching' for 'numberToReturn' number of pitchers
-            </returns>
-        </member>
         <member name="M:BaseballScraper.Controllers.MlbDataApiControllers.cs.MlbDataPitchingLeadersController.CreatePitchingLeadersModel(System.Int32,System.String,System.String)">
             <summary>
-                OPTION 2: Get the current seasons pitching leaders; Endpoint parameters passed as parameters to method
+                Get the current seasons pitching leaders; Endpoint parameters passed as parameters to method
             </summary>
             <remarks>
                 Parameters for 'PitchingLeadersEndPoint' (i.e. numberToReturn, year, sortColumn) are passed as parameters to the method
@@ -582,7 +561,7 @@
         </member>
         <member name="M:BaseballScraper.Controllers.MlbDataApiControllers.cs.MlbDataPitchingLeadersController.GetPitchingLeadersAsync(System.Int32,System.String,System.String)">
             <summary>
-                OPTION 1: Get pitchin leaders w parameters
+                Get pitchin leaders w parameters
             </summary>
             <remarks>
                 'LeadingPitcher' model for options that you can sort by for this method
@@ -597,22 +576,12 @@
                 This is the stat you want to retrieve the leaders for (e.g., era, wins etc)
             </param>
         </member>
-        <member name="M:BaseballScraper.Controllers.MlbDataApiControllers.cs.MlbDataPitchingLeadersController.GetPitchingLeadersAsync">
-            <summary>
-                OPTION 2: Get pitchin leaders w filters defined within method
-            </summary>
-        </member>
         <member name="M:BaseballScraper.Controllers.MlbDataApiControllers.cs.MlbDataPitchingLeadersController.ViewPitchingLeadersAsync(System.Int32,System.String,System.String)">
-            <summary> OPTION 1: Initiate retrieval of mlb pitching leaders for current season </summary>
+            <summary> Initiate retrieval of mlb pitching leaders for current season </summary>
             <param name="numberToReturn"> The number of pitchers to return in the results (e.g. 50 would show you the top 50 leaders) </param>
             <param name="year"> The year that you want to retrieve the leaders for (e.g. 2018 gets you leaders for 2018 mlb season) </param>
             <param name="sortColumn"> This is the stat you want to retrieve the leaders for (e.g., era, wins etc) </param>
             <see> View 'LeadingPitcher' model for options that you can sort by for this method </see>
-            <example> https://127.0.0.1:5001/api/mlb/pitchingleaders </example>
-            <returns> Pitching leaders for current season </returns>
-        </member>
-        <member name="M:BaseballScraper.Controllers.MlbDataApiControllers.cs.MlbDataPitchingLeadersController.ViewPitchingLeadersAsync">
-            <summary> OPTION 2: Initiate retrieval of mlb Pitching leaders for current season </summary>
             <example> https://127.0.0.1:5001/api/mlb/pitchingleaders </example>
             <returns> Pitching leaders for current season </returns>
         </member>
