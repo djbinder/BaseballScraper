@@ -877,6 +877,8 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
                     _dataTabler.InsertDataRowIntoTable(dataTable, pitcherData);
                 }
                 _dataTabler.PrintTable(dataTable);
+
+                dataTable.Dispose();
             }
 
         #endregion PRINTING PRESS ------------------------------------------------------------

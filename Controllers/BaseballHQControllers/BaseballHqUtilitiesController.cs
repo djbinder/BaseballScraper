@@ -184,6 +184,8 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
                 };
                 process.StartInfo = processStartInfo;
                 process.Start();
+
+                process.Dispose();
             }
 
 

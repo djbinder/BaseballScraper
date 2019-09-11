@@ -47,6 +47,86 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
 
 
 
+        // BaseballData/02_WRITE/FANGRAPHS/PITCHERS/
+        private string PitcherWriteDirectory
+        {
+            get => _projectDirectory.FanGraphsPitcherWriteRelativePath;
+        }
+
+
+
+        /*
+            https://127.0.0.1:5001/api/fangraphs/fangraphssp/test
+        */
+        [HttpGet("test")]
+        [ApiExplorerSettings(IgnoreApi = false)]
+        public void TestController()
+        {
+            _helpers.StartMethod();
+            _googleSheetsConnector.SetGradientConditionalFormat();
+        }
+
+
+        /*
+            https://127.0.0.1:5001/api/fangraphs/fangraphssp/async
+        */
+        [HttpGet("async")]
+        [ApiExplorerSettings(IgnoreApi = false)]
+        public async Task TestControllerAsync()
+        {
+            _helpers.StartMethod();
+
+            await RunFgSpWpdiReport(2019, minInningsPitched_:1);
+            // var listFromDatabase = GetMany_DB(season: 2019, minInningsPitched: 100);
+            // AddManyToGsheet(listFromDatabase);
+
+            _helpers.CompleteMethod();
+        }
+
+
+
+
+
+
+        /* --------------------------------------------------------------------- */
+        /*                                                                       */
+        /*                                                                       */
+        /*              [    SECTION 1 : Pitcher Master Report    ]              */
+        /*                                                                       */
+        /*                                                                       */
+        /* --------------------------------------------------------------------- */
+
+        // TO DO
+
+
+
+
+
+
+        /* --------------------------------------------------------------------- */
+        /*                                                                       */
+        /*                                                                       */
+        /*                  [    SECTION 2 : Pitch Values    ]                   */
+        /*                                                                       */
+        /*                                                                       */
+        /* --------------------------------------------------------------------- */
+
+
+
+
+
+
+
+
+
+        /* --------------------------------------------------------------------- */
+        /*                                                                       */
+        /*                                                                       */
+        /*                   [    SECTION 3 : wPDI & mPDI    ]                   */
+        /*                                                                       */
+        /*                                                                       */
+        /* --------------------------------------------------------------------- */
+
 
 
         // Defined by FanGraphs
@@ -85,44 +165,6 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
         private string _wPdiSheetName     = "wPDI";
         private string _wPdiSheetRange    = "A4:MN10004";
         private string _wPdiJsonGroupName = "wPDI";
-
-
-        // BaseballData/02_WRITE/FANGRAPHS/PITCHERS/
-        private string PitcherWriteDirectory
-        {
-            get => _projectDirectory.FanGraphsPitcherWriteRelativePath;
-        }
-
-
-
-        /*
-            https://127.0.0.1:5001/api/fangraphs/FgSpWpdiReport/test
-        */
-        [HttpGet("test")]
-        [ApiExplorerSettings(IgnoreApi = false)]
-        public void TestController()
-        {
-            _helpers.StartMethod();
-            _googleSheetsConnector.SetGradientConditionalFormat();
-        }
-
-
-        /*
-            https://127.0.0.1:5001/api/fangraphs/FgSpWpdiReport/async
-        */
-        [HttpGet("async")]
-        [ApiExplorerSettings(IgnoreApi = false)]
-        public async Task TestControllerAsync()
-        {
-            _helpers.StartMethod();
-
-            await RunFgSpWpdiReport(2019, minInningsPitched_:1);
-            // var listFromDatabase = GetMany_DB(season: 2019, minInningsPitched: 100);
-            // AddManyToGsheet(listFromDatabase);
-
-            _helpers.CompleteMethod();
-        }
-
 
 
 
@@ -988,5 +1030,18 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
             }
 
         #endregion PRINTING PRESS ------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }

@@ -1,4 +1,3 @@
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
 using CsvHelper.Configuration;
 using BaseballScraper.Infrastructure;
 using System.ComponentModel.DataAnnotations;
@@ -6,69 +5,148 @@ using System;
 using BaseballScraper.Models.Player;
 using System.ComponentModel.DataAnnotations.Schema;
 
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Models.FanGraphs
 {
-
     public class FanGraphsPitcher : BaseEntity
     {
-        public string RecordNumber { get; set; }
-        public string FanGraphsName { get; set; }
-        public string FanGraphsTeam { get; set; }
-        public string FanGraphsAge { get; set; }
-        public string GamesStarted { get; set; }
-        public string InningsPitched { get; set; }
-        public string TotalBattersFaced { get; set; }
-        public string Wins { get; set; }
-        public string Saves { get; set; }
-        public string Strikeouts { get; set; }
-        public string Holds { get; set; }
-        public string EarnedRunAverage { get; set; }
-        public string Whip { get; set; }
-        public string StrikeoutPercentage { get; set; }
-        public string WalkPercentage { get; set; }
-        public string StrikeoutsMinusWalks { get; set; }
-        public string StrikeoutsPerNine { get; set; }
-        public string WalksPerNine { get; set; }
-        public string StrikeoutsDividedByWalks { get; set; }
-        public string Balls { get; set; }
-        public string Strikes { get; set; }
-        public string Pitches { get; set; }
-        public string HomeRunsPerNine { get; set; }
-        public string GroundBallPercentage { get; set; }
-        public string LineDrivePercentage { get; set; }
-        public string FlyBallPercentage { get; set; }
-        public string InfieldFlyBallPercentage { get; set; }
-        public string OSwingPercentage { get; set; }
-        public string OSwingPercentagePitchFx { get; set; }
-        public string OSwingPercentagePitchInfo { get; set; }
-        public string ZContactPercentage { get; set; }
-        public string ZContactPercentagePitchFx { get; set; }
+        public string RecordNumber                { get; set; }
+        public string FanGraphsName               { get; set; }
+        public string FanGraphsTeam               { get; set; }
+        public string FanGraphsAge                { get; set; }
+        public string GamesStarted                { get; set; }
+        public string InningsPitched              { get; set; }
+        public string TotalBattersFaced           { get; set; }
+        public string Wins                        { get; set; }
+        public string Saves                       { get; set; }
+        public string Strikeouts                  { get; set; }
+        public string Holds                       { get; set; }
+        public string EarnedRunAverage            { get; set; }
+        public string Whip                        { get; set; }
+        public string StrikeoutPercentage         { get; set; }
+        public string WalkPercentage              { get; set; }
+        public string StrikeoutsMinusWalks        { get; set; }
+        public string StrikeoutsPerNine           { get; set; }
+        public string WalksPerNine                { get; set; }
+        public string StrikeoutsDividedByWalks    { get; set; }
+        public string Balls                       { get; set; }
+        public string Strikes                     { get; set; }
+        public string Pitches                     { get; set; }
+        public string HomeRunsPerNine             { get; set; }
+        public string GroundBallPercentage        { get; set; }
+        public string LineDrivePercentage         { get; set; }
+        public string FlyBallPercentage           { get; set; }
+        public string InfieldFlyBallPercentage    { get; set; }
+        public string OSwingPercentage            { get; set; }
+        public string OSwingPercentagePitchFx     { get; set; }
+        public string OSwingPercentagePitchInfo   { get; set; }
+        public string ZContactPercentage          { get; set; }
+        public string ZContactPercentagePitchFx   { get; set; }
         public string ZContactPercentagePitchInfo { get; set; }
-        public string ContactPercentage { get; set; }
-        public string ContactPercentagePitchFx { get; set; }
-        public string ContactPercentagePitchInfo { get; set; }
-        public string ZonePercentage { get; set; }
-        public string ZonePercentagePitchFx { get; set; }
-        public string ZonePercentagePitchInfo { get; set; }
-        public string FStrikePercentage { get; set; }
-        public string SwingingStrikePercentage { get; set; }
-        public string PullPercentage { get; set; }
-        public string SoftPercentage { get; set; }
-        public string sHardPercentage { get; set; }
-        public string Babip { get; set; }
-        public string LeftOnBasePercentage { get; set; }
-        public string HomeRunsDividedByFlyBalls { get; set; }
-        public string FastballVelocityPitchFx { get; set; }
-        public string EarnedRunAverageRepeat { get; set; }
-        public string EarnedRunAverageMinus { get; set; }
-        public string Fip { get; set; }
-        public string FipMinus { get; set; }
-        public string EarnedRunAverageMinusFip { get; set; }
-        public string XFip { get; set; }
-        public string XFipMinus { get; set; }
-        public string Siera { get; set; }
-        public string RunsPerNine { get; set; }
+        public string ContactPercentage           { get; set; }
+        public string ContactPercentagePitchFx    { get; set; }
+        public string ContactPercentagePitchInfo  { get; set; }
+        public string ZonePercentage              { get; set; }
+        public string ZonePercentagePitchFx       { get; set; }
+        public string ZonePercentagePitchInfo     { get; set; }
+        public string FStrikePercentage           { get; set; }
+        public string SwingingStrikePercentage    { get; set; }
+        public string PullPercentage              { get; set; }
+        public string SoftPercentage              { get; set; }
+        public string sHardPercentage             { get; set; }
+        public string Babip                       { get; set; }
+        public string LeftOnBasePercentage        { get; set; }
+        public string HomeRunsDividedByFlyBalls   { get; set; }
+        public string FastballVelocityPitchFx     { get; set; }
+        public string EarnedRunAverageRepeat      { get; set; }
+        public string EarnedRunAverageMinus       { get; set; }
+        public string Fip                         { get; set; }
+        public string FipMinus                    { get; set; }
+        public string EarnedRunAverageMinusFip    { get; set; }
+        public string XFip                        { get; set; }
+        public string XFipMinus                   { get; set; }
+        public string Siera                       { get; set; }
+        public string RunsPerNine                 { get; set; }
 
+    }
+
+
+    public class FanGraphsPitcherPitchValues : IBaseEntity
+    {
+        public DateTime DateCreated { get; set; }  // from IBaseEntity interface
+        public DateTime DateUpdated { get; set; }  // from IBaseEntity interface
+
+        public int FanGraphsId    { get; set; }
+        public string PitcherName { get; set; }
+        public string TeamName    { get; set; }
+
+
+        public double? wFB { get; set; }
+        public double? wSL { get; set; }
+        public double? wCT { get; set; }
+        public double? wCB { get; set; }
+        public double? wCH { get; set; }
+        public double? wSF { get; set; }
+        public double? wKN { get; set; }
+
+        public double? wFB_C { get; set; }
+        public double? wSL_C { get; set; }
+        public double? wCT_C { get; set; }
+        public double? wCB_C { get; set; }
+        public double? wCH_C { get; set; }
+        public double? wSF_C { get; set; }
+        public double? wKN_C { get; set; }
+    }
+
+    public class FanGraphsPitcherPitchFxPitchValues : IBaseEntity
+    {
+        public DateTime DateCreated { get; set; }  // from IBaseEntity interface
+        public DateTime DateUpdated { get; set; }  // from IBaseEntity interface
+
+        public int FanGraphsId    { get; set; }
+        public string PitcherName { get; set; }
+        public string TeamName    { get; set; }
+        public int InningsPitched { get; set; }
+
+        public double? wFA { get; set; }
+        public double? wFT { get; set; }
+        public double? wFC { get; set; }
+        public double? wFS { get; set; }
+        public double? wFO { get; set; }
+        public double? wSI { get; set; }
+        public double? wSL { get; set; }
+        public double? wCU { get; set; }
+        public double? wKC { get; set; }
+        public double? wEP { get; set; }
+        public double? wCH { get; set; }
+        public double? wSC { get; set; }
+        public double? wKN { get; set; }
+    }
+
+
+    public class FanGraphsPitcherPitchFxPitchValues100 : IBaseEntity
+    {
+        public DateTime DateCreated { get; set; }  // from IBaseEntity interface
+        public DateTime DateUpdated { get; set; }  // from IBaseEntity interface
+
+        public int FanGraphsId    { get; set; }
+        public string PitcherName { get; set; }
+        public string TeamName    { get; set; }
+        public int InningsPitched { get; set; }
+
+        public double? wFA_C { get; set; }
+        public double? wFT_C { get; set; }
+        public double? wFC_C { get; set; }
+        public double? wFS_C { get; set; }
+        public double? wFO_C { get; set; }
+        public double? wSI_C { get; set; }
+        public double? wSL_C { get; set; }
+        public double? wCU_C { get; set; }
+        public double? wKC_C { get; set; }
+        public double? wEP_C { get; set; }
+        public double? wCH_C { get; set; }
+        public double? wSC_C { get; set; }
+        public double? wKN_C { get; set; }
     }
 
 

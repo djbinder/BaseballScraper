@@ -12,7 +12,7 @@ using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 
 
-#pragma warning disable CS1998, CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE1006
+#pragma warning disable CS1998, CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0063, IDE0066, IDE1006
 namespace BaseballScraper.Infrastructure
 {
 

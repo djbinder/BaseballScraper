@@ -115,6 +115,7 @@ namespace BaseballScraper.Controllers
                 List<TwitterStatus> twitterStatus = CreateNewStatusListForEach(searchResponse);
 
                 PrintTwitterStatuses(twitterStatus);
+                twitterCtx.Dispose();
                 return twitterStatus;
             }
 
@@ -230,6 +231,7 @@ namespace BaseballScraper.Controllers
                         select list).ToListAsync();
 
                 PrintLinqToTwitterListInfo(linqToTwitterListItems);
+                twitterCtx.Dispose();
                 return linqToTwitterListItems;
             }
 
