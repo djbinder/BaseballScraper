@@ -75,7 +75,7 @@ namespace BaseballScraper.Infrastructure
                 ExcelDocument document = new ExcelDocument
                 {
                     // document.UserName = "dan";
-                    CodePage = CultureInfo.CurrentCulture.TextInfo.ANSICodePage
+                    CodePage = CultureInfo.CurrentCulture.TextInfo.ANSICodePage,
                 };
 
                 string thisFilesName = $"{fileName}.xls";
@@ -109,7 +109,7 @@ namespace BaseballScraper.Infrastructure
             }
 
 
-            // TODO: the class/model type (FanGraphsPitcher) is defined within the method. This needs to be passed as an argument
+            // TO-DO: the class/model type (FanGraphsPitcher) is defined within the method. This needs to be passed as an argument
             /// <summary> OPTION 2 --> Create and save a new Excel (xlsx) file </summary>
             /// <remarks> File Type: XLSX </remarks>
             /// <param name="fileName"> The name of the new Excel document that you want to create </param>
@@ -139,7 +139,7 @@ namespace BaseballScraper.Infrastructure
             {
                 string targetWorkbook = "";
 
-                if(fileName.Contains("xlsx"))
+                if(fileName.Contains("xlsx", StringComparison.Ordinal))
                 {
                     Console.WriteLine("file name entered WITH xlsx appended");
                     targetWorkbook = fileName;
@@ -189,7 +189,7 @@ namespace BaseballScraper.Infrastructure
 
 
             // STATUS: this does NOT work
-            // TODO: make this work?
+            // TO-DO: make this work?
             public void GetAllWorkbookSheets(string fileName)
             {
                 RegisterProviderToStart();
@@ -250,7 +250,7 @@ namespace BaseballScraper.Infrastructure
         #region ROWS / RECORDS ------------------------------------------------------------
 
             // STATUS: in progress
-            // TODO: the class/model type (FanGraphsHitter) is defined within the method. This needs to be passed as an argument
+            // TO-DO: the class/model type (FanGraphsHitter) is defined within the method. This needs to be passed as an argument
             /// <summary> Add a new row / record to a sheet in an existing xlsx </summary>
             /// <param name="fileName"> The name of the file you are targeting </param>
             /// <param name="sheetName"> The name of the tab / sheet you are targeting </param>
@@ -386,7 +386,7 @@ namespace BaseballScraper.Infrastructure
             }
 
 
-            // STATUS: // TODO: neither option accounts for bold, italic etc. that can be added as third parameter to new Font()
+            // STATUS: // TO-DO: neither option accounts for bold, italic etc. that can be added as third parameter to new Font()
             /// <summary> OPTION 1 --> Set font of a target cell </summary>
             public void SetFont(ExcelDocument document, int rowNumber, string columnLetter,  string fontName, int fontSize)
             {
@@ -395,7 +395,7 @@ namespace BaseballScraper.Infrastructure
             }
 
 
-            // STATUS: // TODO: neither option accounts for bold, italic etc. that can be added as third parameter to new Font()
+            // STATUS: // TO-DO: neither option accounts for bold, italic etc. that can be added as third parameter to new Font()
             /// <summary> OPTION 2 --> Set font of a target cell </summary>
             public void SetFont(ExcelDocument document, int rowNumber, int columnNumber, string fontName, int fontSize)
             {

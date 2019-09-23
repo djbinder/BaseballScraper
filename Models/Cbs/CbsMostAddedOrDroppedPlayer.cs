@@ -1,6 +1,6 @@
 ﻿// https://www.cbssports.com/fantasy/baseball/trends/added/all
 
-
+#pragma warning disable MA0048
 namespace BaseballScraper.Models.Cbs
 {
     public class CbsRosterTrendPlayer

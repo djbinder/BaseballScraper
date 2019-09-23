@@ -16,7 +16,7 @@
     <!-- NU1701: Package XYZ may not be fully compatible with your project. -->
     <!-- MSB3276: Found conflicts between different versions of the same dependent assembly. -->
     <NoWarn>$(NoWarn);1591</NoWarn>
-    <NoWarn>CS1591, NU1701, MSB3276</NoWarn>
+    <NoWarn>CA1303, CS1591, NU1701, MSB3276</NoWarn>
 
   </PropertyGroup>
 
@@ -28,15 +28,17 @@
 
   <ItemGroup>
 
-    <!-- https://github.com/borisdj/EFCore.BulkExtensions -->
+    <!-- See : https://github.com/borisdj/EFCore.BulkExtensions -->
     <PackageReference Include="EFCore.BulkExtensions" Version="2.6.0" />
 
-    <!-- https://www.app-metrics.io/getting-started/ -->
+    <!-- See : https://www.app-metrics.io/getting-started/ -->
     <PackageReference Include="App.Metrics.Reporting.Console" Version="3.1.0" />
+    <PackageReference Include="HotChocolate" Version="10.1.0" />
+    <PackageReference Include="HotChocolate.AspNetCore" Version="10.1.0" />
+    
 
-    <!-- https://miniprofiler.com/ -->
+    <!-- See : https://miniprofiler.com/ -->
     <PackageReference Include="MiniProfiler" Version="4.0.180" />
-
 
 
     <!-- APIs - General -->
@@ -46,11 +48,51 @@
 
 
     <!-- C# - Other -->
-    <!-- http://bit.ly/2zJUKc0 -->
+    <!-- See : http://bit.ly/2zJUKc0 -->
     <PackageReference Include="SharpPad" Version="1.0.4" />
     <PackageReference Include="SharpPad.Template" Version="1.0.3" />
-    <!-- http://bit.ly/2ZCryT8,  http://bit.ly/2PwHgv0 -->
+    <!-- See : http://bit.ly/2ZCryT8,  http://bit.ly/2PwHgv0 -->
     <PackageReference Include="CsharpMacros" Version="2.0.31" />
+
+
+
+
+    <!-- Code Analyzers -->
+    <PackageReference Include="Meziantou.Analyzer" Version="1.0.232" />
+
+    <!-- See : https://github.com/dotnet/roslyn-analyzers/blob/master/src/Microsoft.CodeAnalysis.Analyzers/Microsoft.CodeAnalysis.Analyzers.md -->
+    <!-- <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="2.9.4">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference> -->
+
+
+    <!-- See : https://github.com/dotnet/roslyn-analyzers/blob/master/src/Microsoft.CodeQuality.Analyzers/Microsoft.CodeQuality.Analyzers.md -->
+    <!-- <PackageReference Include="Microsoft.CodeQuality.Analyzers" Version="2.9.4">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference> -->
+
+
+    <!-- See: https://github.com/dotnet/roslyn-analyzers/blob/master/src/Microsoft.NetCore.Analyzers/Microsoft.NetCore.Analyzers.md -->
+    <!-- <PackageReference Include="Microsoft.NetCore.Analyzers" Version="2.9.4">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference> -->
+
+    <!-- <PackageReference Include="FluentValidation" Version="8.4.0" />
+
+    <PackageReference Include="codecracker.CSharp" Version="1.1.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="7.16.0.8981">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference> -->
+
+
 
 
 

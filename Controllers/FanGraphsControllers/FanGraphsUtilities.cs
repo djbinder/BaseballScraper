@@ -1,16 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using BaseballScraper.EndPoints;
 using BaseballScraper.Infrastructure;
-using BaseballScraper.Models;
-using BaseballScraper.Models.FanGraphs;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Linq;
 using C = System.Console;
 
 
@@ -68,7 +60,7 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
 
             foreach(FileInfo file in fileInfo)
             {
-                if(file.Name == fileName)
+                if(string.Equals(file.Name, fileName, StringComparison.Ordinal))
                     doesCsvReportExistForToday = true;
             }
             return doesCsvReportExistForToday;
@@ -85,7 +77,7 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
             _helpers.OpenMethod(3);
 
             string csvSelector = _endPoints.FanGraphsCsvHtmlSelector();
-            await _csvHandler.ClickLinkToDownloadCsvFile(endPoint, csvSelector);
+            await _csvHandler.ClickLinkToDownloadCsvFile(endPoint, csvSelector).ConfigureAwait(false);
         }
 
 

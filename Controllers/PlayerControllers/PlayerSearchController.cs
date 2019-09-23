@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using BaseballScraper.Controllers.AGGREGATORS;
 using BaseballScraper.Controllers.MlbDataApiControllers;
@@ -7,11 +6,9 @@ using BaseballScraper.Infrastructure;
 using BaseballScraper.Models.Player;
 using BaseballScraper.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using static BaseballScraper.Controllers.PlayerControllers.PlayerBaseController;
 using C = System.Console;
 
-#pragma warning disable CS1998, CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE1006
+#pragma warning disable CS1998, CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE1006, MA0016
 namespace BaseballScraper.Controllers.PlayerControllers
 {
     [Route("player/[controller]")]
@@ -81,7 +78,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
 
 
-        public PlayerSearchViewModel _playerSearchViewModel = new PlayerSearchViewModel();
+        private PlayerSearchViewModel _playerSearchViewModel = new PlayerSearchViewModel();
 
 
         // STATUS [ July 24, 2019 ]: DOES NOT WORK; ISSUES WITH THE HTML
@@ -197,7 +194,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
             PlayerSeasons.ForEach((season) => C.WriteLine($"season: {season}"));
         }
 
-        public void PrintPlayerInfo(string playerFullName)
+        private void PrintPlayerInfo(string playerFullName)
         {
             C.WriteLine($"SEARCHING FOR: {playerFullName}");
         }

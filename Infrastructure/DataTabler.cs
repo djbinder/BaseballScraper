@@ -3,13 +3,14 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Reflection;
 using BaseballScraper.Models;
 
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006, MA0016
 namespace BaseballScraper.Infrastructure
 {
     public class DataTabler
@@ -150,7 +151,7 @@ namespace BaseballScraper.Infrastructure
                 {
                     column = new DataColumn
                     {
-                        ColumnName = $"COL {i.ToString()}"
+                        ColumnName = $"COL {i.ToString(CultureInfo.InvariantCulture)}",
                     };
                     dataTable.Columns.Add(column);
                 }
@@ -288,7 +289,7 @@ namespace BaseballScraper.Infrastructure
                         if (col.DataType.Equals (typeof (DateTime)))
                             Console.Write ("{0,-30:d}", row[col]);
 
-                        else if (col.DataType.Equals (typeof (Decimal)))
+                        else if (col.DataType.Equals (typeof (decimal)))
                             Console.Write ("{0,-30:C}", row[col]);
 
                         else
@@ -305,65 +306,3 @@ namespace BaseballScraper.Infrastructure
     }
 }
 
-
-
-
-
-// Console.WriteLine($"newDataTable.Columns.Count: {newDataTable.Columns.Count}");
-
-// var       newDataTableColumns = CreateListOfModelProperties();
-
-// SetDataTableColumnHeaders(newDataTableColumns, newDataTable);
-
-// foreach(var column in newDataTableColumns)
-// {
-//     InsertDataRowIntoTable(newDataTable, column, "100");
-//     // InsertDataRowIntoTable(newDataTable, column , "100");
-// }
-// PrintTable(newDataTable);
-
-
-            // STATUS:
-            // TODO: need to be able to pass a model in as a parameter; it's currently hardcoded into the function
-            // / <summary>
-            // /     Given a model / class, get the properties of that model
-            // / </summary>
-            // / <returns>
-            // /     Model properties for a given class (e.g, FanGraphsPitcher)
-            // / </returns>
-            // public PropertyInfo[] GetModelProperties()
-            // {
-            //     TheGameIsTheGameCategories model = new TheGameIsTheGameCategories();
-
-            //     Type         modelType          = model.GetType();
-            //     PropertyInfo [] modelProperties = modelType.GetProperties();
-            //     return modelProperties;
-            // }
-
-
-
-
-            // OPTION 1
-            // STATUS:
-            // TODO: need to be able to pass a model in as a parameter to the GetModelProperties() function within the method
-            // / <summary>
-            // /     Given a model / class, create a list(string) of the models property names (e.g, Wins)
-            // / </summary>
-            // / <returns>
-            // /     A list of property names
-            // / </returns>
-            // public List<string> CreateListOfModelProperties()
-            // {
-            //     PropertyInfo [] modelProperties           = GetModelProperties();
-            //     List         <String> modelPropertiesList = new List<string>();
-
-            //     int headerCount = 1;
-            //     foreach(var prop in modelProperties)
-            //     {
-            //         // Console.WriteLine($"Header {headerCount}: {prop.Name}");
-            //         modelPropertiesList.Add(prop.Name);
-            //         headerCount++;
-            //     }
-            //     Console.WriteLine($"Final list item count: {modelPropertiesList.Count}");
-            //     return modelPropertiesList;
-            // }

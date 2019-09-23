@@ -14,7 +14,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE0063, IDE1006
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE0063, IDE1006, MA0016, MA0045
 namespace BaseballScraper.Infrastructure
 {
     // https://medium.com/@williamchislett/writing-to-google-sheets-api-using-net-and-a-services-account-91ee7e4a291
@@ -130,7 +130,7 @@ namespace BaseballScraper.Infrastructure
                 _sheetsService = new SheetsService(new BaseClientService.Initializer()
                 {
                     // Type is Google.Apis.Auth.OAuth2.GoogleCredential+ServiceAccountGoogleCredential
-                    HttpClientInitializer = credential, ApplicationName = _applicationName
+                    HttpClientInitializer = credential, ApplicationName = _applicationName,
                 });
 
                 // PRINTERS
@@ -243,7 +243,7 @@ namespace BaseballScraper.Infrastructure
                 List<ValueRange> updateData          = CreateValueRangeList(dataValueRange);
                 BatchUpdateValuesRequest requestBody = CreateBatchUpdateValuesRequest(_userEnteredValueInputOption, updateData);
                 BatchUpdateRequest request           = CreateBatchUpdateRequest(requestBody, _spreadSheetId);
-                BatchUpdateValuesResponse response   = await CreateBatchUpdateValuesResponseAsync(request);
+                BatchUpdateValuesResponse response   = await CreateBatchUpdateValuesResponseAsync(request).ConfigureAwait(false);
 
                 // PRINTERS
                 // PrintRequestBodyData(requestBody);
@@ -294,7 +294,7 @@ namespace BaseballScraper.Infrastructure
                 List<ValueRange> updateData          = CreateValueRangeList(dataValueRange);
                 BatchUpdateValuesRequest requestBody = CreateBatchUpdateValuesRequest(_userEnteredValueInputOption, updateData);
                 BatchUpdateRequest request           = CreateBatchUpdateRequest(requestBody, _spreadSheetId);
-                BatchUpdateValuesResponse response   = await CreateBatchUpdateValuesResponseAsync(request);
+                BatchUpdateValuesResponse response   = await CreateBatchUpdateValuesResponseAsync(request).ConfigureAwait(false);
 
                 // PRINTERS
                 // PrintRequestBodyData(requestBody);
@@ -415,7 +415,7 @@ namespace BaseballScraper.Infrastructure
                 {
                     MajorDimension = majorDimension,
                     Range          = $"{sheetName}!{range}",
-                    Values         = data
+                    Values         = data,
                 };
                 return dataValueRange;
             }
@@ -431,7 +431,7 @@ namespace BaseballScraper.Infrastructure
                 List<ValueRange> updateData = new List<ValueRange>
                 {
                     // add "dataValueRange" to List<ValueRange> updateData
-                    dataValueRange
+                    dataValueRange,
                 };
                 return updateData;
             }
@@ -451,7 +451,7 @@ namespace BaseballScraper.Infrastructure
                 BatchUpdateValuesRequest requestBody = new BatchUpdateValuesRequest
                 {
                     ValueInputOption = valueInputOption,
-                    Data             = updateData
+                    Data             = updateData,
                 };
                 return requestBody;
             }
@@ -494,7 +494,7 @@ namespace BaseballScraper.Infrastructure
             //  * See: https://bit.ly/2ZG0VJq
             private async Task<BatchUpdateValuesResponse> CreateBatchUpdateValuesResponseAsync(BatchUpdateRequest request)
             {
-                BatchUpdateValuesResponse response = await request.ExecuteAsync();
+                BatchUpdateValuesResponse response = await request.ExecuteAsync().ConfigureAwait(false);
                 return response;
             }
 
@@ -568,8 +568,8 @@ namespace BaseballScraper.Infrastructure
                     Minpoint = new InterpolationPoint()
                     {
                         Color = SelectColor(ColorEnum.Red),
-                        Type = "MIN"
-                    }
+                        Type = "MIN",
+                    },
                 };
 
                 conditionalFormatRule.GradientRule = gradientRule;
@@ -651,7 +651,7 @@ namespace BaseballScraper.Infrastructure
 
                 CellFormat cellFormat = SetCellFormat
                 (
-                    ColorEnum.Black, "Arial", true, 10, ColorEnum.White
+                    ColorEnum.Black, "Arial", isCellBolded: true, 10, ColorEnum.White
                 );
 
                 headerRowNumber -= 1;
@@ -682,7 +682,7 @@ namespace BaseballScraper.Infrastructure
             {
                 _spreadSheetId          = SelectGoogleSheetToRead(jsonGroupName, "SpreadsheetId");
                 Spreadsheet spreadSheet = service.Spreadsheets.Get(_spreadSheetId).Execute();
-                Sheet thisSheet         = spreadSheet.Sheets.Where(s => s.Properties.Title == jsonGroupName).FirstOrDefault();
+                Sheet thisSheet         = spreadSheet.Sheets.FirstOrDefault(s => string.Equals(s.Properties.Title, jsonGroupName, StringComparison.Ordinal));
                 int sheetGId            = (int)thisSheet.Properties.SheetId;
                 return sheetGId;
             }
@@ -715,7 +715,7 @@ namespace BaseballScraper.Infrastructure
                     Bold       = isCellBolded,
                     FontFamily = fontFamily,
                     FontSize   = fontSize,
-                    ForegroundColor = SelectColor(colorEnum)
+                    ForegroundColor = SelectColor(colorEnum),
                 };
                 return TextFormat;
             }
@@ -740,10 +740,10 @@ namespace BaseballScraper.Infrastructure
 
                         Cell = new CellData()
                         {
-                            UserEnteredFormat = cellFormat
+                            UserEnteredFormat = cellFormat,
                         },
-                        Fields = "UserEnteredFormat(BackgroundColor,TextFormat)"
-                    }
+                        Fields = "UserEnteredFormat(BackgroundColor,TextFormat)",
+                    },
                 };
                 return updateCellsRequest;
             }
@@ -759,7 +759,7 @@ namespace BaseballScraper.Infrastructure
                     StartColumnIndex = startColumnIndex,
                     EndColumnIndex   = endColumnIndex,
                     StartRowIndex    = startRowIndex,
-                    EndRowIndex      = endRowIndex
+                    EndRowIndex      = endRowIndex,
                 };
                 return Range;
             }
@@ -773,8 +773,8 @@ namespace BaseballScraper.Infrastructure
                 {
                     Requests = new List<Request>
                     {
-                        updateCellsRequest
-                    }
+                        updateCellsRequest,
+                    },
                 };
 
                 SpreadsheetsResource.BatchUpdateRequest batchUpdateRequest = service.Spreadsheets.BatchUpdate(
@@ -936,6 +936,7 @@ namespace BaseballScraper.Infrastructure
             {
                 C.WriteLine();
                 _helpers.Spotlight("UPDATE OUTCOMES");
+                
                 C.WriteLine("-------------------------------------------------------");
                 C.WriteLine($"SPREADSHEET ID:         | {response.SpreadsheetId}");
                 C.WriteLine($"# of SHEETS updated:    | {response.TotalUpdatedSheets}");

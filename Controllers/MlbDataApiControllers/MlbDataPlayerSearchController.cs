@@ -10,7 +10,7 @@ using System.Linq;
 using System.Collections.Generic;
 
 
-#pragma warning disable CS0414, CS0219, IDE0051, IDE0059, CS1591, IDE0052
+#pragma warning disable CS0414, CS0219, IDE0051, IDE0059, CS1591, IDE0052, MA0016
 namespace BaseballScraper.Controllers.MlbDataApiControllers
 {
 

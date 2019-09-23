@@ -5,13 +5,13 @@ using BaseballScraper.EndPoints;
 using BaseballScraper.Infrastructure;
 using BaseballScraper.Models.Player;
 using BaseballScraper.Models.Yahoo;
-using BaseballScraper.Models.Yahoo.Resources.YahooPlayerResource;
+using BaseballScraper.Models.Yahoo.Resources;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006, MA0016
 namespace BaseballScraper.Controllers.YahooControllers.Resources
 {
     [Route("api/yahoo/[controller]")]
@@ -19,11 +19,11 @@ namespace BaseballScraper.Controllers.YahooControllers.Resources
     [ApiExplorerSettings(IgnoreApi = true)]
     public class YahooPlayerResourceController: ControllerBase
     {
-        private readonly Helpers _helpers;
-        private readonly YahooApiEndPoints _endPoints;
+        private readonly Helpers                 _helpers;
+        private readonly YahooApiEndPoints       _endPoints;
         private static YahooApiRequestController _yahooApiRequestController;
-        private readonly YahooAuthController _yahooAuthController = new YahooAuthController();
-        private readonly PlayerBaseController _playerBaseController;
+        private readonly YahooAuthController     _yahooAuthController = new YahooAuthController();
+        private readonly PlayerBaseController    _playerBaseController;
         private readonly PlayerBaseController.PlayerBaseFromExcel _playerBaseFromExcel = new PlayerBaseController.PlayerBaseFromExcel();
 
 

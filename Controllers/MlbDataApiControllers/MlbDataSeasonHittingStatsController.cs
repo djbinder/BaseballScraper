@@ -7,6 +7,7 @@ using RestSharp;
 using static BaseballScraper.Infrastructure.PostmanMethods;
 using static BaseballScraper.EndPoints.MlbDataApiEndPoints;
 using C = System.Console;
+using System.Globalization;
 
 #pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Controllers.MlbDataApiControllers
@@ -53,7 +54,7 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
         // http://lookup-service-prod.mlb.com/json/named.sport_hitting_tm.bam?league_list_id='mlb'&game_type='R'&season='2017'&player_id='592789'
         public HitterSeasonStats CreateHitterSeasonStatsInstance (string year, int playerId)
         {
-            MlbDataEndPoint newEndPoint     = _endPoints.HitterSeasonEndPoint("R",year, playerId.ToString());
+            MlbDataEndPoint newEndPoint     = _endPoints.HitterSeasonEndPoint("R",year, playerId.ToString(CultureInfo.InvariantCulture));
             PostmanRequest postmanRequest   = _postman.CreatePostmanRequest(newEndPoint, "HitterSeasonStats");
             PostmanResponse postmanResponse = _postman.GetPostmanResponse(postmanRequest);
             IRestResponse response          = postmanResponse.Response;

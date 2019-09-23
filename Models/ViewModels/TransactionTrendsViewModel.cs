@@ -3,12 +3,21 @@ using BaseballScraper.Models.Cbs;
 using BaseballScraper.Models.Espn;
 using BaseballScraper.Models.Yahoo;
 
+#pragma warning disable MA0016
 namespace BaseballScraper.Models.ViewModels
 {
     public class TransactionTrendsViewModel
     {
-        public List<CbsMostAddedOrDroppedPlayer> CbsPlayers { get; set; } = new List<CbsMostAddedOrDroppedPlayer>();
-        public List<YahooTransactionTrendsPlayer> YahooPlayers { get; set; } = new List<YahooTransactionTrendsPlayer>();
-        public List<EspnTransactionTrendPlayer> EspnPlayers { get; set; } = new List<EspnTransactionTrendPlayer>();
+        public List<CbsMostAddedOrDroppedPlayer> CbsPlayers { get; set; } 
+        public List<YahooTransactionTrendsPlayer> YahooPlayers { get; set; }
+        public List<EspnTransactionTrendPlayer> EspnPlayers { get; set; } 
+
+
+        public TransactionTrendsViewModel()
+        {
+            CbsPlayers = new List<CbsMostAddedOrDroppedPlayer>();
+            YahooPlayers  = new List<YahooTransactionTrendsPlayer>();
+            EspnPlayers = new List<EspnTransactionTrendPlayer>();
+        }
     }
 }

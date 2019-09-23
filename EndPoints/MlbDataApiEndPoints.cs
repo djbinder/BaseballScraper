@@ -5,7 +5,7 @@ namespace BaseballScraper.EndPoints
         private readonly string baseUri         = $"http://lookup-service-prod.mlb.com/json/named.";
         private readonly string baseUriStatsApi = $"https://statsapi.mlb.com/api/";
 
-        public string endPointType     = "";
+        private string endPointType     = "";
 
         public class MlbDataEndPoint
         {
@@ -24,7 +24,7 @@ namespace BaseballScraper.EndPoints
             return new MlbDataEndPoint
             {
                 BaseUri  = baseUri,
-                EndPoint = $"{endPointType}.bam?sport_code='mlb'&active_sw='Y'&name_part='{lastName}%25'"
+                EndPoint = $"{endPointType}.bam?sport_code='mlb'&active_sw='Y'&name_part='{lastName}%25'",
             };
         }
 
@@ -46,7 +46,7 @@ namespace BaseballScraper.EndPoints
             return new MlbDataEndPoint
             {
                 BaseUri  = baseUri,
-                EndPoint = $"{endPointType}.bam?sport_code='mlb'&active_sw='{activeStatus}'&name_part='{lastName}%25'"
+                EndPoint = $"{endPointType}.bam?sport_code='mlb'&active_sw='{activeStatus}'&name_part='{lastName}%25'",
             };
         }
 
@@ -60,7 +60,7 @@ namespace BaseballScraper.EndPoints
             return new MlbDataEndPoint
             {
                 BaseUri  = baseUri,
-                EndPoint = $"{endPointType}.bam?sport_code='mlb'&player_id='{playerId}'"
+                EndPoint = $"{endPointType}.bam?sport_code='mlb'&player_id='{playerId}'",
             };
         }
 
@@ -74,7 +74,7 @@ namespace BaseballScraper.EndPoints
             return new MlbDataEndPoint
             {
                 BaseUri  = baseUri,
-                EndPoint = $"{endPointType}.bam?season={year}&player_id={playerId}"
+                EndPoint = $"{endPointType}.bam?season={year}&player_id={playerId}",
             };
         }
 
@@ -88,7 +88,7 @@ namespace BaseballScraper.EndPoints
             return new MlbDataEndPoint
             {
                 BaseUri  = baseUri,
-                EndPoint = $"{endPointType}.bam?season={year}&player_id={playerId}"
+                EndPoint = $"{endPointType}.bam?season={year}&player_id={playerId}",
             };
         }
 
@@ -118,7 +118,7 @@ namespace BaseballScraper.EndPoints
             return new MlbDataEndPoint
             {
                 BaseUri  = baseUri,
-                EndPoint = $"{endPointType}.bam?sport_code='mlb'&results={results}&game_type='R'&season='{year}'&sort_column='{sortColumn}'"
+                EndPoint = $"{endPointType}.bam?sport_code='mlb'&results={results}&game_type='R'&season='{year}'&sort_column='{sortColumn}'",
             };
         }
 
@@ -163,7 +163,7 @@ namespace BaseballScraper.EndPoints
             return new MlbDataEndPoint
             {
                 BaseUri  = baseUri,
-                EndPoint = $"{endPointType}.bam?sport_code='mlb'&results={results}&game_type='{gameType}'&season='{year}'&sort_column='{sortColumn}'"
+                EndPoint = $"{endPointType}.bam?sport_code='mlb'&results={results}&game_type='{gameType}'&season='{year}'&sort_column='{sortColumn}'",
             };
         }
 
@@ -193,7 +193,7 @@ namespace BaseballScraper.EndPoints
             return new MlbDataEndPoint
             {
                 BaseUri  = baseUri,
-                EndPoint = $"{endPointType}.bam?sport_code='mlb'&results={results}&game_type='R'&season='{year}'&sort_column='{sortColumn}'"
+                EndPoint = $"{endPointType}.bam?sport_code='mlb'&results={results}&game_type='R'&season='{year}'&sort_column='{sortColumn}'",
             };
         }
 
@@ -238,7 +238,7 @@ namespace BaseballScraper.EndPoints
             return new MlbDataEndPoint
             {
                 BaseUri  = baseUri,
-                EndPoint = $"{endPointType}.bam?sport_code='mlb'&results={results}&game_type='{gameType}'&season='{year}'&sort_column='{sortColumn}'"
+                EndPoint = $"{endPointType}.bam?sport_code='mlb'&results={results}&game_type='{gameType}'&season='{year}'&sort_column='{sortColumn}'",
             };
         }
 
@@ -253,7 +253,7 @@ namespace BaseballScraper.EndPoints
             return new MlbDataEndPoint
             {
                 BaseUri  = baseUri,
-                EndPoint = $"{endPointType}.bam?league_list_id='mlb'&game_type='{gameType}'&season='{year}'&player_id='{playerId}'"
+                EndPoint = $"{endPointType}.bam?league_list_id='mlb'&game_type='{gameType}'&season='{year}'&player_id='{playerId}'",
             };
         }
 
@@ -272,7 +272,7 @@ namespace BaseballScraper.EndPoints
             return new MlbDataEndPoint
             {
                 BaseUri  = baseUri,
-                EndPoint = $"{endPointType}.bam?season={season}&player_id={playerId}"
+                EndPoint = $"{endPointType}.bam?season={season}&player_id={playerId}",
             };
         }
 
@@ -284,13 +284,13 @@ namespace BaseballScraper.EndPoints
             return new MlbDataEndPoint
             {
                 BaseUri  = baseUri,
-                EndPoint = $"{endPointType}.bam?player_id={playerId}"
+                EndPoint = $"{endPointType}.bam?player_id={playerId}",
             };
         }
 
 
-        public int sportId = 1;
-        public string versionOne = "v1";
+        private readonly int sportId = 1;
+        private readonly string versionOne = "v1";
 
 
         public MlbDataEndPoint AllGamesForDateEndPoint(int monthNumber, int dayNumber, int year)
@@ -298,7 +298,7 @@ namespace BaseballScraper.EndPoints
             return new MlbDataEndPoint
             {
                 BaseUri  = baseUriStatsApi,
-                EndPoint = $"{versionOne}/schedule?sportId={sportId}&date={monthNumber}%2F{dayNumber}%2F{year}"
+                EndPoint = $"{versionOne}/schedule?sportId={sportId}&date={monthNumber}%2F{dayNumber}%2F{year}",
             };
         }
 
@@ -309,7 +309,7 @@ namespace BaseballScraper.EndPoints
             return new MlbDataEndPoint
             {
                 BaseUri  = baseUri,
-                EndPoint = $"{versionOne}/game/{gameId}/feed/live"
+                EndPoint = $"{versionOne}/game/{gameId}/feed/live",
             };
         }
     }

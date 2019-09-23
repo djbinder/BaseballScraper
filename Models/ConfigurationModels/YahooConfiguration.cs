@@ -2,6 +2,7 @@
 
 using System.Runtime.Serialization;
 
+#pragma warning disable MA0016, MA0048
 namespace BaseballScraper.Models.ConfigurationModels
 {
     [DataContract]

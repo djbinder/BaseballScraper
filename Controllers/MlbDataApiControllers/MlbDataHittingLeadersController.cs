@@ -9,7 +9,7 @@ using Newtonsoft.Json.Linq;
 using RestSharp;
 using C = System.Console;
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE1006
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE1006, MA0016
 namespace BaseballScraper.Controllers.MlbDataApiControllers
 {
 

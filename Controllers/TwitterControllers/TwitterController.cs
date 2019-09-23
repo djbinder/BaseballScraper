@@ -10,7 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 
-#pragma warning disable CS0219, CS0414, CS1998, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
+#pragma warning disable CS0219, CS0414, CS1998, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006, MA0016
 namespace BaseballScraper.Controllers
 {
     [Route("api/twitter/[controller]")]
@@ -48,8 +48,8 @@ namespace BaseballScraper.Controllers
                     ConsumerKey       = _twitterConfig.ConsumerKey,
                     ConsumerSecret    = _twitterConfig.ConsumerSecret,
                     AccessToken       = _twitterConfig.AccessToken,
-                    AccessTokenSecret = _twitterConfig.AccessTokenSecret
-                }
+                    AccessTokenSecret = _twitterConfig.AccessTokenSecret,
+                },
             };
             return auth;
         }
@@ -149,7 +149,7 @@ namespace BaseballScraper.Controllers
                         UserId         = (int)status.UserID,
                         StatusType     = (int)status.Type,
                         StatusIdString = status.StatusID,
-                        FullText       = status.ExtendedTweet.FullText
+                        FullText       = status.ExtendedTweet.FullText,
                     };
                     allStatuses.Add(twitterStatus);
                 }
@@ -172,9 +172,9 @@ namespace BaseballScraper.Controllers
             /// <example>
             ///     var twitterStatus = CreateNewStatusListFromCount(searchResponse);
             /// </example>
-            public List<TwitterStatus> CreateNewStatusListFromCount(LinqToTwitter.Search SearchResponse)
+            public List<TwitterStatus> CreateNewStatusListFromCount(Search SearchResponse)
             {
-                int searchResponseCount = SearchResponse.Statuses.Count();
+                int searchResponseCount = SearchResponse.Statuses.Count;
 
                 List<TwitterStatus> statuses = new List<TwitterStatus>();
                 for (var i = 0; i <=searchResponseCount - 1; i++)
@@ -186,7 +186,7 @@ namespace BaseballScraper.Controllers
                         UserId         = (int)SearchResponse.Statuses[i].UserID,
                         CreatedAt      = SearchResponse.Statuses[i].CreatedAt,
                         StatusIdString = SearchResponse.Statuses[i].StatusID,
-                        Text           = SearchResponse.Statuses[i].Text
+                        Text           = SearchResponse.Statuses[i].Text,
                     };
                     statuses.Add(newStatus);
                 }
@@ -252,7 +252,7 @@ namespace BaseballScraper.Controllers
             public ActionResult<TwitterStatus> AddTwitterStatusToMongoDb(TwitterStatus twitterStatus)
             {
                 _mongoDbServicer.Create(twitterStatus);
-                return CreatedAtRoute("GetTwitterStatus", new { id = twitterStatus.Id.ToString() }, twitterStatus);
+                return CreatedAtRoute("GetTwitterStatus", new { id = twitterStatus.Id }, twitterStatus);
             }
 
         #endregion MONGO DB ------------------------------------------------------------
@@ -309,7 +309,7 @@ namespace BaseballScraper.Controllers
             }
 
 
-            private void PrintLinqToTwitterUserAndLinqToTwitterSearch(LinqToTwitter.Search search)
+            private void PrintLinqToTwitterUserAndLinqToTwitterSearch(Search search)
             {
                 search.Statuses.ForEach(tweet =>
                     Console.WriteLine(

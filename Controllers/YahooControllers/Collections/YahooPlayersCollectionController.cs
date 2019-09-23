@@ -1,18 +1,18 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+// using System.Linq;
+// using System.Threading.Tasks;
 using BaseballScraper.EndPoints;
 using BaseballScraper.Infrastructure;
-using BaseballScraper.Models.Yahoo.Filters;
-using BaseballScraper.Models.Yahoo.Collections.YahooPlayersCollection;
+// using BaseballScraper.Models.Yahoo.Filters;
+using BaseballScraper.Models.Yahoo.Collections;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006, MA0016
 namespace BaseballScraper.Controllers.YahooControllers.Collections
 {
     [Route("api/yahoo/[controller]")]

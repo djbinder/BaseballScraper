@@ -2,15 +2,12 @@
 // https://app.quicktype.io/
 // https://appac.github.io/mlb-data-api-docs/#player-data-player-teams-get
 
-using System;
 using System.Collections.Generic;
-
-using System.Globalization;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using System.Runtime.Serialization;
 using BaseballScraper.Infrastructure;
 
+#pragma warning disable CA1819, MA0016, MA0048
 namespace BaseballScraper.Models.MlbDataApi
 {
     [DataContract]
@@ -235,7 +232,7 @@ namespace BaseballScraper.Models.MlbDataApi
         public int TotalSize { get; set; }
 
         [JsonProperty("row", NullValueHandling = NullValueHandling.Ignore)]
-        public List<PlayerTeam> Team { get; set; }
+        public List<PlayerTeam> Team { get; }
 
         [JsonProperty("row", NullValueHandling = NullValueHandling.Ignore)]
         public Dictionary<string, string>[] Row { get; set; }

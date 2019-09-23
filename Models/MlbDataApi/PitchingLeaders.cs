@@ -6,15 +6,12 @@
 
 using System;
 using System.Collections.Generic;
-
-using System.Globalization;
 using System.Runtime.Serialization;
 using BaseballScraper.Infrastructure;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
+#pragma warning disable CA1819, CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006, MA0048
 namespace BaseballScraper.Models.MlbDataApi
 {
     [DataContract]

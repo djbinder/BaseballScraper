@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 using System.Xml.Serialization;
-using BaseballScraper.Infrastructure;
 using Newtonsoft.Json;
 
-namespace BaseballScraper.Models.Yahoo.Resources.YahooPlayerResource
+#pragma warning disable MA0016, MA0048
+namespace BaseballScraper.Models.Yahoo.Resources
 {
     // https://developer.yahoo.com/fantasysports/guide/#player-resource
 
@@ -138,7 +136,7 @@ namespace BaseballScraper.Models.Yahoo.Resources.YahooPlayerResource
     }
 
 
-    public partial class EligiblePositions
+    public partial class PlayerResourceEligiblePositions
     {
         [XmlElement (ElementName = "position")]
         [JsonProperty("position")]

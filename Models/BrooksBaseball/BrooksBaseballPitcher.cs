@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 
+#pragma warning disable MA0016, MA0048
 namespace BaseballScraper.Models.BrooksBaseball
 {
     public class BrooksBaseballPitcher

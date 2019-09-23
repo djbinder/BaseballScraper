@@ -1,5 +1,6 @@
 using System.Runtime.Serialization;
 
+#pragma warning disable MA0048
 namespace BaseballScraper.Models.ConfigurationModels
 {
     // * These connect to 'mongoDbConfiguration.json' file in Configuration folder

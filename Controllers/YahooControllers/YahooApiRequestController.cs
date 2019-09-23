@@ -196,6 +196,7 @@ namespace BaseballScraper.Controllers.YahooControllers
                 {
                     StreamReader reader = new StreamReader(response.GetResponseStream());
                     serverResponse = reader.ReadToEnd();
+                    reader.Dispose();
                     return serverResponse;
                 }
             }
@@ -220,6 +221,7 @@ namespace BaseballScraper.Controllers.YahooControllers
                 XmlDocument doc       = new XmlDocument();
                 XmlReader   xmlReader = XmlReader.Create(new StringReader(serverResponse));
                 doc.LoadXml(serverResponse);
+                xmlReader.Dispose();
                 return doc;
             }
 

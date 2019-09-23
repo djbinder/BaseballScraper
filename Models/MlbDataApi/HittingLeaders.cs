@@ -10,6 +10,7 @@ using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using BaseballScraper.Infrastructure;
 
+#pragma warning disable CA1819, MA0048
 namespace BaseballScraper.Models.MlbDataApi
 {
     [DataContract]

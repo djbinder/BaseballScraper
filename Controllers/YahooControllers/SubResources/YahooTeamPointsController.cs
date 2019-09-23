@@ -58,10 +58,10 @@ namespace BaseballScraper.Controllers.YahooControllers
             // var teamPointsPath         = o["fantasy_content"]["team"]["team_points"];
             var teamPointsCoverageType = yTP.CoverageType = teamPointsPath["coverage_type"].ToString();
 
-            if(teamPointsCoverageType == "season")
+            if(string.Equals(teamPointsCoverageType, "season", StringComparison.Ordinal))
                 yTP.WeekOrYear = (int?)teamPointsPath["season"];
 
-            if(teamPointsCoverageType == "week")
+            if(string.Equals(teamPointsCoverageType, "week", StringComparison.Ordinal))
                 yTP.WeekOrYear = (int?)teamPointsPath["week"];
 
             yTP.Total = (int?)teamPointsPath["total"];
@@ -84,10 +84,10 @@ namespace BaseballScraper.Controllers.YahooControllers
 
             var teamPointsCoverageType = yTP.CoverageType = teamPointsPath["coverage_type"].ToString();
 
-            if(teamPointsCoverageType == "season")
+            if(string.Equals(teamPointsCoverageType, "season", StringComparison.Ordinal))
                 yTP.WeekOrYear = (int?)teamPointsPath["season"];
 
-            if(teamPointsCoverageType == "week")
+            if(string.Equals(teamPointsCoverageType, "week", StringComparison.Ordinal))
                 yTP.WeekOrYear = (int?)teamPointsPath["week"];
 
             yTP.Total = (int?)teamPointsPath["total"];

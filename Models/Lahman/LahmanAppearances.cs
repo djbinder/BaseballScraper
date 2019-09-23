@@ -2,6 +2,7 @@
 
 using CsvHelper.Configuration;
 
+#pragma warning disable MA0048
 namespace BaseballScraper.Models.Lahman
 {
     public class LahmanAppearances
@@ -29,7 +30,7 @@ namespace BaseballScraper.Models.Lahman
         public string GamesAsPinchRunner { get; set; }
     }
 
-    public class LahmanAppearancesClassMap: ClassMap<LahmanAppearances>
+    public sealed class LahmanAppearancesClassMap: ClassMap<LahmanAppearances>
     {
         public LahmanAppearancesClassMap()
         {

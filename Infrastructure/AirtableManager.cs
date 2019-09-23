@@ -11,7 +11,7 @@ using C = System.Console;
 
 
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE0063, IDE1006
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE0063, IDE1006, MA0016
 namespace BaseballScraper.Infrastructure
 {
     public class AirtableManager
@@ -110,7 +110,7 @@ namespace BaseballScraper.Infrastructure
         string _testAuthorIdString     = "recZmhlaw6k4Vfzwz";
         string _authorFieldName        = "Author";
         string _datePublishedFieldName = "Publish Date";
-        public List<string> testFields = new List<string> { "Title", "Record_Id" };
+        private List<string> testFields = new List<string> { "Title", "Record_Id" };
 
 
 
@@ -150,7 +150,7 @@ namespace BaseballScraper.Infrastructure
                         tableName: tableName
                     );
 
-                    AirtableListRecordsResponse airResponse = await task;
+                    AirtableListRecordsResponse airResponse = await task.ConfigureAwait(false);
 
                     if (airResponse.Success)
                     {
@@ -206,7 +206,8 @@ namespace BaseballScraper.Infrastructure
                 PrintQueryDetails(fieldToFilterKey, valueToFilterFor);
                 var oneRow =
                     from resp in listOfAirtableRecords
-                    where resp.GetField(fieldToFilterKey).ToString() == valueToFilterFor
+                    where string.Equals(resp.GetField(fieldToFilterKey).ToString(), valueToFilterFor
+                        , StringComparison.Ordinal)
                     select resp;
                 return oneRow;
             }
@@ -236,7 +237,8 @@ namespace BaseballScraper.Infrastructure
                 PrintSortQueryDetails(fieldToFilterKey, valueToFilterFor, fieldToSortKey);
                 IOrderedEnumerable<AirtableRecord> sortedQuery =
                     from resp in listOfAirtableRecords
-                    where resp.GetField(fieldToFilterKey).ToString() == valueToFilterFor
+                    where string.Equals(resp.GetField(fieldToFilterKey).ToString(), valueToFilterFor
+                        , StringComparison.OrdinalIgnoreCase)
                     orderby resp.GetField(fieldToSortKey).ToString()
                     select resp;
                 return sortedQuery;
@@ -272,7 +274,7 @@ namespace BaseballScraper.Infrastructure
                 using (AirtableBase airtableBase = new AirtableBase(_airtableConfig.ApiKey, tableAuthenticationString))
                 {
                     Task<AirtableRetrieveRecordResponse> recordTask = airtableBase.RetrieveRecord(tableName, recordId);
-                    var recordTaskResponse = await recordTask;
+                    var recordTaskResponse = await recordTask.ConfigureAwait(false);
                     var oneRecord = recordTaskResponse.Record;
                     return oneRecord;
                 }
@@ -302,7 +304,7 @@ namespace BaseballScraper.Infrastructure
             /// </example>
             public async Task<string> GetAuthorIdFromAuthorName(string authorName)
             {
-                var authorTableList = await GetAllRecordsFromAirtableAsync(_authorsConfiguration.TableName, _authorsConfiguration.AuthenticationString);
+                var authorTableList = await GetAllRecordsFromAirtableAsync(_authorsConfiguration.TableName, _authorsConfiguration.AuthenticationString).ConfigureAwait(false);
 
                 var airtableRecordEnumerable = GetOneRecordFromAirtable(authorTableList, "Name", authorName);
                 var authorRecord             = airtableRecordEnumerable.First();
@@ -328,7 +330,7 @@ namespace BaseballScraper.Infrastructure
             {
                 PrintTableConfigurationInfo(_websitesConfiguration.TableName, _websitesConfiguration.AuthenticationString);
 
-                var websiteTableList = await GetAllRecordsFromAirtableAsync(_websitesConfiguration.TableName, _websitesConfiguration.AuthenticationString);
+                var websiteTableList = await GetAllRecordsFromAirtableAsync(_websitesConfiguration.TableName, _websitesConfiguration.AuthenticationString).ConfigureAwait(false);
 
                 var airtableRecordEnumerable  = GetOneRecordFromAirtable(websiteTableList, "Name", websiteName);
                 var websiteRecord             = airtableRecordEnumerable.First();
@@ -370,7 +372,7 @@ namespace BaseballScraper.Infrastructure
                 {
                     Dictionary<string,object> recordFields = record.Fields;
 
-                    var singleFieldKvp = recordFields.Single(field => field.Key == fieldName);
+                    var singleFieldKvp = recordFields.Single(field => string.Equals(field.Key, fieldName, StringComparison.Ordinal));
                     string returnValue = string.Empty;
                     var fieldType      = singleFieldKvp.Value.GetType();
 

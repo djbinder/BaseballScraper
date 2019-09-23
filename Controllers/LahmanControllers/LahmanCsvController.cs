@@ -119,7 +119,7 @@ namespace BaseballScraper.LahmanControllers
             }
 
 
-            // TODO: This works but is it necessary? If so, create for the other five Lahman classes/ csv file types
+            // TO-DO: This works but is it necessary? If so, create for the other five Lahman classes/ csv file types
             [Route("async/appearances")]
             // public async Task<IEnumerable<dynamic>> GetAllLahmanAppearancesRecords()
             public async Task GetAllLahmanAppearancesRecords()
@@ -129,7 +129,7 @@ namespace BaseballScraper.LahmanControllers
             }
 
 
-            // TODO: This doesn't work; You get an error that the file textReader closes before the CsvHandler function completes; Need to determine if this method is necessary;
+            // TO-DO: This doesn't work; You get an error that the file textReader closes before the CsvHandler function completes; Need to determine if this method is necessary;
             public async Task<IEnumerable<dynamic>> GetAllLahmanAppearancesRecordsEnumerable()
             {
                 var records = await _cH.ReadCsvRecordsAsync(LahmanAppearancesFilePath, typeof(LahmanAppearances), typeof(LahmanAppearancesClassMap));

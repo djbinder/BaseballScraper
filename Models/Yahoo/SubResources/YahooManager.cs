@@ -1,10 +1,8 @@
-// DJB WORKING ON
-// DJB: this is correct
-
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Xml.Serialization;
 
+#pragma warning disable MA0016, MA0048
 namespace BaseballScraper.Models.Yahoo
 {
     public class YahooManagers

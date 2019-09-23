@@ -2,6 +2,7 @@
 
 using CsvHelper.Configuration;
 
+#pragma warning disable MA0048, MA0051
 namespace BaseballScraper.Models.Lahman
 {
     public class LahmanTeams

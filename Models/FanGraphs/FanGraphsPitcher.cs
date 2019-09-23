@@ -5,7 +5,7 @@ using System;
 using BaseballScraper.Models.Player;
 using System.ComponentModel.DataAnnotations.Schema;
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
+#pragma warning disable CA1707, CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006, MA0048
 namespace BaseballScraper.Models.FanGraphs
 {
     public class FanGraphsPitcher : BaseEntity

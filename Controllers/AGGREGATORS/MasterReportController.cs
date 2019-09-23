@@ -91,7 +91,7 @@ namespace BaseballScraper.Controllers.AGGREGATORS
 
 
                 // 3) HQ | HITTER : YTD & ROS Projections
-                await _hqHitterController.DAILY_REPORT_RUNNER(false, false);
+                await _hqHitterController.DAILY_REPORT_RUNNER(openRosFileAfterMove: false, openYtdFileAfterMove: false);
                 Mark(3, stopWatch,"HQ HITTER");
 
 
@@ -117,7 +117,7 @@ namespace BaseballScraper.Controllers.AGGREGATORS
 
         #region PRINTING PRESS ------------------------------------------------------------
 
-        public void Mark(int orderNumber, Stopwatch stopWatch, string completedType)
+        private void Mark(int orderNumber, Stopwatch stopWatch, string completedType)
         {
             C.ForegroundColor = ConsoleColor.DarkMagenta;
             C.WriteLine($"\n[ {orderNumber} ] {stopWatch.Elapsed.Seconds} seconds | {completedType}\n");

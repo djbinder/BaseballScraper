@@ -64,7 +64,7 @@ namespace BaseballScraper.EndPoints
             {
                 SportComponent           = BaseballUriComponent,
                 TransactionTypeComponent = AddedUriComponent,
-                PositionComponent        = AllPositionsUriComponent
+                PositionComponent        = AllPositionsUriComponent,
             };
         }
 
@@ -77,7 +77,7 @@ namespace BaseballScraper.EndPoints
             {
                 SportComponent           = BaseballUriComponent,
                 TransactionTypeComponent = DroppedUriComponent,
-                PositionComponent        = AllPositionsUriComponent
+                PositionComponent        = AllPositionsUriComponent,
             };
         }
 
@@ -90,7 +90,7 @@ namespace BaseballScraper.EndPoints
             {
                 SportComponent           = BaseballUriComponent,
                 TransactionTypeComponent = TradedUriComponent,
-                PositionComponent        = AllPositionsUriComponent
+                PositionComponent        = AllPositionsUriComponent,
             };
         }
 
@@ -103,7 +103,7 @@ namespace BaseballScraper.EndPoints
             {
                 SportComponent           = BaseballUriComponent,
                 TransactionTypeComponent = ViewedUriComponent,
-                PositionComponent        = AllPositionsUriComponent
+                PositionComponent        = AllPositionsUriComponent,
             };
         }
 
@@ -125,7 +125,7 @@ namespace BaseballScraper.EndPoints
             {
                 SportComponent           = FootballUriComponent,
                 TransactionTypeComponent = AddedUriComponent,
-                PositionComponent        = AllPositionsUriComponent
+                PositionComponent        = AllPositionsUriComponent,
             };
         }
 
@@ -138,7 +138,7 @@ namespace BaseballScraper.EndPoints
             {
                 SportComponent           = FootballUriComponent,
                 TransactionTypeComponent = DroppedUriComponent,
-                PositionComponent        = AllPositionsUriComponent
+                PositionComponent        = AllPositionsUriComponent,
             };
         }
 

@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using BaseballScraper.Infrastructure;
 using BaseballScraper.Models.ConfigurationModels;
 using Microsoft.AspNetCore.Http;
@@ -14,7 +15,7 @@ using ObjectPrinter;
 
 
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE0063, IDE0067, IDE1006
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE0063, IDE0067, IDE1006, MA0051
 namespace BaseballScraper.Controllers.YahooControllers
 {
     [Route("api/yahoo/[controller]")]
@@ -22,25 +23,26 @@ namespace BaseballScraper.Controllers.YahooControllers
     [ApiExplorerSettings(IgnoreApi = true)]
     public class YahooAuthController: ControllerBase
     {
-        private readonly Helpers _h = new Helpers();
-        private readonly YahooConfiguration _yahooConfig;
+        private readonly Helpers              _helpers;
+        private readonly YahooConfiguration   _yahooConfig;
         private readonly IHttpContextAccessor _contextAccessor;
-        public static readonly JsonHandler.NewtonsoftJsonHandlers _newtonHandler = new JsonHandler.NewtonsoftJsonHandlers();
+        private static readonly JsonHandler.NewtonsoftJsonHandlers _newtonHandler = new JsonHandler.NewtonsoftJsonHandlers();
 
         public static readonly string yahooConfigFilePath = "Configuration/yahooConfig.json";
 
-        public string _accessTokenKey  = "accesstoken";
-        public string _tokenTypeKey    = "tokentype";
-        public string _expiresInKey    = "expiresin";
-        public string _refreshTokenKey = "refreshtoken";
-        public string _yahooguidKey    = "yahooguid";
-        public string _authCodeKey     = "authorizationcode";
-        public string _sessionIdKey    = "sessionid";
+        private string _accessTokenKey  = "accesstoken";
+        private string _tokenTypeKey    = "tokentype";
+        private string _expiresInKey    = "expiresin";
+        private string _refreshTokenKey = "refreshtoken";
+        private string _yahooguidKey    = "yahooguid";
+        private string _authCodeKey     = "authorizationcode";
+        private string _sessionIdKey    = "sessionid";
 
 
 
-        public YahooAuthController(IOptions<YahooConfiguration> yahooConfig, IHttpContextAccessor contextAccessor)
+        public YahooAuthController(Helpers helpers, IOptions<YahooConfiguration> yahooConfig, IHttpContextAccessor contextAccessor)
         {
+            _helpers         = helpers;
             _yahooConfig     = yahooConfig.Value;
             _contextAccessor = contextAccessor;
         }
@@ -52,7 +54,7 @@ namespace BaseballScraper.Controllers.YahooControllers
         [Route("test")]
         public void ViewYahooAuthHomePage()
         {
-            _h.StartMethod();
+            _helpers.StartMethod();
             // bool userHasRefreshToken = CheckIfUserHasExistingRefreshToken();
             PrintYahooConfigInfo();
             var code = GenerateUserAuthorizationCode();
@@ -83,14 +85,14 @@ namespace BaseballScraper.Controllers.YahooControllers
                 if(refreshTokenCheck == null)
                 {
                     userHasRefreshToken = false;
-                    // _h.Highlight("### USER DOES NOT HAVE EXISTING REFRESH TOKEN ###");
+                    // _helpers.Highlight("### USER DOES NOT HAVE EXISTING REFRESH TOKEN ###");
                     return userHasRefreshToken;
                 }
                 // User DOES have a refresh token
                 else
                 {
                     userHasRefreshToken = true;
-                    // _h.Highlight("### USER HAS EXISTING REFRESH TOKEN ###");
+                    // _helpers.Highlight("### USER HAS EXISTING REFRESH TOKEN ###");
                     return userHasRefreshToken;
                 }
             }
@@ -99,9 +101,7 @@ namespace BaseballScraper.Controllers.YahooControllers
             // STATUS [ June 8, 2019 ] : this works but not sure if needed
             public YahooConfiguration GetYahooConfigInfo()
             {
-                var yJson = _newtonHandler.Convert(yahooConfigFilePath, _yahooConfig.GetType()) as YahooConfiguration;
-                Console.WriteLine(yJson.AppId);
-                return yJson;
+                return _newtonHandler.Convert(yahooConfigFilePath, _yahooConfig.GetType()) as YahooConfiguration;
             }
 
 
@@ -119,30 +119,31 @@ namespace BaseballScraper.Controllers.YahooControllers
             // STATUS [ June 8, 2019 ] : this works
             // STEP 1
             /// <summary>
-            ///     Triggers browser to open window asking user to authorize usage of their data in the app.
-            ///     When the user approves, they will receive a short authorization code.
-            ///     This code should then be entered in the terminal
-            ///     This is applicable to a first time user (i.e., a user w/o a refresh token)
+            /// * Triggers browser to open window asking user to authorize usage of their data in the app.
+            /// * When the user approves, they will receive a short authorization code.
+            /// * This code should then be entered in the terminal
+            /// * This is applicable to a first time user (i.e., a user w/o a refresh token)
             /// </summary>
             /// <returns>
             ///     AuthorizationCode which is a string entered in the console
             /// </returns>
             private string GenerateUserAuthorizationCode ()
             {
-                // _h.StartMethod();
+                // _helpers.StartMethod();
                 string requestUrl = $"https://api.login.yahoo.com/oauth2/request_auth?client_id={_yahooConfig.ClientId}&redirect_uri={_yahooConfig.RedirectUri}&response_type=code&language=en-us";
 
                 // get approval code from console input
                 // the code comes from https://api.login.yahoo.com/oauth2/authorize
                 Process.Start("open", requestUrl);
-                    _h.Spotlight("Enter Code:");
+                    _helpers.Spotlight("Enter Code:");
                     string authorizationCodeFromConsole = Console.ReadLine();
-                    _h.Intro(authorizationCodeFromConsole, "code entered in console");
+                    _helpers.Intro(authorizationCodeFromConsole, "code entered in console");
 
                 SetSessionAuthorizationCode(authorizationCodeFromConsole);
-                // _h.CompleteMethod();
+                // _helpers.CompleteMethod();
                 return authorizationCodeFromConsole;
             }
+
 
 
             // STATUS [ June 8, 2019 ] : this works
@@ -155,21 +156,21 @@ namespace BaseballScraper.Controllers.YahooControllers
             /// <returns> The HttpWebRequest for authorization converted to a JObject </returns>
             private JObject CreateYahooAccessTokenResponseJObject()
             {
-                // _h.StartMethod();
+                // _helpers.StartMethod();
                 // consumerKey and consumerSecret are unique to each yahoo app; Here, they are called from Secrets/ Config File
-                var consumerKey    = _yahooConfig.ClientId;
-                var consumerSecret = _yahooConfig.ClientSecret;
-                var redirectUri    = _yahooConfig.RedirectUri;
+                string consumerKey    = _yahooConfig.ClientId;
+                string consumerSecret = _yahooConfig.ClientSecret;
+                string redirectUri    = _yahooConfig.RedirectUri;
 
                 // generated from users input into console; it's a seven character string
-                var authorizationCodeFromConsole = GenerateUserAuthorizationCode();
+                string authorizationCodeFromConsole = GenerateUserAuthorizationCode();
 
                 // Exchange authorization code for Access Token by sending Post Request
                 Uri address = new Uri("https://api.login.yahoo.com/oauth2/get_token");
 
                 // Create the web request ___ REQUEST ---> System.Net.HttpWebRequest
                 HttpWebRequest request = WebRequest.Create(address) as HttpWebRequest;
-                // _h.Dig(request);
+                // _helpers.Dig(request);
 
                 // Set type to POST ---> changes 'Method' of HttpWebRequest to 'POST'
                 request.Method = "POST";
@@ -192,10 +193,10 @@ namespace BaseballScraper.Controllers.YahooControllers
                 // Create the data we want to send
                 // 'data' is a concatanated string of all of the data.Append items
                 StringBuilder data = new StringBuilder();
-                    data.Append("?client_id=" + consumerKey);
-                    data.Append("&client_secret=" + consumerSecret);
-                    data.Append("&redirect_uri=" + redirectUri);
-                    data.Append("&code=" + authorizationCodeFromConsole);
+                    data.Append("?client_id=").Append(consumerKey);
+                    data.Append("&client_secret=").Append(consumerSecret);
+                    data.Append("&redirect_uri=").Append(redirectUri);
+                    data.Append("&code=").Append(authorizationCodeFromConsole);
                     data.Append("&grant_type=authorization_code");
 
                 // Create a byte array of the data we want to send ___ BYTE DATA ---> System.Byte[]
@@ -208,11 +209,12 @@ namespace BaseballScraper.Controllers.YahooControllers
                 // Write data to stream
                 using (Stream postStream = request.GetRequestStream())
                 {
-                    postStream.Write(byteData, 0, byteData.Length);
+                    postStream.WriteAsync(byteData, 0, byteData.Length);
                 }
 
                 // Get response
                 string responseFromServer = "";
+                Task<string> responseFromServerTask;
 
                 try
                 {
@@ -221,7 +223,9 @@ namespace BaseballScraper.Controllers.YahooControllers
                     {
                         // Get the response stream
                         StreamReader reader = new StreamReader(response.GetResponseStream());
-                        responseFromServer = reader.ReadToEnd();
+                        // responseFromServer = reader.ReadToEnd();
+                        responseFromServerTask = reader.ReadToEndAsync();
+                        reader.Dispose();
                     }
                 }
                 catch (Exception ex)
@@ -232,10 +236,10 @@ namespace BaseballScraper.Controllers.YahooControllers
                 }
 
                 JObject responseToJson = JObject.Parse(responseFromServer);
-                // _h.Dig(responseToJson);
+                // _helpers.Dig(responseToJson);
 
                 // REQUEST ---> following are added through beginning to end: ContentLength, HaveResponse, Method, ContentType
-                // _h.CompleteMethod();
+                // _helpers.CompleteMethod();
                 return responseToJson;
             }
 
@@ -243,13 +247,13 @@ namespace BaseballScraper.Controllers.YahooControllers
             // STATUS [ June 8, 2019 ] : this works
             // STEP 2B: not required. But can be used if you just want to generate the request and not convert to a JObject
             /// <summary>
-            ///     Generate the HttpWebRequest for authorization
-            ///     This is for brand new users as it calls the 'GenerateUserAuthorizationCode()' method
-            ///     This is applicable to a first time user (i.e., a user w/o a refresh token)
+            /// * Generate the HttpWebRequest for authorization
+            /// * This is for brand new users as it calls the 'GenerateUserAuthorizationCode()' method
+            /// * This is applicable to a first time user (i.e., a user w/o a refresh token)
             /// </summary>
             private HttpWebRequest CreateYahooAccessTokenRequest()
             {
-                _h.StartMethod();
+                _helpers.StartMethod();
 
                 // consumerKey and consumerSecret are unique to each yahoo app; Here, they are called from Secrets/ Config File
                 string consumerKey    = _yahooConfig.ClientId;
@@ -284,10 +288,10 @@ namespace BaseballScraper.Controllers.YahooControllers
 
                 // Create the data we want to send ___ DATA ---> System.Text.StringBuilder ___ 'data' is a concatanated string of all of the data.Append items
                 StringBuilder data = new StringBuilder();
-                    data.Append("?client_id="     + consumerKey);
-                    data.Append("&client_secret=" + consumerSecret);
-                    data.Append("&redirect_uri="  + redirectUri);
-                    data.Append("&code="          + authorizationCodeFromConsole);
+                    data.Append("?client_id=").Append(consumerKey);
+                    data.Append("&client_secret=").Append(consumerSecret);
+                    data.Append("&redirect_uri=").Append(redirectUri);
+                    data.Append("&code=").Append(authorizationCodeFromConsole);
                     data.Append("&grant_type=authorization_code");
 
                 // Create a byte array of the data we want to send
@@ -352,17 +356,20 @@ namespace BaseballScraper.Controllers.YahooControllers
 
                 using (Stream postStream = request.GetRequestStream())
                 {
-                    postStream.Write(byteData, 0, byteData.Length);
+                    postStream.WriteAsync(byteData, 0, byteData.Length);
                 }
 
                 string responseFromServer = "";
+                Task<string> responseFromServerTask;
 
                 try
                 {
                     using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
                     {
                         StreamReader reader = new StreamReader(response.GetResponseStream());
-                        responseFromServer = reader.ReadToEnd();
+                        // responseFromServer = reader.ReadToEnd();
+                        responseFromServerTask = reader.ReadToEndAsync();
+                        reader.Dispose();
                     }
                 }
                 catch (Exception ex)
@@ -426,11 +433,11 @@ namespace BaseballScraper.Controllers.YahooControllers
             private StringBuilder ExchangeRefreshTokenStringbuilder(string consumerKey, string consumerSecret, string redirectUri, string refreshTokenCheck, string grantType)
             {
                 StringBuilder data = new StringBuilder();
-                    data.Append("?client_id="     + consumerKey);
-                    data.Append("&client_secret=" + consumerSecret);
-                    data.Append("&redirect_uri="  + redirectUri);
-                    data.Append("&refresh_token=" + refreshTokenCheck);
-                    data.Append("&grant_type="    + grantType);
+                    data.Append("?client_id=").Append(consumerKey);
+                    data.Append("&client_secret=").Append(consumerSecret);
+                    data.Append("&redirect_uri=").Append(redirectUri);
+                    data.Append("&refresh_token=").Append(refreshTokenCheck);
+                    data.Append("&grant_type=").Append(grantType);
 
                 return data;
             }
@@ -447,7 +454,7 @@ namespace BaseballScraper.Controllers.YahooControllers
                 request.Method      = "POST";
                 request.ContentType = "application/x-www-form-urlencoded";
 
-                byte[] headerByte = Encoding.UTF8.GetBytes(consumerKey+":"+consumerSecret);
+                byte[] headerByte   = Encoding.UTF8.GetBytes(consumerKey+":"+consumerSecret);
                 string headerString = Convert.ToBase64String(headerByte);
                 request.Headers["Authorization"] = "Basic " + headerString;
 
@@ -474,7 +481,7 @@ namespace BaseballScraper.Controllers.YahooControllers
             /// <returns> A new AccessTokenResponse that includes: AccessToken, TokenType, ExpiresIn, RefreshToken, XOAuthYahooGuid</returns>
             public AccessTokenResponse GetYahooAccessTokenResponse ()
             {
-                // _h.StartMethod();
+                // _helpers.StartMethod();
                 JObject responseToJson;
 
                 bool userHasRefreshToken = CheckIfUserHasExistingRefreshToken();
@@ -485,7 +492,7 @@ namespace BaseballScraper.Controllers.YahooControllers
                 {
                     responseToJson = CreateYahooAccessTokenResponseJObject();
                     AccessTokenResponse finalAccessTokenResponse = GenerateYahooAccessTokenResponse(responseToJson);
-                    _h.Dig(finalAccessTokenResponse);
+                    _helpers.Dig(finalAccessTokenResponse);
                     return finalAccessTokenResponse;
                 }
 
@@ -547,23 +554,21 @@ namespace BaseballScraper.Controllers.YahooControllers
             /// </summary>
             public void SetSessionAuthorizationCode(string authorizationCodeFromConsole)
             {
-                // _h.StartMethod();
+                // _helpers.StartMethod();
                 var authCodeCheck = "";
 
                 try
                 {
                     HttpContext.Session.SetString(_authCodeKey, authorizationCodeFromConsole);
                         authCodeCheck = HttpContext.Session.GetString(_authCodeKey);
-                        // _h.Intro(authCodeCheck, "setting auth code as");
 
                     HttpContext.Session.SetInt32(_sessionIdKey,1);
                         int? sessionId = HttpContext.Session.GetInt32(_sessionIdKey);
-                        // _h.Intro(sessionId, "setting session code as");
                 }
-                catch
+                catch(Exception ex)
                 {
                     // Console.WriteLine("ERROR IN: YahooAuthController.SetSessionAuthorizationCode()");
-                    // PrintExceptionMessageInfo(ex);
+                    PrintExceptionMessageInfo(ex);
                 }
             }
 
@@ -589,7 +594,7 @@ namespace BaseballScraper.Controllers.YahooControllers
 
             public void PersistSession()
             {
-                // _h.Highlight("### PERSISTING SESSION ###");
+                // _helpers.Highlight("### PERSISTING SESSION ###");
                 var authCodeCheck     = HttpContext.Session.GetString(_authCodeKey);
                 var accessTokenCheck  = HttpContext.Session.GetString(_accessTokenKey);
                 var refreshTokenCheck = HttpContext.Session.GetString(_refreshTokenKey);
@@ -648,7 +653,7 @@ namespace BaseballScraper.Controllers.YahooControllers
             }
 
 
-            public void PrintExceptionMessageInfo(Exception ex)
+            private void PrintExceptionMessageInfo(Exception ex)
             {
                 Console.WriteLine("----------------------------------------------------------");
                 Console.WriteLine(ex.Message);
@@ -659,7 +664,7 @@ namespace BaseballScraper.Controllers.YahooControllers
             }
 
 
-            public void PrintYahooConfigInfo()
+            private void PrintYahooConfigInfo()
             {
                 Console.WriteLine(_yahooConfig.Name);
                 Console.WriteLine(_yahooConfig.ClientId);
@@ -686,234 +691,6 @@ namespace BaseballScraper.Controllers.YahooControllers
 
         #endregion PRINTING PRESS ------------------------------------------------------------
 
-
-
-
-
-
-        #region OTHER SESSION THINGS
-
-
-        //     public Dictionary<string, string> CreateSessionInfoDictionary()
-        //     {
-        //         List       <string> messagesList                 = new List<string>();
-        //         Dictionary<string, string> sessionInfoDictionary = new Dictionary<string, string>();
-
-        //         try
-        //         {
-        //             if(CheckSession() == 0)
-        //             {
-        //                 string consoleMessage = "dictionary created; but nothing to add to it";
-        //                 messagesList.Add(consoleMessage);
-        //             }
-
-        //             var authCodeCheck     = _contextAccessor.HttpContext.Session.GetString("authorizationcode");
-        //             var accessTokenCheck  = HttpContext.Session.GetString("accesstoken");
-        //             var refreshTokenCheck = HttpContext.Session.GetString("refreshtoken");
-        //             var yahooGuidCheck    = HttpContext.Session.GetString("yahooguid");
-        //             var sessionIdCheck    = HttpContext.Session.GetInt32("sessionid").ToString();
-
-        //             sessionInfoDictionary.Add("authcode", authCodeCheck);
-        //             sessionInfoDictionary.Add("accesstoken", accessTokenCheck);
-        //             sessionInfoDictionary.Add("refreshtoken", refreshTokenCheck);
-        //             sessionInfoDictionary.Add("yahooguid", yahooGuidCheck);
-        //             sessionInfoDictionary.Add("sessionid", sessionIdCheck);
-
-        //             bool printDictionaryItems = false;
-
-        //             if(printDictionaryItems == true)
-        //             {
-        //                 int itemCount = 1;
-        //                 foreach(var item in sessionInfoDictionary)
-        //                 {
-        //                     var setKey = item.Key;
-        //                     Console.WriteLine($"----- #{itemCount} {setKey} ------");
-        //                     Console.WriteLine(item.Value);
-        //                     Console.WriteLine();
-        //                     itemCount++;
-        //                 }
-        //             }
-        //         }
-        //         catch (Exception ex)
-        //         {
-        //             Console.WriteLine("--------------------");
-        //             Console.WriteLine("BASE MESSAGE");
-        //             Console.WriteLine(ex.Message);
-        //             // Console.WriteLine("INNER EXCEPTION");
-        //             // Console.WriteLine(ex.InnerException);
-        //             // Console.WriteLine("--------------------");
-        //             Console.WriteLine();
-        //         }
-        //     return sessionInfoDictionary;
-        // }
-
-
-            // public void GetSessionAccessTokenItems()
-            // {
-            //     try
-            //     {
-            //         var authCodeCheck     = HttpContext.Session.GetString(_authCodeKey);
-            //         var accessTokenCheck  = HttpContext.Session.GetString(_accessTokenKey);
-            //         var refreshTokenCheck = HttpContext.Session.GetString(_refreshTokenKey);
-            //         var yahooGuidCheck    = HttpContext.Session.GetString(_yahooguidKey);
-            //         // var sessionIdCheck    = HttpContext.Session.GetInt32(_sessionIdKey).ToString();
-            //         int? sessionIdCheck    = HttpContext.Session.GetInt32(_sessionIdKey);
-            //     }
-            //     catch (Exception ex)
-            //     {
-            //         Console.WriteLine();
-            //         Console.WriteLine("ERROR IN: YahooAuthController.GetSessionAccessTokenItems()");
-            //         // PrintExceptionMessageInfo(ex);
-            //     }
-
-            //     // CheckYahooSession();
-            // }
-
-
-            // public int CheckSession()
-            // {
-            //     int? sessionId;
-            //     try
-            //     {
-            //         sessionId = HttpContext.Session.GetInt32(_sessionIdKey);
-            //         _h.Highlight($"### SESSION EXISTS ### > id = {sessionId}");
-            //         return (int)sessionId;
-            //     }
-            //     catch(Exception ex)
-            //     {
-            //         _h.Highlight("### SESSION DOES NOT EXIST ###");
-            //         // PrintExceptionMessageInfo(ex);
-            //         return 0;
-            //     }
-            // }
-
-            // public int CheckSessionId()
-            // {
-            //     int? sessionId = HttpContext.Session.GetInt32("sessionid");
-            //     Console.WriteLine($"CheckSessionId() > {sessionId}");
-
-            //     if(sessionId == null)
-            //     {
-            //         Console.WriteLine($"CHECK SESSION ID IS NULL!!!!");
-            //         return 0;
-            //     }
-            //     Console.WriteLine($"CHECK SESSION ID: {sessionId}");
-            //     return (int)sessionId;
-            // }
-
-
-
-            // public static class SessionExtensions
-            // {
-
-
-            //     public static void Set<T>(this ISession session, string key, T value)
-            //     {
-            //         session.SetString(key, JsonConvert.SerializeObject(value));
-            //     }
-
-
-            //     public static T Get<T>(this ISession session, string key)
-            //     {
-            //         var value = session.GetString(key);
-            //         return value == null ? default(T) :
-            //             JsonConvert.DeserializeObject<T>(value);
-            //     }
-
-            // }
-
-
-            // public void OnGet()
-            // {
-            //     if (string.IsNullOrEmpty(HttpContext.Session.GetString(SessionKeyName)))
-            //     {
-            //         HttpContext.Session.SetString(SessionKeyName, "The Doctor");
-            //         HttpContext.Session.SetInt32(SessionKeyAge, 773);
-            //     }
-            // }
-
-
-            // public static void OnGetDateTime()
-            // {
-            //     if (HttpContext.Session.Get<DateTime>(SessionKeyTime) == default(DateTime))
-            //     {
-            //         HttpContext.Session.Set<DateTime>(SessionKeyTime, currentTime);
-            //     }
-            // }
-
-            // public static void SetObjectAsJson(this ISession session, string key, object value)
-            // {
-            //     _h.StartMethod();
-            //     session.SetString(key, JsonConvert.SerializeObject(value));
-            //     CompleteMethod();
-            // }
-
-            // public static async Task Set<T>(this ISession session, string key, T value)
-            // {
-            //     if (!session.IsAvailable)
-            //     await session.LoadAsync();
-            //     session.SetString(key, JsonConvert.SerializeObject(value));
-            // }
-
-            // public static async Task<T> Get<T>(this ISession session,string key)
-            // {
-            //     if (!session.IsAvailable)
-            //     await session.LoadAsync();
-            //     var value = session.GetString(key);
-            //     return value == null ? default(T):
-            //                         JsonConvert.DeserializeObject<T>(value);
-            // }
-
-
-                        // TODO: Confirm whether or not this works
-            // public void CheckYahooSession(HttpResponseMessage response = null)
-            // {
-            //     int? sessionId = HttpContext.Session.GetInt32(_sessionIdKey);
-            //     Console.WriteLine($"sessionId {sessionId}");
-
-            //     if(sessionId == 0)
-            //     {
-            //         Console.WriteLine("sessionId = 0");
-            //     }
-            //     if(sessionId == null)
-            //     {
-            //         Console.WriteLine("sessionId = null");
-            //     }
-            //     try
-            //     {
-            //         if(HttpContext.Session.GetString(_authCodeKey) == null)
-            //         {
-            //             // Console.WriteLine("### NO CURRENT SESSION ###");
-            //             var initialAuthCodeCheck = HttpContext.Session.GetString(_authCodeKey);
-            //             // _h.Intro(initialAuthCodeCheck, "initial auth code check");
-            //         }
-
-            //         else
-            //         {
-            //             // Console.WriteLine("### SESSION IN PROGRESS ###");
-            //             PersistSession();
-            //         }
-            //     }
-
-            //     catch (Exception ex)
-            //     {
-            //         Console.WriteLine("ERROR IN: YahooAuthController.CheckYahooSession() > ERROR 1");
-            //         // PrintExceptionMessageInfo(ex);
-
-            //         try
-            //         {
-            //             _h.Spotlight("trying more...");
-            //             throw new RequestFailedException(String.Format("HTTP error. Request Message - '{0}', Content - {1}, Status Code - {2}", response.RequestMessage, response.Content != null ? response.Content.ReadAsStringAsync().Result : "", response.StatusCode), response);
-            //         }
-
-            //         catch (Exception ex2)
-            //         {
-            //             Console.WriteLine("ERROR IN: YahooAuthController.CheckYahooSession() > ERROR 2");
-            //             // PrintExceptionMessageInfo(ex2);
-            //         }
-            //     }
-            // }
-        #endregion
 
     }
 }

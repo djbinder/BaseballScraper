@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using RDotNet;
 
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
+#pragma warning disable CS0219, CS0414, CA2000, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Infrastructure
 {
-    // TODO: everything needs to be converted to async
+    // TO-DO: everything needs to be converted to async
     /// <summary> Includes various R functions / actions </summary>
     /// <list> RESOURCES
     ///     <item> https://billpetti.github.io/baseballr/data-acquisition-functions/ </item>
@@ -95,7 +95,7 @@ namespace BaseballScraper.Infrastructure
         #region LAHMAN ------------------------------------------------------------
 
             // STATUS: in progress
-            // TODO: currently calls to 'Evaluates' in the function; the first is needed for the second to run correctly; need to figure out how to decouple them
+            // TO-DO: currently calls to 'Evaluates' in the function; the first is needed for the second to run correctly; need to figure out how to decouple them
             /// <summary> </summary>
             /// <reference> http://lahman.r-forge.r-project.org/doc/ </reference>
             public void GetLahmanBattingStats()
@@ -149,11 +149,11 @@ namespace BaseballScraper.Infrastructure
 
 
 
-        // TODO: continue working through available functions within the PitchRx package
+        // TO-DO: continue working through available functions within the PitchRx package
         #region  PITCH RX ------------------------------------------------------------
 
             // STATUS: this works to a point, returns a lot of stuff but then breaks; seems to be an issue with some of the data being returned
-                // TODO: test this with more dates to figure out why it breaks; figure out of if there are more things returned if it doesnt' break
+                // TO-DO: test this with more dates to figure out why it breaks; figure out of if there are more things returned if it doesnt' break
             /// <summary> Scrapes and returns a significant amount of data about each individual at bat within a given date range </summary>
             /// <example> _r.GetPitchRxData("2013-06-01", "2013-06-01"); </example>
             /// <param name="startDate"> First date of the range you are looking for (e.g, "2016-04-06") </param>
@@ -369,14 +369,14 @@ namespace BaseballScraper.Infrastructure
                 CharacterVector leagueVector     = CreateCharVect(engine, league);
                 CharacterVector qualifyingVector = CreateCharVect(engine, qual);
 
-                if(statDisplayType == "aggregate")
+                if(string.Equals(statDisplayType, "aggregate", StringComparison.Ordinal))
                 {
                     int           aggregateInt      = 0;
                     NumericVector statDisplayVector = CreateNumVect(engine, aggregateInt);
                     engine.SetSymbol("statDisplayType", statDisplayVector);
                 }
 
-                if(statDisplayType == "season")
+                if(string.Equals(statDisplayType, "season", StringComparison.Ordinal))
                 {
                     int           aggregateInt      = 1;
                     NumericVector statDisplayVector = CreateNumVect(engine, aggregateInt);
@@ -412,14 +412,14 @@ namespace BaseballScraper.Infrastructure
                 CharacterVector leagueVector              = CreateCharVect(engine, league);
                 NumericVector   minPlateAppearancesVector = CreateNumVect(engine, minPlateAppearances);
 
-                if(statDisplayType == "aggregate")
+                if(string.Equals(statDisplayType, "aggregate", StringComparison.Ordinal))
                 {
                     int           aggregateInt      = 0;
                     NumericVector statDisplayVector = CreateNumVect(engine, aggregateInt);
                     engine.SetSymbol("statDisplayType", statDisplayVector);
                 }
 
-                if(statDisplayType == "season")
+                if(string.Equals(statDisplayType, "season", StringComparison.Ordinal))
                 {
                     int           aggregateInt      = 1;
                     NumericVector statDisplayVector = CreateNumVect(engine, aggregateInt);

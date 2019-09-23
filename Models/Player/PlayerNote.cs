@@ -1,12 +1,13 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
+// #pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Models.Player
 {
-    public class PlayerNote: BaseEntity
+    public class PlayerNote : IBaseEntity
     {
         [Key]
-        public int PlayerNoteId { get; set; }
+        public int? PlayerNoteId { get; set; }
 
         [Display(Name="Player Name")]
         public string PlayerName { get; set; }
@@ -21,13 +22,11 @@ namespace BaseballScraper.Models.Player
 
 
         [Display(Name="Note Text")]
-        public string Note { get; set; }
+        public string NoteText { get; set; }
 
 
         [Display(Name="Note Tone")]
         public string NoteTone { get; set; }
-
-        // news, opinions, stats & analysis, mixed
 
 
         [Display(Name="Source Site")]
@@ -37,16 +36,32 @@ namespace BaseballScraper.Models.Player
         [Display(Name="Note Text Writer")]
         public string NoteWriter { get; set; }
 
-        // pre-season, in-season
 
         [Display(Name="Calendar Year")]
         public int? CalendarYear { get; set; }
 
+
         [Display(Name="Mlb Season Year")]
         public int? Season { get; set; }
 
+        public DateTime DateCreated 
+        { 
+            get => throw new NotImplementedException(); 
+            set => throw new NotImplementedException(); 
+        }
+
+        public DateTime DateUpdated 
+        { 
+            get => throw new NotImplementedException(); 
+            set => throw new NotImplementedException(); 
+        }
 
         public PlayerNote() {}
 
     }
 }
+
+
+
+// public DateTime DateCreated { get; set; }  // from IBaseEntity interface
+// public DateTime DateUpdated { get; set; }  // from IBaseEntity interface

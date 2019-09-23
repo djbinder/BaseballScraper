@@ -5,37 +5,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Xml.Serialization;
 
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006, MA0016, MA0048
 namespace BaseballScraper.Models.Yahoo
 {
-    // [XmlRoot (ElementName = "game_week", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
-    // public class YahooMatchup
-    // {
-    //     [XmlElement (ElementName = "week", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
-    //     public string Week { get; set; }
-
-
-    //     [XmlElement (ElementName = "start", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
-    //     public string WeekStart { get; set; }
-
-
-    //     [XmlElement (ElementName = "end", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
-    //     public string WeekEnd { get; set; }
-
-
-    //     [XmlElement (ElementName = "manager", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
-    //     public List<YahooManager> MatchupManagers { get; set; }
-
-
-    //     [XmlElement (ElementName = "matchup_winner", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
-    //     public YahooManager MatchupWinningManager { get; set; }
-
-
-    //     [XmlElement (ElementName = "matchup_loser", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
-
-    //     public YahooManager MatchupLosingManager { get; set; }
-    // }
-
     [XmlRoot (ElementName = "matchups")]
     public class YahooMatchups
     {
@@ -129,8 +101,5 @@ namespace BaseballScraper.Models.Yahoo
         [XmlElement (ElementName = "is_tied")]
         public string IsTied { get; set; }
     }
-
-
-
 
 }

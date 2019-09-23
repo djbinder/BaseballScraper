@@ -12,7 +12,7 @@ using BaseballScraper.Models;
 using BaseballScraper.Models.BaseballSavant;
 
 
-#pragma warning disable CS0219, CS0414, CS1998, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
+#pragma warning disable CS0219, CS0414, CS1998, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006, MA0016
 namespace BaseballScraper.Controllers.BaseballSavantControllers
 {
     [Route("api/baseballsavant/[controller]")]
@@ -27,7 +27,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
         private readonly CsvHandler                     _csvHandler;
         private readonly ProjectDirectoryEndPoints      _projectDirectory;
 
-        public System.Threading.CancellationToken cancellationToken = new System.Threading.CancellationToken();
+        private System.Threading.CancellationToken cancellationToken = new System.Threading.CancellationToken();
 
 
 
@@ -79,7 +79,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             get => $"{PitcherWriteDirectory}{_allSpCswDateRangeCvs}";
         }
 
-        private List<dynamic> _dynamicList = new List<dynamic>();
+        private readonly List<dynamic> _dynamicList = new List<dynamic>();
 
 
 
@@ -809,7 +809,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
         #region PRINTING PRESS ------------------------------------------------------------
 
 
-            public void PrintDatabaseAddOutcomes(int countAdded, int countNotAdded)
+            private void PrintDatabaseAddOutcomes(int countAdded, int countNotAdded)
             {
                 C.WriteLine($"\n-------------------------------------------------------------------");
                 _helpers.PrintNameSpaceControllerNameMethodName(typeof(BaseballSavantSpController));
@@ -819,7 +819,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             }
 
 
-            public void PrintBsSpCswDetail(List<dynamic> list)
+            private void PrintBsSpCswDetail(List<dynamic> list)
             {
                 int count = 1;
                 foreach(var record in list)
@@ -860,7 +860,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
                     "Name",
                     "Pitches",
                     "CswPitches",
-                    "CSW%"
+                    "CSW%",
                 };
 
                 var dataTable = _dataTabler.CreateDataTableWithCustomHeaders("CSW PITCHERS", tableHeaders);
@@ -872,7 +872,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
                         pitcher.PlayerName,
                         pitcher.TotalPitches,
                         pitcher.CswPitches,
-                        pitcher.CswPitchPercent
+                        pitcher.CswPitchPercent,
                     };
                     _dataTabler.InsertDataRowIntoTable(dataTable, pitcherData);
                 }

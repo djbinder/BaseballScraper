@@ -1,7 +1,7 @@
-// using BaseballScraper.Models.Player;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using BaseballScraper.Infrastructure;
 using BaseballScraper.Models.BaseballHq;
@@ -9,12 +9,12 @@ using BaseballScraper.Models.BaseballSavant;
 using BaseballScraper.Models.FanGraphs;
 using BaseballScraper.Models.Player;
 using BaseballScraper.Models.Yahoo;
-using BaseballScraper.Models.Yahoo.Resources.YahooTeamResource;
-using Microsoft.AspNetCore.Http;
+using BaseballScraper.Models.Yahoo.Resources;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using C = System.Console;
 
+#pragma warning disable MA0061
 namespace BaseballScraper.Models
 {
     public class BaseballScraperContext: DbContext
@@ -162,7 +162,7 @@ namespace BaseballScraper.Models
 
         // See: http://bit.ly/2ZJTvbK
         // * Runs when you do _context.SaveChangesAsync();
-        public override Task<int> SaveChangesAsync(System.Threading.CancellationToken cancellationToken)
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken)
         {
             // _helpers.OpenMethod(3);
 

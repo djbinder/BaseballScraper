@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using BaseballScraper.Infrastructure;
 using BaseballScraper.Models.ConfigurationModels;
@@ -12,7 +13,7 @@ using Tweetinvi.Models.DTO.QueryDTO;
 using Tweetinvi.Parameters;
 
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE0063, IDE1006
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE0063, IDE1006, MA0016
 namespace BaseballScraper.Controllers.TwitterControllers
 {
     [Route("api/twitter/[controller]")]
@@ -294,7 +295,7 @@ namespace BaseballScraper.Controllers.TwitterControllers
             /// </returns>
             public ITweet GetTweetFromTweetId(string tweetIdString)
             {
-                var tweetId = long.Parse(tweetIdString);
+                var tweetId = long.Parse(tweetIdString, CultureInfo.InvariantCulture);
                 ITweet tweet = Tweet.GetTweet(tweetId);
                 return tweet;
             }
@@ -603,7 +604,7 @@ namespace BaseballScraper.Controllers.TwitterControllers
                 var tweetsParameters = new GetTweetsFromListParameters()
                 {
                     SinceId = currentSinceId,
-                    IncludeRetweets = includeRetweets
+                    IncludeRetweets = includeRetweets,
                 };
                 IEnumerable<ITweet> tweets = list.GetTweets(tweetsParameters);
 
@@ -629,7 +630,7 @@ namespace BaseballScraper.Controllers.TwitterControllers
                 var tweetsParameters = new GetTweetsFromListParameters()
                 {
                     // Until = new DateTime(2019,06,23),
-                    IncludeRetweets = includeRetweets
+                    IncludeRetweets = includeRetweets,
                 };
                 IEnumerable<ITweet> tweets = list.GetTweets(tweetsParameters);
                 // PrintTweetInfoFromIEnumerableITweet(tweets);
@@ -763,7 +764,7 @@ namespace BaseballScraper.Controllers.TwitterControllers
             {
                 var rightNow = DateTime.Now;
                 using (System.IO.StreamWriter file =
-                    new System.IO.StreamWriter(@"Configuration/twittersinceId.txt", true))
+                    new System.IO.StreamWriter(@"Configuration/twittersinceId.txt", append: true))
                     {
                         file.WriteLine(rightNow);
                         file.WriteLine(sinceId);
@@ -800,7 +801,7 @@ namespace BaseballScraper.Controllers.TwitterControllers
                     sinceIdString = line;
                     try
                     {
-                        sinceId = long.Parse(sinceIdString);
+                        sinceId = long.Parse(sinceIdString, CultureInfo.InvariantCulture);
                     }
                     catch { }
                     counter++;

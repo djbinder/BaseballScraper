@@ -38,7 +38,7 @@ namespace BaseballScraper.Controllers.YahooControllers
         }
 
 
-        // TODO: add XML summary comments
+        // TO-DO: add XML summary comments
         // Step 1
         public void CreateYahooLeagueScoreboard ()
         {
@@ -60,7 +60,7 @@ namespace BaseballScraper.Controllers.YahooControllers
             await Task.Run(() => { CreateYahooLeagueScoreboard(); });
         }
 
-        // TODO: this is current void; need to make it so it instantiates a new instance
+        // TO-DO: this is current void; need to make it so it instantiates a new instance
         // Step 3
         /// <example> https://127.0.0.1:5001/api/yahoo/scoreboard </example>
         [HttpGet]

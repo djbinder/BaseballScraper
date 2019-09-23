@@ -5,8 +5,9 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using BaseballScraper.Models.Player;
 using CsvHelper.Configuration;
-using Ganss.Excel;
 
+
+#pragma warning disable CA1707, MA0048, MA0051
 namespace BaseballScraper.Models.BaseballHq
 {
 

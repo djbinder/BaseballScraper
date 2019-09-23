@@ -6,6 +6,7 @@ using BaseballScraper.Models.BaseballHq;
 using CsvHelper.Configuration;
 using System;
 
+#pragma warning disable MA0048, MA0051
 namespace BaseballScraper.Models.Player
 {
     public class PlayerBase
@@ -203,7 +204,7 @@ namespace BaseballScraper.Models.Player
         public string RotowirePos  { get; set; }
     }
 
-    public class CrunchTimePlayerBaseClassMap : ClassMap<CrunchTimePlayerBase>
+    public sealed class CrunchTimePlayerBaseClassMap : ClassMap<CrunchTimePlayerBase>
     {
         public CrunchTimePlayerBaseClassMap()
         {

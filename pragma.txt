@@ -1,0 +1,25 @@
+#pragma warning disable 
+
+# CA1707 > Remove underscores in name
+# CA1819 > Properties should not return arrays
+# CA2000 > Dispose objects before losing scope
+
+See : https://github.com/meziantou/Meziantou.Analyzer/tree/master/docs
+
+# MA0004 > Use ConfigureAwait(false) as the current SynchronizationContext is not needed
+# MA0007 > Add comma after last property
+# MA0016 > Prefer collection abstraction
+# MA0045 > Use 'ReadToEndAsync' instead of 'ReadToEnd' and make method async
+# MA0048 > File name must match type name 
+# MA0051 > Method is too long (over 60 lines)
+
+Used but not frequently:
+# MA0002 > Use an overload that has a IEqualityComparer<string> parameter 
+# MA0040 > Specify a CancellationToken (cancellationToken) 
+# MA0061 > Method overrides should not change parameter defaults
+
+
+
+CultureInfo.InvariantCulture
+
+if (long.TryParse(value, NumberStyles.None, CultureInfo.InvariantCulture, out long l))

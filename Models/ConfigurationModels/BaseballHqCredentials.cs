@@ -1,4 +1,5 @@
-﻿namespace BaseballScraper.Models.ConfigurationModels
+﻿#pragma warning disable MA0048
+namespace BaseballScraper.Models.ConfigurationModels
 {
     public class BaseballHqCredentials : IBaseballHqCredentials
     {

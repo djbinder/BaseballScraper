@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 using Newtonsoft.Json;
 using System;
 
-namespace BaseballScraper.Models.Yahoo.Resources.YahooTeamResource
+namespace BaseballScraper.Models.Yahoo.Resources
 {
     // meta: /fantasy/v2/team/{team_key}/metadata
     [XmlRoot(ElementName = "team")]

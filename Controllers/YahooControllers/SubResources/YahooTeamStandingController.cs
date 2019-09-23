@@ -29,7 +29,7 @@ namespace BaseballScraper.Controllers.YahooControllers
         }
 
 
-        // TODO: most of this has been broken out into other methods; needs to be cleaned up
+        // TO-DO: most of this has been broken out into other methods; needs to be cleaned up
         /// <summary> Return instantiated 'YahooTeamStanding' </summary>
         /// <example> https://127.0.0.1:5001/api/yahoo/teamstanding </example>
         /// <returns> rank, playoff seed, games back, wins, losses, ties, winning percentage </returns>

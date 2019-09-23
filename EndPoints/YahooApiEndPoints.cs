@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Globalization;
 using BaseballScraper.Infrastructure;
 using Newtonsoft.Json.Linq;
 
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006, MA0007, MA0048, MA0051
 namespace BaseballScraper.EndPoints
 {
     public class YahooApiEndPoints
@@ -639,7 +640,7 @@ namespace BaseballScraper.EndPoints
                 EndPointType = "players";
                 string sortType = "AR";
                 string sortTypeType = "date";
-                string todaysDateString = DateTime.Now.ToString("YYYY-MM-DD");
+                string todaysDateString = DateTime.Now.ToString("YYYY-MM-DD", CultureInfo.InvariantCulture);
 
                 return new EndPoint
                 {
