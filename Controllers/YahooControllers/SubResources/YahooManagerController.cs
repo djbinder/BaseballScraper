@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 
 
-#pragma warning disable CS0168, CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
+#pragma warning disable CS0168, CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006, MA0016
 namespace BaseballScraper.Controllers.YahooControllers
 {
     [Route("api/yahoo/[controller]")]
@@ -90,7 +90,7 @@ namespace BaseballScraper.Controllers.YahooControllers
                     // these pull from the yahoo response (xml or json) to set each item
                     ManagerId = _endPoints.TeamItem(leagueStandings, managerId, "ManagerId"),
                     NickName = _endPoints.TeamItem(leagueStandings, managerId, "Nickname"),
-                    Guid = _endPoints.TeamItem(leagueStandings, managerId, "Guid")
+                    Guid = _endPoints.TeamItem(leagueStandings, managerId, "Guid"),
                 };
 
                 // Only the commish of the league will have  the "IsCommissioner" field
@@ -138,7 +138,7 @@ namespace BaseballScraper.Controllers.YahooControllers
                     // these pull from the yahoo response (xml or json) to set each item
                     ManagerId = _endPoints.TeamItem(leagueStandings, managerId, "ManagerId"),
                     NickName = _endPoints.TeamItem(leagueStandings, managerId, "Nickname"),
-                    Guid = _endPoints.TeamItem(leagueStandings, managerId, "Guid")
+                    Guid = _endPoints.TeamItem(leagueStandings, managerId, "Guid"),
                 };
 
                 // Only the commish of the league will have  the "IsCommissioner" field

@@ -8,9 +8,10 @@ using System.Collections.Generic;
 using C = System.Console;
 using BaseballScraper.EndPoints;
 using BaseballScraper.Models.BrooksBaseball;
+using System.Globalization;
 
 
-#pragma warning disable CS0219, CS0414, CS1570, CS1572, CS1573, CS1584, CS1587, CS1591, CS1658, CS1998, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
+#pragma warning disable CS0219, CS0414, CS1570, CS1572, CS1573, CS1584, CS1587, CS1591, CS1658, CS1998, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006, MA0016
 namespace BaseballScraper.Controllers.BrooksBaseballControllers
 {
     [Route("api/brooks/[controller]")]
@@ -278,19 +279,19 @@ namespace BaseballScraper.Controllers.BrooksBaseballControllers
             // BrooksBaseballPitcher > BrooksBaseballPitcherProfile > PitchTabularData
             PitchTabularData pitchTabularData = new PitchTabularData
             {
-                PitchTabularData_TrajectoryAndMovement = pitchTabularData_TrajectoryAndMovement
+                PitchTabularData_TrajectoryAndMovement = pitchTabularData_TrajectoryAndMovement,
             };
 
             // BrooksBaseballPitcher > BrooksBaseballPitcherProfile
             BrooksBaseballPitcherProfile pitcherProfile = new BrooksBaseballPitcherProfile
             {
-                PitchTabularData = pitchTabularData
+                PitchTabularData = pitchTabularData,
             };
 
             // BrooksBaseballPitcher
             BrooksBaseballPitcher brooksBaseballPitcher = new BrooksBaseballPitcher
             {
-                PitcherProfile = pitcherProfile
+                PitcherProfile = pitcherProfile,
             };
 
             // _helpers.Dig(brooksBaseballPitcher);
@@ -309,25 +310,25 @@ namespace BaseballScraper.Controllers.BrooksBaseballControllers
             // * BrooksBaseballPitcher > BrooksBaseballPitcherProfile > PitchTabularData > PitchTabularData_TrajectoryAndMovement > (1) PitchTabularData_NoComparison
             PitchTabularData_NoComparison pitcherNoComparison = new PitchTabularData_NoComparison
             {
-                MetricsForEachPitch = metricsForEachPitch_NoComparison
+                MetricsForEachPitch = metricsForEachPitch_NoComparison,
             };
 
             // * BrooksBaseballPitcher > BrooksBaseballPitcherProfile > PitchTabularData > PitchTabularData_TrajectoryAndMovement > (2) PitchTabularData_ZScore
             PitchTabularData_ZScore pitcherZScoreComparison = new PitchTabularData_ZScore
             {
-                MetricsForEachPitch = metricsForEachPitch_ZScoreComparison
+                MetricsForEachPitch = metricsForEachPitch_ZScoreComparison,
             };
 
             // * BrooksBaseballPitcher > BrooksBaseballPitcherProfile > PitchTabularData > PitchTabularData_TrajectoryAndMovement > (3) PitchTabularData_PitchIQ
             PitchTabularData_PitchIQ pitcherPitchIQComparison = new PitchTabularData_PitchIQ
             {
-                MetricsForEachPitch = metricsForEachPitch_PitchIQ
+                MetricsForEachPitch = metricsForEachPitch_PitchIQ,
             };
 
             // * BrooksBaseballPitcher > BrooksBaseballPitcherProfile > PitchTabularData > PitchTabularData_TrajectoryAndMovement > (4) PitchTabularData_Scout
             PitchTabularData_Scout pitcherScoutComparison = new PitchTabularData_Scout
             {
-                MetricsForEachPitch = metricsForEachPitch_Scout
+                MetricsForEachPitch = metricsForEachPitch_Scout,
             };
 
             // * BrooksBaseballPitcher > BrooksBaseballPitcherProfile > PitchTabularData > PitchTabularData_TrajectoryAndMovement
@@ -336,7 +337,7 @@ namespace BaseballScraper.Controllers.BrooksBaseballControllers
                 PitchTabularData_NoComparison = pitcherNoComparison,
                 PitchTabularData_ZScore       = pitcherZScoreComparison,
                 PitchTabularData_PitchIQ      = pitcherPitchIQComparison,
-                PitchTabularData_Scout        = pitcherScoutComparison
+                PitchTabularData_Scout        = pitcherScoutComparison,
             };
         }
 
@@ -348,20 +349,29 @@ namespace BaseballScraper.Controllers.BrooksBaseballControllers
         // *    Comparison Types: 1) NoComparison 2) ZScore 3) PitchIQ 4) Scout
         public PitchTabularData_Metric InstantiatePitchTabularData_Metric(HtmlNodeCollection currentRowNodeCollection)
         {
-            string freqStringWithPercentageSymbol = currentRowNodeCollection.ElementAt(2).InnerText;
-            string splitString = freqStringWithPercentageSymbol.Split('%').First();
-            double frequencyThrownDouble = double.Parse(splitString);
+            string freqStringWithPercentageSymbol = currentRowNodeCollection[2].InnerText;
+            
+            string splitString = freqStringWithPercentageSymbol.Split('%')[0];
+
+            double frequencyThrownDouble = double.Parse(splitString, NumberStyles.None, CultureInfo.InvariantCulture);
 
             return new PitchTabularData_Metric
             {
-                PitchType              = currentRowNodeCollection.ElementAt(0).InnerText,
-                NumberOfPitches        = int.Parse(currentRowNodeCollection.ElementAt(1).InnerText),
+                PitchType              = currentRowNodeCollection[0].InnerText,
+
+                NumberOfPitches        = int.Parse(currentRowNodeCollection[1].InnerText, NumberStyles.None, CultureInfo.InvariantCulture),
+
                 FrequencyThrown        = frequencyThrownDouble,
-                PitchVelocity          = double.Parse(currentRowNodeCollection.ElementAt(3).InnerText),
-                HorizontalMovement     = double.Parse(currentRowNodeCollection.ElementAt(4).InnerText),
-                VerticalMovement       = double.Parse(currentRowNodeCollection.ElementAt(5).InnerText),
-                HorizontalReleasePoint = double.Parse(currentRowNodeCollection.ElementAt(6).InnerText),
-                VerticalReleasePoint   = double.Parse(currentRowNodeCollection.ElementAt(7).InnerText)
+
+                PitchVelocity          = double.Parse(currentRowNodeCollection[3].InnerText, NumberStyles.None, CultureInfo.InvariantCulture),
+
+                HorizontalMovement     = double.Parse(currentRowNodeCollection[4].InnerText, NumberStyles.None, CultureInfo.InvariantCulture),
+
+                VerticalMovement       = double.Parse(currentRowNodeCollection[5].InnerText, NumberStyles.None, CultureInfo.InvariantCulture),
+
+                HorizontalReleasePoint = double.Parse(currentRowNodeCollection[6].InnerText, NumberStyles.None, CultureInfo.InvariantCulture),
+
+                VerticalReleasePoint   = double.Parse(currentRowNodeCollection[7].InnerText, NumberStyles.None, CultureInfo.InvariantCulture),
             };
         }
 

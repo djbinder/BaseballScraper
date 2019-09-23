@@ -2,9 +2,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Xml.Serialization;
 using System;
 
+#pragma warning disable MA0016, MA0048
 namespace BaseballScraper.Models.Yahoo
 {
-
     [XmlRoot (ElementName = "team_logos")]
     public class YahooTeamLogos : IBaseEntity
     {

@@ -2,6 +2,7 @@
 
 using CsvHelper.Configuration;
 
+#pragma warning disable MA0048
 namespace BaseballScraper.Models.Lahman
 {
 public class LahmanPitching
@@ -38,7 +39,7 @@ public class LahmanPitching
     public string DoublePlaysInduced { get; set; }
 }
 
-public class LahmanPitchingClassMap: ClassMap<LahmanPitching>
+public sealed class LahmanPitchingClassMap: ClassMap<LahmanPitching>
 {
     public LahmanPitchingClassMap()
     {

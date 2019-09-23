@@ -1,5 +1,6 @@
 using System;
 
+#pragma warning disable CA1819
 namespace BaseballScraper.Models.Yahoo.Filters
 {
     public partial class YahooPlayersCollectionFilters

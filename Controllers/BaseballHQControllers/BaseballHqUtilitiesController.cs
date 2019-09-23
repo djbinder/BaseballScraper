@@ -61,10 +61,10 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
             public async Task<Page> CreateChromePage()
             {
                 LaunchOptions options = new LaunchOptions { Headless = false, ExecutablePath =_chromePath };
-                await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultRevision);
+                await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultRevision).ConfigureAwait(false);
 
-                var browser = await Puppeteer.LaunchAsync(options);
-                var page    = await browser.NewPageAsync();
+                var browser = await Puppeteer.LaunchAsync(options).ConfigureAwait(false);
+                var page    = await browser.NewPageAsync().ConfigureAwait(false);
 
                 return page;
             }
@@ -84,10 +84,10 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
                 string hqPassword   = _hqCredentials.Password;
                 string loginPageUrl = _hqCredentials.LoginLink;
 
-                await page.GoToAsync(loginPageUrl, 0);
-                await WaitForSelectorClickThenType(page, userNameSelector, hqUserName); // click user name box and enter user name
-                await WaitForSelectorClickThenType(page, passwordSelector, hqPassword); // click password box and enter password
-                await WaitForSelectorThenClick(page, loginButtonSelector);              // click login button
+                await page.GoToAsync(loginPageUrl, 0).ConfigureAwait(false);
+                await WaitForSelectorClickThenType(page, userNameSelector, hqUserName).ConfigureAwait(false); // click user name box and enter user name
+                await WaitForSelectorClickThenType(page, passwordSelector, hqPassword).ConfigureAwait(false); // click password box and enter password
+                await WaitForSelectorThenClick(page, loginButtonSelector).ConfigureAwait(false);              // click login button
             }
 
 
@@ -99,9 +99,10 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
             // * Should probably be moved to some kind of file manager utility / infrastructure
             public async Task DownloadHqReport(Page page, string reportSelector)
             {
-                await page.GoToAsync(_hqReportsUrl);
-                await page.ClickAsync(reportSelector);
-                Thread.Sleep(5000);
+                await page.GoToAsync(_hqReportsUrl).ConfigureAwait(false);
+                await page.ClickAsync(reportSelector).ConfigureAwait(false);
+                await Task.Delay(5000).ConfigureAwait(false);
+                // Thread.Sleep(5000);
             }
 
 
@@ -155,9 +156,9 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
             // * Should probably be moved to some kind of file manager utility / infrastructure
             public async Task WaitForSelectorClickThenType(Page page, string cssSelector, string valueToType)
             {
-                await page.WaitForSelectorAsync(cssSelector);
-                await page.ClickAsync(cssSelector);
-                await page.Keyboard.TypeAsync(valueToType);
+                await page.WaitForSelectorAsync(cssSelector).ConfigureAwait(false);
+                await page.ClickAsync(cssSelector).ConfigureAwait(false);
+                await page.Keyboard.TypeAsync(valueToType).ConfigureAwait(false);
             }
 
 
@@ -166,8 +167,8 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
             // * Should probably be moved to some kind of file manager utility / infrastructure
             public async Task WaitForSelectorThenClick(Page page, string cssSelector)
             {
-                await page.WaitForSelectorAsync(cssSelector);
-                await page.ClickAsync(cssSelector);
+                await page.WaitForSelectorAsync(cssSelector).ConfigureAwait(false);
+                await page.ClickAsync(cssSelector).ConfigureAwait(false);
             }
 
 
@@ -180,7 +181,7 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
                 ProcessStartInfo processStartInfo = new ProcessStartInfo
                 {
                     UseShellExecute = true,
-                    FileName = fullFilePath
+                    FileName = fullFilePath,
                 };
                 process.StartInfo = processStartInfo;
                 process.Start();

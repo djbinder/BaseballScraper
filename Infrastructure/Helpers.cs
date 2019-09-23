@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization.Json;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DiagnosticAdapter;
@@ -14,50 +13,39 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE0063, IDE0067, IDE1006
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE0063, IDE0067, IDE1006, MA0016
 namespace BaseballScraper.Infrastructure
 {
     public class Helpers
     {
         public Helpers() {}
 
-        private static string currentTime     = DateTime.Now.ToShortTimeString();
+        private static string currentTime = DateTime.Now.ToShortTimeString();
 
 
 
 
         #region LOGGERS ------------------------------------------------------------
 
-            // public void PrintSeasons()
-            // {
-            //     PlayerSeasons.ForEach((season) => C.WriteLine($"season: {season}"));
-            // }
 
             public void Intro(object obj, string str)
             {
+                if (obj is null)
+                    throw new ArgumentNullException(nameof(obj));
+                
+
+                if (string.IsNullOrEmpty(str))
+                    throw new ArgumentException("message", nameof(str));
+
+
                 Console.ForegroundColor = ConsoleColor.Green;
-                StackFrame frame = new StackFrame(1, true);
-                var lineNumber = frame.GetFileLineNumber();
-                Console.WriteLine($"\n{str.ToUpper()} --> {obj} --> [@ Line# {lineNumber}]\n");
+                StackFrame frame        = new StackFrame(1, fNeedFileInfo: true);
+                var lineNumber          = frame.GetFileLineNumber();
+                Console.WriteLine($"\n{str.ToUpper(CultureInfo.InvariantCulture)} --> {obj} --> [@ Line# {lineNumber}]\n");
                 Console.ResetColor();
             }
 
-
-            // public void GuardRails(string logMessage, int numberOfRails)
-            // {
-            //     for(int topRails = 1; numberOfRails >= topRails; topRails++)
-            //     {
-            //         Console.WriteLine("**************************************************************");
-            //     }
-            //     Console.WriteLine($"\n{logMessage}\n");
-            //     for(int bottomRails = 1; numberOfRails >= bottomRails; bottomRails++)
-            //     {
-            //         Console.WriteLine("**************************************************************");
-            //     }
-            // }
-
-
-            public void TypeAndIntro(Object o, string x)
+            public void TypeAndIntro(object o, string x)
             {
                 Intro(o, x);
                 Console.WriteLine($"Type for {x} --> {o.GetType()}");
@@ -80,7 +68,7 @@ namespace BaseballScraper.Infrastructure
                 foreach(var jsonItem in responseToJson)
                 {
                     Console.ForegroundColor = ConsoleColor.DarkMagenta;
-                    Console.WriteLine($"{jsonItem.Key.ToUpper()}");
+                    Console.WriteLine($"{jsonItem.Key.ToUpper(CultureInfo.InvariantCulture)}");
                     Console.ResetColor();
                     Console.WriteLine($"{jsonItem.Value}\n");
                 }
@@ -94,7 +82,7 @@ namespace BaseballScraper.Infrastructure
             ///     An object; typically a JObject
             ///     Not certain how it deals with objects besides JObjects)
             /// </param>
-            public void PrintJsonFromObject (Object obj)
+            public void PrintJsonFromObject (object obj)
             {
                 //Create a stream to serialize the object to.
                 MemoryStream mS = new MemoryStream();
@@ -113,53 +101,13 @@ namespace BaseballScraper.Infrastructure
                 // this prints all object content in json format
                 Console.WriteLine(sR.ReadToEnd());
 
+                sR.Dispose();
                 mS.Close();
 
                 Console.WriteLine(Encoding.UTF8.GetString(json, 0, json.Length));
             }
 
 
-            // public void PrintTypes (Type type)
-            // {
-            //     Console.WriteLine($"\nIsArray: {type.IsArray}");
-            //     Console.WriteLine($"Name: {type.Name}");
-            //     Console.WriteLine($"IsSealed: {type.IsSealed}");
-            //     Console.WriteLine($"BaseType.Name: {type.BaseType.Name}\n");
-            // }
-
-
-            // STATUS: this works
-            // / <summary>
-            // /     Print a data table in console
-            // / </summary>
-            // / <param name="dataTable">
-            // /     The data table that you want to print in console
-            // / </param>
-            // private void PrintDataTable (DataTable dataTable)
-            // {
-            //     foreach (DataColumn col in dataTable.Columns)
-            //     {
-            //         Console.Write ("{0,-14}", col.ColumnName);
-            //     }
-            //     Console.WriteLine ();
-
-            //     foreach (DataRow row in dataTable.Rows)
-            //     {
-            //         foreach (DataColumn col in dataTable.Columns)
-            //         {
-            //             if (col.DataType.Equals (typeof (DateTime)))
-            //                 Console.Write ("{0,-14:d}", row[col]);
-
-            //             else if (col.DataType.Equals (typeof (Decimal)))
-            //                 Console.Write ("{0,-14:C}", row[col]);
-
-            //             else
-            //                 Console.Write ("{0,-14}", row[col]);
-            //         }
-            //         Console.WriteLine ();
-            //     }
-            //     Console.WriteLine ();
-            // }
 
 
             // STATUS: this works
@@ -199,7 +147,7 @@ namespace BaseballScraper.Infrastructure
             {
                 Console.ForegroundColor = ConsoleColor.Blue;
                 StackTrace stackTrace   = new StackTrace();
-                StackFrame frame        = new StackFrame(1, true);
+                StackFrame frame        = new StackFrame(1, fNeedFileInfo: true);
 
                 string methodName;
 
@@ -208,9 +156,10 @@ namespace BaseballScraper.Infrastructure
                     methodName = stackTrace.GetFrame(2).GetMethod().Name;
                 }
 
-                catch
+                catch(Exception ex)
                 {
                     methodName = stackTrace.GetFrame(1).GetMethod().Name;
+                    Console.WriteLine(ex.Message);
                 }
 
                 Console.WriteLine($"NAME_SPACE : {type.Namespace}");
@@ -219,15 +168,6 @@ namespace BaseballScraper.Infrastructure
 
                 Console.ResetColor();
             }
-
-            // public void PrintDictionaryItems(Dictionary<string, object> dict)
-            // {
-            //     foreach(var item in dict)
-            //     {
-            //         Console.WriteLine($"{item.Key} : {item.Value}");
-            //     }
-            // }
-
 
 
         #endregion LOGGERS ------------------------------------------------------------
@@ -238,7 +178,7 @@ namespace BaseballScraper.Infrastructure
 
         #region GETTERS ------------------------------------------------------------
 
-            // STATUS: //TODO: need to be able to pass a model in as a parameter; it's currently hardcoded into the function
+            // STATUS: //TO-DO: need to be able to pass a model in as a parameter; it's currently hardcoded into the function
             // / <summary> Given a model / class, get the properties of that model </summary>
             // / <returns> Model properties for a given class (e.g, FanGraphsPitcher) </returns>
             // public PropertyInfo[] GetModelProperties()
@@ -250,7 +190,7 @@ namespace BaseballScraper.Infrastructure
             //     return modelProperties;
             // }
 
-            // STATUS: //TODO: need to be able to pass a model in as a parameter to the GetModelProperties() function within the method
+            // STATUS: //TO-DO: need to be able to pass a model in as a parameter to the GetModelProperties() function within the method
             // / <summary> Given a model / class, create a list(string) of the models property names (e.g, Wins) </summary>
             // / <returns> A list of property names </returns>
             // public List<string> CreateListOfModelProperties()
@@ -306,12 +246,12 @@ namespace BaseballScraper.Infrastructure
 
             public void Spotlight (string message)
             {
-                string fullMessage = JsonConvert.SerializeObject(message, Formatting.Indented).ToUpper();
+                string fullMessage = JsonConvert.SerializeObject(message, Formatting.Indented).ToUpper(CultureInfo.InvariantCulture);
 
-                StackFrame frame      = new StackFrame(1, true);
+                StackFrame frame      = new StackFrame(1, fNeedFileInfo: true);
                 var        lineNumber = frame.GetFileLineNumber();
 
-                using (var writer = new System.IO.StringWriter())
+                using (StringWriter writer = new StringWriter())
                 {
                     Console.ForegroundColor = ConsoleColor.Magenta;
                     Console.WriteLine($"{fullMessage} @ Line#: {lineNumber}");
@@ -323,9 +263,9 @@ namespace BaseballScraper.Infrastructure
 
             public void Highlight (string message)
             {
-                string fullMessage = JsonConvert.SerializeObject(message, Formatting.Indented).ToUpper();
+                string fullMessage = JsonConvert.SerializeObject(message, Formatting.Indented).ToUpper(CultureInfo.InvariantCulture);
 
-                using (var writer = new System.IO.StringWriter())
+                using (StringWriter writer = new StringWriter())
                 {
                     Console.ForegroundColor = ConsoleColor.Magenta;
                     Console.WriteLine($"{fullMessage}");
@@ -341,7 +281,7 @@ namespace BaseballScraper.Infrastructure
 
                 var methodName = stackTrace.GetFrame(1).GetMethod().Name;
 
-                StackFrame frame    = new StackFrame(1, true);
+                StackFrame frame    = new StackFrame(1, fNeedFileInfo: true);
                 var        method   = frame.GetMethod();
                 var        fileName = frame.GetFileName();
 
@@ -365,7 +305,7 @@ namespace BaseballScraper.Infrastructure
                 // var methodName = GetMethodName();
                 var methodName = stackTrace.GetFrame(1).GetMethod().Name;
 
-                StackFrame frame    = new StackFrame(1, true);
+                StackFrame frame    = new StackFrame(1, fNeedFileInfo: true);
                 var        method   = frame.GetMethod();
                 var        fileName = frame.GetFileName();
 
@@ -387,7 +327,7 @@ namespace BaseballScraper.Infrastructure
 
                 StackTrace stackTrace  = new StackTrace();
                 string methodName      = stackTrace.GetFrame(frameNumber).GetMethod().Name;
-                StackFrame frame       = new StackFrame(1, true);
+                StackFrame frame       = new StackFrame(1, fNeedFileInfo: true);
                 string fileName        = frame.GetFileName();
                 int lineNumber         = frame.GetFileLineNumber();
                 string fileNameTrimmed = Path.GetFileName(fileName);
@@ -406,7 +346,7 @@ namespace BaseballScraper.Infrastructure
 
                 var methodName = stackTrace.GetFrame(1).GetMethod().Name;
 
-                StackFrame frame    = new StackFrame(1, true);
+                StackFrame frame    = new StackFrame(1, fNeedFileInfo: true);
                 // var        method   = frame.GetMethod();
                 var        fileName = frame.GetFileName();
 
@@ -425,7 +365,7 @@ namespace BaseballScraper.Infrastructure
 
                 StackTrace stackTrace  = new StackTrace();
                 string methodName      = stackTrace.GetFrame(frameNumber).GetMethod().Name;
-                StackFrame frame       = new StackFrame(1, true);
+                StackFrame frame       = new StackFrame(1, fNeedFileInfo: true);
                 string fileName        = frame.GetFileName();
                 int lineNumber         = frame.GetFileLineNumber();
                 string fileNameTrimmed = Path.GetFileName(fileName);
@@ -458,7 +398,7 @@ namespace BaseballScraper.Infrastructure
             }
 
 
-            public void DigObj(Object obj)
+            public void DigObj(object obj)
             {
                 string json = JsonConvert.SerializeObject(obj, Formatting.Indented);
                 Console.WriteLine($"\n------------------------------------------------------------------");
@@ -474,7 +414,7 @@ namespace BaseballScraper.Infrastructure
             {
                 Console.ForegroundColor = ConsoleColor.DarkRed;
 
-                using (var writer = new System.IO.StringWriter())
+                using (var writer = new StringWriter())
                 {
                     ObjectDumper.Dumper.Dump(x, "Object Dumper", writer);
                     Console.Write(writer.ToString());
@@ -502,7 +442,7 @@ namespace BaseballScraper.Infrastructure
 
             public int ConvertStringToInt(string valueString)
             {
-                int valueInt = Int32.Parse(valueString);
+                int valueInt = int.Parse(valueString, CultureInfo.InvariantCulture);
                 return valueInt;
             }
 
@@ -537,6 +477,9 @@ namespace BaseballScraper.Infrastructure
                 // EnumerateOverRecordsDynamic(dynamicRecords);
             public void EnumerateOverRecordsDynamic(IEnumerable<dynamic> records)
             {
+                if (records is null)
+                    throw new ArgumentNullException(nameof(records));
+
                 // DYNAMIC RECORDS --> CsvHelper.CsvReader+<GetRecords>d__63`1[System.Object]
                 // DYNAMIC RECORDS --> System.Collections.Generic.IEnumerable<dynamic> dynamicRecords
                 // DYNAMIC RECORD type --> System.Dynamic.ExpandoObject
@@ -549,16 +492,22 @@ namespace BaseballScraper.Infrastructure
 
             public void EnumerateOverRecordsObject(IEnumerable<object> records)
             {
-                foreach(var record in records)
+                if (records is null)
+                    throw new ArgumentNullException(nameof(records));
+
+                foreach (var record in records)
                 {
                     Dig(record);
                 }
-            }
+                }
 
 
             public void EnumerateOverRecords(IEnumerable<object> records)
             {
-                var recordsEnumerator = records.GetEnumerator();
+                if (records is null)
+                    throw new ArgumentNullException(nameof(records));
+
+                IEnumerator<object> recordsEnumerator = records.GetEnumerator();
                 while(recordsEnumerator.MoveNext())
                 {
                     Console.WriteLine(recordsEnumerator.Current);
@@ -638,11 +587,11 @@ namespace BaseballScraper.Infrastructure
                         _diagnostics.Write("DiagnosticListenerExample.MiddlewareStarting",
                             new
                             {
-                                httpContext = context
+                                httpContext = context,
                             });
                     }
 
-                    await _next.Invoke(context);
+                    await _next.Invoke(context).ConfigureAwait(false);
                 }
             }
 
@@ -693,55 +642,4 @@ namespace BaseballScraper.Infrastructure
         #endregion DIAGNOSTICS ------------------------------------------------------------
 
     }
-
-
-
-    // to call:
-    // var json = JToken.Parse(/* JSON string */);
-    // var fieldsCollector = new JsonFieldsCollector(json);
-    // var fields = fieldsCollector.GetAllFields();
-    // foreach (var field in fields) Console.WriteLine($"{field.Key}: '{field.Value}'");
-    // public class JsonFieldsCollector
-    // {
-    //     private readonly Dictionary<string, JValue> fields;
-
-    //     public JsonFieldsCollector (JToken token)
-    //     {
-    //         fields = new Dictionary<string, JValue> ();
-    //         Console.WriteLine("--------------------------------------------------------");
-    //         CollectFields (token);
-    //     }
-
-    //     private void CollectFields(JToken jToken)
-    //     {
-    //         switch (jToken.Type)
-    //         {
-    //             case JTokenType.Object:
-    //                 foreach (var child in jToken.Children<JProperty>())
-    //                 {
-    //                     Console.WriteLine($"child1: {child}");
-    //                     CollectFields(child);
-    //                 }
-    //                 break;
-
-    //             case JTokenType.Array:
-    //                 foreach (var child in jToken.Children())
-    //                 {
-    //                     Console.WriteLine($"child2: {child}");
-    //                     CollectFields(child);
-    //                 }
-    //                 break;
-
-    //             case JTokenType.Property:
-    //                 CollectFields(((JProperty) jToken).Value);
-    //                 break;
-    //             default:
-    //                 fields.Add(jToken.Path, (JValue)jToken);
-    //                 break;
-    //         }
-    //     }
-
-    //     public IEnumerable<KeyValuePair<string, JValue>> GetAllFields () => fields;
-    // }
-
 }

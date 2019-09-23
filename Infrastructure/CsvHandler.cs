@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -13,7 +14,7 @@ using PuppeteerSharp;
 using C = System.Console;
 
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE0063, IDE0067, IDE1006
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE0063, IDE0067, IDE1006, MA0004, MA0016
 namespace BaseballScraper.Infrastructure
 {
     public class CsvHandler
@@ -59,7 +60,8 @@ namespace BaseballScraper.Infrastructure
                     await page.GoToAsync(url, 1000000);
                     await page.WaitForSelectorAsync(csvLinkCssSelector);
                     await page.ClickAsync(csvLinkCssSelector);
-                    Thread.Sleep(5000);
+                    // Thread.Sleep(5000);
+                    await Task.Delay(5000);
                 }
             }
 
@@ -97,7 +99,7 @@ namespace BaseballScraper.Infrastructure
                     fileName          = $"{reportType}_{month}_{day}_{year}.csv";
                     string destFile   = Path.Combine(targetPath, fileName);
 
-                    File.Copy(sourceFile, destFile, true);
+                    File.Copy(sourceFile, destFile, overwrite: true);
                 }
                 else
                 {
@@ -254,10 +256,11 @@ namespace BaseballScraper.Infrastructure
                 {
                     webClient.DownloadFile(csvUrl, fullPathWithFileName);
                 }
+                webClient.Dispose();
             }
 
 
-            public JObject _appSettingsJson = JObject.Parse(File.ReadAllText("Configuration/appsettings.Development.json"));
+            private JObject _appSettingsJson = JObject.Parse(File.ReadAllText("Configuration/appsettings.Development.json"));
 
             public string LocalDownloadsFolderLocation()
             {
@@ -299,6 +302,8 @@ namespace BaseballScraper.Infrastructure
                     csvReader.ReadHeader();
 
                     IEnumerable<object> records = csvReader.GetRecords(modelType);
+
+                    csvReader.Dispose();
                     return records;
                 }
             }
@@ -324,6 +329,7 @@ namespace BaseballScraper.Infrastructure
                     csvReader.ReadHeader();
 
                     var records = csvReader.GetRecords(modelType).ToList();
+                    csvReader.Dispose();
                     return records;
                 }
             }
@@ -357,7 +363,7 @@ namespace BaseballScraper.Infrastructure
                 string fileLocationFullPath = $"{csvFolderPath}{csvFileName}";
 
                 /*  STEPS 1 & 2 */
-                if(fileLocationFullPath.Contains("csv"))
+                if(fileLocationFullPath.Contains("csv", StringComparison.Ordinal))
                 {
                     csvFileFullPath = $"{csvFolderPath}{csvFileName}";
                     newCsvFileName  = $"_{csvFileName}";
@@ -386,13 +392,14 @@ namespace BaseballScraper.Infrastructure
                     /*  STEP 6  */
                     csvReader.Configuration.ShouldSkipRecord = row =>
                     {
-                        return row[0].StartsWith("(");
+                        return row[0].StartsWith("(", StringComparison.Ordinal);
                     };
 
                     csvReader.Read();
                     csvReader.ReadHeader();
 
                     var records = csvReader.GetRecords(modelType).ToList();
+                    csvReader.Dispose();
                     return records;
                 }
             }
@@ -418,8 +425,10 @@ namespace BaseballScraper.Infrastructure
 
                     JObject jObject = new JObject
                     {
-                        ["rows"] = JToken.FromObject(records)
+                        ["rows"] = JToken.FromObject(records),
                     };
+
+                    csvReader.Dispose();
 
                     return jObject;
                 }
@@ -465,6 +474,7 @@ namespace BaseballScraper.Infrastructure
 
                     // RECORDS type --> CsvHelper.CsvReader+<GetRecords>d__65
                     records = csvReader.GetRecords(modelType);
+                    csvReader.Dispose();
                 }
                 return records;
             }
@@ -501,6 +511,7 @@ namespace BaseballScraper.Infrastructure
                         list.Add(record);
                         counter++;
                     }
+                    csvReader.Dispose();
                     // C.WriteLine($"COUNTER: {counter}");
                 }
                 return records;
@@ -586,14 +597,14 @@ namespace BaseballScraper.Infrastructure
             public decimal ConvertCellWithPercentageSymbolToDecimal(JToken token)
             {
                 var dataToConvert = token.ToString().Split('%');
-                var decimalValue = decimal.Parse(dataToConvert[0]);
+                var decimalValue = decimal.Parse(dataToConvert[0], NumberStyles.None, CultureInfo.InvariantCulture);
                 return decimalValue;
             }
 
             public decimal ConvertCellWithPercentageSymbolToDecimal(string s)
             {
                 var dataToConvert = s.Split('%');
-                var decimalValue = decimal.Parse(dataToConvert[0]);
+                var decimalValue = decimal.Parse(dataToConvert[0], NumberStyles.None, CultureInfo.InvariantCulture);
                 return decimalValue;
             }
 
@@ -606,7 +617,7 @@ namespace BaseballScraper.Infrastructure
                 try
                 {
                     string[] dataToConvert = s.Split('%');
-                    doubleValue = double.Parse(dataToConvert[0]);
+                    doubleValue = double.Parse(dataToConvert[0], NumberStyles.None, CultureInfo.InvariantCulture);
                 }
 
                 // if the cell does not have data, error
@@ -622,8 +633,8 @@ namespace BaseballScraper.Infrastructure
             }
 
 
-            public double? ParseNullableDouble(string val) => double.TryParse(val, out var i) ? (double?) i : null;
-            public int? ParseNullableInt(string val) => int.TryParse(val, out var i) ? (int?) i : null;
+            public double? ParseNullableDouble(string val) => double.TryParse(val, NumberStyles.None, CultureInfo.InvariantCulture, out var i) ? (double?) i : null;
+            public int? ParseNullableInt(string val) => int.TryParse(val, NumberStyles.None, CultureInfo.InvariantCulture, out var i) ? (int?) i : null;
 
 
             // STATUS [ August 9, 2019 ] : this works
@@ -634,10 +645,10 @@ namespace BaseballScraper.Infrastructure
                 // _helpers.OpenMethod(1);
                 foreach(var value in values)
                 {
-                    if(value.Contains("\""))
+                    if(value.Contains("\"", StringComparison.Ordinal))
                     {
-                        var cleanedValue = value.Replace("\"", "");
-                        var indexOfValue = values.FindIndex(idx => idx == value);
+                        var cleanedValue = value.Replace("\"", "", StringComparison.Ordinal);
+                        var indexOfValue = values.FindIndex(idx => string.Equals(idx, value, StringComparison.Ordinal));
                         values[indexOfValue] = cleanedValue;
                     }
                 }
@@ -662,9 +673,9 @@ namespace BaseballScraper.Infrastructure
                 string dateString = string.Empty;
                 DateTime today    = DateTime.Now;
 
-                string month      = today.Month.ToString();
-                string day        = today.Day.ToString();
-                string year       = today.Year.ToString();
+                string month      = today.Month.ToString(CultureInfo.InvariantCulture);
+                string day        = today.Day.ToString(CultureInfo.InvariantCulture);
+                string year       = today.Year.ToString(CultureInfo.InvariantCulture);
 
                 dateString        = $"{month}_{day}_{year}";
                 return dateString;

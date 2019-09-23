@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
-using SharpPad;
+
 
 #pragma warning disable CS0414, CS0219, IDE0051, IDE0059, CS1591, IDE0044
 namespace BaseballScraper
@@ -15,13 +14,11 @@ namespace BaseballScraper
             Console.WriteLine($"\n***** ---> READY TO ROLL <--- *****");
             Console.WriteLine ($"Version: {Environment.Version}");
 
-            if(Environment.Version.ToString() == "Production")
+            if(string.Equals(Environment.Version.ToString(), "Production", StringComparison.Ordinal))
             {
-                Console.WriteLine();
-                Console.WriteLine("***************************************************");
+                Console.WriteLine($"\n***************************************************");
                 Console.WriteLine("SWITCH TO DEV ENVIRONMENT");
-                Console.WriteLine("***************************************************");
-                Console.WriteLine();
+                Console.WriteLine($"***************************************************\n");
             }
 
             CreateWebHostBuilder(args).Build().Run();

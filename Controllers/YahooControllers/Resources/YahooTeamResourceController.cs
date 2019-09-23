@@ -5,15 +5,14 @@ using System.Linq;
 using BaseballScraper.Models.ConfigurationModels;
 using BaseballScraper.EndPoints;
 using BaseballScraper.Models.Yahoo;
-using BaseballScraper.Models.Yahoo.Resources.YahooTeamResource;
+using BaseballScraper.Models.Yahoo.Resources;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using BaseballScraper.Infrastructure;
 
 
-
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006, MA0016
 namespace BaseballScraper.Controllers.YahooControllers.Resources
 {
     [Route("api/yahoo/[controller]")]
@@ -111,13 +110,13 @@ namespace BaseballScraper.Controllers.YahooControllers.Resources
                 string jArrayType = "Newtonsoft.Json.Linq.JArray";
 
                 // One manager path
-                if(managerPathChildrenType == jObjectType) { PopulateTeamResourceInstanceWithOneManager(tB, managerPath); }
+                if(string.Equals(managerPathChildrenType, jObjectType, StringComparison.Ordinal)) { PopulateTeamResourceInstanceWithOneManager(tB, managerPath); }
 
                 // Co-manager path
                 List<YahooManager> teamManagersList = new List<YahooManager>();
                 tB.TeamManagersList            = new List<YahooManager>();
 
-                if(managerPathChildrenType == jArrayType) { PopulateTeamBaseWithCoManagers(tB, managerPath, teamManagersList); }
+                if(string.Equals(managerPathChildrenType, jArrayType, StringComparison.Ordinal)) { PopulateTeamBaseWithCoManagers(tB, managerPath, teamManagersList); }
 
                 _h.Dig(tB);
                 // _h.CompleteMethod();
@@ -157,12 +156,12 @@ namespace BaseballScraper.Controllers.YahooControllers.Resources
                 string jObjectType = "Newtonsoft.Json.Linq.JObject";
                 string jArrayType = "Newtonsoft.Json.Linq.JArray";
 
-                if(managerPathChildrenType == jObjectType) { PopulateTeamResourceInstanceWithOneManager(tB, managerPath); }
+                if(string.Equals(managerPathChildrenType, jObjectType, StringComparison.Ordinal)) { PopulateTeamResourceInstanceWithOneManager(tB, managerPath); }
 
                 List<YahooManager> teamManagersList = new List<YahooManager>();
                 tB.TeamManagersList            = new List<YahooManager>();
 
-                if(managerPathChildrenType == jArrayType) { PopulateTeamBaseWithCoManagers(tB, managerPath, teamManagersList); }
+                if(string.Equals(managerPathChildrenType, jArrayType, StringComparison.Ordinal)) { PopulateTeamBaseWithCoManagers(tB, managerPath, teamManagersList); }
 
                 return tB;
             }
@@ -238,8 +237,8 @@ namespace BaseballScraper.Controllers.YahooControllers.Resources
                     { "Guid", resourceJson["fantasy_content"]["team"]["managers"]["manager"]["guid"].ToString() },
                     { "Is Commish?", (int?)resourceJson["fantasy_content"]["team"]["managers"]["manager"]["is_commissioner"] },
                     { "Is Current Login?", (int?)resourceJson["fantasy_content"]["team"]["managers"]["manager"]["is_current_login"] },
-                    { "Email", resourceJson["fantasy_content"]["team"]["managers"]["manager"]["email"].ToString() },
-                    { "Image Url", resourceJson["fantasy_content"]["team"]["managers"]["manager"]["image_url"].ToString() }
+                    { "Email", resourceJson["fantasy_content"]["team"]["managers"]["manager"]["email"].ToString() }
+                    ,
                 };
                 // PrintTeamBaseDictionaryKeysAndValues(teamHashTable);
                 // _h.CompleteMethod();
@@ -392,7 +391,7 @@ namespace BaseballScraper.Controllers.YahooControllers.Resources
                         // IsCommissioner = managerPath[i]["is_commissioner"].ToString(),
                         // IsCurrentLogin = managerPath[i]["is_current_login"].ToString(),
                         Email    = tB.PrimaryTeamManager.Email,
-                        ImageUrl = managerPath[i]["image_url"].ToString()
+                        ImageUrl = managerPath[i]["image_url"].ToString(),
                     };
 
                     teamManagersList.Add(manager);

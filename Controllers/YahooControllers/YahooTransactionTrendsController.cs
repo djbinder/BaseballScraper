@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using HtmlAgilityPack;
-using Vereyon.Web;
 using BaseballScraper.Infrastructure;
 using BaseballScraper.Models.Yahoo;
 using System.Linq;
+using System.Globalization;
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006, MA0016
 namespace BaseballScraper.Controllers.YahooControllers
 {
 
@@ -97,17 +97,17 @@ namespace BaseballScraper.Controllers.YahooControllers
             public string SetSearchDateAsToday()
             {
                 var currentDate = DateTime.Today;
-                var currentYear = currentDate.Year.ToString();
+                var currentYear = currentDate.Year.ToString(CultureInfo.InvariantCulture);
 
                 int currentMonthInt = currentDate.Month;
-                var currentMonth = currentDate.Month.ToString();
+                var currentMonth = currentDate.Month.ToString(CultureInfo.InvariantCulture);
 
                 // if the month is less than 10, it is shortened to single digit(e.g. 9 instead 09). If less than 10, this added the zero back in front of the single number
                 if(currentMonthInt < 10)
                     currentMonth = $"0{currentMonth}";
 
                 int currentDayInt = currentDate.Day;
-                var currentDay = currentDate.Day.ToString();
+                var currentDay = currentDate.Day.ToString(CultureInfo.InvariantCulture);
 
                 // if the day is less than 10, it is shortened to single digit(e.g. 9 instead 09). If less than 10, this added the zero back in front of the single number
                 if(currentDayInt < 10)
@@ -323,7 +323,7 @@ namespace BaseballScraper.Controllers.YahooControllers
                     playerDrops,
                     playerAdds,
                     playerTrades,
-                    playerTransactionsTotals
+                    playerTransactionsTotals,
                 };
 
                 // Write that data in listOfLists to YAHOO_TRENDS tab in range A1: Z1000 in the CoreCalculator group / sheet
@@ -373,7 +373,7 @@ namespace BaseballScraper.Controllers.YahooControllers
                         playerDrops,
                         playerAdds,
                         playerTrades,
-                        playerTransactionsTotals
+                        playerTransactionsTotals,
                     }, tabName, range, jsonGroupName);
             }
 

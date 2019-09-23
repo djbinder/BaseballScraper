@@ -10,6 +10,9 @@ using BaseballScraper.Models.Cbs;
 using BaseballScraper.Models.ConfigurationModels;
 using BaseballScraper.Models.Yahoo;
 using SharpPad;
+using GraphQL.Types;
+using GraphQL;
+using C = System.Console;
 
 
 #pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
@@ -58,8 +61,8 @@ namespace BaseballScraper.Controllers
         // STATUS [ July 24, 2019 ]: this works and is needed for transactions trends method below
         public HomeController(CbsTransactionTrendsController cbsTrendsController, EspnTransactionTrendsController espnTrendsController, YahooTransactionTrendsController yahooTrendsController)
         {
-            _cbsTrendsController = cbsTrendsController;
-            _espnTrendsController = espnTrendsController;
+            _cbsTrendsController   = cbsTrendsController;
+            _espnTrendsController  = espnTrendsController;
             _yahooTrendsController = yahooTrendsController;
         }
 
@@ -81,24 +84,56 @@ namespace BaseballScraper.Controllers
         [HttpGet("dashboard")]
         public IActionResult ViewDashboard()
         {
-            Console.WriteLine("DASHBOARD");
-            List<string> ss = new List<string>
+            C.WriteLine("DASHBOARD");
+
+            ISchema schema = Schema.For(@"
+                type Query {
+                    hello: String
+                }
+            ");
+
+            var root = new { Hello = "Hello World!" };
+            string json = schema.Execute(_ =>
             {
-                "1",
-                "HELLO",
-                "1 IS X and Y not"
-            };
+                _.Query = "{ hello }";
+                _.Root = root;
+            });
 
-            ss.Dump();
-
+            C.WriteLine(json);
 
             return View("Dashboard");
         }
 
+
+        [HttpGet("tester_1")]
+        public IActionResult GenericTesterOne()
+        {
+            C.WriteLine("HomeController > GenericTesterOne");
+            return Ok();
+        }
+
+        [HttpGet("tester_2")]
+        public IActionResult GenericTesterTwo()
+        {
+            C.WriteLine("HomeController > GenericTesterTwo");
+            return Ok();
+        }
+
+        [HttpGet("tester_3")]
+        public IActionResult GenericTesterThree()
+        {
+            C.WriteLine("HomeController > GenericTesterThree");
+            return Ok();
+        }
+
+
+
+
+
         [HttpGet("player_bases")]
         public IActionResult ViewPlayerBases()
         {
-            Console.WriteLine("PLAYER BASES");
+            C.WriteLine("HomeController > ViewPlayerBases()");
             return View("PlayerBases");
         }
 
@@ -115,16 +150,16 @@ namespace BaseballScraper.Controllers
         [HttpGet("transaction_trends")]
         public IActionResult ViewTransactionTrends()
         {
-            Console.WriteLine("TransactionTrends");
+            C.WriteLine("TransactionTrends");
 
             List<CbsMostAddedOrDroppedPlayer> cbsPlayers    = _cbsTrendsController.GetListOfCbsMostAddedOrDropped(cbsUrlForMostAddedAllBaseball);
 
-            Console.WriteLine($"cbsPlayers.Count: {cbsPlayers.Count}");
+            C.WriteLine($"cbsPlayers.Count: {cbsPlayers.Count}");
 
             // List<EspnTransactionTrendPlayer> espnPlayers    = _espnTrendsController.GetListOfMostAddedPlayers();
 
             List<YahooTransactionTrendsPlayer> yahooPlayers = _yahooTrendsController.GetTrendsForTodayAllPositions();
-            Console.WriteLine($"yahooPlayers.Count: {yahooPlayers.Count}");
+            C.WriteLine($"yahooPlayers.Count: {yahooPlayers.Count}");
 
 
             return View("TransactionTrends");

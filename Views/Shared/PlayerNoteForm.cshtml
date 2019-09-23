@@ -9,40 +9,44 @@
 <hr style="border: 1px solid slateblue">
 <br>
 
+
 <form asp-controller="PlayerNote" asp-action="CreateNote" method="POST">
+
     <div class="form-group">
         <label asp-for="PlayerName" class="control-label"></label>
-        <input asp-for="PlayerName" class="form-control">
+        <input asp-for="PlayerName" name="PlayerName" id="PlayerName" class="form-control" value="Frank Thomas">
     </div>
 
     <div class="form-group">
         <label asp-for="Position" class="control-label"></label>
-        <input asp-for="Position" class="form-control">
+        <input asp-for="Position" class="form-control" value="SS">
     </div>
 
     <div class="form-group">
         <label asp-for="PositionType" class="control-label"></label>
-        <input asp-for="PositionType" class="form-control">
+        <input asp-for="PositionType" class="form-control" value="H">
     </div>
 
+
     <div class="form-group">
-        <label asp-for="Note" class="control-label"></label>
-        <input asp-for="Note" class="form-control">
+        <label asp-for="NoteText" class="control-label"></label>
+        <input asp-for="NoteText" class="form-control">
     </div>
+
 
     <div class="form-group">
         <label asp-for="NoteTone" class="control-label"></label>
-        <input asp-for="NoteTone" class="form-control">
+        <input asp-for="NoteTone" class="form-control" value="positive">
     </div>
 
     <div class="form-group">
         <label asp-for="SourceSite" class="control-label"></label>
-        <input asp-for="SourceSite" class="form-control">
+        <input asp-for="SourceSite" class="form-control" value="fangraphs">
     </div>
 
     <div class="form-group">
         <label asp-for="NoteWriter" class="control-label"></label>
-        <input asp-for="NoteWriter" class="form-control">
+        <input asp-for="NoteWriter" class="form-control" value="Joe Writer">
     </div>
 
     <div class="form-group">
@@ -54,6 +58,7 @@
         <label asp-for="Season" class="control-label"></label>
         <input asp-for="Season" class="form-control">
     </div>
+
 
     <div class="form-group">
         <input type="submit" value="Create" class="btn btn-default" />

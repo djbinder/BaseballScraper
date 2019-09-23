@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006, MA0016
 namespace BaseballScraper.Infrastructure
 {
     // * Connects to 'MongoDbConfiguration' model
@@ -58,7 +58,7 @@ namespace BaseballScraper.Infrastructure
 
         // * Find<TDocument>: returns all documents in the collection matching the provided search criteria
         public TwitterStatus Get(string id) =>
-            _twitterStatus.Find(twitterStatus => twitterStatus.Id == id).FirstOrDefault();
+            _twitterStatus.Find(twitterStatus => string.Equals(twitterStatus.Id, id, StringComparison.Ordinal)).FirstOrDefault();
 
 
         // * InsertOne: Inserts the provided object as a new document in the collection
@@ -71,16 +71,16 @@ namespace BaseballScraper.Infrastructure
 
         // * ReplaceOne: Replaces the single document matching the provided search criteria with the provided object
         public void Update(string id, TwitterStatus twitterStatusToUpdate) =>
-            _twitterStatus.ReplaceOne(twitterStatus => twitterStatus.Id == id, twitterStatusToUpdate);
+            _twitterStatus.ReplaceOne(twitterStatus => string.Equals(twitterStatus.Id, id, StringComparison.Ordinal), twitterStatusToUpdate);
 
 
         // * DeleteOne: Deletes a single document matching the provided search criteria
         public void Remove(TwitterStatus twitterStatusToRemove) =>
-            _twitterStatus.DeleteOne(twitterStatus => twitterStatus.Id == twitterStatusToRemove.Id);
+            _twitterStatus.DeleteOne(twitterStatus => string.Equals(twitterStatus.Id, twitterStatusToRemove.Id, StringComparison.Ordinal));
 
 
         // * DeleteOne: Deletes a single document matching the provided search criteria
         public void Remove(string id) =>
-            _twitterStatus.DeleteOne(twitterStatus => twitterStatus.Id == id);
+            _twitterStatus.DeleteOne(twitterStatus => string.Equals(twitterStatus.Id, id, StringComparison.Ordinal));
     }
 }

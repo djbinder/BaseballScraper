@@ -2,6 +2,7 @@
 
 using CsvHelper.Configuration;
 
+#pragma warning disable MA0048
 namespace BaseballScraper.Models.Lahman
 {
     public class LahmanParks
@@ -14,7 +15,7 @@ namespace BaseballScraper.Models.Lahman
         public string ParkCountry { get; set; }
     }
 
-    public class LahmanParksClassMap: ClassMap<LahmanParks>
+    public sealed class LahmanParksClassMap: ClassMap<LahmanParks>
     {
         public LahmanParksClassMap()
         {

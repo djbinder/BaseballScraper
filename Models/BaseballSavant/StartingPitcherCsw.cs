@@ -1,9 +1,10 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 using CsvHelper.Configuration;
 
-#pragma warning disable CS0649
+#pragma warning disable CS0649, MA0048
 namespace BaseballScraper.Models.BaseballSavant
 {
     public class StartingPitcherCswFullSeason : StartingPitcherCsw
@@ -62,7 +63,7 @@ namespace BaseballScraper.Models.BaseballSavant
                 }
                 else
                 {
-                    return Int32.Parse(SpinRateObj.ToString());
+                    return Int32.Parse(SpinRateObj.ToString(), NumberStyles.None, CultureInfo.InvariantCulture);
                 }
             }
         }

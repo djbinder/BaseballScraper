@@ -7,11 +7,10 @@ using BaseballScraper.Models;
 using BaseballScraper.Models.BaseballHq;
 using BaseballScraper.Models.Player;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using C = System.Console;
 
-#pragma warning disable CS1998, CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
+#pragma warning disable CS1998, CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006, MA0016
 namespace BaseballScraper.Controllers.BaseballHQControllers
 {
     [Route("api/hq/[controller]")]
@@ -25,7 +24,7 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
         private readonly BaseballScraperContext        _context;
         private readonly ProjectDirectoryEndPoints     _projectDirectory;
 
-        public System.Threading.CancellationToken cancellationToken = new System.Threading.CancellationToken();
+        private System.Threading.CancellationToken cancellationToken = new System.Threading.CancellationToken();
 
 
         public BaseballHqHitterController(Helpers helpers, BaseballHqUtilitiesController hqUtilitiesController, CsvHandler csvHandler, BaseballScraperContext context, ProjectDirectoryEndPoints projectDirectory)
@@ -119,12 +118,12 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
 
                 // * PRIMARY METHOD - REST OF SEASON PROJECTIONS
                 List<HqHitterRestOfSeasonProjection> rosList =
-                    Task.Run(() => GetAllRosAsync_CSV(openRosFileAfterMove)).Result;
+                    await Task.Run(() => GetAllRosAsync_CSV(openRosFileAfterMove));
                 await AddAllRosAsync_DB(rosList);
 
                 // * PRIMARY METHOD - YEAR TO DATE
                 List<HqHitterYearToDate> ytdList =
-                    Task.Run(() => GetAllYtdAsync_CSV(openYtdFileAfterMove)).Result;
+                    await Task.Run(() => GetAllYtdAsync_CSV(openYtdFileAfterMove));
                 await AddAllYtdAsync_DB(ytdList);
 
                 // await UpdateBothHqHitterDatabases(
@@ -183,7 +182,7 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
 
             // * Defined by Baseball HQ
             // * Named by Baseball Hq when downloading to local downloads folder
-            public string _hqRestOfSeasonProjectionReportInitialCsvFileName
+            public string HqRestOfSeasonProjectionReportInitialCsvFileName
             {
                 get => "BaseballHQ_M_B_P.csv";
             }
@@ -191,7 +190,7 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
 
             // * Defined by me
             // * = "HqHitterReport_PROJ_"
-            private string _hitterRestOfSeasonProjectionsCsvFileNameBase
+            private string HitterRestOfSeasonProjectionsCsvFileNameBase
             {
                 get => _projectDirectory.BaseballHqHitterRosProjectionsCsvFileNameBase;
             }
@@ -227,8 +226,8 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
                 // _helpers.OpenMethod(3);
                 await DownloadHqHitterReport(
                     _hitterRestOfSeasonProjectionsReportSelector,
-                    _hqRestOfSeasonProjectionReportInitialCsvFileName,
-                    _hitterRestOfSeasonProjectionsCsvFileNameBase,
+                    HqRestOfSeasonProjectionReportInitialCsvFileName,
+                    HitterRestOfSeasonProjectionsCsvFileNameBase,
                     openFileAfterMove
                 );
             }
@@ -241,7 +240,7 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
             {
                 // _helpers.OpenMethod(1);
 
-                string todaysFileName = GetTodaysCsvFileName(_hitterRestOfSeasonProjectionsCsvFileNameBase);
+                string todaysFileName = GetTodaysCsvFileName(HitterRestOfSeasonProjectionsCsvFileNameBase);
                 bool fileCheck        = DoesCsvFileForTodayExist(todaysFileName);
 
                 C.WriteLine($"\nROS: todaysFileName: {todaysFileName} fileCheck: {fileCheck}\n");
@@ -283,7 +282,7 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
             {
                 SfbbPlayerBase playerBase = new SfbbPlayerBase();
 
-                var allPlayerBases = _context.SfbbPlayerBases.ToList();
+                List<SfbbPlayerBase> allPlayerBases = _context.SfbbPlayerBases.ToList();
 
                 playerBase = (from bases in allPlayerBases
                               where bases.MLBID == player.MlbId
@@ -323,12 +322,12 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
             /// <summary>
             ///     * Add list of HqHitterRestOfSeasonProjection hitters to the database
             /// </summary>
-            public async Task AddAllRosAsync_DB(List<HqHitterRestOfSeasonProjection> listOfHitterRestOfSeasonProjections)
+            public async Task AddAllRosAsync_DB(IList<HqHitterRestOfSeasonProjection> listOfHitterRestOfSeasonProjections)
             {
                 // _helpers.OpenMethod(3);
-                int countAdded = 0; int countNotAdded = 0; int countUpdated = 0;
+                int countAdded = 0; int countNotAdded = 0;
 
-                foreach(var player in listOfHitterRestOfSeasonProjections)
+                foreach(HqHitterRestOfSeasonProjection player in listOfHitterRestOfSeasonProjections)
                 {
                     // HqHitterRestOfSeasonProjection
                     var checkDbForBase = _context.HqHitterRestOfSeasonProjections.SingleOrDefault(h => h.HQID == player.HQID);
@@ -336,7 +335,7 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
                     if(checkDbForBase is null)
                     {
                         _context.Entry(player).State = EntityState.Added;
-                        await _context.Set<HqHitterRestOfSeasonProjection>().AddAsync(player);
+                        await _context.Set<HqHitterRestOfSeasonProjection>().AddAsync(player, cancellationToken);
                     }
                     else
                     {
@@ -361,8 +360,8 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
             public async Task<HqHitterRestOfSeasonProjection> GetOneRosAsync_DB(int? hqid)
             {
                 // _helpers.OpenMethod(3);
-                var player = await _context.HqHitterRestOfSeasonProjections.SingleOrDefaultAsync(h => h.HQID == hqid);
-                return player;
+                return await _context.HqHitterRestOfSeasonProjections.SingleOrDefaultAsync(h => h.HQID == hqid, cancellationToken);
+                // return player;
             }
 
 
@@ -371,11 +370,10 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
             /// <summary>
             ///     * Read all HqHitterRestOfSeasonProjection hitters from database
             /// </summary>
-            public List<HqHitterRestOfSeasonProjection> GetAllRos_DB()
+            public IList<HqHitterRestOfSeasonProjection> GetAllRos_DB()
             {
                 // _helpers.OpenMethod(1);
-                var hqHitters = _context.HqHitterRestOfSeasonProjections.ToList();
-                return hqHitters;
+                return _context.HqHitterRestOfSeasonProjections.ToList();
             }
 
 
@@ -408,7 +406,7 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
             public async Task<IActionResult> DeleteOneRosAsync_DB(int hqId)
             {
                 // _helpers.OpenMethod(3);
-                HqHitterRestOfSeasonProjection hitter = await _context.HqHitterRestOfSeasonProjections.SingleOrDefaultAsync(h => h.HQID == hqId);
+                HqHitterRestOfSeasonProjection hitter = await _context.HqHitterRestOfSeasonProjections.SingleOrDefaultAsync(h => h.HQID == hqId, cancellationToken);
                 _context.Remove(hitter);
                 await _context.SaveChangesAsync(cancellationToken);
                 return Ok();
@@ -453,22 +451,22 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
             /* BUILDING BLOCKS - YEAR TO DATE                                  */
             /* --------------------------------------------------------------- */
 
-            // Defined by Baseball HQ
-            // Can be found in the html of the hq page
+            // * Defined by Baseball HQ
+            // * Can be found in the html of the hq page
             private readonly string _hitterYearToDateReportSelector = "table.stats-links:nth-child(5) > tbody:nth-child(1) > tr:nth-child(3) > td:nth-child(2) > a:nth-child(9)";
 
 
-            // Defined by Baseball HQ
-            // Named by Baseball Hq when downloading to local downloads folder
-            public string _hqYearToDateReportInitialCsvFileName
+            // * Defined by Baseball HQ
+            // * Named by Baseball Hq when downloading to local downloads folder
+            public string HqYearToDateReportInitialCsvFileName
             {
                 get => "BaseballHQ_M_B_Y.csv";
             }
 
 
-            // Defined by me
-            // Returns: HqHitterReport_YTD_
-            private string _hitterYearToDateCsvFileNameBase
+            // * Defined by me
+            // * Returns: HqHitterReport_YTD_
+            private string HitterYearToDateCsvFileNameBase
             {
                 get
                 {
@@ -503,8 +501,8 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
                 // _helpers.OpenMethod(3);
                 await DownloadHqHitterReport(
                     _hitterYearToDateReportSelector,
-                    _hqYearToDateReportInitialCsvFileName,
-                    _hitterYearToDateCsvFileNameBase,
+                    HqYearToDateReportInitialCsvFileName,
+                    HitterYearToDateCsvFileNameBase,
                     openFileAfterMove
                 );
             }
@@ -526,7 +524,7 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
             {
                 // _helpers.OpenMethod(3);
 
-                string todaysFileName = GetTodaysCsvFileName(_hitterYearToDateCsvFileNameBase);
+                string todaysFileName = GetTodaysCsvFileName(HitterYearToDateCsvFileNameBase);
                 bool fileCheck        = DoesCsvFileForTodayExist(todaysFileName);
 
                 C.WriteLine($"\nROS: todaysFileName: {todaysFileName} fileCheck: {fileCheck}\n");
@@ -561,14 +559,13 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
             }
 
 
-
             // YEAR TO DATE
             // Get the 'IDPLAYER' to join SfbbPlayerBase to HqHitterRestOfSeasonProjection
             public string GetIdPlayerForPlayer(HqHitterYearToDate player)
             {
                 SfbbPlayerBase playerBase = new SfbbPlayerBase();
 
-                var allPlayerBases = _context.SfbbPlayerBases.ToList();
+                List<SfbbPlayerBase> allPlayerBases = _context.SfbbPlayerBases.ToList();
 
                 playerBase = (from bases in allPlayerBases
                               where bases.MLBID == player.MlbId
@@ -592,7 +589,7 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
             // YEAR TO DATE
             public async Task<IActionResult> AddOneYtdAsync_DB(HqHitterYearToDate hitter)
             {
-                await _context.AddAsync(hitter);
+                await _context.AddAsync(hitter, cancellationToken);
                 await _context.SaveChangesAsync(cancellationToken);
                 return Ok();
             }
@@ -600,10 +597,10 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
 
             // STATUS [ August 13, 2019 ] : this works
             // YEAR TO DATE
-            public async Task AddAllYtdAsync_DB(List<HqHitterYearToDate> listOfHitterYearToDateRecords)
+            public async Task AddAllYtdAsync_DB(IList<HqHitterYearToDate> listOfHitterYearToDateRecords)
             {
                 // _helpers.OpenMethod(3);
-                int countAdded = 0; int countNotAdded = 0; int countUpdated = 0;
+                int countAdded = 0; int countNotAdded = 0;
 
                 foreach(var player in listOfHitterYearToDateRecords)
                 {
@@ -611,7 +608,7 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
                     if(checkDbForBase is null)
                     {
                         _context.Entry(player).State = EntityState.Added;
-                        await _context.Set<HqHitterYearToDate>().AddAsync(player);
+                        await _context.Set<HqHitterYearToDate>().AddAsync(player, cancellationToken);
                     }
                     else
                     {
@@ -632,19 +629,17 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
             // YEAR TO DATE
             public async Task<HqHitterYearToDate> GetOneYtdAsync_DB(int? hqid)
             {
-                HqHitterYearToDate player =
-                    await _context.HqHitterYearToDates.SingleOrDefaultAsync(h => h.HQID == hqid);
-                return player;
+                return await _context.HqHitterYearToDates.SingleOrDefaultAsync(h => h.HQID == hqid, cancellationToken);
+                // return player;
             }
 
             // STATUS [ August 13, 2019 ] : this works
             // YEAR TO DATE
-            public List<HqHitterYearToDate> GetAllYtd_DB()
+            public IList<HqHitterYearToDate> GetAllYtd_DB()
             {
                 // _helpers.OpenMethod(1);
-                List<HqHitterYearToDate> hqHitters =
-                    _context.HqHitterYearToDates.ToList();
-                return hqHitters;
+                return _context.HqHitterYearToDates.ToList();
+                // return hqHitters;
             }
 
 
@@ -661,7 +656,7 @@ namespace BaseballScraper.Controllers.BaseballHQControllers
             public async Task<IActionResult> DeleteOneAsyncYtd_DB(int hqId)
             {
                 // _helpers.OpenMethod(3);
-                var hitter = await _context.HqHitterYearToDates.SingleOrDefaultAsync(h => h.HQID == hqId);
+                var hitter = await _context.HqHitterYearToDates.SingleOrDefaultAsync(h => h.HQID == hqId, cancellationToken);
                 _context.Remove(hitter);
                 await _context.SaveChangesAsync(cancellationToken);
                 return Ok();

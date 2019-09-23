@@ -12,8 +12,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using C = System.Console;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Globalization;
 
-#pragma warning disable CS0168, CS0219, CS0414, CS1998, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
+#pragma warning disable CS0168, CS0219, CS0414, CS1998, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006, MA0002, MA0016, MA0051
 namespace BaseballScraper.Controllers.PlayerControllers
 {
     [Route("api/player/[controller]")]
@@ -27,7 +28,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
         private readonly GoogleSheetsConnector     _googleSheetsConnector;
         private readonly ProjectDirectoryEndPoints _baseballData;
 
-        public System.Threading.CancellationToken cancellationToken = new System.Threading.CancellationToken();
+        private System.Threading.CancellationToken cancellationToken = new System.Threading.CancellationToken();
 
         private readonly string _sfbbMapDocName   = "SfbbPlayerIdMap";
         private readonly string _sfbbMapTabId     = "SFBB_PLAYER_ID_MAP";
@@ -35,7 +36,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
         private readonly string _googleSheetErrorRange = "A2030:AQ2050";
 
 
-        private Dictionary<string, object> _d = new Dictionary<string, object>();
+        private Dictionary<string, object> _d = new Dictionary<string, object>(StringComparer.Ordinal);
 
         public PlayerBaseController(Helpers helpers, BaseballScraperContext context, CsvHandler csvHandler, GoogleSheetsConnector googleSheetsConnector, ProjectDirectoryEndPoints baseballData)
         {
@@ -213,7 +214,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
             {
                 // _helpers.OpenMethod(3);
                 _context.CrunchTimePlayerBases.Attach(crunchTimePlayerBase);
-                await _context.AddAsync(crunchTimePlayerBase);
+                await _context.AddAsync(crunchTimePlayerBase, cancellationToken);
                 await _context.SaveChangesAsync(cancellationToken);
                 return Ok();
             }
@@ -234,7 +235,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
                     if(checkDbForPlayerBase == null)
                     {
                         _context.CrunchTimePlayerBases.Attach(playerBase);
-                        await _context.AddAsync(playerBase);
+                        await _context.AddAsync(playerBase, cancellationToken);
                         playersAddedCounter++;
                     }
 
@@ -391,7 +392,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
                 StringBuilder sb = new StringBuilder();
                 try
                 {
-                    sb.Append("A"); // A --> CHECK IF PLAYER EXISTS IN DATABASE
+                    sb.Append('A'); // A --> CHECK IF PLAYER EXISTS IN DATABASE
                     SfbbPlayerBase pBase = _context.SfbbPlayerBases.SingleOrDefault(y => y.IDPLAYER == playerBase.IDPLAYER);
 
                     if(pBase != null)
@@ -403,7 +404,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
                     else
                     {
                         sb.Append(" --> C"); // C --> ADD TO DATABASE
-                        await _context.AddAsync(playerBase);
+                        await _context.AddAsync(playerBase, cancellationToken);
                     }
                 }
                 catch(Exception ex)
@@ -412,7 +413,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
                     try
                     {
                         sb.Append(" --> E"); // E --> ADD TO DB
-                        await _context.AddAsync(playerBase);
+                        await _context.AddAsync(playerBase, cancellationToken);
                         // await _context.SaveChangesAsync(cancellationToken);
                     }
 
@@ -449,7 +450,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
                     if(checkDbForBase == null)
                     {
                         _context.Entry(p).State = EntityState.Added;
-                        _context.Set<SfbbPlayerBase>().Add(p);
+                        await _context.Set<SfbbPlayerBase>().AddAsync(p, cancellationToken);
                     }
                     else
                     {
@@ -549,10 +550,11 @@ namespace BaseballScraper.Controllers.PlayerControllers
                     FANTRAXNAME     = row[38].ToString(),
                     ROTOWIRENAME    = row[39].ToString(),
                     ALLPOS          = row[40].ToString(),
-                    NFBCLASTFIRST   = row[41].ToString()
+                    NFBCLASTFIRST   = row[41].ToString(),
                 };
 
-                if(row[10].ToString() == "")
+                // if(string.Equals(row[10].ToString(), "", StringComparison.Ordinal))
+                if(!string.IsNullOrEmpty(row[10].ToString()))
                 {
                     mlbIdCounter++;
                 }
@@ -560,11 +562,12 @@ namespace BaseballScraper.Controllers.PlayerControllers
                 else
                 {
                     string mlbIdString = row[10].ToString();
-                    int mlbIdInt = int.Parse(mlbIdString);
+                    int mlbIdInt = int.Parse(mlbIdString, NumberStyles.None, CultureInfo.InvariantCulture);
                     playerBase.MLBID = mlbIdInt;
                 }
 
-                if(row[35].ToString() == "")
+                // if(string.Equals(row[35].ToString(), "", StringComparison.Ordinal))
+                if(!string.IsNullOrEmpty(row[35].ToString()))
                 {
                     hqIdCounter++;
                 }
@@ -572,7 +575,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
                 else
                 {
                     string hqString = row[35].ToString();
-                    int hqIdInt = int.Parse(hqString);
+                    int hqIdInt = int.Parse(hqString, NumberStyles.None, CultureInfo.InvariantCulture);
                     playerBase.HQID = hqIdInt;
                 }
 
@@ -645,7 +648,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
                 // IEnumerable<PlayerBase> allPlayerBases
                 var allPlayerBases = new ExcelMapper("BaseballData/PlayerBase/PlayerBase.xlsx").Fetch<PlayerBase>();
 
-                var countOfAllPlayerBases = allPlayerBases.ToList().Count();
+                var countOfAllPlayerBases = allPlayerBases.ToList().Count;
                 // Console.WriteLine($"Current # of Players: {countOfAllPlayerBases}");
                 return allPlayerBases;
             }
@@ -670,7 +673,8 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
                 var playerBasesForOneMlbTeam  =
                     from playerBases in allPlayerBases
-                    where playerBases.MlbTeamLong == teamNameFull
+                    where string.Equals(playerBases.MlbTeamLong, teamNameFull
+, StringComparison.Ordinal)
                     select playerBases;
 
                 playerBasesForOneMlbTeam.ToList().ForEach((playerBase) => Console.WriteLine(playerBase.CbsName));
@@ -699,7 +703,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
 
             // STATUS: these all work
-            // TODO: there has got to be a way where you only need one method vs. separating into each like below
+            // TO-DO: there has got to be a way where you only need one method vs. separating into each like below
             /// <summary>
             ///     Each of methods in this section returns a player (from IEnumerable PlayerBases)
             ///     The only difference is the type of Id you are passing in (e.g. MlbId, FanGraphsPlayerId, EspnPlayerId etc.)
@@ -717,10 +721,11 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
                 var onePlayersBase =
                     from playerBases in allPlayerBases
-                    where playerBases.BaseballHqPlayerId == playersBaseballHqPlayerId
+                    where string.Equals(playerBases.BaseballHqPlayerId, playersBaseballHqPlayerId
+, StringComparison.Ordinal)
                     select playerBases;
 
-                onePlayersBase.ToList().ForEach((playerBase) => Console.WriteLine(playerBase.CbsName));
+                onePlayersBase.ToList().ForEach((playerBase) => C.WriteLine(playerBase.CbsName));
                 return onePlayersBase;
             }
 
@@ -732,10 +737,11 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
                 var onePlayersBase =
                     from playerBases in allPlayerBases
-                    where playerBases.BaseballProspectusPlayerId == playersBaseballProspectusPlayerId
+                    where string.Equals(playerBases.BaseballProspectusPlayerId, playersBaseballProspectusPlayerId
+, StringComparison.Ordinal)
                     select playerBases;
 
-                onePlayersBase.ToList().ForEach((playerBase) => Console.WriteLine(playerBase.CbsName));
+                onePlayersBase.ToList().ForEach((playerBase) => C.WriteLine(playerBase.CbsName));
                 return onePlayersBase;
             }
 
@@ -747,7 +753,8 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
                 var onePlayersBase =
                     from playerBases in allPlayerBases
-                    where playerBases.BaseballReferencePlayerId == playersBaseballReferencePlayerId
+                    where string.Equals(playerBases.BaseballReferencePlayerId, playersBaseballReferencePlayerId
+, StringComparison.Ordinal)
                     select playerBases;
 
                 onePlayersBase.ToList().ForEach((playerBase) => Console.WriteLine(playerBase.CbsName));
@@ -762,7 +769,8 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
                 var onePlayersBase =
                     from playerBases in allPlayerBases
-                    where playerBases.CbsPlayerId == playersCbsPlayerId
+                    where string.Equals(playerBases.CbsPlayerId, playersCbsPlayerId
+, StringComparison.Ordinal)
                     select playerBases;
 
                 onePlayersBase.ToList().ForEach((playerBase) => C.WriteLine(playerBase.CbsName));
@@ -777,7 +785,8 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
                 var onePlayersBase =
                     from playerBases in allPlayerBases
-                    where playerBases.DavenportId == playersDavenportPlayerId
+                    where string.Equals(playerBases.DavenportId, playersDavenportPlayerId
+, StringComparison.Ordinal)
                     select playerBases;
 
                 onePlayersBase.ToList().ForEach((playerBase) => C.WriteLine(playerBase.CbsName));
@@ -792,7 +801,8 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
                 var onePlayersBase =
                     from playerBases in allPlayerBases
-                    where playerBases.EspnPlayerId == playersEspnPlayerId
+                    where string.Equals(playerBases.EspnPlayerId, playersEspnPlayerId
+, StringComparison.Ordinal)
                     select playerBases;
 
                 onePlayersBase.ToList().ForEach((playerBase) => C.WriteLine(playerBase.CbsName));
@@ -807,7 +817,8 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
                 var onePlayersBase =
                     from playerBases in allPlayerBases
-                    where playerBases.FanGraphsPlayerId == playersFanGraphsPlayerId
+                    where string.Equals(playerBases.FanGraphsPlayerId, playersFanGraphsPlayerId
+, StringComparison.Ordinal)
                     select playerBases;
 
                 onePlayersBase.ToList().ForEach((playerBase) => Console.WriteLine(playerBase.CbsName));
@@ -822,7 +833,8 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
                 var onePlayersBase =
                     from playerBases in allPlayerBases
-                    where playerBases.LahmanPlayerId == playersLahmanPlayerId
+                    where string.Equals(playerBases.LahmanPlayerId, playersLahmanPlayerId
+, StringComparison.Ordinal)
                     select playerBases;
 
                 onePlayersBase.ToList().ForEach((playerBase) => Console.WriteLine(playerBase.CbsName));
@@ -837,8 +849,9 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
                 // IEnumerable<PlayerBase> onePlayersBase
                 var onePlayersBase = from playerBases in allPlayerBases
-                    where playerBases.MlbId == playersMlbId
-                    select playerBases;
+                    where string.Equals(playerBases.MlbId, playersMlbId
+, StringComparison.Ordinal)
+                                     select playerBases;
 
                 onePlayersBase.ToList().ForEach((playerBase) => Console.WriteLine(playerBase.CbsName));
                 return onePlayersBase;
@@ -852,7 +865,8 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
                 var onePlayersBase =
                     from playerBases in allPlayerBases
-                    where playerBases.NfbcPlayerId == playersNfbcPlayerId
+                    where string.Equals(playerBases.NfbcPlayerId, playersNfbcPlayerId
+, StringComparison.Ordinal)
                     select playerBases;
 
                 onePlayersBase.ToList().ForEach((playerBase) => Console.WriteLine(playerBase.CbsName));
@@ -868,7 +882,8 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
                 var onePlayersBase =
                     from playerBases in allPlayerBases
-                    where playerBases.OttoneuPlayerId == playersOttoneuPlayerId
+                    where string.Equals(playerBases.OttoneuPlayerId, playersOttoneuPlayerId
+, StringComparison.Ordinal)
                     select playerBases;
 
                 onePlayersBase.ToList().ForEach((playerBase) => Console.WriteLine(playerBase.CbsName));
@@ -883,7 +898,8 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
                 var onePlayersBase =
                     from playerBases in allPlayerBases
-                    where playerBases.RetroPlayerId == playersRetroPlayerId
+                    where string.Equals(playerBases.RetroPlayerId, playersRetroPlayerId
+, StringComparison.Ordinal)
                     select playerBases;
 
                 onePlayersBase.ToList().ForEach((playerBase) => Console.WriteLine(playerBase.CbsName));
@@ -898,7 +914,8 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
                 var onePlayersBase =
                     from playerBases in allPlayerBases
-                    where playerBases.RotoWirePlayerId == playersRotoWirePlayerId
+                    where string.Equals(playerBases.RotoWirePlayerId, playersRotoWirePlayerId
+, StringComparison.Ordinal)
                     select playerBases;
 
                 onePlayersBase.ToList().ForEach((playerBase) => Console.WriteLine(playerBase.CbsName));
@@ -913,7 +930,8 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
                 var onePlayersBase =
                     from playerBases in allPlayerBases
-                    where playerBases.SfbbPlayerId == playersSfbbPlayerId
+                    where string.Equals(playerBases.SfbbPlayerId, playersSfbbPlayerId
+, StringComparison.Ordinal)
                     select playerBases;
 
                 onePlayersBase.ToList().ForEach((playerBase) => Console.WriteLine(playerBase.CbsName));
@@ -928,7 +946,8 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
                 var onePlayersBase =
                     from playerBases in allPlayerBases
-                    where playerBases.YahooPlayerId == playersYahooPlayerId
+                    where string.Equals(playerBases.YahooPlayerId, playersYahooPlayerId
+, StringComparison.Ordinal)
                     select playerBases;
 
                 onePlayersBase.ToList().ForEach((playerBase) => Console.WriteLine(playerBase.CbsName));
@@ -943,7 +962,8 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
                 var onePlayersBase =
                     from playerBases in allPlayerBases
-                    where playerBases.YahooName == playersYahooName
+                    where string.Equals(playerBases.YahooName, playersYahooName
+, StringComparison.Ordinal)
                     select playerBases;
 
                 return onePlayersBase;
@@ -978,7 +998,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
                             playersBase.RetroPlayerId,
                             playersBase.YahooPlayerId,
                             playersBase.OttoneuPlayerId,
-                            playersBase.RotoWirePlayerId
+                            playersBase.RotoWirePlayerId,
                         };
 
                         listOfPlayersIds.ForEach((id) => Console.WriteLine($"id: {id}"));
@@ -994,6 +1014,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
                     public Dictionary<string, string> GetAllPlayerIdsDictionary(PlayerBase playersBase)
                     {
                         Dictionary<string, string> dictionaryOfPlayersIds = new Dictionary<string, string>
+                        (StringComparer.Ordinal)
                         {
                             { "MlbId"                      , playersBase.MlbId                      },
                             { "SfbbPlayerId"               , playersBase.SfbbPlayerId               },
@@ -1009,7 +1030,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
                             { "RetroPlayerId"              , playersBase.RetroPlayerId              },
                             { "YahooPlayerId"              , playersBase.YahooPlayerId              },
                             { "OttoneuPlayerId"            , playersBase.OttoneuPlayerId            },
-                            { "RotoWirePlayerId"           , playersBase.RotoWirePlayerId           }
+                            { "RotoWirePlayerId"           , playersBase.RotoWirePlayerId           },
                         };
 
                         foreach (var kvp in dictionaryOfPlayersIds)
@@ -1124,387 +1145,5 @@ namespace BaseballScraper.Controllers.PlayerControllers
             }
 
         #endregion PRINTING PRESS ------------------------------------------------------------
-
-
-
-
     }
 }
-
-
-
-// public List<SfbbPlayerBase> GetAll()
-// {
-//     IEnumerable<SfbbPlayerBase> playerBasesEnumerable = GetAll_GSheet(_googleSheetErrorRange);
-
-//     List<SfbbPlayerBase> playerBasesEnumerableToList = playerBasesEnumerable.ToList();
-//     C.WriteLine($"OLD COUNT: {playerBasesEnumerableToList.Count}");
-
-//     List<string> idPlayers = new List<string>();
-
-//     var newList = new List<SfbbPlayerBase>();
-
-//     foreach(var p in playerBasesEnumerableToList)
-//     {
-//         if(idPlayers.Contains(p.IDPLAYER))
-//         {
-//             C.WriteLine("DUPLICATE");
-//             C.WriteLine(p.PLAYERNAME);
-//         }
-//         else
-//         {
-//             _context.Entry(p).State = EntityState.Added;
-//             newList.Add(p);
-//             idPlayers.Add(p.IDPLAYER);
-//         }
-//     }
-
-//     C.WriteLine($"NEW COUNT: {newList.Count}");
-
-//     return newList;
-// }
-
-
-
-
-
-// STATUS [ August 19, 2019 ] : haven't tested
-// public SfbbPlayerBase GetOne_DB(int mlbId)
-// {
-//     SfbbPlayerBase sfbbPlayer = _context.SfbbPlayerBases.SingleOrDefault(s => s.MLBID == mlbId);
-//     return sfbbPlayer;
-// }
-
-
-
-
-
-// _sfbbMapDocName = "SfbbPlayerIdMap"
-// _sfbbMapTabId = "SFBB_PLAYER_ID_MAP"
-// public IEnumerable<SfbbPlayerBase> GetAllPlayerBasesFromGoogleSheet(string range)
-// {
-//     IList<IList<object>> allPlayerBaseObjects = _googleSheetsConnector.ReadDataFromSheetRange(
-//         _sfbbMapDocName,
-//         _sfbbMapTabId,
-//         range
-//     );
-
-//     PrintPlayerBaseObjectDetails(allPlayerBaseObjects, _sfbbMapDocName, _sfbbMapTabId, range);
-
-//     List<SfbbPlayerBase> allPlayerBases = new List<SfbbPlayerBase>();
-//     int counter = 1;
-//     int mlbIdCounter = 1;
-//     int hqIdCounter = 1;
-
-//     foreach(var row in allPlayerBaseObjects)
-//     {
-//         SfbbPlayerBase playerBase = new SfbbPlayerBase
-//         {
-//             IDPLAYER        = row[0].ToString(),
-//             PLAYERNAME      = row[1].ToString(),
-//             BIRTHDATE       = row[2].ToString(),
-//             FIRSTNAME       = row[3].ToString(),
-//             LASTNAME        = row[4].ToString(),
-//             TEAM            = row[5].ToString(),
-//             LG              = row[6].ToString(),
-//             POS             = row[7].ToString(),
-//             IDFANGRAPHS     = row[8].ToString(),
-//             FANGRAPHSNAME   = row[9].ToString(),
-//             // MLBID           = Int32.Parse(row[10].ToString()),
-//             // MLBID           = _csvHandler.ParseNullableInt(row[10].ToString()),
-//             MLBNAME         = row[11].ToString(),
-//             CBSID           = row[12].ToString(),
-//             CBSNAME         = row[13].ToString(),
-//             RETROID         = row[14].ToString(),
-//             BREFID          = row[15].ToString(),
-//             NFBCID          = row[16].ToString(),
-//             NFBCNAME        = row[17].ToString(),
-//             ESPNID          = row[18].ToString(),
-//             ESPNNAME        = row[19].ToString(),
-//             KFFLNAME        = row[20].ToString(),
-//             DAVENPORTID     = row[21].ToString(),
-//             BPID            = row[22].ToString(),
-//             YAHOOID         = row[23].ToString(),
-//             YAHOONAME       = row[24].ToString(),
-//             MSTRBLLNAME     = row[25].ToString(),
-//             BATS            = row[26].ToString(),
-//             THROWS          = row[27].ToString(),
-//             FANTPROSNAME     = row[28].ToString(),
-//             LASTCOMMAFIRST  = row[29].ToString(),
-//             ROTOWIREID      = row[30].ToString(),
-//             FANDUELNAME     = row[31].ToString(),
-//             FANDUELID       = row[32].ToString(),
-//             DRAFTKINGSNAME  = row[33].ToString(),
-//             OTTONEUID       = row[34].ToString(),
-//             // HQID            = Int32.Parse(row[35].ToString()),
-//             RAZZBALLNAME    = row[36].ToString(),
-//             FANTRAXID       = row[37].ToString(),
-//             FANTRAXNAME     = row[38].ToString(),
-//             ROTOWIRENAME    = row[39].ToString(),
-//             ALLPOS          = row[40].ToString(),
-//             NFBCLASTFIRST   = row[41].ToString()
-//         };
-
-//         if(row[10].ToString() == "")
-//         {
-//             // playerBase.MLBID = mlbIdCounter;
-//             mlbIdCounter++;
-//         }
-
-//         else
-//         {
-//             string mlbIdString = row[10].ToString();
-//             int mlbIdInt = Int32.Parse(mlbIdString);
-//             playerBase.MLBID = mlbIdInt;
-//         }
-
-//         if(row[35].ToString() == "")
-//         {
-//             // playerBase.HQID = hqIdCounter;
-//             hqIdCounter++;
-//         }
-
-//         else
-//         {
-//             string hqString = row[35].ToString();
-//             int hqIdInt = int.Parse(hqString);
-//             playerBase.HQID = hqIdInt;
-//         }
-
-//         allPlayerBases.Add(playerBase);
-//         // Console.WriteLine($"NEW: {playerBase.PLAYERNAME}\t MLB ID: {playerBase.MLBID}\t HQ ID: {playerBase.HQID}");
-
-//         // counter++;
-//     }
-//     return allPlayerBases;
-// }
-
-
-
-
-
-// STATUS [ August 19, 2019 ] : should work and be faster than AddSfbbPlayerBasesToDatabase()
-// [HttpPost("sfbb_player_base/all")]
-// public async Task<ActionResult> AddAllSfbbPlayerBasesToDatabase(IEnumerable<SfbbPlayerBase> allPlayerBases)
-// {
-//     _helpers.StartMethod();
-//     foreach(SfbbPlayerBase playerBase in allPlayerBases)
-//     {
-//         try
-//         {
-//             await _context.AddAsync(playerBase);
-//         }
-//         catch
-//         {
-//             Console.WriteLine($"ISSUE ADDING: {playerBase.PLAYERNAME} to SFBB DATABASE");
-//         }
-//     }
-//     await _context.SaveChangesAsync();
-//     return Ok();
-// }
-
-
-// STATUS [ August 27, 2019 ] : not tested but should work; should be faster than 'AddSfbbPlayerBasesToDatabase()'
-// * Because SaveChangesAsync is only called once
-// List would be something like:
-// * var allPlayerBases = _playerBaseFromGoogleSheet.GetAllPlayerBasesFromGoogleSheet("A7:AQ2333");
-// [HttpPost("sfbb_player_base/all")]
-// public async Task<ActionResult> AddAllSfbbPlayerBasesToDatabase(List<SfbbPlayerBase> allPlayerBases)
-// {
-//     _helpers.StartMethod();
-//     foreach(SfbbPlayerBase playerBase in allPlayerBases)
-//     {
-//         await _context.AddAsync(playerBase);
-//     }
-//     await _context.SaveChangesAsync();
-//     return Ok();
-// }
-
-
-
-
-
-
-/* --------------------------------------------------------------- */
-/* ONE PLAYERS BASE                                                */
-/* --------------------------------------------------------------- */
-
-// public void GetOnePlayerBaseColumnFromGoogleSheet(string range)
-// {
-//     var allPlayerBaseObjects = _googleSheetsConnector.ReadDataFromSheetRange(_sfbbMapDocName, _sfbbMapTabId, range);
-//     IEnumerable<SfbbPlayerBase> allPlayerBases = Enumerable.Empty<SfbbPlayerBase>();
-// }
-
-
-// public SfbbPlayerBase GetOneFromDatabase(int mlbId)
-// {
-//     SfbbPlayerBase sfbbPlayer = _context.SfbbPlayerBases.SingleOrDefault(s => s.MLBID == mlbId);
-//     return sfbbPlayer;
-// }
-
-
-
-
-
-/* ------------------------------------------------------------------- */
-/* --------------------- NEW PLACEHOLDER SECTION --------------------- */
-/*
-
-                                                                  */
-    // [Route("google_sheet")]
-    // public class PlayerBaseFromGoogleSheet : PlayerBaseController
-    // {
-
-    // // new private static readonly string         _sfbbMapDocName = "SfbbPlayerIdMap";
-    // // new private static readonly string         _sfbbMapTabId = "SFBB_PLAYER_ID_MAP";
-    // new private readonly Helpers               _helpers;
-    // new private readonly GoogleSheetsConnector _googleSheetsConnector;
-
-
-
-    // public PlayerBaseFromGoogleSheet(Helpers helpers, GoogleSheetsConnector googleSheetsConnector)
-    // {
-    //     _helpers               = helpers;
-    //     _googleSheetsConnector = googleSheetsConnector;
-    // }
-
-    // public PlayerBaseFromGoogleSheet(){}
-
-
-/*                                                                     */
-/* --------------------- END PLACEHOLDER SECTION --------------------- */
-/* ------------------------------------------------------------------- */
-
-
-
-
-/* ------------------------------------------------------------------- */
-/* --------------------- NEW PLACEHOLDER SECTION --------------------- */
-/*                                                                     */
-
-
-    /* --------------------------------------------------------------- */
-    /* ALL PLAYER BASES                                                */
-    /* --------------------------------------------------------------- */
-
-    // // range example: "A5:AP2284"
-    // public IList<IList<object>> GetAll_GSheet(string range)
-    // {
-    //     _helpers.StartMethod();
-
-    //     var allPlayerBases = _googleSheetsConnector.ReadDataFromSheetRange(
-    //         _sfbbMapDocName,
-    //         _sfbbMapTabId,
-    //         range
-    //     );
-
-    //     return allPlayerBases;
-    // }
-
-
-/*                                                                     */
-/* --------------------- END PLACEHOLDER SECTION --------------------- */
-/* ------------------------------------------------------------------- */
-
-
-
-
-
-
-/* ------------------------------------------------------------------- */
-/* --------------------- NEW PLACEHOLDER SECTION --------------------- */
-/*                                                                     */
-
-
-    //     {
-    //         IDPLAYER        = row[0].ToString(),
-    //         PLAYERNAME      = row[1].ToString(),
-    //         BIRTHDATE       = row[2].ToString(),
-    //         FIRSTNAME       = row[3].ToString(),
-    //         LASTNAME        = row[4].ToString(),
-    //         TEAM            = row[5].ToString(),
-    //         LG              = row[6].ToString(),
-    //         POS             = row[7].ToString(),
-    //         IDFANGRAPHS     = row[8].ToString(),
-    //         FANGRAPHSNAME   = row[9].ToString(),
-    //         MLBNAME         = row[11].ToString(),
-    //         CBSID           = row[12].ToString(),
-    //         CBSNAME         = row[13].ToString(),
-    //         RETROID         = row[14].ToString(),
-    //         BREFID          = row[15].ToString(),
-    //         NFBCID          = row[16].ToString(),
-    //         NFBCNAME        = row[17].ToString(),
-    //         ESPNID          = row[18].ToString(),
-    //         ESPNNAME        = row[19].ToString(),
-    //         KFFLNAME        = row[20].ToString(),
-    //         DAVENPORTID     = row[21].ToString(),
-    //         BPID            = row[22].ToString(),
-    //         YAHOOID         = row[23].ToString(),
-    //         YAHOONAME       = row[24].ToString(),
-    //         MSTRBLLNAME     = row[25].ToString(),
-    //         BATS            = row[26].ToString(),
-    //         THROWS          = row[27].ToString(),
-    //         FANTPROSNAME     = row[28].ToString(),
-    //         LASTCOMMAFIRST  = row[29].ToString(),
-    //         ROTOWIREID      = row[30].ToString(),
-    //         FANDUELNAME     = row[31].ToString(),
-    //         FANDUELID       = row[32].ToString(),
-    //         DRAFTKINGSNAME  = row[33].ToString(),
-    //         OTTONEUID       = row[34].ToString(),
-    //         RAZZBALLNAME    = row[36].ToString(),
-    //         FANTRAXID       = row[37].ToString(),
-    //         FANTRAXNAME     = row[38].ToString(),
-    //         ROTOWIRENAME    = row[39].ToString(),
-    //         ALLPOS          = row[40].ToString(),
-    //         NFBCLASTFIRST   = row[41].ToString()
-    //     };
-
-    //     if(row[10].ToString() == "")
-    //     {
-    //         // playerBase.MLBID = mlbIdCounter;
-    //         mlbIdCounter++;
-    //     }
-
-    //     else
-    //     {
-    //         string mlbIdString = row[10].ToString();
-    //         int mlbIdInt = int.Parse(mlbIdString);
-    //         playerBase.MLBID = mlbIdInt;
-    //     }
-
-    //     if(row[35].ToString() == "")
-    //     {
-    //         // playerBase.HQID = hqIdCounter;
-    //         hqIdCounter++;
-    //     }
-
-    //     else
-    //     {
-    //         string hqString = row[35].ToString();
-    //         int hqIdInt = int.Parse(hqString);
-    //         playerBase.HQID = hqIdInt;
-    //     }
-
-    //     allPlayerBases.Add(playerBase);
-    //     // Console.WriteLine($"NEW: {playerBase.PLAYERNAME}\t MLB ID: {playerBase.MLBID}\t HQ ID: {playerBase.HQID}");
-
-
-/*                                                                     */
-/* --------------------- END PLACEHOLDER SECTION --------------------- */
-/* ------------------------------------------------------------------- */
-
-
-
-
-
-
-
-
-
-            // SFBB PLAYER BASE
-            // public async Task<ActionResult> AddOne_DB(SfbbPlayerBase sfbbPlayerBase)
-            // {
-            //     await _context.AddAsync(sfbbPlayerBase);
-            //     await _context.SaveChangesAsync(cancellationToken);
-            //     return Ok();
-            // }

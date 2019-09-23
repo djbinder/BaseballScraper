@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using BaseballScraper.Infrastructure;
 using BaseballScraper.Models.Lahman;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +8,7 @@ using RDotNet;
 using C = System.Console;
 
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE1006
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE1006, MA0016
 namespace BaseballScraper.Controllers.LahmanControllers
 {
     [Route("api/lahman/[controller]")]
@@ -83,7 +84,7 @@ namespace BaseballScraper.Controllers.LahmanControllers
                     var columnCount = evaluationDataFrame.ColumnCount;
                     var columnHeaders = GetColumnNames(evaluationDataFrame);
 
-                Dictionary<string, object> keysAndValues = new Dictionary<string, object>();
+                Dictionary<string, object> keysAndValues = new Dictionary<string, object>(StringComparer.Ordinal);
 
                 for(var columnCounter = 0; columnCounter <= columnCount - 1; columnCounter++)
                 {
@@ -102,28 +103,28 @@ namespace BaseballScraper.Controllers.LahmanControllers
             {
                 var player = new LahmanMasterTablePlayer
                 {
-                    LahmanPlayerId            =keysAndValues["playerID"].ToString(),
-                    BirthYear                 =Convert.ToInt32(keysAndValues["birthYear"]),
-                    BirthMonth                =Convert.ToInt32(keysAndValues["birthMonth"]),
-                    BirthDay                  =Convert.ToInt32(keysAndValues["birthDay"]),
-                    BirthCountry              =keysAndValues["birthCountry"].ToString(),
-                    BirthState                =keysAndValues["birthState"].ToString(),
-                    BirthCity                 =keysAndValues["birthCity"].ToString(),
-                    DeathYear                 =ManageNullInt(keysAndValues["deathYear"]),
-                    DeathMonth                =ManageNullInt(keysAndValues["deathMonth"]),
-                    DeathDay                  =ManageNullInt(keysAndValues["deathDay"]),
-                    DeathCountry              =ManageNullString(keysAndValues["deathCountry"]),
-                    DeathState                =ManageNullString(keysAndValues["deathState"]),
-                    DeathCity                 =ManageNullString(keysAndValues["deathCity"]),
-                    FirstName                 =keysAndValues["nameFirst"].ToString(),
-                    LastName                  =keysAndValues["nameLast"].ToString(),
-                    NameFirstLast             =keysAndValues["nameGiven"].ToString(),
-                    Weight                    =Convert.ToInt32(keysAndValues["weight"]),
-                    Height                    =Convert.ToInt32(keysAndValues["height"]),
-                    Bats                      =keysAndValues["bats"].ToString(),
-                    Throws                    =keysAndValues["throws"].ToString(),
-                    Debut                     =DateTime.Parse(keysAndValues["debut"].ToString()),
-                    FinalGame                 =DateTime.Parse(keysAndValues["finalGame"].ToString()),
+                    LahmanPlayerId            = keysAndValues["playerID"].ToString(),
+                    BirthYear                 = Convert.ToInt32(keysAndValues["birthYear"], CultureInfo.CurrentCulture),
+                    BirthMonth                = Convert.ToInt32(keysAndValues["birthMonth"], CultureInfo.CurrentCulture),
+                    BirthDay                  = Convert.ToInt32(keysAndValues["birthDay"], CultureInfo.CurrentCulture),
+                    BirthCountry              = keysAndValues["birthCountry"].ToString(),
+                    BirthState                = keysAndValues["birthState"].ToString(),
+                    BirthCity                 = keysAndValues["birthCity"].ToString(),
+                    DeathYear                 = ManageNullInt(keysAndValues["deathYear"]),
+                    DeathMonth                = ManageNullInt(keysAndValues["deathMonth"]),
+                    DeathDay                  = ManageNullInt(keysAndValues["deathDay"]),
+                    DeathCountry              = ManageNullString(keysAndValues["deathCountry"]),
+                    DeathState                = ManageNullString(keysAndValues["deathState"]),
+                    DeathCity                 = ManageNullString(keysAndValues["deathCity"]),
+                    FirstName                 = keysAndValues["nameFirst"].ToString(),
+                    LastName                  = keysAndValues["nameLast"].ToString(),
+                    NameFirstLast             = keysAndValues["nameGiven"].ToString(),
+                    Weight                    = Convert.ToInt32(keysAndValues["weight"], CultureInfo.CurrentCulture),
+                    Height                    = Convert.ToInt32(keysAndValues["height"], CultureInfo.CurrentCulture),
+                    Bats                      = keysAndValues["bats"].ToString(),
+                    Throws                    = keysAndValues["throws"].ToString(),
+                    Debut                     = DateTime.Parse(keysAndValues["debut"].ToString(), CultureInfo.InvariantCulture),
+                    FinalGame                 = DateTime.Parse(keysAndValues["finalGame"].ToString(), CultureInfo.InvariantCulture),
                     RetroPlayerId             =keysAndValues["retroID"].ToString(),
                     BaseballReferencePlayerId =keysAndValues["bbrefID"].ToString(),
                     // DeathDate                 =DateTime.Parse(keysAndValues["deathDate"].ToString()),
@@ -162,7 +163,7 @@ namespace BaseballScraper.Controllers.LahmanControllers
                 if(obj == null)
                     numCheck = 0;
                 else
-                    numCheck = Convert.ToInt32(obj);
+                    numCheck = Convert.ToInt32(obj, CultureInfo.CurrentCulture);
 
                 return numCheck;
             }
@@ -174,7 +175,10 @@ namespace BaseballScraper.Controllers.LahmanControllers
             public string FormatSearchStringsForR(string str)
             {
                 var isFirstLetterCapitalized = char.IsUpper(str, 0);
-                if(isFirstLetterCapitalized == false) { str = char.ToUpper(str[0]) + str.Substring(1); }
+                if(isFirstLetterCapitalized == false) 
+                { 
+                    str = char.ToUpper(str[0], CultureInfo.InvariantCulture) + str.Substring(1); 
+                }
                 str = $"\"{str}\"";
                 return str;
             }

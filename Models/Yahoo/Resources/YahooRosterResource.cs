@@ -2,13 +2,12 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
-// using BaseballScraper.Models.Yahoo.Collections.YahooPlayersCollection;
 using System;
 using Newtonsoft.Json.Converters;
 using System.Globalization;
 
-#pragma warning disable IDE0066
-namespace BaseballScraper.Models.Yahoo.Resources.YahooRosterResource
+#pragma warning disable CA1819, IDE0066, MA0048
+namespace BaseballScraper.Models.Yahoo.Resources
 {
     [XmlRoot (ElementName = "team", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
     public partial class YahooRosterResource
@@ -122,7 +121,7 @@ namespace BaseballScraper.Models.Yahoo.Resources.YahooRosterResource
         public long Count { get; set; }
 
         [JsonProperty("player")]
-        public List<Player> Player { get; set; }
+        public IList<Player> Player { get; set; }
     }
 
     public partial class Player
@@ -215,13 +214,13 @@ namespace BaseballScraper.Models.Yahoo.Resources.YahooRosterResource
     }
 
 
-    // 99% of the time a player will have 2+ eligible positions because 'Util' is applicable to all
-    // This means their positions will show as a list in the json
-    // But if a player only has 'Util' (i.e., they're a DH only) the return json is a string
+    // * 99% of the time a player will have 2+ eligible positions because 'Util' is applicable to all
+    // * This means their positions will show as a list in the json
+    // * But if a player only has 'Util' (i.e., they're a DH only) the return json is a string
     public partial class EligiblePositions
     {
         [JsonProperty("position")]
-        public object Position { get; set; }
+        public object RosterResourcePosition { get; set; }
 
 
         protected string[] PositionCasted
@@ -229,20 +228,18 @@ namespace BaseballScraper.Models.Yahoo.Resources.YahooRosterResource
             get
             {
                 // player is DH / Util only
-                if(Position is String)
+                if(RosterResourcePosition is string)
                 {
                     return null;
                 }
                 // player is eligible for multiple positions
                 else
                 {
-                    return (string[]) Position;
+                    return (string[]) RosterResourcePosition;
                 }
             }
         }
     }
-
-
 
     public partial class TeamLogo
     {
@@ -321,12 +318,12 @@ namespace BaseballScraper.Models.Yahoo.Resources.YahooRosterResource
 
     public partial class YahooRosterResource
     {
-        public static YahooRosterResource FromJson(string json) => JsonConvert.DeserializeObject<YahooRosterResource>(json, BaseballScraper.Models.Yahoo.Resources.YahooRosterResource.Converter.Settings);
+        public static YahooRosterResource FromJson(string json) => JsonConvert.DeserializeObject<YahooRosterResource>(json, Converter.Settings);
     }
 
     public static class Serialize
     {
-        public static string ToJson(this YahooRosterResource self) => JsonConvert.SerializeObject(self, BaseballScraper.Models.Yahoo.Resources.YahooRosterResource.Converter.Settings);
+        public static string ToJson(this YahooRosterResource self) => JsonConvert.SerializeObject(self, Converter.Settings);
     }
 
     internal static class Converter
@@ -341,7 +338,10 @@ namespace BaseballScraper.Models.Yahoo.Resources.YahooRosterResource
                 CoverageTypeConverter.Singleton,
                 SizeConverter.Singleton,
                 PositionTypeConverter.Singleton,
-                new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal }
+                new IsoDateTimeConverter 
+                { 
+                    DateTimeStyles = DateTimeStyles.AssumeUniversal, 
+                },
             },
         };
     }
@@ -352,23 +352,14 @@ namespace BaseballScraper.Models.Yahoo.Resources.YahooRosterResource
 
         public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
         {
-            // Console.WriteLine("A");
-            // Console.WriteLine($"existingValue: {existingValue}");
-            // Console.WriteLine($"existingValue.GetType(): {existingValue.GetType()}");
-            // Console.WriteLine($"reader.TokenTYpe: {reader.TokenType}");
-
             if (reader.TokenType == JsonToken.Null)
-            {
                 return null;
-            }
 
-            var value = serializer.Deserialize<string>(reader);
+            string value = serializer.Deserialize<string>(reader);
 
-            if (Int64.TryParse(value, out long l))
-            {
+            if (long.TryParse(value, NumberStyles.None, CultureInfo.InvariantCulture, out long l))
                 return l;
-            }
-            Console.WriteLine("A2");
+
             throw new Exception("Cannot unmarshal type long");
         }
 
@@ -376,19 +367,16 @@ namespace BaseballScraper.Models.Yahoo.Resources.YahooRosterResource
         {
             if (untypedValue == null)
             {
-                serializer.Serialize(writer, null);
+                serializer.Serialize(writer, value: null);
                 return;
             }
-            var value = (long)untypedValue;
-            serializer.Serialize(writer, value.ToString());
+            long value = (long)untypedValue;
+            serializer.Serialize(writer, value: value.ToString( CultureInfo.InvariantCulture));
             return;
         }
 
         public static readonly ParseStringConverter Singleton = new ParseStringConverter();
     }
-
-
-
 
 
     internal class CoverageTypeConverter : JsonConverter
@@ -398,11 +386,11 @@ namespace BaseballScraper.Models.Yahoo.Resources.YahooRosterResource
         public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
         {
             if (reader.TokenType == JsonToken.Null) return null;
-            var value = serializer.Deserialize<string>(reader);
-            if (value == "date")
-            {
+            string value = serializer.Deserialize<string>(reader);
+
+            if (string.Equals(value, "date", StringComparison.Ordinal))
                 return CoverageType.Date;
-            }
+
             throw new Exception("Cannot unmarshal type CoverageType");
         }
 
@@ -410,10 +398,10 @@ namespace BaseballScraper.Models.Yahoo.Resources.YahooRosterResource
         {
             if (untypedValue == null)
             {
-                serializer.Serialize(writer, null);
+                serializer.Serialize(writer, value: null);
                 return;
             }
-            var value = (CoverageType)untypedValue;
+            CoverageType value = (CoverageType)untypedValue;
             if (value == CoverageType.Date)
             {
                 serializer.Serialize(writer, "date");
@@ -434,7 +422,7 @@ namespace BaseballScraper.Models.Yahoo.Resources.YahooRosterResource
         public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
         {
             if (reader.TokenType == JsonToken.Null) return null;
-            var value = serializer.Deserialize<string>(reader);
+            string value = serializer.Deserialize<string>(reader);
             switch (value)
             {
                 case "large":
@@ -449,10 +437,10 @@ namespace BaseballScraper.Models.Yahoo.Resources.YahooRosterResource
         {
             if (untypedValue == null)
             {
-                serializer.Serialize(writer, null);
+                serializer.Serialize(writer, value: null);
                 return;
             }
-            var value = (Size)untypedValue;
+            Size value = (Size)untypedValue;
             switch (value)
             {
                 case Size.Large:
@@ -490,7 +478,7 @@ namespace BaseballScraper.Models.Yahoo.Resources.YahooRosterResource
         {
             if (untypedValue == null)
             {
-                serializer.Serialize(writer, null);
+                serializer.Serialize(writer, value: null);
                 return;
             }
             var value = (PositionType)untypedValue;

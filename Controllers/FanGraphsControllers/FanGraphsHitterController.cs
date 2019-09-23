@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using BaseballScraper.EndPoints;
 using BaseballScraper.Infrastructure;
@@ -9,7 +10,7 @@ using Newtonsoft.Json.Linq;
 using PuppeteerSharp;
 using static BaseballScraper.EndPoints.FanGraphsUriEndPoints;
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE1006
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE1006, MA0016, MA0051
 namespace BaseballScraper.Controllers.FanGraphsControllers
 {
     [Route("api/fangraphs/[controller]")]
@@ -114,7 +115,7 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
                 {
                     // scrape first page of html to get total number of pages that will be scraped
                     int pageNumber = 1;
-                    var endPoint = (_fanGraphsEndPoints.FgHitterMasterReport(
+                    string endPoint = (_fanGraphsEndPoints.FgHitterMasterReport(
                         positionEnum: positionEnum,
                         minPlateAppearances: minPlateAppearances,
                         league: league,
@@ -147,7 +148,7 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
                         try
                         {
                             // loop through each row on page
-                            for(var rowCounter = 1; rowCounter < rowCount; rowCounter++)
+                            for(int rowCounter = 1; rowCounter < rowCount; rowCounter++)
                             {
                                 string rowSelector = $".rgMasterTable #LeaderBoard1_dg1_ctl00__{rowCounter} .grid_line_regular";
                                 await page.WaitForSelectorAsync(rowSelector);
@@ -210,7 +211,7 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
                             return `${intToGet}`;
                         });
                 }", selector);
-                int intToGet = Convert.ToInt32(intJToken[0]);
+                int intToGet = Convert.ToInt32(value: intJToken[0], provider: CultureInfo.CurrentCulture);
                 return intToGet;
             }
 
@@ -310,7 +311,7 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
                     OppoPercentagePlus              =(int)allValuesInRow[38],
                     SoftPercentagePlus              =(int)allValuesInRow[39],
                     MediumPercentagePlus            =(int)allValuesInRow[40],
-                    HardPercentagePlus              =(int)allValuesInRow[41]
+                    HardPercentagePlus              =(int)allValuesInRow[41],
                 };
                 return fgHitter;
             }
@@ -331,7 +332,7 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
             public decimal ConvertCellWithPercentageSymbolToDecimal(JToken token)
             {
                 var dataToConvert = token.ToString().Split('%');
-                var decimalValue = decimal.Parse(dataToConvert[0]);
+                var decimalValue = decimal.Parse(dataToConvert[0], NumberStyles.None, CultureInfo.InvariantCulture);
                 return decimalValue;
             }
 

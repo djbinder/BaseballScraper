@@ -5,7 +5,7 @@ using BaseballScraper.Models.Player;
 using CsvHelper.Configuration;
 // using Ganss.Excel;
 
-#pragma warning disable CS0649, IDE0051, IDE0052
+#pragma warning disable CS0649, IDE0051, IDE0052, MA0048
 namespace BaseballScraper.Models.BaseballSavant
 {
     public class XstatsHitter : IBaseEntity

@@ -23,7 +23,7 @@ namespace BaseballScraper.Models.FanGraphs
         }
 
 
-        public class ParkFactors
+        private class ParkFactors
         {
             public int Season { get; set; }
             public string TeamNameShort { get; set; }

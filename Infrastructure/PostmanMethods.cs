@@ -31,7 +31,7 @@ namespace BaseballScraper.Infrastructure
                 PostmanRequest postmanRequest = new PostmanRequest()
                 {
                     Client  = new RestClient(endPointUri),
-                    Request = new RestRequest(Method.GET)
+                    Request = new RestRequest(Method.GET),
                 };
 
                 AddRequestHeader(postmanRequest, tokenType);
@@ -58,7 +58,7 @@ namespace BaseballScraper.Infrastructure
                 PostmanRequest postmanRequest = new PostmanRequest()
                 {
                     Client  = new RestClient(endPointUri),
-                    Request = new RestRequest(Method.GET)
+                    Request = new RestRequest(Method.GET),
                 };
 
                 AddRequestHeader(postmanRequest, tokenTypeForSwitch);
@@ -93,7 +93,7 @@ namespace BaseballScraper.Infrastructure
             {
                 return new PostmanResponse
                 {
-                    Response = request.Client.Execute(request.Request)
+                    Response = request.Client.Execute(request.Request),
                 };
             }
 
@@ -103,7 +103,7 @@ namespace BaseballScraper.Infrastructure
                 PostmanRequest postmanRequest = new PostmanRequest()
                 {
                     Client  = new RestClient(endPointUri),
-                    Request = new RestRequest(Method.GET)
+                    Request = new RestRequest(Method.GET),
                 };
 
                 AddRequestHeader(postmanRequest, tokenType);
@@ -111,7 +111,7 @@ namespace BaseballScraper.Infrastructure
 
                 return new PostmanResponse
                 {
-                    Response = postmanRequest.Client.Execute(postmanRequest.Request)
+                    Response = postmanRequest.Client.Execute(postmanRequest.Request),
                 };
             }
 

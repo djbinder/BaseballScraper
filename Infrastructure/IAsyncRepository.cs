@@ -2,11 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 using BaseballScraper.Models;
 using Microsoft.EntityFrameworkCore;
 
-
+#pragma warning disable MA0040, MA0048
 namespace BaseballScraper.Infrastructure
 {
     // STATUS [ September 9, 2019 ] : this was straight pulled from: http://bit.ly/2lKxIOM
@@ -42,8 +43,8 @@ namespace BaseballScraper.Infrastructure
 
         #region Fields
 
-        protected BaseballScraperContext _context;
-        public System.Threading.CancellationToken cancellationToken = new System.Threading.CancellationToken();
+        private protected BaseballScraperContext _context;
+        private readonly CancellationToken cancellationToken = new CancellationToken();
 
         #endregion
 
@@ -54,16 +55,16 @@ namespace BaseballScraper.Infrastructure
 
         #region Public Methods
 
-        public Task<T> GetById(int id) => _context.Set<T>().FindAsync(id);
+        public Task<T> GetById(int id) => _context.Set<T>().FindAsync(id, cancellationToken);
 
         public Task<T> FirstOrDefault(Expression<Func<T, bool>> predicate)
-            => _context.Set<T>().FirstOrDefaultAsync(predicate);
+            => _context.Set<T>().FirstOrDefaultAsync(predicate, cancellationToken);
 
         public async Task Add(T entity)
         {
             // await Context.AddAsync(entity);
-            await _context.Set<T>().AddAsync(entity);
-            await _context.SaveChangesAsync(cancellationToken);
+            await _context.Set<T>().AddAsync(entity, cancellationToken).ConfigureAwait(false);
+            await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         }
 
         public Task Update(T entity)
@@ -81,18 +82,18 @@ namespace BaseballScraper.Infrastructure
 
         public async Task<IEnumerable<T>> GetAll()
         {
-            return await _context.Set<T>().ToListAsync();
+            return await _context.Set<T>().ToListAsync(cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<T>> GetWhere(Expression<Func<T, bool>> predicate)
         {
-            return await _context.Set<T>().Where(predicate).ToListAsync();
+            return await _context.Set<T>().Where(predicate).ToListAsync(cancellationToken).ConfigureAwait(false);
         }
 
-        public Task<int> CountAll() => _context.Set<T>().CountAsync();
+        public Task<int> CountAll() => _context.Set<T>().CountAsync(cancellationToken);
 
         public Task<int> CountWhere(Expression<Func<T, bool>> predicate)
-            => _context.Set<T>().CountAsync(predicate);
+            => _context.Set<T>().CountAsync(predicate, cancellationToken);
 
         #endregion
 
@@ -119,6 +120,6 @@ namespace BaseballScraper.Infrastructure
         public WorkerRepository(BaseballScraperContext context) : base(context) { }
 
         public Task<Worker> GetByFirstName(string firstName)
-            => FirstOrDefault(w => w.FirstName == firstName);
+            => FirstOrDefault(w => string.Equals(w.FirstName, firstName, StringComparison.Ordinal));
     }
 }

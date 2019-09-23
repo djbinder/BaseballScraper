@@ -1,4 +1,5 @@
 using AirtableApiClient;
+using BaseballScraper.Controllers.PlayerControllers;
 using BaseballScraper.Infrastructure;
 using BaseballScraper.Models.ConfigurationModels;
 using BaseballScraper.Models.Player;
@@ -6,15 +7,12 @@ using C = System.Console;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
-using RestSharp;
-using static BaseballScraper.Controllers.PlayerControllers.PlayerBaseController;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using BaseballScraper.Controllers.PlayerControllers;
+using System.Globalization;
 
 
 #pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE1006
@@ -28,7 +26,6 @@ namespace BaseballScraper.Controllers.AGGREGATORS
         private readonly Helpers                   _helpers;
         private readonly AirtableManager           _atM;
         private readonly PlayerBaseController      _playerBaseController;
-        // private readonly PlayerBaseFromGoogleSheet _playerBaseFromGoogleSheet;
         private readonly AirtableConfiguration     _airtableConfig;
         private readonly PostmanMethods            _postmanMethods;
         private readonly GoogleSheetsConnector     _googleSheetsConnector;
@@ -39,24 +36,32 @@ namespace BaseballScraper.Controllers.AGGREGATORS
 
         public LaunchCoreSpSitesController
         (
-            Helpers helpers,
-            AirtableManager atM,
-            // PlayerBaseFromGoogleSheet playerBaseFromGoogleSheet,
-            PlayerBaseController playerBaseController,
-            IOptions<AirtableConfiguration> airtableConfig,
-            PostmanMethods postmanMethods,
-            GoogleSheetsConnector googleSheetsConnector,
+            Helpers                                    helpers,
+            AirtableManager                            atM,
+            PlayerBaseController                       playerBaseController,
+            IOptions<AirtableConfiguration>            airtableConfig,
+            PostmanMethods                             postmanMethods,
+            GoogleSheetsConnector                      googleSheetsConnector,
             IOptionsSnapshot<GoogleSheetConfiguration> options,
-            IOptionsSnapshot<AirtableConfiguration> airTableOptions
+            IOptionsSnapshot<AirtableConfiguration>    airTableOptions
         )
         {
-            _helpers                            = helpers;
-            _atM                                = atM;
-            // _playerBaseFromGoogleSheet          = playerBaseFromGoogleSheet;
-            _playerBaseController               = playerBaseController;
+            if (airtableConfig is null)
+                throw new ArgumentNullException(nameof(airtableConfig));
+            
+            if (options is null)
+                throw new ArgumentNullException(nameof(options));
+
+            if (airTableOptions is null)
+                throw new ArgumentNullException(nameof(airTableOptions));
+            
+
+            _helpers                            = helpers ?? throw new ArgumentNullException(nameof(helpers));
+            _atM                                = atM ?? throw new ArgumentNullException(nameof(atM));
+            _playerBaseController               = playerBaseController ?? throw new ArgumentNullException(nameof(playerBaseController));
             _airtableConfig                     = airtableConfig.Value;
-            _postmanMethods                     = postmanMethods;
-            _googleSheetsConnector              = googleSheetsConnector;
+            _postmanMethods                     = postmanMethods ?? throw new ArgumentNullException(nameof(postmanMethods));
+            _googleSheetsConnector              = googleSheetsConnector ?? throw new ArgumentNullException(nameof(googleSheetsConnector));
             _crunchTimePlayerIdMapConfiguration = options.Get("CrunchtimePlayerIdMap");
             _sfbbPlayerIdMapConfiguration       = options.Get("SfbbPlayerIdMap");
             _spRankingsConfiguration            = airTableOptions.Get("SpRankings");
@@ -97,41 +102,49 @@ namespace BaseballScraper.Controllers.AGGREGATORS
             public async Task RetrievePitcherRankingInfoFromDatabase()
             {
                 _helpers.StartMethod();
-                var spRankingTableConfig    = _atM.GetSpRankingsTableConfiguration();
+                AirtableConfiguration spRankingTableConfig    = _atM.GetSpRankingsTableConfiguration();
                 string airTableKey          = spRankingTableConfig.ApiKey = _airtableConfig.ApiKey;
                 string authenticationString = spRankingTableConfig.AuthenticationString;
 
-                var listOfSpRankings =
+                List<AirtableRecord> listOfSpRankings =
                     await _atM.GetAllRecordsFromAirtableAsync
                     (
                         _spRankingsConfiguration.TableName,
                         _spRankingsConfiguration.AuthenticationString
                     );
 
-                var listOfAuthors =
+                List<AirtableRecord> listOfAuthors =
                     await _atM.GetAllRecordsFromAirtableAsync
                     (
                         _authorsConfiguration.TableName,
                         _authorsConfiguration.AuthenticationString
                     );
 
-                foreach(AirtableRecord ranking in listOfSpRankings)
+                for (int i = 0; i < listOfSpRankings.Count; i++)
                 {
-                    var authorField    = ranking.GetField("Author");
-                    JArray fieldJArray = authorField as JArray;
-                    string authorId    = fieldJArray[0].ToString();
+                    AirtableRecord ranking = listOfSpRankings[i];
+                    object authorField     = ranking.GetField("Author");
+                    JArray fieldJArray     = authorField as JArray;
+                    string authorId        = fieldJArray[0].ToString();
                     C.WriteLine($"authorId: {authorId}");
                 }
 
-                foreach (var author in listOfAuthors)
+                for (int i = 0; i < listOfAuthors.Count; i++)
                 {
-                    // _helpers.Dig(author);
+                    AirtableRecord author = listOfAuthors[i];
                     C.WriteLine($"author.Id: {author.Id}");
-                    var rankingQuery =
-                        (from ranking in listOfSpRankings
-                            where ((JArray)ranking.GetField("Author")).Select(item => (string)item[0]).ToString() == author.Id
-                            select ranking
-                            );
+
+                    IEnumerable<AirtableRecord> rankingQuery =
+                        from ranking in listOfSpRankings
+                            where string.Equals(
+                                ((JArray)ranking
+                                    .GetField("Author"))
+                                    .Select(item => (string)item[0])
+                                    .ToString(), 
+                                    author.Id, 
+                                    StringComparison.Ordinal
+                                )
+                        select ranking;
 
                     _helpers.Dig(rankingQuery);
                 }
@@ -147,7 +160,7 @@ namespace BaseballScraper.Controllers.AGGREGATORS
 
 
             // STATUS [ July 11, 2019 ] : this works
-            //        [ August 29, 2019 ] : made tweeks and haven't tested
+            //        [ August 29, 2019 ] : made tweaks and haven't tested
             /// <summary>
             ///     Launch all websites for an individual in Google Chrome
             ///     Sites include:
@@ -168,21 +181,26 @@ namespace BaseballScraper.Controllers.AGGREGATORS
             /// </example>
             public void LaunchAllPagesInChromeForPlayer(string firstName, string lastName)
             {
-                firstName = FormatPlayerFirstAndLastName(firstName); // capitalize first letter if needed
-                lastName = FormatPlayerFirstAndLastName(lastName);   // capitalize first letter if needed
+                firstName = FormatPlayerFirstAndLastName(firstName);  // capitalize first letter if needed
+                lastName  = FormatPlayerFirstAndLastName(lastName);   // capitalize first letter if needed
+
                 string playerName = $"{firstName} {lastName}";
 
                 IEnumerable<SfbbPlayerBase> allPlayerBases = _playerBaseController.GetAll_GSheet("A7:AQ2284");
 
                 IEnumerable<SfbbPlayerBase> onePlayerBase =
                     from playerBases in allPlayerBases
-                    where playerBases.FANGRAPHSNAME == playerName
+                    where string.Equals(
+                        playerBases.FANGRAPHSNAME, 
+                        playerName, 
+                        StringComparison.Ordinal
+                    )
                     select playerBases;
 
                 int nullCheck = onePlayerBase.Count();
                 if(nullCheck == 0)
                 {
-                    ManageNullPlayerBase(firstName, lastName);
+                    PrintNullPlayerBase(firstName, lastName);
                 }
 
                 else
@@ -199,17 +217,6 @@ namespace BaseballScraper.Controllers.AGGREGATORS
             }
 
 
-            public void ManageNullPlayerBase(string firstName, string lastName)
-            {
-                C.ForegroundColor = ConsoleColor.Red;
-                C.WriteLine($"\n****************************************************************");
-                C.WriteLine($"PLAYER BASE DOES NOT EXIST FOR: {firstName} {lastName}");
-                C.WriteLine($"See: {_sfbbPlayerIdMapConfiguration.Link}");
-                C.WriteLine($"****************************************************************\n");
-                C.ResetColor();
-            }
-
-
         #endregion LAUNCH ALL SITES - PRIMARY METHOD ------------------------------------------------------------
 
 
@@ -223,10 +230,10 @@ namespace BaseballScraper.Controllers.AGGREGATORS
             /// <summary>
             ///     Launch FanGraphs page for player
             /// </summary>
-            public void LaunchPlayersFanGraphsPageInChrome(SfbbPlayerBase player)
+            public static void LaunchPlayersFanGraphsPageInChrome(SfbbPlayerBase player)
             {
-                var playerFanGraphsId = player.IDFANGRAPHS;
-                string urlString = $"https://www.fangraphs.com/statss.aspx?playerid={playerFanGraphsId}";
+                string playerFanGraphsId = player.IDFANGRAPHS;
+                string urlString         = $"https://www.fangraphs.com/statss.aspx?playerid={playerFanGraphsId}";
                 C.WriteLine($"FG: {urlString}");
                 Process.Start("open", urlString);
             }
@@ -238,8 +245,8 @@ namespace BaseballScraper.Controllers.AGGREGATORS
             /// </summary>
             public void LaunchPlayersBaseballProsectusPageInChrome(SfbbPlayerBase player)
             {
-                var playerBaseballProspectusId = player.BPID;
-                string urlString = $"https://legacy.baseballprospectus.com/card/{playerBaseballProspectusId}/";
+                string playerBaseballProspectusId = player.BPID;
+                string urlString                  = $"https://legacy.baseballprospectus.com/card/{playerBaseballProspectusId}/";
                 C.WriteLine($"BB PROSPECTUS: {urlString}");
                 Process.Start("open", urlString);
             }
@@ -251,8 +258,8 @@ namespace BaseballScraper.Controllers.AGGREGATORS
             /// </summary>
             public void LaunchPlayersRotowirePageInChrome(SfbbPlayerBase player)
             {
-                var playerRotowireId = player.ROTOWIREID;
-                string urlString = $"https://www.rotowire.com/baseball/player.php?id={playerRotowireId}";
+                string playerRotowireId = player.ROTOWIREID;
+                string urlString        = $"https://www.rotowire.com/baseball/player.php?id={playerRotowireId}";
                 C.WriteLine($"ROTOWIRE: {urlString}");
                 Process.Start("open", urlString);
             }
@@ -264,7 +271,7 @@ namespace BaseballScraper.Controllers.AGGREGATORS
             /// </summary>
             public void LaunchPlayersBaseballSavantPageInChrome(SfbbPlayerBase player)
             {
-                var mlbId = player.MLBID;
+                int? mlbId       = player.MLBID;
                 string urlString = $"https://baseballsavant.mlb.com/savant-player/{mlbId}";
                 C.WriteLine($"SAVANT: {urlString}");
                 Process.Start("open", urlString);
@@ -277,12 +284,12 @@ namespace BaseballScraper.Controllers.AGGREGATORS
             /// </summary>
             public void LaunchPlayersBaseballHqPageInChrome(SfbbPlayerBase player)
             {
-                var playerBaseballHqId = player.HQID;
-                var playerPosition = player.POS;
+                int? playerBaseballHqId = player.HQID;
+                string playerPosition = player.POS;
 
                 // the urls are slightly different for pitchers and hitters
                 string linkType;
-                if(playerPosition == "P")
+                if(string.Equals(playerPosition, "P", StringComparison.Ordinal))
                     linkType = "pitcherlink";
                 else
                     linkType = "batterlink";
@@ -299,7 +306,7 @@ namespace BaseballScraper.Controllers.AGGREGATORS
             /// </summary>
             public void LaunchPlayersYahooPageInChrome(SfbbPlayerBase player)
             {
-                var playerYahooId = player.YAHOOID;
+                string playerYahooId = player.YAHOOID;
                 string urlString = $"https://sports.yahoo.com/mlb/players/{playerYahooId}/";
                 C.WriteLine($"YAHOO: {urlString}");
                 Process.Start("open", urlString);
@@ -312,8 +319,8 @@ namespace BaseballScraper.Controllers.AGGREGATORS
             /// </summary>
             public void LaunchPlayersBaseballReferencePageInChrome(SfbbPlayerBase player)
             {
-                var baseballReferenceId = player.BREFID;
-                string lastNameFirstLetter = player.LASTNAME.Substring(0,1).ToLower();
+                string baseballReferenceId = player.BREFID;
+                string lastNameFirstLetter = player.LASTNAME.Substring(0,1).ToLower(CultureInfo.CurrentCulture);
                 string urlString = $"https://www.baseball-reference.com/players/{lastNameFirstLetter}/{baseballReferenceId}.shtml";
                 C.WriteLine($"BREF: {urlString}");
                 Process.Start("open", urlString);
@@ -335,11 +342,32 @@ namespace BaseballScraper.Controllers.AGGREGATORS
             /// </summary>
             public string FormatPlayerFirstAndLastName(string str)
             {
-                var isFirstLetterCapitalized = char.IsUpper(str, 0);
-                if(isFirstLetterCapitalized == false) { str = char.ToUpper(str[0]) + str.Substring(1); }
+                bool isFirstLetterCapitalized = char.IsUpper(str, 0);
+                                                
+                if(isFirstLetterCapitalized == false) 
+                    str = char.ToUpper(str[0], CultureInfo.InvariantCulture) + str.Substring(1); 
+
                 return str;
             }
 
         #endregion LAUNCH SITES - SUPPORT METHODS ------------------------------------------------------------
+
+
+
+
+
+        #region PRINTING PRESS ------------------------------------------------------------
+        
+            public void PrintNullPlayerBase(string firstName, string lastName)
+            {
+                C.ForegroundColor = ConsoleColor.Red;
+                C.WriteLine($"\n****************************************************************");
+                C.WriteLine($"PLAYER BASE DOES NOT EXIST FOR: {firstName} {lastName}");
+                C.WriteLine($"See: {_sfbbPlayerIdMapConfiguration.Link}");
+                C.WriteLine($"****************************************************************\n");
+                C.ResetColor();
+            }
+        
+        #endregion PRINTING PRESS ------------------------------------------------------------
     }
 }

@@ -85,7 +85,7 @@
                 * Add one HqHitterRestOfSeasonProjection to the database
             </summary>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.AddAllRosAsync_DB(System.Collections.Generic.List{BaseballScraper.Models.BaseballHq.HqHitterRestOfSeasonProjection})">
+        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.AddAllRosAsync_DB(System.Collections.Generic.IList{BaseballScraper.Models.BaseballHq.HqHitterRestOfSeasonProjection})">
             <summary>
                 * Add list of HqHitterRestOfSeasonProjection hitters to the database
             </summary>
@@ -1272,13 +1272,13 @@
                var collection = FilterByPositionStatusAndCountThenCreateInstance("3B","FA","10");
             </example>
         </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.Collections.YahooPlayersCollectionController.CreatePlayerListFromPlayersCollection(BaseballScraper.Models.Yahoo.Collections.YahooPlayersCollection.YahooPlayersCollection)">
+        <member name="M:BaseballScraper.Controllers.YahooControllers.Collections.YahooPlayersCollectionController.CreatePlayerListFromPlayersCollection(BaseballScraper.Models.Yahoo.Collections.YahooPlayersCollection)">
             <example>
                var collection = FilterByPositionWithSortThenCreateInstance("3B","OR");
                var listOfPlayers = CreatePlayerListFromPlayersCollection(collection);
             </example>
         </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.Collections.YahooPlayersCollectionController.CreatePlayerListFromPlayers(BaseballScraper.Models.Yahoo.Collections.YahooPlayersCollection.Players)">
+        <member name="M:BaseballScraper.Controllers.YahooControllers.Collections.YahooPlayersCollectionController.CreatePlayerListFromPlayers(BaseballScraper.Models.Yahoo.Collections.Players)">
             <example>
                 var collection = FilterByPositionWithSortThenCreateInstance("3B","OR");
                 var collectionPlayers = collection.Players;
@@ -1517,7 +1517,7 @@
               var teamBase = CreateYahooTeamResourceHashTable(1);
             </example>
         </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.Resources.YahooTeamResourceController.PopulateInitialTeamResourceInstanceProperties(BaseballScraper.Models.Yahoo.Resources.YahooTeamResource.YahooTeamResource,Newtonsoft.Json.Linq.JObject)">
+        <member name="M:BaseballScraper.Controllers.YahooControllers.Resources.YahooTeamResourceController.PopulateInitialTeamResourceInstanceProperties(BaseballScraper.Models.Yahoo.Resources.YahooTeamResource,Newtonsoft.Json.Linq.JObject)">
             <summary>
                 Set initial properties that all Team Bases have in common
                 Other properties are set in either of
@@ -1532,7 +1532,7 @@
                 PopulateInitialTeamBaseProperties(tB, resourceJson);
             </example>
         </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.Resources.YahooTeamResourceController.PopulateTeamResourceInstanceWithOneManager(BaseballScraper.Models.Yahoo.Resources.YahooTeamResource.YahooTeamResource,Newtonsoft.Json.Linq.JToken)">
+        <member name="M:BaseballScraper.Controllers.YahooControllers.Resources.YahooTeamResourceController.PopulateTeamResourceInstanceWithOneManager(BaseballScraper.Models.Yahoo.Resources.YahooTeamResource,Newtonsoft.Json.Linq.JToken)">
             <summary>
                 If the team only has one manager, populate remaining properties with this code
                 If there are two managers, populate properties with 'PopulateTeamBaseWithCoManagers()'
@@ -1542,7 +1542,7 @@
                 PopulateTeamResourceInstanceWithOneManager(tB, managerPath);
             </example>
         </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.Resources.YahooTeamResourceController.PopulateTeamBaseWithCoManagers(BaseballScraper.Models.Yahoo.Resources.YahooTeamResource.YahooTeamResource,Newtonsoft.Json.Linq.JToken,System.Collections.Generic.List{BaseballScraper.Models.Yahoo.YahooManager})">
+        <member name="M:BaseballScraper.Controllers.YahooControllers.Resources.YahooTeamResourceController.PopulateTeamBaseWithCoManagers(BaseballScraper.Models.Yahoo.Resources.YahooTeamResource,Newtonsoft.Json.Linq.JToken,System.Collections.Generic.List{BaseballScraper.Models.Yahoo.YahooManager})">
             <summary>
                 If the team has co-managers, populate remaining properties with this code
                 If the team only has one manager, populate remaining properties with 'PopulateTeamBaseWithOneManager()' method
@@ -1785,10 +1785,10 @@
         </member>
         <member name="M:BaseballScraper.Controllers.YahooControllers.YahooAuthController.GenerateUserAuthorizationCode">
             <summary>
-                Triggers browser to open window asking user to authorize usage of their data in the app.
-                When the user approves, they will receive a short authorization code.
-                This code should then be entered in the terminal
-                This is applicable to a first time user (i.e., a user w/o a refresh token)
+            * Triggers browser to open window asking user to authorize usage of their data in the app.
+            * When the user approves, they will receive a short authorization code.
+            * This code should then be entered in the terminal
+            * This is applicable to a first time user (i.e., a user w/o a refresh token)
             </summary>
             <returns>
                 AuthorizationCode which is a string entered in the console
@@ -1804,9 +1804,9 @@
         </member>
         <member name="M:BaseballScraper.Controllers.YahooControllers.YahooAuthController.CreateYahooAccessTokenRequest">
             <summary>
-                Generate the HttpWebRequest for authorization
-                This is for brand new users as it calls the 'GenerateUserAuthorizationCode()' method
-                This is applicable to a first time user (i.e., a user w/o a refresh token)
+            * Generate the HttpWebRequest for authorization
+            * This is for brand new users as it calls the 'GenerateUserAuthorizationCode()' method
+            * This is applicable to a first time user (i.e., a user w/o a refresh token)
             </summary>
         </member>
         <member name="M:BaseballScraper.Controllers.YahooControllers.YahooAuthController.ExchangeRefreshTokenForNewAccessTokenJObject">

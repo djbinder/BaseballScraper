@@ -27,8 +27,9 @@ using System.Diagnostics;
 using System.Text;
 using C = System.Console;
 using BaseballScraper.Controllers.BrooksBaseballControllers;
+using System.Globalization;
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006, MA0051
 namespace BaseballScraper
 {
     public class Startup
@@ -92,9 +93,9 @@ namespace BaseballScraper
 
 
 
-        // export ASPNETCORE_ENVIRONMENT="Development"
-        // This method gets called by the runtime
-        // Use this method to add services to the container
+        // * export ASPNETCORE_ENVIRONMENT="Development"
+        // * This method gets called by the runtime
+        // * Use this method to add services to the container
         public void ConfigureServices (IServiceCollection services)
         {
 
@@ -141,6 +142,8 @@ namespace BaseballScraper
             // Singletons:
             // * A singleton is one instance per application
             // * No matter how many times we refresh the page, it’s never going to create a new instance
+            // * Use when you only want there to be one instance possible
+            // * If the class represents something (e.g., log file) you only have one of, it should be a singleton
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<ApiInfrastructure>();
             services.AddSingleton<BaseballSavantUriEndPoints>();
@@ -465,7 +468,7 @@ namespace BaseballScraper
                 config.RefreshToken    = Configuration["YahooConfiguration:AccessToken"];
                 config.RefreshToken    = Configuration["YahooConfiguration:RefreshToken"];
                 config.XOAuthYahooGuid = Configuration["YahooConfiguration:XOAuthYahooGuid"];
-                config.ExpiresIn       = int.Parse(Configuration["YahooConfiguration:ExpiresIn"]);
+                config.ExpiresIn       = int.Parse(Configuration["YahooConfiguration:ExpiresIn"], NumberStyles.None, CultureInfo.InvariantCulture);
             });
 
             // C.WriteLine(Configuration["YahooConfiguration:Name"]);

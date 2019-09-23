@@ -74,7 +74,7 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers.cs
                 PostmanResponse postmanResponse = _postman.GetPostmanResponse(postmanRequest);
                 IRestResponse response          = postmanResponse.Response;
 
-                JObject leadersJObject = _apiInfrastructure.CreateModelJObject(response);;
+                JObject leadersJObject = _apiInfrastructure.CreateModelJObject(response);
                 JToken leadersJToken   = _apiInfrastructure.CreateModelJToken(leadersJObject, "PitchingLeaders");
 
                 // * Returns object with many 'LeadingPitcher' instances
@@ -125,7 +125,7 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers.cs
             /// </param>
             public async Task GetPitchingLeadersAsync(int numberToReturn, string year, string sortColumn)
             {
-                await Task.Run(() => { CreatePitchingLeadersModel(numberToReturn, year, sortColumn); });
+                await Task.Run(() => { CreatePitchingLeadersModel(numberToReturn, year, sortColumn); }).ConfigureAwait(false);
             }
 
         #endregion STEP 2 ------------------------------------------------------------
@@ -149,7 +149,7 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers.cs
             [Route("pitchingleaders/{year}")]
             public async Task<IActionResult> ViewPitchingLeadersAsync(int numberToReturn, string year, string sortColumn)
             {
-                await GetPitchingLeadersAsync(numberToReturn, year, sortColumn);
+                await GetPitchingLeadersAsync(numberToReturn, year, sortColumn).ConfigureAwait(false);
                 return Ok();
             }
 

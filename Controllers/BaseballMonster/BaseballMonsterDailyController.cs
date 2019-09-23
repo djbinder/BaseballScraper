@@ -44,7 +44,7 @@ namespace BaseballScraper.Controllers.BaseballMonster
         }
 
 
-        public string _dfsResultsUrl = "https://baseballmonster.com/dfsdailysummary.aspx";
+        private readonly string _dfsResultsUrl = "https://baseballmonster.com/dfsdailysummary.aspx";
 
 
         // STATUS [ July 8, 2019 ] : DOES NOT WORK
@@ -60,7 +60,7 @@ namespace BaseballScraper.Controllers.BaseballMonster
             {
                 await page.GoToAsync(_dfsResultsUrl);
 
-                var buttonSelector = ".button-green";
+                const string buttonSelector = ".button-green";
                 await page.WaitForSelectorAsync(buttonSelector);
                 await page.ClickAsync(buttonSelector);
             }

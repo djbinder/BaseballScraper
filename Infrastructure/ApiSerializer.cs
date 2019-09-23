@@ -12,7 +12,7 @@ using Newtonsoft.Json.Linq;
 using RestSharp;
 
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE0066, IDE0067, IDE0068, IDE1006
+#pragma warning disable CA2000, CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE0066, IDE0067, IDE0068, IDE1006, MA0016, MA0048
 namespace BaseballScraper.Infrastructure
 {
     public class ApiInfrastructure
@@ -43,6 +43,7 @@ namespace BaseballScraper.Infrastructure
             StreamReader sR = new StreamReader(mS);
             // this prints all object content in json format
             // Console.WriteLine($"Streamreader: {sR.ReadToEnd()}");
+            sR.Dispose();
 
             mS.Close();
             return Encoding.UTF8.GetString(json, 0, json.Length);
@@ -102,7 +103,7 @@ namespace BaseballScraper.Infrastructure
         // Example: check MlbDataPlayerTeams.GetTeamsforPlayerAllSeasons
         // IMPORTANT: every attribute in the model needs to have the 'DataMember' tag
             // E.g., [DataMember(Name="season_state")]
-        public Object CreateMultipleInstancesOfModelByLooping(JToken token, Object obj, string modelType)
+        public Object CreateMultipleInstancesOfModelByLooping(JToken token, object obj, string modelType)
         {
             int instance = 1;
 
@@ -262,7 +263,7 @@ namespace BaseballScraper.Infrastructure
             MetadataPropertyHandling = MetadataPropertyHandling.Ignore,
             DateParseHandling        = DateParseHandling.None,
             Converters               = {
-                new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal }
+                new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal, },
             },
         };
     }
@@ -278,7 +279,7 @@ namespace BaseballScraper.Infrastructure
         {
             if (reader.TokenType == JsonToken.Null) return null;
             var value = serializer.Deserialize<string>(reader);
-                if (Int64.TryParse(value, out long l))
+                if (Int64.TryParse(value, NumberStyles.None, CultureInfo.InvariantCulture, out long l))
                 {
                     return l;
                 }
@@ -289,11 +290,11 @@ namespace BaseballScraper.Infrastructure
         {
             if (untypedValue == null)
             {
-                serializer.Serialize(writer, null);
+                serializer.Serialize(writer, value: null);
                 return;
             }
             var value = (long)untypedValue;
-            serializer.Serialize(writer, value.ToString());
+            serializer.Serialize(writer, value.ToString(CultureInfo.InvariantCulture));
             return;
         }
 

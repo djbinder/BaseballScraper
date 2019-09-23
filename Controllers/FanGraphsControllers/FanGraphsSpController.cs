@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -14,7 +15,7 @@ using Newtonsoft.Json.Linq;
 using C = System.Console;
 
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE1006
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE1006, MA0016, MA0051
 namespace BaseballScraper.Controllers.FanGraphsControllers
 {
     [Route("api/fangraphs/[controller]")]
@@ -29,7 +30,7 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
         private readonly BaseballScraperContext       _context;
         private readonly ProjectDirectoryEndPoints    _projectDirectory;
 
-        public System.Threading.CancellationToken cancellationToken = new System.Threading.CancellationToken();
+        private System.Threading.CancellationToken cancellationToken = new System.Threading.CancellationToken();
 
 
 
@@ -142,23 +143,23 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
         // wPDI weights
         // * Defined by FanGraphs
         // See: https://bit.ly/33abnet
-        public double OutcomeA_index = 1;           // Out of Zone / Swung On / No Contact
-        public double OutcomeB_index = .65;         // Out of Zone / Swung On / Contact Made
-        public double OutcomeC_index = .1;          // Out of Zone / No Swing
-        public double OutcomeD_index = .900;        // In Zone / Swung On / No Contact
-        public double OutcomeE_index = 0;           // In Zone / Swung On / Contact Made
-        public double OutcomeF_index = .8;          // In Zone / No Swing
+        private double OutcomeA_index = 1;           // Out of Zone / Swung On / No Contact
+        private double OutcomeB_index = .65;         // Out of Zone / Swung On / Contact Made
+        private double OutcomeC_index = .1;          // Out of Zone / No Swing
+        private double OutcomeD_index = .900;        // In Zone / Swung On / No Contact
+        private double OutcomeE_index = 0;           // In Zone / Swung On / Contact Made
+        private double OutcomeF_index = .8;          // In Zone / No Swing
 
 
         // mPDI weights
         // * Defined by FanGraphs
         // See: https://bit.ly/2YPh1TU
-        public double madduxOutcomeA_index = 1;     // Out of Zone / Swung On / No Contact
-        public double madduxOutcomeB_index = 1;     // Out of Zone / Swung On / Contact Made
-        public double madduxOutcomeC_index = 0;     // Out of Zone / No Swing
-        public double madduxOutcomeD_index = 0;     // In Zone / Swung On / No Contact
-        public double madduxOutcomeE_index = 0;     // In Zone / Swung On / Contact Made
-        public double madduxOutcomeF_index = 1;     // In Zone / No Swing
+        private readonly static double madduxOutcomeA_index = 1;     // Out of Zone / Swung On / No Contact
+        private readonly static double madduxOutcomeB_index = 1;     // Out of Zone / Swung On / Contact Made
+        private readonly double madduxOutcomeC_index = 0;     // Out of Zone / No Swing
+        private readonly double madduxOutcomeD_index = 0;     // In Zone / Swung On / No Contact
+        private readonly double madduxOutcomeE_index = 0;     // In Zone / Swung On / Contact Made
+        private readonly static double madduxOutcomeF_index = 1;     // In Zone / No Swing
 
 
         private string _wPdiReportPrefix  = "SpWpdiReport";
@@ -363,7 +364,7 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
 
                 foreach(FileInfo file in fileInfo)
                 {
-                    if(file.Name == fileName)
+                    if(string.Equals(file.Name, fileName, StringComparison.Ordinal))
                         doesCsvReportExistForToday = true;
                 }
                 return doesCsvReportExistForToday;
@@ -394,7 +395,7 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
                     startDay          : startDay_,
                     endMonth          : endMonth_,
                     endDay            : endDay_
-                ).EndPointUri.ToString();
+                ).EndPointUri;
 
                 var csvSelector = _endPoints.FanGraphsCsvHtmlSelector();
 
@@ -503,7 +504,7 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
                 }
                 else
                 {
-                    await _context.AddAsync(pitcher);
+                    await _context.AddAsync(pitcher, cancellationToken);
                     await _context.SaveChangesAsync(cancellationToken);
                 }
             }
@@ -550,11 +551,11 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
             {
                 _helpers.OpenMethod(1);
                 var pitchers = _context.FanGraphsPitchersForWpdiReport
-                    .OrderByDescending(w => w.Wpdi)
                     .Where(
                         y => y.Season == season &&
                         y.InningsPitched > minInningsPitched
-                    ).ToList();
+                    ).OrderByDescending(w => w.Wpdi).ToList();
+                    
 
                 // PrintPitcherWpdiBasics(pitchers);
                 return pitchers;
@@ -571,7 +572,7 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
             // STATUS [ August 1, 2019 ] : haven't tested if this works
             public async Task<IActionResult> DeleteOne_DB(int fangraphsid)
             {
-                var pitcher = await _context.FanGraphsPitchersForWpdiReport.SingleOrDefaultAsync(p => p.FanGraphsId == fangraphsid);
+                var pitcher = await _context.FanGraphsPitchersForWpdiReport.SingleOrDefaultAsync(p => p.FanGraphsId == fangraphsid, cancellationToken);
                 _context.Remove(pitcher);
                 await _context.SaveChangesAsync(cancellationToken);
                 return Ok();
@@ -814,43 +815,43 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
 
             /* ----- CALCULATE INDIVIDUAL WPDI COMPONENTS ----- */
 
-            public double CalculateApercentage(double zonePercentage, double oSwingPercentage, double oContactPercentage)
+            public static double CalculateApercentage(double zonePercentage, double oSwingPercentage, double oContactPercentage)
             {
                 double aPercentage = (1 - zonePercentage) * (oSwingPercentage) * (1 - oContactPercentage);
                 return aPercentage;
             }
 
-            public double CalculateBpercentage(double zonePercentage, double oSwingPercentage, double oContactPercentage)
+            public static double CalculateBpercentage(double zonePercentage, double oSwingPercentage, double oContactPercentage)
             {
                 double bPercentage = (1 - zonePercentage) * oSwingPercentage * oContactPercentage;
                 return bPercentage;
             }
 
-            public double CalculateCpercentage(double zonePercentage, double oSwingPercentage)
+            public static double CalculateCpercentage(double zonePercentage, double oSwingPercentage)
             {
                 double cPercentage = (1 - zonePercentage) * (1 - oSwingPercentage);
                 return cPercentage;
             }
 
-            public double CalculateDpercentage(double zonePercentage, double zSwingPercentage, double zContactPercentage)
+            public static double CalculateDpercentage(double zonePercentage, double zSwingPercentage, double zContactPercentage)
             {
                 double dPercentage = zonePercentage * zSwingPercentage * (1 - zContactPercentage);
                 return dPercentage;
             }
 
-            public double CalculateEpercentage(double zonePercentage, double zSwingPercentage, double zContactPercentage)
+            public static double CalculateEpercentage(double zonePercentage, double zSwingPercentage, double zContactPercentage)
             {
                 double ePercentage = zonePercentage * zSwingPercentage * zContactPercentage;
                 return ePercentage;
             }
 
-            public double CalculateFpercentage(double zonePercentage, double zSwingPercentage)
+            public static double CalculateFpercentage(double zonePercentage, double zSwingPercentage)
             {
                 double fPercentage = zonePercentage * (1 - zSwingPercentage);
                 return fPercentage;
             }
 
-            public double CalculateFinalOutcomePercentage(double outcomeIndex, double outcomePercentage)
+            public static double CalculateFinalOutcomePercentage(double outcomeIndex, double outcomePercentage)
             {
                 double finalValue = outcomeIndex * outcomePercentage;
                 return finalValue;
@@ -893,7 +894,7 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
 
             // SEE: https://fantasy.fangraphs.com/introducing-maddux-plate-discipline-index-mpdi-for-pitchers/
             // C, D, E are not included because they are weighted as 0
-            public double CalculateSpMpdi(double zonePercentage, double oSwingPercentage, double oContactPercentage, double zSwingPercentage)
+            public static double CalculateSpMpdi(double zonePercentage, double oSwingPercentage, double oContactPercentage, double zSwingPercentage)
             {
                 double aPercentage = CalculateApercentage(zonePercentage, oSwingPercentage, oContactPercentage);
                 double bPercentage = CalculateBpercentage(zonePercentage, oSwingPercentage, oContactPercentage);

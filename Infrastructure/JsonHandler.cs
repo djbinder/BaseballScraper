@@ -14,7 +14,7 @@ namespace BaseballScraper.Infrastructure
 
         public static readonly string yahooConfigFilePath = "Configuration/yahooConfig.json";
 
-        public YahooConfiguration _yConfig = new YahooConfiguration();
+        private YahooConfiguration _yConfig = new YahooConfiguration();
 
 
 
@@ -35,6 +35,7 @@ namespace BaseballScraper.Infrastructure
                 memoryStream.Position = 0;
 
                 StreamReader configReader = new StreamReader(memoryStream);
+                configReader.Dispose();
 
                 Console.WriteLine(configReader.ReadToEnd());
             }

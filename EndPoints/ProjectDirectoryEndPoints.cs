@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 #pragma warning disable CS1998, CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE1006
 namespace BaseballScraper.EndPoints
@@ -323,9 +324,9 @@ namespace BaseballScraper.EndPoints
                 string dateString = string.Empty;
                 DateTime today    = DateTime.Now;
 
-                string month      = today.Month.ToString();
-                string day        = today.Day.ToString();
-                string year       = today.Year.ToString();
+                string month      = today.Month.ToString(CultureInfo.InvariantCulture);
+                string day        = today.Day.ToString(CultureInfo.InvariantCulture);
+                string year       = today.Year.ToString(CultureInfo.InvariantCulture);
 
                 dateString        = $"{month}_{day}_{year}";
                 return dateString;
@@ -342,13 +343,13 @@ namespace BaseballScraper.EndPoints
                 string dateString = string.Empty;
 
                 DateTime today    = DateTime.Now;
-                    string todayString = today.ToString();
-                    string month       = today.Month.ToString();
-                    string day         = today.Day.ToString();
-                    string year        = today.Year.ToString();
-                    string minute      = today.Minute.ToString();
-                    string hour        = today.Hour.ToString();
-                    string second      = today.Second.ToString();
+                    string todayString = today.ToString(CultureInfo.InvariantCulture);
+                    string month       = today.Month.ToString(CultureInfo.InvariantCulture);
+                    string day         = today.Day.ToString(CultureInfo.InvariantCulture);
+                    string year        = today.Year.ToString(CultureInfo.InvariantCulture);
+                    string minute      = today.Minute.ToString(CultureInfo.InvariantCulture);
+                    string hour        = today.Hour.ToString(CultureInfo.InvariantCulture);
+                    string second      = today.Second.ToString(CultureInfo.InvariantCulture);
 
                 dateString        = $"{month}_{day}_{year}_{hour}_{minute}_{second}";
                 return dateString;

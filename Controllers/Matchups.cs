@@ -4,9 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.ML.Probabilistic.Distributions;
 using Microsoft.ML.Probabilistic.Models;
 
+#pragma warning disable MA0048
 namespace BaseballScraper
 {
-    public class MatchupsConroller : Controller
+    public class MatchupsController : Controller
     {
         // STATUS [ July 24, 2019 ]: this works
         // See: https://docs.microsoft.com/en-us/dotnet/machine-learning/how-to-guides/matchup-app-infer-net

@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 using BaseballScraper.Controllers.PlayerControllers;
 using BaseballScraper.EndPoints;
 using BaseballScraper.Infrastructure;
-using BaseballScraper.Models.Yahoo.Resources.YahooRosterResource;
+using BaseballScraper.Models.Yahoo.Resources;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006, MA0016, MA0051
 namespace BaseballScraper.Controllers.YahooControllers.Resources
 {
     [Route("api/yahoo/[controller]")]
@@ -151,21 +151,21 @@ namespace BaseballScraper.Controllers.YahooControllers.Resources
                         player.Status,
                         player.DisplayPosition,
                         player.PrimaryPosition,
-                        player.SelectedPosition.Position
+                        player.SelectedPosition.Position,
                     };
 
                     // EligiblePositions.Positions can either be a string or array
                     // if it is a string, add the string to the list
-                    if(player.EligiblePositions.Position is string)
+                    if(player.EligiblePositions.RosterResourcePosition is string)
                     {
-                        corePlayerInfo.Add(player.EligiblePositions.Position);
+                        corePlayerInfo.Add(player.EligiblePositions.RosterResourcePosition);
                     }
 
                     // if EligiblePositions.Positions is an array, go through the array and get each value
                     // add that value to a string, then add the string to a list
                     else
                     {
-                        JArray eligiblePositionJArray = (JArray)player.EligiblePositions.Position;
+                        JArray eligiblePositionJArray = (JArray)player.EligiblePositions.RosterResourcePosition;
 
                         var eligiblePositionCount = eligiblePositionJArray.Count;
                         string positionsString = "";
@@ -532,7 +532,7 @@ namespace BaseballScraper.Controllers.YahooControllers.Resources
             {
                 foreach(PropertyInfo property in name.GetType().GetProperties())
                 {
-                    var propertyValue = property.GetValue(name, null).ToString();
+                    string propertyValue = property.GetValue(name, index: null).ToString();
                     list.Add(propertyValue);
                 }
             }
@@ -812,7 +812,7 @@ namespace BaseballScraper.Controllers.YahooControllers.Resources
                     "Display Position",
                     "Primary Position",
                     "Selected Position",
-                    "Eligible Positions"
+                    "Eligible Positions",
                 };
 
                 listOfLists.Add(headers);
@@ -827,7 +827,7 @@ namespace BaseballScraper.Controllers.YahooControllers.Resources
 
         #region PRINTING PRESS ------------------------------------------------------------
 
-            public void PrintPlayerInfoFromList(List<Models.Yahoo.Collections.YahooPlayersCollection.Player> listOfPlayers)
+            public void PrintPlayerInfoFromList(List<Models.Yahoo.Collections.Player> listOfPlayers)
             {
                 Console.WriteLine();
                 Console.WriteLine("----------------------------------------------------------");

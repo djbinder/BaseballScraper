@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using BaseballScraper.EndPoints;
 using BaseballScraper.Infrastructure;
 using BaseballScraper.Models.MlbDataApi;
@@ -11,7 +12,7 @@ using static BaseballScraper.Infrastructure.PostmanMethods;
 using C = System.Console;
 
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
+#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006, MA0016
 namespace BaseballScraper.Controllers.MlbDataApiControllers
 {
 
@@ -54,7 +55,7 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
             JObject jObject = _apI.CreateModelJObject(response);
 
             // totalSize --> the size of "row" which is equal to number of teams (e.g., a totalSize of 2 means there are two teams shown for the player in the "row" json header)
-            int totalSize = Convert.ToInt32(jObject["player_teams"]["queryResults"]["totalSize"]);
+            int totalSize = Convert.ToInt32(jObject["player_teams"]["queryResults"]["totalSize"], CultureInfo.CurrentCulture);
 
             // returns all keys & values for all teams the player played for
             JToken allTeamValuesJToken = _apI.CreateModelJToken(jObject,"PlayerTeam");
@@ -87,7 +88,7 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
             JObject jObject = _apI.CreateModelJObject(response);
 
             // totalSize --> the size of "row" which is equal to number of teams (e.g., a totalSize of 2 means there are two teams shown for the player in the "row" json header)
-            int totalSize = Convert.ToInt32(jObject["player_teams"]["queryResults"]["totalSize"]);
+            int totalSize = Convert.ToInt32(jObject["player_teams"]["queryResults"]["totalSize"], CultureInfo.CurrentCulture);
 
             // returns all keys & values for all teams the player played for
             JToken allTeamValuesJToken = _apI.CreateModelJToken(jObject,"PlayerTeam");
@@ -117,10 +118,12 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
 
             foreach(PlayerTeam playersTeam in ptList)
             {
-                if (playersTeam.SportCode != "mlb")
+                // if (playersTeam.SportCode != "mlb")
+                //     continue;
+                if (!string.Equals(playersTeam.SportCode, "mlb", StringComparison.Ordinal))
                     continue;
 
-                years.Add(Convert.ToInt32(playersTeam.LeagueSeason));
+                years.Add(Convert.ToInt32(playersTeam.LeagueSeason, CultureInfo.CurrentCulture));
             }
 
             foreach (var year in years)

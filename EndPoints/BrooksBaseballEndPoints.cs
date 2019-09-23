@@ -92,7 +92,7 @@ namespace BaseballScraper.EndPoints
             NoComparison,       // none
             ZScoreComparison,   // z
             PitchIQComparison,  // piq
-            ScoutComparison     // scout
+            ScoutComparison,    // scout
         }
 
         public string ComparisonType(ComparisonTypeEnum comparisonTypeEnum)
@@ -108,7 +108,7 @@ namespace BaseballScraper.EndPoints
                 case ComparisonTypeEnum.ScoutComparison:   return "scout";
 
                 default: break;
-            };
+            }
             throw new Exception("Comparison Type not found");
         }
 
@@ -128,7 +128,7 @@ namespace BaseballScraper.EndPoints
 
             return new TabularDataEndPoint
             {
-                EndPoint = $"{TabularDataEndPoint.BaseUri}{playerId}&p_hand=-1&ppos=-1&cn=200&compType={comparisonTypeString}&risp=0&1b=0&2b=0&3b=0&rType=perc&gFilt=&time=month&minmax=ci&var={tableTypeString}&s_type=2&startDate=01/01/2019&endDate=01/01/2020&balls=-1&strikes=-1&b_hand=-1"
+                EndPoint = $"{TabularDataEndPoint.BaseUri}{playerId}&p_hand=-1&ppos=-1&cn=200&compType={comparisonTypeString}&risp=0&1b=0&2b=0&3b=0&rType=perc&gFilt=&time=month&minmax=ci&var={tableTypeString}&s_type=2&startDate=01/01/2019&endDate=01/01/2020&balls=-1&strikes=-1&b_hand=-1",
             };
         }
 
@@ -137,7 +137,7 @@ namespace BaseballScraper.EndPoints
             return new TabularDataEndPoint
             {
                 PlayerId = playerId,
-                EndPoint = $"&p_hand=-1&ppos=-1&cn=200&compType={comparisonType}&risp=0&1b=0&2b=0&3b=0&rType=perc&gFilt=&time=month&minmax=ci&var={tableType}&s_type=2&startDate=01/01/2019&endDate=01/01/2020&balls=-1&strikes=-1&b_hand=-1"
+                EndPoint = $"&p_hand=-1&ppos=-1&cn=200&compType={comparisonType}&risp=0&1b=0&2b=0&3b=0&rType=perc&gFilt=&time=month&minmax=ci&var={tableType}&s_type=2&startDate=01/01/2019&endDate=01/01/2020&balls=-1&strikes=-1&b_hand=-1",
             };
         }
 
@@ -146,7 +146,7 @@ namespace BaseballScraper.EndPoints
             return new TabularDataEndPoint
             {
                 PlayerId = playerId,
-                EndPoint = $"&p_hand=-1&ppos=-1&cn=200&compType=none&gFilt=&time=month&minmax=ci&var=po&s_type=2&startDate=01/01/2019&endDate=01/01/2020&balls=-1&strikes=-1&b_hand=-1"
+                EndPoint = $"&p_hand=-1&ppos=-1&cn=200&compType=none&gFilt=&time=month&minmax=ci&var=po&s_type=2&startDate=01/01/2019&endDate=01/01/2020&balls=-1&strikes=-1&b_hand=-1",
             };
         }
 

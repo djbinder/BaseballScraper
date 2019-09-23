@@ -6,7 +6,7 @@ using BaseballScraper.Models.Espn;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Mvc;
 
-#pragma warning disable CS0219, CS0414, CS1998, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
+#pragma warning disable CS0219, CS0414, CS1998, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006,MA0016, MA0051
 namespace BaseballScraper.Controllers.EspnControllers
 {
 
@@ -53,7 +53,6 @@ namespace BaseballScraper.Controllers.EspnControllers
                 // thisUrlsHtml --> HtmlAgilityPack.HtmlDocument
                 HtmlDocument thisUrlsHtmlAndScripts = htmlWeb.Load(urlToScrape);
 
-
                 List<EspnTransactionTrendPlayer> listOfAddedPlayers = new List<EspnTransactionTrendPlayer>();
 
                 // htmlChildNodes has 2 children: 1) #comment 2) html
@@ -74,11 +73,6 @@ namespace BaseballScraper.Controllers.EspnControllers
                 {
                     if(childCount == 0)
                     {
-                        // Console.WriteLine(child);
-                        // Console.WriteLine(child.Name);
-                        // Console.WriteLine("CHILD NODES");
-                        // Console.WriteLine(child.ChildNodes);
-
                         foreach(var child2 in child.ChildNodes)
                         {
                             Console.WriteLine(child2.Name);
@@ -88,14 +82,6 @@ namespace BaseballScraper.Controllers.EspnControllers
                     }
                     childCount++;
                 }
-
-
-
-
-
-
-
-
 
                 HtmlNode transactionTrendTable = thisUrlsHtmlAndScripts.DocumentNode.SelectSingleNode("//*[@id='espn-analytics']/div/div[5]/div[2]/footer/p[1]/a[2]");
                 // HtmlNodeCollection transactionTrendTable = thisUrlsHtmlAndScripts.DocumentNode.SelectNodes("//table[contains(@class, 'Table2__table-scroller Table2__table')]");

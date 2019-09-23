@@ -1,16 +1,12 @@
-// https://app.quicktype.io/
-
-
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Linq;
 
-#pragma warning disable IDE0066
-namespace BaseballScraper.Models.Yahoo.Collections.YahooPlayersCollection
+#pragma warning disable CA1819, IDE0066, MA0048
+namespace BaseballScraper.Models.Yahoo.Collections
 {
     public partial class YahooPlayersCollection
     {
@@ -136,18 +132,17 @@ namespace BaseballScraper.Models.Yahoo.Collections.YahooPlayersCollection
         [JsonProperty("@count")]
         public string Count { get; set; }
 
-        public List<Player> PlayerList { get; set; }
+        public IList<Player> PlayerList { get; set; }
 
 
         [JsonProperty("player")]
-        // public List<Player> Player { get; set; }
         public object Player { get; set; }
 
-        protected List<Player> PlayerCasted
+        protected IList<Player> PlayerCasted
         {
             get
             {
-                if(Player is String)
+                if(Player is string)
                 {
                     return null;
                 }
@@ -155,12 +150,9 @@ namespace BaseballScraper.Models.Yahoo.Collections.YahooPlayersCollection
                 else
                 {
                     return PlayerList;
-                    // return (List<Player>) PlayerList;
-                    // return(List<Player>) Player;
                 }
             }
         }
-
     }
 
     public partial class Player
@@ -180,12 +172,10 @@ namespace BaseballScraper.Models.Yahoo.Collections.YahooPlayersCollection
 
         [JsonProperty("status", NullValueHandling = NullValueHandling.Ignore)]
         public string Status { get; set; }
-        // public Status? Status { get; set; }
 
 
         [JsonProperty("status_full", NullValueHandling = NullValueHandling.Ignore)]
         public string StatusFull { get; set; }
-        // public StatusFull? StatusFull { get; set; }
 
 
         [JsonProperty("editorial_player_key")]
@@ -226,13 +216,10 @@ namespace BaseballScraper.Models.Yahoo.Collections.YahooPlayersCollection
 
         [JsonProperty("position_type")]
         public PositionType PositionType { get; set; }
-        // public string PositionType { get; set; }
 
 
         [JsonProperty("primary_position")]
         public string PrimaryPosition { get; set; }
-        // public PrimaryPositionElement PrimaryPosition { get; set; }
-        // public Position PrimaryPosition { get; set; }
 
 
         [JsonProperty("eligible_positions")]
@@ -326,7 +313,6 @@ namespace BaseballScraper.Models.Yahoo.Collections.YahooPlayersCollection
 
         [JsonProperty("ascii_last")]
         public string AsciiLast { get; set; }
-
     }
 
     public partial class Xml
@@ -337,52 +323,23 @@ namespace BaseballScraper.Models.Yahoo.Collections.YahooPlayersCollection
 
         [JsonProperty("@encoding")]
         public string Encoding { get; set; }
-
     }
-
-    // public partial struct Position
-    // {
-    //     public string String;
-    //     public List<string> StringArray;
-
-    //     public static implicit operator Position(string String) => new Position { String = String };
-    //     public static implicit operator Position(List<string> StringArray) => new Position { StringArray = StringArray };
-    // }
-
-
-    // public enum PrimaryPositionElement { C, Dl, If, Of, Ss, The1B, The2B, The3B, Util, P, Sp, Rp };
-    // // public enum Position { C, Dl, If, Of, Ss, The1B, The2B, The3B, Util, P, Sp, Rp };
-    // public partial struct PositionUnion
-    // {
-    //     public PrimaryPositionElement? Enum;
-    //     public List<PrimaryPositionElement> StringArray;
-
-    //     public static implicit operator PositionUnion(PrimaryPositionElement Enum) => new PositionUnion { Enum = Enum };
-    //     public static implicit operator PositionUnion(List<PrimaryPositionElement> StringArray) => new PositionUnion { StringArray = StringArray };
-    // }
-
-
-    // public enum YPosition { Sp, SpRp };
 
 
     public enum Size { Small };
 
     public enum PositionType { B, P };
 
-    // public enum Status { Dl7, Dl10, Dl60, Na, DTD };
-
-    // public enum StatusFull { NotActive, The7DayDisabledList, The10DayDisabledList, The60DayDisabledList, DayToDay };
-
 
     public partial class YahooPlayersCollection
     {
-        public static YahooPlayersCollection FromJson(string json) => JsonConvert.DeserializeObject<YahooPlayersCollection>(json, BaseballScraper.Models.Yahoo.Collections.YahooPlayersCollection.Converter.Settings);
+        public static YahooPlayersCollection FromJson(string json) => JsonConvert.DeserializeObject<YahooPlayersCollection>(json, Converter.Settings);
     }
 
 
     public static class Serialize
     {
-        public static string ToJson(this YahooPlayersCollection self) => JsonConvert.SerializeObject(self, BaseballScraper.Models.Yahoo.Collections.YahooPlayersCollection.Converter.Settings);
+        public static string ToJson(this YahooPlayersCollection self) => JsonConvert.SerializeObject(self, Converter.Settings);
     }
 
 
@@ -394,14 +351,8 @@ namespace BaseballScraper.Models.Yahoo.Collections.YahooPlayersCollection
             DateParseHandling = DateParseHandling.None,
             Converters =
             {
-                // YPositionConverter.Singleton,
-                // PositionUnionConverter.Singleton,
-                // PrimaryPositionElementConverter.Singleton,
-                // PositionConverter.Singleton,
                 SizeConverter.Singleton,
-                // StatusConverter.Singleton,
-                // StatusFullConverter.Singleton,
-                new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal }
+                new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal },
             },
         };
     }
@@ -414,8 +365,8 @@ namespace BaseballScraper.Models.Yahoo.Collections.YahooPlayersCollection
         public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
         {
             if (reader.TokenType == JsonToken.Null) return null;
-            var value = serializer.Deserialize<string>(reader);
-            if (Int64.TryParse(value, out long l))
+            string value = serializer.Deserialize<string>(reader);
+            if (long.TryParse(value, NumberStyles.None, CultureInfo.InvariantCulture, out long l))
             {
                 return l;
             }
@@ -426,25 +377,25 @@ namespace BaseballScraper.Models.Yahoo.Collections.YahooPlayersCollection
         {
             if (untypedValue == null)
             {
-                serializer.Serialize(writer, null);
+                serializer.Serialize(writer, value: null);
                 return;
             }
-            var value = (long)untypedValue;
-            serializer.Serialize(writer, value.ToString());
+            long value = (long)untypedValue;
+            serializer.Serialize(writer, value: value.ToString( CultureInfo.InvariantCulture));
             return;
         }
 
         public static readonly ParseStringConverter Singleton = new ParseStringConverter();
     }
 
-     internal class PositionTypeConverter : JsonConverter
+    internal class PositionTypeConverter : JsonConverter
     {
         public override bool CanConvert(Type t) => t == typeof(PositionType) || t == typeof(PositionType?);
 
         public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
         {
             if (reader.TokenType == JsonToken.Null) return null;
-            var value = serializer.Deserialize<string>(reader);
+            string value = serializer.Deserialize<string>(reader);
             switch (value)
             {
                 case "B":
@@ -459,10 +410,10 @@ namespace BaseballScraper.Models.Yahoo.Collections.YahooPlayersCollection
         {
             if (untypedValue == null)
             {
-                serializer.Serialize(writer, null);
+                serializer.Serialize(writer, value: null);
                 return;
             }
-            var value = (PositionType)untypedValue;
+            PositionType value = (PositionType)untypedValue;
             switch (value)
             {
                 case PositionType.B:
@@ -486,8 +437,8 @@ namespace BaseballScraper.Models.Yahoo.Collections.YahooPlayersCollection
         public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
         {
             if (reader.TokenType == JsonToken.Null) return null;
-            var value = serializer.Deserialize<string>(reader);
-            if (value == "small")
+            string value = serializer.Deserialize<string>(reader);
+            if (string.Equals(value, "small", StringComparison.Ordinal))
             {
                 return Size.Small;
             }
@@ -498,10 +449,10 @@ namespace BaseballScraper.Models.Yahoo.Collections.YahooPlayersCollection
         {
             if (untypedValue == null)
             {
-                serializer.Serialize(writer, null);
+                serializer.Serialize(writer, value: null);
                 return;
             }
-            var value = (Size)untypedValue;
+            Size value = (Size)untypedValue;
             if (value == Size.Small)
             {
                 serializer.Serialize(writer, "small");
@@ -512,510 +463,4 @@ namespace BaseballScraper.Models.Yahoo.Collections.YahooPlayersCollection
 
         public static readonly SizeConverter Singleton = new SizeConverter();
     }
-
-    // internal class YPositionConverter : JsonConverter
-    // {
-    //     public override bool CanConvert(Type t) => t == typeof(YPosition) || t == typeof(YPosition?);
-
-    //     public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
-    //     {
-    //         if (reader.TokenType == JsonToken.Null) return null;
-    //         var value = serializer.Deserialize<string>(reader);
-    //         switch (value)
-    //         {
-    //             case "SP":
-    //                 return YPosition.Sp;
-    //             case "SP,RP":
-    //                 return YPosition.SpRp;
-    //         }
-    //         throw new Exception("Cannot unmarshal type YPosition");
-    //     }
-
-    //     public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
-    //     {
-    //         if (untypedValue == null)
-    //         {
-    //             serializer.Serialize(writer, null);
-    //             return;
-    //         }
-    //         var value = (YPosition)untypedValue;
-    //         switch (value)
-    //         {
-    //             case YPosition.Sp:
-    //                 serializer.Serialize(writer, "SP");
-    //                 return;
-    //             case YPosition.SpRp:
-    //                 serializer.Serialize(writer, "SP,RP");
-    //                 return;
-    //         }
-    //         throw new Exception("Cannot marshal type YPosition");
-    //     }
-
-    //     public static readonly YPositionConverter Singleton = new YPositionConverter();
-    // }
-
-
-    // internal class PositionUnionConverter : JsonConverter
-    // {
-    //     public override bool CanConvert(Type t) => t == typeof(PositionUnion) || t == typeof(PositionUnion?);
-
-    //     public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
-    //     {
-    //         switch (reader.TokenType)
-    //         {
-    //             case JsonToken.String:
-    //             case JsonToken.Date:
-    //                 var stringValue = serializer.Deserialize<string>(reader);
-    //                 switch (stringValue)
-    //                 {
-    //                     case "1B":
-    //                         return new PositionUnion { Enum = PrimaryPositionElement.The1B };
-    //                     case "2B":
-    //                         return new PositionUnion { Enum = PrimaryPositionElement.The2B };
-    //                     case "3B":
-    //                         return new PositionUnion { Enum = PrimaryPositionElement.The3B };
-    //                     case "C":
-    //                         return new PositionUnion { Enum = PrimaryPositionElement.C };
-    //                     case "IF":
-    //                         return new PositionUnion { Enum = PrimaryPositionElement.If };
-    //                     case "OF":
-    //                         return new PositionUnion { Enum = PrimaryPositionElement.Of };
-    //                     case "SS":
-    //                         return new PositionUnion { Enum = PrimaryPositionElement.Ss };
-    //                     case "Util":
-    //                         return new PositionUnion { Enum = PrimaryPositionElement.Util };
-    //                     case "DL":
-    //                         return new PositionUnion { Enum = PrimaryPositionElement.Dl };
-    //                     case "P":
-    //                         return new PositionUnion { Enum = PrimaryPositionElement.P };
-    //                     case "SP":
-    //                         return new PositionUnion { Enum = PrimaryPositionElement.Sp };
-    //                     case "RP":
-    //                         return new PositionUnion { Enum = PrimaryPositionElement.Rp };
-    //                 }
-    //                 break;
-    //             case JsonToken.StartArray:
-    //                 var arrayValue = serializer.Deserialize<List<PrimaryPositionElement>>(reader);
-    //                 return new PositionUnion { StringArray = arrayValue };
-    //         }
-    //         throw new Exception("Cannot unmarshal type PositionUnion");
-    //     }
-
-
-    //     public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
-    //     {
-    //         var value = (PositionUnion)untypedValue;
-    //         if (value.Enum != null)
-    //         {
-    //             switch (value.Enum)
-    //             {
-    //                 case PrimaryPositionElement.The1B:
-    //                     serializer.Serialize(writer, "1B");
-    //                     return;
-    //                 case PrimaryPositionElement.The2B:
-    //                     serializer.Serialize(writer, "2B");
-    //                     return;
-    //                 case PrimaryPositionElement.The3B:
-    //                     serializer.Serialize(writer, "3B");
-    //                     return;
-    //                 case PrimaryPositionElement.C:
-    //                     serializer.Serialize(writer, "C");
-    //                     return;
-    //                 case PrimaryPositionElement.If:
-    //                     serializer.Serialize(writer, "IF");
-    //                     return;
-    //                 case PrimaryPositionElement.Of:
-    //                     serializer.Serialize(writer, "OF");
-    //                     return;
-    //                 case PrimaryPositionElement.Ss:
-    //                     serializer.Serialize(writer, "SS");
-    //                     return;
-    //                 case PrimaryPositionElement.Util:
-    //                     serializer.Serialize(writer, "Util");
-    //                     return;
-    //                 case PrimaryPositionElement.Dl:
-    //                     serializer.Serialize(writer, "DL");
-    //                     return;
-    //                 case PrimaryPositionElement.P:
-    //                     serializer.Serialize(writer, "P");
-    //                     return;
-    //                 case PrimaryPositionElement.Sp:
-    //                     serializer.Serialize(writer, "SP");
-    //                     return;
-    //                 case PrimaryPositionElement.Rp:
-    //                     serializer.Serialize(writer, "RP");
-    //                     return;
-    //             }
-    //         }
-    //         if (value.StringArray != null)
-    //         {
-    //             serializer.Serialize(writer, value.StringArray);
-    //             return;
-    //         }
-    //         throw new Exception("Cannot marshal type PositionUnion");
-    //     }
-
-    //     public static readonly PositionUnionConverter Singleton = new PositionUnionConverter();
-    // }
-
-
-    // internal class PrimaryPositionElementConverter : JsonConverter
-    // {
-    //     public override bool CanConvert(Type t) => t == typeof(PrimaryPositionElement) || t == typeof(PrimaryPositionElement?);
-
-    //     public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
-    //     {
-    //         if (reader.TokenType == JsonToken.Null) return null;
-    //         Console.WriteLine("POINT 1");
-    //         var value = serializer.Deserialize<string>(reader);
-    //         Console.WriteLine("POINT 2");
-    //         switch (value)
-    //         {
-    //             case "1B":
-    //                 return PrimaryPositionElement.The1B;
-    //             case "2B":
-    //                 return PrimaryPositionElement.The2B;
-    //             case "3B":
-    //                 return PrimaryPositionElement.The3B;
-    //             case "C":
-    //                 return PrimaryPositionElement.C;
-    //             case "IF":
-    //                 return PrimaryPositionElement.If;
-    //             case "OF":
-    //                 return PrimaryPositionElement.Of;
-    //             case "SS":
-    //                 return PrimaryPositionElement.Ss;
-    //             case "Util":
-    //                 return PrimaryPositionElement.Util;
-    //             case "DL":
-    //                 return PrimaryPositionElement.Dl;
-    //             case "P":
-    //                 return PrimaryPositionElement.P;
-    //             case "SP":
-    //                 return PrimaryPositionElement.Sp;
-    //             case "RP":
-    //                 return PrimaryPositionElement.Rp;
-    //         }
-    //         Console.WriteLine("POINT 3");
-    //         throw new Exception("Cannot unmarshal type PrimaryPositionElement");
-    //     }
-
-    //     public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
-    //     {
-    //         if (untypedValue == null)
-    //         {
-    //             serializer.Serialize(writer, null);
-    //             return;
-    //         }
-    //         var value = (PrimaryPositionElement)untypedValue;
-    //         switch (value)
-    //         {
-    //             case PrimaryPositionElement.The1B:
-    //                 serializer.Serialize(writer, "1B");
-    //                 return;
-    //             case PrimaryPositionElement.The2B:
-    //                 serializer.Serialize(writer, "2B");
-    //                 return;
-    //             case PrimaryPositionElement.The3B:
-    //                 serializer.Serialize(writer, "3B");
-    //                 return;
-    //             case PrimaryPositionElement.C:
-    //                 serializer.Serialize(writer, "C");
-    //                 return;
-    //             case PrimaryPositionElement.If:
-    //                 serializer.Serialize(writer, "IF");
-    //                 return;
-    //             case PrimaryPositionElement.Of:
-    //                 serializer.Serialize(writer, "OF");
-    //                 return;
-    //             case PrimaryPositionElement.Ss:
-    //                 serializer.Serialize(writer, "SS");
-    //                 return;
-    //             case PrimaryPositionElement.Util:
-    //                 serializer.Serialize(writer, "Util");
-    //                 return;
-    //             case PrimaryPositionElement.Dl:
-    //                 serializer.Serialize(writer, "DL");
-    //                 return;
-    //             case PrimaryPositionElement.P:
-    //                 serializer.Serialize(writer, "P");
-    //                 return;
-    //             case PrimaryPositionElement.Sp:
-    //                 serializer.Serialize(writer, "SP");
-    //                 return;
-    //             case PrimaryPositionElement.Rp:
-    //                 serializer.Serialize(writer, "RP");
-    //                 return;
-    //         }
-    //         throw new Exception("Cannot marshal type PrimaryPositionElement");
-    //     }
-
-    //     public static readonly PrimaryPositionElementConverter Singleton = new PrimaryPositionElementConverter();
-    // }
-
-
-
-
-
-    // internal class StatusConverter : JsonConverter
-    // {
-    //     public override bool CanConvert(Type t) => t == typeof(Status) || t == typeof(Status?);
-
-    //     public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
-    //     {
-    //         if (reader.TokenType == JsonToken.Null) return null;
-    //         var value = serializer.Deserialize<string>(reader);
-    //         switch (value)
-    //         {
-    //             case "DL7":
-    //                 return Status.Dl7;
-    //             case "DL10":
-    //                 return Status.Dl10;
-    //             case "DL60":
-    //                 return Status.Dl60;
-    //             case "NA":
-    //                 return Status.Na;
-    //             case "DTD":
-    //                 return Status.DTD;
-    //         }
-    //         throw new Exception("Cannot unmarshal type Status");
-    //     }
-
-    //     public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
-    //     {
-    //         if (untypedValue == null)
-    //         {
-    //             serializer.Serialize(writer, null);
-    //             return;
-    //         }
-    //         var value = (Status)untypedValue;
-    //         switch (value)
-    //         {
-    //             case Status.Dl7:
-    //                 serializer.Serialize(writer, "DL7");
-    //                 return;
-    //             case Status.Dl10:
-    //                 serializer.Serialize(writer, "DL10");
-    //                 return;
-    //             case Status.Dl60:
-    //                 serializer.Serialize(writer, "DL60");
-    //                 return;
-    //             case Status.Na:
-    //                 serializer.Serialize(writer, "NA");
-    //                 return;
-    //             case Status.DTD:
-    //                 serializer.Serialize(writer, "DTD");
-    //                 return;
-    //         }
-    //         throw new Exception("Cannot marshal type Status");
-    //     }
-
-    //     public static readonly StatusConverter Singleton = new StatusConverter();
-    // }
-
-
-    // internal class StatusFullConverter : JsonConverter
-    // {
-    //     public override bool CanConvert(Type t) => t == typeof(StatusFull) || t == typeof(StatusFull?);
-
-    //     public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
-    //     {
-    //         if (reader.TokenType == JsonToken.Null) return null;
-    //         var value = serializer.Deserialize<string>(reader);
-    //         switch (value)
-    //         {
-    //             case "7-Day Disabled List":
-    //                 return StatusFull.The7DayDisabledList;
-    //             case "10-Day Disabled List":
-    //                 return StatusFull.The10DayDisabledList;
-    //             case "60-Day Disabled List":
-    //                 return StatusFull.The60DayDisabledList;
-    //             case "Not Active":
-    //                 return StatusFull.NotActive;
-    //             case "Day-to-Day":
-    //                 return StatusFull.DayToDay;
-    //         }
-    //         throw new Exception("Cannot unmarshal type StatusFull");
-    //     }
-
-    //     public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
-    //     {
-    //         if (untypedValue == null)
-    //         {
-    //             serializer.Serialize(writer, null);
-    //             return;
-    //         }
-    //         var value = (StatusFull)untypedValue;
-    //         switch (value)
-    //         {
-    //             case StatusFull.The7DayDisabledList:
-    //                 serializer.Serialize(writer, "7-Day Disabled List");
-    //                 return;
-    //             case StatusFull.The10DayDisabledList:
-    //                 serializer.Serialize(writer, "10-Day Disabled List");
-    //                 return;
-    //             case StatusFull.The60DayDisabledList:
-    //                 serializer.Serialize(writer, "60-Day Disabled List");
-    //                 return;
-    //             case StatusFull.NotActive:
-    //                 serializer.Serialize(writer, "Not Active");
-    //                 return;
-    //             case StatusFull.DayToDay:
-    //                 serializer.Serialize(writer, "Day-to-Day");
-    //                 return;
-    //         }
-    //         throw new Exception("Cannot marshal type StatusFull");
-    //     }
-
-    //     public static readonly StatusFullConverter Singleton = new StatusFullConverter();
-    // }
-
 }
-
-
-
-
-// internal class PositionConverter : JsonConverter
-//     {
-//         public override bool CanConvert(Type t) => t == typeof(Position) || t == typeof(Position?);
-
-//         public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
-//         {
-//             if (reader.TokenType == JsonToken.Null) return null;
-//             var value = serializer.Deserialize<string>(reader);
-//             switch (value)
-//             {
-//                 case "DL":
-//                     return Position.Dl;
-//                 case "P":
-//                     return Position.P;
-//                 case "RP":
-//                     return Position.Rp;
-//                 case "SP":
-//                     return Position.Sp;
-//                 case "1B":
-//                     return Position.The1B;
-//                 case "2B":
-//                     return Position.The2B;
-//                 case "3B":
-//                     return Position.The3B;
-//                 case "C":
-//                     return Position.C;
-//                 case "IF":
-//                     return Position.If;
-//                 case "OF":
-//                     return Position.Of;
-//                 case "SS":
-//                     return Position.Ss;
-//                 case "Util":
-//                     return Position.Util;
-//             }
-//             throw new Exception("Cannot unmarshal type Position");
-//         }
-
-//         public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
-//         {
-//             if (untypedValue == null)
-//             {
-//                 serializer.Serialize(writer, null);
-//                 return;
-//             }
-//             var value = (Position)untypedValue;
-//             switch (value)
-//             {
-//                 case Position.Dl:
-//                     serializer.Serialize(writer, "DL");
-//                     return;
-//                 case Position.P:
-//                     serializer.Serialize(writer, "P");
-//                     return;
-//                 case Position.Rp:
-//                     serializer.Serialize(writer, "RP");
-//                     return;
-//                 case Position.Sp:
-//                     serializer.Serialize(writer, "SP");
-//                     return;
-//                 case Position.The1B:
-//                     serializer.Serialize(writer, "1B");
-//                     return;
-//                 case Position.The2B:
-//                     serializer.Serialize(writer, "2B");
-//                     return;
-//                 case Position.The3B:
-//                     serializer.Serialize(writer, "3B");
-//                     return;
-//                 case Position.C:
-//                     serializer.Serialize(writer, "C");
-//                     return;
-//                 case Position.If:
-//                     serializer.Serialize(writer, "IF");
-//                     return;
-//                 case Position.Of:
-//                     serializer.Serialize(writer, "OF");
-//                     return;
-//                 case Position.Ss:
-//                     serializer.Serialize(writer, "SS");
-//                     return;
-//                 case Position.Util:
-//                     serializer.Serialize(writer, "Util");
-//                     return;
-//             }
-//             throw new Exception("Cannot marshal type Position");
-//         }
-
-//         public static readonly PositionConverter Singleton = new PositionConverter();
-//     }
-
-
-
-// public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
-// {
-//     if (untypedValue == null)
-//     {
-//         serializer.Serialize(writer, null);
-//         return;
-//     }
-//     var value = (Position)untypedValue;
-//     switch (value)
-//     {
-//         case Position.Dl:
-//             serializer.Serialize(writer, "DL");
-//             return;
-//         case Position.P:
-//             serializer.Serialize(writer, "P");
-//             return;
-//         case Position.Rp:
-//             serializer.Serialize(writer, "RP");
-//             return;
-//         case Position.Sp:
-//             serializer.Serialize(writer, "SP");
-//             return;
-//         case Position.The1B:
-//             serializer.Serialize(writer, "1B");
-//             return;
-//         case Position.The2B:
-//             serializer.Serialize(writer, "2B");
-//             return;
-//         case Position.The3B:
-//             serializer.Serialize(writer, "3B");
-//             return;
-//         case Position.C:
-//             serializer.Serialize(writer, "C");
-//             return;
-//         case Position.If:
-//             serializer.Serialize(writer, "IF");
-//             return;
-//         case Position.Of:
-//             serializer.Serialize(writer, "OF");
-//             return;
-//         case Position.Ss:
-//             serializer.Serialize(writer, "SS");
-//             return;
-//         case Position.Util:
-//             serializer.Serialize(writer, "Util");
-//             return;
-//     }
-//     throw new Exception("Cannot marshal type Position");
-// }
-
-// public static readonly PositionConverter Singleton = new PositionConverter();

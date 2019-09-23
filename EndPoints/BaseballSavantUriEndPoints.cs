@@ -1,6 +1,7 @@
 using System;
+using System.Globalization;
 
-#pragma warning disable CS1998, CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE1006
+#pragma warning disable CS1998, CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE1006, MA0007
 namespace BaseballScraper.EndPoints
 {
     public class BaseballSavantUriEndPoints
@@ -68,12 +69,12 @@ namespace BaseballScraper.EndPoints
 
                 if(year == 0)
                 {
-                    yearString = currentYear.ToString();
+                    yearString = currentYear.ToString(CultureInfo.InvariantCulture);
                 }
 
                 else
                 {
-                    yearString = year.ToString();
+                    yearString = year.ToString(CultureInfo.InvariantCulture);
                 }
 
 

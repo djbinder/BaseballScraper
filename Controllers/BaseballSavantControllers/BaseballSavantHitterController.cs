@@ -16,7 +16,7 @@ using C = System.Console;
 using SIO = System.IO;
 
 
-#pragma warning disable CS1998, CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE1006
+#pragma warning disable CS1998, CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE1006, MA0016
 namespace BaseballScraper.Controllers.BaseballSavantControllers
 {
     [Route("api/baseballsavant/[controller]")]
@@ -30,7 +30,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
         private readonly BaseballScraperContext        _context;
         private readonly ProjectDirectoryEndPoints     _projectDirectory;
 
-        public CancellationToken cancellationToken = new CancellationToken();
+        private CancellationToken cancellationToken = new CancellationToken();
 
 
         public BaseballSavantHitterController(Helpers helpers, CsvHandler csvHandler, BaseballSavantHitterEndPoints hitterEndpoints, BaseballScraperContext context, ProjectDirectoryEndPoints projectDirectory)
