@@ -48,15 +48,15 @@ namespace BaseballScraper.Controllers.YahooControllers
             YahooTeamPoints yTP = new YahooTeamPoints();
 
             // TEAMID --> A number between 0 and the total number of teams in the league with each number in between representing one of the teams (i.e., each team has its own unique team id number)
-            int teamId = 1;
+            const int teamId = 1;
 
-            var uriTeamBase = endPoints.TeamSeasonStatsEndPoint(_theGameConfig.LeagueKey, teamId).EndPointUri;
+            string uriTeamBase = endPoints.TeamSeasonStatsEndPoint(_theGameConfig.LeagueKey, teamId).EndPointUri;
 
             JObject teamStatsJson = _yahooApiRequestController.GenerateYahooResourceJObject(uriTeamBase);
 
-            var teamPointsPath = teamStatsJson["fantasy_content"]["team"]["team_points"];
+            JToken teamPointsPath = teamStatsJson["fantasy_content"]["team"]["team_points"];
             // var teamPointsPath         = o["fantasy_content"]["team"]["team_points"];
-            var teamPointsCoverageType = yTP.CoverageType = teamPointsPath["coverage_type"].ToString();
+            string teamPointsCoverageType = yTP.CoverageType = teamPointsPath["coverage_type"].ToString();
 
             if(string.Equals(teamPointsCoverageType, "season", StringComparison.Ordinal))
                 yTP.WeekOrYear = (int?)teamPointsPath["season"];
@@ -106,7 +106,7 @@ namespace BaseballScraper.Controllers.YahooControllers
         {
             _h.StartMethod();
 
-            int teamId      = 1;
+            const int teamId = 1;
             var uriTeamBase = endPoints.TeamSeasonStatsEndPoint(_theGameConfig.LeagueKey, teamId).EndPointUri;
 
             JObject teamStatsJson = _yahooApiRequestController.GenerateYahooResourceJObject(uriTeamBase);

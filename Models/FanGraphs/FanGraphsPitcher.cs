@@ -172,7 +172,8 @@ namespace BaseballScraper.Models.FanGraphs
 
         public virtual SfbbPlayerBase SfbbPlayerBase { get; set; }
 
-        [ForeignKey("SfbbPlayerBase")]
+        // [ForeignKey("SfbbPlayerBase")]
+        [ForeignKey(nameof(SfbbPlayerBase))]
         public string IDPLAYER { get; set; }
 
         private string _playerYearConcat;

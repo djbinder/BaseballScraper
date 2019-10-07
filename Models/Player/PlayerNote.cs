@@ -44,16 +44,16 @@ namespace BaseballScraper.Models.Player
         [Display(Name="Mlb Season Year")]
         public int? Season { get; set; }
 
-        public DateTime DateCreated 
-        { 
-            get => throw new NotImplementedException(); 
-            set => throw new NotImplementedException(); 
+        public DateTime DateCreated
+        {
+            get => new DateTime();
+            set => throw new NotSupportedException();
         }
 
-        public DateTime DateUpdated 
-        { 
-            get => throw new NotImplementedException(); 
-            set => throw new NotImplementedException(); 
+        public DateTime DateUpdated
+        {
+            get => new DateTime();
+            set => throw new NotSupportedException();
         }
 
         public PlayerNote() {}

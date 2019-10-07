@@ -339,7 +339,7 @@ namespace BaseballScraper.Controllers.TwitterControllers
             /// </returns>
             public string CreateSearchStringToSearchListFor(string screenName, string listName, string searchString, int numberOfResultsToReturn)
             {
-                string urlBase          = "https://api.twitter.com/1.1/search/tweets.json?q=";
+                const string urlBase = "https://api.twitter.com/1.1/search/tweets.json?q=";
                 string prefix           = $"list%3A%40{screenName}%2F{listName}%20";
                 string resultsCount     = $"&count={numberOfResultsToReturn}";
                 string fullSearchString = $"{urlBase}{prefix}{searchString}{resultsCount}";
@@ -601,7 +601,7 @@ namespace BaseballScraper.Controllers.TwitterControllers
 
                 var currentSinceId = ReadCurrentSinceIdFromTxtFile();
 
-                var tweetsParameters = new GetTweetsFromListParameters()
+                var tweetsParameters = new GetTweetsFromListParameters
                 {
                     SinceId = currentSinceId,
                     IncludeRetweets = includeRetweets,
@@ -627,7 +627,7 @@ namespace BaseballScraper.Controllers.TwitterControllers
             {
                 ITwitterList list = TwitterList.GetExistingList(listName, screenName);
 
-                var tweetsParameters = new GetTweetsFromListParameters()
+                var tweetsParameters = new GetTweetsFromListParameters
                 {
                     // Until = new DateTime(2019,06,23),
                     IncludeRetweets = includeRetweets,
@@ -719,15 +719,17 @@ namespace BaseballScraper.Controllers.TwitterControllers
             }
 
 
-            // STATUS [ June 24, 2019 ]: this works
-            /// <summary>
-            ///     Support method for 'GetAllUserIdsForMembersOfTwitterList' method
-            ///     Gets all user ids from given IUsers and adds them to List
-            /// </summary>
-            public void AddUserIdsToList(IEnumerable<IUser> members, [FromQuery]List<long> userIds)
-            {
-                foreach(var member in members) { userIds.Add(member.Id); }
-            }
+        // STATUS [ June 24, 2019 ]: this works
+        /// <summary>
+        ///     Support method for 'GetAllUserIdsForMembersOfTwitterList' method
+        ///     Gets all user ids from given IUsers and adds them to List
+        /// </summary>
+        /// <param name="members">todo: describe members parameter on AddUserIdsToList</param>
+        /// <param name="userIds">todo: describe userIds parameter on AddUserIdsToList</param>
+        public void AddUserIdsToList(IEnumerable<IUser> members, [FromQuery]List<long> userIds)
+        {
+            foreach(var member in members) { userIds.Add(member.Id); }
+        }
 
 
         #endregion LISTS ------------------------------------------------------------
@@ -799,15 +801,14 @@ namespace BaseballScraper.Controllers.TwitterControllers
                 while((line = file.ReadLine()) != null)
                 {
                     sinceIdString = line;
-                    try
                     {
                         sinceId = long.Parse(sinceIdString, CultureInfo.InvariantCulture);
                     }
-                    catch { }
                     counter++;
                 }
                 Console.WriteLine($"final sinceId: {sinceId}");
                 file.Close();
+                file.Dispose();
                 return sinceId;
             }
 
@@ -836,15 +837,15 @@ namespace BaseballScraper.Controllers.TwitterControllers
             {
                 TweetinviEvents.QueryBeforeExecute += (sender, args) =>
                 {
-                    var rateLimits = RateLimit.GetQueryRateLimit(args.QueryURL);
+                    IEndpointRateLimit rateLimits = RateLimit.GetQueryRateLimit(args.QueryURL);
                     if (rateLimits != null)
                     {
                         Console.WriteLine($"\nrateLimits: {rateLimits}"); // 2 - Your code to await for rate limits
                     }
-                    var shouldChangeCredentials = true; // 3 - Your strategy to use multiple credentials
+                    const bool shouldChangeCredentials = true; // 3 - Your strategy to use multiple credentials
                     if (shouldChangeCredentials)
                     {
-                        var queryDetails = args.TwitterQuery;
+                        ITwitterQuery queryDetails = args.TwitterQuery;
                         Console.WriteLine($"\nqueryDetails: {queryDetails}\n");
                     }
                     // 4 - Cancel your query

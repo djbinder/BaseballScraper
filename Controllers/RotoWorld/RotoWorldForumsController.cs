@@ -41,10 +41,10 @@ namespace BaseballScraper.Controllers.RotoWorld
             public string PostUrl   { get; set; }
         }
 
-        
+
         // STATUS [ September 18, 2019 ] : this works
         // * Get the title and url for each post in Rotoworld Forum Page
-        // * numberOfPagesToScrape is how many links you want to go through 
+        // * numberOfPagesToScrape is how many links you want to go through
         // * See (Baseball) : http://forums.rotoworld.com/forum/4-fantasy-baseball-talk/
         // * See (Football) : http://forums.rotoworld.com/forum/2-fantasy-football-talk/
         // * Example : await GetRotoWorldForumPostsAsync(10);
@@ -56,17 +56,17 @@ namespace BaseballScraper.Controllers.RotoWorld
             List<ForumPost> allPosts = new List<ForumPost>();
 
             // * Count = 25; One for each topic on the page
-            string postTitleAndUrlPaths = "//ol/li/div/h4/span/a";
+            const string postTitleAndUrlPaths = "//ol/li/div/h4/span/a";
             await Task.Run(() => LoopThroughTopicsAndLinks(web, numberOfPagesToScrape, postTitleAndUrlPaths, allPosts));
 
             return allPosts;
-        } 
+        }
 
 
         // STATUS [ September 18, 2019 ] : this works
         // * Forum Topics HTML Structure (as of September 18, 2019)
-        //   > ol     | The full table                       |  ipsDataList ipsDataList_zebra ipsClear cForumTopicTable  cTopicList 
-        //   > li     | Each full top row                    |  ipsDataItem ipsDataItem_responsivePhoto 
+        //   > ol     | The full table                       |  ipsDataList ipsDataList_zebra ipsClear cForumTopicTable  cTopicList
+        //   > li     | Each full top row                    |  ipsDataItem ipsDataItem_responsivePhoto
         //   > div    | Everything up to the Replies column  |  ipsDataItem_main
         //   > h4     | Pin icon, topic title, page numbers  |  ipsDataItem_title ipsContained_container
         //   > span   | Topic title, page numbers            |  ipsType_break ipsContained
@@ -80,7 +80,7 @@ namespace BaseballScraper.Controllers.RotoWorld
                 // string footballForumUri = $"http://forums.rotoworld.com/forum/2-fantasy-football-talk/page/{pageCounter}";
 
                 HtmlDocument htmlDoc = web.Load(baseballForumUri);
-                
+
                 // ol > li > div > h4 > span > a
                 HtmlNodeCollection allLinks = htmlDoc.DocumentNode.SelectNodes(postTitleAndUrlPaths);
 

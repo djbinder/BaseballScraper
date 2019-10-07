@@ -72,12 +72,12 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
         // * Goes to a FanGraphs page and downloads the CSV from that page to local downloads folder
         // * Ultimately the CSV should be moved to project data folder (See MoveCsvToProjectFolder method)
         // * This should not run if a Csv file for current day already exists
-        public async Task DownloadCsvToLocalDownloads(string endPoint)
+        public async Task DownloadCsvToLocalDownloadsAsync(string endPoint)
         {
             _helpers.OpenMethod(3);
 
             string csvSelector = _endPoints.FanGraphsCsvHtmlSelector();
-            await _csvHandler.ClickLinkToDownloadCsvFile(endPoint, csvSelector).ConfigureAwait(false);
+            await _csvHandler.ClickLinkToDownloadCsvFileAsync(endPoint, csvSelector).ConfigureAwait(false);
         }
 
 

@@ -9,7 +9,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006, MA0016, MA0051
+#pragma warning disable CC0091, CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006, MA0016, MA0051
 namespace BaseballScraper.Controllers.YahooControllers
 {
     [Route("api/yahoo/[controller]")]
@@ -76,9 +76,9 @@ namespace BaseballScraper.Controllers.YahooControllers
             public YahooTeamStatsList CreateYahooTeamStatsModel()
             {
                 // _h.Spotlight("executing create yahoo team stats method option 1");
-                int teamId      = 1;
+                const int teamId = 1;
                 string leagueKey = _yahooApiRequestController.GetTheGameIsTheGameLeagueKey();
-                var uriTeamBase = endPoints.TeamSeasonStatsEndPoint(leagueKey, teamId).EndPointUri;
+                string uriTeamBase = endPoints.TeamSeasonStatsEndPoint(leagueKey, teamId).EndPointUri;
 
                 JObject teamStatsJson = _yahooApiRequestController.GenerateYahooResourceJObject(uriTeamBase);
 

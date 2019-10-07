@@ -12,7 +12,7 @@ using Newtonsoft.Json.Linq;
 
 
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006, MA0016
+#pragma warning disable CC0091, CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006, MA0016
 namespace BaseballScraper.Controllers.YahooControllers.Collections
 {
     [Route("api/yahoo/[controller]")]
@@ -146,17 +146,16 @@ namespace BaseballScraper.Controllers.YahooControllers.Collections
 
             /* OVERALL SUMMARY OF SECTION */
             // STATUS [ June 11, 2019 ] : these all work
-            /// <summary>
-            ///     Query yahoo players collection with various filters
-            ///     Each below is one (e.g., filter by player name) or a combo of filters (e.g., filter by player name, and position, and status)
-            ///     See 'filter options' #region to view options for each of the filter types (e.g., status, )
-            /// </summary>
+            // Summary:
+            // * Query yahoo players collection with various filters
+            // * Each below is one (e.g., filter by player name) or a combo of filters (e.g., filter by player name, and position, and status)
+            // * See 'filter options' #region to view options for each of the filter types (e.g., status, )
 
 
-            /// <example>
-            ///    var collection = FilterByPlayerNameThenCreateInstance("smith"); OR
-            ///    var player = FilterByPlayerNameThenCreateInstance("bryant");
-            /// </example>
+
+            // Example :
+            // * var collection = FilterByPlayerNameThenCreateInstance("smith"); OR
+            // * var player = FilterByPlayerNameThenCreateInstance("bryant");
             [HttpGet("player")]
             public YahooPlayersCollection FilterByPlayerNameThenCreateInstance(string playerName)
             {
@@ -167,9 +166,8 @@ namespace BaseballScraper.Controllers.YahooControllers.Collections
             }
 
 
-            /// <example>
-            ///    var collection = FilterByPlayerNameAndPositionThenCreateInstance("smith","SP");
-            /// </example>
+            // Example :
+            // * var collection = FilterByPlayerNameAndPositionThenCreateInstance("smith","SP");
             [HttpGet("player/{playerName}")]
             public YahooPlayersCollection FilterByPlayerNameAndPositionThenCreateInstance(string playerName, string position)
             {
@@ -181,9 +179,8 @@ namespace BaseballScraper.Controllers.YahooControllers.Collections
             }
 
 
-            /// <example>
-            ///    var collection = FilterByPositionThenCreateInstance("3B");
-            /// </example>
+            // Example :
+            // * var collection = FilterByPositionThenCreateInstance("3B");
             [HttpGet("player_position")]
             public YahooPlayersCollection FilterByPositionThenCreateInstance(string position)
             {
@@ -194,9 +191,8 @@ namespace BaseballScraper.Controllers.YahooControllers.Collections
             }
 
 
-            /// <example>
-            ///    var collection = FilterByPositionWithSortThenCreateInstance("3B","OR");
-            /// </example>
+            // Example :
+            // * var collection = FilterByPositionWithSortThenCreateInstance("3B","OR");
             [HttpGet("player_position_sort")]
             public YahooPlayersCollection FilterByPositionWithSortThenCreateInstance(string position, string sortType)
             {
@@ -207,9 +203,8 @@ namespace BaseballScraper.Controllers.YahooControllers.Collections
             }
 
 
-            /// <example>
-            ///     var collection = FilterByPositionAndStatusWithSortThenCreateInstance("3B","FA","OR");
-            /// </example>
+// Example :
+            // * var collection = FilterByPositionAndStatusWithSortThenCreateInstance("3B","FA","OR");
             [HttpGet("player_position_status_sort/{position}/{status}")]
             public YahooPlayersCollection FilterByPositionAndStatusWithSortThenCreateInstance(string position, string status, string sortType)
             {
@@ -220,9 +215,8 @@ namespace BaseballScraper.Controllers.YahooControllers.Collections
             }
 
 
-            /// <example>
-            ///     var collection = FilterByPositionAndStatusWithSortForLastWeekThenCreateInstance("3B","FA");
-            /// </example>
+            // Example :
+            // * var collection = FilterByPositionAndStatusWithSortForLastWeekThenCreateInstance("3B","FA");
             [HttpGet("player_position_status_sort_last_week/{position}/{status}")]
             public YahooPlayersCollection FilterByPositionAndStatusWithSortForLastWeekThenCreateInstance(string position, string status)
             {
@@ -233,9 +227,8 @@ namespace BaseballScraper.Controllers.YahooControllers.Collections
             }
 
 
-            /// <example>
-            ///    var collection = FilterByPositionAndStatusWithSortForLastMonthThenCreateInstance("3B","FA");
-            /// </example>
+            // Example :
+            // * var collection = FilterByPositionAndStatusWithSortForLastMonthThenCreateInstance("3B","FA");
             [HttpGet("player_position_status_sort_last_month/{position}/{status}")]
             public YahooPlayersCollection FilterByPositionAndStatusWithSortForLastMonthThenCreateInstance(string position, string status)
             {
@@ -246,9 +239,8 @@ namespace BaseballScraper.Controllers.YahooControllers.Collections
             }
 
 
-            /// <example>
-            ///    var collection = FilterByPositionAndStatusWithSortForTodayThenCreateInstance("3B","FA");
-            /// </example>
+            // Example :
+            // * var collection = FilterByPositionAndStatusWithSortForTodayThenCreateInstance("3B","FA");
             [HttpGet("player_position_status_sort_today/{position}/{status}")]
             public YahooPlayersCollection FilterByPositionAndStatusWithSortForTodayThenCreateInstance(string position, string status)
             {
@@ -260,9 +252,8 @@ namespace BaseballScraper.Controllers.YahooControllers.Collections
             }
 
 
-            /// <example>
-            ///     var collection = FilterByPositionAndStatusThenCreateInstance("3B","FA");
-            /// </example>
+            // Example :
+            // * var collection = FilterByPositionAndStatusThenCreateInstance("3B","FA");
             [HttpGet("player_position_status/{position}/{status}")]
             public YahooPlayersCollection FilterByPositionAndStatusThenCreateInstance(string position, string status)
             {
@@ -273,9 +264,8 @@ namespace BaseballScraper.Controllers.YahooControllers.Collections
             }
 
 
-            /// <example>
-            ///    var collection = FilterByPositionStatusAndCountThenCreateInstance("3B","FA","10");
-            /// </example>
+            // Example :
+            // * var collection = FilterByPositionStatusAndCountThenCreateInstance("3B","FA","10");
             [HttpGet("player_position_status_count/{position}/{status}")]
             public YahooPlayersCollection FilterByPositionStatusAndCountThenCreateInstance(string position, string status, string count)
             {
@@ -288,10 +278,9 @@ namespace BaseballScraper.Controllers.YahooControllers.Collections
 
 
             // STATUS [ June 18, 2019 ] : this works
-            /// <example>
-            ///    var collection = FilterByPositionWithSortThenCreateInstance("3B","OR");
-            ///    var listOfPlayers = CreatePlayerListFromPlayersCollection(collection);
-            /// </example>
+            // Example :
+            // * var collection = FilterByPositionWithSortThenCreateInstance("3B","OR");
+            // * var listOfPlayers = CreatePlayerListFromPlayersCollection(collection);
             [HttpPost("players_list_collection")]
             public List<Player> CreatePlayerListFromPlayersCollection(YahooPlayersCollection collection)
             {
@@ -325,11 +314,10 @@ namespace BaseballScraper.Controllers.YahooControllers.Collections
 
 
             // STATUS [ June 18, 2019 ] : this should work but haven't tested
-            /// <example>
-            ///     var collection = FilterByPositionWithSortThenCreateInstance("3B","OR");
-            ///     var collectionPlayers = collection.Players;
-            ///     var listPlayer = CreatePlayerListFromPlayers(collectionPlayers);
-            /// </example>
+            // Example :
+            // * var collection = FilterByPositionWithSortThenCreateInstance("3B","OR");
+            // * var collectionPlayers = collection.Players;
+            // * var listPlayer = CreatePlayerListFromPlayers(collectionPlayers);
             [HttpPost("players_list")]
             public List<Player> CreatePlayerListFromPlayers(Players players)
             {
@@ -368,25 +356,26 @@ namespace BaseballScraper.Controllers.YahooControllers.Collections
         #region YAHOO PLAYERS COLLECTION - SUPPORT METHODS ------------------------------------------------------------
 
 
-            // STATUS [ June 11, 2019 ] : this works
-            /// <summary>
-            ///     Used by the various methods about to generate the actual players collection based on the filters of those methods
-            /// </summary>
-            [HttpPost("players_collection")]
-            private YahooPlayersCollection CreatePlayersCollectionInstance(string uriPlayersCollection)
-            {
-                JObject collectionJObject = _yahooApiRequestController.GenerateYahooResourceJObject(uriPlayersCollection);
-                // _h.Dig(collectionJObject);
+        // STATUS [ June 11, 2019 ] : this works
+        /// <summary>
+        ///     Used by the various methods about to generate the actual players collection based on the filters of those methods
+        /// </summary>
+        /// <param name="uriPlayersCollection">todo: describe uriPlayersCollection parameter on CreatePlayersCollectionInstance</param>
+        [HttpPost("players_collection")]
+        private YahooPlayersCollection CreatePlayersCollectionInstance(string uriPlayersCollection)
+        {
+            JObject collectionJObject = _yahooApiRequestController.GenerateYahooResourceJObject(uriPlayersCollection);
+            // _h.Dig(collectionJObject);
 
-                JToken yahooPlayersCollectionToken = collectionJObject["fantasy_content"]["league"];
+            JToken yahooPlayersCollectionToken = collectionJObject["fantasy_content"]["league"];
 
-                string playersCollectionString = yahooPlayersCollectionToken.ToString();
+            string playersCollectionString = yahooPlayersCollectionToken.ToString();
 
-                YahooPlayersCollection playersCollection = YahooPlayersCollection.FromJson(playersCollectionString);
+            YahooPlayersCollection playersCollection = YahooPlayersCollection.FromJson(playersCollectionString);
 
-                // PrintPlayerNameAndTeamName(playersCollectionString);
-                return playersCollection;
-            }
+            // PrintPlayerNameAndTeamName(playersCollectionString);
+            return playersCollection;
+        }
 
 
         #endregion YAHOO PLAYERS COLLECTION - SUPPORT METHODS ------------------------------------------------------------

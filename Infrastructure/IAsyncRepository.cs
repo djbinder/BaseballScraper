@@ -23,18 +23,18 @@ namespace BaseballScraper.Infrastructure
 
     public interface IAsyncRepository<T> where T : BaseEntity
     {
-        Task<T> GetById(int id);
-        Task<T> FirstOrDefault(Expression<Func<T, bool>> predicate);
+        Task<T> GetByIdAsync(int id);
+        Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate);
 
-        Task Add(T entity);
-        Task Update(T entity);
-        Task Remove(T entity);
+        Task AddAsync(T entity);
+        Task UpdateAsync(T entity);
+        Task RemoveAsync(T entity);
 
-        Task<IEnumerable<T>> GetAll();
-        Task<IEnumerable<T>> GetWhere(Expression<Func<T, bool>> predicate);
+        Task<IEnumerable<T>> GetAllAsync();
+        Task<IEnumerable<T>> GetWhereAsync(Expression<Func<T, bool>> predicate);
 
-        Task<int> CountAll();
-        Task<int> CountWhere(Expression<Func<T, bool>> predicate);
+        Task<int> CountAllAsync();
+        Task<int> CountWhereAsync(Expression<Func<T, bool>> predicate);
     }
 
 
@@ -55,44 +55,44 @@ namespace BaseballScraper.Infrastructure
 
         #region Public Methods
 
-        public Task<T> GetById(int id) => _context.Set<T>().FindAsync(id, cancellationToken);
+        public Task<T> GetByIdAsync(int id) => _context.Set<T>().FindAsync(id, cancellationToken);
 
-        public Task<T> FirstOrDefault(Expression<Func<T, bool>> predicate)
+        public Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate)
             => _context.Set<T>().FirstOrDefaultAsync(predicate, cancellationToken);
 
-        public async Task Add(T entity)
+        public async Task AddAsync(T entity)
         {
             // await Context.AddAsync(entity);
             await _context.Set<T>().AddAsync(entity, cancellationToken).ConfigureAwait(false);
             await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         }
 
-        public Task Update(T entity)
+        public Task UpdateAsync(T entity)
         {
             // In case AsNoTracking is used
             _context.Entry(entity).State = EntityState.Modified;
             return _context.SaveChangesAsync(cancellationToken);
         }
 
-        public Task Remove(T entity)
+        public Task RemoveAsync(T entity)
         {
             _context.Set<T>().Remove(entity);
             return _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<IEnumerable<T>> GetAll()
+        public async Task<IEnumerable<T>> GetAllAsync()
         {
             return await _context.Set<T>().ToListAsync(cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<IEnumerable<T>> GetWhere(Expression<Func<T, bool>> predicate)
+        public async Task<IEnumerable<T>> GetWhereAsync(Expression<Func<T, bool>> predicate)
         {
             return await _context.Set<T>().Where(predicate).ToListAsync(cancellationToken).ConfigureAwait(false);
         }
 
-        public Task<int> CountAll() => _context.Set<T>().CountAsync(cancellationToken);
+        public Task<int> CountAllAsync() => _context.Set<T>().CountAsync(cancellationToken);
 
-        public Task<int> CountWhere(Expression<Func<T, bool>> predicate)
+        public Task<int> CountWhereAsync(Expression<Func<T, bool>> predicate)
             => _context.Set<T>().CountAsync(predicate, cancellationToken);
 
         #endregion
@@ -111,7 +111,7 @@ namespace BaseballScraper.Infrastructure
 
     public interface IWorkerRepository : IAsyncRepository<Worker>
     {
-        Task<Worker> GetByFirstName(string firstName);
+        Task<Worker> GetByFirstNameAsync(string firstName);
     }
 
 
@@ -119,7 +119,7 @@ namespace BaseballScraper.Infrastructure
     {
         public WorkerRepository(BaseballScraperContext context) : base(context) { }
 
-        public Task<Worker> GetByFirstName(string firstName)
-            => FirstOrDefault(w => string.Equals(w.FirstName, firstName, StringComparison.Ordinal));
+        public Task<Worker> GetByFirstNameAsync(string firstName)
+            => FirstOrDefaultAsync(w => string.Equals(w.FirstName, firstName, StringComparison.Ordinal));
     }
 }

@@ -16,7 +16,7 @@ using C = System.Console;
 using SIO = System.IO;
 
 
-#pragma warning disable CS1998, CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE1006, MA0016
+#pragma warning disable CC0061, CS1998, CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE1006, MA0016
 namespace BaseballScraper.Controllers.BaseballSavantControllers
 {
     [Route("api/baseballsavant/[controller]")]
@@ -124,7 +124,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
         /* PRIMARY REGION 1 */
         #region EXPECTED STATISTICS ------------------------------------------------------------
 
-            private static string _expectedStatsStringAppendix = "_x_stats.csv";
+            private static readonly string _expectedStatsStringAppendix = "_x_stats.csv";
 
 
             /* --------------------------------------------------------------- */
@@ -132,10 +132,10 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             /* --------------------------------------------------------------- */
 
 
-                // STATUS [ August 27, 2019 ] : this works
-                // X-Stats
-                public List<XstatsHitter> GetAllXStats_CSV(int year, int minAtBats)
-                {
+            // STATUS [ August 27, 2019 ] : this works
+            // X-Stats
+            public List<XstatsHitter> GetAllXStats_CSV(int year, int minAtBats)
+            {
                     _helpers.OpenMethod(1);
 
                     DownloadExpectedStatsCsv(year, minAtBats);
@@ -255,12 +255,11 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
                 public IActionResult AddAll_DB(List<XstatsHitter> hitters)
                 {
                     _helpers.OpenMethod(1);
-                    int countAdded = 0; int countNotAdded = 0; int countUpdated = 0;
+                    int countAdded = 0; int countNotAdded = 0; const int countUpdated = 0;
 
-                    foreach(var hitter in hitters)
+                    foreach (XstatsHitter hitter in hitters)
                     {
-                        // XstatsHitter
-                        var checkForHitterInDb = _context.XStatsHitters.SingleOrDefault(x => x.MLBID == hitter.MLBID);
+                        XstatsHitter checkForHitterInDb = _context.XStatsHitters.SingleOrDefault(x => x.MLBID == hitter.MLBID);
 
                         if(checkForHitterInDb == null)
                         {
@@ -307,7 +306,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
 
             // See: https://atmlb.com/31IMZzg
 
-            private static string _velocityAndBarrelsStringAppendix = "_exit_velocity_barrels.csv";
+            private static readonly string _velocityAndBarrelsStringAppendix = "_exit_velocity_barrels.csv";
 
 
             /* --------------------------------------------------------------- */
@@ -408,7 +407,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
                         }
                         else
                         {
-                            // Console.WriteLine($"{counter} | EXIT VELO AND BARREL HITTER ALREADY EXISTS");
+                            Console.WriteLine($"{counter} | EXIT VELO AND BARREL HITTER ALREADY EXISTS");
                         }
                         counter++;
                     }
@@ -423,11 +422,11 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
                 {
                     _helpers.OpenMethod(1);
 
-                    int countAdded = 0; int countNotAdded = 0; int countUpdated = 0;
+                    int countAdded = 0; int countNotAdded = 0; const int countUpdated = 0;
 
-                    foreach(var hitter in hitters)
+                    foreach (ExitVelocityAndBarrelsHitter hitter in hitters)
                     {
-                        var checkDbForHitter = _context.ExitVelocityAndBarrelsHitters.SingleOrDefault(x => x.MLBID == hitter.MLBID);
+                        ExitVelocityAndBarrelsHitter checkDbForHitter = _context.ExitVelocityAndBarrelsHitters.SingleOrDefault(x => x.MLBID == hitter.MLBID);
 
                         if(checkDbForHitter == null)
                         {

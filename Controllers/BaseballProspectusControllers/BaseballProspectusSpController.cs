@@ -5,7 +5,7 @@ using BaseballScraper.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
+#pragma warning disable CC0091, CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Controllers.BaseballProspectusControllers
 {
     [Route("api/baseballprospectus/[controller]")]

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Scripting.Hosting;
 
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
+#pragma warning disable CC0091, CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006
 namespace BaseballScraper.Controllers.BaseballReference
 {
     [Route("api/baseballreference/[controller]")]
@@ -16,8 +16,7 @@ namespace BaseballScraper.Controllers.BaseballReference
     public class BRefLeagueBattingController: ControllerBase
     {
 
-        private readonly Helpers _helpers;
-
+        private readonly Helpers         _helpers;
         private readonly PythonConnector _pythonConnector;
 
         // may need to use full path and not relative path for this
@@ -26,23 +25,24 @@ namespace BaseballScraper.Controllers.BaseballReference
 
         public BRefLeagueBattingController (Helpers helpers, PythonConnector pythonConnector)
         {
-            _helpers = helpers;
+            _helpers         = helpers;
             _pythonConnector = pythonConnector;
         }
 
 
 
         // See:
-        //  * python_paths.md in Configuration folder
-        //  * PythonConnector.cs
-        //  * BRefLeagueBattingController.py
+        // * python_paths.md in Configuration folder
+        // * PythonConnector.cs
+        // * BRefLeagueBattingController.py
 
         // Status [July 3, 2019]:
-        //  * If all you want are simple variables, then this work
-        //  * It breaks if you need to bring things in like numpy or pandas
-        //  * Check all links / notes listed at top of PythonConnector.cs file
-        //  * IronPython doesn't work with Python3 yet; Python 2.7 will be deprecated in 2020
-        //  * Probably best to wait until IronPython is upgraded to support Python3 before doing any more on this
+        // * If all you want are simple variables, then this works
+        // * It breaks if you need to bring things in like numpy or pandas
+        // * Check all links / notes listed at top of PythonConnector.cs file
+        // * IronPython doesn't work with Python3 yet; Python 2.7 will be deprecated in 2020
+        // * Probably best to wait until IronPython is upgraded to support Python3 before doing any more on this
+        // * https://github.com/IronLanguages/ironpython3
 
 
         /*
@@ -65,16 +65,16 @@ namespace BaseballScraper.Controllers.BaseballReference
 
             ScriptScope scope = _pythonConnector.CreatePythonScriptScope(engine);
 
-            var paths = _pythonConnector.GetListOfPythonFilePaths(engine);
+            ICollection<string> paths = _pythonConnector.GetListOfPythonFilePaths(engine);
             AddPythonPaths(paths);
 
             engine.SetSearchPaths(paths);
 
             ScriptSource source = _pythonConnector.CreatePythonScriptSource(engine, fileName);
 
-            var compiled = source.Compile();
+            CompiledCode compiled = source.Compile();
 
-            var connectionToPython = source.Execute(scope);
+            dynamic connectionToPython = source.Execute(scope);
 
             return scope;
         }
@@ -85,7 +85,7 @@ namespace BaseballScraper.Controllers.BaseballReference
         public object GetOneVariableFromBrefPythonFile(string fileName, string variableKey)
         {
             ScriptScope scope = CreateScopeForBrefPythonFile(fileName);
-            var variableValue = scope.GetVariable<string>(variableKey);
+            string variableValue = scope.GetVariable<string>(variableKey);
             Console.WriteLine($"variableValue: {variableValue} of type: {variableValue.GetType()}");
             return variableValue;
         }
@@ -96,14 +96,15 @@ namespace BaseballScraper.Controllers.BaseballReference
         public IEnumerable<string> GetAllVariableNamesFromBrefPythonFile(string fileName)
         {
             ScriptScope scope = CreateScopeForBrefPythonFile(fileName);
-            var variableNames = scope.GetVariableNames();
-            foreach(var name in variableNames)
+            IEnumerable<string> variableNames = scope.GetVariableNames();
+            foreach(string name in variableNames)
             {
                 Console.WriteLine($"vNAME: {name}");
             }
             _pythonConnector.PrintPythonVariableNames(variableNames);
             return variableNames;
         }
+
 
 
         // note: see 'python_paths.md' for other paths that should be added here
@@ -121,7 +122,7 @@ namespace BaseballScraper.Controllers.BaseballReference
 
             public void PrintPaths(ICollection<string> paths)
             {
-                foreach(var path in paths)
+                foreach(string path in paths)
                 {
                     Console.WriteLine($"path: {path}");
                 }

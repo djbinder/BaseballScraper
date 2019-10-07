@@ -51,6 +51,7 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
         /// <summary>
         ///     View instantiated PlayerSearch object
         /// </summary>
+        /// <param name="playerLastName">todo: describe playerLastName parameter on ViewPlayerSearchModel</param>
         /// <remarks>
         ///     See: https://appac.github.io/mlb-data-api-docs/#player-data-player-search-get
         /// </remarks>

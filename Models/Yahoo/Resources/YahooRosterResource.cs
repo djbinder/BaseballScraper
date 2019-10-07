@@ -81,7 +81,7 @@ namespace BaseballScraper.Models.Yahoo.Resources
     }
 
 
-     public partial class Roster
+    public partial class Roster
     {
         [JsonProperty("coverage_type")]
         public CoverageType CoverageType { get; set; }
@@ -222,21 +222,13 @@ namespace BaseballScraper.Models.Yahoo.Resources
         [JsonProperty("position")]
         public object RosterResourcePosition { get; set; }
 
-
         protected string[] PositionCasted
         {
             get
             {
-                // player is DH / Util only
-                if(RosterResourcePosition is string)
-                {
-                    return null;
-                }
-                // player is eligible for multiple positions
-                else
-                {
-                    return (string[]) RosterResourcePosition;
-                }
+                // * Player is DH / Util only
+                // * RosterResourcePosition = string, null; else...
+                return RosterResourcePosition is string ? null : (string[])RosterResourcePosition;
             }
         }
     }
@@ -338,9 +330,9 @@ namespace BaseballScraper.Models.Yahoo.Resources
                 CoverageTypeConverter.Singleton,
                 SizeConverter.Singleton,
                 PositionTypeConverter.Singleton,
-                new IsoDateTimeConverter 
-                { 
-                    DateTimeStyles = DateTimeStyles.AssumeUniversal, 
+                new IsoDateTimeConverter
+                {
+                    DateTimeStyles = DateTimeStyles.AssumeUniversal,
                 },
             },
         };
@@ -429,6 +421,8 @@ namespace BaseballScraper.Models.Yahoo.Resources
                     return Size.Large;
                 case "small":
                     return Size.Small;
+                default:
+                    break;
             }
             throw new Exception("Cannot unmarshal type Size");
         }
@@ -449,6 +443,8 @@ namespace BaseballScraper.Models.Yahoo.Resources
                 case Size.Small:
                     serializer.Serialize(writer, "small");
                     return;
+                default:
+                    break;
             }
             throw new Exception("Cannot marshal type Size");
         }
@@ -463,13 +459,15 @@ namespace BaseballScraper.Models.Yahoo.Resources
         public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
         {
             if (reader.TokenType == JsonToken.Null) return null;
-            var value = serializer.Deserialize<string>(reader);
+            string value = serializer.Deserialize<string>(reader);
             switch (value)
             {
                 case "B":
                     return PositionType.B;
                 case "P":
                     return PositionType.P;
+                default:
+                    break;
             }
             throw new Exception("Cannot unmarshal type PositionType");
         }
@@ -481,7 +479,7 @@ namespace BaseballScraper.Models.Yahoo.Resources
                 serializer.Serialize(writer, value: null);
                 return;
             }
-            var value = (PositionType)untypedValue;
+            PositionType value = (PositionType)untypedValue;
             switch (value)
             {
                 case PositionType.B:
@@ -490,6 +488,8 @@ namespace BaseballScraper.Models.Yahoo.Resources
                 case PositionType.P:
                     serializer.Serialize(writer, "P");
                     return;
+                default:
+                    break;
             }
             throw new Exception("Cannot marshal type PositionType");
         }

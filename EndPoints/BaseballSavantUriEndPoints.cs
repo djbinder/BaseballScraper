@@ -67,16 +67,7 @@ namespace BaseballScraper.EndPoints
                 int currentYear = DateTime.Now.Year;
                 string yearString;
 
-                if(year == 0)
-                {
-                    yearString = currentYear.ToString(CultureInfo.InvariantCulture);
-                }
-
-                else
-                {
-                    yearString = year.ToString(CultureInfo.InvariantCulture);
-                }
-
+                yearString = year == 0 ? currentYear.ToString(CultureInfo.InvariantCulture) : year.ToString(CultureInfo.InvariantCulture);
 
                 return new BaseballSavantUriEndPoint
                 {
@@ -123,15 +114,7 @@ namespace BaseballScraper.EndPoints
             public BaseballSavantUriEndPoint HitterExpectedStatisticsEndPoint_Csv(int year, int minPlateAppearances, BaseballSavantPositionEnum position = BaseballSavantPositionEnum.All)
             {
                 string positionString = string.Empty;
-                if(position == BaseballSavantPositionEnum.All)
-                {
-                    positionString = "";
-                }
-
-                else
-                {
-                    positionString = position.ToString();
-                }
+                positionString = position == BaseballSavantPositionEnum.All ? "" : position.ToString();
 
                 // Console.WriteLine($"positionString: {positionString}");
                 return new BaseballSavantUriEndPoint

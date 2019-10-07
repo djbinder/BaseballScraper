@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using BaseballScraper.Controllers.FanGraphsControllers;
+using BaseballScraper.Controllers.PlayerControllers;
 using BaseballScraper.Infrastructure;
 using BaseballScraper.Models.BaseballHq;
 using BaseballScraper.Models.BaseballSavant;
@@ -20,11 +22,16 @@ namespace BaseballScraper.Models
     public class BaseballScraperContext: DbContext
     {
         private readonly Helpers _helpers;
+        // private readonly FanGraphsSpController _fangraphsSpController;
+        // private readonly PlayerBaseController _playerBaseController;
+        private readonly PlayerBaseController _playerBaseController = new PlayerBaseController();
+
+        // FanGraphsSpController fangraphsSpController, PlayerBaseController playerBaseController
         public BaseballScraperContext(DbContextOptions<BaseballScraperContext> options, Helpers helpers): base(options)
         {
             _helpers = helpers;
-
-
+            // _fangraphsSpController = fangraphsSpController;
+            // _playerBaseController = playerBaseController;
         }
 
         public BaseballScraperContext(){}
@@ -38,8 +45,8 @@ namespace BaseballScraper.Models
 
 
         /* PLAYER BASES */
-        public DbSet<SfbbPlayerBase>                    SfbbPlayerBases                 { get; set; }
-        public DbSet<CrunchTimePlayerBase>              CrunchTimePlayerBases           { get; set; }
+        public DbSet<SfbbPlayerBase>        SfbbPlayerBases       { get; set; }
+        public DbSet<CrunchTimePlayerBase>  CrunchTimePlayerBases { get; set; }
 
 
         /* BASEBALL HQ */
@@ -48,26 +55,23 @@ namespace BaseballScraper.Models
 
 
         /* BASEBALL SAVANT */
-        public DbSet<ExitVelocityAndBarrelsHitter>      ExitVelocityAndBarrelsHitters   { get; set; }
-        public DbSet<XstatsHitter>                      XStatsHitters                   { get; set; }
+        public DbSet<ExitVelocityAndBarrelsHitter>   ExitVelocityAndBarrelsHitters   { get; set; }
+        public DbSet<XstatsHitter>                   XStatsHitters                   { get; set; }
 
-        public DbSet<StartingPitcherCswSingleDay>       StartingPitcherCswsSingleDays   { get; set; }
-        public DbSet<StartingPitcherCswDateRange>       StartingPitcherCswsDateRanges   { get; set; }
-        public DbSet<StartingPitcherCswFullSeason>      StartingPitcherCswsFullSeason   { get; set; }
+        public DbSet<StartingPitcherCswSingleDay>    StartingPitcherCswsSingleDays   { get; set; }
+        public DbSet<StartingPitcherCswDateRange>    StartingPitcherCswsDateRanges   { get; set; }
+        public DbSet<StartingPitcherCswFullSeason>   StartingPitcherCswsFullSeason   { get; set; }
 
 
         /* YAHOO */
-        public DbSet<YahooTeamResource>                 YahooTeamResource               { get; set; }
+        public DbSet<YahooTeamResource> YahooTeamResource { get; set; }
 
 
         /* FANGRAPHS */
         public DbSet<FanGraphsPitcherWpdi>     FanGraphsPitchersForWpdiReport  { get; set; }
 
 
-        public DbSet<PlayerNote>                        PlayerNotes                     { get; set; }
-
-
-
+        public DbSet<PlayerNote> PlayerNotes { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -82,7 +86,7 @@ namespace BaseballScraper.Models
                     fk.DeleteBehavior == DeleteBehavior.Cascade
                 );
 
-            foreach(var fk in cascadeFks)
+            foreach(Microsoft.EntityFrameworkCore.Metadata.IMutableForeignKey fk in cascadeFks)
                 fk.DeleteBehavior = DeleteBehavior.SetNull;
 
             base.OnModelCreating(modelBuilder);
@@ -125,6 +129,8 @@ namespace BaseballScraper.Models
 
             /* FANGRAPHS */
             modelBuilder.Entity<FanGraphsPitcherWpdi>().ToTable("FG_SP_wPDI");
+
+            SeedDatabase(modelBuilder);
 
 
             _helpers.CloseMethod(1);
@@ -208,6 +214,26 @@ namespace BaseballScraper.Models
 
 
 
+        private void SeedDatabase(ModelBuilder modelBuilder)
+        {
+            _helpers.OpenMethod(1);
+            const string crunchTimePlayerBaseCsvFilePath = "BaseballData/00_SEED_DATA/_BASE_CrunchTime.csv";
+
+            List<CrunchTimePlayerBase> listOfCrunchTimePlayerBases = _playerBaseController.GetAllToday_CSV(crunchTimePlayerBaseCsvFilePath);
+
+            C.WriteLine("CrunchBase count : {listOfCrunchTimePlayerBases.Count}");
+
+            modelBuilder.Entity<CrunchTimePlayerBase>().HasData(listOfCrunchTimePlayerBases);
+
+            // const string fgSpWpdiSeedCsvFilePath = "BaseballData/00_SEED_DATA/FG_SP_wPDI.csv";
+
+            // List<FanGraphsPitcherWpdi> listOfFanGraphsPitcherWpdi = _fangraphsSpController.GetAllSeed_CSV(fgSpWpdiSeedCsvFilePath, 2019);
+
+            // modelBuilder.Entity<FanGraphsPitcherWpdi>().HasData(listOfFanGraphsPitcherWpdi);
+        }
+
+
+
         public void PrintDatabaseAddOutcomes(int countAdded, int countNotAdded, Type type)
         {
             C.WriteLine($"\n-------------------------------------------------------------------");
@@ -217,54 +243,62 @@ namespace BaseballScraper.Models
             C.WriteLine($"-------------------------------------------------------------------\n");
         }
 
-        public void PrintDatabaseAddOutcomes(int countAdded, int countNotAdded)
+        public static void PrintDatabaseAddOutcomes(int countAdded, int countNotAdded)
         {
             C.WriteLine($"\n-------------------------------------------------------------------");
             C.WriteLine($"ADDED TO DB   : {countAdded}");
             C.WriteLine($"ALREADY IN DB : {countNotAdded}");
             C.WriteLine($"-------------------------------------------------------------------\n");
         }
-
-
-
     }
+
+
 }
 
 
 // DATABASE MIGRATIONS
-// 1) update appsettings.Development.json first
-//      i.e., change this "database=BS_08_05_2019_1" to today's date
-// 2) Clear secrets; set new secrets (for DB info in appsettings files)
-//      * dotnet user-secrets clear
-        /*
-            cat ./Configuration/appsettings.Development.json | dotnet user-secrets set
-            cat ./Configuration/airtableConfiguration.json | dotnet user-secrets set
-        */
-// 3) delete old Migrations folder
-// 4) dotnet ef migrations add YourMigrationName
-        // dotnet ef migrations add mig05302019_1 OR mig08_06_2019_1
-        /*
-            dotnet ef migrations add MIG_08_29_2019_1
-        */
-// 5) dotnet ef database update
+// [ 1 ] update appsettings.Development.json first
+// * i.e., change this "database=BS_08_05_2019_1" to today's date
+
+// [ 2 ] Clear secrets; set new secrets (for DB info in appsettings files)
+// * dotnet user-secrets clear
+// * cat ./Configuration/appsettings.Development.json | dotnet user-secrets set// * cat ./Configuration/airtableConfiguration.json | dotnet user-secrets set
+
+// [ 3 ] delete old Migrations folder
+
+// [ 4 ] dotnet ef migrations add YourMigrationName
+// * dotnet ef migrations add mig05302019_1 OR mig08_06_2019_1
+// * dotnet ef migrations add MIG_08_29_2019_1
+
+// [ 5 ] dotnet ef database update
 
 // To add a table to an already migrated database, just do steps 4 and 5 (after you've added the DbSet to this file)
 
 
+// POTENTIAL ERRORS
+// [ A ] "Connection Refused" when trying to run dotnet ef database update
+// * Make sure PostGres is running
 
-// help if issues with 42P07 (relation already exists) errors
-// https://weblog.west-wind.com/posts/2016/jan/13/resetting-entity-framework-migrations-to-a-clean-slate
+// [ B ] help if issues with 42P07 (relation already exists) errors
+// * https://weblog.west-wind.com/posts/2016/jan/13/resetting-entity-framework-migrations-to-a-clean-slate
 
 
+
+
+// MANAGING SECRETS
 // DBInfo from json file may be stored and read from user secrets
-    // view all secrets:
-        // dotnet user-secrets list
-    // remove one secret:
-        // dotnet user-secrets remove "DBInfo:ConnectionString"
-    // set secret:
-        // dotnet user-secrets set "DBInfo:ConnectionString" "server=localhost;userId=postgres;password=root;port=5432;database=BS_05302019_1;"
-// https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-2.2&tabs=windows
-// https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-2.1&tabs=linux
+//
+// [ A ] view all secrets:
+// * dotnet user-secrets list
+//
+// [ B ] remove one secret:
+// * dotnet user-secrets remove "DBInfo:ConnectionString"
+//
+// [ C ] set secret:
+// * dotnet user-secrets set "DBInfo:ConnectionString" "server=localhost;userId=postgres;password=root;port=5432;database=BS_05302019_1;"
+//
+// See: https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-2.2&tabs=windows
+// See : https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-2.1&tabs=linux
 
 
 // set all user secrets from appsettings.Development.json and other config files:

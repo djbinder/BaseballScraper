@@ -11,7 +11,7 @@ using BaseballScraper.Models.BrooksBaseball;
 using System.Globalization;
 
 
-#pragma warning disable CS0219, CS0414, CS1570, CS1572, CS1573, CS1584, CS1587, CS1591, CS1658, CS1998, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006, MA0016
+#pragma warning disable CC0091, CS0219, CS0414, CS1570, CS1572, CS1573, CS1584, CS1587, CS1591, CS1658, CS1998, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006, MA0016
 namespace BaseballScraper.Controllers.BrooksBaseballControllers
 {
     [Route("api/brooks/[controller]")]
@@ -350,7 +350,7 @@ namespace BaseballScraper.Controllers.BrooksBaseballControllers
         public PitchTabularData_Metric InstantiatePitchTabularData_Metric(HtmlNodeCollection currentRowNodeCollection)
         {
             string freqStringWithPercentageSymbol = currentRowNodeCollection[2].InnerText;
-            
+
             string splitString = freqStringWithPercentageSymbol.Split('%')[0];
 
             double frequencyThrownDouble = double.Parse(splitString, NumberStyles.None, CultureInfo.InvariantCulture);

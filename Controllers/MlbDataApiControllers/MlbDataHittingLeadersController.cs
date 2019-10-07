@@ -152,6 +152,8 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
 
 
 
+
+
         #region STEP 3 ------------------------------------------------------------
 
             // STATUS: this works
@@ -168,8 +170,7 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
             public async Task<IActionResult> ViewHittingLeadersAsync(int numberToReturn, string year, string sortColumn)
             {
                 await GetHittingLeadersAsync(numberToReturn, year, sortColumn);
-                string currently = "retrieving hitting leaders";
-                return Content($"CURRENT TASK: {currently}");
+                return Ok();
             }
 
         #endregion STEP 3 ------------------------------------------------------------

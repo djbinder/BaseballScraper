@@ -11,13 +11,13 @@ using C = System.Console;
 
 
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE0063, IDE1006, MA0016
+#pragma warning disable CC0068, CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE0063, IDE1006, MA0016
 namespace BaseballScraper.Infrastructure
 {
     public class AirtableManager
     {
         private readonly Helpers               _helpers;
-        private AirtableConfiguration          _airtableConfig;
+        private readonly AirtableConfiguration _airtableConfig;
         private readonly AirtableConfiguration _spRankingsConfiguration;
         private readonly AirtableConfiguration _authorsConfiguration;
         private readonly AirtableConfiguration _websitesConfiguration;
@@ -26,7 +26,7 @@ namespace BaseballScraper.Infrastructure
         // private string spRankings = "SpRankings";
 
 
-        public AirtableManager(Helpers helpers, IOptions<AirtableConfiguration> airtableConfig, IOptionsSnapshot<AirtableConfiguration> options, AirtableConfiguration baseballScraperConfiguration)
+        public AirtableManager(Helpers helpers, IOptions<AirtableConfiguration> airtableConfig, IOptionsSnapshot<AirtableConfiguration> options)
         {
             _helpers                      = helpers;
             _airtableConfig               = airtableConfig.Value;
@@ -105,12 +105,13 @@ namespace BaseballScraper.Infrastructure
         */
 
 
-        string _testRecordId           = "rec7yJqKs5Ht3I7j3";
-        int _testMaxRecordsToGet       = 1;
-        string _testAuthorIdString     = "recZmhlaw6k4Vfzwz";
-        string _authorFieldName        = "Author";
-        string _datePublishedFieldName = "Publish Date";
-        private List<string> testFields = new List<string> { "Title", "Record_Id" };
+        // * Dummy data
+        private readonly string _testRecordId           = "rec7yJqKs5Ht3I7j3";
+        private readonly int    _testMaxRecordsToGet    = 1;
+        private readonly string _testAuthorIdString     = "recZmhlaw6k4Vfzwz";
+        private readonly string _authorFieldName        = "Author";
+        private readonly string _datePublishedFieldName = "Publish Date";
+        private readonly List<string> testFields = new List<string> { "Title", "Record_Id" };
 
 
 
@@ -120,29 +121,29 @@ namespace BaseballScraper.Infrastructure
         #region GET ALL RECORDS FOR TABLE ------------------------------------------------------------
 
 
-            // STATUS [ July 13, 2019 ] : this works
-            /// <summary>
-            ///     Get all the records from a given table
-            /// </summary>
-            /// <remarks>
-            ///     Configuration for each table is setup in Startup.cs and airtableConfiguration.json
-            ///     See: https://github.com/ngocnicholas/airtable.net
-            /// </remarks>
-            /// <param name="tableName">
-            ///     Equivalent to the TableName in airtableConfiguration.json
-            ///     Equivalent to the tab name in actual airtable
-            /// </param>
-            /// <param name="tableAuthenticationString">
-            ///     Equivalent to the AuthenticationString in airtableConfiguration.json
-            /// </param>
-            /// <example>
-            ///     var listOfRecords = await _atM.GetAllRecordsFromAirtableAsync(_spRankingsConfiguration.TableName, _spRankingsConfiguration.AuthenticationString);
-            /// </example>
-            public async Task<List<AirtableRecord>> GetAllRecordsFromAirtableAsync(string tableName, string tableAuthenticationString)
+        // STATUS [ July 13, 2019 ] : this works
+        /// <summary>
+        ///     Get all the records from a given table
+        /// </summary>
+        /// <remarks>
+        ///     Configuration for each table is setup in Startup.cs and airtableConfiguration.json
+        ///     See: https://github.com/ngocnicholas/airtable.net
+        /// </remarks>
+        /// <param name="tableName">
+        ///     Equivalent to the TableName in airtableConfiguration.json
+        ///     Equivalent to the tab name in actual airtable
+        /// </param>
+        /// <param name="tableAuthenticationString">
+        ///     Equivalent to the AuthenticationString in airtableConfiguration.json
+        /// </param>
+        /// <example>
+        ///     var listOfRecords = await _atM.GetAllRecordsFromAirtableAsync(_spRankingsConfiguration.TableName, _spRankingsConfiguration.AuthenticationString);
+        /// </example>
+        public async Task<List<AirtableRecord>> GetAllRecordsFromAirtableAsync(string tableName, string tableAuthenticationString)
             {
                 string offset       = null;
                 string errorMessage = null;
-                var records         = new List<AirtableRecord>();
+                List<AirtableRecord> records = new List<AirtableRecord>();
 
                 using (AirtableBase airtableBase = new AirtableBase(_airtableConfig.ApiKey, tableAuthenticationString))
                 {
@@ -157,14 +158,7 @@ namespace BaseballScraper.Infrastructure
                         records.AddRange(airResponse.Records.ToList());
                         offset = airResponse.Offset;
                     }
-                    else if (airResponse.AirtableApiError is AirtableApiException)
-                    {
-                        errorMessage = airResponse.AirtableApiError.ErrorMessage;
-                    }
-                    else
-                    {
-                        errorMessage = "Unknown error";
-                    }
+                    else errorMessage = airResponse.AirtableApiError is AirtableApiException ? airResponse.AirtableApiError.ErrorMessage : "Unknown error";
                 }
 
                 if(!string.IsNullOrEmpty(errorMessage))
@@ -201,15 +195,15 @@ namespace BaseballScraper.Infrastructure
             ///     string recordId = 1
             ///     var airtableRecordEnumerable = _atM.GetOneRecordFromAirtable(listOfRecords, "Record_Id", "1");
             /// </example>
-            public IEnumerable<AirtableRecord> GetOneRecordFromAirtable(List<AirtableRecord> listOfAirtableRecords, string fieldToFilterKey, string valueToFilterFor)
+            public static IEnumerable<AirtableRecord> GetOneRecordFromAirtable(List<AirtableRecord> listOfAirtableRecords, string fieldToFilterKey, string valueToFilterFor)
             {
                 PrintQueryDetails(fieldToFilterKey, valueToFilterFor);
-                var oneRow =
+                IEnumerable<AirtableRecord> oneRowIEnumerable =
                     from resp in listOfAirtableRecords
                     where string.Equals(resp.GetField(fieldToFilterKey).ToString(), valueToFilterFor
                         , StringComparison.Ordinal)
                     select resp;
-                return oneRow;
+                return oneRowIEnumerable;
             }
 
 
@@ -232,7 +226,7 @@ namespace BaseballScraper.Infrastructure
             /// <example>
             ///     var airtableRecordEnumerable = _atM.GetRecordsFromTableWithSort(listOfRecords, "Month", "7", "Title");
             /// </example>
-            public IOrderedEnumerable<AirtableRecord> GetRecordsFromTableWithSort(List<AirtableRecord> listOfAirtableRecords, string fieldToFilterKey, string valueToFilterFor, string fieldToSortKey)
+            public static IOrderedEnumerable<AirtableRecord> GetRecordsFromTableWithSort(List<AirtableRecord> listOfAirtableRecords, string fieldToFilterKey, string valueToFilterFor, string fieldToSortKey)
             {
                 PrintSortQueryDetails(fieldToFilterKey, valueToFilterFor, fieldToSortKey);
                 IOrderedEnumerable<AirtableRecord> sortedQuery =
@@ -274,8 +268,8 @@ namespace BaseballScraper.Infrastructure
                 using (AirtableBase airtableBase = new AirtableBase(_airtableConfig.ApiKey, tableAuthenticationString))
                 {
                     Task<AirtableRetrieveRecordResponse> recordTask = airtableBase.RetrieveRecord(tableName, recordId);
-                    var recordTaskResponse = await recordTask.ConfigureAwait(false);
-                    var oneRecord = recordTaskResponse.Record;
+                    AirtableRetrieveRecordResponse recordTaskResponse = await recordTask.ConfigureAwait(false);
+                    AirtableRecord oneRecord = recordTaskResponse.Record;
                     return oneRecord;
                 }
             }
@@ -294,6 +288,7 @@ namespace BaseballScraper.Infrastructure
             ///     Retrieves the Airtable generated Id for an author based on their name
             ///     Note: the Airtable generated Id is different than "Author_Id"
             /// </summary>
+            /// <param name="authorName">todo: describe authorName parameter on GetAuthorIdFromAuthorName</param>
             /// <remarks>
             ///     This can be used when the Author table is used as a field in another table
             ///     When author is referenced on another table, the Api provides the generated id instead of the author name
@@ -302,13 +297,14 @@ namespace BaseballScraper.Infrastructure
             /// <example>
             ///     var authorNameFromId = await _atM.GetAuthorIdFromAuthorName("Eno Sarris");
             /// </example>
-            public async Task<string> GetAuthorIdFromAuthorName(string authorName)
+            public async Task<string> GetAuthorIdFromAuthorNameAsync(string authorName)
             {
-                var authorTableList = await GetAllRecordsFromAirtableAsync(_authorsConfiguration.TableName, _authorsConfiguration.AuthenticationString).ConfigureAwait(false);
+                List<AirtableRecord> authorTableList = await GetAllRecordsFromAirtableAsync(_authorsConfiguration.TableName, _authorsConfiguration.AuthenticationString).ConfigureAwait(false);
 
-                var airtableRecordEnumerable = GetOneRecordFromAirtable(authorTableList, "Name", authorName);
-                var authorRecord             = airtableRecordEnumerable.First();
-                var authorAirtableId         = authorRecord.Id;
+                IEnumerable<AirtableRecord> airtableRecordEnumerable = GetOneRecordFromAirtable(authorTableList, "Name", authorName);
+                AirtableRecord authorRecord = airtableRecordEnumerable.First();
+                string authorAirtableId = authorRecord.Id;
+
                 return authorAirtableId;
             }
 
@@ -318,6 +314,7 @@ namespace BaseballScraper.Infrastructure
             ///     Retrieves the Airtable generated Id for website based on its name
             ///     Note: the Airtable generated Id is different than "Website_Id"
             /// </summary>
+            /// <param name="websiteName">todo: describe websiteName parameter on GetWebsiteIdFromWebsiteName</param>
             /// <remarks>
             ///     This can be used when the website table is used as a field in another table
             ///     When the website is referenced on another table, the Api provides the generated id instead of the website name
@@ -326,16 +323,17 @@ namespace BaseballScraper.Infrastructure
             /// <example>
             ///     var websiteId = await _atM.GetWebsiteIdFromWebsiteName("FanGraphs");
             /// </example>
-            public async Task<string> GetWebsiteIdFromWebsiteName(string websiteName)
+            public async Task<string> GetWebsiteIdFromWebsiteNameAsync(string websiteName)
             {
                 PrintTableConfigurationInfo(_websitesConfiguration.TableName, _websitesConfiguration.AuthenticationString);
 
-                var websiteTableList = await GetAllRecordsFromAirtableAsync(_websitesConfiguration.TableName, _websitesConfiguration.AuthenticationString).ConfigureAwait(false);
+            List<AirtableRecord> websiteTableList = await GetAllRecordsFromAirtableAsync(_websitesConfiguration.TableName, _websitesConfiguration.AuthenticationString).ConfigureAwait(false);
 
-                var airtableRecordEnumerable  = GetOneRecordFromAirtable(websiteTableList, "Name", websiteName);
-                var websiteRecord             = airtableRecordEnumerable.First();
-                var websiteAirtableId         = websiteRecord.Id;
-                return websiteAirtableId;
+            IEnumerable<AirtableRecord> airtableRecordEnumerable  = GetOneRecordFromAirtable(websiteTableList, "Name", websiteName);
+            AirtableRecord websiteRecord = airtableRecordEnumerable.First();
+            string websiteAirtableId = websiteRecord.Id;
+
+            return websiteAirtableId;
             }
 
 
@@ -365,16 +363,16 @@ namespace BaseballScraper.Infrastructure
             ///     var titles = _atM.GetOneFieldForListOfRecords(listOfRecords, "Title");
             ///     var authors = _atM.GetOneFieldForListOfRecords(listOfRecords, "Author");
             /// </example>
-            public List<string> GetAllValuesForOneField(List<AirtableRecord> listOfAirtableRecords, string fieldName)
+            public static List<string> GetAllValuesForOneField(List<AirtableRecord> listOfAirtableRecords, string fieldName)
             {
                 List<string> returnValues = new List<string>();
                 foreach(AirtableRecord record in listOfAirtableRecords)
                 {
                     Dictionary<string,object> recordFields = record.Fields;
 
-                    var singleFieldKvp = recordFields.Single(field => string.Equals(field.Key, fieldName, StringComparison.Ordinal));
-                    string returnValue = string.Empty;
-                    var fieldType      = singleFieldKvp.Value.GetType();
+                    KeyValuePair<string, object> singleFieldKvp = recordFields.Single(field => string.Equals(field.Key, fieldName, StringComparison.Ordinal));
+                    string returnValue  = string.Empty;
+                    Type fieldType      = singleFieldKvp.Value.GetType();
 
                     if(fieldType == typeof(string))
                     {
@@ -382,7 +380,7 @@ namespace BaseballScraper.Infrastructure
                         returnValues.Add(returnValue);
                     }
 
-                    else if(fieldType == typeof(Newtonsoft.Json.Linq.JArray))
+                    else if(fieldType == typeof(JArray))
                     {
                         JArray fieldToJArray = singleFieldKvp.Value as JArray;
                         returnValue = fieldToJArray[0].ToString();
@@ -406,17 +404,17 @@ namespace BaseballScraper.Infrastructure
 
         #region PRINTING PRESS ------------------------------------------------------------
 
-            public void PrintRecordsFromAirtableList(List<AirtableRecord> listOfAirtableRecords)
+            private static void PrintRecordsFromAirtableList(List<AirtableRecord> listOfAirtableRecords)
             {
                 listOfAirtableRecords.ForEach((record) => C.WriteLine($"record: {record}"));
             }
 
-            public void PrintFieldValuesFromList(List<string> returnValues)
+            private static void PrintFieldValuesFromList(List<string> returnValues)
             {
                 returnValues.ForEach((returnValue) => C.WriteLine($"returnValue: {returnValue}"));
             }
 
-            public void PrintKeyValuesPairs(Dictionary<string,object> recordFields)
+            private static void PrintKeyValuesPairs(Dictionary<string,object> recordFields)
             {
                 foreach(KeyValuePair<string,object> kvp in recordFields)
                 {
@@ -424,17 +422,17 @@ namespace BaseballScraper.Infrastructure
                 }
             }
 
-            public void PrintSortQueryDetails(string fieldToQueryKey, string fieldToQueryValue, string fieldToSortKey)
+            private static void PrintSortQueryDetails(string fieldToQueryKey, string fieldToQueryValue, string fieldToSortKey)
             {
                 C.WriteLine($"QUERY FIELD KEY: {fieldToQueryKey}\t FILTER FOR: {fieldToQueryValue}\t SORT BY: {fieldToSortKey}");
             }
 
-            public void PrintQueryDetails(string fieldToQueryKey, string filterForValue)
+            private static void PrintQueryDetails(string fieldToQueryKey, string filterForValue)
             {
                 C.WriteLine($"QUERY FIELD KEY: {fieldToQueryKey}\t FILTER FOR: {filterForValue}");
             }
 
-            public void PrintTableConfigurationInfo(string tableName, string authString)
+            private static void PrintTableConfigurationInfo(string tableName, string authString)
             {
                 C.WriteLine($"TABLE: {tableName}\t AUTH STRING: {authString}");
             }

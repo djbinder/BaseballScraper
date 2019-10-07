@@ -13,8 +13,8 @@ namespace BaseballScraper.Models.Lahman
 {
     public class LahmanMasterTablePlayer
     {
-        private string key;
-        private object value;
+        private readonly string key;
+        private readonly object value;
 
         public LahmanMasterTablePlayer(string key, object value)
         {
@@ -25,15 +25,15 @@ namespace BaseballScraper.Models.Lahman
         public LahmanMasterTablePlayer(){}
 
         public string LahmanPlayerId { get; set; }
-        public int? BirthYear { get; set; }
-        public int? BirthMonth { get; set; }
-        public int? BirthDay { get; set; }
-        public string BirthCountry { get; set; }
-        public string BirthState { get; set; }
-        public string BirthCity { get; set; }
-        public int? DeathYear { get; set; }
-        public int? DeathMonth { get; set; }
-        public int? DeathDay { get; set; }
+        public int? BirthYear        { get; set; }
+        public int? BirthMonth       { get; set; }
+        public int? BirthDay         { get; set; }
+        public string BirthCountry   { get; set; }
+        public string BirthState     { get; set; }
+        public string BirthCity      { get; set; }
+        public int? DeathYear        { get; set; }
+        public int? DeathMonth       { get; set; }
+        public int? DeathDay         { get; set; }
 
 
 
@@ -68,8 +68,8 @@ namespace BaseballScraper.Models.Lahman
 
     public class LahmanMasterTablePlayerDTO
     {
-        private string key;
-        private object value;
+        private readonly string key;
+        private readonly object value;
         public LahmanMasterTablePlayerDTO(string key, object value)
         {
             this.key = key;

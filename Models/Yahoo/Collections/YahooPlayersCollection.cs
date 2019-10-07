@@ -140,17 +140,10 @@ namespace BaseballScraper.Models.Yahoo.Collections
 
         protected IList<Player> PlayerCasted
         {
+            // if player = string, null; else, PlayerList
             get
             {
-                if(Player is string)
-                {
-                    return null;
-                }
-
-                else
-                {
-                    return PlayerList;
-                }
+                return Player is string ? null : PlayerList;
             }
         }
     }
@@ -269,16 +262,9 @@ namespace BaseballScraper.Models.Yahoo.Collections
         {
             get
             {
-                // player is DH / Util only
-                if(Position is String)
-                {
-                    return null;
-                }
-                // player is eligible for multiple positions
-                else
-                {
-                    return (string[]) Position;
-                }
+                // * player is DH / Util only
+                // * if Position = string, null; else (string[]) Position;
+                return Position is String ? null : (string[])Position;
             }
         }
     }
@@ -402,6 +388,8 @@ namespace BaseballScraper.Models.Yahoo.Collections
                     return PositionType.B;
                 case "P":
                     return PositionType.P;
+                default:
+                    break;
             }
             throw new Exception("Cannot unmarshal type PositionType");
         }
@@ -422,6 +410,8 @@ namespace BaseballScraper.Models.Yahoo.Collections
                 case PositionType.P:
                     serializer.Serialize(writer, "P");
                     return;
+                default:
+                    break;
             }
             throw new Exception("Cannot marshal type PositionType");
         }

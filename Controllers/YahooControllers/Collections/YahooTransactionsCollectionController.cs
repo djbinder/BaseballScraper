@@ -4,17 +4,17 @@ namespace BaseballScraper.Controllers.YahooControllers.Collections
 {
     public class YahooTransactionsCollectionController
     {
-        private readonly Helpers _helpers; 
+        // private readonly Helpers _helpers;
 
-        public YahooTransactionsCollectionController(Helpers helpers)
-        {
-            _helpers = helpers;
-        }
-        
+        // public YahooTransactionsCollectionController(Helpers helpers)
+        // {
+        //     _helpers = helpers;
+        // }
+
         // Yahoo Doc Link: https://developer.yahoo.com/fantasysports/guide/#transactions-collection
         // Transactions Collection description (from Yahoo):
-        //   * Transactions API allows you to GET from a collection of transactions simultaneously. 
-        //   * Qualified in the URI by a particular league. 
+        //   * Transactions API allows you to GET from a collection of transactions simultaneously.
+        //   * Qualified in the URI by a particular league.
         //   * Each element beneath will be a Transaction Resource
         //   * You can POST to do things like adding or dropping players or proposing trades.
         // URIs

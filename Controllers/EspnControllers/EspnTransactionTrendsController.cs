@@ -47,7 +47,7 @@ namespace BaseballScraper.Controllers.EspnControllers
             {
                 HtmlWeb htmlWeb = new HtmlWeb();
 
-                var urlToScrape = "http://fantasy.espn.com/baseball/addeddropped";
+                const string urlToScrape = "http://fantasy.espn.com/baseball/addeddropped";
                 // var urlToScrape = "http://games.espn.com/flb/addeddropped";
 
                 // thisUrlsHtml --> HtmlAgilityPack.HtmlDocument
@@ -149,7 +149,7 @@ namespace BaseballScraper.Controllers.EspnControllers
             {
                 HtmlWeb htmlWeb = new HtmlWeb();
 
-                var urlToScrape = "http://fantasy.espn.com/baseball/addeddropped";
+                const string urlToScrape = "http://fantasy.espn.com/baseball/addeddropped";
                 // var urlToScrape = "http://games.espn.com/flb/addeddropped";
 
                 HtmlDocument thisUrlsHtml = htmlWeb.Load(urlToScrape);

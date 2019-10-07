@@ -41,7 +41,7 @@ namespace BaseballScraper.Controllers.MlbStatsApiControllers
             var endPoint    = _endPoints.AllGamesForDateEndPoint(5,16,2016);
             var endPointUri = endPoint.EndPointUri;
 
-            var type = "MlbStatsApiEndPoints_AllGamesDate";
+            const string type = "MlbStatsApiEndPoints_AllGamesDate";
 
             PostmanResponse pmResponse     = _postman.CreatePostmanRequestGetResponse(endPointUri, type);
             IRestResponse fullResponse     = pmResponse.Response;

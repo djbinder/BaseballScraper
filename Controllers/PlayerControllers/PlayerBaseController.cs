@@ -14,7 +14,7 @@ using C = System.Console;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Globalization;
 
-#pragma warning disable CS0168, CS0219, CS0414, CS1998, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006, MA0002, MA0016, MA0051
+#pragma warning disable CC0061, CS0168, CS0219, CS0414, CS1998, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006, MA0002, MA0016, MA0051
 namespace BaseballScraper.Controllers.PlayerControllers
 {
     [Route("api/player/[controller]")]
@@ -36,7 +36,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
         private readonly string _googleSheetErrorRange = "A2030:AQ2050";
 
 
-        private Dictionary<string, object> _d = new Dictionary<string, object>(StringComparer.Ordinal);
+        private readonly Dictionary<string, object> _d = new Dictionary<string, object>(StringComparer.Ordinal);
 
         public PlayerBaseController(Helpers helpers, BaseballScraperContext context, CsvHandler csvHandler, GoogleSheetsConnector googleSheetsConnector, ProjectDirectoryEndPoints baseballData)
         {
@@ -162,7 +162,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
                 string locationToWriteTo = $"{CrunchTimeWriteFolder}{CrunchTimeReportFileBaseName}_{todayString}.csv";
                 bool doesFileExist       = _csvHandler.CheckIfFileExists(locationToWriteTo);
 
-                if(doesFileExist != true)
+                if(!doesFileExist)
                 {
                     _csvHandler.DownloadCsvFromLink(
                         CrunchTimeCsvSourceUrl,
@@ -188,6 +188,29 @@ namespace BaseballScraper.Controllers.PlayerControllers
                     fullFilePathAndName,
                     typeof(CrunchTimePlayerBase),
                     typeof(CrunchTimePlayerBaseClassMap)
+                );
+
+                List<CrunchTimePlayerBase> crunchTimePlayerBases = new List<CrunchTimePlayerBase>();
+
+                foreach(object csvRow in listOfObjects)
+                {
+                    CrunchTimePlayerBase crunchTimePlayerBase = csvRow as CrunchTimePlayerBase;
+                    crunchTimePlayerBases.Add(crunchTimePlayerBase);
+                }
+                _helpers.CloseMethod(1);
+                return crunchTimePlayerBases;
+            }
+
+
+
+            public List<CrunchTimePlayerBase> GetAllToday_CSV(string filePath)
+            {
+                _helpers.OpenMethod(1);
+
+                IList<object> listOfObjects = _csvHandler.ReadCsvRecordsToList(
+                    csvFilePath     : filePath,
+                    modelType       : typeof(CrunchTimePlayerBase),
+                    modelMapType    : typeof(CrunchTimePlayerBaseClassMap)
                 );
 
                 List<CrunchTimePlayerBase> crunchTimePlayerBases = new List<CrunchTimePlayerBase>();
@@ -428,16 +451,17 @@ namespace BaseballScraper.Controllers.PlayerControllers
             }
 
 
-            // STATUS [ August 19, 2019 ] : this works but needs updates
-            // SFBB PLAYER BASE
-            // POST ALL SfbbplayerBase Option 1
-            // * Pull range out as a parameter
-            // * Define list outside of method
-            /// <summary>
-            ///     * Add list of playerBases
-            ///     * AddAll_DB Option 1 for SfbbPlayerBases
-            /// </summary>
-            public async Task<ActionResult> AddAllAsync_DB(List<SfbbPlayerBase> allPlayerBases)
+        // STATUS [ August 19, 2019 ] : this works but needs updates
+        // SFBB PLAYER BASE
+        // POST ALL SfbbplayerBase Option 1
+        // * Pull range out as a parameter
+        // * Define list outside of method
+        /// <summary>
+        ///     * Add list of playerBases
+        ///     * AddAll_DB Option 1 for SfbbPlayerBases
+        /// </summary>
+        /// <param name="allPlayerBases">todo: describe allPlayerBases parameter on AddAllAsync_DB</param>
+        public async Task<ActionResult> AddAllAsync_DB(List<SfbbPlayerBase> allPlayerBases)
             {
                 _helpers.OpenMethod(3);
 
@@ -507,7 +531,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
             // SFBB PLAYER BASE
             public SfbbPlayerBase InstantiateSfbbPlayerBase(IList<object> row)
             {
-                int counter = 1; int mlbIdCounter = 1; int hqIdCounter = 1;
+                const int counter = 1; int mlbIdCounter = 1; int hqIdCounter = 1;
 
                 SfbbPlayerBase playerBase = new SfbbPlayerBase
                 {
@@ -575,7 +599,8 @@ namespace BaseballScraper.Controllers.PlayerControllers
                 else
                 {
                     string hqString = row[35].ToString();
-                    int hqIdInt = int.Parse(hqString, NumberStyles.None, CultureInfo.InvariantCulture);
+                    // int hqIdInt = int.Parse(hqString, NumberStyles.None, CultureInfo.InvariantCulture);
+                    int hqIdInt = int.Parse(hqString);
                     playerBase.HQID = hqIdInt;
                 }
 
@@ -708,6 +733,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
             ///     Each of methods in this section returns a player (from IEnumerable PlayerBases)
             ///     The only difference is the type of Id you are passing in (e.g. MlbId, FanGraphsPlayerId, EspnPlayerId etc.)
             /// </summary>
+            /// <param name="playersBaseballHqPlayerId">todo: describe playersBaseballHqPlayerId parameter on GetOnePlayersBaseFromBaseballHqId</param>
             /// <returns>
             ///     IEnumerable of PlayerBases (i.e. a PlayerBase for one player)
             /// </returns>

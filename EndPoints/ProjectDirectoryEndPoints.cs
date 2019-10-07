@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
+using BaseballScraper.Infrastructure;
+
 
 #pragma warning disable CS1998, CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE1006
 namespace BaseballScraper.EndPoints
@@ -8,10 +11,13 @@ namespace BaseballScraper.EndPoints
     {
         // Name of the folder that all baseball data is in
         // * this is the relative path of the directory (i.e., at the project level)
-        private string BaseballDataDirectory
+        public string BaseballDataDirectory
         {
             get => "BaseballData/";
         }
+
+        public string SEED_DATA_DirectoryName => "00_SEED_DATA/";
+        public string SEED_DirectoryRelativePath => $"{BaseballDataDirectory}{SEED_DATA_DirectoryName}";
 
         // TWO major paths within BaseballDataDirectory
         // 1) READ  > "01_READ"
@@ -21,17 +27,12 @@ namespace BaseballScraper.EndPoints
         // 1) READ  > "01_READ"
         #region READ DATA FOLDER  ------------------------------------------------------------
 
-            private string READ_DirectoryName
-            {
-                get => "01_READ/";
-            }
 
+        private string READ_DirectoryName => "01_READ/";
 
-            // "BaseballData/01_READ/"
-            private string READ_DirectoryRelativePath
-            {
-                get => $"{BaseballDataDirectory}{READ_DirectoryName}";
-            }
+        // "BaseballData/01_READ/"
+        public string READ_DirectoryRelativePath => $"{BaseballDataDirectory}{READ_DirectoryName}";
+
 
         #endregion READ DATA FOLDER  ------------------------------------------------------------
 
@@ -47,36 +48,18 @@ namespace BaseballScraper.EndPoints
         /* WRITE DIRECTORY BUILDING BLOCKS                                 */
         /* --------------------------------------------------------------- */
 
-            // 02_WRITE/
-            private string WRITE_DirectoryName
-            {
-                get => "02_WRITE/";
-            }
 
-            // BaseballData/02_WRITE/
-            private string WRITE_DirectoryRelativePath
-            {
-                get => $"{BaseballDataDirectory}{WRITE_DirectoryName}";
-            }
+        // 02_WRITE/
+        private string WRITE_DirectoryName => "02_WRITE/";
 
-            private string HITTER_DirectoryName
-            {
-                get => "HITTERS/";
-            }
+        // BaseballData/02_WRITE/
+        public string WRITE_DirectoryRelativePath => $"{BaseballDataDirectory}{WRITE_DirectoryName}";
 
-            private string PITCHER_DirectoryName
-            {
-                get => "PITCHERS/";
-            }
+        private string HITTER_DirectoryName => "HITTERS/";
 
-            private string ARCHIVE_DirectoryName
-            {
-                get => "_archive/";
-            }
+        private string PITCHER_DirectoryName => "PITCHERS/";
 
-
-
-
+        private string ARCHIVE_DirectoryName => "_archive/";
 
 
         /* --------------------------------------------------------------- */
@@ -92,13 +75,13 @@ namespace BaseballScraper.EndPoints
 
         /* ----->  PLAYER BASE : BUILDING BLOCKS  <----- */
 
-            // PlayerBase/
+            // PLAYER_BASE/
             private string PlayerBaseWriteDirectoryName
             {
-                get => "PlayerBase/";
+                get => "PLAYER_BASE/";
             }
 
-            // BaseballData/02_WRITE/PlayerBase/
+            // BaseballData/02_WRITE/PLAYER_BASE/
             private string PlayerBaseWriteDirectoryRelativePath
             {
                 get => $"{WRITE_DirectoryRelativePath}{PlayerBaseWriteDirectoryName}";
@@ -107,7 +90,7 @@ namespace BaseballScraper.EndPoints
 
         /* ----->  PLAYER BASE : ARCHIVE <----- */
 
-            // BaseballData/02_WRITE/PlayerBase/_archive/
+            // BaseballData/02_WRITE/PLAYER_BASE/_archive/
             public string PlayerBaseWriteArchiveDirectoryRelativePath
             {
                 get => $"{PlayerBaseWriteDirectoryRelativePath}{ARCHIVE_DirectoryName}";
@@ -128,7 +111,7 @@ namespace BaseballScraper.EndPoints
                 get => $"CRUNCH_TIME/";
             }
 
-            // = "BaseballData/02_WRITE/PlayerBase/CRUNCH_TIME/"
+            // = "BaseballData/02_WRITE/PLAYER_BASE/CRUNCH_TIME/"
             public string CrunchTimeWriteDirectoryRelativePath
             {
                 get => $"{PlayerBaseWriteDirectoryRelativePath}{CrunchTimeWriteDirectoryName}";
@@ -146,7 +129,7 @@ namespace BaseballScraper.EndPoints
                 get => $"SFBB/";
             }
 
-            // BaseballData/02_WRITE/PlayerBase/SFBB/
+            // BaseballData/02_WRITE/PLAYER_BASE/SFBB/
             public string SfbbWriteDirectoryRelativePath
             {
                 get => $"{PlayerBaseWriteDirectoryRelativePath}{SfbbWriteDirectoryName}";
@@ -311,54 +294,10 @@ namespace BaseballScraper.EndPoints
 
 
 
-        public class FileManagerMethods
-        {
-            // STATUS [ August 13, 2019 ] : this works
-            // * Appends date string that includes month, day, year to another string
-            // * Helps when downloaded files initially have the same generic name
-            // * This basically makes the file unique for the day it was downloaded
-            // * Example : 08_01_2019
-            public string TodaysDateString()
-            {
-                // _helpers.OpenMethod(1);
-                string dateString = string.Empty;
-                DateTime today    = DateTime.Now;
-
-                string month      = today.Month.ToString(CultureInfo.InvariantCulture);
-                string day        = today.Day.ToString(CultureInfo.InvariantCulture);
-                string year       = today.Year.ToString(CultureInfo.InvariantCulture);
-
-                dateString        = $"{month}_{day}_{year}";
-                return dateString;
-            }
-
-
-            // STATUS [ August 13, 2019 ] : this works
-            // * Appends data string that includes month, day, year, minute, hour, second, to another string
-            // * Helps when downloaded files initially have the same generic name
-            // * This basically makes the file unique for the day it was downloaded
-            public string TodaysDateStringComplex()
-            {
-                // _helpers.OpenMethod(1);
-                string dateString = string.Empty;
-
-                DateTime today    = DateTime.Now;
-                    string todayString = today.ToString(CultureInfo.InvariantCulture);
-                    string month       = today.Month.ToString(CultureInfo.InvariantCulture);
-                    string day         = today.Day.ToString(CultureInfo.InvariantCulture);
-                    string year        = today.Year.ToString(CultureInfo.InvariantCulture);
-                    string minute      = today.Minute.ToString(CultureInfo.InvariantCulture);
-                    string hour        = today.Hour.ToString(CultureInfo.InvariantCulture);
-                    string second      = today.Second.ToString(CultureInfo.InvariantCulture);
-
-                dateString        = $"{month}_{day}_{year}_{hour}_{minute}_{second}";
-                return dateString;
-            }
 
 
 
 
-        }
 
 
 
