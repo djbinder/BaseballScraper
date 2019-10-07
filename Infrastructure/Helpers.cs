@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE0063, IDE0067, IDE1006, MA0016
+#pragma warning disable CC0061, CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE0063, IDE0067, IDE1006, MA0016
 namespace BaseballScraper.Infrastructure
 {
     public class Helpers
@@ -32,7 +32,7 @@ namespace BaseballScraper.Infrastructure
             {
                 if (obj is null)
                     throw new ArgumentNullException(nameof(obj));
-                
+
 
                 if (string.IsNullOrEmpty(str))
                     throw new ArgumentException("message", nameof(str));
@@ -156,7 +156,7 @@ namespace BaseballScraper.Infrastructure
                     methodName = stackTrace.GetFrame(2).GetMethod().Name;
                 }
 
-                catch(Exception ex)
+                catch(ArgumentNullException ex)
                 {
                     methodName = stackTrace.GetFrame(1).GetMethod().Name;
                     Console.WriteLine(ex.Message);

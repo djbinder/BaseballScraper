@@ -4,20 +4,20 @@ using System.Globalization;
 using System.IO;
 using System.Runtime.Serialization.Json;
 using System.Text;
-using BaseballScraper.EndPoints;
-using BaseballScraper.Models.MlbDataApi;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using BaseballScraper.EndPoints;
 using Newtonsoft.Json.Linq;
 using RestSharp;
+using BaseballScraper.Models.MlbDataApi;
 
 
-#pragma warning disable CA2000, CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE0066, IDE0067, IDE0068, IDE1006, MA0016, MA0048
+#pragma warning disable CA2000, CC0021, CC0091, CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE0066, IDE0067, IDE0068, IDE1006, MA0016, MA0048
 namespace BaseballScraper.Infrastructure
 {
     public class ApiInfrastructure
     {
-        private readonly Helpers _h                            = new Helpers();
+        private readonly Helpers _h = new Helpers();
 
         private static readonly MlbDataApiEndPoints _endPoints = new MlbDataApiEndPoints();
 
@@ -25,12 +25,12 @@ namespace BaseballScraper.Infrastructure
         /// <summary> Serialize a given object to a JSON stream (i.e., take a given object and convert it to JSON ) </summary>
         /// <param name="obj"> An object; typically a JObject (not certain how it deals with objects besides JObjects) </param>
         /// <returns></returns>
-        public string ReturnJsonFromObject (Object obj)
+        public string ReturnJsonFromObject (object obj)
         {
             //Create a stream to serialize the object to.
             MemoryStream mS = new MemoryStream();
 
-            var objType = obj.GetType();
+            Type objType = obj.GetType();
             // Console.WriteLine($"ApiSerializer > ReturnJsonFromObject.objType: {objType}");
 
             // Serializer the given object to the stream
@@ -52,7 +52,7 @@ namespace BaseballScraper.Infrastructure
 
         public JObject CreateModelJObject(IRestResponse response)
         {
-            var     responseToJson    = response.Content;
+            string responseToJson    = response.Content;
             JObject responseToJObject = JObject.Parse(responseToJson);
             // Extensions.PrintJObjectItems(responseToJObject);
             return responseToJObject;
@@ -60,6 +60,8 @@ namespace BaseballScraper.Infrastructure
 
 
         /// <summary> Returns a JToken that lists keys/values for player items in PlayerSearch api </summary>
+        /// <param name="obj">todo: describe obj parameter on CreateModelJToken</param>
+        /// <param name="modelType">todo: describe modelType parameter on CreateModelJToken</param>
         /// <returns> A JToken</returns>
         public JToken CreateModelJToken(JObject obj, string modelType)
         {
@@ -68,16 +70,14 @@ namespace BaseballScraper.Infrastructure
             // Console.WriteLine($"CREATING J TOKEN FOR MODEL TYPE: {modelType}");
             // Console.WriteLine();
 
-            JToken modelToken = CreateObjectJTokenFromSwitch(obj, modelType);
-
-            return modelToken;
+            return CreateObjectJTokenFromSwitch(obj, modelType);
         }
 
         // May 22, 2019 status: this works
         // Example: check MlbDataPlayerTeams.GetTeamsforPlayerAllSeasons
         // IMPORTANT: every attribute in the model needs to have the 'DataMember' tag
             // E.g., [DataMember(Name="season_state")]
-        public Object CreateInstanceOfModel (JToken token, Object obj, string modelType)
+        public object CreateInstanceOfModel (JToken token, object obj, string modelType)
         {
             string tokenToString = token.ToString();
 
@@ -85,7 +85,7 @@ namespace BaseballScraper.Infrastructure
 
             DataContractJsonSerializer serializer = new DataContractJsonSerializer(obj.GetType());
 
-            obj = SetTypeToReadObjectAs(obj, memoryStream, serializer, modelType);
+            obj = SetTypeToReadObjectAs(memoryStream, serializer, modelType);
 
             memoryStream.Close();
 
@@ -103,7 +103,7 @@ namespace BaseballScraper.Infrastructure
         // Example: check MlbDataPlayerTeams.GetTeamsforPlayerAllSeasons
         // IMPORTANT: every attribute in the model needs to have the 'DataMember' tag
             // E.g., [DataMember(Name="season_state")]
-        public Object CreateMultipleInstancesOfModelByLooping(JToken token, object obj, string modelType)
+        public object CreateMultipleInstancesOfModelByLooping(JToken token, object obj, string modelType)
         {
             int instance = 1;
 
@@ -115,7 +115,7 @@ namespace BaseballScraper.Infrastructure
 
                 DataContractJsonSerializer serializer = new DataContractJsonSerializer(obj.GetType());
 
-                obj = SetTypeToReadObjectAs(obj, memoryStream, serializer, modelType);
+                obj = SetTypeToReadObjectAs(memoryStream, serializer, modelType);
 
                 memoryStream.Close();
 
@@ -134,7 +134,7 @@ namespace BaseballScraper.Infrastructure
             // var objList = _apI.CreateListWithMultipleInstances(allTeamValuesJToken,pTeam2,ptList2,"PlayerTeam");
             // var firstValue = objList[0] as PlayerTeam;
             // Console.WriteLine(firstValue.OrgFull);
-        public List<dynamic> CreateListWithMultipleInstances(JToken token, Object obj, List<dynamic> objList, string modelType)
+        public List<dynamic> CreateListWithMultipleInstances(JToken token, object obj, List<dynamic> objList, string modelType)
         {
             foreach(var playerObject in token)
             {
@@ -144,7 +144,7 @@ namespace BaseballScraper.Infrastructure
 
                 DataContractJsonSerializer serializer = new DataContractJsonSerializer(obj.GetType());
 
-                obj = SetTypeToReadObjectAs(obj, memoryStream, serializer, modelType);
+                obj = SetTypeToReadObjectAs(memoryStream, serializer, modelType);
 
                 memoryStream.Close();
 
@@ -164,9 +164,9 @@ namespace BaseballScraper.Infrastructure
         }
 
 
-        internal Object SetTypeToReadObjectAs (Object obj, MemoryStream memoryStream, DataContractJsonSerializer serializer, string modelType)
+        internal object SetTypeToReadObjectAs (MemoryStream memoryStream, DataContractJsonSerializer serializer, string modelType)
         {
-            switch(modelType)
+            switch (modelType)
             {
                 case "PlayerSearch":
                     return serializer.ReadObject(memoryStream) as PlayerSearch;
@@ -190,14 +190,16 @@ namespace BaseballScraper.Infrastructure
                     return serializer.ReadObject(memoryStream) as PlayerTeams;
                 case "PlayerTeam":
                     return serializer.ReadObject(memoryStream) as PlayerTeam;
+                default:
+                    break;
             }
-            throw new System.Exception("no model type found");
+            throw new Exception("no model type found");
         }
 
 
         internal JToken CreateObjectJTokenFromSwitch(JObject obj, string tokenName)
         {
-            switch(tokenName)
+            switch (tokenName)
             {
                 case "PlayerSearch":
                     return obj["search_player_all"]["queryResults"]["row"];
@@ -231,8 +233,10 @@ namespace BaseballScraper.Infrastructure
 
                 case "PlayerTeam":
                     return obj["player_teams"]["queryResults"]["row"];
+                default:
+                    break;
             }
-            throw new System.Exception("no api type found");
+            throw new Exception("no api type found");
         }
     }
 

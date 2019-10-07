@@ -37,10 +37,10 @@ namespace BaseballScraper.EndPoints
 
             string activeStatus = "";
 
-            if(currentlyActive == true)
+            if(currentlyActive)
                 activeStatus = "Y";
 
-            if(currentlyActive == false)
+            if(!currentlyActive)
                 activeStatus = "N";
 
             return new MlbDataEndPoint

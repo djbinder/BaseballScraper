@@ -8,9 +8,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using C = System.Console;
 
 
-#pragma warning disable CS0219, CS0414, CS1998, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006, MA0016
+#pragma warning disable CC0068, CC0091, CS0219, CS0414, CS1998, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006, MA0016
 namespace BaseballScraper.Controllers
 {
     [Route("api/twitter/[controller]")]
@@ -97,7 +98,7 @@ namespace BaseballScraper.Controllers
             ///     string fullName = "Anthony Rizzo";
             ///     var taskSearch = await ExecuteTwitterStringSearch(fullName);
             /// </example>
-            public async Task<List<TwitterStatus>> ExecuteTwitterStringSearch (string searchString)
+            public async Task<List<TwitterStatus>> ExecuteTwitterStringSearchAsync (string searchString)
             {
                 SingleUserAuthorizer authorizedUser = AuthorizeTwitterUser();
 
@@ -218,7 +219,7 @@ namespace BaseballScraper.Controllers
             /// <example>
             ///     var taskSearch = await GetListsForUser("mr_baseball");
             /// </example>
-            public async Task<List<List>> GetListsForUser(string userName)
+            public async Task<List<List>> GetListsForUserAsync(string userName)
             {
                 SingleUserAuthorizer authorizedUser = AuthorizeTwitterUser();
                 TwitterContext twitterCtx = new TwitterContext(authorizedUser);
@@ -244,16 +245,17 @@ namespace BaseballScraper.Controllers
 
         #region MONGO DB ------------------------------------------------------------
 
-            // STATUS [ June 25, 2019 ]: this works
-            /// <summary>
-            ///     Add a TwitterStatus to mongoDb
-            /// </summary>
-            [HttpPost]
-            public ActionResult<TwitterStatus> AddTwitterStatusToMongoDb(TwitterStatus twitterStatus)
-            {
-                _mongoDbServicer.Create(twitterStatus);
-                return CreatedAtRoute("GetTwitterStatus", new { id = twitterStatus.Id }, twitterStatus);
-            }
+        // STATUS [ June 25, 2019 ]: this works
+        /// <summary>
+        ///     Add a TwitterStatus to mongoDb
+        /// </summary>
+        /// <param name="twitterStatus">todo: describe twitterStatus parameter on AddTwitterStatusToMongoDb</param>
+    [HttpPost]
+        public ActionResult<TwitterStatus> AddTwitterStatusToMongoDb(TwitterStatus twitterStatus)
+        {
+            _mongoDbServicer.Create(twitterStatus);
+            return CreatedAtRoute("GetTwitterStatus", new { id = twitterStatus.Id }, twitterStatus);
+        }
 
         #endregion MONGO DB ------------------------------------------------------------
 
@@ -263,101 +265,98 @@ namespace BaseballScraper.Controllers
 
         #region PRINTING PRESS ------------------------------------------------------------
 
-            private void PrintTwitterListQueryIds(ulong sinceID, ulong previousMaxID, ulong maxID)
+        private void PrintTwitterListQueryIds(ulong sinceID, ulong previousMaxID, ulong maxID)
+        {
+            C.WriteLine($"sinceID: {sinceID} \tpreviousMaxID: {previousMaxID}\t maxID: {maxID}\n");
+        }
+
+
+        private void PrintLinqToTwitterListInfo(List<List> listItems)
+        {
+            C.WriteLine("---------------------------------------------");
+            C.WriteLine($"USER'S TWITTER LISTS INFO || COUNT: {listItems.Count}");
+            C.WriteLine("---------------------------------------------");
+
+            foreach(var item in listItems)
             {
-                Console.WriteLine($"sinceID: {sinceID} \tpreviousMaxID: {previousMaxID}\t maxID: {maxID}\n");
+                C.WriteLine($"LIST:   {item.FullName}");
+                C.WriteLine($"SLUG:   {item.SlugResponse}");
+                C.WriteLine($"ID:     {item.ListIDResponse}");
+                C.WriteLine($"URI:    {item.Uri}\n");
             }
+            C.WriteLine("---------------------------------------------");
+            C.WriteLine();
+        }
 
 
-            private void PrintLinqToTwitterListInfo(List<List> listItems)
+        private void PrintTwitterStatuses(List<TwitterStatus> statuses)
+        {
+            int xCount = 1;
+            foreach(TwitterStatus item in statuses)
             {
-                Console.WriteLine("---------------------------------------------");
-                Console.WriteLine($"USER'S TWITTER LISTS INFO || COUNT: {listItems.Count}");
-                Console.WriteLine("---------------------------------------------");
+                C.WriteLine();
+                _helpers.Spotlight($"# {xCount}");
+                C.WriteLine("-------------------------------------------------------");
+                C.WriteLine($"SCREEN NAME         | {item.ScreenName}");
+                C.WriteLine($"STATUS TYPE         | {item.StatusType}");
+                C.WriteLine($"USER ID             | {item.UserId}");
+                C.WriteLine($"CREATED @           | {item.CreatedAt}");
+                C.WriteLine($"STATUS ID STRING    | {item.StatusIdString}");
+                C.WriteLine($"TWEET               | {item.Text}");
+                C.WriteLine("-------------------------------------------------------");
+                C.WriteLine();
 
-                foreach(var item in listItems)
-                {
-                    Console.WriteLine($"LIST:   {item.FullName}");
-                    Console.WriteLine($"SLUG:   {item.SlugResponse}");
-                    Console.WriteLine($"ID:     {item.ListIDResponse}");
-                    Console.WriteLine($"URI:    {item.Uri}\n");
-                }
-                Console.WriteLine("---------------------------------------------");
-                Console.WriteLine();
+                xCount++;
             }
+        }
 
 
-            private void PrintTwitterStatuses(List<TwitterStatus> statuses)
+        private void PrintLinqToTwitterUserAndLinqToTwitterSearch(Search search)
+        {
+            search.Statuses.ForEach(tweet =>
+                C.WriteLine($"User: {tweet.User.ScreenNameResponse}, Tweet: {tweet.Text}"));
+        }
+
+
+        public void PrintLinqToTwitterUserInfo(User user)
+        {
+            C.WriteLine("-----USER-----");
+            C.WriteLine($"ScreenNameResponse: {user.ScreenNameResponse}");
+            C.WriteLine($"BannerSizes: {user.BannerSizes}");
+            C.WriteLine($"Categories: {user.Categories}");
+            C.WriteLine($"Email: {user.Email}");
+            C.WriteLine($"Location: {user.Location}");
+            C.WriteLine($"Name: {user.Name}");
+            C.WriteLine($"ScreenName: {user.ScreenName}");
+            C.WriteLine($"ScreenNameList: {user.ScreenNameList}");
+            C.WriteLine($"Type: {user.Type}");
+            C.WriteLine($"UserIDResponse: {user.UserIDResponse}");
+            C.WriteLine($"UserIdList: {user.UserIdList}");
+        }
+
+
+        private void PrintLinqToTwitterStatus(Status Status)
+        {
+            C.WriteLine($"@{Status.User.Name} | {Status.CreatedAt} | [{Status.StatusID}]");
+            C.WriteLine(Status.Text);
+            C.WriteLine();
+        }
+
+
+        private void PrintListOfLinqToTwitterStatuses(List<Status> listOfStatuses)
+        {
+            C.WriteLine("---------------------------------------------");
+            C.WriteLine($"TWEETS || COUNT: {listOfStatuses.Count}");
+            C.WriteLine("---------------------------------------------");
+            int counter = 1;
+            foreach(var status in listOfStatuses)
             {
-                int xCount = 1;
-                foreach(TwitterStatus item in statuses)
-                {
-                    Console.WriteLine();
-                    _helpers.Spotlight($"# {xCount}");
-                    Console.WriteLine("-------------------------------------------------------");
-                    Console.WriteLine($"SCREEN NAME         | {item.ScreenName}");
-                    Console.WriteLine($"STATUS TYPE         | {item.StatusType}");
-                    Console.WriteLine($"USER ID             | {item.UserId}");
-                    Console.WriteLine($"CREATED @           | {item.CreatedAt}");
-                    Console.WriteLine($"STATUS ID STRING    | {item.StatusIdString}");
-                    Console.WriteLine($"TWEET               | {item.Text}");
-                    Console.WriteLine("-------------------------------------------------------");
-                    Console.WriteLine();
-
-                    xCount++;
-                }
+                C.WriteLine($"# {counter}");
+                PrintLinqToTwitterStatus(status);
+                C.WriteLine();
+                counter++;
             }
-
-
-            private void PrintLinqToTwitterUserAndLinqToTwitterSearch(Search search)
-            {
-                search.Statuses.ForEach(tweet =>
-                    Console.WriteLine(
-                        "User: {0}, Tweet: {1}",
-                        tweet.User.ScreenNameResponse, tweet.Text)
-                    );
-            }
-
-
-            public void PrintLinqToTwitterUserInfo(User user)
-            {
-                Console.WriteLine("-----USER-----");
-                Console.WriteLine($"ScreenNameResponse: {user.ScreenNameResponse}");
-                Console.WriteLine($"BannerSizes: {user.BannerSizes}");
-                Console.WriteLine($"Categories: {user.Categories}");
-                Console.WriteLine($"Email: {user.Email}");
-                Console.WriteLine($"Location: {user.Location}");
-                Console.WriteLine($"Name: {user.Name}");
-                Console.WriteLine($"ScreenName: {user.ScreenName}");
-                Console.WriteLine($"ScreenNameList: {user.ScreenNameList}");
-                Console.WriteLine($"Type: {user.Type}");
-                Console.WriteLine($"UserIDResponse: {user.UserIDResponse}");
-                Console.WriteLine($"UserIdList: {user.UserIdList}");
-            }
-
-
-            private void PrintLinqToTwitterStatus(Status Status)
-            {
-                Console.WriteLine($"@{Status.User.Name} | {Status.CreatedAt} | [{Status.StatusID}]");
-                Console.WriteLine(Status.Text);
-                Console.WriteLine();
-            }
-
-
-            private void PrintListOfLinqToTwitterStatuses(List<Status> listOfStatuses)
-            {
-                Console.WriteLine("---------------------------------------------");
-                Console.WriteLine($"TWEETS || COUNT: {listOfStatuses.Count}");
-                Console.WriteLine("---------------------------------------------");
-                int counter = 1;
-                foreach(var status in listOfStatuses)
-                {
-                    Console.WriteLine($"# {counter}");
-                    PrintLinqToTwitterStatus(status);
-                    Console.WriteLine();
-                    counter++;
-                }
-            }
+        }
 
 
         #endregion PRINTING PRESS ------------------------------------------------------------

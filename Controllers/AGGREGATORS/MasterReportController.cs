@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -8,13 +7,11 @@ using BaseballScraper.Controllers.BaseballSavantControllers;
 using BaseballScraper.Controllers.FanGraphsControllers;
 using BaseballScraper.Controllers.PlayerControllers;
 using BaseballScraper.Infrastructure;
-using BaseballScraper.Models.Player;
 using C = System.Console;
-using BaseballScraper.Models.ConfigurationModels;
-using Microsoft.Extensions.Options;
+using BaseballScraper.EndPoints;
 
 
-#pragma warning disable CS1998, CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE1006
+#pragma warning disable CC0091, CS0162, CS1998, CS0219, CS0414, IDE0035, IDE0044, IDE0052, IDE0059, IDE1006
 namespace BaseballScraper.Controllers.AGGREGATORS
 {
     [Route("master_report")]
@@ -25,22 +22,25 @@ namespace BaseballScraper.Controllers.AGGREGATORS
         private readonly BaseballSavantHitterController _baseballSavantHitterController;
         private readonly BaseballHqHitterController     _hqHitterController;
         private readonly FanGraphsSpController          _fanGraphsSpController;
+        private readonly FileHandler                    _fileHandler;
         private readonly BaseballSavantSpController     _baseballSavantSpController;
         private readonly AirtableManager                _airtableManager;
+        private readonly ProjectDirectoryEndPoints      _projectDirectoryEndPoints;
 
 
 
 
-        public MasterReportController(Helpers helpers, PlayerBaseController playerBaseController, BaseballSavantHitterController baseballSavantHitterController, BaseballHqHitterController hqHitterController, FanGraphsSpController fanGraphsSpController, BaseballSavantSpController baseballSavantSpController, AirtableManager airtableManager)
+        public MasterReportController(Helpers helpers, PlayerBaseController playerBaseController, BaseballSavantHitterController baseballSavantHitterController, BaseballHqHitterController hqHitterController, FanGraphsSpController fanGraphsSpController, FileHandler fileHandler, BaseballSavantSpController baseballSavantSpController, AirtableManager airtableManager, ProjectDirectoryEndPoints projectDirectoryEndPoints)
         {
             _helpers                        = helpers;
             _playerBaseController           = playerBaseController;
             _baseballSavantHitterController = baseballSavantHitterController;
             _hqHitterController             = hqHitterController;
             _fanGraphsSpController          = fanGraphsSpController;
+            _fileHandler                    = fileHandler;
             _baseballSavantSpController     = baseballSavantSpController;
             _airtableManager                = airtableManager;
-
+            _projectDirectoryEndPoints      = projectDirectoryEndPoints;
         }
 
         public MasterReportController(){}
@@ -51,8 +51,8 @@ namespace BaseballScraper.Controllers.AGGREGATORS
         [HttpGet("report_runner_view")]
         public IActionResult GoToReportRunnerPage()
         {
-            _helpers.OpenMethod(1);
-            _helpers.CloseMethod(1);
+            // _helpers.OpenMethod(1);
+            // _helpers.CloseMethod(1);
             return View("ReportRunner");
         }
 
@@ -61,56 +61,43 @@ namespace BaseballScraper.Controllers.AGGREGATORS
             https://127.0.0.1:5001/master_report/full_season
         */
         [HttpPost("full_season")]
-        public async Task<IActionResult> UpdateFullSeasonReports()
+        public async Task<IActionResult> UpdateFullSeasonReportsAsync()
         {
             _helpers.OpenMethod(3);
 
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
 
-
-            // 4) FANGRAPHS | SP | wPDI, mPDI
-            await _fanGraphsSpController.DAILY_REPORT_RUNNER();
-            Mark(4, stopWatch, "FANGRAPH SP");
+            _fileHandler.BuildBaseballDataProjectDirectories();
 
 
-
-
-
-            bool shouldTheseBeRun = false;
-            if(shouldTheseBeRun == true)
+            const bool shouldTheseBeRun = false;
+            if (shouldTheseBeRun)
             {
                 // 1) PLAYER BASES : Sfbb & Crunch Time
-                await _playerBaseController.DAILY_REPORT_RUNNER("A7:AQ2333");
+                await _playerBaseController.DAILY_REPORT_RUNNER(range: "A7:AQ2333");
                 Mark(1, stopWatch, "PLAYER BASE");
 
-
                 // 2) SAVANT | HITTER : X-Stats and Exit Velo
-                _baseballSavantHitterController.DAILY_REPORT_RUNNER(2019, 100);
+                _baseballSavantHitterController.DAILY_REPORT_RUNNER(year: 2019, minAtBats: 100);
                 Mark(2, stopWatch, "BASEBALL SAVANT HITTER");
-
 
                 // 3) HQ | HITTER : YTD & ROS Projections
                 await _hqHitterController.DAILY_REPORT_RUNNER(openRosFileAfterMove: false, openYtdFileAfterMove: false);
                 Mark(3, stopWatch,"HQ HITTER");
 
+                // 4) FANGRAPHS | SP | wPDI, mPDI
+                await _fanGraphsSpController.DAILY_REPORT_RUNNER();
+                Mark(4, stopWatch, "FANGRAPH SP");
 
                 // 5) SAVANT | SP | CSW
                 await _baseballSavantSpController.DAILY_REPORT_RUNNER();
                 Mark(5, stopWatch, "BASEBALL SAVANT PITCHER");
-
-
             }
-
-
-
             stopWatch.Stop();
             _helpers.CompleteMethod();
             return Ok();
         }
-
-
-
 
 
 
@@ -130,29 +117,3 @@ namespace BaseballScraper.Controllers.AGGREGATORS
         #endregion PRINTING PRESS ------------------------------------------------------------
     }
 }
-
-
-
-
-
-
-// #region PLAYER BASE --------------------
-// #endregion PLAYER BASE --------------------
-
-
-
-
-// #region FULL SEASON REPORTS --------------------
-
-// bool runFullSeasonReports = false;
-// if(runFullSeasonReports == true)
-// {
-
-// }
-
-// #endregion FULL SEASON REPORTS --------------------
-
-
-
-// #region SINGLE DAY REPORTS --------------------
-// #endregion SINGLE DAY REPORTS --------------------

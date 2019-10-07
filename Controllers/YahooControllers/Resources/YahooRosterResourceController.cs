@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006, MA0016, MA0051
+#pragma warning disable CC0068, CC0091, CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006, MA0016, MA0051
 namespace BaseballScraper.Controllers.YahooControllers.Resources
 {
     [Route("api/yahoo/[controller]")]
@@ -20,7 +20,7 @@ namespace BaseballScraper.Controllers.YahooControllers.Resources
     public class YahooRosterResourceController : ControllerBase
     {
         private readonly Helpers _h = new Helpers();
-        private static YahooApiEndPoints _endPoints = new YahooApiEndPoints();
+        private static readonly YahooApiEndPoints _endPoints = new YahooApiEndPoints();
         private static YahooApiRequestController _yahooApiRequestController = new YahooApiRequestController();
         private readonly YahooAuthController _yahooAuthController = new YahooAuthController();
         private readonly PlayerBaseController _playerBaseController;
@@ -172,11 +172,7 @@ namespace BaseballScraper.Controllers.YahooControllers.Resources
 
                         for(var i=0; i < eligiblePositionCount; i++)
                         {
-                            if(i == 0)
-                                positionsString = eligiblePositionJArray[i].ToString();
-
-                            else
-                                positionsString = $"{positionsString}, {eligiblePositionJArray[i].ToString()}";
+                            positionsString = i == 0 ? eligiblePositionJArray[i].ToString() : $"{positionsString}, {eligiblePositionJArray[i].ToString()}";
                         }
                         corePlayerInfo.Add(positionsString);
                     }
@@ -205,9 +201,7 @@ namespace BaseballScraper.Controllers.YahooControllers.Resources
 
 
             // STATUS [ June 17, 2019 ] : this works
-            /// <summary>
-            ///     This is the same as the 'AddPlayersForOneRosterToGoogleSheetAsync()' method but for all teams
-            /// </summary>
+            // * This is the same as the 'AddPlayersForOneRosterToGoogleSheetAsync()' method but for all teams
             private async Task AddPlayersForAllLeagueRostersToGoogleSheetAsync(int countOfTeams, string tabName, string gSheetsDocumentName)
             {
                 for(var i = 1; i <= countOfTeams; i++)
@@ -368,8 +362,7 @@ namespace BaseballScraper.Controllers.YahooControllers.Resources
             // STATUS [ June 17, 2019 ] : should work but haven't tested
             private Roster DeserializeRoster(JToken rosterJToken)
             {
-                Roster roster = JsonConvert.DeserializeObject<Roster>(rosterJToken.ToString());
-                return roster;
+                return JsonConvert.DeserializeObject<Roster>(rosterJToken.ToString());
             }
 
 
@@ -403,93 +396,95 @@ namespace BaseballScraper.Controllers.YahooControllers.Resources
         #region YAHOO ROSTER RESOURCE | PLAYERS - PRIMARY METHODS ------------------------------------------------------------
 
 
-            // YAHOO ROSTER RESOURCE | PLAYERS ONLY
-            // STATUS [ June 17, 2019 ] : should work but haven't tested
-            private Player DeserializePlayerByIndex(JToken playerJToken, int playerIndex)
+        // YAHOO ROSTER RESOURCE | PLAYERS ONLY
+        // STATUS [ June 17, 2019 ] : should work but haven't tested
+        private Player DeserializePlayerByIndex(JToken playerJToken, int playerIndex)
+        {
+            Player player = JsonConvert.DeserializeObject<Player>(playerJToken[playerIndex].ToString());
+            return player;
+        }
+
+
+        // YAHOO ROSTER RESOURCE | PLAYERS ONLY
+        // STATUS [ June 17, 2019 ] : should work but haven't tested
+        private Player DeserializePlayer(JToken playerJToken)
+        {
+            Player player = JsonConvert.DeserializeObject<Player>(playerJToken.ToString());
+            return player;
+        }
+
+
+        // YAHOO ROSTER RESOURCE | PLAYERS ONLY
+        // STATUS [ June 17, 2019 ] : this works
+        public JToken CreatePlayersJToken(int teamNumber)
+        {
+            var jToken = CreateYahooRosterResourceJToken(teamNumber);
+            var playersJToken = jToken["roster"]["players"];
+            return playersJToken;
+        }
+
+
+        // YAHOO ROSTER RESOURCE | PLAYERS ONLY
+        // STATUS [ June 17, 2019 ] : should work but haven't tested
+        public JToken CreatePlayerJToken(int teamNumber)
+        {
+            var jToken = CreateYahooRosterResourceJToken(teamNumber);
+            var playerJToken = jToken["roster"]["players"]["player"];
+            return playerJToken;
+        }
+
+
+        // YAHOO ROSTER RESOURCE | PLAYERS ONLY
+        // STATUS [ June 13, 2019 ] : this works
+        /// <summary>
+        ///     Create list of Players on one manager's roster
+        /// </summary>
+        /// <param name="teamNumber">todo: describe teamNumber parameter on CreateListOfPlayersOnRoster</param>
+        /// <example>
+        ///     var rosterResourceToken = CreateRosterResourceJToken(6);
+        ///     var listOfPlayers = CreateListOfPlayersOnRoster(rosterResourceToken);
+        /// </example>
+        public List<Player> CreateListOfPlayersOnRoster(int teamNumber)
+        {
+            JToken playersJToken = CreatePlayersJToken(teamNumber);
+            var playersArray = playersJToken["player"];
+
+            var newPlayer = new Player();
+            var listOfPlayers = new List<Player>();
+
+            foreach(var player in playersArray)
             {
-                Player player = JsonConvert.DeserializeObject<Player>(playerJToken[playerIndex].ToString());
-                return player;
+                    newPlayer = JsonConvert.DeserializeObject<Player>(player.ToString());
+                    listOfPlayers.Add(newPlayer);
             }
+            // PrintPlayerInfoFromList(listOfPlayers);
+            return listOfPlayers;
+        }
 
 
-            // YAHOO ROSTER RESOURCE | PLAYERS ONLY
-            // STATUS [ June 17, 2019 ] : should work but haven't tested
-            private Player DeserializePlayer(JToken playerJToken)
+        // YAHOO ROSTER RESOURCE | PLAYERS ONLY
+        // STATUS [ June 13, 2019 ] : this works
+        /// <summary>
+        ///     Creates list of Players for all managers in league
+        /// </summary>
+        /// <param name="numberOfTeamsInLeague">todo: describe numberOfTeamsInLeague parameter on CreateListOfPlayersAllRosters</param>
+        /// <example>
+        ///     var roster  = CreateListOfPlayersAllRosters(10);
+        /// </example>
+        public List<List<Player>> CreateListOfPlayersAllRosters(int numberOfTeamsInLeague)
+        {
+            var listOfLists = new List<List<Player>>();
+
+            for(var counter = 1; counter <= numberOfTeamsInLeague; counter++)
             {
-                Player player = JsonConvert.DeserializeObject<Player>(playerJToken.ToString());
-                return player;
+                var rosterResourceJObject = CreateRosterResourceJObject(counter);
+                // JToken rosterResourceToken = rosterResourceJObject["fantasy_content"]["team"];
+
+                var listOfPlayers = CreateListOfPlayersOnRoster(counter);
+                listOfLists.Add(listOfPlayers);
             }
-
-
-            // YAHOO ROSTER RESOURCE | PLAYERS ONLY
-            // STATUS [ June 17, 2019 ] : this works
-            public JToken CreatePlayersJToken(int teamNumber)
-            {
-                var jToken = CreateYahooRosterResourceJToken(teamNumber);
-                var playersJToken = jToken["roster"]["players"];
-                return playersJToken;
-            }
-
-
-            // YAHOO ROSTER RESOURCE | PLAYERS ONLY
-            // STATUS [ June 17, 2019 ] : should work but haven't tested
-            public JToken CreatePlayerJToken(int teamNumber)
-            {
-                var jToken = CreateYahooRosterResourceJToken(teamNumber);
-                var playerJToken = jToken["roster"]["players"]["player"];
-                return playerJToken;
-            }
-
-
-            // YAHOO ROSTER RESOURCE | PLAYERS ONLY
-            // STATUS [ June 13, 2019 ] : this works
-            /// <summary>
-            ///     Create list of Players on one manager's roster
-            /// </summary>
-            /// <example>
-            ///     var rosterResourceToken = CreateRosterResourceJToken(6);
-            ///     var listOfPlayers = CreateListOfPlayersOnRoster(rosterResourceToken);
-            /// </example>
-            public List<Player> CreateListOfPlayersOnRoster(int teamNumber)
-            {
-                JToken playersJToken = CreatePlayersJToken(teamNumber);
-                var playersArray = playersJToken["player"];
-
-                var newPlayer = new Player();
-                var listOfPlayers = new List<Player>();
-
-                foreach(var player in playersArray)
-                {
-                     newPlayer = JsonConvert.DeserializeObject<Player>(player.ToString());
-                     listOfPlayers.Add(newPlayer);
-                }
-                // PrintPlayerInfoFromList(listOfPlayers);
-                return listOfPlayers;
-            }
-
-
-            // YAHOO ROSTER RESOURCE | PLAYERS ONLY
-            // STATUS [ June 13, 2019 ] : this works
-            /// <summary>
-            ///     Creates list of Players for all managers in league
-            /// </summary>
-            /// <example>
-            ///     var roster  = CreateListOfPlayersAllRosters(10);
-            /// </example>
-            public List<List<Player>> CreateListOfPlayersAllRosters(int numberOfTeamsInLeague)
-            {
-                var listOfLists = new List<List<Player>>();
-
-                for(var counter = 1; counter <= numberOfTeamsInLeague; counter++)
-                {
-                    var rosterResourceJObject = CreateRosterResourceJObject(counter);
-                    // JToken rosterResourceToken = rosterResourceJObject["fantasy_content"]["team"];
-
-                    var listOfPlayers = CreateListOfPlayersOnRoster(counter);
-                    listOfLists.Add(listOfPlayers);
-                }
-                return listOfLists;
-            }
+            return listOfLists;
+        }
 
 
         #endregion YAHOO ROSTER RESOURCE | PLAYERS - PRIMARY METHODS ------------------------------------------------------------
@@ -507,35 +502,34 @@ namespace BaseballScraper.Controllers.YahooControllers.Resources
         #region YAHOO ROSTER RESOURCE | PLAYER > NAME - PRIMARY METHODS ------------------------------------------------------------
 
 
-            // YAHOO ROSTER RESOURCE | PLAYER NAME ONLY
-            // STATUS [ June 17, 2019 ] : should work but haven't tested
-            private Name DeserializeName(JToken nameJToken)
+        // YAHOO ROSTER RESOURCE | PLAYER NAME ONLY
+        // STATUS [ June 17, 2019 ] : should work but haven't tested
+        private Name DeserializeName(JToken nameJToken)
+        {
+            return JsonConvert.DeserializeObject<Name>(nameJToken.ToString());
+        }
+
+
+        // YAHOO ROSTER RESOURCE | PLAYER NAME ONLY
+        // STATUS [ June 17, 2019 ] : should work but haven't tested
+        public JToken CreateNameJToken(int teamNumber, int playerIndex)
+        {
+            var jObject = CreateRosterResourceJObject(teamNumber);
+            var nameJToken = jObject["roster"]["players"]["player"][playerIndex]["name"];
+            return nameJToken;
+        }
+
+
+        // YAHOO ROSTER RESOURCE | PLAYER NAME ONLY
+        // STATUS [ June 17, 2019 ] : should work but haven't tested
+        public void AddNameValuesToList(Name name, [FromQuery]List<object> list)
+        {
+            foreach(PropertyInfo property in name.GetType().GetProperties())
             {
-                Name name = JsonConvert.DeserializeObject<Name>(nameJToken.ToString());
-                return name;
+                string propertyValue = property.GetValue(name, index: null).ToString();
+                list.Add(propertyValue);
             }
-
-
-            // YAHOO ROSTER RESOURCE | PLAYER NAME ONLY
-            // STATUS [ June 17, 2019 ] : should work but haven't tested
-            public JToken CreateNameJToken(int teamNumber, int playerIndex)
-            {
-                var jObject = CreateRosterResourceJObject(teamNumber);
-                var nameJToken = jObject["roster"]["players"]["player"][playerIndex]["name"];
-                return nameJToken;
-            }
-
-
-            // YAHOO ROSTER RESOURCE | PLAYER NAME ONLY
-            // STATUS [ June 17, 2019 ] : should work but haven't tested
-            public void AddNameValuesToList(Name name, [FromQuery]List<object> list)
-            {
-                foreach(PropertyInfo property in name.GetType().GetProperties())
-                {
-                    string propertyValue = property.GetValue(name, index: null).ToString();
-                    list.Add(propertyValue);
-                }
-            }
+        }
 
 
         #endregion YAHOO ROSTER RESOURCE | PLAYER > NAME - PRIMARY METHODS ------------------------------------------------------------
@@ -553,23 +547,22 @@ namespace BaseballScraper.Controllers.YahooControllers.Resources
         #region YAHOO ROSTER RESOURCE | PLAYER > TEAM LOGO - PRIMARY METHODS ------------------------------------------------------------
 
 
-            // YAHOO ROSTER RESOURCE | PLAYER TEAM LOGO ONLY
-            // STATUS [ June 17, 2019 ] : should work but haven't tested
-            private TeamLogo DeserializeTeamLogo(JToken teamLogoJToken)
-            {
-                TeamLogo teamLogo = JsonConvert.DeserializeObject<TeamLogo>(teamLogoJToken.ToString());
-                return teamLogo;
-            }
+        // YAHOO ROSTER RESOURCE | PLAYER TEAM LOGO ONLY
+        // STATUS [ June 17, 2019 ] : should work but haven't tested
+        private TeamLogo DeserializeTeamLogo(JToken teamLogoJToken)
+        {
+            return JsonConvert.DeserializeObject<TeamLogo>(teamLogoJToken.ToString());
+        }
 
 
-            // YAHOO ROSTER RESOURCE | PLAYER TEAM LOGO ONLY
-            // STATUS [ June 17, 2019 ] : should work but haven't tested
-            public JToken CreateTeamLogoJToken(int teamNumber, int playerIndex)
-            {
-                var jObject = CreateRosterResourceJObject(teamNumber);
-                var teamLogoJToken = jObject["roster"]["players"]["player"][playerIndex]["headshot"];
-                return teamLogoJToken;
-            }
+        // YAHOO ROSTER RESOURCE | PLAYER TEAM LOGO ONLY
+        // STATUS [ June 17, 2019 ] : should work but haven't tested
+        public JToken CreateTeamLogoJToken(int teamNumber, int playerIndex)
+        {
+            var jObject = CreateRosterResourceJObject(teamNumber);
+            var teamLogoJToken = jObject["roster"]["players"]["player"][playerIndex]["headshot"];
+            return teamLogoJToken;
+        }
 
 
         #endregion YAHOO ROSTER RESOURCE | PLAYER > TEAM LOGO - PRIMARY METHODS ------------------------------------------------------------
@@ -625,8 +618,7 @@ namespace BaseballScraper.Controllers.YahooControllers.Resources
             // STATUS [ June 17, 2019 ] : should work but haven't tested
             private EligiblePositions DeserializeEligiblePositions(JToken eligiblePositionsJToken)
             {
-                EligiblePositions eligiblePositions = JsonConvert.DeserializeObject<EligiblePositions>(eligiblePositionsJToken.ToString());
-                return eligiblePositions;
+                return JsonConvert.DeserializeObject<EligiblePositions>(eligiblePositionsJToken.ToString());
             }
 
 
@@ -702,53 +694,55 @@ namespace BaseballScraper.Controllers.YahooControllers.Resources
             }
 
 
-            // YAHOO ROSTER RESOURCE | MANAGERS ONLY
-            // STATUS [ June 13, 2019 ] : this works
-            /// <summary>
-            ///     Create instance of manager for one team in league
-            /// </summary>
-            /// <remarks>
-            ///     This might break if there are co-managers; haven't tested that yet though
-            /// </remarks>
-            /// <example>
-            ///     var managers = GetManagersForRoster(8);
-            /// </example>
-            public Manager GetMangersForRoster(int teamNumber)
+        // YAHOO ROSTER RESOURCE | MANAGERS ONLY
+        // STATUS [ June 13, 2019 ] : this works
+        /// <summary>
+        ///     Create instance of manager for one team in league
+        /// </summary>
+        /// <param name="teamNumber">todo: describe teamNumber parameter on GetMangersForRoster</param>
+        /// <remarks>
+        ///     This might break if there are co-managers; haven't tested that yet though
+        /// </remarks>
+        /// <example>
+        ///     var managers = GetManagersForRoster(8);
+        /// </example>
+        public Manager GetMangersForRoster(int teamNumber)
+        {
+            var rosterResourceJObject = CreateRosterResourceJObject(teamNumber);
+            JToken managersToken = rosterResourceJObject["fantasy_content"]["team"]["managers"]["manager"];
+            string managersTokenString = managersToken.ToString();
+
+            Manager manager = new Manager();
+                manager = JsonConvert.DeserializeObject<Manager>(managersTokenString);
+
+            return manager;
+        }
+
+
+        // YAHOO ROSTER RESOURCE | MANAGERS ONLY
+        // STATUS [ June 13, 2019 ] : this works
+        /// <summary>
+        ///     Create instance of manager all teams in league
+        /// </summary>
+        /// <param name="numberOfTeamsInLeague">todo: describe numberOfTeamsInLeague parameter on CreateListOfManagersForAllRosters</param>
+        /// <remarks>
+        ///     This might break if there are co-managers; haven't tested that yet though
+        /// </remarks>
+        /// <example>
+        ///     var managersList = CreateListOfManagersForAllRosters(10);
+        /// </example>
+        public List<Manager> CreateListOfManagersForAllRosters(int numberOfTeamsInLeague)
+        {
+            var managerList = new List<Manager>();
+            Manager manager = new Manager();
+
+            for(var counter = 1; counter <= numberOfTeamsInLeague; counter++)
             {
-                var rosterResourceJObject = CreateRosterResourceJObject(teamNumber);
-                JToken managersToken = rosterResourceJObject["fantasy_content"]["team"]["managers"]["manager"];
-                string managersTokenString = managersToken.ToString();
-
-                Manager manager = new Manager();
-                    manager = JsonConvert.DeserializeObject<Manager>(managersTokenString);
-
-                return manager;
+                manager = GetMangersForRoster(counter);
+                managerList.Add(manager);
             }
-
-
-            // YAHOO ROSTER RESOURCE | MANAGERS ONLY
-            // STATUS [ June 13, 2019 ] : this works
-            /// <summary>
-            ///     Create instance of manager all teams in league
-            /// </summary>
-            /// <remarks>
-            ///     This might break if there are co-managers; haven't tested that yet though
-            /// </remarks>
-            /// <example>
-            ///     var managersList = CreateListOfManagersForAllRosters(10);
-            /// </example>
-            public List<Manager> CreateListOfManagersForAllRosters(int numberOfTeamsInLeague)
-            {
-                var managerList = new List<Manager>();
-                Manager manager = new Manager();
-
-                for(var counter = 1; counter <= numberOfTeamsInLeague; counter++)
-                {
-                    manager = GetMangersForRoster(counter);
-                    managerList.Add(manager);
-                }
-                return managerList;
-            }
+            return managerList;
+        }
 
 
         #endregion YAHOO ROSTER RESOURCE | MANAGERS - PRIMARY METHODS ------------------------------------------------------------
@@ -760,63 +754,65 @@ namespace BaseballScraper.Controllers.YahooControllers.Resources
         #region YAHOO ROSTER RESOURCE - SUPPORT METHODS | CONNECT TO GOOGLE SHEETS ------------------------------------------------------------
 
 
-            // YAHOO ROSTER RESOURCE | GOOGLE SHEETS HEADERS
-            // STATUS [ June 13, 2019 ] : this works
-            /// <summary>
-            ///     Create a list of headers of all available data in Yahoo Roster Resource json
-            ///     This differs from next method as that method is a refined version of the headers you want
-            /// </summary>
-            /// <example>
-            ///     AddAllPlayerModelPropertiesAsHeadersInGoogleSheet(listOfLists);
-            /// </example>
-            public void AddAllPlayerModelPropertiesAsHeadersInGoogleSheet(List<IList<object>> listOfLists)
+        // YAHOO ROSTER RESOURCE | GOOGLE SHEETS HEADERS
+        // STATUS [ June 13, 2019 ] : this works
+        /// <summary>
+        ///     Create a list of headers of all available data in Yahoo Roster Resource json
+        ///     This differs from next method as that method is a refined version of the headers you want
+        /// </summary>
+        /// <param name="listOfLists">todo: describe listOfLists parameter on AddAllPlayerModelPropertiesAsHeadersInGoogleSheet</param>
+        /// <example>
+        ///     AddAllPlayerModelPropertiesAsHeadersInGoogleSheet(listOfLists);
+        /// </example>
+        public void AddAllPlayerModelPropertiesAsHeadersInGoogleSheet(List<IList<object>> listOfLists)
+        {
+            List<object> headers = new List<object>();
+            Player blankPlayer = new Player();
+            PropertyInfo[] playerProperties = blankPlayer.GetType().GetProperties();
+            foreach(var pProp in playerProperties)
             {
-                List<object> headers = new List<object>();
-                Player blankPlayer = new Player();
-                PropertyInfo[] playerProperties = blankPlayer.GetType().GetProperties();
-                foreach(var pProp in playerProperties)
-                {
-                    // Console.WriteLine(pProp.Name);
-                    // Console.WriteLine(pProp.PropertyType);
-                    // Console.WriteLine();
-                    headers.Add(pProp.Name);
-                }
-                listOfLists.Add(headers);
+                // Console.WriteLine(pProp.Name);
+                // Console.WriteLine(pProp.PropertyType);
+                // Console.WriteLine();
+                headers.Add(pProp.Name);
             }
+            listOfLists.Add(headers);
+        }
 
 
-            // YAHOO ROSTER RESOURCE | GOOGLE SHEETS HEADERS
-            // STATUS [ June 1y, 2019 ] : this works
-            /// <summary>
-            ///     Create a list of selected headers
-            ///     This differs from the previous method as previous method gets you all headers
-            /// </summary>
-            /// <example>
-            ///     AddMostRelevantRosterPropertiesAsHeadersInGoogleSheet(listOfLists);
-            /// </example>
-            public void AddMostRelevantRosterPropertiesAsHeadersInGoogleSheet(List<IList<object>> listOfLists)
+        // YAHOO ROSTER RESOURCE | GOOGLE SHEETS HEADERS
+        // STATUS [ June 1y, 2019 ] : this works
+        /// <summary>
+        ///     Create a list of selected headers
+        ///     This differs from the previous method as previous method gets you all headers
+        /// </summary>
+        /// <param name="listOfLists">todo: describe listOfLists parameter on AddMostRelevantRosterPropertiesAsHeadersInGoogleSheet</param>
+        /// <example>
+        ///     AddMostRelevantRosterPropertiesAsHeadersInGoogleSheet(listOfLists);
+        /// </example>
+        public void AddMostRelevantRosterPropertiesAsHeadersInGoogleSheet(List<IList<object>> listOfLists)
+        {
+            List<object> headers = new List<object>
             {
-                List<object> headers = new List<object>()
-                {
-                    "Team Key",
-                    "Team Id",
-                    "Team",
-                    "Manager Id",
-                    "Manager",
-                    "Player Id",
-                    "Full Name",
-                    "First Name",
-                    "Last Name",
-                    "MLB Team",
-                    "Status",
-                    "Display Position",
-                    "Primary Position",
-                    "Selected Position",
-                    "Eligible Positions",
-                };
+                "Team Key",
+                "Team Id",
+                "Team",
+                "Manager Id",
+                "Manager",
+                "Player Id",
+                "Full Name",
+                "First Name",
+                "Last Name",
+                "MLB Team",
+                "Status",
+                "Display Position",
+                "Primary Position",
+                "Selected Position",
+                "Eligible Positions",
+            };
 
-                listOfLists.Add(headers);
-            }
+            listOfLists.Add(headers);
+        }
 
 
         #endregion YAHOO ROSTER RESOURCE - SUPPORT METHODS | CONNECT TO GOOGLE SHEETS ------------------------------------------------------------

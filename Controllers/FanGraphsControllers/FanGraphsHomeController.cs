@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using BaseballScraper.Infrastructure;
@@ -19,7 +20,7 @@ namespace BaseballScraper.Controllers.FanGraphs
     {
         private readonly Helpers _helpers;
 
-        public FanGraphsHomeController(Helpers helpers) 
+        public FanGraphsHomeController(Helpers helpers)
         {
             _helpers = helpers;
         }
@@ -39,7 +40,7 @@ namespace BaseballScraper.Controllers.FanGraphs
             _helpers.StartMethod();
 
             // original
-            string initialUrl = "https://www.fangraphs.com/leaders.aspx?pos=all&stats=bat&lg=all&qual=y&type=8&season=2018&month=0&season1=2018&ind=0&page=1_50";
+            const string initialUrl = "https://www.fangraphs.com/leaders.aspx?pos=all&stats=bat&lg=all&qual=y&type=8&season=2018&month=0&season1=2018&ind=0&page=1_50";
 
             return initialUrl;
         }
@@ -84,11 +85,11 @@ namespace BaseballScraper.Controllers.FanGraphs
 
             for (int i = 1; i <= numOfPagesToScrape; i++)
             {
-                var baseOfUrlToScrape = "https://www.fangraphs.com/leaders.aspx?pos=all&stats=bat&lg=all&qual=y&type=8&season=2018&month=0&season1=2018&ind=0&page=";
+                const string baseOfUrlToScrape = "https://www.fangraphs.com/leaders.aspx?pos=all&stats=bat&lg=all&qual=y&type=8&season=2018&month=0&season1=2018&ind=0&page=";
 
                 int pageNumber = i;
 
-                string numOfRecordsListedOnPage = "_50";
+                const string numOfRecordsListedOnPage = "_50";
 
                 string urlToScrape = $"{baseOfUrlToScrape}{i}{numOfRecordsListedOnPage}";
 
@@ -134,8 +135,8 @@ namespace BaseballScraper.Controllers.FanGraphs
                     // * This can be gotten from Chrome
                     // * Right-click 'Inspect', view the html for the table
                     // * Right-click on any item(in this case a row) and select Copy > tableBodyXpath
-                    string preForRows  = "//*[@id='LeaderBoard1_dg1_ctl00__";
-                    string postForRows = "']";
+                    const string preForRows = "//*[@id='LeaderBoard1_dg1_ctl00__";
+                    const string postForRows = "']";
 
                     // 52 for first page; 13 for last page
                     int tbNodeChildCount = tableBodyNode.ChildNodes.Count;
@@ -156,11 +157,11 @@ namespace BaseballScraper.Controllers.FanGraphs
 
                             //  e.g. --->   12Manny Machado- - -101440245066710.9 %12.5 %.252.310.311.384.563.393152-0.526.3-3.23.9
                             string preForData  = $"{trForEachPlayer}/td[";
-                            string postForData = "]";
+                            const string postForData = "]";
 
                             List<string> playerItems = new List<string> ();
 
-                            int numberOfColumns = 22;
+                            const int numberOfColumns = 22;
                             int keyCount        = 1;
 
                             for (int j = 1; j <= numberOfColumns; j++)
@@ -176,7 +177,7 @@ namespace BaseballScraper.Controllers.FanGraphs
                                 {
                                     try
                                     {
-                                        string postPost = "/a";
+                                        const string postPost = "/a";
 
                                         // NAME AND TEAM X-PATHS ---> //*[@id='LeaderBoard1_dg1_ctl00__11']/td[2]/a
                                         string nameAndTeamTableBodyXpaths = $"{tdForEachPlayer}{postPost}";
@@ -192,11 +193,12 @@ namespace BaseballScraper.Controllers.FanGraphs
                                         }
                                     }
 
-                                    catch
+                                    catch (Exception ex)
                                     {
-                                        _helpers.Spotlight ("NAME or TEAM is broken");
-                                        string cellIsBlank = "";
-                                        playerItems.Add (cellIsBlank);
+                                        Debug.WriteLine(ex);
+                                        _helpers.Spotlight("NAME or TEAM is broken");
+                                        const string cellIsBlank = "";
+                                        playerItems.Add(cellIsBlank);
                                     }
                                 }
 

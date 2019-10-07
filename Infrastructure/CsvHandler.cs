@@ -14,7 +14,7 @@ using PuppeteerSharp;
 using C = System.Console;
 
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE0063, IDE0067, IDE1006, MA0004, MA0016
+#pragma warning disable CC0068, CC0091, CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE0063, IDE0067, IDE1006, MA0004, MA0016
 namespace BaseballScraper.Infrastructure
 {
     public class CsvHandler
@@ -42,189 +42,191 @@ namespace BaseballScraper.Infrastructure
 
         #region AUTOMATED CSV DOWNLOAD ------------------------------------------------------------
 
-            // STATUS [ July 25, 2019 ] : this works
-            // Go to Url, click link where CSV is located, CSV downloads
-            // * Not sure if this works for any website I would want but it works with FanGraphs CSVs
-            // * It sleeps at the end to give the file time to save to local downloads folder
-            // See: https://www.c-sharpcorner.com/blogs/how-to-get-the-latest-file-from-a-folder-by-using-c-sharp
-            // See: https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/file-system/how-to-get-information-about-files-folders-and-drives
-            public async Task ClickLinkToDownloadCsvFile(string url, string csvLinkCssSelector)
-            {
-                _helpers.OpenMethod(3);
-                var options = new LaunchOptions { Headless = false };
-                await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultRevision);
+        // STATUS [ July 25, 2019 ] : this works
+        // Go to Url, click link where CSV is located, CSV downloads
+        // * Not sure if this works for any website I would want but it works with FanGraphs CSVs
+        // * It sleeps at the end to give the file time to save to local downloads folder
+        // See: https://www.c-sharpcorner.com/blogs/how-to-get-the-latest-file-from-a-folder-by-using-c-sharp
+        // See: https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/file-system/how-to-get-information-about-files-folders-and-drives
+        public async Task ClickLinkToDownloadCsvFileAsync(string url, string csvLinkCssSelector)
+        {
+            _helpers.OpenMethod(3);
+            LaunchOptions options = new LaunchOptions { Headless = false };
+            await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultRevision);
 
-                using (var browser = await Puppeteer.LaunchAsync(options))
-                using (var page    = await browser.NewPageAsync())
-                {
-                    await page.GoToAsync(url, 1000000);
-                    await page.WaitForSelectorAsync(csvLinkCssSelector);
-                    await page.ClickAsync(csvLinkCssSelector);
-                    // Thread.Sleep(5000);
-                    await Task.Delay(5000);
-                }
+            using (Browser browser = await Puppeteer.LaunchAsync(options))
+            using (Page page       = await browser.NewPageAsync())
+            {
+                await page.GoToAsync(url, 1000000);
+                await page.WaitForSelectorAsync(csvLinkCssSelector);
+                await page.ClickAsync(csvLinkCssSelector);
+                // Thread.Sleep(5000);
+                await Task.Delay(5000);
             }
+        }
 
 
-            // STATUS [ July 25, 2019 ] : this works
-            // * Find last updated file on folder
-            // * Move a file from one folder to another on local machine
-            // * Rename file when it is moved by appending a date string with year, month, day
-            public void MoveCsvFileToFolder(string currentFilePath, string filePathToSaveCsv, string reportType, int month = 0, int year = 0, int day = 0)
+        // STATUS [ July 25, 2019 ] : this works
+        // * Find last updated file on folder
+        // * Move a file from one folder to another on local machine
+        // * Rename file when it is moved by appending a date string with year, month, day
+        public void MoveCsvFileToFolder(string currentFilePath, string filePathToSaveCsv, string reportType, int month = 0, int year = 0, int day = 0)
+        {
+            _helpers.OpenMethod(1);
+            string fileName      = string.Empty;
+            string targetPath    = filePathToSaveCsv;
+
+            if (Directory.Exists(currentFilePath))
             {
-                _helpers.OpenMethod(1);
-                string fileName      = string.Empty;
-                string targetPath    = filePathToSaveCsv;
+                FileInfo[] fileInfo         = new DirectoryInfo(currentFilePath).GetFiles();
+                DateTime lastUpdated = DateTime.MinValue;
 
-                if (Directory.Exists(currentFilePath))
+                foreach(FileInfo file in fileInfo)
                 {
-                    var fileInfo         = new DirectoryInfo(currentFilePath).GetFiles();
-                    DateTime lastUpdated = DateTime.MinValue;
-
-                    foreach(FileInfo file in fileInfo)
+                    if(file.LastWriteTime > lastUpdated)
                     {
-                        if(file.LastWriteTime > lastUpdated)
-                        {
-                            lastUpdated = file.LastWriteTime;
-                            fileName = file.Name;
-                        }
-                    }
-
-                    DateTime today = DateTime.Now;
-                    if(year  == 0) { year  = today.Year;  }
-                    if(month == 0) { month = today.Month; }
-                    if(day   == 0) { day   = today.Day;   }
-
-                    string sourceFile = Path.Combine(currentFilePath, fileName);
-                    fileName          = $"{reportType}_{month}_{day}_{year}.csv";
-                    string destFile   = Path.Combine(targetPath, fileName);
-
-                    File.Copy(sourceFile, destFile, overwrite: true);
-                }
-                else
-                {
-                    C.WriteLine("Source path does not exist!");
-                }
-            }
-
-
-            // STATUS [ August 13, 2019 ] : this works
-            public string GetPathToLastUpdatedFileInFolder(string folderPath)
-            {
-                _helpers.OpenMethod(1);
-                string fileName = string.Empty;
-                if (Directory.Exists(folderPath))
-                {
-                    var fileInfo = new DirectoryInfo(folderPath).GetFiles();
-                    DateTime lastUpdated = DateTime.MinValue;
-
-                    DateTime createTime = new DateTime();
-                    DateTime lastAccessTime = new DateTime();
-
-                    foreach(FileInfo file in fileInfo)
-                    {
-                        createTime = file.CreationTime;
-                        lastAccessTime = file.LastAccessTime;
-
-                        if(file.LastAccessTime > lastUpdated)
-                        {
-                            lastUpdated = file.LastAccessTime;
-                            fileName = file.Name;
-                        }
-                    }
-                }
-                string filePath = Path.Combine(folderPath, fileName);
-                return filePath;
-            }
-
-
-            /// <summary></summary>
-            public void MoveMultipleFiles(string sourceDirectoryPath, string destinationDirectoryPath)
-            {
-                _helpers.OpenMethod(1);
-                int countFilesMoved = 1;
-
-                if(Directory.Exists(sourceDirectoryPath))
-                {
-                    var fileInfo = new DirectoryInfo(sourceDirectoryPath).GetFiles();
-
-                    foreach(FileInfo file in fileInfo)
-                    {
-                        string fileName = file.Name;
-
-                        var sourceDirectoryPathAndFileName = $"{sourceDirectoryPath}{fileName}";
-                        var destinationDirectoryPathAndFileName = $"{destinationDirectoryPath}{fileName}";
-
-                        if(File.Exists(destinationDirectoryPathAndFileName))
-                        {
-                            C.WriteLine("File Exists. Replacing File");
-                            string backupFileName = $"{destinationDirectoryPathAndFileName}_";
-                            File.Replace(
-                                sourceDirectoryPathAndFileName,
-                                destinationDirectoryPathAndFileName,
-                                backupFileName
-                            );
-                        }
-
-                        else
-                        {
-                            C.WriteLine("File does NOT exist. Moving File");
-                            File.Move(
-                                sourceDirectoryPathAndFileName,
-                                destinationDirectoryPathAndFileName
-                            );
-                        }
-
-                        countFilesMoved++;
+                        lastUpdated = file.LastWriteTime;
+                        fileName = file.Name;
                     }
                 }
 
-                else
+                DateTime today = DateTime.Now;
+                if(year  == 0) { year  = today.Year;  }
+                if(month == 0) { month = today.Month; }
+                if(day   == 0) { day   = today.Day;   }
+
+                string sourceFile = Path.Combine(currentFilePath, fileName);
+                fileName          = $"{reportType}_{month}_{day}_{year}.csv";
+                string destFile   = Path.Combine(targetPath, fileName);
+
+                File.Copy(sourceFile, destFile, overwrite: true);
+            }
+            else
+            {
+                C.WriteLine("Source path does not exist!");
+            }
+        }
+
+
+        // STATUS [ August 13, 2019 ] : this works
+        public string GetPathToLastUpdatedFileInFolder(string folderPath)
+        {
+            _helpers.OpenMethod(1);
+            string fileName = string.Empty;
+            if (Directory.Exists(folderPath))
+            {
+                var fileInfo = new DirectoryInfo(folderPath).GetFiles();
+                DateTime lastUpdated = DateTime.MinValue;
+
+                DateTime createTime = new DateTime();
+                DateTime lastAccessTime = new DateTime();
+
+                foreach(FileInfo file in fileInfo)
                 {
-                    C.WriteLine("File Path Does Not Exist. Creating Path: ");
-                    C.WriteLine(sourceDirectoryPath);
-                    Directory.CreateDirectory(sourceDirectoryPath);
+                    createTime = file.CreationTime;
+                    lastAccessTime = file.LastAccessTime;
+
+                    if(file.LastAccessTime > lastUpdated)
+                    {
+                        lastUpdated = file.LastAccessTime;
+                        fileName = file.Name;
+                    }
                 }
-                C.WriteLine($"\nMOVED {countFilesMoved} FILES\n");
             }
+            string filePath = Path.Combine(folderPath, fileName);
+            return filePath;
+        }
 
 
-            // STATUS [ August 13, 2019 ] : this works
-            public string FindFileInFolder(string fileName, string folderPath)
+        /// <summary></summary>
+        /// <param name="sourceDirectoryPath">todo: describe sourceDirectoryPath parameter on MoveMultipleFiles</param>
+        /// <param name="destinationDirectoryPath">todo: describe destinationDirectoryPath parameter on MoveMultipleFiles</param>
+        public void MoveMultipleFiles(string sourceDirectoryPath, string destinationDirectoryPath)
+        {
+            _helpers.OpenMethod(1);
+            int countFilesMoved = 1;
+
+            if(Directory.Exists(sourceDirectoryPath))
             {
-                _helpers.OpenMethod(1);
-                string filePath = string.Empty;
-                if (Directory.Exists(folderPath))
-                    filePath = Path.Combine(folderPath, fileName);
+                FileInfo[] fileInfo = new DirectoryInfo(sourceDirectoryPath).GetFiles();
 
-                return filePath;
+                foreach(FileInfo file in fileInfo)
+                {
+                    string fileName = file.Name;
+
+                    string sourceDirectoryPathAndFileName = $"{sourceDirectoryPath}{fileName}";
+                    string destinationDirectoryPathAndFileName = $"{destinationDirectoryPath}{fileName}";
+
+                    if(File.Exists(destinationDirectoryPathAndFileName))
+                    {
+                        C.WriteLine("File Exists. Replacing File");
+                        string backupFileName = $"{destinationDirectoryPathAndFileName}_";
+                        File.Replace(
+                            sourceDirectoryPathAndFileName,
+                            destinationDirectoryPathAndFileName,
+                            backupFileName
+                        );
+                    }
+
+                    else
+                    {
+                        C.WriteLine("File does NOT exist. Moving File");
+                        File.Move(
+                            sourceDirectoryPathAndFileName,
+                            destinationDirectoryPathAndFileName
+                        );
+                    }
+                    countFilesMoved++;
+                }
             }
 
-            // STATUS [ August 13, 2019 ] : this works
-            public void MoveFile(string fullSourceFilePath, string fullDestinationFilePath)
+            else
             {
-                _helpers.OpenMethod(1);
-                File.Move(fullSourceFilePath, fullDestinationFilePath);
+                C.WriteLine("File Path Does Not Exist. Creating Path: ");
+                C.WriteLine(sourceDirectoryPath);
+                Directory.CreateDirectory(sourceDirectoryPath);
             }
-
-            // STATUS [ August 13, 2019 ] : this works
-            public void ReplaceFile(string fullSourceFilePath, string fullDestinationFilePath, string backupFileName)
-            {
-                _helpers.OpenMethod(1);
-                File.Replace(fullSourceFilePath, fullDestinationFilePath, backupFileName);
-            }
+            C.WriteLine($"\nMOVED {countFilesMoved} FILES\n");
+        }
 
 
-            public bool CheckIfFileExists(string filePath)
-            {
-                _helpers.OpenMethod(1);
-                bool doesFileExist = false;
+        // STATUS [ August 13, 2019 ] : this works
+        public string FindFileInFolder(string fileName, string folderPath)
+        {
+            _helpers.OpenMethod(1);
+            string filePath = string.Empty;
+            if (Directory.Exists(folderPath))
+                filePath = Path.Combine(folderPath, fileName);
 
-                if(File.Exists(filePath))
-                    doesFileExist = true;
+            return filePath;
+        }
 
-                return doesFileExist;
-            }
+        // STATUS [ August 13, 2019 ] : this works
+        public void MoveFile(string fullSourceFilePath, string fullDestinationFilePath)
+        {
+            _helpers.OpenMethod(1);
+            File.Move(fullSourceFilePath, fullDestinationFilePath);
+        }
+
+        // STATUS [ August 13, 2019 ] : this works
+        public void ReplaceFile(string fullSourceFilePath, string fullDestinationFilePath, string backupFileName)
+        {
+            _helpers.OpenMethod(1);
+            File.Replace(fullSourceFilePath, fullDestinationFilePath, backupFileName);
+        }
+
+
+        // Should be moved to FileHandler
+        public bool CheckIfFileExists(string filePath)
+        {
+            _helpers.OpenMethod(1);
+            bool doesFileExist = false;
+
+            if(File.Exists(filePath))
+                doesFileExist = true;
+
+            return doesFileExist;
+        }
 
 
         #endregion AUTOMATED CSV DOWNLOAD ------------------------------------------------------------
@@ -235,40 +237,40 @@ namespace BaseballScraper.Infrastructure
 
         #region DOWNLOAD CSV ------------------------------------------------------------
 
-            /// <summary>
-            ///     Download remote CSV and save it to local location
-            /// </summary>
-            /// <param name="csvUrl">
-            ///     The full url of where the csv is linked / hosted
-            ///     Download CSV from this url
-            /// </param>
-            /// <param name="fullPathWithFileName">
-            ///     The name of the file that you want to write to
-            ///     Save CSV to location defined by 'targetFileName'
-            /// </param>
-            /// <example>
-            ///     DownloadCsvFromLink("http://crunchtimebaseball.com/master.csv", "BaseballData/PlayerBase/CrunchtimePlayerBaseCsvAutoDownload.csv")
-            /// </example>
-            public void DownloadCsvFromLink(string csvUrl, string fullPathWithFileName)
+        /// <summary>
+        ///     Download remote CSV and save it to local location
+        /// </summary>
+        /// <param name="csvUrl">
+        ///     The full url of where the csv is linked / hosted
+        ///     Download CSV from this url
+        /// </param>
+        /// <param name="fullPathWithFileName">
+        ///     The name of the file that you want to write to
+        ///     Save CSV to location defined by 'targetFileName'
+        /// </param>
+        /// <example>
+        ///     DownloadCsvFromLink("http://crunchtimebaseball.com/master.csv", "BaseballData/PlayerBase/CrunchtimePlayerBaseCsvAutoDownload.csv")
+        /// </example>
+        public void DownloadCsvFromLink(string csvUrl, string fullPathWithFileName)
+        {
+            _helpers.OpenMethod(1);
+            WebClient webClient = new WebClient();
             {
-                _helpers.OpenMethod(1);
-                WebClient webClient = new WebClient();
-                {
-                    webClient.DownloadFile(csvUrl, fullPathWithFileName);
-                }
-                webClient.Dispose();
+                webClient.DownloadFile(csvUrl, fullPathWithFileName);
             }
+            webClient.Dispose();
+        }
 
 
-            private JObject _appSettingsJson = JObject.Parse(File.ReadAllText("Configuration/appsettings.Development.json"));
+        private readonly JObject _appSettingsJson = JObject.Parse(File.ReadAllText("Configuration/appsettings.Development.json"));
 
-            public string LocalDownloadsFolderLocation()
-            {
-                _helpers.OpenMethod(1);
-                var downloadsFolderToken = _appSettingsJson["LocalComputerItems"]["DownloadsFolderLocation"];
-                string downloadsPath     = downloadsFolderToken.ToString();
-                return downloadsPath;
-            }
+        public string LocalDownloadsFolderLocation()
+        {
+            _helpers.OpenMethod(1);
+            JToken downloadsFolderToken = _appSettingsJson["LocalComputerItems"]["DownloadsFolderLocation"];
+            string downloadsPath        = downloadsFolderToken.ToString();
+            return downloadsPath;
+        }
 
         #endregion DOWNLOAD CSV ------------------------------------------------------------
 
@@ -278,264 +280,260 @@ namespace BaseballScraper.Infrastructure
 
         #region READ CSV ------------------------------------------------------------
 
-            // STATUS: this works
-            /// <summary>
-            ///     Reads a csv file, non async
-            /// </summary>
-            /// <param name="csvFilePath"> The location / path of the file that you want to read </param>
-            /// <param name="modelType">  </param>
-            /// <param name="modelMapType"> </param>
-            /// <example> _cH.ReadCsv("BaseballData/Lahman/Teams.csv"); </example>
-            public IEnumerable<dynamic> ReadCsvRecords(string csvFilePath, Type modelType, Type modelMapType)
+        // STATUS: this works
+        /// <summary>
+        ///     Reads a csv file, non async
+        /// </summary>
+        /// <param name="csvFilePath"> The location / path of the file that you want to read </param>
+        /// <param name="modelType">  </param>
+        /// <param name="modelMapType"> </param>
+        /// <example> _cH.ReadCsv("BaseballData/Lahman/Teams.csv"); </example>
+        public IEnumerable<dynamic> ReadCsvRecords(string csvFilePath, Type modelType, Type modelMapType)
+        {
+            _helpers.OpenMethod(1);
+            using(TextReader fileReader = File.OpenText(csvFilePath))
             {
-                _helpers.OpenMethod(1);
-                using(TextReader fileReader = File.OpenText(csvFilePath))
-                {
-                    var csvReader = new CsvReader( fileReader );
+                CsvReader csvReader = new CsvReader( fileReader );
 
-                    RegisterMapForClass(
-                        csvReader,
-                        modelMapType
-                    );
-
-                    csvReader.Read();
-                    csvReader.ReadHeader();
-
-                    IEnumerable<object> records = csvReader.GetRecords(modelType);
-
-                    csvReader.Dispose();
-                    return records;
-                }
-            }
-
-
-            public IList<object> ReadCsvRecordsToList(string csvFilePath, Type modelType, Type modelMapType)
-            {
-                _helpers.OpenMethod(1);
-                using(TextReader fileReader = File.OpenText(csvFilePath))
-                {
-                    var csvReader = new CsvReader( fileReader );
-
-                    RegisterMapForClass(
-                        csvReader,
-                        modelMapType
-                    );
-
-                    csvReader.Configuration.TrimOptions       = TrimOptions.Trim;
-                    csvReader.Configuration.IgnoreBlankLines  = true;
-                    csvReader.Configuration.MissingFieldFound = null;
-
-                    csvReader.Read();
-                    csvReader.ReadHeader();
-
-                    var records = csvReader.GetRecords(modelType).ToList();
-                    csvReader.Dispose();
-                    return records;
-                }
-            }
-
-
-            // STATUS [ August 9, 2019 ] : this works
-            // * Do not read a row in a csv
-            // * Example: var preProcessedRecords = File.ReadLines(csvFileFullPath).Skip(1);
-            public IEnumerable<string> ReadCsvLinesAndSkipRow(string csvFilePath, int skipRowInt)
-            {
-                IEnumerable<string> preProcessedRecords = File.ReadLines(csvFilePath).Skip(skipRowInt);
-                return preProcessedRecords;
-            }
-
-
-            // STATUS [ August 13, 2019 ] : this works BUT needs to be DRYer
-            // * As of right now, used by Baseball Hq Hitter controller
-            // * When downloaded CSV from HQ, the first row isn't the headers we need; headers are in second row
-            // * This method:
-            // *    1) Makes sure files have .csv appendix (makes it idiot proof for me)
-            // *    2) Creates a new file (i.e., appends "_" to original file name)
-            // *    3) Copies all data except the first row
-            // *    4) Pastes copied data to new file (so now headers are in first row)
-            // *    5) Creates list of the object from csv
-            // *    6) When reading records, ignores last row of data in csv (it's a disclaimer added by bb hq)
-            public IList<object> ReadCsvRecordsToList(string csvFolderPath, string csvFileName, Type modelType, Type modelMapType, bool headersAreInFirstRow)
-            {
-                _helpers.OpenMethod(1);
-                string csvFileFullPath      = string.Empty;
-                string newCsvFileName       = string.Empty;
-                string fileLocationFullPath = $"{csvFolderPath}{csvFileName}";
-
-                /*  STEPS 1 & 2 */
-                if(fileLocationFullPath.Contains("csv", StringComparison.Ordinal))
-                {
-                    csvFileFullPath = $"{csvFolderPath}{csvFileName}";
-                    newCsvFileName  = $"_{csvFileName}";
-                }
-
-                string updatedPath = $"{csvFolderPath}{newCsvFileName}";
-
-                /*  STEP 3  */
-                IEnumerable<string> preProcessedRecords = File.ReadLines(csvFileFullPath).Skip(1);
-
-                /*  STEP 4  */
-                WriteValuesAcrossRows(
-                    updatedPath,
-                    preProcessedRecords
+                RegisterMapForClass(
+                    csvReader,
+                    modelMapType
                 );
 
-                /*  STEP 5  */
-                using(TextReader fileReader = File.OpenText(updatedPath))
-                {
-                    var csvReader = new CsvReader( fileReader );
-                    RegisterMapForClass(
-                        csvReader,
-                        modelMapType
-                    );
+                csvReader.Read();
+                csvReader.ReadHeader();
 
-                    /*  STEP 6  */
-                    csvReader.Configuration.ShouldSkipRecord = row =>
-                    {
-                        return row[0].StartsWith("(", StringComparison.Ordinal);
-                    };
+                IEnumerable<object> records = csvReader.GetRecords(modelType);
 
-                    csvReader.Read();
-                    csvReader.ReadHeader();
-
-                    var records = csvReader.GetRecords(modelType).ToList();
-                    csvReader.Dispose();
-                    return records;
-                }
-            }
-
-
-            // _h.EnumerateOverRecordsDynamic(records);
-            public JObject ReadCsvRecordsToJObject(string csvFilePath, Type modelType, Type modelMapType)
-            {
-                _helpers.OpenMethod(1);
-                using(TextReader fileReader = File.OpenText(csvFilePath))
-                {
-                    var csvReader = new CsvReader( fileReader );
-
-                    RegisterMapForClass(
-                        csvReader,
-                        modelMapType
-                    );
-
-                    csvReader.Read();
-                    csvReader.ReadHeader();
-
-                    var records      = csvReader.GetRecords(modelType).ToList();
-
-                    JObject jObject = new JObject
-                    {
-                        ["rows"] = JToken.FromObject(records),
-                    };
-
-                    csvReader.Dispose();
-
-                    return jObject;
-                }
-            }
-
-
-            // STATUS: this works
-            /// <summary>
-            ///     Reads a csv file, async
-            /// </summary>
-            /// <remarks>
-            ///     This does not enumerate over the records
-            /// </remarks>
-            /// <param name="csvFilePath">
-            ///     The location / path of the file that you want to read
-            /// </param>
-            /// <param name="modelType">
-            ///     The Lahman class / model that is in the csv file
-            /// </param>
-            /// <param name="modelMapType">
-            ///     The map of the Lahman class / model that is in the csv file
-            /// </param>
-            /// <example>
-            ///     await _cH.ReadCsvRecordsAsync(filePath, typeof(LahmanPeople), typeof(LahmanPeopleMap));
-            /// </example>
-            public async Task<IEnumerable<dynamic>> ReadCsvRecordsAsync(string csvFilePath, Type modelType, Type modelMapType)
-            {
-                _helpers.OpenMethod(3);
-
-                using(TextReader fileReader = File.OpenText(csvFilePath))
-                {
-                    CsvReader csvReader = new CsvReader( fileReader );
-
-                    RegisterMapForClass(
-                        csvReader,
-                        modelMapType
-                    );
-
-                    csvReader.Configuration.DetectColumnCountChanges = true;
-
-                    await csvReader.ReadAsync();
-                    csvReader.ReadHeader();
-
-                    // RECORDS type --> CsvHelper.CsvReader+<GetRecords>d__65
-                    records = csvReader.GetRecords(modelType);
-                    csvReader.Dispose();
-                }
+                csvReader.Dispose();
                 return records;
             }
+        }
 
 
-            public async Task<IEnumerable<object>> ReadCsvRecordsAsyncToList(string csvFilePath, Type modelType, Type modelMapType, List<object> list)
+        public IList<object> ReadCsvRecordsToList(string csvFilePath, Type modelType, Type modelMapType)
+        {
+            _helpers.OpenMethod(1);
+            using(TextReader fileReader = File.OpenText(csvFilePath))
             {
-                _helpers.OpenMethod(3);
-                bool doesFileExist = CheckIfFileExists(csvFilePath);
+                CsvReader csvReader = new CsvReader( fileReader );
 
-                PrintPathModelMap(csvFilePath, doesFileExist, modelType, modelMapType);
+                RegisterMapForClass(
+                    csvReader,
+                    modelMapType
+                );
 
-                using(TextReader fileReader = File.OpenText(csvFilePath))
-                {
-                    CsvReader csvReader = new CsvReader( fileReader );
+                csvReader.Configuration.TrimOptions       = TrimOptions.Trim;
+                csvReader.Configuration.IgnoreBlankLines  = true;
+                csvReader.Configuration.MissingFieldFound = null;
 
-                    RegisterMapForClass(
-                        csvReader,
-                        modelMapType
-                    );
+                csvReader.Read();
+                csvReader.ReadHeader();
 
-                    csvReader.Configuration.DetectColumnCountChanges = true;
-
-                    await csvReader.ReadAsync();
-                    csvReader.ReadHeader();
-
-                    // RECORDS type --> CsvHelper.CsvReader+<GetRecords>d__65
-                    records = csvReader.GetRecords(modelType);
-
-                    int counter = 1;
-                    foreach(var record in records)
-                    {
-                        // C.WriteLine(record);
-                        list.Add(record);
-                        counter++;
-                    }
-                    csvReader.Dispose();
-                    // C.WriteLine($"COUNTER: {counter}");
-                }
+                List<object> records = csvReader.GetRecords(modelType).ToList();
+                csvReader.Dispose();
                 return records;
             }
+        }
 
 
-            // STATUS: this works
-            /// <summary>
-            ///     Register the map for the class within a csv you are trying read
-            /// </summary>
-            /// <remarks>
-            ///     This is required any type you want to use a model map
-            /// </remarks>
-            /// <param name="csvReader">
-            ///     A reader reading a csv file
-            /// </param>
-            /// <param name="modelType">
-            ///     The class / model that is in the csv file
-            /// </param>
-            public void RegisterMapForClass(CsvReader csvReader, Type modelType)
+        // STATUS [ August 9, 2019 ] : this works
+        // * Do not read a row in a csv
+        // * Example: var preProcessedRecords = File.ReadLines(csvFileFullPath).Skip(1);
+        public static IEnumerable<string> ReadCsvLinesAndSkipRow(string csvFilePath, int skipRowInt)
+        {
+            return File.ReadLines(csvFilePath).Skip(skipRowInt);
+        }
+
+
+        // STATUS [ August 13, 2019 ] : this works BUT needs to be DRYer
+        // * As of right now, used by Baseball Hq Hitter controller
+        // * When downloaded CSV from HQ, the first row isn't the headers we need; headers are in second row
+        // * This method:
+        // *    1) Makes sure files have .csv appendix (makes it idiot proof for me)
+        // *    2) Creates a new file (i.e., appends "_" to original file name)
+        // *    3) Copies all data except the first row
+        // *    4) Pastes copied data to new file (so now headers are in first row)
+        // *    5) Creates list of the object from csv
+        // *    6) When reading records, ignores last row of data in csv (it's a disclaimer added by bb hq)
+        public IList<object> ReadCsvRecordsToList(string csvFolderPath, string csvFileName, Type modelType, Type modelMapType)
+        {
+            _helpers.OpenMethod(1);
+            string csvFileFullPath      = string.Empty;
+            string newCsvFileName       = string.Empty;
+            string fileLocationFullPath = $"{csvFolderPath}{csvFileName}";
+
+            /*  STEPS 1 & 2 */
+            if(fileLocationFullPath.Contains("csv", StringComparison.Ordinal))
             {
-                // _helpers.OpenMethod(1);
-                var mapClass = csvReader.Configuration.RegisterClassMap(modelType);
+                csvFileFullPath = $"{csvFolderPath}{csvFileName}";
+                newCsvFileName  = $"_{csvFileName}";
             }
+
+            string updatedPath = $"{csvFolderPath}{newCsvFileName}";
+
+            /*  STEP 3  */
+            IEnumerable<string> preProcessedRecords = File.ReadLines(csvFileFullPath).Skip(1);
+
+            /*  STEP 4  */
+            WriteValuesAcrossRows(
+                updatedPath,
+                preProcessedRecords
+            );
+
+            /*  STEP 5  */
+            using(TextReader fileReader = File.OpenText(updatedPath))
+            {
+                CsvReader csvReader = new CsvReader( fileReader );
+                RegisterMapForClass(
+                    csvReader,
+                    modelMapType
+                );
+
+                /*  STEP 6  */
+                csvReader.Configuration.ShouldSkipRecord = row =>
+                {
+                    return row[0].StartsWith("(", StringComparison.Ordinal);
+                };
+
+                csvReader.Read();
+                csvReader.ReadHeader();
+
+                List<object> records = csvReader.GetRecords(modelType).ToList();
+                csvReader.Dispose();
+                return records;
+            }
+        }
+
+
+        public JObject ReadCsvRecordsToJObject(string csvFilePath, Type modelType, Type modelMapType)
+        {
+            _helpers.OpenMethod(1);
+            using(TextReader fileReader = File.OpenText(csvFilePath))
+            {
+                CsvReader csvReader = new CsvReader( fileReader );
+
+                RegisterMapForClass(
+                    csvReader,
+                    modelMapType
+                );
+
+                csvReader.Read();
+                csvReader.ReadHeader();
+
+                List<object> records = csvReader.GetRecords(modelType).ToList();
+
+                JObject jObject = new JObject
+                {
+                    ["rows"] = JToken.FromObject(records),
+                };
+
+                csvReader.Dispose();
+
+                return jObject;
+            }
+        }
+
+
+        // STATUS: this works
+        /// <summary>
+        ///     Reads a csv file, async
+        /// </summary>
+        /// <remarks>
+        ///     This does not enumerate over the records
+        /// </remarks>
+        /// <param name="csvFilePath">
+        ///     The location / path of the file that you want to read
+        /// </param>
+        /// <param name="modelType">
+        ///     The Lahman class / model that is in the csv file
+        /// </param>
+        /// <param name="modelMapType">
+        ///     The map of the Lahman class / model that is in the csv file
+        /// </param>
+        /// <example>
+        ///     await _cH.ReadCsvRecordsAsync(filePath, typeof(LahmanPeople), typeof(LahmanPeopleMap));
+        /// </example>
+        public async Task<IEnumerable<dynamic>> ReadCsvRecordsAsync(string csvFilePath, Type modelType, Type modelMapType)
+        {
+            _helpers.OpenMethod(3);
+
+            using(TextReader fileReader = File.OpenText(csvFilePath))
+            {
+                CsvReader csvReader = new CsvReader( fileReader );
+
+                RegisterMapForClass(
+                    csvReader,
+                    modelMapType
+                );
+
+                csvReader.Configuration.DetectColumnCountChanges = true;
+
+                await csvReader.ReadAsync();
+                csvReader.ReadHeader();
+
+                // RECORDS type --> CsvHelper.CsvReader+<GetRecords>d__65
+                records = csvReader.GetRecords(modelType);
+                csvReader.Dispose();
+            }
+            return records;
+        }
+
+
+        public async Task<IEnumerable<object>> ReadCsvRecordsToListAsync(string csvFilePath, Type modelType, Type modelMapType, List<object> list)
+        {
+            _helpers.OpenMethod(3);
+            bool doesFileExist = CheckIfFileExists(csvFilePath);
+
+            PrintPathModelMap(csvFilePath, doesFileExist, modelType, modelMapType);
+
+            using(TextReader fileReader = File.OpenText(csvFilePath))
+            {
+                CsvReader csvReader = new CsvReader( fileReader );
+
+                RegisterMapForClass(
+                    csvReader,
+                    modelMapType
+                );
+
+                csvReader.Configuration.DetectColumnCountChanges = true;
+
+                await csvReader.ReadAsync();
+                csvReader.ReadHeader();
+
+                // RECORDS type --> CsvHelper.CsvReader+<GetRecords>d__65
+                records = csvReader.GetRecords(modelType);
+
+                int counter = 1;
+                foreach(dynamic record in records)
+                {
+                    list.Add(record);
+                    counter++;
+                }
+                csvReader.Dispose();
+            }
+            return records;
+        }
+
+
+        // STATUS: this works
+        /// <summary>
+        ///     Register the map for the class within a csv you are trying read
+        /// </summary>
+        /// <remarks>
+        ///     This is required any type you want to use a model map
+        /// </remarks>
+        /// <param name="csvReader">
+        ///     A reader reading a csv file
+        /// </param>
+        /// <param name="modelType">
+        ///     The class / model that is in the csv file
+        /// </param>
+        public void RegisterMapForClass(CsvReader csvReader, Type modelType)
+        {
+            // _helpers.OpenMethod(1);
+            ClassMap mapClass = csvReader.Configuration.RegisterClassMap(modelType);
+        }
 
         #endregion READ CSV ------------------------------------------------------------
 
@@ -545,34 +543,34 @@ namespace BaseballScraper.Infrastructure
 
         #region WRITE TO CSV ------------------------------------------------------------
 
-            // STATUS [ August 13, 2019 ] : this works
-            // * Writes records across rows in a CSV
-            // * Each initial data row is one long string; It's comma-delimited but hasn't been split by "," yet
-            // * So data only fills on column to start
-            // * This splits each row by commas and spreads data across columns
-            // * It's basically what Text-to-Columns is in Excel
-            public void WriteValuesAcrossRows(string fullPathOfWriteFile, IEnumerable<string> recordsToWrite)
+        // STATUS [ August 13, 2019 ] : this works
+        // * Writes records across rows in a CSV
+        // * Each initial data row is one long string; It's comma-delimited but hasn't been split by "," yet
+        // * So data only fills on column to start
+        // * This splits each row by commas and spreads data across columns
+        // * It's basically what Text-to-Columns is in Excel
+        public void WriteValuesAcrossRows(string fullPathOfWriteFile, IEnumerable<string> recordsToWrite)
+        {
+            _helpers.OpenMethod(1);
+            using(MemoryStream memoryStream = new MemoryStream())
+            using(StreamWriter streamWriter = new StreamWriter(fullPathOfWriteFile))
+            using(StreamReader streamReader = new StreamReader(memoryStream))
+            using(CsvWriter csvWriter       = new CsvWriter(streamWriter))
             {
-                _helpers.OpenMethod(1);
-                using(var stream = new MemoryStream())
-                using(var writer = new StreamWriter(fullPathOfWriteFile))
-                using(var reader = new StreamReader(stream))
-                using(var csv    = new CsvWriter(writer))
+                List<string> preProcessedRecordsList = recordsToWrite.ToList();
+
+                foreach(string preProcessedRecordString in preProcessedRecordsList)
                 {
-                    var preProcessedRecordsList = recordsToWrite.ToList();
-
-                    foreach(var preProcessedRecordString in preProcessedRecordsList)
-                    {
-                        string[] splitValues = preProcessedRecordString.Split(",");
-                        CleanQuotationMarksFromString(splitValues);
-                        csv.WriteField(splitValues);
-                        csv.NextRecord();
-                    }
-
-                    writer.Flush();
-                    stream.Position = 0;
+                    string[] splitValues = preProcessedRecordString.Split(",");
+                    CleanQuotationMarksFromString(splitValues);
+                    csvWriter.WriteField(splitValues);
+                    csvWriter.NextRecord();
                 }
+
+                streamWriter.Flush();
+                memoryStream.Position = 0;
             }
+        }
 
         #endregion WRITE TO CSV ------------------------------------------------------------
 
@@ -582,77 +580,80 @@ namespace BaseballScraper.Infrastructure
 
         #region CELLS ------------------------------------------------------------
 
-            // STATUS [ July 8, 2019 ] : this works
-            /// <summary>
-            ///     Some cells have % symbol in them; this removes it and just gives the number back
-            ///     e.g., 13.1% becomes 13.1
-            ///     Helper method for: 'CreateFanGraphsHitterInstance(JToken allValuesInRow)' method
-            /// </summary>
-            /// <remarks>
-            ///     See: https://stackoverflow.com/questions/2171615/how-to-convert-percentage-string-to-double
-            /// </remarks>
-            /// <example>
-            ///     int numberOfPagesToScrape = await GetNumberOfPagesToScape(page);
-            /// </example>
-            public decimal ConvertCellWithPercentageSymbolToDecimal(JToken token)
+        // STATUS [ July 8, 2019 ] : this works
+        /// <summary>
+        ///     Some cells have % symbol in them; this removes it and just gives the number back
+        ///     e.g., 13.1% becomes 13.1
+        ///     Helper method for: 'CreateFanGraphsHitterInstance(JToken allValuesInRow)' method
+        /// </summary>
+        /// <param name="token">todo: describe token parameter on ConvertCellWithPercentageSymbolToDecimal</param>
+        /// <remarks>
+        ///     See: https://stackoverflow.com/questions/2171615/how-to-convert-percentage-string-to-double
+        /// </remarks>
+        /// <example>
+        ///     int numberOfPagesToScrape = await GetNumberOfPagesToScape(page);
+        /// </example>
+        public decimal ConvertCellWithPercentageSymbolToDecimal(JToken token)
+        {
+            var dataToConvert = token.ToString().Split('%');
+            var decimalValue = decimal.Parse(dataToConvert[0], NumberStyles.None, CultureInfo.InvariantCulture);
+            return decimalValue;
+        }
+
+        public decimal ConvertCellWithPercentageSymbolToDecimal(string s)
+        {
+            var dataToConvert = s.Split('%');
+            var decimalValue = decimal.Parse(dataToConvert[0], NumberStyles.None, CultureInfo.InvariantCulture);
+            return decimalValue;
+        }
+
+        public double ConvertCellWithPercentageSymbolToDouble(string s)
+        {
+            // _helpers.OpenMethod(1);
+            double doubleValue = 0.00;
+
+            // if the cell has data, parse the data
+            try
             {
-                var dataToConvert = token.ToString().Split('%');
-                var decimalValue = decimal.Parse(dataToConvert[0], NumberStyles.None, CultureInfo.InvariantCulture);
-                return decimalValue;
+                string[] dataToConvert = s.Split('%');
+                // doubleValue = double.Parse(dataToConvert[0], NumberStyles.None, CultureInfo.InvariantCulture);
+                doubleValue = double.Parse(dataToConvert[0]);
             }
 
-            public decimal ConvertCellWithPercentageSymbolToDecimal(string s)
+            // if the cell does not have data, error
+            catch(ArgumentNullException nullException)
             {
-                var dataToConvert = s.Split('%');
-                var decimalValue = decimal.Parse(dataToConvert[0], NumberStyles.None, CultureInfo.InvariantCulture);
-                return decimalValue;
+                C.ForegroundColor = ConsoleColor.Red;
+                C.WriteLine($"\nERROR:");
+                C.ResetColor();
+                C.WriteLine($"Issue converting string to double - likely because no data in csv cell");
+                C.WriteLine($"In: CsvHandler > ConvertCellWithPercentageSymbolToDouble() Method\n");
+                C.WriteLine($"nullException : {nullException}");
             }
+            return doubleValue;
+        }
 
-            public double ConvertCellWithPercentageSymbolToDouble(string s)
+
+        // public double? ParseNullableDouble(string val) => double.TryParse(val, NumberStyles.None, CultureInfo.InvariantCulture, out var i) ? (double?) i : null;
+        // public int? ParseNullableInt(string val) => int.TryParse(val, NumberStyles.None, CultureInfo.InvariantCulture, out var i) ? (int?) i : null;
+
+
+        // STATUS [ August 9, 2019 ] : this works
+        // If text in a cell has quotation marks around a string, this format removes them
+        // * Quotation marks can mess with mapping header rows to model properties
+        public void CleanQuotationMarksFromString(string[] values)
+        {
+            // _helpers.OpenMethod(1);
+            foreach(var value in values)
             {
-                // _helpers.OpenMethod(1);
-                double doubleValue = 0.00;
-
-                // if the cell has data, parse the data
-                try
+                if(value.Contains("\"", StringComparison.Ordinal))
                 {
-                    string[] dataToConvert = s.Split('%');
-                    doubleValue = double.Parse(dataToConvert[0], NumberStyles.None, CultureInfo.InvariantCulture);
-                }
-
-                // if the cell does not have data, error
-                catch
-                {
-                    C.ForegroundColor = ConsoleColor.Red;
-                    C.WriteLine($"\nERROR:");
-                    C.ResetColor();
-                    C.WriteLine($"Issue converting string to double - likely because no data in csv cell");
-                    C.WriteLine($"In: CsvHandler > ConvertCellWithPercentageSymbolToDouble() Method\n");
-                }
-                return doubleValue;
-            }
-
-
-            public double? ParseNullableDouble(string val) => double.TryParse(val, NumberStyles.None, CultureInfo.InvariantCulture, out var i) ? (double?) i : null;
-            public int? ParseNullableInt(string val) => int.TryParse(val, NumberStyles.None, CultureInfo.InvariantCulture, out var i) ? (int?) i : null;
-
-
-            // STATUS [ August 9, 2019 ] : this works
-            // If text in a cell has quotation marks around a string, this format removes them
-            // * Quotation marks can mess with mapping header rows to model properties
-            public void CleanQuotationMarksFromString(string[] values)
-            {
-                // _helpers.OpenMethod(1);
-                foreach(var value in values)
-                {
-                    if(value.Contains("\"", StringComparison.Ordinal))
-                    {
-                        var cleanedValue = value.Replace("\"", "", StringComparison.Ordinal);
-                        var indexOfValue = values.FindIndex(idx => string.Equals(idx, value, StringComparison.Ordinal));
-                        values[indexOfValue] = cleanedValue;
-                    }
+                    var cleanedValue = value.Replace("\"", "", StringComparison.Ordinal);
+                    var indexOfValue = values.FindIndex(idx => string.Equals(idx, value, StringComparison.Ordinal));
+                    values[indexOfValue] = cleanedValue;
                 }
             }
+        }
 
         #endregion CELLS ------------------------------------------------------------
 
@@ -663,63 +664,55 @@ namespace BaseballScraper.Infrastructure
         #region HELPERS ------------------------------------------------------------
 
 
-            // STATUS [ August 13, 2019 ] : this works
-            // * Appends data string that includes month, day, year to another string
-            // * Helps when downloaded files initially have the same generic name
-            // * This basically makes the file unique for the day it was downloaded
-            public string TodaysDateString()
-            {
-                // _helpers.OpenMethod(1);
-                string dateString = string.Empty;
-                DateTime today    = DateTime.Now;
+        // STATUS [ August 13, 2019 ] : this works
+        // * Appends data string that includes month, day, year to another string
+        // * Helps when downloaded files initially have the same generic name
+        // * This basically makes the file unique for the day it was downloaded
+        public string TodaysDateString()
+        {
+            // _helpers.OpenMethod(1);
+            string dateString = string.Empty;
+            DateTime today    = DateTime.Now;
 
-                string month      = today.Month.ToString(CultureInfo.InvariantCulture);
-                string day        = today.Day.ToString(CultureInfo.InvariantCulture);
-                string year       = today.Year.ToString(CultureInfo.InvariantCulture);
+            string month = today.Month.ToString(CultureInfo.InvariantCulture);
+            string day   = today.Day.ToString(CultureInfo.InvariantCulture);
+            string year  = today.Year.ToString(CultureInfo.InvariantCulture);
 
-                dateString        = $"{month}_{day}_{year}";
-                return dateString;
-            }
-
-
-            // // STATUS [ September 1, 2019 ] : moved to FileManagerMethods
-            // // STATUS [ August 13, 2019 ] : this works
-            // // * Appends data string that includes month, day, year, minute, hour, second, to another string
-            // // * Helps when downloaded files initially have the same generic name
-            // // * This basically makes the file unique for the day it was downloaded
-            // public string TodaysDateStringComplex()
-            // {
-            //     // _helpers.OpenMethod(1);
-            //     string dateString = string.Empty;
-
-            //     DateTime today    = DateTime.Now;
-            //         string todayString = today.ToString();
-            //         string month       = today.Month.ToString();
-            //         string day         = today.Day.ToString();
-            //         string year        = today.Year.ToString();
-            //         string minute      = today.Minute.ToString();
-            //         string hour        = today.Hour.ToString();
-            //         string second      = today.Second.ToString();
-
-            //     dateString        = $"{month}_{day}_{year}_{hour}_{minute}_{second}";
-            //     return dateString;
-            // }
+            dateString = $"{month}_{day}_{year}";
+            return dateString;
+        }
 
 
-            // STATUS: this works
-            public string GetFieldNameByIndex(CsvReader csvReader, int indexNumber)
-            {
-                string fieldName = csvReader[indexNumber];
-                return fieldName;
-            }
+        // // STATUS [ September 1, 2019 ] : moved to FileManagerMethods
+        // // STATUS [ August 13, 2019 ] : this works
+        // // * Appends data string that includes month, day, year, minute, hour, second, to another string
+        // // * Helps when downloaded files initially have the same generic name
+        // // * This basically makes the file unique for the day it was downloaded
+        // public string TodaysDateStringComplex()
+        // {
+        //     // _helpers.OpenMethod(1);
+        //     string dateString = string.Empty;
+
+        //     DateTime today    = DateTime.Now;
+        //         string todayString = today.ToString();
+        //         string month       = today.Month.ToString();
+        //         string day         = today.Day.ToString();
+        //         string year        = today.Year.ToString();
+        //         string minute      = today.Minute.ToString();
+        //         string hour        = today.Hour.ToString();
+        //         string second      = today.Second.ToString();
+
+        //     dateString        = $"{month}_{day}_{year}_{hour}_{minute}_{second}";
+        //     return dateString;
+        // }
 
 
-            // STATUS: this works
-            public int GetFieldPosition(CsvReader csvReader, int indexNumber)
-            {
-                var field = csvReader.GetField<int>(indexNumber);
-                return field;
-            }
+        // STATUS: this works
+        public string GetFieldNameByIndex(CsvReader csvReader, int indexNumber) => csvReader[indexNumber];
+
+
+        // STATUS: this works
+        public int GetFieldPosition(CsvReader csvReader, int indexNumber) => csvReader.GetField<int>(indexNumber);
 
         #endregion HELPERS ------------------------------------------------------------
 
@@ -731,24 +724,24 @@ namespace BaseballScraper.Infrastructure
 
         #region PRINTING PRESS ------------------------------------------------------------
 
-            public void PrintPathModelMap(string csvFilePath, bool doesFileExist, Type modelType, Type modelMapType)
-            {
-                C.WriteLine($"\n-------------------------------------------------------------------");
-                _helpers.PrintNameSpaceControllerNameMethodName(typeof(CsvHandler));
-                C.WriteLine($"CSV FILE PATH  : {csvFilePath}");
-                C.WriteLine($"FILE EXISTS?   : {doesFileExist}");
-                C.WriteLine($"MODEL TYPE     : {modelType}");
-                C.WriteLine($"MODEL MAP TYPE : {modelMapType}");
-                C.WriteLine($"-------------------------------------------------------------------\n");
-            }
+        private void PrintPathModelMap(string csvFilePath, bool doesFileExist, Type modelType, Type modelMapType)
+        {
+            C.WriteLine($"\n-------------------------------------------------------------------");
+            _helpers.PrintNameSpaceControllerNameMethodName(typeof(CsvHandler));
+            C.WriteLine($"CSV FILE PATH  : {csvFilePath}");
+            C.WriteLine($"FILE EXISTS?   : {doesFileExist}");
+            C.WriteLine($"MODEL TYPE     : {modelType}");
+            C.WriteLine($"MODEL MAP TYPE : {modelMapType}");
+            C.WriteLine($"-------------------------------------------------------------------\n");
+        }
 
 
-            public void PrintFileInfoDetails(FileInfo file)
-            {
-                C.WriteLine($"\nfileName: {file.FullName}");
-                C.WriteLine($"Last Access: {file.LastAccessTime}");
-                C.WriteLine($"Last Write: {file.LastWriteTime}\n");
-            }
+        private static void PrintFileInfoDetails(FileInfo file)
+        {
+            C.WriteLine($"\nfileName: {file.FullName}");
+            C.WriteLine($"Last Access: {file.LastAccessTime}");
+            C.WriteLine($"Last Write: {file.LastWriteTime}\n");
+        }
 
         #endregion PRINTING PRESS ------------------------------------------------------------
 

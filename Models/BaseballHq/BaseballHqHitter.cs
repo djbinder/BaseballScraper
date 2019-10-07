@@ -65,7 +65,7 @@ namespace BaseballScraper.Models.BaseballHq
     {
         public virtual SfbbPlayerBase SfbbPlayerBase { get; set; }
 
-        [ForeignKey("SfbbPlayerBase")]
+        [ForeignKey(nameof(SfbbPlayerBase))]
         public string IDPLAYER { get; set; }
 
 
@@ -382,7 +382,7 @@ namespace BaseballScraper.Models.BaseballHq
     {
         public virtual SfbbPlayerBase SfbbPlayerBase { get; set; }
 
-        [ForeignKey("SfbbPlayerBase")]
+        [ForeignKey(nameof(SfbbPlayerBase))]
         public string IDPLAYER { get; set; }
 
 

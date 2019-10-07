@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 using System.Runtime.Serialization.Json;
 
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE0063, IDE0067, IDE1006
+#pragma warning disable CC0091, CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE0063, IDE0067, IDE1006
 namespace BaseballScraper.Infrastructure
 {
     public class JsonHandler
@@ -14,7 +14,7 @@ namespace BaseballScraper.Infrastructure
 
         public static readonly string yahooConfigFilePath = "Configuration/yahooConfig.json";
 
-        private YahooConfiguration _yConfig = new YahooConfiguration();
+        private readonly YahooConfiguration _yConfig = new YahooConfiguration();
 
 
 
@@ -24,9 +24,9 @@ namespace BaseballScraper.Infrastructure
 
             // STATUS [ June 6, 2019 ] : this works
             // https://docs.microsoft.com/en-us/dotnet/framework/wcf/feature-details/how-to-serialize-and-deserialize-json-data
-            public void ReadJsonFile(string filePath)
+            public static void ReadJsonFile(string filePath)
             {
-                var configData = JsonConvert.DeserializeObject<YahooConfiguration>(File.ReadAllText(filePath));
+                YahooConfiguration configData = JsonConvert.DeserializeObject<YahooConfiguration>(File.ReadAllText(filePath));
 
                 DataContractJsonSerializer dcJr = new DataContractJsonSerializer(typeof(YahooConfiguration));
 
@@ -43,11 +43,11 @@ namespace BaseballScraper.Infrastructure
 
             // STATUS [ June 6, 2019 ] : this works
             // https://docs.microsoft.com/en-us/dotnet/framework/wcf/feature-details/how-to-serialize-and-deserialize-json-data
-            public void DeserializeTypeInstanceFromJson()
+            public static void DeserializeTypeInstanceFromJson()
             {
                 memoryStream.Position = 0;
                 DataContractJsonSerializer dcJr = new DataContractJsonSerializer(typeof(YahooConfiguration));
-                var configData = (YahooConfiguration)dcJr.ReadObject(memoryStream);
+                YahooConfiguration configData = (YahooConfiguration)dcJr.ReadObject(memoryStream);
                 Console.WriteLine($"\n{configData}");
             }
 
@@ -63,7 +63,7 @@ namespace BaseballScraper.Infrastructure
             // https://www.newtonsoft.com/json/help/html/CustomJsonConverterGeneric.htm
             public object Convert(string jsonFilePath, Type type)
             {
-                var obj = DeserializeJsonFromFileStatic(jsonFilePath, type);
+                object obj = DeserializeJsonFromFileStatic(jsonFilePath, type);
                 return obj;
             }
 
@@ -71,9 +71,9 @@ namespace BaseballScraper.Infrastructure
             // STATUS [ June 6, 2019 ] : this works
             // https://www.newtonsoft.com/json/help/html/SerializeObject.htm
             // NewtonsoftJsonHandlers.SerializeObject(yahooConfigFilePath);
-            public string SerializeObjectToString(string filePath)
+            public static string SerializeObjectToString(string filePath)
             {
-                var data = DeserializeJsonToTypeFromString(filePath);
+                object data = DeserializeJsonToTypeFromString(filePath);
                 string json = JsonConvert.SerializeObject(data, Formatting.Indented);
                 return json;
             }
@@ -82,7 +82,7 @@ namespace BaseballScraper.Infrastructure
             // https://www.newtonsoft.com/json/help/html/DeserializeWithJsonSerializerFromFile.htm
             public static object DeserializeJsonToTypeFromString(string filePath)
             {
-                var configData = JsonConvert.DeserializeObject<YahooConfiguration>(File.ReadAllText(filePath));
+                YahooConfiguration configData = JsonConvert.DeserializeObject<YahooConfiguration>(File.ReadAllText(filePath));
                 return configData;
             }
 
@@ -90,20 +90,20 @@ namespace BaseballScraper.Infrastructure
             // https://www.newtonsoft.com/json/help/html/DeserializeWithJsonSerializerFromFile.htm
             public object DeserializeJsonFromFile(string filePath, Type type)
             {
-                var checkType = type.GetType();
+                Type checkType = type.GetType();
 
                 using(StreamReader file = File.OpenText(filePath))
                 {
                     JsonSerializer serializer = new JsonSerializer();
-                    var obj = serializer.Deserialize(file, type);
-                    var objType = obj.GetType();
+                    object obj = serializer.Deserialize(file, type);
+                    Type objType = obj.GetType();
                     return obj;
                 }
             }
 
             public static object DeserializeJsonFromFileStatic(string filePath, Type type)
             {
-                var checkType = type.GetType();
+                Type checkType = type.GetType();
 
                 using(StreamReader file = File.OpenText(filePath))
                 {

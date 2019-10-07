@@ -65,7 +65,7 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
             for(var teamIndex = 0; teamIndex <= totalSize - 1; teamIndex++)
             {
                 PlayerTeam pTeam  = new PlayerTeam();
-                var pTeamInstance = _apI.CreateInstanceOfModel(allTeamValuesJToken[teamIndex],pTeam,"PlayerTeam") as PlayerTeam;
+                PlayerTeam pTeamInstance = _apI.CreateInstanceOfModel(allTeamValuesJToken[teamIndex],pTeam,"PlayerTeam") as PlayerTeam;
                 ptList.Add(pTeamInstance);
             }
             return ptList;
@@ -112,7 +112,8 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
         // Example: _pT.GetListOfPlayersSeasons("493316");
         public List<int> GetListOfPlayersSeasons (string playerId)
         {
-            var ptList = GetTeamsForPlayerAllSeasons("493316");
+            playerId = "493316";
+            List<PlayerTeam> ptList = GetTeamsForPlayerAllSeasons("493316");
 
             List<int> years = new List<int>();
 

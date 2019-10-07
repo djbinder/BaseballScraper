@@ -20,7 +20,8 @@ namespace BaseballScraper.Models.BaseballSavant
         public string FirstName                      { get; set; }
 
 
-        [ForeignKey("SfbbPlayerBase")]
+        // [ForeignKey("SfbbPlayerBase")]
+        [ForeignKey(nameof(SfbbPlayerBase))]
         public string IDPLAYER { get; set; }
         public virtual SfbbPlayerBase SfbbPlayerBase { get; set; }
 
@@ -75,7 +76,8 @@ namespace BaseballScraper.Models.BaseballSavant
         public string FirstName  { get; set; }
 
 
-        [ForeignKey("SfbbPlayerBase")]
+        // [ForeignKey("SfbbPlayerBase")]
+        [ForeignKey(nameof(SfbbPlayerBase))]
         public string IDPLAYER { get; set; }
         public virtual SfbbPlayerBase SfbbPlayerBase { get; set; }
         public int Attempts                                    { get; set; }

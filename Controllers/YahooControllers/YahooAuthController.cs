@@ -14,8 +14,7 @@ using Newtonsoft.Json.Linq;
 using ObjectPrinter;
 
 
-
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE0063, IDE0067, IDE1006, MA0051
+#pragma warning disable CC0068, CC0091, CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE0063, IDE0067, IDE1006, MA0051
 namespace BaseballScraper.Controllers.YahooControllers
 {
     [Route("api/yahoo/[controller]")]
@@ -30,13 +29,13 @@ namespace BaseballScraper.Controllers.YahooControllers
 
         public static readonly string yahooConfigFilePath = "Configuration/yahooConfig.json";
 
-        private string _accessTokenKey  = "accesstoken";
-        private string _tokenTypeKey    = "tokentype";
-        private string _expiresInKey    = "expiresin";
-        private string _refreshTokenKey = "refreshtoken";
-        private string _yahooguidKey    = "yahooguid";
-        private string _authCodeKey     = "authorizationcode";
-        private string _sessionIdKey    = "sessionid";
+        private readonly string _accessTokenKey  = "accesstoken";
+        private readonly string _tokenTypeKey    = "tokentype";
+        private readonly string _expiresInKey    = "expiresin";
+        private readonly string _refreshTokenKey = "refreshtoken";
+        private readonly string _yahooguidKey    = "yahooguid";
+        private readonly string _authCodeKey     = "authorizationcode";
+        private readonly string _sessionIdKey    = "sessionid";
 
 
 
@@ -57,7 +56,7 @@ namespace BaseballScraper.Controllers.YahooControllers
             _helpers.StartMethod();
             // bool userHasRefreshToken = CheckIfUserHasExistingRefreshToken();
             PrintYahooConfigInfo();
-            var code = GenerateUserAuthorizationCode();
+            _ = GenerateUserAuthorizationCode();
             // ExchangeRefreshTokenForNewAccessTokenJObject();
         }
 
@@ -213,7 +212,7 @@ namespace BaseballScraper.Controllers.YahooControllers
                 }
 
                 // Get response
-                string responseFromServer = "";
+                const string responseFromServer = "";
                 Task<string> responseFromServerTask;
 
                 try
@@ -246,63 +245,63 @@ namespace BaseballScraper.Controllers.YahooControllers
 
             // STATUS [ June 8, 2019 ] : this works
             // STEP 2B: not required. But can be used if you just want to generate the request and not convert to a JObject
-            /// <summary>
-            /// * Generate the HttpWebRequest for authorization
-            /// * This is for brand new users as it calls the 'GenerateUserAuthorizationCode()' method
-            /// * This is applicable to a first time user (i.e., a user w/o a refresh token)
-            /// </summary>
-            private HttpWebRequest CreateYahooAccessTokenRequest()
-            {
-                _helpers.StartMethod();
+            // <summary>
+            // * Generate the HttpWebRequest for authorization
+            // * This is for brand new users as it calls the 'GenerateUserAuthorizationCode()' method
+            // * This is applicable to a first time user (i.e., a user w/o a refresh token)
+            // </summary>
+            // private HttpWebRequest CreateYahooAccessTokenRequest()
+            // {
+            //     _helpers.StartMethod();
 
-                // consumerKey and consumerSecret are unique to each yahoo app; Here, they are called from Secrets/ Config File
-                string consumerKey    = _yahooConfig.ClientId;
-                string consumerSecret = _yahooConfig.ClientSecret;
-                string redirectUri    = _yahooConfig.RedirectUri;
+            //     // consumerKey and consumerSecret are unique to each yahoo app; Here, they are called from Secrets/ Config File
+            //     string consumerKey    = _yahooConfig.ClientId;
+            //     string consumerSecret = _yahooConfig.ClientSecret;
+            //     string redirectUri    = _yahooConfig.RedirectUri;
 
-                // Generates the Authorization Code that is needed for the request
-                var authorizationCodeFromConsole = GenerateUserAuthorizationCode();
+            //     // Generates the Authorization Code that is needed for the request
+            //     var authorizationCodeFromConsole = GenerateUserAuthorizationCode();
 
-                // Exchange authorization code for Access Token by sending Post Request
-                Uri address = new Uri("https://api.login.yahoo.com/oauth2/get_token");
+            //     // Exchange authorization code for Access Token by sending Post Request
+            //     Uri address = new Uri("https://api.login.yahoo.com/oauth2/get_token");
 
-                // Create the web request ___ REQUEST ---> System.Net.HttpWebRequest
-                HttpWebRequest request = WebRequest.Create(address) as HttpWebRequest;
+            //     // Create the web request ___ REQUEST ---> System.Net.HttpWebRequest
+            //     HttpWebRequest request = WebRequest.Create(address) as HttpWebRequest;
 
-                // Set type to POST ---> changes 'Method' of HttpWebRequest to 'POST'
-                request.Method = "POST";
+            //     // Set type to POST ---> changes 'Method' of HttpWebRequest to 'POST'
+            //     request.Method = "POST";
 
-                // changes 'Content Type' of HttpWebRequest to 'application/x-www-form-urlencoded'
-                request.ContentType = "application/x-www-form-urlencoded";
+            //     // changes 'Content Type' of HttpWebRequest to 'application/x-www-form-urlencoded'
+            //     request.ContentType = "application/x-www-form-urlencoded";
 
-                // produces very Base64Encoded version of consumerKey and yahooClientSecrent(it's long string of letters and numbers) ___ HEADER BYTE ---> System.Byte[] ___ e.g., '"ZGoweUpt...etc."'
-                byte[] headerByte = Encoding.UTF8.GetBytes(consumerKey+":"+consumerSecret);
+            //     // produces very Base64Encoded version of consumerKey and yahooClientSecrent(it's long string of letters and numbers) ___ HEADER BYTE ---> System.Byte[] ___ e.g., '"ZGoweUpt...etc."'
+            //     byte[] headerByte = Encoding.UTF8.GetBytes(consumerKey+":"+consumerSecret);
 
-                // converts 'headerByte'; same letters and numbers but new format ___ HEADER STRING ---> System.String ___ e.g., 'ZGoweUpt...etc.'
-                string headerString = Convert.ToBase64String(headerByte);
+            //     // converts 'headerByte'; same letters and numbers but new format ___ HEADER STRING ---> System.String ___ e.g., 'ZGoweUpt...etc.'
+            //     string headerString = Convert.ToBase64String(headerByte);
 
-                // returns two lines
-                // 1) Content-Type: application/x-www-form-urlencoded
-                // 2) 'Authorization: Basic <headerString> ___ e.g., <headerString> = ZGoweUpt...etc.
-                request.Headers["Authorization"] = "Basic " + headerString;
+            //     // returns two lines
+            //     // 1) Content-Type: application/x-www-form-urlencoded
+            //     // 2) 'Authorization: Basic <headerString> ___ e.g., <headerString> = ZGoweUpt...etc.
+            //     request.Headers["Authorization"] = "Basic " + headerString;
 
-                // Create the data we want to send ___ DATA ---> System.Text.StringBuilder ___ 'data' is a concatanated string of all of the data.Append items
-                StringBuilder data = new StringBuilder();
-                    data.Append("?client_id=").Append(consumerKey);
-                    data.Append("&client_secret=").Append(consumerSecret);
-                    data.Append("&redirect_uri=").Append(redirectUri);
-                    data.Append("&code=").Append(authorizationCodeFromConsole);
-                    data.Append("&grant_type=authorization_code");
+            //     // Create the data we want to send ___ DATA ---> System.Text.StringBuilder ___ 'data' is a concatanated string of all of the data.Append items
+            //     StringBuilder data = new StringBuilder();
+            //         data.Append("?client_id=").Append(consumerKey);
+            //         data.Append("&client_secret=").Append(consumerSecret);
+            //         data.Append("&redirect_uri=").Append(redirectUri);
+            //         data.Append("&code=").Append(authorizationCodeFromConsole);
+            //         data.Append("&grant_type=authorization_code");
 
-                // Create a byte array of the data we want to send
-                byte[] byteData = Encoding.UTF8.GetBytes(data.ToString());
+            //     // Create a byte array of the data we want to send
+            //     byte[] byteData = Encoding.UTF8.GetBytes(data.ToString());
 
-                // * Set the content length in the request headers
-                // * Changes 'Content Length' of HttpWebRequest to 218
-                request.ContentLength = byteData.Length;
+            //     // * Set the content length in the request headers
+            //     // * Changes 'Content Length' of HttpWebRequest to 218
+            //     request.ContentLength = byteData.Length;
 
-                return request;
-            }
+            //     return request;
+            // }
 
 
         #endregion AUTHORIZE FIRST TIME USER OF YAHOO APP ------------------------------------------------------------
@@ -328,7 +327,7 @@ namespace BaseballScraper.Controllers.YahooControllers
                 string consumerKey       = _yahooConfig.ClientId;
                 string consumerSecret    = _yahooConfig.ClientSecret;
                 string redirectUri       = _yahooConfig.RedirectUri;
-                string grantType         = "refresh_token";
+                const string grantType         = "refresh_token";
                 string refreshTokenCheck = _yahooConfig.RefreshToken;
                 Console.WriteLine(refreshTokenCheck);
 
@@ -359,7 +358,7 @@ namespace BaseballScraper.Controllers.YahooControllers
                     postStream.WriteAsync(byteData, 0, byteData.Length);
                 }
 
-                string responseFromServer = "";
+                const string responseFromServer = "";
                 Task<string> responseFromServerTask;
 
                 try
@@ -395,7 +394,7 @@ namespace BaseballScraper.Controllers.YahooControllers
                 string consumerKey       = _yahooConfig.ClientId;
                 string consumerSecret    = _yahooConfig.ClientSecret;
                 string redirectUri       = _yahooConfig.RedirectUri;
-                string grantType         = "refresh_token";
+                const string grantType         = "refresh_token";
                 string refreshTokenCheck = _yahooConfig.RefreshToken;
                 // Console.WriteLine(refreshTokenCheck);
 
@@ -424,42 +423,50 @@ namespace BaseballScraper.Controllers.YahooControllers
             }
 
 
-            // STATUS [ June 8, 2019 ] : this works
-            /// <summary>
-            ///     Stringbuilder for:
-            ///     1) ExchangeRefreshTokenForNewAccessTokenJObject()
-            ///     2) ExchangeRefreshTokenForNewAccessToken()
-            /// </summary>
-            private StringBuilder ExchangeRefreshTokenStringbuilder(string consumerKey, string consumerSecret, string redirectUri, string refreshTokenCheck, string grantType)
-            {
-                StringBuilder data = new StringBuilder();
-                    data.Append("?client_id=").Append(consumerKey);
-                    data.Append("&client_secret=").Append(consumerSecret);
-                    data.Append("&redirect_uri=").Append(redirectUri);
-                    data.Append("&refresh_token=").Append(refreshTokenCheck);
-                    data.Append("&grant_type=").Append(grantType);
+        // STATUS [ June 8, 2019 ] : this works
+        /// <summary>
+        ///     Stringbuilder for:
+        ///     1) ExchangeRefreshTokenForNewAccessTokenJObject()
+        ///     2) ExchangeRefreshTokenForNewAccessToken()
+        /// </summary>
+        /// <param name="consumerKey">todo: describe consumerKey parameter on ExchangeRefreshTokenStringbuilder</param>
+        /// <param name="consumerSecret">todo: describe consumerSecret parameter on ExchangeRefreshTokenStringbuilder</param>
+        /// <param name="redirectUri">todo: describe redirectUri parameter on ExchangeRefreshTokenStringbuilder</param>
+        /// <param name="refreshTokenCheck">todo: describe refreshTokenCheck parameter on ExchangeRefreshTokenStringbuilder</param>
+        /// <param name="grantType">todo: describe grantType parameter on ExchangeRefreshTokenStringbuilder</param>
+        private StringBuilder ExchangeRefreshTokenStringbuilder(string consumerKey, string consumerSecret, string redirectUri, string refreshTokenCheck, string grantType)
+        {
+            StringBuilder data = new StringBuilder();
+                data.Append("?client_id=").Append(consumerKey);
+                data.Append("&client_secret=").Append(consumerSecret);
+                data.Append("&redirect_uri=").Append(redirectUri);
+                data.Append("&refresh_token=").Append(refreshTokenCheck);
+                data.Append("&grant_type=").Append(grantType);
 
-                return data;
-            }
+            return data;
+        }
 
 
-            // STATUS [ June 8, 2019 ] : this works
-            /// <summary>
-            ///     Appends multiple things to HttpWebRequest for methods:
-            ///     1) ExchangeRefreshTokenForNewAccessTokenJObject()
-            ///     2) ExchangeRefreshTokenForNewAccessToken()
-            /// </summary>
-            private HttpWebRequest ExchangeRefreshTokenRequestAppender(HttpWebRequest request, string consumerKey, string consumerSecret)
-            {
-                request.Method      = "POST";
-                request.ContentType = "application/x-www-form-urlencoded";
+        // STATUS [ June 8, 2019 ] : this works
+        /// <summary>
+        ///     Appends multiple things to HttpWebRequest for methods:
+        ///     1) ExchangeRefreshTokenForNewAccessTokenJObject()
+        ///     2) ExchangeRefreshTokenForNewAccessToken()
+        /// </summary>
+        /// <param name="request">todo: describe request parameter on ExchangeRefreshTokenRequestAppender</param>
+        /// <param name="consumerKey">todo: describe consumerKey parameter on ExchangeRefreshTokenRequestAppender</param>
+        /// <param name="consumerSecret">todo: describe consumerSecret parameter on ExchangeRefreshTokenRequestAppender</param>
+        private HttpWebRequest ExchangeRefreshTokenRequestAppender(HttpWebRequest request, string consumerKey, string consumerSecret)
+        {
+            request.Method      = "POST";
+            request.ContentType = "application/x-www-form-urlencoded";
 
-                byte[] headerByte   = Encoding.UTF8.GetBytes(consumerKey+":"+consumerSecret);
-                string headerString = Convert.ToBase64String(headerByte);
-                request.Headers["Authorization"] = "Basic " + headerString;
+            byte[] headerByte   = Encoding.UTF8.GetBytes(consumerKey+":"+consumerSecret);
+            string headerString = Convert.ToBase64String(headerByte);
+            request.Headers["Authorization"] = "Basic " + headerString;
 
-                return request;
-            }
+            return request;
+        }
 
 
         #endregion RE-AUTHORIZE EXISTING USER OF YAHOO APP ------------------------------------------------------------
@@ -488,7 +495,7 @@ namespace BaseballScraper.Controllers.YahooControllers
                 // userHasRefreshToken = false;
                 Console.WriteLine($"User has refresh token?: {userHasRefreshToken}");
 
-                if(userHasRefreshToken == false)
+                if(!userHasRefreshToken)
                 {
                     responseToJson = CreateYahooAccessTokenResponseJObject();
                     AccessTokenResponse finalAccessTokenResponse = GenerateYahooAccessTokenResponse(responseToJson);
@@ -496,7 +503,7 @@ namespace BaseballScraper.Controllers.YahooControllers
                     return finalAccessTokenResponse;
                 }
 
-                if(userHasRefreshToken == true)
+                if(userHasRefreshToken)
                 {
                     responseToJson = ExchangeRefreshTokenForNewAccessTokenJObject();
                     AccessTokenResponse finalAccessTokenResponse = GenerateYahooAccessTokenResponse(responseToJson);
@@ -511,31 +518,32 @@ namespace BaseballScraper.Controllers.YahooControllers
             }
 
 
-            // STATUS [ June 8, 2019 ] : this works
-            /// <summary>
-            ///     Receives a JObject, takes that information, and turns it into an AccessTokenResponse
-            ///     Called 2x within:  'GetYahooAccessTokenResponse()'
-            /// </summary>
-            private AccessTokenResponse GenerateYahooAccessTokenResponse (JObject responseToJson)
+        // STATUS [ June 8, 2019 ] : this works
+        /// <summary>
+        ///     Receives a JObject, takes that information, and turns it into an AccessTokenResponse
+        ///     Called 2x within:  'GetYahooAccessTokenResponse()'
+        /// </summary>
+        /// <param name="responseToJson">todo: describe responseToJson parameter on GenerateYahooAccessTokenResponse</param>
+        private AccessTokenResponse GenerateYahooAccessTokenResponse (JObject responseToJson)
+        {
+            AccessTokenResponse newAccessTokenResponse = new AccessTokenResponse
             {
-                AccessTokenResponse newAccessTokenResponse = new AccessTokenResponse()
-                {
-                    // generated / variable: a VERY long string of letters and numbers
-                    AccessToken = responseToJson["access_token"].ToString(),
-                    // constant: bearer
-                    TokenType = responseToJson["token_type"].ToString(),
-                    // constant: 3600
-                    ExpiresIn = responseToJson["expires_in"].ToString(),
-                    // unique: refresh_token
-                    RefreshToken = responseToJson["refresh_token"].ToString(),
-                    // unique to each yahoo user: yahoo guid
-                    XOAuthYahooGuid = responseToJson["xoauth_yahoo_guid"].ToString(),
-                };
+                // generated / variable: a VERY long string of letters and numbers
+                AccessToken = responseToJson["access_token"].ToString(),
+                // constant: bearer
+                TokenType = responseToJson["token_type"].ToString(),
+                // constant: 3600
+                ExpiresIn = responseToJson["expires_in"].ToString(),
+                // unique: refresh_token
+                RefreshToken = responseToJson["refresh_token"].ToString(),
+                // unique to each yahoo user: yahoo guid
+                XOAuthYahooGuid = responseToJson["xoauth_yahoo_guid"].ToString(),
+            };
 
-                // PrintAccessTokenResponseDetails(newAccessTokenResponse);
-                SetSessionAccessTokenItems(newAccessTokenResponse);
-                return newAccessTokenResponse;
-            }
+            // PrintAccessTokenResponseDetails(newAccessTokenResponse);
+            SetSessionAccessTokenItems(newAccessTokenResponse);
+            return newAccessTokenResponse;
+        }
 
 
         #endregion GENERATE ACCESS TOKEN RESPONSE ------------------------------------------------------------
@@ -547,68 +555,64 @@ namespace BaseballScraper.Controllers.YahooControllers
         #region MANAGE SESSION ------------------------------------------------------------
 
 
-            /// <summary>
-            ///     Takes the authorization code and sets it within session
-            ///     This is called within the GenerateUserAuthorizationCode method
-            ///     This method / step is not required
-            /// </summary>
-            public void SetSessionAuthorizationCode(string authorizationCodeFromConsole)
+        /// <summary>
+        ///     Takes the authorization code and sets it within session
+        ///     This is called within the GenerateUserAuthorizationCode method
+        ///     This method / step is not required
+        /// </summary>
+        /// <param name="authorizationCodeFromConsole">todo: describe authorizationCodeFromConsole parameter on SetSessionAuthorizationCode</param>
+        public void SetSessionAuthorizationCode(string authorizationCodeFromConsole)
+        {
+            try
             {
-                // _helpers.StartMethod();
-                var authCodeCheck = "";
-
-                try
-                {
-                    HttpContext.Session.SetString(_authCodeKey, authorizationCodeFromConsole);
-                        authCodeCheck = HttpContext.Session.GetString(_authCodeKey);
-
-                    HttpContext.Session.SetInt32(_sessionIdKey,1);
-                        int? sessionId = HttpContext.Session.GetInt32(_sessionIdKey);
-                }
-                catch(Exception ex)
-                {
-                    // Console.WriteLine("ERROR IN: YahooAuthController.SetSessionAuthorizationCode()");
-                    PrintExceptionMessageInfo(ex);
-                }
+                HttpContext.Session.SetString(_authCodeKey, authorizationCodeFromConsole);
+                string authCodeCheck = HttpContext.Session.GetString(_authCodeKey);
+                HttpContext.Session.SetInt32(_sessionIdKey,1);
+                    int? sessionId = HttpContext.Session.GetInt32(_sessionIdKey);
             }
-
-
-            public void SetSessionAccessTokenItems(AccessTokenResponse newAccessTokenResponse)
+            catch(Exception ex)
             {
-                try
-                {
-                    HttpContext.Session.SetString(_accessTokenKey, newAccessTokenResponse.AccessToken);
-                    HttpContext.Session.SetString(_tokenTypeKey, newAccessTokenResponse.TokenType);
-                    HttpContext.Session.SetString(_expiresInKey, newAccessTokenResponse.ExpiresIn);
-                    HttpContext.Session.SetString(_refreshTokenKey, newAccessTokenResponse.RefreshToken);
-                    HttpContext.Session.SetString(_yahooguidKey, newAccessTokenResponse.XOAuthYahooGuid);
-                }
-                catch
-                {
-                    // Console.WriteLine();
-                    // Console.WriteLine("ERROR IN: YahooAuthController.SetSessionAccessTokenItems()");
-                    // PrintExceptionMessageInfo(ex);
-                }
+                // Console.WriteLine("ERROR IN: YahooAuthController.SetSessionAuthorizationCode()");
+                PrintExceptionMessageInfo(ex);
             }
+        }
 
 
-            public void PersistSession()
+        public void SetSessionAccessTokenItems(AccessTokenResponse newAccessTokenResponse)
+        {
+            try
             {
-                // _helpers.Highlight("### PERSISTING SESSION ###");
-                var authCodeCheck     = HttpContext.Session.GetString(_authCodeKey);
-                var accessTokenCheck  = HttpContext.Session.GetString(_accessTokenKey);
-                var refreshTokenCheck = HttpContext.Session.GetString(_refreshTokenKey);
-                var yahooGuidCheck    = HttpContext.Session.GetString(_yahooguidKey);
-                // var sessionIdCheck    = HttpContext.Session.GetInt32(_sessionIdKey).ToString();
-                int? sessionIdCheck   = HttpContext.Session.GetInt32(_sessionIdKey);
-
-                HttpContext.Session.SetString(_authCodeKey, authCodeCheck);
-                HttpContext.Session.SetString(_accessTokenKey, accessTokenCheck);
-                HttpContext.Session.SetString(_refreshTokenKey, refreshTokenCheck);
-                HttpContext.Session.SetString(_yahooguidKey, yahooGuidCheck);
-                // HttpContext.Session.SetString(_sessionIdKey, sessionIdCheck);
-                HttpContext.Session.SetInt32(_sessionIdKey, (int)sessionIdCheck);
+                HttpContext.Session.SetString(_accessTokenKey, newAccessTokenResponse.AccessToken);
+                HttpContext.Session.SetString(_tokenTypeKey, newAccessTokenResponse.TokenType);
+                HttpContext.Session.SetString(_expiresInKey, newAccessTokenResponse.ExpiresIn);
+                HttpContext.Session.SetString(_refreshTokenKey, newAccessTokenResponse.RefreshToken);
+                HttpContext.Session.SetString(_yahooguidKey, newAccessTokenResponse.XOAuthYahooGuid);
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                throw;
+            }
+        }
+
+
+        public void PersistSession()
+        {
+            // _helpers.Highlight("### PERSISTING SESSION ###");
+            var authCodeCheck     = HttpContext.Session.GetString(_authCodeKey);
+            var accessTokenCheck  = HttpContext.Session.GetString(_accessTokenKey);
+            var refreshTokenCheck = HttpContext.Session.GetString(_refreshTokenKey);
+            var yahooGuidCheck    = HttpContext.Session.GetString(_yahooguidKey);
+            // var sessionIdCheck    = HttpContext.Session.GetInt32(_sessionIdKey).ToString();
+            int? sessionIdCheck   = HttpContext.Session.GetInt32(_sessionIdKey);
+
+            HttpContext.Session.SetString(_authCodeKey, authCodeCheck);
+            HttpContext.Session.SetString(_accessTokenKey, accessTokenCheck);
+            HttpContext.Session.SetString(_refreshTokenKey, refreshTokenCheck);
+            HttpContext.Session.SetString(_yahooguidKey, yahooGuidCheck);
+            // HttpContext.Session.SetString(_sessionIdKey, sessionIdCheck);
+            HttpContext.Session.SetInt32(_sessionIdKey, (int)sessionIdCheck);
+        }
 
 
         #endregion MANAGE SESSION ------------------------------------------------------------
@@ -675,18 +679,18 @@ namespace BaseballScraper.Controllers.YahooControllers
             }
 
 
-            public class RequestFailedException: Exception
-            {
-                HttpResponseMessage Response;
+            // public class RequestFailedException: Exception
+            // {
+            //     readonly HttpResponseMessage Response;
 
-                public RequestFailedException(): base() { }
+            //     public RequestFailedException(): base() { }
 
-                public RequestFailedException(string message): base(message) { }
+            //     public RequestFailedException(string message): base(message) { }
 
-                public RequestFailedException(string message, HttpResponseMessage response): base(message) { Response = response; }
+            //     public RequestFailedException(string message, HttpResponseMessage response): base(message) { Response = response; }
 
-                public RequestFailedException(string message, Exception innerException): base(message, innerException) { }
-            }
+            //     public RequestFailedException(string message, Exception innerException): base(message, innerException) { }
+            // }
 
 
         #endregion PRINTING PRESS ------------------------------------------------------------

@@ -49,7 +49,7 @@ namespace BaseballScraper.Controllers.YahooControllers
             Console.WriteLine($"uriLeagueStandings: {uriLeagueStandings}");
 
             JObject leagueStandings = _yahooApiRequestController.GenerateYahooResourceJObject(uriLeagueStandings);
-            int     teamsInLeague   = 10;
+            const int teamsInLeague = 10;
 
             YahooTeamStanding yS = new YahooTeamStanding();
 

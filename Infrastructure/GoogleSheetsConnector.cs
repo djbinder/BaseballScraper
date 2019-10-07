@@ -13,8 +13,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Reflection;
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE0063, IDE1006, MA0016, MA0045
+#pragma warning disable CC0068, CC0091, CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE0063, IDE1006, MA0016, MA0045
 namespace BaseballScraper.Infrastructure
 {
     // https://medium.com/@williamchislett/writing-to-google-sheets-api-using-net-and-a-services-account-91ee7e4a291
@@ -25,7 +26,7 @@ namespace BaseballScraper.Infrastructure
         private readonly string                   _applicationName = "Baseball Scraper";
         private SheetsService                     _sheetsService;
         private readonly string                   _googleSheetsUrlBase = "https://docs.google.com/spreadsheets/d/";
-        private GoogleSheetConfiguration          _googleSheetConfiguration;
+        private readonly GoogleSheetConfiguration _googleSheetConfiguration;
         private readonly GoogleSheetConfiguration _crunchTimePlayerIdMapConfiguration;
         private readonly GoogleSheetConfiguration _sfbbPlayerIdMapConfiguration;
 
@@ -113,21 +114,21 @@ namespace BaseballScraper.Infrastructure
 
         #region CONNECT TO GOOGLE API ------------------------------------------------------------
 
-            // Add credentials json file to project root folder
-            // Make sure copy to output dir property is set to always copy
+            // * Add credentials json file to project root folder
+            // * Make sure copy to output dir property is set to always copy
             public SheetsService ConnectToGoogle()
             {
                 GoogleCredential credential;
 
                 using (FileStream stream = new FileStream("Configuration/googleCredentials.json",FileMode.Open, FileAccess.Read))
                 {
-                    // credential: Google.Apis.Auth.OAuth2.GoogleCredential+ServiceAccountGoogleCredential
+                    // * Credential: Google.Apis.Auth.OAuth2.GoogleCredential+ServiceAccountGoogleCredential
                     credential = GoogleCredential.FromStream(stream).CreateScoped(_scopes);
                 }
 
-                // Create Google Sheets API service.
-                // Type is Google.Apis.Sheets.v4.SheetsService
-                _sheetsService = new SheetsService(new BaseClientService.Initializer()
+                // * Create Google Sheets API service.
+                // * Type is Google.Apis.Sheets.v4.SheetsService
+                _sheetsService = new SheetsService(new BaseClientService.Initializer
                 {
                     // Type is Google.Apis.Auth.OAuth2.GoogleCredential+ServiceAccountGoogleCredential
                     HttpClientInitializer = credential, ApplicationName = _applicationName,
@@ -167,7 +168,7 @@ namespace BaseballScraper.Infrastructure
             private string MajorDimensionString(MajorDimensionEnum dimension)
             {
                 string dimensionType;
-                switch(dimension)
+                switch (dimension)
                 {
                     case MajorDimensionEnum.ROWS:
                         dimensionType = _rowsMajorDimension;
@@ -176,8 +177,10 @@ namespace BaseballScraper.Infrastructure
                     case MajorDimensionEnum.COLUMNS:
                         dimensionType = _columnsMajorDimension;
                         return dimensionType;
+                    default:
+                        throw new Exception("Unexpected Case");
                 }
-                throw new Exception("GoogleSheetsConnector > MajorDimensionString > ERROR: 'Dimension Enum Type not found'");
+            throw new Exception("GoogleSheetsConnector > MajorDimensionString > ERROR: 'Dimension Enum Type not found'");
             }
 
 
@@ -201,6 +204,10 @@ namespace BaseballScraper.Infrastructure
             // STATUS [ August 3, 2019 ] : this works
             // Pass in your data as a list of a list (2-D lists are equivalent to the 2-D spreadsheet structure)
             // See: https://bit.ly/2MDoleW
+            /// <param name="data">todo: describe data parameter on WriteGoogleSheetRows</param>
+            /// <param name="sheetName">todo: describe sheetName parameter on WriteGoogleSheetRows</param>
+            /// <param name="range">todo: describe range parameter on WriteGoogleSheetRows</param>
+            /// <param name="jsonGroupName">todo: describe jsonGroupName parameter on WriteGoogleSheetRows</param>
             /// <example>
             ///     private static readonly GoogleSheetsConnector _gSC = new GoogleSheetsConnector();
             ///     _gSC.UpdateGoogleSheetRows(listOfLists,"FG_SP_MASTER_IMPORT","A3:DB1000","CoreCalculator");
@@ -254,6 +261,10 @@ namespace BaseballScraper.Infrastructure
 
 
             // STATUS [ August 3, 2019 ] : this works
+            /// <param name="data">todo: describe data parameter on WriteGoogleSheetColumns</param>
+            /// <param name="sheetName">todo: describe sheetName parameter on WriteGoogleSheetColumns</param>
+            /// <param name="range">todo: describe range parameter on WriteGoogleSheetColumns</param>
+            /// <param name="jsonGroupName">todo: describe jsonGroupName parameter on WriteGoogleSheetColumns</param>
             /// <example>
             ///     _gSC.WriteGoogleSheetColumns(listOfLists, "YAHOO_TRENDS","A1:Z1000","CoreCalculator");
             /// </example>
@@ -280,6 +291,10 @@ namespace BaseballScraper.Infrastructure
 
 
             // STATUS [ August 3, 2019 ] : this works
+            /// <param name="data">todo: describe data parameter on WriteGoogleSheetColumnsAsync</param>
+            /// <param name="sheetName">todo: describe sheetName parameter on WriteGoogleSheetColumnsAsync</param>
+            /// <param name="range">todo: describe range parameter on WriteGoogleSheetColumnsAsync</param>
+            /// <param name="jsonGroupName">todo: describe jsonGroupName parameter on WriteGoogleSheetColumnsAsync</param>
             /// <example>
             ///     await _gSC.WriteGoogleSheetColumnsAsync(listOfLists, "YAHOO_TRENDS","A1:Z1000","CoreCalculator");
             /// </example>
@@ -354,7 +369,7 @@ namespace BaseballScraper.Infrastructure
 
                 using (FileStream stream = new FileStream("Configuration/gSheetNames.json",FileMode.Open, FileAccess.Read))
                 {
-                    using(var reader = new StreamReader(stream))
+                    using(StreamReader reader = new StreamReader(stream))
                     {
                         string content     = reader.ReadToEnd();
                         JObject json       = ParseJsonFromConfigurationFile(content);
@@ -370,7 +385,7 @@ namespace BaseballScraper.Infrastructure
 
 
             // STATUS [ August 3, 2019 ] : this works
-            private JObject ParseJsonFromConfigurationFile(string content)
+            private static JObject ParseJsonFromConfigurationFile(string content)
             {
                 // json --> all the data from the json file; shows all first-level and second-level data / key-value pairs
                 // json.Count --> the number of json groups in the file (i.e., the number of first-level json items in the file)
@@ -397,7 +412,7 @@ namespace BaseballScraper.Infrastructure
             //  * "Data within a range of the spreadsheet."
             //  * The new values to apply to the spreadsheet
             //  * See: https://bit.ly/2Zu7fUh
-            private ValueRange SetSheetDataValueRange(string majorDimension, string sheetName, string range, IList<IList<object>> data)
+            private static ValueRange SetSheetDataValueRange(string majorDimension, string sheetName, string range, IList<IList<object>> data)
             {
                 // [ 1 ] MajorDimension
                 //  * Direction to write data; either "ROWS" (i.e., write horizontally) or "COLUMNS" (i.e., write vertically)
@@ -426,7 +441,7 @@ namespace BaseballScraper.Infrastructure
             //  * "Data within a range of the spreadsheet."
             //  * The new values to apply to the spreadsheet
             //  * See: https://bit.ly/2Zu7fUh
-            private List<ValueRange> CreateValueRangeList(ValueRange dataValueRange)
+            private static List<ValueRange> CreateValueRangeList(ValueRange dataValueRange)
             {
                 List<ValueRange> updateData = new List<ValueRange>
                 {
@@ -441,7 +456,7 @@ namespace BaseballScraper.Infrastructure
             // BatchUpdateValuesRequest
             //  * "The request for updating more than one range of values in a spreadsheet."
             //  * See: https://bit.ly/3364meV
-            private BatchUpdateValuesRequest CreateBatchUpdateValuesRequest(string valueInputOption, IList<ValueRange> updateData)
+            private static BatchUpdateValuesRequest CreateBatchUpdateValuesRequest(string valueInputOption, IList<ValueRange> updateData)
             {
                 // ValueInputOption
                 //  * "How the input data should be interpreted."
@@ -479,7 +494,7 @@ namespace BaseballScraper.Infrastructure
             //  * Type is Google.Apis.Sheets.v4.Data.BatchUpdateValuesResponse
             //  * To do this async --> Data.BatchUpdateValuesResponse response = await request.ExecuteAsync();
             //  * See: https://bit.ly/2ZG0VJq
-            private BatchUpdateValuesResponse CreateBatchUpdateValuesResponse(BatchUpdateRequest request)
+            private static BatchUpdateValuesResponse CreateBatchUpdateValuesResponse(BatchUpdateRequest request)
             {
                 BatchUpdateValuesResponse response = request.Execute();
                 return response;
@@ -492,7 +507,7 @@ namespace BaseballScraper.Infrastructure
             //  * Type is Google.Apis.Sheets.v4.Data.BatchUpdateValuesResponse
             //  * To do this async --> Data.BatchUpdateValuesResponse response = await request.ExecuteAsync();
             //  * See: https://bit.ly/2ZG0VJq
-            private async Task<BatchUpdateValuesResponse> CreateBatchUpdateValuesResponseAsync(BatchUpdateRequest request)
+            private async static Task<BatchUpdateValuesResponse> CreateBatchUpdateValuesResponseAsync(BatchUpdateRequest request)
             {
                 BatchUpdateValuesResponse response = await request.ExecuteAsync().ConfigureAwait(false);
                 return response;
@@ -505,7 +520,7 @@ namespace BaseballScraper.Infrastructure
             //  * Each row is also a list itself made up of the actual data within the cells of the row
             //  * allRows.Count = the number of rows with data
             //  * e.g., allRows[0].Count is the number of cells in the first row with data in the cells
-            private IList<IList<object>> CreateListOfAllRowsInSheet(ValueRange valueRange)
+            private static IList<IList<object>> CreateListOfAllRowsInSheet(ValueRange valueRange)
             {
                 IList<IList<object>> allRows = valueRange.Values;
                 return allRows;
@@ -521,7 +536,7 @@ namespace BaseballScraper.Infrastructure
         #region SHEET HEADERS ------------------------------------------------------------
 
 
-            private List<object> CreateListOfSheetHeaders(string[] headerStrings)
+            private static List<object> CreateListOfSheetHeaders(string[] headerStrings)
             {
                 List<object> headers = new List<object>();
                 for(var i = 0; i < headerStrings.Length; i++)
@@ -536,11 +551,11 @@ namespace BaseballScraper.Infrastructure
             // var listFromDatabase = GetMany(season: 2019, minInningsPitched: 100);
             // var firstPitcher = listFromDatabase[0];
             // var listOfProperties = _googleSheetsConnector.GetModelProperties(firstPitcher);
-            public List<object> GetModelProperties<T>(T item)
+            public static List<object> GetModelProperties<T>(T item)
             {
                 List<object> propertyNames = new List<object>();
-                var props = item.GetType().GetProperties();
-                foreach(var prop in props)
+                PropertyInfo[] props = item.GetType().GetProperties();
+                foreach(PropertyInfo prop in props)
                 {
                     propertyNames.Add(prop.Name);
                 }
@@ -557,18 +572,18 @@ namespace BaseballScraper.Infrastructure
                 SheetsService service = ConnectToGoogle();
                 ConditionalFormatRule conditionalFormatRule = new ConditionalFormatRule();
 
-                GradientRule gradientRule = new GradientRule()
+                GradientRule gradientRule = new GradientRule
                 {
-                    Maxpoint = new InterpolationPoint()
+                    Maxpoint = new InterpolationPoint
                     {
                         Color = SelectColor(ColorEnum.Green),
                         Type = "MAX",
                     },
 
-                    Minpoint = new InterpolationPoint()
+                    Minpoint = new InterpolationPoint
                     {
                         Color = SelectColor(ColorEnum.Red),
-                        Type = "MIN",
+                        Type  = "MIN",
                     },
                 };
 
@@ -576,25 +591,25 @@ namespace BaseballScraper.Infrastructure
 
                 int sheetGId = SelectGIdOfSheetToFormat("wPDI", service);
 
-                GridRange gridRange = new GridRange()
+                GridRange gridRange = new GridRange
                 {
-                    SheetId = sheetGId,
-                    StartRowIndex = 5,
-                    EndRowIndex = 50,
+                    SheetId          = sheetGId,
+                    StartRowIndex    = 5,
+                    EndRowIndex      = 50,
                     StartColumnIndex = 8,
-                    EndColumnIndex = 9,
+                    EndColumnIndex   = 9,
                 };
 
                 C.WriteLine($"gridRange: {gridRange.SheetId}");
 
-                var listOfRanges = conditionalFormatRule.Ranges;
-                foreach(var range in listOfRanges)
+                IList<GridRange> listOfRanges = conditionalFormatRule.Ranges;
+                foreach(GridRange range in listOfRanges)
                 {
                     C.WriteLine($"range: {range}");
                 }
 
                 conditionalFormatRule.Ranges.Add(gridRange);
-                foreach(var range in listOfRanges)
+                foreach(GridRange range in listOfRanges)
                 {
                     C.WriteLine($"range: {range}");
                 }
@@ -690,9 +705,9 @@ namespace BaseballScraper.Infrastructure
 
             // STATUS [ August 3, 2019 ] : this works
             // STEP 2: set the format that you want to apply to cells in the sheet
-            private CellFormat SetCellFormat(ColorEnum backgroundColor, string fontFamily, bool? isCellBolded, int fontSize, ColorEnum fontColorEnum)
+            private static CellFormat SetCellFormat(ColorEnum backgroundColor, string fontFamily, bool? isCellBolded, int fontSize, ColorEnum fontColorEnum)
             {
-                CellFormat cellFormat = new CellFormat()
+                return new CellFormat
                 {
                     BackgroundColor = SelectColor(backgroundColor),
                     TextFormat = SetCellTextFormat(
@@ -702,33 +717,31 @@ namespace BaseballScraper.Infrastructure
                         fontColorEnum
                     ),
                 };
-                return cellFormat;
             }
 
 
             // STATUS [ August 3, 2019 ] : this works
             // STEP 2 helper
-            private TextFormat SetCellTextFormat(string fontFamily, bool? isCellBolded, int fontSize, ColorEnum colorEnum)
+            private static TextFormat SetCellTextFormat(string fontFamily, bool? isCellBolded, int fontSize, ColorEnum colorEnum)
             {
-                var TextFormat = new TextFormat()
+                return new TextFormat
                 {
                     Bold       = isCellBolded,
                     FontFamily = fontFamily,
                     FontSize   = fontSize,
                     ForegroundColor = SelectColor(colorEnum),
                 };
-                return TextFormat;
             }
 
 
             // STATUS [ August 3, 2019 ] : this works
             // STEP 3: set the start and end indexes for the rows and columns to be formatted
-            private Request CreateFormatRequest(int sheetId, CellFormat cellFormat, int startColumnIndex, int endColumnIndex, int startRowIndex, int endRowIndex)
+            private static Request CreateFormatRequest(int sheetId, CellFormat cellFormat, int startColumnIndex, int endColumnIndex, int startRowIndex, int endRowIndex)
             {
                 C.WriteLine($"create format request: {sheetId}");
-                var updateCellsRequest = new Request()
+                Request updateCellsRequest = new Request
                 {
-                    RepeatCell = new RepeatCellRequest()
+                    RepeatCell = new RepeatCellRequest
                     {
                         Range = SetRangeToFormat(
                             sheetId,
@@ -738,7 +751,7 @@ namespace BaseballScraper.Infrastructure
                             endRowIndex
                         ),
 
-                        Cell = new CellData()
+                        Cell = new CellData
                         {
                             UserEnteredFormat = cellFormat,
                         },
@@ -751,9 +764,9 @@ namespace BaseballScraper.Infrastructure
 
             // STATUS [ August 3, 2019 ] : this works
             // STEP 3 helper
-            private GridRange SetRangeToFormat(int sheetId, int startColumnIndex, int endColumnIndex, int startRowIndex, int endRowIndex)
+            private static GridRange SetRangeToFormat(int sheetId, int startColumnIndex, int endColumnIndex, int startRowIndex, int endRowIndex)
             {
-                var Range = new GridRange()
+                GridRange Range = new GridRange
                 {
                     SheetId          = sheetId,
                     StartColumnIndex = startColumnIndex,
@@ -802,58 +815,60 @@ namespace BaseballScraper.Infrastructure
 
             // STATUS [ August 3, 2019 ] : this works
             // Switch that works with ColorEnum to set either text or cell color
-            public Color SelectColor(ColorEnum colorEnum)
+            public static Color SelectColor(ColorEnum colorEnum)
             {
-                var color = new Color();
-                switch(colorEnum)
+                Color color = new Color();
+                switch (colorEnum)
                 {
                     case ColorEnum.White:
-                        color.Blue  = 1;
+                        color.Blue = 1;
                         color.Green = 1;
-                        color.Red   = 1;
+                        color.Red = 1;
                         return color;
 
                     case ColorEnum.Black:
-                        color.Blue  = 0;
+                        color.Blue = 0;
                         color.Green = 0;
-                        color.Red   = 0;
+                        color.Red = 0;
                         return color;
 
                     case ColorEnum.Blue:
-                        color.Blue  = 1;
+                        color.Blue = 1;
                         color.Green = 0;
-                        color.Red   = 0;
+                        color.Red = 0;
                         return color;
 
                     case ColorEnum.Red:
-                        color.Blue  = 0;
+                        color.Blue = 0;
                         color.Green = 0;
-                        color.Red   = 1;
+                        color.Red = 1;
                         return color;
 
                     case ColorEnum.Green:
-                        color.Blue  = 0;
+                        color.Blue = 0;
                         color.Green = 1;
-                        color.Red   = 0;
+                        color.Red = 0;
                         return color;
 
                     case ColorEnum.Yellow:
-                        color.Blue  = 0;
+                        color.Blue = 0;
                         color.Green = 1;
-                        color.Red   = (float) 0.5;
+                        color.Red = (float)0.5;
                         return color;
 
                     case ColorEnum.Orange:
-                        color.Blue  = 0;
-                        color.Green = (float) 0.5;
-                        color.Red   = 1;
+                        color.Blue = 0;
+                        color.Green = (float)0.5;
+                        color.Red = 1;
                         return color;
 
                     case ColorEnum.Purple:
-                        color.Blue  = 1;
+                        color.Blue = 1;
                         color.Green = 0;
-                        color.Red   = 1;
+                        color.Red = 1;
                         return color;
+                    default:
+                        break;
                 }
                 throw new Exception("ColorEnum not found");
             }
@@ -868,15 +883,15 @@ namespace BaseballScraper.Infrastructure
         #region CONVERTERS ------------------------------------------------------------
 
 
-            public List<object> ConvertListOfAnyTypeToObjectType<T>(List<T> listOfAnyType)
+            public static List<object> ConvertListOfAnyTypeToObjectType<T>(List<T> listOfAnyType)
             {
-                var convertedList = listOfAnyType.ConvertAll(x => (object)x);
+                List<object> convertedList = listOfAnyType.ConvertAll(x => (object)x);
                 return convertedList;
             }
 
             public IList<object> ConvertIListOfAnyTypeToObjectType<T>(List<T> listOfAnyType)
             {
-                var convertedList = listOfAnyType.ConvertAll(x => (object)x);
+                List<object> convertedList = listOfAnyType.ConvertAll(x => (object)x);
                 return convertedList;
             }
 
@@ -889,19 +904,19 @@ namespace BaseballScraper.Infrastructure
         #region PRINTING PRESS ------------------------------------------------------------
 
 
-            public void PrintJsonInfoForSheetBeingRead(JToken jsonGroup, JToken jTokenValue, string returnValue )
+            private static void PrintJsonInfoForSheetBeingRead(JToken jsonGroup, JToken jTokenValue, string returnValue )
             {
                 C.WriteLine($"\njsonGroup: {jsonGroup}");
                 C.WriteLine($"jTokenValue: {jTokenValue}");
                 C.WriteLine($"returnValue: {returnValue}\n");
             }
 
-            public void PrintDetailsForSheetBeingRead(string jsonGroupName, string jsonItemName)
+            private static void PrintDetailsForSheetBeingRead(string jsonGroupName, string jsonItemName)
             {
                 C.WriteLine($"\njSonGroupName: {jsonGroupName}\t jSonItemName: {jsonItemName}\n");
             }
 
-            public void PrintRowInfo(IList<IList<object>> allRows)
+            private static void PrintRowInfo(IList<IList<object>> allRows)
             {
                 if (allRows != null && allRows.Count > 0)
                 {
@@ -914,7 +929,7 @@ namespace BaseballScraper.Infrastructure
                         }
                         else
                         {
-                            foreach(var cell in row)
+                            foreach(object cell in row)
                             {
                                 C.WriteLine($"{cell}");
                             }
@@ -925,7 +940,7 @@ namespace BaseballScraper.Infrastructure
                 else { C.WriteLine("No data found."); }
             }
 
-            public void PrintDetailsForRangeBeingRead(string documentName, string sheetName, string spreadSheetId)
+            private static void PrintDetailsForRangeBeingRead(string documentName, string sheetName, string spreadSheetId)
             {
                 C.WriteLine($"\nSpreadsheet Name: {documentName}");
                 C.WriteLine($"Sheet Name:         {sheetName}");
@@ -936,7 +951,7 @@ namespace BaseballScraper.Infrastructure
             {
                 C.WriteLine();
                 _helpers.Spotlight("UPDATE OUTCOMES");
-                
+
                 C.WriteLine("-------------------------------------------------------");
                 C.WriteLine($"SPREADSHEET ID:         | {response.SpreadsheetId}");
                 C.WriteLine($"# of SHEETS updated:    | {response.TotalUpdatedSheets}");

@@ -98,7 +98,6 @@ namespace BaseballScraper
         // * Use this method to add services to the container
         public void ConfigureServices (IServiceCollection services)
         {
-
             #region .NET CORE CONFIGURATION
 
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -111,7 +110,9 @@ namespace BaseballScraper
                 services.AddMvc ()
                     .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                     .AddSessionStateTempDataProvider()
-                    .AddControllersAsServices();
+                    .AddControllersAsServices()
+                    ;
+
 
                 services.AddSession (options =>
                 {
@@ -155,6 +156,7 @@ namespace BaseballScraper
             services.AddSingleton<DataTabler>();
             services.AddSingleton<EmailHelper>();
             services.AddSingleton<FanGraphsUriEndPoints>();
+            services.AddSingleton<FileHandler>();
             services.AddSingleton<Helpers>();
             services.AddSingleton<MlbDataApiEndPoints>();
             services.AddSingleton<MlbDataSeasonHittingStatsController>();
@@ -292,7 +294,7 @@ namespace BaseballScraper
 
         public void ConfigureAirtableServices(IServiceCollection services)
         {
-            string airtableConfiguration = "AirtableConfiguration";
+            const string airtableConfiguration = "AirtableConfiguration";
 
             #region AIR TABLE KEY
                 services.Configure<AirtableConfiguration>(Configuration.GetSection("AirtableConfiguration"));
@@ -321,10 +323,10 @@ namespace BaseballScraper
             #endregion AIR TABLE KEY
 
             /* Configure individual table */
-            string spRankings = "SpRankings";
-            string authors    = "Authors";
-            string websites   = "Websites";
-            string baScConfig = "BaseballScraperConfig";
+            const string spRankings = "SpRankings";
+            const string authors    = "Authors";
+            const string websites   = "Websites";
+            const string baScConfig = "BaseballScraperConfig";
 
             services.Configure<AirtableConfiguration>(spRankings, Configuration.GetSection(spRankings));
             services.Configure<AirtableConfiguration>(authors,    Configuration.GetSection(authors));
@@ -405,11 +407,11 @@ namespace BaseballScraper
             // See: gSheetNames.json configuration file, GoogleSheetsConnector.cs, GoogleSheetConfiguration.cs
             // See: https://dotnetcoretutorials.com/2018/03/20/cannot-consume-scoped-service-from-singleton-a-lesson-in-asp-net-core-di-scopes/
 
-            string sfbbPlayerIdMap       = "SfbbPlayerIdMap";
-            string crunchtimePlayerIdMap = "CrunchtimePlayerIdMap";
-            string spCustomAnalysisA     = "SpCustomAnalysisA";
-            string yahooTrends           = "YahooTrends";
-            string fgSpMasterImport      = "FgSpMasterImport";
+            const string sfbbPlayerIdMap       = "SfbbPlayerIdMap";
+            const string crunchtimePlayerIdMap = "CrunchtimePlayerIdMap";
+            const string spCustomAnalysisA     = "SpCustomAnalysisA";
+            const string yahooTrends           = "YahooTrends";
+            const string fgSpMasterImport      = "FgSpMasterImport";
 
             // these are equal to the json group name in gSheetNames.json configuration file
             services.Configure<GoogleSheetConfiguration>(sfbbPlayerIdMap,       Configuration.GetSection(sfbbPlayerIdMap));

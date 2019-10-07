@@ -12,7 +12,7 @@ using System.IO;
 using System.Net;
 using System.Xml;
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE0063, IDE0067, IDE1006
+#pragma warning disable CC0091, CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE0063, IDE0067, IDE1006
 namespace BaseballScraper.Controllers.YahooControllers
 {
     [Route("api/yahoo/[controller]")]
@@ -31,7 +31,6 @@ namespace BaseballScraper.Controllers.YahooControllers
 
 
 
-
         public YahooApiRequestController(Helpers helpers, YahooApiEndPoints endPoints, YahooAuthController yahooAuthController, IHttpContextAccessor contextAccessor, BaseballScraperContext context,IOptions<TheGameIsTheGameConfiguration> theGameConfig)
         {
             _helpers             = helpers;
@@ -46,6 +45,7 @@ namespace BaseballScraper.Controllers.YahooControllers
 
 
 
+
         [HttpGet]
         [Route("")]
         public void ViewYahooHomePage()
@@ -57,12 +57,13 @@ namespace BaseballScraper.Controllers.YahooControllers
             string leagueKey = GetTheGameIsTheGameLeagueKey();
             Console.WriteLine($"leagueKey: {leagueKey}");
 
-            var uriLeagueScoreboard = _endPoints.LeagueSeasonScoreboardEndPoint(leagueKey).EndPointUri;
+            string uriLeagueScoreboard = _endPoints.LeagueSeasonScoreboardEndPoint(leagueKey).EndPointUri;
             Console.WriteLine($"HOME CreateYahooScoreboard > uriLeagueScoreboard: {uriLeagueScoreboard}");
 
             JObject leagueScoreboard = GenerateYahooResourceJObject(uriLeagueScoreboard);
             _helpers.Dig(leagueScoreboard);
         }
+
 
 
 
@@ -84,9 +85,9 @@ namespace BaseballScraper.Controllers.YahooControllers
             /// </returns>
             public string GetYahooMlbGameKeyForThisYear()
             {
-                var gameLink = "https://fantasysports.yahooapis.com/fantasy/v2/game/mlb";
-                var gameObject = GenerateYahooResourceJObject(gameLink);
-                var gameKey = gameObject["fantasy_content"]["game"]["game_key"].ToString();
+                const string gameLink = "https://fantasysports.yahooapis.com/fantasy/v2/game/mlb";
+                JObject gameObject = GenerateYahooResourceJObject(gameLink);
+                string gameKey = gameObject["fantasy_content"]["game"]["game_key"].ToString();
                 return gameKey;
             }
 
@@ -108,7 +109,7 @@ namespace BaseballScraper.Controllers.YahooControllers
                 TheGameIsTheGameConfiguration theGameConfig = new TheGameIsTheGameConfiguration();
                 Type theGameConfigType = theGameConfig.GetType();
 
-                var configObject = _newtonHandler.DeserializeJsonFromFile(
+                TheGameIsTheGameConfiguration configObject = _newtonHandler.DeserializeJsonFromFile(
                     theGameConfigFilePath,
                     theGameConfigType
                 ) as TheGameIsTheGameConfiguration;
@@ -116,6 +117,7 @@ namespace BaseballScraper.Controllers.YahooControllers
                 string leagueKeySuffix = configObject.LeagueKeySuffix;
                 return leagueKeySuffix;
             }
+
 
 
             // STATUS [ June 7, 2019 ] : this works
@@ -131,9 +133,9 @@ namespace BaseballScraper.Controllers.YahooControllers
             /// </returns>
             public string GetTheGameIsTheGameLeagueKey()
             {
-                var gameKey          = GetYahooMlbGameKeyForThisYear();
-                var theGameKeySuffix = GetTheGameIsTheGameLeagueKeySuffix();
-                var leagueKey        = $"{gameKey}{theGameKeySuffix}";
+                string gameKey          = GetYahooMlbGameKeyForThisYear();
+                string theGameKeySuffix = GetTheGameIsTheGameLeagueKeySuffix();
+                string leagueKey        = $"{gameKey}{theGameKeySuffix}";
                 // PrintLeagueKeyDetails(gameKey,theGameKeySuffix,leagueKey);
                 return leagueKey;
             }
@@ -162,8 +164,8 @@ namespace BaseballScraper.Controllers.YahooControllers
             public HttpWebRequest GenerateWebRequest(string uri)
             {
                 // _helpers.StartMethod();
-                var aTR = _yahooAuthController.GetYahooAccessTokenResponse();
-                var accessToken = aTR.AccessToken;
+                AccessTokenResponse aTR = _yahooAuthController.GetYahooAccessTokenResponse();
+                string accessToken = aTR.AccessToken;
                 // Console.WriteLine($"HOME GenerateWebRequest > accessToken: {accessToken}");
 
                 // Generate request then set the authorization and method headers of the request
@@ -219,11 +221,14 @@ namespace BaseballScraper.Controllers.YahooControllers
             {
                 // _helpers.StartMethod();
                 XmlDocument doc       = new XmlDocument();
-                XmlReader   xmlReader = XmlReader.Create(new StringReader(serverResponse));
-                doc.LoadXml(serverResponse);
-                xmlReader.Dispose();
-                return doc;
-            }
+                using (var stringReader = new StringReader(s: serverResponse))
+                {
+                    XmlReader xmlReader = XmlReader.Create(input: stringReader);
+                    doc.LoadXml(serverResponse);
+                    xmlReader.Dispose();
+                    return doc;
+                }
+        }
 
 
             // NOTE: this is ultimately the method called to by yahoo controllers to get yahoo fantasy data
@@ -242,17 +247,17 @@ namespace BaseballScraper.Controllers.YahooControllers
             {
                 // _helpers.StartMethod();
                 // Console.WriteLine($"HOME GenerateYahooResourceJObject > uri: {uri}");
-                HttpWebRequest request = GenerateWebRequest(uri);
+                HttpWebRequest request = GenerateWebRequest(uri: uri);
 
-                string serverResponse = GetResponseFromServer(request);
+                string serverResponse = GetResponseFromServer(request: request);
 
-                XmlDocument doc = TranslateServerResponseToXml(serverResponse);
+                XmlDocument doc = TranslateServerResponseToXml(serverResponse: serverResponse);
 
                 // convert the xml to json
-                string json = JsonConvert.SerializeXmlNode(doc);
+                string json = JsonConvert.SerializeXmlNode(node: doc);
 
                 // clean the json up
-                JObject resourceJson = JObject.Parse(json);
+                JObject resourceJson = JObject.Parse(json: json);
                 return resourceJson;
             }
 

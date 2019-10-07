@@ -8,7 +8,7 @@ using BaseballScraper.Models.Yahoo;
 using System.Linq;
 using System.Globalization;
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006, MA0016
+#pragma warning disable CC0091, CS0219, CS0414, IDE0044, IDE0052, IDE0059, IDE0060, IDE1006, MA0016
 namespace BaseballScraper.Controllers.YahooControllers
 {
 
@@ -49,6 +49,7 @@ namespace BaseballScraper.Controllers.YahooControllers
             // AddTrendsToGoogleSheets();
             // _gSC.UpdateData(convertedList);
         }
+
 
 
         [Route("practice/async")]
@@ -129,7 +130,7 @@ namespace BaseballScraper.Controllers.YahooControllers
             /// <remarks> This method is used by all methods in the 'Get Trends' Region </remarks>
             /// <param name="thisUrlsHtml"> The html to scrape </param>
             /// <returns> A list of trends of YahooTransactionTrendsPlayers </returns>
-            public List<YahooTransactionTrendsPlayer> GenerateList(HtmlDocument thisUrlsHtml)
+            public static List<YahooTransactionTrendsPlayer> GenerateList(HtmlDocument thisUrlsHtml)
             {
                 List<YahooTransactionTrendsPlayer> listOfPlayers = new List<YahooTransactionTrendsPlayer>();
 
@@ -192,190 +193,200 @@ namespace BaseballScraper.Controllers.YahooControllers
 
         #region GET TRENDS ------------------------------------------------------------
 
-            // STATUS: this works
-            /// <summary> Get trends for all positions for today's dates </summary>
-            /// <example> GetTrendsForTodayAllPositions(); </example>
-            /// <returns> A list of YahooTransactionTrendsPlayer --> Name, Drops, Adds, Trades, Total </returns>
-            public List<YahooTransactionTrendsPlayer> GetTrendsForTodayAllPositions()
-            {
-                HtmlWeb htmlWeb = new HtmlWeb();
+        // STATUS: this works
+        /// <summary> Get trends for all positions for today's dates </summary>
+        /// <example> GetTrendsForTodayAllPositions(); </example>
+        /// <returns> A list of YahooTransactionTrendsPlayer --> Name, Drops, Adds, Trades, Total </returns>
+        public List<YahooTransactionTrendsPlayer> GetTrendsForTodayAllPositions()
+        {
+            HtmlWeb htmlWeb = new HtmlWeb();
 
-                var urlToScrape = "https://baseball.fantasysports.yahoo.com/b1/buzzindex";
-                // var urlToScrape = SetSearchDateAsToday();
-                // Console.WriteLine($"Url To Scrape: {urlToScrape}");
+            const string urlToScrape = "https://baseball.fantasysports.yahoo.com/b1/buzzindex";
+            // var urlToScrape = SetSearchDateAsToday();
+            // Console.WriteLine($"Url To Scrape: {urlToScrape}");
 
-                HtmlDocument thisUrlsHtml = htmlWeb.Load(urlToScrape);
+            HtmlDocument thisUrlsHtml = htmlWeb.Load(urlToScrape);
 
-                List<YahooTransactionTrendsPlayer> listOfPlayers = GenerateList(thisUrlsHtml);
+            List<YahooTransactionTrendsPlayer> listOfPlayers = GenerateList(thisUrlsHtml);
 
-                Console.WriteLine($"total count: {listOfPlayers.Count}");
+            Console.WriteLine($"total count: {listOfPlayers.Count}");
 
-                PrintYahooTrendPlayers(listOfPlayers);
-                return listOfPlayers;
-            }
-
-
-            // STATUS: this works
-            /// <summary> Get trends for one position for today's date </summary>
-            /// <param name="positionShort"> Shortened position string ("1B", "2B", "3B", "SS", "OF", "P", "SP", "RP", "C", "Util")</param>
-            /// <example> GetTrendsForTodayOnePosition("QB"); </example>
-            /// <returns> A list of YahooTransactionTrendsPlayer --> Name, Drops, Adds, Trades, Total </returns>
-            public List<YahooTransactionTrendsPlayer> GetTrendsForTodayOnePosition(string positionShort)
-            {
-                _helpers.StartMethod();
-                HtmlWeb htmlWeb = new HtmlWeb();
-
-                var urlToScrape = $"{SetSearchDateAsToday()}&pos={positionShort}";
-                Console.WriteLine($"Url To Scrape: {urlToScrape}");
-
-                HtmlDocument thisUrlsHtml = htmlWeb.Load(urlToScrape);
-
-                List<YahooTransactionTrendsPlayer> listOfPlayers = GenerateList(thisUrlsHtml);
-
-                // PrintYahooTrendPlayers(listOfPlayers);
-                return listOfPlayers;
-            }
+            PrintYahooTrendPlayers(listOfPlayers);
+            return listOfPlayers;
+        }
 
 
-            // STATUS: this works
-            /// <summary> Get trends for all positions for a specific date </summary>
-            /// <param name="fourDigitYear"> string year e.g. "2018" </param>
-            /// <param name="twoDigitMonth"> string month e.g. "10" </param>
-            /// <param name="twoDigitDay"> string day e.g. "08" </param>
-            /// <example> GetTrendsForDateAllPositions("2018", "10", "01"); </example>
-            /// <returns> A list of YahooTransactionTrendsPlayer --> Name, Drops, Adds, Trades, Total </returns>
-            public List<YahooTransactionTrendsPlayer> GetTrendsForDateAllPositions(string fourDigitYear, string twoDigitMonth, string twoDigitDay)
-            {
-                _helpers.StartMethod();
-                HtmlWeb htmlWeb = new HtmlWeb();
+        // STATUS: this works
+        /// <summary> Get trends for one position for today's date </summary>
+        /// <param name="positionShort"> Shortened position string ("1B", "2B", "3B", "SS", "OF", "P", "SP", "RP", "C", "Util")</param>
+        /// <example> GetTrendsForTodayOnePosition("QB"); </example>
+        /// <returns> A list of YahooTransactionTrendsPlayer --> Name, Drops, Adds, Trades, Total </returns>
+        public List<YahooTransactionTrendsPlayer> GetTrendsForTodayOnePosition(string positionShort)
+        {
+            _helpers.StartMethod();
+            HtmlWeb htmlWeb = new HtmlWeb();
 
-                var urlToScrape = SetSearchDate(fourDigitYear, twoDigitMonth, twoDigitDay);
-                Console.WriteLine($"Url To Scrape: {urlToScrape}");
+            var urlToScrape = $"{SetSearchDateAsToday()}&pos={positionShort}";
+            Console.WriteLine($"Url To Scrape: {urlToScrape}");
 
-                HtmlDocument thisUrlsHtml = htmlWeb.Load(urlToScrape);
+            HtmlDocument thisUrlsHtml = htmlWeb.Load(urlToScrape);
 
-                List<YahooTransactionTrendsPlayer> listOfPlayers = GenerateList(thisUrlsHtml);
+            List<YahooTransactionTrendsPlayer> listOfPlayers = GenerateList(thisUrlsHtml);
 
-                return listOfPlayers;
-            }
+            // PrintYahooTrendPlayers(listOfPlayers);
+            return listOfPlayers;
+        }
 
 
-            // STATUS: this works
-            /// <summary> Get trends for one position for a specific date </summary>
-            /// <param name="fourDigitYear"> string year e.g. "2018" </param>
-            /// <param name="twoDigitMonth"> string month e.g. "10" </param>
-            /// <param name="twoDigitDay"> string day e.g. "08" </param>
-            /// <param name="positionShort"> Shortened position string ("1B", "2B", "3B", "SS", "OF", "P", "SP", "RP", "C", "Util")</param>
-            /// <example> GetTrendsForDateOnePosition("2018", "10", "01", "QB"); </example>
-            /// <returns> A list of YahooTransactionTrendsPlayer --> Name, Drops, Adds, Trades, Total </returns>
-            public List<YahooTransactionTrendsPlayer> GetTrendsForDateOnePosition(string fourDigitYear, string twoDigitMonth, string twoDigitDay, string positionShort)
-            {
-                _helpers.StartMethod();
-                HtmlWeb htmlWeb = new HtmlWeb();
+        // STATUS: this works
+        /// <summary> Get trends for all positions for a specific date </summary>
+        /// <param name="fourDigitYear"> string year e.g. "2018" </param>
+        /// <param name="twoDigitMonth"> string month e.g. "10" </param>
+        /// <param name="twoDigitDay"> string day e.g. "08" </param>
+        /// <example> GetTrendsForDateAllPositions("2018", "10", "01"); </example>
+        /// <returns> A list of YahooTransactionTrendsPlayer --> Name, Drops, Adds, Trades, Total </returns>
+        public List<YahooTransactionTrendsPlayer> GetTrendsForDateAllPositions(string fourDigitYear, string twoDigitMonth, string twoDigitDay)
+        {
+            _helpers.StartMethod();
+            HtmlWeb htmlWeb = new HtmlWeb();
 
-                var urlToScrape = $"{SetSearchDate(fourDigitYear, twoDigitMonth, twoDigitDay)}&pos={positionShort}";
-                Console.WriteLine($"Url To Scrape: {urlToScrape}");
+            var urlToScrape = SetSearchDate(fourDigitYear, twoDigitMonth, twoDigitDay);
+            Console.WriteLine($"Url To Scrape: {urlToScrape}");
 
-                HtmlDocument thisUrlsHtml = htmlWeb.Load(urlToScrape);
+            HtmlDocument thisUrlsHtml = htmlWeb.Load(urlToScrape);
 
-                List<YahooTransactionTrendsPlayer> listOfPlayers = GenerateList(thisUrlsHtml);
+            List<YahooTransactionTrendsPlayer> listOfPlayers = GenerateList(thisUrlsHtml);
 
-                return listOfPlayers;
-            }
+            return listOfPlayers;
+        }
+
+
+        // STATUS: this works
+        /// <summary> Get trends for one position for a specific date </summary>
+        /// <param name="fourDigitYear"> string year e.g. "2018" </param>
+        /// <param name="twoDigitMonth"> string month e.g. "10" </param>
+        /// <param name="twoDigitDay"> string day e.g. "08" </param>
+        /// <param name="positionShort"> Shortened position string ("1B", "2B", "3B", "SS", "OF", "P", "SP", "RP", "C", "Util")</param>
+        /// <example> GetTrendsForDateOnePosition("2018", "10", "01", "QB"); </example>
+        /// <returns> A list of YahooTransactionTrendsPlayer --> Name, Drops, Adds, Trades, Total </returns>
+        public List<YahooTransactionTrendsPlayer> GetTrendsForDateOnePosition(string fourDigitYear, string twoDigitMonth, string twoDigitDay, string positionShort)
+        {
+            _helpers.StartMethod();
+            HtmlWeb htmlWeb = new HtmlWeb();
+
+            var urlToScrape = $"{SetSearchDate(fourDigitYear, twoDigitMonth, twoDigitDay)}&pos={positionShort}";
+            Console.WriteLine($"Url To Scrape: {urlToScrape}");
+
+            HtmlDocument thisUrlsHtml = htmlWeb.Load(urlToScrape);
+
+            List<YahooTransactionTrendsPlayer> listOfPlayers = GenerateList(thisUrlsHtml);
+
+            return listOfPlayers;
+        }
 
         #endregion GET TRENDS ------------------------------------------------------------
+
+
 
 
 
         #region GENERATE GOOGLE SHEETS LISTS ------------------------------------------------------------
 
 
-            /// <example>
-            /// AddTrendsToGoogleSheets("YAHOO_TRENDS","A1:Z1000","CoreCalculator")
-            /// </example>
-            public void AddTrendsToGoogleSheets(string tabName, string range, string jsonGroupName)
+        /// <param name="tabName">todo: describe tabName parameter on AddTrendsToGoogleSheets</param>
+        /// <param name="range">todo: describe range parameter on AddTrendsToGoogleSheets</param>
+        /// <param name="jsonGroupName">todo: describe jsonGroupName parameter on AddTrendsToGoogleSheets</param>
+        /// <example>
+        /// AddTrendsToGoogleSheets("YAHOO_TRENDS","A1:Z1000","CoreCalculator")
+        /// </example>
+        public void AddTrendsToGoogleSheets(string tabName, string range, string jsonGroupName)
+        {
+            ConnectYahooTrendsToGoogleSheets();
+            List<YahooTransactionTrendsPlayer> allTrendInfo = GetTrendsForTodayAllPositions();
+
+            // instantiate a list foreach column in the transaction trends api
+            // each list is associated with a particular column in the report
+            List<object> playerNames              = new List<object> { "Player Name" };
+            List<object> playerDrops              = new List<object> { "Drops"       };
+            List<object> playerAdds               = new List<object> { "Adds"        };
+            List<object> playerTrades             = new List<object> { "Trades"      };
+            List<object> playerTransactionsTotals = new List<object> { "Total "      };
+
+            // add the player's values to each of the column lists
+            foreach(YahooTransactionTrendsPlayer player in allTrendInfo)
             {
-                ConnectYahooTrendsToGoogleSheets();
-                List<YahooTransactionTrendsPlayer> allTrendInfo = GetTrendsForTodayAllPositions();
+                playerNames.Add(player.YahooPlayerName);
+                playerDrops.Add(player.YahooPlayerDrops);
+                playerAdds.Add(player.YahooPlayerAdds);
+                playerTrades.Add(player.YahooPlayerTrades);
+                playerTransactionsTotals.Add(player.YahooTransactionsTotal);
+            }
 
-                // instantiate a list foreach column in the transaction trends api
-                // each list is associated with a particular column in the report
-                List<object> playerNames = new List<object>() { "Player Name" };
-                List<object> playerDrops = new List<object>() { "Drops" };
-                List<object> playerAdds = new List<object>() { "Adds" };
-                List<object> playerTrades = new List<object>() { "Trades" };
-                List<object> playerTransactionsTotals = new List<object>() { "Total "};
+            // add all columns lists to a list to create a list of lists
+            List<IList<object>> listOfLists = new List<IList<object>>
+            {
+                playerNames,
+                playerDrops,
+                playerAdds,
+                playerTrades,
+                playerTransactionsTotals,
+            };
 
-                // add the player's values to each of the column lists
-                foreach(YahooTransactionTrendsPlayer player in allTrendInfo)
-                {
-                    playerNames.Add(player.YahooPlayerName);
-                    playerDrops.Add(player.YahooPlayerDrops);
-                    playerAdds.Add(player.YahooPlayerAdds);
-                    playerTrades.Add(player.YahooPlayerTrades);
-                    playerTransactionsTotals.Add(player.YahooTransactionsTotal);
-                }
+            // Write that data in listOfLists to YAHOO_TRENDS tab in range A1: Z1000 in the CoreCalculator group / sheet
+            // _gSC.WriteGoogleSheetColumns(listOfLists, "YAHOO_TRENDS","A1:Z1000","CoreCalculator");
+            _googleSheetsConnector.WriteGoogleSheetColumns(listOfLists, tabName, range, jsonGroupName);
+        }
 
-                // add all columns lists to a list to create a list of lists
-                List<IList<object>> listOfLists = new List<IList<object>>
+
+        // public Task DoAsyncTest(string item)
+        // {
+        //     Task.Delay(1000);
+        //     Console.WriteLine($"item: {item}");
+        //     return Task.CompletedTask;
+        // }
+
+
+
+        /// <param name="tabName">todo: describe tabName parameter on AddTrendsToGoogleSheetsAsync</param>
+        /// <param name="range">todo: describe range parameter on AddTrendsToGoogleSheetsAsync</param>
+        /// <param name="jsonGroupName">todo: describe jsonGroupName parameter on AddTrendsToGoogleSheetsAsync</param>
+        /// <example>
+        /// await AddTrendsToGoogleSheetsAsync("YAHOO_TRENDS","A1:Z1000","CoreCalculator")
+        /// </example>
+        public async Task AddTrendsToGoogleSheetsAsync(string tabName, string range, string jsonGroupName)
+        {
+            ConnectYahooTrendsToGoogleSheets();
+            List<YahooTransactionTrendsPlayer> allTrendInfo = GetTrendsForTodayAllPositions();
+
+            // instantiate a list foreach column in the transaction trends api
+            // each list is associated with a particular column in the report
+            List<object> playerNames              = new List<object> { "Player Name" };
+            List<object> playerDrops              = new List<object> { "Drops"       };
+            List<object> playerAdds               = new List<object> { "Adds"        };
+            List<object> playerTrades             = new List<object> { "Trades"      };
+            List<object> playerTransactionsTotals = new List<object> { "Total "      };
+
+            // add the player's values to each of the column lists
+            foreach(YahooTransactionTrendsPlayer player in allTrendInfo)
+            {
+                playerNames.Add(item: player.YahooPlayerName);
+                playerDrops.Add(item: player.YahooPlayerDrops);
+                playerAdds.Add(item: player.YahooPlayerAdds);
+                playerTrades.Add(item: player.YahooPlayerTrades);
+                playerTransactionsTotals.Add(item: player.YahooTransactionsTotal);
+            }
+
+            // add all columns lists to a list to create a list of lists
+            // Write that data in listOfLists to YAHOO_TRENDS tab in range A1: Z1000 in the CoreCalculator group / sheet
+            await _googleSheetsConnector.WriteGoogleSheetColumnsAsync(new List<IList<object>>
                 {
                     playerNames,
                     playerDrops,
                     playerAdds,
                     playerTrades,
                     playerTransactionsTotals,
-                };
-
-                // Write that data in listOfLists to YAHOO_TRENDS tab in range A1: Z1000 in the CoreCalculator group / sheet
-                // _gSC.WriteGoogleSheetColumns(listOfLists, "YAHOO_TRENDS","A1:Z1000","CoreCalculator");
-                _googleSheetsConnector.WriteGoogleSheetColumns(listOfLists, tabName, range, jsonGroupName);
-            }
-
-
-            public Task DoAsyncTest(string item)
-            {
-                Task.Delay(1000);
-                Console.WriteLine($"item: {item}");
-                return Task.CompletedTask;
-            }
-
-            /// <example>
-            /// await AddTrendsToGoogleSheetsAsync("YAHOO_TRENDS","A1:Z1000","CoreCalculator")
-            /// </example>
-            public async Task AddTrendsToGoogleSheetsAsync(string tabName, string range, string jsonGroupName)
-            {
-                ConnectYahooTrendsToGoogleSheets();
-                List<YahooTransactionTrendsPlayer> allTrendInfo = GetTrendsForTodayAllPositions();
-
-                // instantiate a list foreach column in the transaction trends api
-                // each list is associated with a particular column in the report
-                List<object> playerNames = new List<object>() { "Player Name" };
-                List<object> playerDrops = new List<object>() { "Drops" };
-                List<object> playerAdds = new List<object>() { "Adds" };
-                List<object> playerTrades = new List<object>() { "Trades" };
-                List<object> playerTransactionsTotals = new List<object>() { "Total "};
-
-                // add the player's values to each of the column lists
-                foreach(YahooTransactionTrendsPlayer player in allTrendInfo)
-                {
-                    playerNames.Add(item: player.YahooPlayerName);
-                    playerDrops.Add(item: player.YahooPlayerDrops);
-                    playerAdds.Add(item: player.YahooPlayerAdds);
-                    playerTrades.Add(item: player.YahooPlayerTrades);
-                    playerTransactionsTotals.Add(item: player.YahooTransactionsTotal);
-                }
-
-                // add all columns lists to a list to create a list of lists
-                // Write that data in listOfLists to YAHOO_TRENDS tab in range A1: Z1000 in the CoreCalculator group / sheet
-                await _googleSheetsConnector.WriteGoogleSheetColumnsAsync(new List<IList<object>>
-                    {
-                        playerNames,
-                        playerDrops,
-                        playerAdds,
-                        playerTrades,
-                        playerTransactionsTotals,
-                    }, tabName, range, jsonGroupName);
-            }
+                }, tabName, range, jsonGroupName);
+        }
 
 
         #endregion GENERATE GOOGLE SHEETS LISTS ------------------------------------------------------------
@@ -385,18 +396,18 @@ namespace BaseballScraper.Controllers.YahooControllers
 
         #region PRINTING PRESS ------------------------------------------------------------
 
-            public void PrintYahooTrendPlayers(List<YahooTransactionTrendsPlayer> listOfPlayers)
+        private static void PrintYahooTrendPlayers(List<YahooTransactionTrendsPlayer> listOfPlayers)
+        {
+            foreach(var p in listOfPlayers)
             {
-                foreach(var p in listOfPlayers)
-                {
-                    Console.WriteLine(p.YahooPlayerName);
-                    Console.WriteLine(p.YahooPlayerDrops);
-                    Console.WriteLine(p.YahooPlayerAdds);
-                    Console.WriteLine(p.YahooPlayerTrades);
-                    Console.WriteLine(p.YahooTransactionsTotal);
-                    Console.WriteLine();
-                }
+                Console.WriteLine(p.YahooPlayerName);
+                Console.WriteLine(p.YahooPlayerDrops);
+                Console.WriteLine(p.YahooPlayerAdds);
+                Console.WriteLine(p.YahooPlayerTrades);
+                Console.WriteLine(p.YahooTransactionsTotal);
+                Console.WriteLine();
             }
+        }
 
         #endregion PRINTING PRESS ------------------------------------------------------------
 

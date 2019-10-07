@@ -27,8 +27,6 @@ namespace BaseballScraper.Controllers.YahooControllers.Resources
         private readonly PlayerBaseController.PlayerBaseFromExcel _playerBaseFromExcel = new PlayerBaseController.PlayerBaseFromExcel();
 
 
-
-
         public YahooPlayerResourceController(Helpers helpers, YahooApiRequestController yahooApiRequestController, YahooAuthController yahooAuthController, PlayerBaseController playerBaseController, YahooApiEndPoints endPoints)
         {
             _helpers = helpers;
@@ -58,8 +56,6 @@ namespace BaseballScraper.Controllers.YahooControllers.Resources
 
 
 
-
-
         [Route("test")]
         public void TestYahooPlayerResourceController()
         {
@@ -67,77 +63,76 @@ namespace BaseballScraper.Controllers.YahooControllers.Resources
         }
 
 
-
-
         #region YAHOO PLAYER RESOURCE - PRIMARY METHODS ------------------------------------------------------------
 
 
-            // STATUS [ June 10, 2019 ] : this works
-            /// <summary>
-            ///     Instantiate new instance of yahoo player resource
-            /// </summary>
-            /// <param name="yahooPlayerId">
-            ///     The Mlb players yahoo player id
-            ///     Typically four or five numbers but fed to method as a string
-            ///         E.g., "8967" instead of 8967
-            /// </param>
-            /// <remarks>
-            ///     If you do not know the yahoo id, try the 'GetYahooPlayersIdFromPlayerName()' method to get it
-            /// </remarks>
-            /// <example>
-            ///     var yahooPlayerResourceModel = CreateYahooPlayerResourceInstances("8967");
-            /// </example>
-            public YahooPlayerResource CreateYahooPlayerResourceInstances(string yahooPlayerId)
+        // STATUS [ June 10, 2019 ] : this works
+        /// <summary>
+        ///     Instantiate new instance of yahoo player resource
+        /// </summary>
+        /// <param name="yahooPlayerId">
+        ///     The Mlb players yahoo player id
+        ///     Typically four or five numbers but fed to method as a string
+        ///         E.g., "8967" instead of 8967
+        /// </param>
+        /// <remarks>
+        ///     If you do not know the yahoo id, try the 'GetYahooPlayersIdFromPlayerName()' method to get it
+        /// </remarks>
+        /// <example>
+        ///     var yahooPlayerResourceModel = CreateYahooPlayerResourceInstances("8967");
+        /// </example>
+        public YahooPlayerResource CreateYahooPlayerResourceInstances(string yahooPlayerId)
+        {
+            // string leagueKey = _yahooApiRequestController.GetTheGameIsTheGameLeagueKey();
+            // Console.WriteLine($"YAHOO RESOURCE CONTROLLER > leagueKey: {leagueKey}");
+
+            const string keyPrefix = "mlb.p.";
+            string playerKey = $"{keyPrefix}{yahooPlayerId}";
+
+            // e.g., https://fantasysports.yahooapis.com/fantasy/v2/player/mlb.p.8967
+            var uriPlayer = _endPoints.PlayerBaseEndPoint(playerKey).EndPointUri;
+
+            JObject playerJObject = _yahooApiRequestController.GenerateYahooResourceJObject(uriPlayer);
+
+            JToken playerResource = playerJObject["fantasy_content"]["player"];
+            string playerResourceString = playerResource.ToString();
+
+            YahooPlayerResource yPlayerResource = JsonConvert.DeserializeObject<YahooPlayerResource>(playerResourceString);
+            _helpers.Dig(yPlayerResource);
+
+            return yPlayerResource;
+        }
+
+
+        // STATUS [ June 10, 2019 ] : this works
+        /// <summary>
+        ///     Instantiate multiple instances of yahoo player resource
+        /// </summary>
+        /// <param name="ListOfYahooPlayerIds">todo: describe ListOfYahooPlayerIds parameter on CreateListOfYahooPlayerResourceInstances</param>
+        /// <example>
+        ///     string rizzoId = "8868";
+        ///     string goldschmidtId = "8967";
+        ///     var playerIds = new List string
+        ///     {
+        ///         rizzoId,
+        ///         goldschmidtId
+        ///     };
+        ///     var playerList = CreateListOfYahooPlayerResourceInstances(playerIds);
+        /// </example>
+        public List<YahooPlayerResource> CreateListOfYahooPlayerResourceInstances(List<string> ListOfYahooPlayerIds)
+        {
+            List<YahooPlayerResource> yahooPlayerResourceList = new List<YahooPlayerResource>();
+            YahooPlayerResource yahooPlayerResource = new YahooPlayerResource();
+
+            foreach(var id in ListOfYahooPlayerIds)
             {
-                // string leagueKey = _yahooApiRequestController.GetTheGameIsTheGameLeagueKey();
-                // Console.WriteLine($"YAHOO RESOURCE CONTROLLER > leagueKey: {leagueKey}");
-
-                string keyPrefix = "mlb.p.";
-                string playerKey = $"{keyPrefix}{yahooPlayerId}";
-
-                // e.g., https://fantasysports.yahooapis.com/fantasy/v2/player/mlb.p.8967
-                var uriPlayer = _endPoints.PlayerBaseEndPoint(playerKey).EndPointUri;
-
-                JObject playerJObject = _yahooApiRequestController.GenerateYahooResourceJObject(uriPlayer);
-
-                JToken playerResource = playerJObject["fantasy_content"]["player"];
-                string playerResourceString = playerResource.ToString();
-
-                YahooPlayerResource yPlayerResource = JsonConvert.DeserializeObject<YahooPlayerResource>(playerResourceString);
-                _helpers.Dig(yPlayerResource);
-
-                return yPlayerResource;
+                yahooPlayerResource = CreateYahooPlayerResourceInstances(id);
+                yahooPlayerResourceList.Add(yahooPlayerResource);
             }
 
-
-            // STATUS [ June 10, 2019 ] : this works
-            /// <summary>
-            ///     Instantiate multiple instances of yahoo player resource
-            /// </summary>
-            /// <example>
-            ///     string rizzoId = "8868";
-            ///     string goldschmidtId = "8967";
-            ///     var playerIds = new List string
-            ///     {
-            ///         rizzoId,
-            ///         goldschmidtId
-            ///     };
-            ///     var playerList = CreateListOfYahooPlayerResourceInstances(playerIds);
-            /// </example>
-            public List<YahooPlayerResource> CreateListOfYahooPlayerResourceInstances(List<string> ListOfYahooPlayerIds)
-            {
-                List<YahooPlayerResource> yahooPlayerResourceList = new List<YahooPlayerResource>();
-                YahooPlayerResource yahooPlayerResource = new YahooPlayerResource();
-
-                foreach(var id in ListOfYahooPlayerIds)
-                {
-                    yahooPlayerResource = CreateYahooPlayerResourceInstances(id);
-                    yahooPlayerResourceList.Add(yahooPlayerResource);
-                }
-
-                // _h.Dig(yahooPlayerResourceList);
-                return yahooPlayerResourceList;
-            }
+            // _h.Dig(yahooPlayerResourceList);
+            return yahooPlayerResourceList;
+        }
 
 
         #endregion YAHOO PLAYER RESOURCE - PRIMARY METHODS ------------------------------------------------------------
@@ -149,28 +144,29 @@ namespace BaseballScraper.Controllers.YahooControllers.Resources
         #region YAHOO PLAYER RESOURCE - SUPPORT METHODS ------------------------------------------------------------
 
 
-            // STATUS [ June 10, 2019 ] : this works
-            /// <summary>
-            ///     Retrieves yahoo player id from player's yahoo name
-            ///     This is helpful with primary methods if you do not know the player's yahoo id
-            /// </summary>
-            /// <example>
-            ///     var playerId = GetYahooPlayersIdFromPlayerName("Anthony Rizzo");
-            /// </example>
-            public string GetYahooPlayersIdFromPlayerName(string PlayerName)
+        // STATUS [ June 10, 2019 ] : this works
+        /// <summary>
+        ///     Retrieves yahoo player id from player's yahoo name
+        ///     This is helpful with primary methods if you do not know the player's yahoo id
+        /// </summary>
+        /// <param name="PlayerName">todo: describe PlayerName parameter on GetYahooPlayersIdFromPlayerName</param>
+        /// <example>
+        ///     var playerId = GetYahooPlayersIdFromPlayerName("Anthony Rizzo");
+        /// </example>
+        public string GetYahooPlayersIdFromPlayerName(string PlayerName)
+        {
+            var yahooPlayerId = "";
+            IEnumerable<PlayerBase> playerBase = _playerBaseFromExcel.GetOnePlayersBaseFromYahooName(PlayerName);
+            // _h.Dig(playerBase);
+
+            var enumerator = playerBase.GetEnumerator();
+            while(enumerator.MoveNext())
             {
-                var yahooPlayerId = "";
-                IEnumerable<PlayerBase> playerBase = _playerBaseFromExcel.GetOnePlayersBaseFromYahooName(PlayerName);
-                // _h.Dig(playerBase);
-
-                var enumerator = playerBase.GetEnumerator();
-                while(enumerator.MoveNext())
-                {
-                    yahooPlayerId = enumerator.Current.YahooPlayerId;
-                }
-
-                return yahooPlayerId;
+                yahooPlayerId = enumerator.Current.YahooPlayerId;
             }
+
+            return yahooPlayerId;
+        }
 
 
         #endregion YAHOO PLAYER RESOURCE - SUPPORT METHODS ------------------------------------------------------------

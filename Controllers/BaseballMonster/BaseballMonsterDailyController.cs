@@ -40,7 +40,7 @@ namespace BaseballScraper.Controllers.BaseballMonster
         public async Task TestBbMonsterDailyControllerAsync()
         {
             helpers.StartMethod();
-            await DownloadLiveDFSResults();
+            await DownloadLiveDFSResultsAsync();
         }
 
 
@@ -49,7 +49,7 @@ namespace BaseballScraper.Controllers.BaseballMonster
 
         // STATUS [ July 8, 2019 ] : DOES NOT WORK
         // trying to automatically click button on page to download results Excel file
-        public async Task DownloadLiveDFSResults()
+        public async Task DownloadLiveDFSResultsAsync()
         {
             helpers.StartMethod();
             var options = new LaunchOptions { Headless = true };

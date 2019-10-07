@@ -51,6 +51,7 @@ namespace BaseballScraper.Controllers.MlbDataApiControllers
         /// <summary>
         ///     View instantiated player model with player's info
         /// </summary>
+        /// <param name="playerId">todo: describe playerId parameter on CreatePlayerInfoInstance</param>
         /// <returns>
         ///     A view of a playerinfo model
         /// </returns>

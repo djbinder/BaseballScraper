@@ -48,7 +48,7 @@ namespace BaseballScraper.Controllers
             _pythonConnector      = pythonConnector;
             _dataTabler           = dataTabler;
             _csvHandler           = csvHandler;
-            // _cbsTrendsController  = cbsTrendsController;
+            _cbsTrendsController  = cbsTrendsController;
 
             // this._cbsTrendsController = cbsTrendsController;
         }
@@ -68,6 +68,16 @@ namespace BaseballScraper.Controllers
 
 
 
+
+        public int XUnitPractice(int number)
+        {
+            int newNumber = number * 3;
+            C.WriteLine($"newNumber : {newNumber}");
+            C.WriteLine("hold");
+            return newNumber;
+        }
+
+
         /// <summary>
         /// The home controller
         /// </summary>
@@ -75,7 +85,9 @@ namespace BaseballScraper.Controllers
         [Route("")]
         public IActionResult Index()
         {
-            // Console.WriteLine("INDEX!");
+            C.WriteLine("INDEX!");
+            int indexNumber = XUnitPractice(300);
+            C.WriteLine($"indexNumber : {indexNumber}");
             return View("Dashboard");
 
         }

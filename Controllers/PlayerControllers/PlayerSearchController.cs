@@ -8,7 +8,7 @@ using BaseballScraper.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using C = System.Console;
 
-#pragma warning disable CS1998, CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE1006, MA0016
+#pragma warning disable CC0068, CS1998, CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE1006, MA0016
 namespace BaseballScraper.Controllers.PlayerControllers
 {
     [Route("player/[controller]")]
@@ -78,7 +78,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
 
 
 
-        private PlayerSearchViewModel _playerSearchViewModel = new PlayerSearchViewModel();
+        private readonly PlayerSearchViewModel _playerSearchViewModel = new PlayerSearchViewModel();
 
 
         // STATUS [ July 24, 2019 ]: DOES NOT WORK; ISSUES WITH THE HTML
@@ -194,7 +194,7 @@ namespace BaseballScraper.Controllers.PlayerControllers
             PlayerSeasons.ForEach((season) => C.WriteLine($"season: {season}"));
         }
 
-        private void PrintPlayerInfo(string playerFullName)
+        private static void PrintPlayerInfo(string playerFullName)
         {
             C.WriteLine($"SEARCHING FOR: {playerFullName}");
         }

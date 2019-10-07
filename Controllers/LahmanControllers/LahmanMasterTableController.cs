@@ -146,10 +146,7 @@ namespace BaseballScraper.Controllers.LahmanControllers
             public string ManageNullString(object obj)
             {
                 string str = string.Empty;
-                if(obj == null)
-                    str = "NULL";
-                else
-                    str = obj.ToString();
+                str = obj == null ? "NULL" : obj.ToString();
 
                 return str;
             }
@@ -160,10 +157,7 @@ namespace BaseballScraper.Controllers.LahmanControllers
             public int ManageNullInt(object obj)
             {
                 int numCheck;
-                if(obj == null)
-                    numCheck = 0;
-                else
-                    numCheck = Convert.ToInt32(obj, CultureInfo.CurrentCulture);
+                numCheck = obj == null ? 0 : Convert.ToInt32(obj, CultureInfo.CurrentCulture);
 
                 return numCheck;
             }
@@ -175,9 +169,9 @@ namespace BaseballScraper.Controllers.LahmanControllers
             public string FormatSearchStringsForR(string str)
             {
                 var isFirstLetterCapitalized = char.IsUpper(str, 0);
-                if(isFirstLetterCapitalized == false) 
-                { 
-                    str = char.ToUpper(str[0], CultureInfo.InvariantCulture) + str.Substring(1); 
+                if(!isFirstLetterCapitalized)
+                {
+                    str = char.ToUpper(str[0], CultureInfo.InvariantCulture) + str.Substring(1);
                 }
                 str = $"\"{str}\"";
                 return str;

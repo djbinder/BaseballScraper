@@ -56,6 +56,7 @@ namespace BaseballScraper.Controllers.LahmanControllers
         /// <summary>
         ///     Get list of Mlb player's Player Id, First Name, Last Name
         /// </summary>
+        /// <param name="lastName">todo: describe lastName parameter on GetPlayerInfoForAllPlayersWithLastName</param>
         /// <remarks>
         ///     See: 'playerInfo' section @ http://lahman.r-forge.r-project.org/doc/
         ///     See: https://analyticsrusers.blog/2018/05/31/leverage-r-code-within-net-environments-running-a-cvar-model-in-a-c-applications/
@@ -97,6 +98,9 @@ namespace BaseballScraper.Controllers.LahmanControllers
         /// <summary>
         ///     Instantiate instance of LahmanPlayerInfo
         /// </summary>
+        /// <param name="dataFrame">todo: describe dataFrame parameter on CreateLahmanPlayerInfoInstance</param>
+        /// <param name="indexer">todo: describe indexer parameter on CreateLahmanPlayerInfoInstance</param>
+        /// <param name="lastName">todo: describe lastName parameter on CreateLahmanPlayerInfoInstance</param>
         public LahmanPlayerInfo CreateLahmanPlayerInfoInstance(DataFrame dataFrame, int indexer, string lastName)
         {
             var playerInfo = new LahmanPlayerInfo();

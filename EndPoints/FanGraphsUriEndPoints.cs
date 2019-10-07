@@ -21,7 +21,7 @@ namespace BaseballScraper.EndPoints
         private readonly static DateTime? rightNow = DateTime.Now;
         readonly int currentYear = rightNow.Value.Year;
 
-        private JObject _appSettingsJson = JObject.Parse(File.ReadAllText("Configuration/appsettings.Development.json"));
+        private readonly JObject _appSettingsJson = JObject.Parse(File.ReadAllText("Configuration/appsettings.Development.json"));
 
 
         public string FanGraphsTargetWriteFolderLocation()
@@ -42,7 +42,7 @@ namespace BaseballScraper.EndPoints
 
         public string FanGraphsCsvHtmlSelector()
         {
-            string selector = "#LeaderBoard1_cmdCSV";
+            const string selector = "#LeaderBoard1_cmdCSV";
             return selector;
         }
 
@@ -140,28 +140,16 @@ namespace BaseballScraper.EndPoints
                 string startDate = string.Empty;
                 string endDate   = string.Empty;
 
-                if (minInningsPitched == 0)
-                    convertedInningsPitched = "y";
-
-                else
-                    convertedInningsPitched = minInningsPitched;
+                convertedInningsPitched = minInningsPitched == 0 ? (object)"y" : minInningsPitched;
 
                 if (year == 0)
-                    year = currentYear;
+                        year = currentYear;
 
 
-                if(startDay == 0 || startMonth == 0)
-                    startDate = "";
-
-                else
-                    startDate = $"{year}-{startMonth}-{startDay}";
+                startDate = startDay == 0 || startMonth == 0 ? "" : $"{year}-{startMonth}-{startDay}";
 
 
-                if(endDay == 0 || endMonth == 0)
-                    endDate = "";
-
-                else
-                    endDate = $"{year}-{startMonth}-{startDay}";
+                endDate = endDay == 0 || endMonth == 0 ? "" : $"{year}-{startMonth}-{startDay}";
 
                 // Console.WriteLine($"minInningsPitched: {minInningsPitched}");
                 // Console.WriteLine($"convertedInningsPitched: {convertedInningsPitched}");
@@ -215,11 +203,7 @@ namespace BaseballScraper.EndPoints
                 if (convertedInningsPitched is null)
                     throw new ArgumentNullException(nameof(convertedInningsPitched));
 
-                if (minInningsPitched == 0)
-                    convertedInningsPitched = "y";
-
-                else
-                    convertedInningsPitched = minInningsPitched;
+                convertedInningsPitched = minInningsPitched == 0 ? (object)"y" : minInningsPitched;
 
                 return convertedInningsPitched;
             }
@@ -252,11 +236,9 @@ namespace BaseballScraper.EndPoints
             {
                 object convertedPlateAppearances;
 
-                if (minPlateAppearances == 0) { convertedPlateAppearances = "y"; }
-                else { convertedPlateAppearances = minPlateAppearances; }
+                convertedPlateAppearances = minPlateAppearances == 0 ? (object)"y" : minPlateAppearances;
 
                 if (year == 0) { year = currentYear; }
-                else {}
 
                 var position = PositionString(positionEnum);
 
@@ -316,15 +298,17 @@ namespace BaseballScraper.EndPoints
                         return "dh";
                     case PositionEnum.NoPosition:
                         return "np";
+                    default:
+                        break;
                 }
-                throw new Exception("PositionEnum not found");
-            }
+            throw new Exception("PositionEnum not found");
+        }
 
 
-            public string PositionCleaned(string position)
-            {
+        public string PositionCleaned(string position)
+        {
                 string finalString;
-                switch(position)
+                switch (position)
                 {
                     case "ALL":
                     case "All":
@@ -370,9 +354,11 @@ namespace BaseballScraper.EndPoints
                     case "np":
                         finalString = "np";
                         return finalString;
+                    default:
+                        break;
                 }
                 throw new Exception("Position not able to be cleaned; it doesn't exist in the switch");
-            }
+        }
 
 
         #endregion FANGRAPHS HITTER ENDPOINTS ------------------------------------------------------------
@@ -383,7 +369,7 @@ namespace BaseballScraper.EndPoints
         #region PRINTING PRESS ------------------------------------------------------------
 
 
-            public void PrintHitterSearchParameters(string position, object minPlateAppearances, string league, int year, PositionEnum positionEnum)
+        public void PrintHitterSearchParameters(string position, object minPlateAppearances, string league, int year, PositionEnum positionEnum)
             {
                 Console.WriteLine($"\n[ SEARCH PARAMETERS ]");
                 Console.WriteLine($"Position: {position}\t| Qualified?: {minPlateAppearances}\t| League: {league}\t| Season: {year}\t| Position Enum: {positionEnum}\n");

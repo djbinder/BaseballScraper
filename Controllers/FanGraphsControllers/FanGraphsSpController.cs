@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -15,7 +16,7 @@ using Newtonsoft.Json.Linq;
 using C = System.Console;
 
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE1006, MA0016, MA0051
+#pragma warning disable CC0061, CC0068, CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE1006, MA0016, MA0051
 namespace BaseballScraper.Controllers.FanGraphsControllers
 {
     [Route("api/fangraphs/[controller]")]
@@ -162,10 +163,10 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
         private readonly static double madduxOutcomeF_index = 1;     // In Zone / No Swing
 
 
-        private string _wPdiReportPrefix  = "SpWpdiReport";
-        private string _wPdiSheetName     = "wPDI";
-        private string _wPdiSheetRange    = "A4:MN10004";
-        private string _wPdiJsonGroupName = "wPDI";
+        private readonly string _wPdiReportPrefix  = "SpWpdiReport";
+        private readonly string _wPdiSheetName     = "wPDI";
+        private readonly string _wPdiSheetRange    = "A4:MN10004";
+        private readonly string _wPdiJsonGroupName = "wPDI";
 
 
 
@@ -209,7 +210,7 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
                 _helpers.OpenMethod(3);
 
                 // if CSV doesn't exist
-                if(CheckIfCsvFileForTodayExists() == false)
+                if(!CheckIfCsvFileForTodayExists())
                 {
                     await DownloadCsvToLocalDownloads(
                         minInningsPitched_: minInningsPitched_
@@ -397,9 +398,11 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
                     endDay            : endDay_
                 ).EndPointUri;
 
+                C.WriteLine(fgUrl);
+
                 var csvSelector = _endPoints.FanGraphsCsvHtmlSelector();
 
-                await _csvHandler.ClickLinkToDownloadCsvFile(
+                await _csvHandler.ClickLinkToDownloadCsvFileAsync(
                     fgUrl,
                     csvSelector
                 );
@@ -464,6 +467,35 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
             }
 
 
+            public List<FanGraphsPitcherWpdi> GetAllSeed_CSV(string seedCsvFilePath, int season)
+            {
+                _helpers.OpenMethod(1);
+
+                JObject records = _csvHandler.ReadCsvRecordsToJObject(
+                    csvFilePath  : seedCsvFilePath,
+                    modelType    : typeof(FanGraphsPitcherWpdi),
+                    modelMapType : typeof(WpdiReportClassMap)
+                );
+
+                var pitchers = new List<FanGraphsPitcherWpdi>();
+                var pitcher  = new FanGraphsPitcherWpdi();
+
+                foreach(KeyValuePair<string, JToken> kvp in records)
+                {
+                    JToken allPitchers = kvp.Value;
+                    int countOfPitchers = allPitchers.Count();
+
+                    for(var recordCounter = 0; recordCounter < countOfPitchers; recordCounter++)
+                    {
+                        JToken currentPitcher = allPitchers[recordCounter];
+                        pitcher = CreateNewWpdiPitcherInstance(currentPitcher, season);
+                        pitchers.Add(pitcher);
+                    }
+                }
+                return pitchers;
+            }
+
+
 
 
         #endregion FANGRAPHS CSV ------------------------------------------------------------
@@ -500,8 +532,12 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
                         _context.Update(exists);
                         await _context.SaveChangesAsync(cancellationToken);
                     }
-                    catch { C.WriteLine("Error either adding or updating pitcher"); }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                    C.WriteLine("Error either adding or updating pitcher");
                 }
+            }
                 else
                 {
                     await _context.AddAsync(pitcher, cancellationToken);
@@ -555,7 +591,7 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
                         y => y.Season == season &&
                         y.InningsPitched > minInningsPitched
                     ).OrderByDescending(w => w.Wpdi).ToList();
-                    
+
 
                 // PrintPitcherWpdiBasics(pitchers);
                 return pitchers;
@@ -932,7 +968,7 @@ namespace BaseballScraper.Controllers.FanGraphsControllers
 
             private void PrintPitcherWpdiBasics(FanGraphsPitcherWpdi pitcher)
             {
-                Console.WriteLine($"{pitcher.PitcherName}\t\t{pitcher.InningsPitched}\t{pitcher.Wpdi}");
+                C.WriteLine($"{pitcher.PitcherName}\t\t{pitcher.InningsPitched}\t{pitcher.Wpdi}");
             }
 
             private void PrintAllPitcherWpdiData(FanGraphsPitcherWpdi pitcher)

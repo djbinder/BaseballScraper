@@ -32,6 +32,8 @@ namespace BaseballScraper.Infrastructure
         /// <summary>
         ///     Send an email
         /// </summary>
+        /// <param name="emailSubject">todo: describe emailSubject parameter on SendEmail</param>
+        /// <param name="emailBodyContent">todo: describe emailBodyContent parameter on SendEmail</param>
         /// <remarks>
         ///     _gmail1Value and _gmail1PasswordForAppValue:
         ///         * Are set in user secrets
@@ -52,7 +54,7 @@ namespace BaseballScraper.Infrastructure
         /// </example>
         public void SendEmail(string emailSubject, string emailBodyContent)
         {
-            using (var message = new MailMessage())
+            using (MailMessage message = new MailMessage())
             {
                 message.To.Add(new MailAddress(_gmail1Value, "RECEIVER"));
                 message.From = new MailAddress(_gmail1Value, "Baseball Scraper Reporting");
@@ -61,7 +63,7 @@ namespace BaseballScraper.Infrastructure
                 message.Body       = emailBodyContent;
                 message.IsBodyHtml = true;
 
-                using (var client = new SmtpClient("smtp.gmail.com"))
+                using (SmtpClient client = new SmtpClient("smtp.gmail.com"))
                 {
                     client.Port        = 587;
                     client.Credentials = new NetworkCredential(_gmail1Value, _gmail1PasswordForAppValue);

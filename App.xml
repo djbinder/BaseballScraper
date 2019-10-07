@@ -15,6 +15,8 @@
                     * Baseball HQ
                     * Yahoo
             </summary>
+            <param name="firstName">todo: describe firstName parameter on LaunchAllPagesInChromeForPlayer</param>
+            <param name="lastName">todo: describe lastName parameter on LaunchAllPagesInChromeForPlayer</param>
             <remarks>
                 Uses google sheet connector
                 See: gSheetNames.json for sheet info
@@ -28,48 +30,57 @@
             <summary>
                 Launch FanGraphs page for player
             </summary>
+            <param name="player">todo: describe player parameter on LaunchPlayersFanGraphsPageInChrome</param>
         </member>
         <member name="M:BaseballScraper.Controllers.AGGREGATORS.LaunchCoreSpSitesController.LaunchPlayersBaseballProsectusPageInChrome(BaseballScraper.Models.Player.SfbbPlayerBase)">
             <summary>
                 Launch Baseball Prospectus page for player
             </summary>
+            <param name="player">todo: describe player parameter on LaunchPlayersBaseballProsectusPageInChrome</param>
         </member>
         <member name="M:BaseballScraper.Controllers.AGGREGATORS.LaunchCoreSpSitesController.LaunchPlayersRotowirePageInChrome(BaseballScraper.Models.Player.SfbbPlayerBase)">
             <summary>
                 Launch Rotowire page for player
             </summary>
+            <param name="player">todo: describe player parameter on LaunchPlayersRotowirePageInChrome</param>
         </member>
         <member name="M:BaseballScraper.Controllers.AGGREGATORS.LaunchCoreSpSitesController.LaunchPlayersBaseballSavantPageInChrome(BaseballScraper.Models.Player.SfbbPlayerBase)">
             <summary>
                 Launch Baseball Savant page for player
             </summary>
+            <param name="player">todo: describe player parameter on LaunchPlayersBaseballSavantPageInChrome</param>
         </member>
         <member name="M:BaseballScraper.Controllers.AGGREGATORS.LaunchCoreSpSitesController.LaunchPlayersBaseballHqPageInChrome(BaseballScraper.Models.Player.SfbbPlayerBase)">
             <summary>
                 Launch Baseball HQ page for player
             </summary>
+            <param name="player">todo: describe player parameter on LaunchPlayersBaseballHqPageInChrome</param>
         </member>
         <member name="M:BaseballScraper.Controllers.AGGREGATORS.LaunchCoreSpSitesController.LaunchPlayersYahooPageInChrome(BaseballScraper.Models.Player.SfbbPlayerBase)">
             <summary>
                 Launch Yahoo page for player
             </summary>
+            <param name="player">todo: describe player parameter on LaunchPlayersYahooPageInChrome</param>
         </member>
         <member name="M:BaseballScraper.Controllers.AGGREGATORS.LaunchCoreSpSitesController.LaunchPlayersBaseballReferencePageInChrome(BaseballScraper.Models.Player.SfbbPlayerBase)">
             <summary>
                 Launch Baseball Reference page
             </summary>
+            <param name="player">todo: describe player parameter on LaunchPlayersBaseballReferencePageInChrome</param>
         </member>
         <member name="M:BaseballScraper.Controllers.AGGREGATORS.LaunchCoreSpSitesController.FormatPlayerFirstAndLastName(System.String)">
             <summary>
                 Capitalizes first letter in player's first and / or last name
                 Without this, you will get an error / will not find player in sheet
             </summary>
+            <param name="str">todo: describe str parameter on FormatPlayerFirstAndLastName</param>
         </member>
-        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.DownloadRestOfSeasonProjections(System.Boolean)">
+        <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.DownloadRestOfSeasonProjectionsAsync(System.Boolean)">
             <summary>
                 * Downloads csv from hq
                 * File should be downloaded each day to get the latest and greatest data
             </summary>
+            <param name="openFileAfterMove">todo: describe openFileAfterMove parameter on DownloadRestOfSeasonProjectionsAsync</param>
             <remarks>
                 * STEPS
                   * 1) Go to baseball hq website and log in
@@ -84,16 +95,19 @@
             <summary>
                 * Add one HqHitterRestOfSeasonProjection to the database
             </summary>
+            <param name="hitter">todo: describe hitter parameter on AddOneRosAsync_DB</param>
         </member>
         <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.AddAllRosAsync_DB(System.Collections.Generic.IList{BaseballScraper.Models.BaseballHq.HqHitterRestOfSeasonProjection})">
             <summary>
                 * Add list of HqHitterRestOfSeasonProjection hitters to the database
             </summary>
+            <param name="listOfHitterRestOfSeasonProjections">todo: describe listOfHitterRestOfSeasonProjections parameter on AddAllRosAsync_DB</param>
         </member>
         <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.GetOneRosAsync_DB(System.Nullable{System.Int32})">
             <summary>
                 * Read one HqHitterRestOfSeasonProjection hitter from database
             </summary>
+            <param name="hqid">todo: describe hqid parameter on GetOneRosAsync_DB</param>
         </member>
         <member name="M:BaseballScraper.Controllers.BaseballHQControllers.BaseballHqHitterController.GetAllRos_DB">
             <summary>
@@ -104,6 +118,7 @@
             <summary>
                 Gets YTD csv from hq site and adds hitters to database
             </summary>
+            <param name="openFileAfterMove">todo: describe openFileAfterMove parameter on GetAllYtdAsync_CSV</param>
             <remarks>
                 * Should be run each day
                 * 1) Checks if Csv File for todays exists in Hq Target_Write folders
@@ -135,11 +150,17 @@
             <summary>
                 Create end point for 'WriteBaseballSavantSingleDayDataToCsv' method to write to
             </summary>
+            <param name="year">todo: describe year parameter on GetAllSpCswSingleDayEndPointUri</param>
+            <param name="monthNumber">todo: describe monthNumber parameter on GetAllSpCswSingleDayEndPointUri</param>
+            <param name="dayNumber">todo: describe dayNumber parameter on GetAllSpCswSingleDayEndPointUri</param>
         </member>
         <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BaseballSavantSpController.SetCsvFilePathSpCswSingleDay(System.Int32,System.Int32,System.Int32)">
             <summary>
                 Creates a string of the fill path name
             </summary>
+            <param name="year">todo: describe year parameter on SetCsvFilePathSpCswSingleDay</param>
+            <param name="monthNumber">todo: describe monthNumber parameter on SetCsvFilePathSpCswSingleDay</param>
+            <param name="dayNumber">todo: describe dayNumber parameter on SetCsvFilePathSpCswSingleDay</param>
         </member>
         <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BaseballSavantSpController.ReadSpCswCsvSingleDayAsync(System.Int32,System.Int32,System.Int32)">
             <summary>
@@ -175,16 +196,22 @@
             <summary>
                 Add StartingPitcherCswSingleDay to Database
             </summary>
+            <param name="spCsw">todo: describe spCsw parameter on AddStartingPitcherCswSingleDayToDatabase</param>
         </member>
         <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BaseballSavantSpController.AddStartingPitcherCswsSingleDayToDatabaseFromList(System.Collections.Generic.List{BaseballScraper.Models.BaseballSavant.StartingPitcherCswSingleDay})">
             <summary>
                 Add StartingPitcherCswSingleDay to Database from list
             </summary>
+            <param name="listSpCsw">todo: describe listSpCsw parameter on AddStartingPitcherCswsSingleDayToDatabaseFromList</param>
         </member>
         <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BaseballSavantSpController.CreateSpCswSingleDayList(System.Collections.Generic.List{System.Object},System.Int32,System.Int32,System.Int32)">
             <summary>
                 Create list of StartingPitcherCswSingleDay
             </summary>
+            <param name="list">todo: describe list parameter on CreateSpCswSingleDayList</param>
+            <param name="year">todo: describe year parameter on CreateSpCswSingleDayList</param>
+            <param name="monthNumber">todo: describe monthNumber parameter on CreateSpCswSingleDayList</param>
+            <param name="dayNumber">todo: describe dayNumber parameter on CreateSpCswSingleDayList</param>
         </member>
         <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BaseballSavantSpController.WriteBaseballSavantDateRangeDataToCsv(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
             <summary>
@@ -211,11 +238,21 @@
             <summary>
                 Create end point for 'WriteBaseballSavantDateRangeDataToCsv' method to write to
             </summary>
+            <param name="year">todo: describe year parameter on GetAllSpCswRangeOfDaysEndPointUri</param>
+            <param name="startMonth">todo: describe startMonth parameter on GetAllSpCswRangeOfDaysEndPointUri</param>
+            <param name="startDay">todo: describe startDay parameter on GetAllSpCswRangeOfDaysEndPointUri</param>
+            <param name="endMonth">todo: describe endMonth parameter on GetAllSpCswRangeOfDaysEndPointUri</param>
+            <param name="endDay">todo: describe endDay parameter on GetAllSpCswRangeOfDaysEndPointUri</param>
         </member>
         <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BaseballSavantSpController.SetCsvFilePathSpCswDateRange(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
             <summary>
                 Creates a string of the fill path name
             </summary>
+            <param name="year">todo: describe year parameter on SetCsvFilePathSpCswDateRange</param>
+            <param name="startMonth">todo: describe startMonth parameter on SetCsvFilePathSpCswDateRange</param>
+            <param name="startDay">todo: describe startDay parameter on SetCsvFilePathSpCswDateRange</param>
+            <param name="endMonth">todo: describe endMonth parameter on SetCsvFilePathSpCswDateRange</param>
+            <param name="endDay">todo: describe endDay parameter on SetCsvFilePathSpCswDateRange</param>
         </member>
         <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BaseballSavantSpController.ReadSpCswCsvDateRangeAsync(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
             <summary>
@@ -256,16 +293,24 @@
             <summary>
                 Add StartingPitcherCswDateRange to Database
             </summary>
+            <param name="spCsw">todo: describe spCsw parameter on AddStartingPitcherCswDateRangeToDatabase</param>
         </member>
         <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BaseballSavantSpController.AddStartingPitcherCswsDateRangeToDatabaseFromList(System.Collections.Generic.List{BaseballScraper.Models.BaseballSavant.StartingPitcherCswDateRange})">
             <summary>
                 Add StartingPitcherCswDateRange to Database from list
             </summary>
+            <param name="listSpCsw">todo: describe listSpCsw parameter on AddStartingPitcherCswsDateRangeToDatabaseFromList</param>
         </member>
         <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BaseballSavantSpController.CreateSpCswDateRangeList(System.Collections.Generic.List{System.Object},System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
             <summary>
                 Create list of StartingPitcherCswDateRange
             </summary>
+            <param name="list">todo: describe list parameter on CreateSpCswDateRangeList</param>
+            <param name="year">todo: describe year parameter on CreateSpCswDateRangeList</param>
+            <param name="startMonth">todo: describe startMonth parameter on CreateSpCswDateRangeList</param>
+            <param name="startDay">todo: describe startDay parameter on CreateSpCswDateRangeList</param>
+            <param name="endMonth">todo: describe endMonth parameter on CreateSpCswDateRangeList</param>
+            <param name="endDay">todo: describe endDay parameter on CreateSpCswDateRangeList</param>
         </member>
         <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BaseballSavantSpController.WriteBaseballSavantFullSeasonData(System.Int32)">
             <summary>
@@ -280,11 +325,13 @@
             <summary>
                 Create end point for 'WriteBaseballSavantFullSeasonData' method to write to
             </summary>
+            <param name="year">todo: describe year parameter on GetAllSpCswFullSeasonEndPointUri</param>
         </member>
         <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BaseballSavantSpController.SetCsvFilePathSpCswFulLSeason(System.Int32)">
             <summary>
                 Creates a string of the fill path name
             </summary>
+            <param name="year">todo: describe year parameter on SetCsvFilePathSpCswFulLSeason</param>
         </member>
         <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BaseballSavantSpController.ReadSpCswCsvFullSeasonAsync(System.Int32)">
             <summary>
@@ -313,16 +360,20 @@
             <summary>
                 Add StartingPitcherCsw to Database
             </summary>
+            <param name="spCsw">todo: describe spCsw parameter on AddStartingPitcherCswFullSeasonToDatabase</param>
         </member>
         <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BaseballSavantSpController.AddStartingPitcherCswsFullSeasonToDatabaseFromList(System.Collections.Generic.List{BaseballScraper.Models.BaseballSavant.StartingPitcherCswFullSeason})">
             <summary>
                 Add StartingPitcherCsw to Database from list
             </summary>
+            <param name="listSpCsw">todo: describe listSpCsw parameter on AddStartingPitcherCswsFullSeasonToDatabaseFromList</param>
         </member>
         <member name="M:BaseballScraper.Controllers.BaseballSavantControllers.BaseballSavantSpController.CreateSpCswFullSeasonList(System.Collections.Generic.List{System.Object},System.Int32)">
             <summary>
                 Create list of StartingPitcherCsw
             </summary>
+            <param name="list">todo: describe list parameter on CreateSpCswFullSeasonList</param>
+            <param name="year">todo: describe year parameter on CreateSpCswFullSeasonList</param>
         </member>
         <member name="M:BaseballScraper.Controllers.CbsControllers.CbsTransactionTrendsController.GetListOfCbsMostAddedOrDropped(System.String)">
             <summary> Returns a list of the most added or dropped players according to Cbs trends; Does not filter by position </summary>
@@ -381,7 +432,7 @@
             <summary> Gets the top 25 most dropped players from ESPN </summary>
             <returns> A list of EspnTransactionTrendPlayer </returns>
         </member>
-        <member name="M:BaseballScraper.Controllers.FanGraphsControllers.FanGraphsHitterController.ScrapeMasterHittersReport(BaseballScraper.EndPoints.FanGraphsUriEndPoints.PositionEnum,System.Int32,System.String,System.Int32)">
+        <member name="M:BaseballScraper.Controllers.FanGraphsControllers.FanGraphsHitterController.ScrapeMasterHittersReportAsync(BaseballScraper.EndPoints.FanGraphsUriEndPoints.PositionEnum,System.Int32,System.String,System.Int32)">
             <summary>
                 Scapes FanGraphs hitter master report html
                 By default, returns 30 rows per page
@@ -416,7 +467,7 @@
                 NL SS, 100PA+:  var scrapeForOutfieldersIn2018 = await ScrapeMasterHittersReport(positionEnum: PositionEnum.Shortstop, minPlateAppearances: 100, league: "nl");
             </example>
         </member>
-        <member name="M:BaseballScraper.Controllers.FanGraphsControllers.FanGraphsHitterController.GetIntFromPage(PuppeteerSharp.Page,System.String)">
+        <member name="M:BaseballScraper.Controllers.FanGraphsControllers.FanGraphsHitterController.GetIntFromPageAsync(PuppeteerSharp.Page,System.String)">
             <summary>
                 Gets a specific value from within the html of the page
             </summary>
@@ -433,18 +484,21 @@
                 int numberOfPagesToScrape = await GetIntFromPage(page, _pageCountSelector);
             </example>
         </member>
-        <member name="M:BaseballScraper.Controllers.FanGraphsControllers.FanGraphsHitterController.GetNumberOfPagesToScape(PuppeteerSharp.Page,System.String)">
+        <member name="M:BaseballScraper.Controllers.FanGraphsControllers.FanGraphsHitterController.GetNumberOfPagesToScapeAsync(PuppeteerSharp.Page,System.String)">
             <summary>
                 Gets the number of rows on page to scrape
             </summary>
+            <param name="page">todo: describe page parameter on GetNumberOfPagesToScape</param>
+            <param name="endPoint">todo: describe endPoint parameter on GetNumberOfPagesToScape</param>
             <example>
                 int numberOfPagesToScrape = await GetNumberOfPagesToScape(page, endPoint);
             </example>
         </member>
-        <member name="M:BaseballScraper.Controllers.FanGraphsControllers.FanGraphsHitterController.GetNumberOfPagesToScape(PuppeteerSharp.Page)">
+        <member name="M:BaseballScraper.Controllers.FanGraphsControllers.FanGraphsHitterController.GetNumberOfPagesToScapeAsync(PuppeteerSharp.Page)">
             <summary>
                 Gets the number of rows on page to scrape
             </summary>
+            <param name="page">todo: describe page parameter on GetNumberOfPagesToScape</param>
             <example>
                 int numberOfPagesToScrape = await GetNumberOfPagesToScape(page);
             </example>
@@ -455,6 +509,7 @@
                 e.g., 13.1% becomes 13.1
                 Helper method for: 'CreateFanGraphsHitterInstance(JToken allValuesInRow)' method
             </summary>
+            <param name="token">todo: describe token parameter on ConvertCellWithPercentageSymbolToDecimal</param>
             <remarks>
                 See: https://stackoverflow.com/questions/2171615/how-to-convert-percentage-string-to-double
             </remarks>
@@ -471,6 +526,7 @@
             <summary>
                 Get list of Mlb player's Player Id, First Name, Last Name
             </summary>
+            <param name="lastName">todo: describe lastName parameter on GetPlayerInfoForAllPlayersWithLastName</param>
             <remarks>
                 See: 'playerInfo' section @ http://lahman.r-forge.r-project.org/doc/
                 See: https://analyticsrusers.blog/2018/05/31/leverage-r-code-within-net-environments-running-a-cvar-model-in-a-c-applications/
@@ -486,6 +542,9 @@
             <summary>
                 Instantiate instance of LahmanPlayerInfo
             </summary>
+            <param name="dataFrame">todo: describe dataFrame parameter on CreateLahmanPlayerInfoInstance</param>
+            <param name="indexer">todo: describe indexer parameter on CreateLahmanPlayerInfoInstance</param>
+            <param name="lastName">todo: describe lastName parameter on CreateLahmanPlayerInfoInstance</param>
         </member>
         <member name="T:BaseballScraper.Controllers.MlbDataApiControllers.MlbDataHittingLeadersController">
             <summary>
@@ -587,6 +646,7 @@
         </member>
         <member name="M:BaseballScraper.Controllers.MlbDataApiControllers.cs.MlbDataProjectedPitchingStatsController.ViewPlayerInfo(System.Int32)">
             <summary> View instantiated pecota projections for a selected pitcher in a selected season  </summary>
+            <param name="playerId">todo: describe playerId parameter on ViewPlayerInfo</param>
             <example> https://127.0.0.1:5001/api/mlb/projectedpitchingstats/592789 </example>
             <returns> A view of a projectedpitchingstats model </returns>
         </member>
@@ -594,6 +654,7 @@
             <summary>
                 View instantiated player model with player's info
             </summary>
+            <param name="playerId">todo: describe playerId parameter on CreatePlayerInfoInstance</param>
             <returns>
                 A view of a playerinfo model
             </returns>
@@ -602,6 +663,7 @@
             <summary>
                 View instantiated PlayerSearch object
             </summary>
+            <param name="playerLastName">todo: describe playerLastName parameter on ViewPlayerSearchModel</param>
             <remarks>
                 See: https://appac.github.io/mlb-data-api-docs/#player-data-player-search-get
             </remarks>
@@ -611,6 +673,7 @@
         </member>
         <member name="M:BaseballScraper.Controllers.MlbDataApiControllers.MlbDataProjectedHittingStatsController.ViewPlayerInfo(System.Int32)">
             <summary> View instantiated pecota projections for a selected hitter in a selected season  </summary>
+            <param name="playerId">todo: describe playerId parameter on ViewPlayerInfo</param>
             <example> https://127.0.0.1:5001/api/mlb/projectedhittingstats/493316 </example>
             <returns> A view of a projectedhittingstats model </returns>
         </member>
@@ -650,6 +713,7 @@
                 * Add list of playerBases
                 * AddAll_DB Option 1 for SfbbPlayerBases
             </summary>
+            <param name="allPlayerBases">todo: describe allPlayerBases parameter on AddAllAsync_DB</param>
         </member>
         <member name="M:BaseballScraper.Controllers.PlayerControllers.PlayerBaseController.PlayerBaseFromExcel.GetAllPlayerBasesFromExcel">
             <summary>
@@ -678,6 +742,7 @@
                 Each of methods in this section returns a player (from IEnumerable PlayerBases)
                 The only difference is the type of Id you are passing in (e.g. MlbId, FanGraphsPlayerId, EspnPlayerId etc.)
             </summary>
+            <param name="playersBaseballHqPlayerId">todo: describe playersBaseballHqPlayerId parameter on GetOnePlayersBaseFromBaseballHqId</param>
             <returns>
                 IEnumerable of PlayerBases (i.e. a PlayerBase for one player)
             </returns>
@@ -692,7 +757,7 @@
             <param name="playersBase"> An instantiated PlayerBase </param>
             <returns> A dictionary of all of a player's ids with key value pairs of Key: Id type, Value: id number/string </returns>
         </member>
-        <member name="M:BaseballScraper.Controllers.TwitterController.ExecuteTwitterStringSearch(System.String)">
+        <member name="M:BaseballScraper.Controllers.TwitterController.ExecuteTwitterStringSearchAsync(System.String)">
             <summary>
                 Search all of Twitter to find most recent tweets that include 'searchString' parameter
                 Set to return last 100 relevant tweets which is the max possible
@@ -739,7 +804,7 @@
                 var twitterStatus = CreateNewStatusListFromCount(searchResponse);
             </example>
         </member>
-        <member name="M:BaseballScraper.Controllers.TwitterController.GetListsForUser(System.String)">
+        <member name="M:BaseballScraper.Controllers.TwitterController.GetListsForUserAsync(System.String)">
             <summary>
                 Create LinqToTwitter.List
             </summary>
@@ -758,6 +823,7 @@
             <summary>
                 Add a TwitterStatus to mongoDb
             </summary>
+            <param name="twitterStatus">todo: describe twitterStatus parameter on AddTwitterStatusToMongoDb</param>
         </member>
         <member name="M:BaseballScraper.Controllers.TwitterControllers.TwitterTweetinviController.GetIUserFromScreenName(System.String)">
             <summary>
@@ -1158,6 +1224,8 @@
                 Support method for 'GetAllUserIdsForMembersOfTwitterList' method
                 Gets all user ids from given IUsers and adds them to List
             </summary>
+            <param name="members">todo: describe members parameter on AddUserIdsToList</param>
+            <param name="userIds">todo: describe userIds parameter on AddUserIdsToList</param>
         </member>
         <member name="M:BaseballScraper.Controllers.TwitterControllers.TwitterTweetinviController.WriteSinceIdToTxtFile(System.Int64)">
             <summary>
@@ -1216,79 +1284,11 @@
                 See: https://github.com/linvi/tweetinvi/wiki/Tweetinvi-Events
             </remarks>
         </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.Collections.YahooPlayersCollectionController.FilterByPlayerNameThenCreateInstance(System.String)">
-            <summary>
-                Query yahoo players collection with various filters
-                Each below is one (e.g., filter by player name) or a combo of filters (e.g., filter by player name, and position, and status)
-                See 'filter options' #region to view options for each of the filter types (e.g., status, )
-            </summary>
-            <example>
-               var collection = FilterByPlayerNameThenCreateInstance("smith"); OR
-               var player = FilterByPlayerNameThenCreateInstance("bryant");
-            </example>
-        </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.Collections.YahooPlayersCollectionController.FilterByPlayerNameAndPositionThenCreateInstance(System.String,System.String)">
-            <example>
-               var collection = FilterByPlayerNameAndPositionThenCreateInstance("smith","SP");
-            </example>
-        </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.Collections.YahooPlayersCollectionController.FilterByPositionThenCreateInstance(System.String)">
-            <example>
-               var collection = FilterByPositionThenCreateInstance("3B");
-            </example>
-        </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.Collections.YahooPlayersCollectionController.FilterByPositionWithSortThenCreateInstance(System.String,System.String)">
-            <example>
-               var collection = FilterByPositionWithSortThenCreateInstance("3B","OR");
-            </example>
-        </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.Collections.YahooPlayersCollectionController.FilterByPositionAndStatusWithSortThenCreateInstance(System.String,System.String,System.String)">
-            <example>
-                var collection = FilterByPositionAndStatusWithSortThenCreateInstance("3B","FA","OR");
-            </example>
-        </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.Collections.YahooPlayersCollectionController.FilterByPositionAndStatusWithSortForLastWeekThenCreateInstance(System.String,System.String)">
-            <example>
-                var collection = FilterByPositionAndStatusWithSortForLastWeekThenCreateInstance("3B","FA");
-            </example>
-        </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.Collections.YahooPlayersCollectionController.FilterByPositionAndStatusWithSortForLastMonthThenCreateInstance(System.String,System.String)">
-            <example>
-               var collection = FilterByPositionAndStatusWithSortForLastMonthThenCreateInstance("3B","FA");
-            </example>
-        </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.Collections.YahooPlayersCollectionController.FilterByPositionAndStatusWithSortForTodayThenCreateInstance(System.String,System.String)">
-            <example>
-               var collection = FilterByPositionAndStatusWithSortForTodayThenCreateInstance("3B","FA");
-            </example>
-        </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.Collections.YahooPlayersCollectionController.FilterByPositionAndStatusThenCreateInstance(System.String,System.String)">
-            <example>
-                var collection = FilterByPositionAndStatusThenCreateInstance("3B","FA");
-            </example>
-        </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.Collections.YahooPlayersCollectionController.FilterByPositionStatusAndCountThenCreateInstance(System.String,System.String,System.String)">
-            <example>
-               var collection = FilterByPositionStatusAndCountThenCreateInstance("3B","FA","10");
-            </example>
-        </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.Collections.YahooPlayersCollectionController.CreatePlayerListFromPlayersCollection(BaseballScraper.Models.Yahoo.Collections.YahooPlayersCollection)">
-            <example>
-               var collection = FilterByPositionWithSortThenCreateInstance("3B","OR");
-               var listOfPlayers = CreatePlayerListFromPlayersCollection(collection);
-            </example>
-        </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.Collections.YahooPlayersCollectionController.CreatePlayerListFromPlayers(BaseballScraper.Models.Yahoo.Collections.Players)">
-            <example>
-                var collection = FilterByPositionWithSortThenCreateInstance("3B","OR");
-                var collectionPlayers = collection.Players;
-                var listPlayer = CreatePlayerListFromPlayers(collectionPlayers);
-            </example>
-        </member>
         <member name="M:BaseballScraper.Controllers.YahooControllers.Collections.YahooPlayersCollectionController.CreatePlayersCollectionInstance(System.String)">
             <summary>
                 Used by the various methods about to generate the actual players collection based on the filters of those methods
             </summary>
+            <param name="uriPlayersCollection">todo: describe uriPlayersCollection parameter on CreatePlayersCollectionInstance</param>
         </member>
         <member name="M:BaseballScraper.Controllers.YahooControllers.Resources.YahooPlayerResourceController.CreateYahooPlayerResourceInstances(System.String)">
             <summary>
@@ -1310,6 +1310,7 @@
             <summary>
                 Instantiate multiple instances of yahoo player resource
             </summary>
+            <param name="ListOfYahooPlayerIds">todo: describe ListOfYahooPlayerIds parameter on CreateListOfYahooPlayerResourceInstances</param>
             <example>
                 string rizzoId = "8868";
                 string goldschmidtId = "8967";
@@ -1326,6 +1327,7 @@
                 Retrieves yahoo player id from player's yahoo name
                 This is helpful with primary methods if you do not know the player's yahoo id
             </summary>
+            <param name="PlayerName">todo: describe PlayerName parameter on GetYahooPlayersIdFromPlayerName</param>
             <example>
                 var playerId = GetYahooPlayersIdFromPlayerName("Anthony Rizzo");
             </example>
@@ -1349,11 +1351,6 @@
             <example>
                 await AddPlayersForOneRosterToGoogleSheetAsync(1, "roster_import_test", "SheetsTestDoc")
             </example>
-        </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.Resources.YahooRosterResourceController.AddPlayersForAllLeagueRostersToGoogleSheetAsync(System.Int32,System.String,System.String)">
-            <summary>
-                This is the same as the 'AddPlayersForOneRosterToGoogleSheetAsync()' method but for all teams
-            </summary>
         </member>
         <member name="M:BaseballScraper.Controllers.YahooControllers.Resources.YahooRosterResourceController.CreateYahooRosterResourceInstance(System.Int32)">
             <summary>
@@ -1411,6 +1408,7 @@
             <summary>
                 Create list of Players on one manager's roster
             </summary>
+            <param name="teamNumber">todo: describe teamNumber parameter on CreateListOfPlayersOnRoster</param>
             <example>
                 var rosterResourceToken = CreateRosterResourceJToken(6);
                 var listOfPlayers = CreateListOfPlayersOnRoster(rosterResourceToken);
@@ -1420,6 +1418,7 @@
             <summary>
                 Creates list of Players for all managers in league
             </summary>
+            <param name="numberOfTeamsInLeague">todo: describe numberOfTeamsInLeague parameter on CreateListOfPlayersAllRosters</param>
             <example>
                 var roster  = CreateListOfPlayersAllRosters(10);
             </example>
@@ -1428,6 +1427,7 @@
             <summary>
                 Create instance of manager for one team in league
             </summary>
+            <param name="teamNumber">todo: describe teamNumber parameter on GetMangersForRoster</param>
             <remarks>
                 This might break if there are co-managers; haven't tested that yet though
             </remarks>
@@ -1439,6 +1439,7 @@
             <summary>
                 Create instance of manager all teams in league
             </summary>
+            <param name="numberOfTeamsInLeague">todo: describe numberOfTeamsInLeague parameter on CreateListOfManagersForAllRosters</param>
             <remarks>
                 This might break if there are co-managers; haven't tested that yet though
             </remarks>
@@ -1451,6 +1452,7 @@
                 Create a list of headers of all available data in Yahoo Roster Resource json
                 This differs from next method as that method is a refined version of the headers you want
             </summary>
+            <param name="listOfLists">todo: describe listOfLists parameter on AddAllPlayerModelPropertiesAsHeadersInGoogleSheet</param>
             <example>
                 AddAllPlayerModelPropertiesAsHeadersInGoogleSheet(listOfLists);
             </example>
@@ -1460,6 +1462,7 @@
                 Create a list of selected headers
                 This differs from the previous method as previous method gets you all headers
             </summary>
+            <param name="listOfLists">todo: describe listOfLists parameter on AddMostRelevantRosterPropertiesAsHeadersInGoogleSheet</param>
             <example>
                 AddMostRelevantRosterPropertiesAsHeadersInGoogleSheet(listOfLists);
             </example>
@@ -1525,6 +1528,8 @@
                 2) 'PopulateTeamBaseWithCoManagers()' methods
                 This is ultimately called in the 'CreateYahooTeamBaseModel()' method
             </summary>
+            <param name="tB">todo: describe tB parameter on PopulateInitialTeamResourceInstanceProperties</param>
+            <param name="resourceJson">todo: describe resourceJson parameter on PopulateInitialTeamResourceInstanceProperties</param>
             <remarks>
                 Note that the code below is formated / indented to give an idea how the json looks
             </remarks>
@@ -1538,6 +1543,8 @@
                 If there are two managers, populate properties with 'PopulateTeamBaseWithCoManagers()'
                 This is ultimately called in the 'CreateYahooTeamBaseModel()' method
             </summary>
+            <param name="tB">todo: describe tB parameter on PopulateTeamResourceInstanceWithOneManager</param>
+            <param name="managerPath">todo: describe managerPath parameter on PopulateTeamResourceInstanceWithOneManager</param>
             <example>
                 PopulateTeamResourceInstanceWithOneManager(tB, managerPath);
             </example>
@@ -1548,6 +1555,9 @@
                 If the team only has one manager, populate remaining properties with 'PopulateTeamBaseWithOneManager()' method
                 This is ultimately called in the 'CreateYahooTeamBaseModel()' method
             </summary>
+            <param name="tB">todo: describe tB parameter on PopulateTeamBaseWithCoManagers</param>
+            <param name="managerPath">todo: describe managerPath parameter on PopulateTeamBaseWithCoManagers</param>
+            <param name="teamManagersList">todo: describe teamManagersList parameter on PopulateTeamBaseWithCoManagers</param>
             <example>
                 PopulateTeamBaseWithCoManagers(tB, managerPath, teamManagersList);
             </example>
@@ -1576,6 +1586,7 @@
             <summary>
                 This is the same thing as 'GetYahooManagerModel()' method except managerId is passed in through url
             </summary>
+            <param name="managerId">todo: describe managerId parameter on CreateYahooManagerModelFromUrl</param>
             <example>
                 https://127.0.0.1:5001/api/yahoo/yahoomanager/1
             </example>
@@ -1802,13 +1813,6 @@
             </summary>
             <returns> The HttpWebRequest for authorization converted to a JObject </returns>
         </member>
-        <member name="M:BaseballScraper.Controllers.YahooControllers.YahooAuthController.CreateYahooAccessTokenRequest">
-            <summary>
-            * Generate the HttpWebRequest for authorization
-            * This is for brand new users as it calls the 'GenerateUserAuthorizationCode()' method
-            * This is applicable to a first time user (i.e., a user w/o a refresh token)
-            </summary>
-        </member>
         <member name="M:BaseballScraper.Controllers.YahooControllers.YahooAuthController.ExchangeRefreshTokenForNewAccessTokenJObject">
             <summary>
                 If user has a refresh token, this is the path
@@ -1832,6 +1836,11 @@
                 1) ExchangeRefreshTokenForNewAccessTokenJObject()
                 2) ExchangeRefreshTokenForNewAccessToken()
             </summary>
+            <param name="consumerKey">todo: describe consumerKey parameter on ExchangeRefreshTokenStringbuilder</param>
+            <param name="consumerSecret">todo: describe consumerSecret parameter on ExchangeRefreshTokenStringbuilder</param>
+            <param name="redirectUri">todo: describe redirectUri parameter on ExchangeRefreshTokenStringbuilder</param>
+            <param name="refreshTokenCheck">todo: describe refreshTokenCheck parameter on ExchangeRefreshTokenStringbuilder</param>
+            <param name="grantType">todo: describe grantType parameter on ExchangeRefreshTokenStringbuilder</param>
         </member>
         <member name="M:BaseballScraper.Controllers.YahooControllers.YahooAuthController.ExchangeRefreshTokenRequestAppender(System.Net.HttpWebRequest,System.String,System.String)">
             <summary>
@@ -1839,6 +1848,9 @@
                 1) ExchangeRefreshTokenForNewAccessTokenJObject()
                 2) ExchangeRefreshTokenForNewAccessToken()
             </summary>
+            <param name="request">todo: describe request parameter on ExchangeRefreshTokenRequestAppender</param>
+            <param name="consumerKey">todo: describe consumerKey parameter on ExchangeRefreshTokenRequestAppender</param>
+            <param name="consumerSecret">todo: describe consumerSecret parameter on ExchangeRefreshTokenRequestAppender</param>
         </member>
         <member name="M:BaseballScraper.Controllers.YahooControllers.YahooAuthController.GetYahooAccessTokenResponse">
             <summary>
@@ -1852,6 +1864,7 @@
                 Receives a JObject, takes that information, and turns it into an AccessTokenResponse
                 Called 2x within:  'GetYahooAccessTokenResponse()'
             </summary>
+            <param name="responseToJson">todo: describe responseToJson parameter on GenerateYahooAccessTokenResponse</param>
         </member>
         <member name="M:BaseballScraper.Controllers.YahooControllers.YahooAuthController.SetSessionAuthorizationCode(System.String)">
             <summary>
@@ -1859,6 +1872,7 @@
                 This is called within the GenerateUserAuthorizationCode method
                 This method / step is not required
             </summary>
+            <param name="authorizationCodeFromConsole">todo: describe authorizationCodeFromConsole parameter on SetSessionAuthorizationCode</param>
         </member>
         <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTransactionTrendsController.SetSearchDate(System.String,System.String,System.String)">
             <summary> Sets a query url for a specific date </summary>
@@ -1907,11 +1921,17 @@
             <returns> A list of YahooTransactionTrendsPlayer --> Name, Drops, Adds, Trades, Total </returns>
         </member>
         <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTransactionTrendsController.AddTrendsToGoogleSheets(System.String,System.String,System.String)">
+            <param name="tabName">todo: describe tabName parameter on AddTrendsToGoogleSheets</param>
+            <param name="range">todo: describe range parameter on AddTrendsToGoogleSheets</param>
+            <param name="jsonGroupName">todo: describe jsonGroupName parameter on AddTrendsToGoogleSheets</param>
             <example>
             AddTrendsToGoogleSheets("YAHOO_TRENDS","A1:Z1000","CoreCalculator")
             </example>
         </member>
         <member name="M:BaseballScraper.Controllers.YahooControllers.YahooTransactionTrendsController.AddTrendsToGoogleSheetsAsync(System.String,System.String,System.String)">
+            <param name="tabName">todo: describe tabName parameter on AddTrendsToGoogleSheetsAsync</param>
+            <param name="range">todo: describe range parameter on AddTrendsToGoogleSheetsAsync</param>
+            <param name="jsonGroupName">todo: describe jsonGroupName parameter on AddTrendsToGoogleSheetsAsync</param>
             <example>
             await AddTrendsToGoogleSheetsAsync("YAHOO_TRENDS","A1:Z1000","CoreCalculator")
             </example>
@@ -2143,11 +2163,12 @@
                 var oneRecord = await _atM.GetOneRecordFromAirtableAsync("SpRankings", authenticationString, "rec7yJqKs5Ht3I7j3");
             </example>
         </member>
-        <member name="M:BaseballScraper.Infrastructure.AirtableManager.GetAuthorIdFromAuthorName(System.String)">
+        <member name="M:BaseballScraper.Infrastructure.AirtableManager.GetAuthorIdFromAuthorNameAsync(System.String)">
             <summary>
                 Retrieves the Airtable generated Id for an author based on their name
                 Note: the Airtable generated Id is different than "Author_Id"
             </summary>
+            <param name="authorName">todo: describe authorName parameter on GetAuthorIdFromAuthorName</param>
             <remarks>
                 This can be used when the Author table is used as a field in another table
                 When author is referenced on another table, the Api provides the generated id instead of the author name
@@ -2157,11 +2178,12 @@
                 var authorNameFromId = await _atM.GetAuthorIdFromAuthorName("Eno Sarris");
             </example>
         </member>
-        <member name="M:BaseballScraper.Infrastructure.AirtableManager.GetWebsiteIdFromWebsiteName(System.String)">
+        <member name="M:BaseballScraper.Infrastructure.AirtableManager.GetWebsiteIdFromWebsiteNameAsync(System.String)">
             <summary>
                 Retrieves the Airtable generated Id for website based on its name
                 Note: the Airtable generated Id is different than "Website_Id"
             </summary>
+            <param name="websiteName">todo: describe websiteName parameter on GetWebsiteIdFromWebsiteName</param>
             <remarks>
                 This can be used when the website table is used as a field in another table
                 When the website is referenced on another table, the Api provides the generated id instead of the website name
@@ -2196,10 +2218,14 @@
         </member>
         <member name="M:BaseballScraper.Infrastructure.ApiInfrastructure.CreateModelJToken(Newtonsoft.Json.Linq.JObject,System.String)">
             <summary> Returns a JToken that lists keys/values for player items in PlayerSearch api </summary>
+            <param name="obj">todo: describe obj parameter on CreateModelJToken</param>
+            <param name="modelType">todo: describe modelType parameter on CreateModelJToken</param>
             <returns> A JToken</returns>
         </member>
         <member name="M:BaseballScraper.Infrastructure.CsvHandler.MoveMultipleFiles(System.String,System.String)">
             <summary></summary>
+            <param name="sourceDirectoryPath">todo: describe sourceDirectoryPath parameter on MoveMultipleFiles</param>
+            <param name="destinationDirectoryPath">todo: describe destinationDirectoryPath parameter on MoveMultipleFiles</param>
         </member>
         <member name="M:BaseballScraper.Infrastructure.CsvHandler.DownloadCsvFromLink(System.String,System.String)">
             <summary>
@@ -2266,6 +2292,7 @@
                 e.g., 13.1% becomes 13.1
                 Helper method for: 'CreateFanGraphsHitterInstance(JToken allValuesInRow)' method
             </summary>
+            <param name="token">todo: describe token parameter on ConvertCellWithPercentageSymbolToDecimal</param>
             <remarks>
                 See: https://stackoverflow.com/questions/2171615/how-to-convert-percentage-string-to-double
             </remarks>
@@ -2277,6 +2304,7 @@
             <summary>
                 Create a new data table
             </summary>
+            <param name="tableName">todo: describe tableName parameter on CreateEmptyDataTable</param>
             <returns>
                 A new data table based with no columns or rows
             </returns>
@@ -2288,6 +2316,8 @@
             <summary>
                 Create a new data table; add columns / headers to table of provided strings
             </summary>
+            <param name="tableName">todo: describe tableName parameter on CreateDataTableWithCustomHeaders</param>
+            <param name="tableHeaders">todo: describe tableHeaders parameter on CreateDataTableWithCustomHeaders</param>
             <returns>
                 A new data table with headers of your choosing
             </returns>
@@ -2368,6 +2398,8 @@
             <summary>
                 Send an email
             </summary>
+            <param name="emailSubject">todo: describe emailSubject parameter on SendEmail</param>
+            <param name="emailBodyContent">todo: describe emailBodyContent parameter on SendEmail</param>
             <remarks>
                 _gmail1Value and _gmail1PasswordForAppValue:
                     * Are set in user secrets
@@ -2446,9 +2478,12 @@
         </member>
         <member name="M:BaseballScraper.Infrastructure.ExcelHandler.AddRecordsToList``1(System.Collections.Generic.IList{``0},``0)">
             <summary> Add retrieved records / rows to a list </summary>
+            <param name="objectList">todo: describe objectList parameter on AddRecordsToList</param>
+            <param name="t">todo: describe t parameter on AddRecordsToList</param>
         </member>
         <member name="M:BaseballScraper.Infrastructure.ExcelHandler.PrintRecord``1(Npoi.Mapper.RowInfo{``0})">
             <summary> Prints records to a list </summary>
+            <param name="obj">todo: describe obj parameter on PrintRecord</param>
         </member>
         <member name="M:BaseballScraper.Infrastructure.ExcelHandler.SetColumnWidth(Export.XLS.ExcelDocument,System.String,System.Int32)">
             <summary> OPTION 1 --> Set the width of a given column </summary>
@@ -2482,12 +2517,25 @@
         </member>
         <member name="M:BaseballScraper.Infrastructure.ExcelHandler.SetFont(Export.XLS.ExcelDocument,System.Int32,System.String,System.String,System.Int32)">
             <summary> OPTION 1 --> Set font of a target cell </summary>
+            <param name="document">todo: describe document parameter on SetFont</param>
+            <param name="rowNumber">todo: describe rowNumber parameter on SetFont</param>
+            <param name="columnLetter">todo: describe columnLetter parameter on SetFont</param>
+            <param name="fontName">todo: describe fontName parameter on SetFont</param>
+            <param name="fontSize">todo: describe fontSize parameter on SetFont</param>
         </member>
         <member name="M:BaseballScraper.Infrastructure.ExcelHandler.SetFont(Export.XLS.ExcelDocument,System.Int32,System.Int32,System.String,System.Int32)">
             <summary> OPTION 2 --> Set font of a target cell </summary>
+            <param name="document">todo: describe document parameter on SetFont</param>
+            <param name="rowNumber">todo: describe rowNumber parameter on SetFont</param>
+            <param name="columnNumber">todo: describe columnNumber parameter on SetFont</param>
+            <param name="fontName">todo: describe fontName parameter on SetFont</param>
+            <param name="fontSize">todo: describe fontSize parameter on SetFont</param>
         </member>
         <member name="M:BaseballScraper.Infrastructure.ExcelHandler.FormatDate(Export.XLS.ExcelDocument,System.Int32,System.Int32)">
             <summary> Format a date cell </summary>
+            <param name="document">todo: describe document parameter on FormatDate</param>
+            <param name="rowNumber">todo: describe rowNumber parameter on FormatDate</param>
+            <param name="columnNumber">todo: describe columnNumber parameter on FormatDate</param>
         </member>
         <member name="M:BaseballScraper.Infrastructure.ExcelHandler.ColumnHeaderLetterToNumber(System.String)">
             <summary> Converts a given letter to it's corresponding number </summary>
@@ -2536,6 +2584,10 @@
             </example>
         </member>
         <member name="M:BaseballScraper.Infrastructure.GoogleSheetsConnector.WriteGoogleSheetRows(System.Collections.Generic.IList{System.Collections.Generic.IList{System.Object}},System.String,System.String,System.String)">
+            <param name="data">todo: describe data parameter on WriteGoogleSheetRows</param>
+            <param name="sheetName">todo: describe sheetName parameter on WriteGoogleSheetRows</param>
+            <param name="range">todo: describe range parameter on WriteGoogleSheetRows</param>
+            <param name="jsonGroupName">todo: describe jsonGroupName parameter on WriteGoogleSheetRows</param>
             <example>
                 private static readonly GoogleSheetsConnector _gSC = new GoogleSheetsConnector();
                 _gSC.UpdateGoogleSheetRows(listOfLists,"FG_SP_MASTER_IMPORT","A3:DB1000","CoreCalculator");
@@ -2545,11 +2597,19 @@
             </remarks>
         </member>
         <member name="M:BaseballScraper.Infrastructure.GoogleSheetsConnector.WriteGoogleSheetColumns(System.Collections.Generic.IList{System.Collections.Generic.IList{System.Object}},System.String,System.String,System.String)">
+            <param name="data">todo: describe data parameter on WriteGoogleSheetColumns</param>
+            <param name="sheetName">todo: describe sheetName parameter on WriteGoogleSheetColumns</param>
+            <param name="range">todo: describe range parameter on WriteGoogleSheetColumns</param>
+            <param name="jsonGroupName">todo: describe jsonGroupName parameter on WriteGoogleSheetColumns</param>
             <example>
                 _gSC.WriteGoogleSheetColumns(listOfLists, "YAHOO_TRENDS","A1:Z1000","CoreCalculator");
             </example>
         </member>
         <member name="M:BaseballScraper.Infrastructure.GoogleSheetsConnector.WriteGoogleSheetColumnsAsync(System.Collections.Generic.IList{System.Collections.Generic.IList{System.Object}},System.String,System.String,System.String)">
+            <param name="data">todo: describe data parameter on WriteGoogleSheetColumnsAsync</param>
+            <param name="sheetName">todo: describe sheetName parameter on WriteGoogleSheetColumnsAsync</param>
+            <param name="range">todo: describe range parameter on WriteGoogleSheetColumnsAsync</param>
+            <param name="jsonGroupName">todo: describe jsonGroupName parameter on WriteGoogleSheetColumnsAsync</param>
             <example>
                 await _gSC.WriteGoogleSheetColumnsAsync(listOfLists, "YAHOO_TRENDS","A1:Z1000","CoreCalculator");
             </example>
@@ -2583,6 +2643,7 @@
             <summary>
                 Create a connection between .NET and a Python file; This must be run before any of the other methods will work
             </summary>
+            <param name="fileName">todo: describe fileName parameter on ConnectToPythonFile</param>
             <remarks>
                 This must be run before any of the other below methods
             </remarks>
@@ -2737,10 +2798,6 @@
             <summary> </summary>
             <reference> http://lahman.r-forge.r-project.org/doc/ </reference>
         </member>
-        <member name="M:BaseballScraper.Infrastructure.RdotNetConnector.GetLahmanTeamInfo(System.String)">
-            <summary> Get Mlb player's Player Id, First Name, Last Name</summary>
-            <reference> http://lahman.r-forge.r-project.org/doc/ </reference>
-        </member>
         <member name="M:BaseballScraper.Infrastructure.RdotNetConnector.GetPitchRxData(System.String,System.String)">
             <summary> Scrapes and returns a significant amount of data about each individual at bat within a given date range </summary>
             <example> _r.GetPitchRxData("2013-06-01", "2013-06-01"); </example>
@@ -2878,6 +2935,7 @@
         </member>
         <member name="M:BaseballScraper.Infrastructure.RdotNetConnector.GetFanGraphsParkFactors(System.Int32)">
             <summary> Retrieves park factors for mlb stadiums for a given year </summary>
+            <param name="year">todo: describe year parameter on GetFanGraphsParkFactors</param>
             <remarks>
                 See: https://billpetti.github.io/baseballr/data-acquisition-functions/
             </remarks>
@@ -2886,6 +2944,7 @@
             <summary>
                 Retrieves park factors for mlb stadiums for a given year and splits it between righties and lefties
             </summary>
+            <param name="year">todo: describe year parameter on GetFanGraphsParkFactorsByBatterHandedness</param>
             <remarks>
                 Only available for years 2002 and later
             </remarks>
@@ -2946,7 +3005,7 @@
             3) Call the Execute(numberOfIterations) method.
             4) Use the XXXMarginal() methods to retrieve posterior marginals for different variables.
             
-            Generated by Infer.NET 0.3.1810.501 at 3:23 PM on Wednesday, August 14, 2019.
+            Generated by Infer.NET 0.3.1810.501 at 5:33 PM on Monday, September 30, 2019.
             </remarks>
         </member>
         <member name="F:Models.Model_EP.Changed_numberOfIterations_vint__0_vint__1_isDone">

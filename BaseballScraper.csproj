@@ -2,6 +2,10 @@
   <PropertyGroup>
 
     <TargetFramework>netcoreapp2.2</TargetFramework>
+
+    <!-- <TargetFrameworks>netcoreapp3.0;netstandard2.0</TargetFrameworks> -->
+    <!-- <IncludeOpenAPIAnalyzers>true</IncludeOpenAPIAnalyzers> -->
+
     <UserSecretsId>79a3edd0-2092-40a2-a04d-dcb46d5ca9ed</UserSecretsId>
 
     <!-- When set to 'true' you get the MSB3276 error -->
@@ -12,11 +16,18 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <DocumentationFile>App.xml</DocumentationFile>
 
-    <!-- CS1591: Missing XML comment for publicly visible type or member -->
-    <!-- NU1701: Package XYZ may not be fully compatible with your project. -->
-    <!-- MSB3276: Found conflicts between different versions of the same dependent assembly. -->
+    <!-- CC0001 (codeCracker.CSharp) : Use 'var' instead of specifying the type name. (CC0001) [BaseballScraper] -->
+    <!-- CC0021 (codeCracker.CSharp) : Use 'nameof(HitterSeasonStats)' instead of specifying the program element name. (CC0021) [BaseballScraper] -->
+    <!-- CC0037 (codeCracker.CSharp) : Commented code should be removed. (CC0037) [BaseballScraper] -->
+    <!-- CC0091 (codeCracker.CSharp) : Make method static -->
+    <!-- CC0105 (codeCracker.CSharp) : Use 'var' instead of specifying the type name. (CC0105) [BaseballScraper] -->
+    <!-- CS1591  : Missing XML comment for publicly visible type or member -->
+    <!-- NU1701  : Package XYZ may not be fully compatible with your project. -->
+    <!-- MSB3276 : Found conflicts between different versions of the same dependent assembly. -->
+    <!-- S125 (SonarAnalyzer) : Remove this commented out code. (S125) [BaseballScraper] -->
+    <!-- S1135 (SonarAnalyzer) : Complete the task associated to this 'TODO' comment. (S1135) [BaseballScraper]-->
     <NoWarn>$(NoWarn);1591</NoWarn>
-    <NoWarn>CA1303, CS1591, NU1701, MSB3276</NoWarn>
+    <NoWarn> CC0001, CC0021, CC0037, CC0091, CC0105, CS1591, NU1701, MSB3276, S125, S1135</NoWarn>
 
   </PropertyGroup>
 
@@ -26,16 +37,21 @@
   </ItemGroup>
 
 
+
   <ItemGroup>
+
+    <!-- <PackageReference Include="coverlet.msbuild" Version="2.7.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference> -->
 
     <!-- See : https://github.com/borisdj/EFCore.BulkExtensions -->
     <PackageReference Include="EFCore.BulkExtensions" Version="2.6.0" />
 
     <!-- See : https://www.app-metrics.io/getting-started/ -->
     <PackageReference Include="App.Metrics.Reporting.Console" Version="3.1.0" />
-    <PackageReference Include="HotChocolate" Version="10.1.0" />
-    <PackageReference Include="HotChocolate.AspNetCore" Version="10.1.0" />
-    
+
+
 
     <!-- See : https://miniprofiler.com/ -->
     <PackageReference Include="MiniProfiler" Version="4.0.180" />
@@ -53,7 +69,6 @@
     <PackageReference Include="SharpPad.Template" Version="1.0.3" />
     <!-- See : http://bit.ly/2ZCryT8,  http://bit.ly/2PwHgv0 -->
     <PackageReference Include="CsharpMacros" Version="2.0.31" />
-
 
 
 
@@ -80,14 +95,16 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference> -->
 
-    <!-- <PackageReference Include="FluentValidation" Version="8.4.0" />
+    <!-- <PackageReference Include="FluentValidation" Version="8.4.0" /> -->
 
-    <PackageReference Include="codecracker.CSharp" Version="1.1.0">
+    <!-- Last Refreshed Oct 5, 2019 -->
+    <!-- <PackageReference Include="codecracker.CSharp" Version="1.1.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
+    </PackageReference> -->
 
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="7.16.0.8981">
+    <!-- Last Refreshed Oct 5, 2019 -->
+    <!-- <PackageReference Include="SonarAnalyzer.CSharp" Version="7.16.0.8981">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference> -->
@@ -101,13 +118,15 @@
 
 
     <!-- Database -->
-    <PackageReference Include="Airtable" Version="1.0.2" />
+    <PackageReference Include="Airtable" Version="1.0.2" />                               <!-- Airtable -->
     <PackageReference Include="Dapper" Version="1.50.5" />
-    <PackageReference Include="MongoDB.Driver" Version="2.8.1" />
+    <PackageReference Include="MongoDB.Driver" Version="2.8.1" />                         <!-- Mongo DB -->
     <PackageReference Include="MySql.Data.Entity" Version="6.10.8" />
-    <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.12" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.2.0" />
-    <PackageReference Include="GraphQL" Version="2.4.0" />
+    <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.12" />        <!-- SQL / EF -->
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.2.0" />  <!-- Postgres -->
+    <PackageReference Include="GraphQL" Version="2.4.0" />                                <!-- GraphQL  -->
+    <PackageReference Include="HotChocolate" Version="10.1.0" />                          <!-- GraphQL  -->
+    <PackageReference Include="HotChocolate.AspNetCore" Version="10.1.0" />               <!-- GraphQL  -->
 
 
     <!-- Excel -->

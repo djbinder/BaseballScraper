@@ -57,14 +57,8 @@ namespace BaseballScraper.Models.BaseballSavant
         {
             get
             {
-                if(SpinRateObj is string)
-                {
-                    return 0;
-                }
-                else
-                {
-                    return Int32.Parse(SpinRateObj.ToString(), NumberStyles.None, CultureInfo.InvariantCulture);
-                }
+                // * if SpinRateOjb = string, 0; else...
+                return SpinRateObj is string ? 0 : Int32.Parse(SpinRateObj.ToString(), NumberStyles.None, CultureInfo.InvariantCulture);
             }
         }
 

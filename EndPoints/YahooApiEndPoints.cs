@@ -4,7 +4,7 @@ using BaseballScraper.Infrastructure;
 using Newtonsoft.Json.Linq;
 
 
-#pragma warning disable CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006, MA0007, MA0048, MA0051
+#pragma warning disable CC0091, CS0219, CS0414, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006, MA0007, MA0048, MA0051
 namespace BaseballScraper.EndPoints
 {
     public class YahooApiEndPoints
@@ -196,176 +196,175 @@ namespace BaseballScraper.EndPoints
                 };
             }
 
-            // team_key, team_id, name, is_owned_by_current_login, url, team_logos, waiver_priority, number_of_moves, number_of_trades, roster_adds, league_scoring_type, has_draft_grade, managers, team_stats, team_points, team_standings
-            internal string TeamItem(JObject obj, int teamNumber, string itemName)
+        // team_key, team_id, name, is_owned_by_current_login, url, team_logos, waiver_priority, number_of_moves, number_of_trades, roster_adds, league_scoring_type, has_draft_grade, managers, team_stats, team_points, team_standings
+        public string TeamItem(JObject obj, int teamNumber, string itemName)
+        {
+            JToken LeagueTeam    = obj["fantasy_content"]["league"]["standings"]["teams"]["team"][teamNumber];
+            JToken TeamLogos     = LeagueTeam["team_logos"];
+            JToken TeamLogo      = TeamLogos["team_logo"];
+            JToken RosterAdds    = LeagueTeam["roster_adds"];
+            JToken TeamStandings = obj["fantasy_content"]["league"]["standings"]["teams"]["team"][teamNumber]["team_standings"];
+            JToken TeamOutcomes  = TeamStandings["outcome_totals"];
+            JToken TeamPoints    = obj["fantasy_content"]["league"]["standings"]["teams"]["team"][teamNumber]["team_points"];
+            JToken Managers      = obj["fantasy_content"]["league"]["standings"]["teams"]["team"][teamNumber]["managers"];
+            JToken Manager       = obj["fantasy_content"]["league"]["standings"]["teams"]["team"][teamNumber]["managers"]["manager"];
+
+            // before being converted to strings, all return types is Newtonsoft.Json.Linq.JValue
+            switch (itemName)
             {
-                var LeagueTeam    = obj["fantasy_content"]["league"]["standings"]["teams"]["team"][teamNumber];
-                var TeamLogos     = LeagueTeam["team_logos"];
-                var TeamLogo      = TeamLogos["team_logo"];
-                var RosterAdds    = LeagueTeam["roster_adds"];
-                var TeamStandings = obj["fantasy_content"]["league"]["standings"]["teams"]["team"][teamNumber]["team_standings"];
-                var TeamOutcomes  = TeamStandings["outcome_totals"];
-                var TeamPoints    = obj["fantasy_content"]["league"]["standings"]["teams"]["team"][teamNumber]["team_points"];
-                var Managers      = obj["fantasy_content"]["league"]["standings"]["teams"]["team"][teamNumber]["managers"];
-                var Manager       = obj["fantasy_content"]["league"]["standings"]["teams"]["team"][teamNumber]["managers"]["manager"];
+                #region ### LeagueTeam
 
-                // before being converted to strings, all return types is Newtonsoft.Json.Linq.JValue
-                switch (itemName)
-                {
-                    #region ### LeagueTeam
+                // string teamKey = endPoints.LeagueTeamItem(leagueStandings, 0, "TeamKey");
+                case "TeamKey":
+                    return LeagueTeam["team_key"].ToString();
 
-                        // string teamKey = endPoints.LeagueTeamItem(leagueStandings, 0, "TeamKey");
-                        case "TeamKey":
-                            return LeagueTeam["team_key"].ToString();
+                case "TeamId":
+                    return LeagueTeam["team_id"].ToString();
 
-                        case "TeamId":
-                            return LeagueTeam["team_id"].ToString();
+                case "TeamName":
+                    return LeagueTeam["team_name"].ToString();
 
-                        case "TeamName":
-                            return LeagueTeam["team_name"].ToString();
+                case "IsOwnedByCurrentLogin":
+                    return LeagueTeam["is_owned_by_current_login"].ToString();
 
-                        case "IsOwnedByCurrentLogin":
-                            return LeagueTeam["is_owned_by_current_login"].ToString();
+                case "Url":
+                    return LeagueTeam["url"].ToString();
 
-                        case "Url":
-                            return LeagueTeam["url"].ToString();
+                case "WaiverPriority":
+                    return LeagueTeam["waiver_priority"].ToString();
 
-                        case "WaiverPriority":
-                            return LeagueTeam["waiver_priority"].ToString();
+                case "NumberOfMoves":
+                    return LeagueTeam["number_of_moves"].ToString();
 
-                        case "NumberOfMoves":
-                            return LeagueTeam["number_of_moves"].ToString();
+                case "NumberOfTrades":
+                    return LeagueTeam["number_of_trades"].ToString();
 
-                        case "NumberOfTrades":
-                            return LeagueTeam["number_of_trades"].ToString();
+                case "LeagueScoringType":
+                    return LeagueTeam["league_scoring_type"].ToString();
 
-                        case "LeagueScoringType":
-                            return LeagueTeam["league_scoring_type"].ToString();
+                case "HasDraftGrade":
+                    return LeagueTeam["has_draft_grade"].ToString();
 
-                        case "HasDraftGrade":
-                            return LeagueTeam["has_draft_grade"].ToString();
-
-                    #endregion ### LeagueTeam
+                #endregion ### LeagueTeam
 
 
-                    #region ### RosterAdds ###
+                #region ### RosterAdds ###
 
-                        case "RosterCoverageType":
-                            return RosterAdds["coverage_type"].ToString();
+                case "RosterCoverageType":
+                    return RosterAdds["coverage_type"].ToString();
 
-                        case "CoverageValue":
-                            return RosterAdds["coverage_value"].ToString();
+                case "CoverageValue":
+                    return RosterAdds["coverage_value"].ToString();
 
-                        case "Value":
-                            return RosterAdds["value"].ToString();
+                case "Value":
+                    return RosterAdds["value"].ToString();
 
-                    #endregion ### RosterAdds ###
-
-
-                    #region ### TeamStandings ###
-
-                        // string teamRank = endPoints.LeagueTeamItem(leagueStandings, 0, "Rank");
-                        case "Rank":
-                            return TeamStandings["rank"].ToString();
-
-                        case "PlayoffSeed":
-                            return TeamStandings["playoff_seed"].ToString();
-
-                        case "GamesBack":
-                            return TeamStandings["games_back"].ToString();
-
-                    #endregion ### TeamStandings ###
+                #endregion ### RosterAdds ###
 
 
-                    #region ### TeamLogos ###
+                #region ### TeamStandings ###
 
-                        case "TeamLogos":
-                            return TeamLogos["team_logo"].ToString();
+                // string teamRank = endPoints.LeagueTeamItem(leagueStandings, 0, "Rank");
+                case "Rank":
+                    return TeamStandings["rank"].ToString();
 
-                    #endregion ### TeamLogos ###
+                case "PlayoffSeed":
+                    return TeamStandings["playoff_seed"].ToString();
 
+                case "GamesBack":
+                    return TeamStandings["games_back"].ToString();
 
-                    // 'team_logo' is nested under 'team_logos'
-                    #region ### TeamLogo ###
-
-                        case "TeamLogoSize":
-                            return TeamLogo["size"].ToString();
-
-                        case "TeamLogoUrl":
-                            return TeamLogo["url"].ToString();
-
-                    #endregion ### TeamLogo ###
+                #endregion ### TeamStandings ###
 
 
-                    // 'outcome_totals' is nested under TeamStandings
-                    #region ### TeamOutcomes ###
+                #region ### TeamLogos ###
 
-                        case "Wins":
-                            return TeamOutcomes["wins"].ToString();
+                case "TeamLogos":
+                    return TeamLogos["team_logo"].ToString();
 
-                        case "Losses":
-                            return TeamOutcomes["losses"].ToString();
-
-                        case "Ties":
-                            return TeamOutcomes["ties"].ToString();
-
-                        case "WinningPercentage":
-                            return TeamOutcomes["percentage"].ToString();
-
-                    #endregion ### TeamOutcomes ###
+                #endregion ### TeamLogos ###
 
 
-                    #region ### TeamPoints ###
+                // 'team_logo' is nested under 'team_logos'
+                #region ### TeamLogo ###
 
-                        case "PointsCoverageType":
-                            return TeamPoints["coverage_type"].ToString();
+                case "TeamLogoSize":
+                    return TeamLogo["size"].ToString();
 
-                        case "Season":
-                            return TeamPoints["season"].ToString();
+                case "TeamLogoUrl":
+                    return TeamLogo["url"].ToString();
 
-                        case "Total":
-                            return TeamPoints["total"].ToString();
-
-                    #endregion ### TeamPoints ###
+                #endregion ### TeamLogo ###
 
 
-                    #region ### Manager ###
+                // 'outcome_totals' is nested under TeamStandings
+                #region ### TeamOutcomes ###
 
-                        case "Manager":
-                            return Managers["manager"].ToString();
+                case "Wins":
+                    return TeamOutcomes["wins"].ToString();
 
-                    #endregion ### Manager ###
+                case "Losses":
+                    return TeamOutcomes["losses"].ToString();
+
+                case "Ties":
+                    return TeamOutcomes["ties"].ToString();
+
+                case "WinningPercentage":
+                    return TeamOutcomes["percentage"].ToString();
+
+                #endregion ### TeamOutcomes ###
 
 
-                    #region ### Manager ###
+                #region ### TeamPoints ###
 
-                        case "ManagerId":
-                            return Manager["manager_id"].ToString();
+                case "PointsCoverageType":
+                    return TeamPoints["coverage_type"].ToString();
 
-                        case "Nickname":
-                            return Manager["nickname"].ToString();
+                case "Season":
+                    return TeamPoints["season"].ToString();
 
-                        case "Guid":
-                            return Manager["guid"].ToString();
+                case "Total":
+                    return TeamPoints["total"].ToString();
 
-                        case "IsCommissioner":
-                            return Manager["is_commissioner"].ToString();
+                #endregion ### TeamPoints ###
 
-                        case "IsCurrentLogin":
-                            return Manager["is_current_login"].ToString();
 
-                        case "Email":
-                            return Manager["email"].ToString();
+                #region ### Manager ###
 
-                        case "ImageUrl":
-                            return Manager["image_url"].ToString();
+                case "Manager":
+                    return Managers["manager"].ToString();
 
-                    #endregion ### Manager ###
-                }
+                #endregion ### Manager ###
 
-                string test = "test";
-                return test;
+
+                #region ### Manager ###
+
+                case "ManagerId":
+                    return Manager["manager_id"].ToString();
+
+                case "Nickname":
+                    return Manager["nickname"].ToString();
+
+                case "Guid":
+                    return Manager["guid"].ToString();
+
+                case "IsCommissioner":
+                    return Manager["is_commissioner"].ToString();
+
+                case "IsCurrentLogin":
+                    return Manager["is_current_login"].ToString();
+
+                case "Email":
+                    return Manager["email"].ToString();
+
+                case "ImageUrl":
+                    return Manager["image_url"].ToString();
+                default:
+                    throw new Exception("Unexpected Case");
+
+                #endregion ### Manager ###
             }
+        }
 
         #endregion END POINTS ------------------------------------------------------------
 
@@ -610,8 +609,8 @@ namespace BaseballScraper.EndPoints
             public EndPoint PlayersCollectionForPositionAndStatusWithSortForLastWeek (string leagueKey, string position, string status)
             {
                 EndPointType = "players";
-                string sortType = "AR";
-                string sortTypeType = "lastweek";
+                const string sortType = "AR";
+                const string sortTypeType = "lastweek";
 
                 return new EndPoint
                 {
@@ -624,8 +623,8 @@ namespace BaseballScraper.EndPoints
             public EndPoint PlayersCollectionForPositionAndStatusWithSortForLastMonth (string leagueKey, string position, string status)
             {
                 EndPointType = "players";
-                string sortType = "AR";
-                string sortTypeType = "lastmonth";
+                const string sortType = "AR";
+                const string sortTypeType = "lastmonth";
 
                 return new EndPoint
                 {
@@ -638,8 +637,8 @@ namespace BaseballScraper.EndPoints
             public EndPoint PlayersCollectionForPositionAndStatusWithSortForToday (string leagueKey, string position, string status)
             {
                 EndPointType = "players";
-                string sortType = "AR";
-                string sortTypeType = "date";
+                const string sortType = "AR";
+                const string sortTypeType = "date";
                 string todaysDateString = DateTime.Now.ToString("YYYY-MM-DD", CultureInfo.InvariantCulture);
 
                 return new EndPoint

@@ -47,7 +47,7 @@ namespace BaseballScraper.Controllers.YahooControllers
             // retrieve the league key from user secrets / yahoo league config
             string leagueKey = _yahooApiRequestController.GetTheGameIsTheGameLeagueKey();
 
-            var uriLeagueScoreboard = endPoints.LeagueSeasonScoreboardEndPoint(leagueKey).EndPointUri;
+            string uriLeagueScoreboard = endPoints.LeagueSeasonScoreboardEndPoint(leagueKey).EndPointUri;
 
             JObject leagueScoreboard = _yahooApiRequestController.GenerateYahooResourceJObject(uriLeagueScoreboard);
 
@@ -68,10 +68,7 @@ namespace BaseballScraper.Controllers.YahooControllers
         public async Task<IActionResult> ViewLeagueScoreboardAsync()
         {
             await GetYahooLeagueScoreboardAsync();
-
-            string currently = "retrieving league scoreboard";
-
-            return Content($"CURRENT TASK: {currently}");
+            return Ok();
         }
     }
 }

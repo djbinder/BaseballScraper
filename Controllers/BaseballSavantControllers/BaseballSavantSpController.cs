@@ -12,7 +12,7 @@ using BaseballScraper.Models;
 using BaseballScraper.Models.BaseballSavant;
 
 
-#pragma warning disable CS0219, CS0414, CS1998, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006, MA0016
+#pragma warning disable CC0061, CC0091, CC0068, CS0219, CS0414, CS1998, IDE0044, IDE0051, IDE0052, IDE0059, IDE0060, IDE1006, MA0016
 namespace BaseballScraper.Controllers.BaseballSavantControllers
 {
     [Route("api/baseballsavant/[controller]")]
@@ -99,7 +99,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
         [Route("test/async")]
         public async Task BaseballSavantTestingAsync()
         {
-            await WriteBaseballSavantDataForYesterdayToCsv();
+            await WriteBaseballSavantDataForYesterdayToCsvAsync();
         }
 
 
@@ -107,8 +107,8 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
         {
             _helpers.OpenMethod(3);
 
-            int year = 2019;
-            int currentMonth = 8;
+            const int year = 2019;
+            const int currentMonth = 8;
             int currentDay = DateTime.Now.Day;
 
             #region FULL SEASON
@@ -149,7 +149,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
 
 
 
-        public async Task WriteBaseballSavantDataForYesterdayToCsv()
+        public async Task WriteBaseballSavantDataForYesterdayToCsvAsync()
         {
             // get date information for yesterday
             DateTime yesterday = DateTime.Today.AddDays(-1);
@@ -246,34 +246,40 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             }
 
 
-            // STATUS [ June 5, 2019 ]: this works
-            // SINGLE DAY
-            /// <summary>
-            ///     Create end point for 'WriteBaseballSavantSingleDayDataToCsv' method to write to
-            /// </summary>
-            public string GetAllSpCswSingleDayEndPointUri(int year, int monthNumber, int dayNumber)
-            {
-                _helpers.OpenMethod(1);
-                BaseballSavantUriEndPoint endPoint = _baseballSavantEndPoints.AllSpCswSingleDay(
-                    year,
-                    monthNumber,
-                    dayNumber
-                );
-                return endPoint.EndPointUri;
-            }
+        // STATUS [ June 5, 2019 ]: this works
+        // SINGLE DAY
+        /// <summary>
+        ///     Create end point for 'WriteBaseballSavantSingleDayDataToCsv' method to write to
+        /// </summary>
+        /// <param name="year">todo: describe year parameter on GetAllSpCswSingleDayEndPointUri</param>
+        /// <param name="monthNumber">todo: describe monthNumber parameter on GetAllSpCswSingleDayEndPointUri</param>
+        /// <param name="dayNumber">todo: describe dayNumber parameter on GetAllSpCswSingleDayEndPointUri</param>
+        public string GetAllSpCswSingleDayEndPointUri(int year, int monthNumber, int dayNumber)
+        {
+            _helpers.OpenMethod(1);
+            BaseballSavantUriEndPoint endPoint = _baseballSavantEndPoints.AllSpCswSingleDay(
+                year,
+                monthNumber,
+                dayNumber
+            );
+            return endPoint.EndPointUri;
+        }
 
 
-            // STATUS [ June 5, 2019 ]: this works
-            // SINGLE DAY
-            /// <summary>
-            ///     Creates a string of the fill path name
-            /// </summary>
-            public string SetCsvFilePathSpCswSingleDay(int year, int monthNumber, int dayNumber)
-            {
-                _helpers.OpenMethod(1);
-                string filePath = $"{_allSpCswSingleDayCvsPath}{monthNumber}_{dayNumber}_{year}.csv";
-                return filePath;
-            }
+        // STATUS [ June 5, 2019 ]: this works
+        // SINGLE DAY
+        /// <summary>
+        ///     Creates a string of the fill path name
+        /// </summary>
+        /// <param name="year">todo: describe year parameter on SetCsvFilePathSpCswSingleDay</param>
+        /// <param name="monthNumber">todo: describe monthNumber parameter on SetCsvFilePathSpCswSingleDay</param>
+        /// <param name="dayNumber">todo: describe dayNumber parameter on SetCsvFilePathSpCswSingleDay</param>
+        public string SetCsvFilePathSpCswSingleDay(int year, int monthNumber, int dayNumber)
+        {
+            _helpers.OpenMethod(1);
+            string filePath = $"{_allSpCswSingleDayCvsPath}{monthNumber}_{dayNumber}_{year}.csv";
+            return filePath;
+        }
 
 
             // STATUS [ June 5, 2019 ]: this works
@@ -316,7 +322,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
                     dayNumber
                 );
 
-                await _csvHandler.ReadCsvRecordsAsyncToList(
+                await _csvHandler.ReadCsvRecordsToListAsync(
                     csvFilePath,
                     typeof(StartingPitcherCswSingleDay),
                     typeof(StartingPitcherCswClassMap),
@@ -334,70 +340,76 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
 
 
 
-            // STATUS [ June 5, 2019 ]: this works
-            // SINGLE DAY
-            /// <summary>
-            ///     Add StartingPitcherCswSingleDay to Database
-            /// </summary>
-            [HttpPost("add/one/csw_single_day")]
-            public ActionResult AddStartingPitcherCswSingleDayToDatabase(StartingPitcherCswSingleDay spCsw)
+        // STATUS [ June 5, 2019 ]: this works
+        // SINGLE DAY
+        /// <summary>
+        ///     Add StartingPitcherCswSingleDay to Database
+        /// </summary>
+        /// <param name="spCsw">todo: describe spCsw parameter on AddStartingPitcherCswSingleDayToDatabase</param>
+        [HttpPost("add/one/csw_single_day")]
+        public ActionResult AddStartingPitcherCswSingleDayToDatabase(StartingPitcherCswSingleDay spCsw)
+        {
+            _helpers.OpenMethod(1);
+            _context.Add(spCsw);
+            _context.SaveChanges();
+            return Ok(spCsw);
+        }
+
+
+        // STATUS [ June 5, 2019 ]: this works
+        // SINGLE DAY
+        /// <summary>
+        ///     Add StartingPitcherCswSingleDay to Database from list
+        /// </summary>
+        /// <param name="listSpCsw">todo: describe listSpCsw parameter on AddStartingPitcherCswsSingleDayToDatabaseFromList</param>
+        [HttpPost("add/all/csw_single_day")]
+        public ActionResult AddStartingPitcherCswsSingleDayToDatabaseFromList(List<StartingPitcherCswSingleDay> listSpCsw)
+        {
+            _helpers.OpenMethod(1);
+            int countAdded = 0; int countNotAdded = 0;
+
+            foreach(var sp in listSpCsw)
             {
-                _helpers.OpenMethod(1);
-                _context.Add(spCsw);
-                _context.SaveChanges();
-                return Ok(spCsw);
+                var checkForCompositeKeyInDb =
+                    _context.StartingPitcherCswsSingleDays.Find(
+                        sp.PlayerId,
+                        sp.DatePitched
+                    );
+
+                    var nullCheck      = (checkForCompositeKeyInDb == null) ? _context.Add(sp) : null;
+                    int manageCounters = (checkForCompositeKeyInDb == null) ? countAdded++ : countNotAdded++;
             }
 
+            PrintDatabaseAddOutcomes(countAdded, countNotAdded);
+            _context.SaveChanges();
+            return Ok();
+        }
 
-            // STATUS [ June 5, 2019 ]: this works
-            // SINGLE DAY
-            /// <summary>
-            ///     Add StartingPitcherCswSingleDay to Database from list
-            /// </summary>
-            [HttpPost("add/all/csw_single_day")]
-            public ActionResult AddStartingPitcherCswsSingleDayToDatabaseFromList(List<StartingPitcherCswSingleDay> listSpCsw)
+
+        // STATUS [ June 5, 2019 ]: this works
+        // SINGLE DAY
+        /// <summary>
+        ///     Create list of StartingPitcherCswSingleDay
+        /// </summary>
+        /// <param name="list">todo: describe list parameter on CreateSpCswSingleDayList</param>
+        /// <param name="year">todo: describe year parameter on CreateSpCswSingleDayList</param>
+        /// <param name="monthNumber">todo: describe monthNumber parameter on CreateSpCswSingleDayList</param>
+        /// <param name="dayNumber">todo: describe dayNumber parameter on CreateSpCswSingleDayList</param>
+        public List<StartingPitcherCswSingleDay> CreateSpCswSingleDayList(List<dynamic> list, int year, int monthNumber, int dayNumber)
+        {
+            _helpers.OpenMethod(1);
+
+            var listSpCsw = new List<StartingPitcherCswSingleDay>();
+            DateTime datePitched = new DateTime(year, monthNumber, dayNumber);
+
+            foreach(dynamic record in list)
             {
-                _helpers.OpenMethod(1);
-                int countAdded = 0; int countNotAdded = 0;
-
-                foreach(var sp in listSpCsw)
-                {
-                    var checkForCompositeKeyInDb =
-                        _context.StartingPitcherCswsSingleDays.Find(
-                            sp.PlayerId,
-                            sp.DatePitched
-                        );
-
-                     var nullCheck      = (checkForCompositeKeyInDb == null) ? _context.Add(sp) : null;
-                     int manageCounters = (checkForCompositeKeyInDb == null) ? countAdded++ : countNotAdded++;
-                }
-
-                PrintDatabaseAddOutcomes(countAdded, countNotAdded);
-                _context.SaveChanges();
-                return Ok();
+                var spCsw = record as StartingPitcherCswSingleDay;
+                spCsw.DatePitched = datePitched;
+                listSpCsw.Add(spCsw);
             }
-
-
-            // STATUS [ June 5, 2019 ]: this works
-            // SINGLE DAY
-            /// <summary>
-            ///     Create list of StartingPitcherCswSingleDay
-            /// </summary>
-            public List<StartingPitcherCswSingleDay> CreateSpCswSingleDayList(List<dynamic> list, int year, int monthNumber, int dayNumber)
-            {
-                _helpers.OpenMethod(1);
-
-                var listSpCsw = new List<StartingPitcherCswSingleDay>();
-                DateTime datePitched = new DateTime(year, monthNumber, dayNumber);
-
-                foreach(dynamic record in list)
-                {
-                    var spCsw = record as StartingPitcherCswSingleDay;
-                    spCsw.DatePitched = datePitched;
-                    listSpCsw.Add(spCsw);
-                }
-                return listSpCsw;
-            }
+            return listSpCsw;
+        }
 
 
         #endregion SP CALLED-STRIKE + WALK DATA - SINGLE DAY ------------------------------------------------------------
@@ -454,36 +466,46 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             }
 
 
-            // STATUS [ June 5, 2019 ]: this works
-            // DATE RANGE
-            /// <summary>
-            ///     Create end point for 'WriteBaseballSavantDateRangeDataToCsv' method to write to
-            /// </summary>
-            public string GetAllSpCswRangeOfDaysEndPointUri(int year, int startMonth, int startDay, int endMonth, int endDay)
-            {
-                _helpers.OpenMethod(1);
-                BaseballSavantUriEndPoint endPoint = _baseballSavantEndPoints.AllSpCswRangeOfDays(
-                    year,
-                    startMonth,
-                    startDay,
-                    endMonth,
-                    endDay
-                );
-                return endPoint.EndPointUri;
-            }
+        // STATUS [ June 5, 2019 ]: this works
+        // DATE RANGE
+        /// <summary>
+        ///     Create end point for 'WriteBaseballSavantDateRangeDataToCsv' method to write to
+        /// </summary>
+        /// <param name="year">todo: describe year parameter on GetAllSpCswRangeOfDaysEndPointUri</param>
+        /// <param name="startMonth">todo: describe startMonth parameter on GetAllSpCswRangeOfDaysEndPointUri</param>
+        /// <param name="startDay">todo: describe startDay parameter on GetAllSpCswRangeOfDaysEndPointUri</param>
+        /// <param name="endMonth">todo: describe endMonth parameter on GetAllSpCswRangeOfDaysEndPointUri</param>
+        /// <param name="endDay">todo: describe endDay parameter on GetAllSpCswRangeOfDaysEndPointUri</param>
+        public string GetAllSpCswRangeOfDaysEndPointUri(int year, int startMonth, int startDay, int endMonth, int endDay)
+        {
+            _helpers.OpenMethod(1);
+            BaseballSavantUriEndPoint endPoint = _baseballSavantEndPoints.AllSpCswRangeOfDays(
+                year,
+                startMonth,
+                startDay,
+                endMonth,
+                endDay
+            );
+            return endPoint.EndPointUri;
+        }
 
 
-            // STATUS [ June 5, 2019 ]: this works
-            // DATE RANGE
-            /// <summary>
-            ///     Creates a string of the fill path name
-            /// </summary>
-            public string SetCsvFilePathSpCswDateRange(int year, int startMonth, int startDay, int endMonth, int endDay)
-            {
-                _helpers.OpenMethod(1);
-                string filePath = $"{_allSpCswDateRangeCvsPath}{startMonth}_{startDay}_{year}_to_{endMonth}_{endDay}_{year}.csv";
-                return filePath;
-            }
+        // STATUS [ June 5, 2019 ]: this works
+        // DATE RANGE
+        /// <summary>
+        ///     Creates a string of the fill path name
+        /// </summary>
+        /// <param name="year">todo: describe year parameter on SetCsvFilePathSpCswDateRange</param>
+        /// <param name="startMonth">todo: describe startMonth parameter on SetCsvFilePathSpCswDateRange</param>
+        /// <param name="startDay">todo: describe startDay parameter on SetCsvFilePathSpCswDateRange</param>
+        /// <param name="endMonth">todo: describe endMonth parameter on SetCsvFilePathSpCswDateRange</param>
+        /// <param name="endDay">todo: describe endDay parameter on SetCsvFilePathSpCswDateRange</param>
+        public string SetCsvFilePathSpCswDateRange(int year, int startMonth, int startDay, int endMonth, int endDay)
+        {
+            _helpers.OpenMethod(1);
+            string filePath = $"{_allSpCswDateRangeCvsPath}{startMonth}_{startDay}_{year}_to_{endMonth}_{endDay}_{year}.csv";
+            return filePath;
+        }
 
 
             // STATUS [ June 25, 2019 ]: this works
@@ -532,7 +554,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
                     endDay
                 );
 
-                await _csvHandler.ReadCsvRecordsAsyncToList(
+                await _csvHandler.ReadCsvRecordsToListAsync(
                     csvFilePath,
                     typeof(StartingPitcherCswDateRange),
                     typeof(StartingPitcherCswClassMap),
@@ -552,74 +574,82 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             }
 
 
-            // STATUS [ June 5, 2019 ]: this works
-            // DATE RANGE
-            /// <summary>
-            ///     Add StartingPitcherCswDateRange to Database
-            /// </summary>
-            [HttpPost("add/one/csw_date_range")]
-            public ActionResult AddStartingPitcherCswDateRangeToDatabase(StartingPitcherCswDateRange spCsw)
+        // STATUS [ June 5, 2019 ]: this works
+        // DATE RANGE
+        /// <summary>
+        ///     Add StartingPitcherCswDateRange to Database
+        /// </summary>
+        /// <param name="spCsw">todo: describe spCsw parameter on AddStartingPitcherCswDateRangeToDatabase</param>
+        [HttpPost("add/one/csw_date_range")]
+        public ActionResult AddStartingPitcherCswDateRangeToDatabase(StartingPitcherCswDateRange spCsw)
+        {
+            _helpers.OpenMethod(1);
+            _context.Add(spCsw);
+            _context.SaveChanges();
+            return Ok(spCsw);
+        }
+
+
+        // STATUS [ June 5, 2019 ]: this works
+        // DATE RANGE
+        /// <summary>
+        ///     Add StartingPitcherCswDateRange to Database from list
+        /// </summary>
+        /// <param name="listSpCsw">todo: describe listSpCsw parameter on AddStartingPitcherCswsDateRangeToDatabaseFromList</param>
+        [HttpPost("add/all/csw_date_range")]
+        public ActionResult AddStartingPitcherCswsDateRangeToDatabaseFromList(List<StartingPitcherCswDateRange> listSpCsw)
+        {
+            _helpers.OpenMethod(1);
+            int countAdded = 0; int countNotAdded = 0;
+
+            foreach(StartingPitcherCswDateRange sp in listSpCsw)
             {
-                _helpers.OpenMethod(1);
-                _context.Add(spCsw);
-                _context.SaveChanges();
-                return Ok(spCsw);
+                var checkForCompositeKeyInDb =
+                    _context.StartingPitcherCswsFullSeason.Find(
+                        sp.PlayerId,
+                        sp.StartDate,
+                        sp.EndDate
+                    );
+
+                var nullCheck      = (checkForCompositeKeyInDb == null) ? _context.Add(sp) : null;
+                int manageCounters = (checkForCompositeKeyInDb == null) ? countAdded++ : countNotAdded++;
             }
 
+            PrintDatabaseAddOutcomes(countAdded, countNotAdded);
+            _context.SaveChanges();
+            return Ok();
+        }
 
-            // STATUS [ June 5, 2019 ]: this works
-            // DATE RANGE
-            /// <summary>
-            ///     Add StartingPitcherCswDateRange to Database from list
-            /// </summary>
-            [HttpPost("add/all/csw_date_range")]
-            public ActionResult AddStartingPitcherCswsDateRangeToDatabaseFromList(List<StartingPitcherCswDateRange> listSpCsw)
+
+        // STATUS [ June 5, 2019 ]: this works
+        // DATE RANGE
+        /// <summary>
+        ///     Create list of StartingPitcherCswDateRange
+        /// </summary>
+        /// <param name="list">todo: describe list parameter on CreateSpCswDateRangeList</param>
+        /// <param name="year">todo: describe year parameter on CreateSpCswDateRangeList</param>
+        /// <param name="startMonth">todo: describe startMonth parameter on CreateSpCswDateRangeList</param>
+        /// <param name="startDay">todo: describe startDay parameter on CreateSpCswDateRangeList</param>
+        /// <param name="endMonth">todo: describe endMonth parameter on CreateSpCswDateRangeList</param>
+        /// <param name="endDay">todo: describe endDay parameter on CreateSpCswDateRangeList</param>
+        public List<StartingPitcherCswDateRange> CreateSpCswDateRangeList(List<dynamic> list, int year, int startMonth, int startDay, int endMonth, int endDay)
+        {
+            _helpers.OpenMethod(1);
+
+            var listSpCsw = new List<StartingPitcherCswDateRange>();
+
+            DateTime startDate = new DateTime(year, startMonth, startDay);
+            DateTime endDate   = new DateTime(year, endMonth, endDay);
+
+            foreach(dynamic record in list)
             {
-                _helpers.OpenMethod(1);
-                int countAdded = 0; int countNotAdded = 0;
-
-                foreach(var sp in listSpCsw)
-                {
-                    var checkForCompositeKeyInDb =
-                        _context.StartingPitcherCswsFullSeason.Find(
-                            sp.PlayerId,
-                            sp.StartDate,
-                            sp.EndDate
-                        );
-
-                    var nullCheck      = (checkForCompositeKeyInDb == null) ? _context.Add(sp) : null;
-                    int manageCounters = (checkForCompositeKeyInDb == null) ? countAdded++ : countNotAdded++;
-                }
-
-                PrintDatabaseAddOutcomes(countAdded, countNotAdded);
-                _context.SaveChanges();
-                return Ok();
+                var spCsw = record as StartingPitcherCswDateRange;
+                spCsw.StartDate = startDate;
+                spCsw.EndDate   = endDate;
+                listSpCsw.Add(spCsw);
             }
-
-
-            // STATUS [ June 5, 2019 ]: this works
-            // DATE RANGE
-            /// <summary>
-            ///     Create list of StartingPitcherCswDateRange
-            /// </summary>
-            public List<StartingPitcherCswDateRange> CreateSpCswDateRangeList(List<dynamic> list, int year, int startMonth, int startDay, int endMonth, int endDay)
-            {
-                _helpers.OpenMethod(1);
-
-                var listSpCsw = new List<StartingPitcherCswDateRange>();
-
-                DateTime startDate = new DateTime(year, startMonth, startDay);
-                DateTime endDate   = new DateTime(year, endMonth, endDay);
-
-                foreach(dynamic record in list)
-                {
-                    var spCsw = record as StartingPitcherCswDateRange;
-                    spCsw.StartDate = startDate;
-                    spCsw.EndDate   = endDate;
-                    listSpCsw.Add(spCsw);
-                }
-                return listSpCsw;
-            }
+            return listSpCsw;
+        }
 
 
         #endregion SP CALLED-STRIKE + WALK DATA - DATE RANGE ------------------------------------------------------------
@@ -632,50 +662,52 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
         #region SP CALLED-STRIKE + WALK DATA - FULL SEASON ------------------------------------------------------------
 
 
-            // STATUS [ June 5, 2019 ]: this works
-            // FULL SEASON
-            /// <summary>
-            ///     Write SP CSW data from Baseball Savant to CSV File
-            ///     Uses 'GetAllSpCswFullSeasonEndPointUri' end point
-            /// </summary>
-            /// <param name="year">
-            ///     The year / season you want to search for
-            /// </param>
-            public void WriteBaseballSavantFullSeasonData(int year)
-            {
-                _helpers.OpenMethod(1);
+        // STATUS [ June 5, 2019 ]: this works
+        // FULL SEASON
+        /// <summary>
+        ///     Write SP CSW data from Baseball Savant to CSV File
+        ///     Uses 'GetAllSpCswFullSeasonEndPointUri' end point
+        /// </summary>
+        /// <param name="year">
+        ///     The year / season you want to search for
+        /// </param>
+        public void WriteBaseballSavantFullSeasonData(int year)
+        {
+            _helpers.OpenMethod(1);
 
-                var endPointUri     = GetAllSpCswFullSeasonEndPointUri(year);
-                var targetCsvString = SetCsvFilePathSpCswFulLSeason(year);
+            var endPointUri     = GetAllSpCswFullSeasonEndPointUri(year);
+            var targetCsvString = SetCsvFilePathSpCswFulLSeason(year);
 
-                DownloadSpCswCvsAndWriteToLocalCsv(endPointUri, $"{targetCsvString}");
-            }
-
-
-            // STATUS [ June 5, 2019 ]: this works
-            // FULL SEASON
-            /// <summary>
-            ///     Create end point for 'WriteBaseballSavantFullSeasonData' method to write to
-            /// </summary>
-            public string GetAllSpCswFullSeasonEndPointUri(int year)
-            {
-                _helpers.OpenMethod(1);
-                BaseballSavantUriEndPoint endPoint = _baseballSavantEndPoints.AllSpCswFullSeason(year);
-                return endPoint.EndPointUri;
-            }
+            DownloadSpCswCvsAndWriteToLocalCsv(endPointUri, $"{targetCsvString}");
+        }
 
 
-            // STATUS [ June 5, 2019 ]: this works
-            // FULL SEASON
-            /// <summary>
-            ///     Creates a string of the fill path name
-            /// </summary>
-            public string SetCsvFilePathSpCswFulLSeason(int year)
-            {
-                _helpers.OpenMethod(1);
-                string filePath = $"{_allSpCswDateRangeCvsPath}_FULL_SEASON_{year}.csv";
-                return filePath;
-            }
+        // STATUS [ June 5, 2019 ]: this works
+        // FULL SEASON
+        /// <summary>
+        ///     Create end point for 'WriteBaseballSavantFullSeasonData' method to write to
+        /// </summary>
+        /// <param name="year">todo: describe year parameter on GetAllSpCswFullSeasonEndPointUri</param>
+        public string GetAllSpCswFullSeasonEndPointUri(int year)
+        {
+            _helpers.OpenMethod(1);
+            BaseballSavantUriEndPoint endPoint = _baseballSavantEndPoints.AllSpCswFullSeason(year);
+            return endPoint.EndPointUri;
+        }
+
+
+        // STATUS [ June 5, 2019 ]: this works
+        // FULL SEASON
+        /// <summary>
+        ///     Creates a string of the fill path name
+        /// </summary>
+        /// <param name="year">todo: describe year parameter on SetCsvFilePathSpCswFulLSeason</param>
+        public string SetCsvFilePathSpCswFulLSeason(int year)
+        {
+            _helpers.OpenMethod(1);
+            string filePath = $"{_allSpCswDateRangeCvsPath}_FULL_SEASON_{year}.csv";
+            return filePath;
+        }
 
 
             // STATUS [ June 25, 2019 ]: this works
@@ -706,7 +738,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
                 _helpers.OpenMethod(3);
                 string csvFilePath = SetCsvFilePathSpCswFulLSeason(year);
 
-                await _csvHandler.ReadCsvRecordsAsyncToList(
+                await _csvHandler.ReadCsvRecordsToListAsync(
                     csvFilePath,
                     typeof(StartingPitcherCswFullSeason),
                     typeof(StartingPitcherCswClassMap),
@@ -722,67 +754,73 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
             }
 
 
-            // STATUS [ June 5, 2019 ]: this works
-            // FULL SEASON
-            /// <summary>
-            ///     Add StartingPitcherCsw to Database
-            /// </summary>
-            [HttpPost("add/one/csw_season")]
-            public ActionResult AddStartingPitcherCswFullSeasonToDatabase(StartingPitcherCswFullSeason spCsw)
+
+
+        // STATUS [ June 5, 2019 ]: this works
+        // FULL SEASON
+        /// <summary>
+        ///     Add StartingPitcherCsw to Database
+        /// </summary>
+        /// <param name="spCsw">todo: describe spCsw parameter on AddStartingPitcherCswFullSeasonToDatabase</param>
+    [HttpPost("add/one/csw_season")]
+        public ActionResult AddStartingPitcherCswFullSeasonToDatabase(StartingPitcherCswFullSeason spCsw)
+        {
+            _helpers.OpenMethod(1);
+            _context.Add(spCsw);
+            _context.SaveChanges();
+            return Ok(spCsw);
+        }
+
+
+        // STATUS [ June 5, 2019 ]: this works
+        // FULL SEASON
+        /// <summary>
+        ///     Add StartingPitcherCsw to Database from list
+        /// </summary>
+        /// <param name="listSpCsw">todo: describe listSpCsw parameter on AddStartingPitcherCswsFullSeasonToDatabaseFromList</param>
+        [HttpPost("add/all/csw_season")]
+        public ActionResult AddStartingPitcherCswsFullSeasonToDatabaseFromList(List<StartingPitcherCswFullSeason> listSpCsw)
+        {
+            _helpers.OpenMethod(1);
+
+            int countAdded = 0; int countNotAdded = 0;
+            foreach(var sp in listSpCsw)
             {
-                _helpers.OpenMethod(1);
-                _context.Add(spCsw);
-                _context.SaveChanges();
-                return Ok(spCsw);
+                var checkForCompositeKeyInDb =
+                    _context.StartingPitcherCswsFullSeason.Find(
+                        sp.PlayerId,
+                        sp.Season
+                    );
+
+                var nullCheck      = (checkForCompositeKeyInDb == null) ? _context.Add(sp) : null;
+                int manageCounters = (checkForCompositeKeyInDb == null) ? countAdded++ : countNotAdded++;
             }
 
+            PrintDatabaseAddOutcomes(countAdded, countNotAdded);
+            _context.SaveChanges();
+            return Ok();
+        }
 
-            // STATUS [ June 5, 2019 ]: this works
-            // FULL SEASON
-            /// <summary>
-            ///     Add StartingPitcherCsw to Database from list
-            /// </summary>
-            [HttpPost("add/all/csw_season")]
-            public ActionResult AddStartingPitcherCswsFullSeasonToDatabaseFromList(List<StartingPitcherCswFullSeason> listSpCsw)
+
+        // STATUS [ June 5, 2019 ]: this works
+        // FULL SEASON
+        /// <summary>
+        ///     Create list of StartingPitcherCsw
+        /// </summary>
+        /// <param name="list">todo: describe list parameter on CreateSpCswFullSeasonList</param>
+        /// <param name="year">todo: describe year parameter on CreateSpCswFullSeasonList</param>
+        public List<StartingPitcherCswFullSeason> CreateSpCswFullSeasonList(List<dynamic> list, int year)
+        {
+            _helpers.OpenMethod(1);
+            var listSpCsw = new List<StartingPitcherCswFullSeason>();
+            foreach(dynamic record in list)
             {
-                _helpers.OpenMethod(1);
-
-                int countAdded = 0; int countNotAdded = 0;
-                foreach(var sp in listSpCsw)
-                {
-                    var checkForCompositeKeyInDb =
-                        _context.StartingPitcherCswsFullSeason.Find(
-                            sp.PlayerId,
-                            sp.Season
-                        );
-
-                    var nullCheck      = (checkForCompositeKeyInDb == null) ? _context.Add(sp) : null;
-                    int manageCounters = (checkForCompositeKeyInDb == null) ? countAdded++ : countNotAdded++;
-                }
-
-                PrintDatabaseAddOutcomes(countAdded, countNotAdded);
-                _context.SaveChanges();
-                return Ok();
+                var spCsw = record as StartingPitcherCswFullSeason;
+                spCsw.Season = year;
+                listSpCsw.Add(spCsw);
             }
-
-
-            // STATUS [ June 5, 2019 ]: this works
-            // FULL SEASON
-            /// <summary>
-            ///     Create list of StartingPitcherCsw
-            /// </summary>
-            public List<StartingPitcherCswFullSeason> CreateSpCswFullSeasonList(List<dynamic> list, int year)
-            {
-                _helpers.OpenMethod(1);
-                var listSpCsw = new List<StartingPitcherCswFullSeason>();
-                foreach(dynamic record in list)
-                {
-                    var spCsw = record as StartingPitcherCswFullSeason;
-                    spCsw.Season = year;
-                    listSpCsw.Add(spCsw);
-                }
-                return listSpCsw;
-            }
+            return listSpCsw;
+        }
 
 
         #endregion SP CALLED-STRIKE + WALK DATA - FULL SEASON ------------------------------------------------------------
@@ -876,6 +914,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
                     };
                     _dataTabler.InsertDataRowIntoTable(dataTable, pitcherData);
                 }
+
                 _dataTabler.PrintTable(dataTable);
 
                 dataTable.Dispose();
@@ -885,6 +924,7 @@ namespace BaseballScraper.Controllers.BaseballSavantControllers
 
     }
 }
+
 
 
 

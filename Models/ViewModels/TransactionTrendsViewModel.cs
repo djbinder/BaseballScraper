@@ -8,9 +8,9 @@ namespace BaseballScraper.Models.ViewModels
 {
     public class TransactionTrendsViewModel
     {
-        public List<CbsMostAddedOrDroppedPlayer> CbsPlayers { get; set; } 
+        public List<CbsMostAddedOrDroppedPlayer> CbsPlayers    { get; set; }
         public List<YahooTransactionTrendsPlayer> YahooPlayers { get; set; }
-        public List<EspnTransactionTrendPlayer> EspnPlayers { get; set; } 
+        public List<EspnTransactionTrendPlayer> EspnPlayers    { get; set; }
 
 
         public TransactionTrendsViewModel()
